@@ -1109,10 +1109,29 @@ ${product.description ? `\nDescription: ${product.description}` : ''}
         function showLoading() {
             document.getElementById('products-container').innerHTML = `
                 <div class="loading">
-                    <div style="font-size: 2rem; margin-bottom: 1rem;">🔄</div>
+                    <div style="font-size: 2rem; margin-bottom: 1rem; animation: spin 1s linear infinite;">🔄</div>
                     <div>Loading your curated drops...</div>
                 </div>`;
         }
+
+        // Add CSS for loading animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes spin {
+                from { transform: rotate(0deg); }
+                to { transform: rotate(360deg); }
+            }
+            
+            .currency-modal {
+                animation: fadeIn 0.3s ease;
+            }
+            
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
 
         // Add error handling for images
         function handleImageError(img) {
