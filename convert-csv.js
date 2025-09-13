@@ -20,6 +20,7 @@ function convertCsvToJson() {
             // Clean and transform the data for website use
             const product = {
                 id: data.asin || generateId(),
+                asin: data.asin || '',
                 name: data.productTitle || 'Untitled Product',
                 description: data.Description || '',
                 price: parseFloat(data.price) || 0,
@@ -117,8 +118,8 @@ function extractMainCategory(categoryHierarchy) {
     return parts[0] || '';
 }
 
-function generateId() {
-    return 'prod_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+function generateAsin() {
+    return 'B0' + Date.now().toString().slice(-8) + Math.random().toString(36).substr(2, 2).toUpperCase();
 }
 
 convertCsvToJson();
