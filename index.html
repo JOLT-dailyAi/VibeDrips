@@ -1,1 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VibeDrips - Drops that Drip. Curated Finds, Digitally Yours.</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 50%, #a855f7 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Currency Selection Modal */
+        .currency-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .currency-modal.hidden {
+            display: none;
+        }
+
+        .currency-content {
+            background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 100%);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .currency-content h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .currency-content p {
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .currency-select {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .currency-select option {
+            background: #4c1d95;
+            color: #fff;
+        }
+
+        .currency-btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(45deg, #10b981, #059669);
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .currency-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Header */
+        header {
+            padding: 1.5rem 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .logo-img {
+            width: 50px;
+            height: 50px;
+            background: url('https://raw.githubusercontent.com/JOLT-dailyAi/VibeDrips/main/assets/images/VibeDrips.png') center/contain no-repeat;
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search-icon, .profile-icon, .cart-icon {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .search-icon:hover, .profile-icon:hover, .cart-icon:hover {
+            opacity: 1;
+        }
+
+        .currency-display {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .currency-display:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Filters */
+        .filters {
+            padding: 2rem 0;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-group label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 0.75rem;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 0.95rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .filter-group select option {
+            background: #4c1d95;
+            color: #fff;
+        }
+
+        .filter-group input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        /* Time-based Categories */
+        .time-categories {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .time-category {
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .time-category.active {
+            background: linear-gradient(45deg, #10b981, #059669);
+            border-color: #10b981;
+        }
+
+        .time-category:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Products Grid */
+        .products-section {
+            padding: 3rem 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .product-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 250px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-image-placeholder {
+            font-size: 4rem;
+            opacity: 0.3;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-category {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            font-weight: 500;
+            opacity: 0.7;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, #10b981, #059669);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #fff;
+            line-height: 1.3;
+        }
+
+        .product-price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .product-timestamp {
+            font-size: 0.75rem;
+            opacity: 0.6;
+            margin-bottom: 1rem;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(45deg, #10b981, #059669);
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-to-cart:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        /* Footer Brand Section */
+        .footer-brand {
+            text-align: center;
+            padding: 4rem 0;
+            background: rgba(0, 0, 0, 0.2);
+            margin-top: 4rem;
+        }
+
+        .footer-logo {
+            width: 300px;
+            height: 200px;
+            background: url('https://raw.githubusercontent.com/JOLT-dailyAi/VibeDrips/main/assets/images/VibeDrips_DP.png') center/contain no-repeat;
+            margin: 0 auto 2rem auto;
+        }
+
+        .footer-tagline {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-description {
+            font-size: 1.1rem;
+            opacity: 0.8;
+            font-style: italic;
+        }
+
+        /* Loading and States */
+        .loading {
+            text-align: center;
+            padding: 4rem 0;
+            opacity: 0.7;
+        }
+
+        .no-products {
+            text-align: center;
+            padding: 4rem 0;
+            opacity: 0.7;
+        }
+
+        /* Stats */
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .filter-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .time-categories {
+                justify-content: center;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 1.5rem;
+            }
+
+            .currency-content {
+                margin: 1rem;
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Currency Selection Modal -->
+    <div id="currency-modal" class="currency-modal">
+        <div class="currency-content">
+            <h2>Welcome to VibeDrips</h2>
+            <p>Select your preferred currency to see localized pricing</p>
+            <select id="currency-selector" class="currency-select">
+                <option value="USD">🇺🇸 USD - US Dollar</option>
+                <option value="EUR">🇪🇺 EUR - Euro</option>
+                <option value="GBP">🇬🇧 GBP - British Pound</option>
+                <option value="INR">🇮🇳 INR - Indian Rupee</option>
+                <option value="JPY">🇯🇵 JPY - Japanese Yen</option>
+                <option value="CAD">🇨🇦 CAD - Canadian Dollar</option>
+                <option value="AUD">🇦🇺 AUD - Australian Dollar</option>
+                <option value="CHF">🇨🇭 CHF - Swiss Franc</option>
+            </select>
+            <button class="currency-btn" onclick="setCurrency()">Continue Shopping</button>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">
+                    <div class="logo-img"></div>
+                    <div class="logo-text">VibeDrips</div>
+                </a>
+                <div class="header-actions">
+                    <div class="currency-display" onclick="showCurrencyModal()">
+                        <span id="current-currency">USD</span>
+                    </div>
+                    <svg class="search-icon" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7 7 7 0 0 1-7 7Z"/>
+                    </svg>
+                    <svg class="profile-icon" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                    </svg>
+                    <svg class="cart-icon" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M7 18c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.5-1.1 2.5c-.1.3-.1.6 0 1 .2.4.6.6 1 .6H19v-2H7l1.1-2h7.5c.4 0 .7-.2.9-.5L20.9 9H6.2l-.9-2H1zm16 16c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Filters -->
+    <section class="filters">
+        <div class="container">
+            <div class="time-categories">
+                <div class="time-category active" onclick="filterByTime('hot')">🔥 Hot This Month</div>
+                <div class="time-category" onclick="filterByTime('new')">✨ New Arrivals</div>
+                <div class="time-category" onclick="filterByTime('upcoming')">🚀 Coming Soon</div>
+                <div class="time-category" onclick="filterByTime('all')">📅 All Products</div>
+            </div>
+            <div class="filter-controls">
+                <div class="filter-group">
+                    <label for="search">Search Everything</label>
+                    <input type="text" id="search" class="search-box" placeholder="Search products, brands, categories..." oninput="filterProducts()">
+                </div>
+                <div class="filter-group">
+                    <label for="category-filter">Category</label>
+                    <select id="category-filter" onchange="filterProducts()">
+                        <option value="">All Categories</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="price-sort">Sort by Price</label>
+                    <select id="price-sort" onchange="sortProducts()">
+                        <option value="">Default</option>
+                        <option value="low-high">Price: Low to High</option>
+                        <option value="high-low">Price: High to Low</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 id="section-title">Hot This Month 🔥</h2>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="product-count">0</div>
+                    <div class="stat-label">Products</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="category-count">0</div>
+                    <div class="stat-label">Categories</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="currency-display">USD</div>
+                    <div class="stat-label">Currency</div>
+                </div>
+            </div>
+
+            <div id="products-container">
+                <div class="loading">Loading your curated drops...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Brand -->
+    <section class="footer-brand">
+        <div class="container">
+            <div class="footer-logo"></div>
+            <div class="footer-tagline">Drops that Drip. Curated Finds, Digitally Yours.</div>
+            <div class="footer-description">Curated digital finds and affiliate drops — aesthetic tools, festive picks, and everyday scroll-stoppers.</div>
+        </div>
+    </section>
+
+    <script>
+        let allProducts = [];
+        let filteredProducts = [];
+        let categories = new Set();
+        let currentCurrency = 'USD';
+        let currentTimeFilter = 'hot';
+
+        // Currency conversion rates (example rates - in production, fetch from API)
+        const exchangeRates = {
+            'USD': 1,
+            'EUR': 0.85,
+            'GBP': 0.73,
+            'INR': 83.12,
+            'JPY': 110.0,
+            'CAD': 1.25,
+            'AUD': 1.35,
+            'CHF': 0.92
+        };
+
+        // Initialize the store
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedCurrency = localStorage.getItem('vibedrips-currency');
+            if (savedCurrency) {
+                currentCurrency = savedCurrency;
+                document.getElementById('current-currency').textContent = savedCurrency;
+                document.getElementById('currency-display').textContent = savedCurrency;
+                document.getElementById('currency-modal').classList.add('hidden');
+                loadProducts();
+            } else {
+                showCurrencyModal();
+            }
+        });
+
+        // Currency functions
+        function showCurrencyModal() {
+            document.getElementById('currency-modal').classList.remove('hidden');
+        }
+
+        function setCurrency() {
+            const selector = document.getElementById('currency-selector');
+            currentCurrency = selector.value;
+            localStorage.setItem('vibedrips-currency', currentCurrency);
+            document.getElementById('current-currency').textContent = currentCurrency;
+            document.getElementById('currency-display').textContent = currentCurrency;
+            document.getElementById('currency-modal').classList.add('hidden');
+            
+            if (allProducts.length === 0) {
+                loadProducts();
+            } else {
+                renderProducts(); // Re-render with new currency
+            }
+        }
+
+        // Load products data
+        async function loadProducts() {
+            try {
+                let products = [];
+                
+                // Try loading from your GitHub repository
+                try {
+                    const jsonResponse = await fetch('https://raw.githubusercontent.com/JOLT-dailyAi/VibeDrips/main/data/products.json');
+                    if (jsonResponse.ok) {
+                        products = await jsonResponse.json();
+                        console.log('Loaded products from GitHub JSON');
+                    }
+                } catch (e) {
+                    console.log('GitHub JSON not accessible, trying CSV...');
+                    try {
+                        const csvResponse = await fetch('https://raw.githubusercontent.com/JOLT-dailyAi/VibeDrips/main/data/products.csv');
+                        if (csvResponse.ok) {
+                            const csvText = await csvResponse.text();
+                            products = parseCSV(csvText);
+                            console.log('Loaded products from GitHub CSV');
+                        }
+                    } catch (e) {
+                        console.log('GitHub CSV not accessible, using sample data');
+                    }
+                }
+
+                // Fallback to local files or sample data
+                if (products.length === 0) {
+                    try {
+                        const localJson = await fetch('./data/products.json');
+                        if (localJson.ok) {
+                            products = await localJson.json();
+                        }
+                    } catch (e) {
+                        try {
+                            const localCsv = await fetch('./data/products.csv');
+                            if (localCsv.ok) {
+                                const csvText = await localCsv.text();
+                                products = parseCSV(csvText);
+                            }
+                        } catch (e) {
+                            // Use sample data as final fallback
+                            products = generateSampleData();
+                        }
+                    }
+                }
+
+                allProducts = products;
+                filteredProducts = [...allProducts];
+                
+                // Extract categories and set up filters
+                extractCategories();
+                populateCategoryFilter();
+                filterByTime('hot'); // Start with hot products
+                updateStats();
+
+            } catch (error) {
+                console.error('Error loading products:', error);
+                document.getElementById('products-container').innerHTML = 
+                    `<div class="no-products">
+                        <h3>Unable to load products</h3>
+                        <p>Please check your connection or try again later.</p>
+                    </div>`;
+            }
+        }
+
+        // Generate sample data for demonstration
+        function generateSampleData() {
+            const categories = ['Electronics', 'Fashion', 'Home & Garden', 'Books', 'Sports', 'Beauty'];
+            const sampleProducts = [];
+            
+            for (let i = 1; i <= 12; i++) {
+                const category = categories[Math.floor(Math.random() * categories.length)];
+                const basePrice = Math.floor(Math.random() * 200) + 20;
+                
+                // Generate timestamp for different months
+                const date = new Date();
+                if (i <= 4) {
+                    // Hot this month (September 2025)
+                    date.setMonth(8); // September
+                } else if (i <= 8) {
+                    // October products
+                    date.setMonth(9);
+                } else {
+                    // November products
+                    date.setMonth(10);
+                }
+                
+                sampleProducts.push({
+                    id: `sample-${i}`,
+                    name: `Sample Product ${i}`,
+                    description: `This is a sample product description for ${category.toLowerCase()} item ${i}`,
+                    price: basePrice,
+                    currency: 'USD',
+                    categoryHierarchy: category,
+                    timestamp: date.toISOString(),
+                    image: `https://via.placeholder.com/300x250?text=Product+${i}`,
+                    brand: 'VibeDrips'
+                });
+            }
+            
+            return sampleProducts;
+        }
+
+        // Parse CSV data
+        function parseCSV(csvText) {
+            const lines = csvText.trim().split('\n');
+            if (lines.length < 2) return [];
+            
+            const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+            const products = [];
+
+            for (let i = 1; i < lines.length; i++) {
+                const values = parseCSVLine(lines[i]);
+                const product = {};
+                
+                headers.forEach((header, index) => {
+                    product[header.toLowerCase().replace(/\s+/g, '')] = values[index] || '';
+                });
+
+                // Convert price to number
+                if (product.price) {
+                    product.price = parseFloat(product.price.replace(/[^0-9.-]+/g, '')) || 0;
+                }
+
+                products.push(product);
+            }
+
+            return products;
+        }
+
+        // Parse CSV line handling quotes
+        function parseCSVLine(line) {
+            const values = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    values.push(current.trim());
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            values.push(current.trim());
+            
+            return values;
+        }
+
+        // Extract categories from products
+        function extractCategories() {
+            categories.clear();
+            allProducts.forEach(product => {
+                const cat = product.categoryHierarchy || product.category || product.categoryHierarchy;
+                if (cat) {
+                    categories.add(cat.trim());
+                }
+            });
+        }
+
+        // Populate category filter
+        function populateCategoryFilter() {
+            const categoryFilter = document.getElementById('category-filter');
+            categoryFilter.innerHTML = '<option value="">All Categories</option>';
+            
+            const sortedCategories = Array.from(categories).sort();
+            sortedCategories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                categoryFilter.appendChild(option);
+            });
+        }
+
+        // Convert price to current currency
+        function convertPrice(price, fromCurrency = 'USD') {
+            if (!price || isNaN(price)) return 0;
+            
+            const usdPrice = price / (exchangeRates[fromCurrency] || 1);
+            const convertedPrice = usdPrice * (exchangeRates[currentCurrency] || 1);
+            
+            return convertedPrice;
+        }
+
+        // Format price with currency symbol
+        function formatPrice(price, currency = currentCurrency) {
+            const symbols = {
+                'USD': ',
+                'EUR': '€',
+                'GBP': '£',
+                'INR': '₹',
+                'JPY': '¥',
+                'CAD': 'C,
+                'AUD': 'A,
+                'CHF': 'CHF '
+            };
+            
+            const symbol = symbols[currency] || currency + ' ';
+            const formattedPrice = currency === 'JPY' ? Math.round(price) : price.toFixed(2);
+            
+            return symbol + formattedPrice;
+        }
+
+        // Filter by time periods
+        function filterByTime(timeFilter) {
+            currentTimeFilter = timeFilter;
+            
+            // Update active time category
+            document.querySelectorAll('.time-category').forEach(cat => cat.classList.remove('active'));
+            event?.target?.classList.add('active') || 
+            document.querySelector(`[onclick="filterByTime('${timeFilter}')"]`)?.classList.add('active');
+
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+
+            filteredProducts = allProducts.filter(product => {
+                if (timeFilter === 'all') return true;
+                
+                const productDate = new Date(product.timestamp || product.date || Date.now());
+                const productMonth = productDate.getMonth();
+                const productYear = productDate.getFullYear();
+                
+                switch (timeFilter) {
+                    case 'hot':
+                        // Current month products (hot this month)
+                        return productMonth === currentMonth && productYear === currentYear;
+                    case 'new':
+                        // Products from last 30 days
+                        const thirtyDaysAgo = new Date();
+                        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+                        return productDate >= thirtyDaysAgo;
+                    case 'upcoming':
+                        // Future products (next month and beyond)
+                        return productDate > now;
+                    default:
+                        return true;
+                }
+            });
+
+            // Update section title
+            const titles = {
+                'hot': '🔥 Hot This Month',
+                'new': '✨ New Arrivals',
+                'upcoming': '🚀 Coming Soon',
+                'all': '📅 All Products'
+            };
+            document.getElementById('section-title').textContent = titles[timeFilter] || 'Products';
+
+            applyCurrentFilters();
+            renderProducts();
+        }
+
+        // Apply current search and category filters
+        function applyCurrentFilters() {
+            const searchTerm = document.getElementById('search').value.toLowerCase();
+            const categoryFilter = document.getElementById('category-filter').value;
+
+            if (searchTerm || categoryFilter) {
+                filteredProducts = filteredProducts.filter(product => {
+                    // Global search across all fields
+                    const searchFields = [
+                        product.name, 
+                        product.title, 
+                        product.description, 
+                        product.categoryHierarchy, 
+                        product.category,
+                        product.brand,
+                        product.tags,
+                        product.id
+                    ];
+                    
+                    const matchesSearch = !searchTerm || searchFields.some(field => 
+                        field && field.toString().toLowerCase().includes(searchTerm)
+                    );
+
+                    const matchesCategory = !categoryFilter || 
+                        (product.categoryHierarchy || product.category || '').toLowerCase() === categoryFilter.toLowerCase();
+
+                    return matchesSearch && matchesCategory;
+                });
+            }
+        }
+
+        // Filter products
+        function filterProducts() {
+            filterByTime(currentTimeFilter);
+        }
+
+        // Sort products
+        function sortProducts() {
+            const sortBy = document.getElementById('price-sort').value;
+
+            if (sortBy === 'low-high') {
+                filteredProducts.sort((a, b) => {
+                    const priceA = convertPrice(parseFloat(a.price) || 0, a.currency);
+                    const priceB = convertPrice(parseFloat(b.price) || 0, b.currency);
+                    return priceA - priceB;
+                });
+            } else if (sortBy === 'high-low') {
+                filteredProducts.sort((a, b) => {
+                    const priceA = convertPrice(parseFloat(a.price) || 0, a.currency);
+                    const priceB = convertPrice(parseFloat(b.price) || 0, b.currency);
+                    return priceB - priceA;
+                });
+            }
+
+            renderProducts();
+        }
+
+        // Render products
+        function renderProducts() {
+            const container = document.getElementById('products-container');
+            
+            if (filteredProducts.length === 0) {
+                container.innerHTML = `
+                    <div class="no-products">
+                        <h3>No products found</h3>
+                        <p>Try adjusting your search or filters to see more products.</p>
+                    </div>`;
+                return;
+            }
+
+            const productsGrid = document.createElement('div');
+            productsGrid.className = 'products-grid';
+
+            filteredProducts.forEach(product => {
+                const productCard = createProductCard(product);
+                productsGrid.appendChild(productCard);
+            });
+
+            container.innerHTML = '';
+            container.appendChild(productsGrid);
+            updateStats();
+        }
+
+        // Create product card
+        function createProductCard(product) {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.onclick = () => openProductDetail(product);
+
+            // Handle image
+            const imageUrl = product.image || product.image_url || product.imageurl || '';
+            const imageElement = imageUrl ? 
+                `<img src="${imageUrl}" alt="${product.name || product.title || 'Product'}" 
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                 <div class="product-image-placeholder" style="display:none;">🛍️</div>` :
+                `<div class="product-image-placeholder">🛍️</div>`;
+
+            // Handle price conversion
+            const originalPrice = parseFloat(product.price) || 0;
+            const convertedPrice = convertPrice(originalPrice, product.currency || 'USD');
+            const formattedPrice = originalPrice > 0 ? formatPrice(convertedPrice) : 'Price not available';
+
+            // Format timestamp
+            const timestamp = product.timestamp || product.date;
+            const formattedDate = timestamp ? new Date(timestamp).toLocaleDateString('en-US', {
+                month: 'short',
+                year: 'numeric'
+            }) : '';
+
+            // Get category
+            const category = product.categoryHierarchy || product.category || 'Uncategorized';
+
+            card.innerHTML = `
+                <div class="product-image">
+                    ${imageElement}
+                </div>
+                <div class="product-info">
+                    <div class="product-category">${category}</div>
+                    <h3 class="product-title">${product.name || product.title || 'Untitled Product'}</h3>
+                    <div class="product-price">${formattedPrice}</div>
+                    ${formattedDate ? `<div class="product-timestamp">${formattedDate}</div>` : ''}
+                    <button class="add-to-cart" onclick="event.stopPropagation(); addToCart('${product.id || product.name}')">
+                        Add to Cart
+                    </button>
+                </div>
+            `;
+
+            return card;
+        }
+
+        // Update stats
+        function updateStats() {
+            document.getElementById('product-count').textContent = filteredProducts.length;
+            document.getElementById('category-count').textContent = categories.size;
+            document.getElementById('currency-display').textContent = currentCurrency;
+        }
+
+        // Placeholder functions
+        function addToCart(productId) {
+            // Create a simple notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(45deg, #10b981, #059669);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 10px;
+                z-index: 1001;
+                font-weight: 600;
+                box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+                transform: translateX(400px);
+                transition: transform 0.3s ease;
+            `;
+            notification.textContent = `Added to cart! 🛒`;
+            
+            document.body.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(400px)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        function openProductDetail(product) {
+            // For now, show an alert - you can implement a modal or redirect to product.html
+            const details = `
+Product: ${product.name || product.title || 'Untitled'}
+Category: ${product.categoryHierarchy || product.category || 'N/A'}
+Price: ${formatPrice(convertPrice(parseFloat(product.price) || 0, product.currency || 'USD'))}
+${product.description ? `\nDescription: ${product.description}` : ''}
+            `.trim();
+            
+            alert(details);
+            
+            // Alternative: Open in new page with URL parameters
+            // window.open(`product.html?id=${encodeURIComponent(product.id || product.name)}`, '_blank');
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey || e.metaKey) {
+                switch (e.key) {
+                    case 'k':
+                        e.preventDefault();
+                        document.getElementById('search').focus();
+                        break;
+                    case ',':
+                        e.preventDefault();
+                        showCurrencyModal();
+                        break;
+                }
+            }
+        });
+
+        // Add some loading animations
+        function showLoading() {
+            document.getElementById('products-container').innerHTML = `
+                <div class="loading">
+                    <div style="font-size: 2rem; margin-bottom: 1rem;">🔄</div>
+                    <div>Loading your curated drops...</div>
+                </div>`;
+        }
+
+        // Add error handling for images
+        function handleImageError(img) {
+            img.style.display = 'none';
+            const placeholder = img.nextElementSibling;
+            if (placeholder) {
+                placeholder.style.display = 'flex';
+            }
+        }
+
+        // Initialize tooltips or help text
+        function initializeHelp() {
+            const searchBox = document.getElementById('search');
+            searchBox.addEventListener('focus', () => {
+                if (!searchBox.value) {
+                    searchBox.placeholder = 'Search by name, category, brand, description... (Ctrl+K)';
+                }
+            });
+            
+            searchBox.addEventListener('blur', () => {
+                searchBox.placeholder = 'Search products, brands, categories...';
+            });
+        }
+
+        // Call initialization functions when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeHelp();
+        });
+    </script>
+</body>
+</html>
