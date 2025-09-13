@@ -19,8 +19,7 @@ function convertCsvToJson() {
         .on('data', (data) => {
             // Clean and transform the data for website use
             const product = {
-                id: data.asin || generateId(),
-                asin: data.asin || '',
+                asin: data.asin || generateAsin(),
                 name: data.productTitle || 'Untitled Product',
                 description: data.Description || '',
                 price: parseFloat(data.price) || 0,
