@@ -1,29 +1,13 @@
 # VibeDrips
-Curated digital finds and affiliate drops – aesthetic tools, festive picks, and everyday scroll-stoppers.
+**Drops that Drip. Curated Finds, Digitally Yours.**
 
+A modern, static affiliate e-commerce platform showcasing curated digital finds and trending products across global markets. Built with vanilla HTML, CSS, and JavaScript for maximum performance and compatibility.
 
-# VibeDrips 🛍️
-
-A modern, static e-commerce store built with vanilla HTML, CSS, and JavaScript that automatically displays products from your data sources (CSV/JSON) with a sleek Shopify-inspired design.
-
-## ✨ Features
-
-- **Responsive Shopify-themed design** - Mobile-first, modern UI
-- **Automatic data loading** - Supports both JSON and CSV formats
-- **Dynamic product rendering** - Images loaded directly from URLs
-- **Smart filtering & search** - Real-time product filtering by category and search
-- **Price sorting** - Sort products by price (low to high, high to low)
-- **GitHub Actions integration** - Automated daily updates from Google Sheets
-- **No backend required** - Pure static site, works on any hosting platform
-- **SEO friendly** - Semantic HTML structure
-
-# VibeDrips - Drops that Drip. Curated Finds, Digitally Yours.
-
-A modern, multi-currency affiliate e-commerce platform showcasing curated digital finds and trending products across global markets.
+![VibeDrips Banner](https://raw.githubusercontent.com/JOLT-dailyAi/VibeDrips/main/assets/images/VibeDrips_DP.png)
 
 ## 🌍 Multi-Currency Support
 
-VibeDrips automatically detects and separates products by currency, creating dedicated shopping experiences for different regions:
+VibeDrips automatically detects and separates products by currency, creating dedicated shopping experiences for different regions with **no currency conversion** - each region shows products in their native currency.
 
 ### Supported Currencies & Regions
 - **INR** (₹) - India (Default)
@@ -40,28 +24,37 @@ VibeDrips automatically detects and separates products by currency, creating ded
 - **SAR** (﷼) - Saudi Arabia
 - **SEK** (kr) - Sweden
 - **PLN** (zł) - Poland
+- **MISC** (🎁) - Random Drops (Global)
 
 ## 🏗️ Project Structure
 
 ```
 VibeDrips/
-├── .github/workflows/          # GitHub Actions
-│   └── process-csv.yml
-├── convert-csv.js              # ← Backend automation (ROOT)
-├── cleanup-old-files.js        # ← Backend automation (ROOT)  
-├── data/                       # Data files
-│   ├── products.csv
-│   └── products-INR.json
-├── vibedrips/                  # Your main project
-│   ├── assets/
-│   │   ├── js/                 # ← Frontend JavaScript
-│   │   │   ├── main.js         # Website functionality
-│   │   │   ├── cart.js         # Shopping cart
-│   │   │   └── products.js     # Product display
-│   │   ├── css/
-│   │   └── images/
-│   ├── index.html
-│   └── products.html
+├── .github/workflows/          # GitHub Actions automation
+│   └── process-csv.yml         # Daily CSV to JSON conversion
+├── convert-csv.js              # Backend automation (ROOT)
+├── cleanup-old-files.js        # Backend automation (ROOT)  
+├── data/                       # Generated data files
+│   ├── products.csv            # Source CSV data
+│   ├── currencies.json         # Available currencies manifest
+│   ├── products-INR.json       # Indian products
+│   ├── products-USD.json       # US products
+│   ├── products-EUR.json       # European products
+│   ├── products-MISC.json      # Random drops
+│   └── last_updated.txt        # Processing log
+├── assets/
+│   ├── js/                     # Frontend JavaScript modules
+│   │   ├── main.js             # Core app logic & initialization
+│   │   ├── currency.js         # Currency detection & formatting
+│   │   └── products.js         # Product display & filtering
+│   ├── css/
+│   │   ├── main.css            # Core styles & layout
+│   │   ├── products.css        # Product-specific styles
+│   │   └── mobile.css          # Mobile responsive styles
+│   └── images/
+│       ├── VibeDrips.png       # Header logo (300px)
+│       └── VibeDrips_DP.png    # Footer logo (550px) & favicon
+├── index.html                  # Main application page
 └── README.md
 ```
 
@@ -69,97 +62,102 @@ VibeDrips/
 
 ### Automated Workflow
 - **Trigger**: Daily at midnight UTC or when `products.csv` is updated
-- **Process**: Converts CSV to currency-specific JSON files
-- **Output**: Separate product files for each detected currency
+- **Process**: `convert-csv.js` converts CSV to currency-specific JSON files
+- **Output**: Separate product files for each detected currency (no conversion)
 
 ### Currency Detection Logic
 1. **Primary**: Check `Currency` column in CSV
 2. **Fallback**: Parse currency symbols from price field (₹, $, €, etc.)
-3. **Default**: Products without clear currency go to "Random Drops" category
+3. **Default**: Products without clear currency go to `products-MISC.json`
 
 ### Data Transformation
-- Cleans and structures product data
-- Extracts categories and subcategories
-- Processes affiliate links (Amazon SiteStripe)
-- Handles product images and metadata
-- Sorts by timestamp (newest first)
+- Cleans and structures product data from CSV
+- Extracts categories, subcategories, and brands
+- Processes affiliate links (Amazon SiteStripe Short/Long)
+- Handles product images (MainImage + AllImages array)
+- Sorts by `dateFirstAvailable` then `timestamp`
 
-## 🚀 Features
+## 🚀 Key Features
 
-### Smart Currency Loading
-- Detects user's region via IP geolocation
-- Shows only currencies with available products
-- Falls back to INR (Indian market) as default
-- No currency conversion - direct regional pricing
+### Smart Regional Loading
+- **IP Geolocation**: Detects user's region automatically
+- **Currency Auto-Selection**: Shows only currencies with available products  
+- **Fallback to INR**: Default market when detection fails
+- **Direct JSON Loading**: No client-side currency conversion
+
+### Enhanced Product Display
+- **New Card Layout**: Source embed on left, image carousel on right
+- **Amazon Integration**: Direct redirect via SiteStripe Short/Long links
+- **Hot Products**: Based on `dateFirstAvailable` (Sep/Oct 2025), fallback to `timestamp`
+- **Image Carousel**: MainImage + AllImages with navigation dots
+
+### Advanced Filtering System
+- **🔥 Hot This Month**: Products from current month based on `dateFirstAvailable`
+- **⭐ Featured Products**: Curated highlights
+- **🆕 New Arrivals**: Recent additions (last 30 days)
+- **📈 Trending Now**: Popular items
+- **🛍️ All Products**: Complete catalog
+- **Real-time Search**: Across all product fields
+- **Category Filtering**: Dynamic category extraction
+- **Multi-Sort Options**: Price, name, rating, date
 
 ### Responsive Design
-- Device-type detection (mobile/tablet/desktop)
-- Adaptive layouts based on screen size
-- Network-aware loading for slower connections
-- Modern purple/cyan color scheme
+- **Device Detection**: Adaptive layouts for mobile/tablet/desktop
+- **Modern UI**: Purple/cyan theme with glassmorphism effects
+- **Performance Optimized**: Lazy loading, efficient rendering
+- **Static Site**: No backend dependencies
 
-### Product Categories
-- **Featured Products** - Curated highlights
-- **New Arrivals** - Recent additions
-- **Trending Now** - Popular items
-- **Random Drops** - Miscellaneous finds
-- **All Products** - Complete catalog
+## 🛠️ Technical Implementation
 
-### Search & Filter
-- Real-time search across all product fields
-- Category filtering
-- Price sorting (low-to-high, high-to-low)
-- Rating-based sorting
-- Brand filtering
+### Core JavaScript Modules
 
-## 🛠️ Development
+#### `main.js` - Application Core
+- App initialization and state management
+- IP-based region detection
+- Currency auto-selection logic
+- Event handling and DOM caching
+- Error handling with graceful fallbacks
 
-### Prerequisites
-- Node.js 18+
-- npm or yarn
-- GitHub repository with Actions enabled
+#### `currency.js` - Currency Management  
+- **No Conversion**: Direct price formatting only
+- Currency symbol mapping and formatting
+- Price cleaning and validation utilities
+- Support for 14+ currencies plus MISC
 
-### Setup
-```bash
-# Clone repository
-git clone https://github.com/JOLT-dailyAi/VibeDrips.git
-cd VibeDrips
+#### `products.js` - Product Operations
+- Hot products detection (dateFirstAvailable priority)
+- Enhanced product card rendering
+- Modal with source embed + image carousel
+- Advanced filtering and sorting
+- Amazon redirect handling
 
-# Install dependencies
-npm init -y
-npm install csv-parser
-
-# Convert CSV to JSON (manual)
-node convert-csv.js
+### Data Flow
+```
+CSV Source → convert-csv.js → Currency-Specific JSONs → Frontend Loading
+     ↓
+GitHub Actions (Daily) → Update JSON files → Live site refresh
 ```
 
-### Adding New Products
-1. Add products to `data/products.csv`
-2. Ensure `Currency` column is populated
-3. Push to main branch
-4. GitHub Actions will automatically process the data
+## 📊 Enhanced Product Data Structure
 
-### File Structure Benefits
-- **Modular**: Separate HTML, CSS, and JS files
-- **Maintainable**: Easy to update individual components
-- **Scalable**: Add new currencies without breaking existing functionality
-- **SEO-Friendly**: Clean HTML structure
-
-## 📊 Data Format
-
-### CSV Columns (Key Fields)
-- `Timestamp` - When product was added
-- `productTitle` - Product name
-- `Description` - Product description
-- `price` - Price with currency symbol
-- `Currency` - ISO currency code (INR, USD, etc.)
-- `brand` - Product brand
-- `categoryHierarchy` - Product category
-- `MainImage` - Primary product image
-- `AllImages` - Additional product images
-- `Amazon SiteStripe (Short)` - Affiliate link
-- `customerRating` - Product rating
-- `reviewCount` - Number of reviews
+### CSV Input Columns (Key Fields)
+```
+Timestamp                    - When added to system
+Product Source Link          - Instagram/social source
+Amazon SiteStripe (Short)    - Primary affiliate link  
+Amazon SiteStripe (Long)     - Secondary affiliate link
+MainImage                    - Primary product image
+AllImages                    - Additional images array
+dateFirstAvailable          - Amazon availability date (for "Hot" filter)
+Currency                     - Product currency (INR, USD, etc.)
+productTitle                 - Product name
+Description                  - Product description
+price                        - Price in native currency
+brand                        - Product brand
+categoryHierarchy            - Product category
+customerRating               - Product rating (0-5)
+reviewCount                  - Number of reviews
+```
 
 ### JSON Output Structure
 ```json
@@ -172,52 +170,132 @@ node convert-csv.js
   "brand": "Banpresto",
   "category": "Toys & Games",
   "main_image": "https://m.media-amazon.com/images/...",
-  "affiliate_link": "https://amzn.to/...",
+  "all_images": ["url1", "url2", "url3"],
+  "amazon_short": "https://amzn.to/...",
+  "amazon_long": "https://www.amazon.in/...",
+  "source_link": "https://www.instagram.com/...",
+  "date_first_available": "2021-03-30",
   "customer_rating": 4.8,
   "review_count": 128,
-  "timestamp": "2025-01-15T10:30:00Z"
+  "timestamp": "2025-09-10T14:55:44Z"
 }
 ```
 
-## 🎨 Design System
+## 🎨 UI/UX Enhancements
 
-### Color Palette
-- **Primary Background**: `#2E1D80` (Deep Purple)
-- **Text Color**: `#80DFFF` (Cyan Blue)
-- **Accent Gradients**: Purple to Cyan
-- **Cards**: Semi-transparent overlays with blur effects
-- **Buttons**: Gradient backgrounds with hover effects
+### Product Modal Layout
+- **Left Panel**: Source link embed (Instagram/social content)
+- **Right Panel**: Image carousel with navigation
+- **Bottom Section**: Product details grid + Amazon buy button
+- **Responsive**: Stacks vertically on mobile
 
-### Typography
-- **Font Stack**: `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`
-- **Headings**: Bold weights with gradient text effects
-- **Body**: Clean, readable sans-serif
+### Hot Products Algorithm
+```javascript
+// Priority: dateFirstAvailable > timestamp
+const hotProducts = products.filter(product => {
+    const date = product.date_first_available || product.timestamp;
+    return isCurrentMonth(date) || isLastMonth(date);
+}).sort(byDateDescending);
+```
 
-## 🔗 Affiliate Integration
+### Amazon Redirect Priority
+```javascript
+const redirectUrl = product.amazon_short || 
+                   product.amazon_long || 
+                   product.source_link || '#';
+```
 
-- **Amazon Associates**: Full SiteStripe link support
-- **Link Tracking**: Product ID-based analytics
-- **External Links**: Opens in new tabs with proper attribution
-- **Fallback Handling**: Graceful degradation for missing links
+## 🌐 Social & Support Integration
 
-## 📱 Mobile Optimization
+### Footer Links
+- **Instagram**: [@vibedrips.dailyai](https://www.instagram.com/vibedrips.dailyai/)
+- **Ko-fi Support**: [Daily AI Tiers](https://ko-fi.com/dailyai/tiers)
+- **Branding**: VibeDrips_DP.png (550px) with tagline
 
-- **Responsive Grid**: Auto-fit product cards
-- **Touch Friendly**: Large tap targets
-- **Performance**: Lazy loading for images
-- **PWA Ready**: Service worker and manifest support
+### Assets & Branding
+- **Header Logo**: VibeDrips.png (300px width)
+- **Footer Logo**: VibeDrips_DP.png (550px width) 
+- **Favicon**: VibeDrips_DP.png (32x32px for browser tab)
 
-## 🚦 Status & Monitoring
+## 📱 Future Enhancements (Phase 4)
 
-- **Build Status**: Automated via GitHub Actions
-- **Data Freshness**: Timestamp tracking
-- **Error Handling**: Graceful fallbacks for missing data
-- **Performance**: Optimized loading strategies
+### Planned Features
+- **Desktop Media**: Background video/music with volume controls
+- **Theme System**: Light/dark mode toggle
+- **Enhanced Mobile**: Theme switching for mobile optimization
+- **Performance**: Further optimizations for loading speeds
 
-## 📄 License
+### Volume & Theme Controls (Upcoming)
+- Speaker icon with hover volume slider
+- Desktop/mobile theme toggle button  
+- Background media controls for premium experience
 
-This project is proprietary and confidential. All rights reserved.
+## 🔧 Development Setup
+
+### Prerequisites
+- Node.js 18+ (for CSV processing)
+- GitHub repository with Actions enabled
+- Static hosting (GitHub Pages, Netlify, Vercel)
+
+### Local Development
+```bash
+# Clone repository
+git clone https://github.com/JOLT-dailyAi/VibeDrips.git
+cd VibeDrips
+
+# Install dependencies for CSV processing
+npm init -y
+npm install csv-parser
+
+# Process CSV manually (optional)
+cat data/products.csv | node convert-csv.js
+
+# Serve locally (any static server)
+python -m http.server 8000
+# or
+npx serve .
+```
+
+### Adding New Products
+1. Add products to `data/products.csv` with proper `Currency` column
+2. Ensure `dateFirstAvailable` is populated for "Hot" filtering
+3. Include `Amazon SiteStripe (Short)` for primary affiliate links
+4. Push to main branch - GitHub Actions will auto-process
+
+### Currency File Generation
+The `convert-csv.js` script automatically:
+- Reads CSV from STDIN
+- Detects currency from `Currency` column or price symbols
+- Creates separate JSON files per currency
+- Generates `currencies.json` manifest with metadata
+- Updates `last_updated.txt` with processing stats
+
+## 🎯 Performance Features
+
+- **Static Site**: Zero server dependencies, runs anywhere
+- **Lazy Loading**: Images load only when needed
+- **Efficient Rendering**: Smart DOM updates and caching
+- **Mobile Optimized**: Touch-friendly interface with responsive design
+- **SEO Ready**: Semantic HTML structure with proper meta tags
+
+## 📈 Analytics Integration Ready
+
+The platform is prepared for:
+- Product click tracking (Amazon redirects)
+- Search analytics (filter usage patterns)
+- Regional performance metrics (currency-based insights)
+- Conversion tracking (affiliate link effectiveness)
+
+## 📄 License & Usage
+
+This project is proprietary and confidential. All rights reserved to VibeDrips and Daily AI.
+
+**For support or inquiries:**
+- Instagram: [@vibedrips.dailyai](https://www.instagram.com/vibedrips.dailyai/)
+- Ko-fi: [Support Daily AI](https://ko-fi.com/dailyai/tiers)
 
 ---
 
-**VibeDrips** - Where digital curation meets global commerce. 🛍️✨
+*VibeDrips - Where digital curation meets global commerce. 🛍️✨*
+
+**Built with ❤️ by [Daily AI](https://ko-fi.com/dailyai)**
