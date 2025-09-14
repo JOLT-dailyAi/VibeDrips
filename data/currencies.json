@@ -10,15 +10,15 @@
       "product_count": 7,
       "filename": "products-INR.json",
       "categories": [
-        "General",
-        "Toys & Games › Action & Toy Figures › Toy Figures"
+        "Toys & Games › Action & Toy Figures › Toy Figures",
+        "General"
       ],
       "brands": [
-        "Ignyte",
-        "Axor",
-        "CodersParadise",
+        "Banpresto",
         "Junkyard",
-        "Banpresto"
+        "CodersParadise",
+        "Axor",
+        "Ignyte"
       ],
       "price_range": {
         "min": 189,
@@ -26,7 +26,7 @@
       }
     }
   ],
-  "last_updated": "2025-09-14T08:33:41.300Z",
+  "last_updated": "2025-09-14T07:55:00.000Z",
   "total_products": 7,
   "default_currency": "INR"
 }
