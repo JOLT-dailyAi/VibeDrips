@@ -127,8 +127,13 @@ function setupThemeToggle() {
     body.className = savedTheme;
 
     VibeDrips.elements.themeToggle.addEventListener('click', () => {
-        body.classList.toggle('dark-theme');
-        body.classList.toggle('light-theme');
+        if (body.classList.contains('dark-theme')) {
+            body.classList.remove('dark-theme');
+            body.classList.add('light-theme');
+        } else {
+            body.classList.remove('light-theme');
+            body.classList.add('dark-theme');
+        }
         localStorage.setItem('theme', body.className);
     });
 }
@@ -207,15 +212,28 @@ async function loadProducts() {
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         VibeDrips.allProducts = await response.json();
         console.log('Products loaded:', VibeDrips.allProducts); // Debug log
-        VibeDrips.categories = new Set(VibeDrips.allProducts.map(p => p.category));
+        VibeDrips.categories = new Set(VibeDrips.allProducts.map(p => p.category || 'Uncategorized'));
         VibeDrips.elements.productCount.textContent = VibeDrips.allProducts.length || 0;
         VibeDrips.elements.categoryCount.textContent = VibeDrips.categories.size || 0;
         VibeDrips.elements.lastUpdated.textContent = '9/15/2025'; // Current date
+        populateCategoryFilter();
         filterProducts(); // Initial filter
     } catch (error) {
         console.error('❌ Failed to load products:', error, `URL: ${VibeDrips.config.dataUrl}/products-${VibeDrips.currentCurrency}.json`);
-        showError('Failed to load products. Check console for details.');
+        showError('Failed to load products. Check console for details or ensure JSON files exist in ./data/.');
     }
+}
+
+// Populate category filter
+function populateCategoryFilter() {
+    if (!VibeDrips.elements.categoryFilter) return;
+    VibeDrips.elements.categoryFilter.innerHTML = '<option value="">All Categories</option>';
+    VibeDrips.categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        VibeDrips.elements.categoryFilter.appendChild(option);
+    });
 }
 
 // Show currency modal
