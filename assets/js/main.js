@@ -43,6 +43,8 @@ async function initializeApp() {
         await detectUserRegion();
         await loadAvailableCurrencies();
         await initializeCurrency();
+        await loadProducts(VibeDrips.currentCurrency); // Load products after currency
+        setupThemeToggle(); // Add theme toggle
         
         console.log('✅ VibeDrips initialized successfully!');
         
@@ -60,6 +62,7 @@ function cacheElements() {
     elements.currencySelector = document.getElementById('currency-selector');
     elements.currentCurrency = document.getElementById('current-currency');
     elements.currencyDisplay = document.getElementById('currency-display');
+    elements.currencyTrigger = document.getElementById('currency-trigger');
     elements.productsContainer = document.getElementById('products-container');
     elements.sectionTitle = document.getElementById('section-title');
     elements.sectionSubtitle = document.getElementById('section-subtitle');
@@ -69,6 +72,7 @@ function cacheElements() {
     elements.search = document.getElementById('search');
     elements.categoryFilter = document.getElementById('category-filter');
     elements.priceSort = document.getElementById('price-sort');
+    elements.themeToggle = document.getElementById('theme-toggle');
     
     console.log('📋 DOM elements cached');
 }
@@ -97,6 +101,24 @@ function setupEventListeners() {
     });
     
     console.log('🎧 Event listeners set up');
+}
+
+// Setup theme toggle
+function setupThemeToggle() {
+    const body = document.body;
+    const savedTheme = localStorage.getItem('theme') || 'light-theme'; // Default to light
+    body.className = savedTheme;
+
+    VibeDrips.elements.themeToggle.addEventListener('click', () => {
+        if (body.classList.contains('light-theme')) {
+            body.classList.remove('light-theme');
+            body.classList.add('dark-theme');
+        } else {
+            body.classList.remove('dark-theme');
+            body.classList.add('light-theme');
+        }
+        localStorage.setItem('theme', body.className);
+    });
 }
 
 // Detect user region using IP
@@ -283,6 +305,9 @@ async function setCurrency() {
     if (VibeDrips.elements.currencyDisplay) {
         VibeDrips.elements.currencyDisplay.textContent = selectedCurrency;
     }
+    if (VibeDrips.elements.currencyTrigger) {
+        VibeDrips.elements.currencyTrigger.textContent = selectedCurrency;
+    }
     
     hideCurrencyModal();
     
@@ -324,6 +349,9 @@ async function loadProducts(currency) {
         populateCategoryFilter();
         setTimeFilter(VibeDrips.currentTimeFilter);
         
+        // Update stats
+        VibeDrips.elements.productCount.textContent = VibeDrips.allProducts.length || 0;
+        VibeDrips.elements.categoryCount.textContent = VibeDrips.categories.size || 0;
     } catch (error) {
         console.error('❌ Product loading failed:', error);
         showError('Unable to load products. Please check your connection and try again.');
@@ -387,6 +415,54 @@ function populateCategoryFilter() {
     });
 }
 
+// Set time filter and update UI
+function setTimeFilter(filter) {
+    VibeDrips.currentTimeFilter = filter;
+    document.querySelectorAll('.time-category').forEach(c => c.classList.remove('active'));
+    document.querySelector(`.time-category[data-filter="${filter}"]`).classList.add('active');
+    filterProducts();
+}
+
+// Filter products
+function filterProducts() {
+    VibeDrips.filteredProducts = VibeDrips.allProducts.filter(product => {
+        const searchTerm = (VibeDrips.elements.search.value || '').toLowerCase();
+        const category = VibeDrips.elements.categoryFilter.value;
+        return (!searchTerm || (product.name && product.name.toLowerCase().includes(searchTerm))) &&
+               (!category || (product.category && product.category === category)) &&
+               (VibeDrips.currentTimeFilter === 'all' || (product.timeFilter && product.timeFilter === VibeDrips.currentTimeFilter));
+    });
+    if (VibeDrips.elements.productsContainer) {
+        VibeDrips.elements.productsContainer.innerHTML = VibeDrips.filteredProducts.length > 0 ?
+            VibeDrips.filteredProducts.map(p => `<div class="product-item">${p.name || 'Unnamed Product'}</div>`).join('') :
+            '<div class="no-products">No products found.</div>';
+    }
+    console.log('Filtered products:', VibeDrips.filteredProducts.length);
+}
+
+// Sort products
+function sortProducts() {
+    const sortBy = VibeDrips.elements.priceSort.value;
+    if (sortBy && VibeDrips.filteredProducts.length) {
+        VibeDrips.filteredProducts.sort((a, b) => {
+            switch (sortBy) {
+                case 'price-low': return (a.price || 0) - (b.price || 0);
+                case 'price-high': return (b.price || 0) - (a.price || 0);
+                case 'name': return (a.name || '').localeCompare(b.name || '');
+                case 'rating': return (b.customer_rating || 0) - (a.customer_rating || 0);
+                case 'date-new': return new Date(b.date_first_available || 0) - new Date(a.date_first_available || 0);
+                default: return 0;
+            }
+        });
+    }
+    if (VibeDrips.elements.productsContainer) {
+        VibeDrips.elements.productsContainer.innerHTML = VibeDrips.filteredProducts.length > 0 ?
+            VibeDrips.filteredProducts.map(p => `<div class="product-item">${p.name || 'Unnamed Product'}</div>`).join('') :
+            '<div class="no-products">No products found.</div>';
+    }
+    console.log('Sorted products:', sortBy);
+}
+
 // Show different UI states
 function showLoadingState() {
     if (VibeDrips.elements.productsContainer) {
@@ -442,6 +518,12 @@ async function fallbackInitialization() {
     
     if (VibeDrips.elements.currentCurrency) {
         VibeDrips.elements.currentCurrency.textContent = 'INR';
+    }
+    if (VibeDrips.elements.currencyDisplay) {
+        VibeDrips.elements.currencyDisplay.textContent = 'INR';
+    }
+    if (VibeDrips.elements.currencyTrigger) {
+        VibeDrips.elements.currencyTrigger.textContent = 'INR';
     }
     
     showComingSoonState();
