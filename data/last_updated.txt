@@ -1,5 +1,5 @@
 VibeDrips Data Processing Summary
-Generated: 2025-09-14T08:18:05.333Z
+Generated: 2025-09-14T08:33:41.301Z
 
 📊 STATISTICS
 - Total Rows Processed: 7
@@ -9,7 +9,7 @@ Generated: 2025-09-14T08:18:05.333Z
 
 💰 CURRENCIES
 - Currencies Found: 1
-- Available: MISC
+- Available: INR
 
 📦 CATEGORIES
 - Categories Found: 2
@@ -20,5 +20,5 @@ Generated: 2025-09-14T08:18:05.333Z
 - Top Brands: Banpresto, Junkyard, CodersParadise, Axor, Ignyte
 
 📁 FILES GENERATED
-- products-MISC.json (7 products)
+- products-INR.json (7 products)
 - currencies.json (manifest)

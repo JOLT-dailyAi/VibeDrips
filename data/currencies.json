@@ -1,14 +1,14 @@
 {
   "available_currencies": [
     {
-      "code": "MISC",
-      "name": "Random Drops",
-      "symbol": "🎁",
+      "code": "INR",
+      "name": "Indian Rupee",
+      "symbol": "₹",
       "countries": [
-        "Global"
+        "India"
       ],
       "product_count": 7,
-      "filename": "products-MISC.json",
+      "filename": "products-INR.json",
       "categories": [
         "General",
         "Toys & Games › Action & Toy Figures › Toy Figures"
@@ -26,7 +26,7 @@
       }
     }
   ],
-  "last_updated": "2025-09-14T08:18:05.333Z",
+  "last_updated": "2025-09-14T08:33:41.300Z",
   "total_products": 7,
   "default_currency": "INR"
 }
