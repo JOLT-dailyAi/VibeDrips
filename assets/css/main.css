@@ -27,6 +27,7 @@ body {
   z-index: 1000;
   transition: transform 0.3s;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Added shadow for depth */
+  min-height: 230px; /* Adjusted for 200x200 image + padding */
 }
 
 .main-header.collapsed {
@@ -35,7 +36,7 @@ body {
 
 .logo-img {
   height: auto;
-  width: 300px;
+  width: 200px; /* Match 200x200 image */
   transition: width 0.3s; /* Smooth resize on mobile */
 }
 
@@ -54,6 +55,7 @@ body {
 .time-categories {
   display: flex;
   gap: 15px;
+  flex-wrap: wrap; /* Allow wrapping on small screens */
 }
 
 .time-category {
@@ -78,6 +80,7 @@ body {
 .filter-controls {
   display: flex;
   gap: 15px;
+  flex-wrap: wrap; /* Allow wrapping on small screens */
 }
 
 .filter-group label {
@@ -105,12 +108,14 @@ body {
   gap: 15px;
   font-size: 16px;
   border-radius: 5px;
+  flex-wrap: wrap; /* Allow wrapping on small screens */
 }
 
 .stat-item {
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex: 1 1 20%; /* Distribute evenly, wrap if needed */
 }
 
 .stat-number {
@@ -121,6 +126,30 @@ body {
 .stat-label {
   font-size: 12px;
   text-transform: uppercase;
+}
+
+.products-section {
+  margin-top: 20px;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.product-item {
+  background-color: #4A3ABF;
+  padding: 15px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.no-products {
+  text-align: center;
+  color: #FFFFFF;
+  padding: 20px;
 }
 
 .main-footer {
@@ -153,21 +182,22 @@ body {
   background-color: #2E1D80;
   color: #FFFFFF;
   border: 2px solid #4A3ABF;
-  padding: 10px;
+  padding: 5px; /* Adjusted for 50x50 */
   cursor: pointer;
   font-size: 16px;
   transition: all 0.3s;
   border-radius: 50%; /* Circular button */
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   text-align: center;
-  line-height: 20px;
+  line-height: 40px; /* Center icon vertically */
 }
 
 .social-float #theme-toggle::before {
   content: "\f186"; /* Moon icon for dark theme */
   font-family: "Font Awesome 6 Free";
   font-weight: 900;
+  font-size: 24px; /* Ensure visibility at 50x50 */
 }
 
 .light-theme .social-float #theme-toggle::before {
@@ -262,9 +292,10 @@ body {
 @media (max-width: 768px) {
   .main-header {
     padding: 10px 15px; /* Adjusted but still spacious */
+    min-height: 210px; /* Adjusted for mobile */
   }
   .logo-img {
-    width: 200px;
+    width: 150px; /* Scaled down for mobile */
   }
   .time-categories, .filter-controls {
     flex-direction: column;
@@ -284,7 +315,10 @@ body {
     border-radius: 5px;
   }
   .social-float #theme-toggle {
-    width: 35px;
-    height: 35px;
+    width: 50px;
+    height: 50px;
+  }
+  .products-grid {
+    grid-template-columns: 1fr; /* Single column on mobile */
   }
 }
