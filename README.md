@@ -45,20 +45,24 @@ VibeDrips automatically detects and separates products by currency, creating ded
 
 ```
 VibeDrips/
-├── index.html              # Main website (modular structure)
-├── styles.css              # Purple/cyan theme styling
-├── app.js                  # Core functionality
-├── convert-csv.js          # CSV to multi-currency JSON converter
-├── data/
-│   ├── products.csv        # Master product database
-│   ├── currencies.json     # Available currencies manifest
-│   ├── products-INR.json   # Indian market products
-│   ├── products-USD.json   # US market products
-│   ├── products-EUR.json   # European market products
-│   ├── products-MISC.json  # Random Drops (uncategorized)
-│   └── last_updated.txt    # Last processing timestamp
-└── .github/workflows/
-    └── process-csv.yml     # Automated data processing
+├── .github/workflows/          # GitHub Actions
+│   └── process-csv.yml
+├── convert-csv.js              # ← Backend automation (ROOT)
+├── cleanup-old-files.js        # ← Backend automation (ROOT)  
+├── data/                       # Data files
+│   ├── products.csv
+│   └── products-INR.json
+├── vibedrips/                  # Your main project
+│   ├── assets/
+│   │   ├── js/                 # ← Frontend JavaScript
+│   │   │   ├── main.js         # Website functionality
+│   │   │   ├── cart.js         # Shopping cart
+│   │   │   └── products.js     # Product display
+│   │   ├── css/
+│   │   └── images/
+│   ├── index.html
+│   └── products.html
+└── README.md
 ```
 
 ## 🔄 Data Processing Pipeline
