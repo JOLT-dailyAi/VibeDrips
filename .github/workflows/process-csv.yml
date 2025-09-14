@@ -3,7 +3,7 @@ name: Process CSV Data
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Run daily at 12:00 AM UTC (midnight)
+    - cron: '0 0 * * *'
   push:
     paths:
       - 'data/products.csv'
@@ -30,34 +30,34 @@ jobs:
         npm init -y
         npm install csv-parser
         
-    - name: Clean old JSON files
+    # NEW: Fix Git cached/ghost files
+    - name: Remove cached ghost files
       run: |
-        # Use Node.js cleanup script for better control
-        node -e "
-        const fs = require('fs');
-        const path = require('path');
-        const dataDir = 'data';
+        echo "🔍 Checking for cached/ghost files..."
         
-        if (fs.existsSync(dataDir)) {
-          const files = fs.readdirSync(dataDir);
-          let deleted = 0;
-          
-          files.forEach(file => {
-            // Delete old JSON files but keep CSV and txt files
-            if (file.endsWith('.json')) {
-              try {
-                fs.unlinkSync(path.join(dataDir, file));
-                console.log('🗑️ Deleted old file:', file);
-                deleted++;
-              } catch (e) {
-                console.log('⚠️ Could not delete:', file, e.message);
-              }
-            }
-          });
-          
-          console.log('✨ Cleanup complete. Deleted', deleted, 'old JSON files');
-        }
-        "
+        # List all files in git index
+        echo "📋 Files in Git index:"
+        git ls-files data/
+        
+        # List actual files on filesystem
+        echo "📋 Files on filesystem:"
+        ls -la data/ || echo "Directory doesn't exist yet"
+        
+        # Remove ghost JSON files from git cache
+        echo "🗑️ Removing cached JSON files..."
+        git rm --cached data/products-*.json || echo "No cached product files found"
+        git rm --cached data/currencies.json || echo "No cached currencies file found"
+        
+        # Verify removal
+        echo "✅ Git index after cleanup:"
+        git ls-files data/
+        
+    - name: Clean old physical files
+      run: |
+        # Clean any remaining physical files
+        find data/ -name "products-*.json" -type f -delete 2>/dev/null || true
+        rm -f data/currencies.json 2>/dev/null || true
+        echo "🧹 Physical file cleanup complete"
         
     - name: Convert CSV to JSON
       run: |
@@ -65,16 +65,17 @@ jobs:
         
     - name: List generated files
       run: |
-        echo "Generated files:"
+        echo "📁 Generated files:"
         ls -la data/
+        echo "📁 Git index files:"
+        git ls-files data/
         
     - name: Commit processed data
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git pull origin main
         
-        # Add all generated JSON files and last_updated.txt
+        # Add all generated files
         git add data/products-*.json data/currencies.json data/last_updated.txt
         
         # Check if there are changes to commit
