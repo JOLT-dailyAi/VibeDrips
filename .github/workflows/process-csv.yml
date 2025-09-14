@@ -3,7 +3,7 @@ name: Process CSV Data
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Run daily at 12:00 AM UTC (05:30 AM IST)
+    - cron: '0 0 * * *'  # Run daily at 12:00 AM UTC (midnight)
   push:
     paths:
       - 'data/products.csv'
@@ -30,20 +30,57 @@ jobs:
         npm init -y
         npm install csv-parser
         
+    - name: Clean old JSON files
+      run: |
+        # Use Node.js cleanup script for better control
+        node -e "
+        const fs = require('fs');
+        const path = require('path');
+        const dataDir = 'data';
+        
+        if (fs.existsSync(dataDir)) {
+          const files = fs.readdirSync(dataDir);
+          let deleted = 0;
+          
+          files.forEach(file => {
+            // Delete old JSON files but keep CSV and txt files
+            if (file.endsWith('.json')) {
+              try {
+                fs.unlinkSync(path.join(dataDir, file));
+                console.log('🗑️ Deleted old file:', file);
+                deleted++;
+              } catch (e) {
+                console.log('⚠️ Could not delete:', file, e.message);
+              }
+            }
+          });
+          
+          console.log('✨ Cleanup complete. Deleted', deleted, 'old JSON files');
+        }
+        "
+        
     - name: Convert CSV to JSON
       run: |
         cat data/products.csv | node convert-csv.js
         
-    - name: Remove old files from Git
+    - name: List generated files
       run: |
-        git rm -r --quiet data/products-*.json data/currencies.json data/last_updated.txt 2>/dev/null || true
-        git add data/products-*.json data/currencies.json data/last_updated.txt
+        echo "Generated files:"
+        ls -la data/
         
     - name: Commit processed data
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git pull origin main
+        
+        # Add all generated JSON files and last_updated.txt
         git add data/products-*.json data/currencies.json data/last_updated.txt
-        git diff --staged --quiet || git commit -m "Process CSV data - $(date)"
-        git push
+        
+        # Check if there are changes to commit
+        if git diff --staged --quiet; then
+          echo "No changes to commit"
+        else
+          git commit -m "🔄 Process CSV data - $(date)"
+          git push
+        fi
