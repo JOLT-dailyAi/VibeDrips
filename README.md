@@ -17,252 +17,203 @@ A modern, static e-commerce store built with vanilla HTML, CSS, and JavaScript t
 - **No backend required** - Pure static site, works on any hosting platform
 - **SEO friendly** - Semantic HTML structure
 
+# VibeDrips - Drops that Drip. Curated Finds, Digitally Yours.
+
+A modern, multi-currency affiliate e-commerce platform showcasing curated digital finds and trending products across global markets.
+
+## 🌍 Multi-Currency Support
+
+VibeDrips automatically detects and separates products by currency, creating dedicated shopping experiences for different regions:
+
+### Supported Currencies & Regions
+- **INR** (₹) - India (Default)
+- **USD** ($) - United States
+- **EUR** (€) - Germany, France, Italy, Spain, Netherlands, Belgium, Ireland
+- **GBP** (£) - United Kingdom
+- **JPY** (¥) - Japan
+- **CAD** (C$) - Canada
+- **AUD** (A$) - Australia
+- **BRL** (R$) - Brazil
+- **MXN** ($) - Mexico
+- **AED** (د.إ) - United Arab Emirates
+- **SGD** (S$) - Singapore
+- **SAR** (﷼) - Saudi Arabia
+- **SEK** (kr) - Sweden
+- **PLN** (zł) - Poland
+
 ## 🏗️ Project Structure
 
 ```
 VibeDrips/
-├── .github/
-│   └── workflows/
-│       └── process-csv.yml        # GitHub Action for daily updates
+├── index.html              # Main website (modular structure)
+├── styles.css              # Purple/cyan theme styling
+├── app.js                  # Core functionality
+├── convert-csv.js          # CSV to multi-currency JSON converter
 ├── data/
-│   ├── products.json             # Auto-generated from Google Sheets
-│   ├── products.csv              # CSV data source (created by n8n)
-│   ├── last_updated.txt          # Timestamp of last update
-│   └── categories.json           # Product categories (optional)
-├── assets/
-│   ├── css/
-│   │   └── style.css            # Additional custom styles
-│   ├── js/
-│   │   └── main.js              # Additional JavaScript functionality
-│   └── images/                  # Static assets (logos, etc.)
-├── index.html                   # Main store page
-├── product.html                 # Product detail template
-├── convert-csv.js               # CSV to JSON conversion script
-└── README.md                    # This file
+│   ├── products.csv        # Master product database
+│   ├── currencies.json     # Available currencies manifest
+│   ├── products-INR.json   # Indian market products
+│   ├── products-USD.json   # US market products
+│   ├── products-EUR.json   # European market products
+│   ├── products-MISC.json  # Random Drops (uncategorized)
+│   └── last_updated.txt    # Last processing timestamp
+└── .github/workflows/
+    └── process-csv.yml     # Automated data processing
 ```
 
-## 🚀 Quick Start
+## 🔄 Data Processing Pipeline
 
-### 1. Clone or Download
+### Automated Workflow
+- **Trigger**: Daily at midnight UTC or when `products.csv` is updated
+- **Process**: Converts CSV to currency-specific JSON files
+- **Output**: Separate product files for each detected currency
 
-```bash
-git clone https://github.com/JOLT-dailyAi/VibeDrips.git
-cd VibeDrips
-```
+### Currency Detection Logic
+1. **Primary**: Check `Currency` column in CSV
+2. **Fallback**: Parse currency symbols from price field (₹, $, €, etc.)
+3. **Default**: Products without clear currency go to "Random Drops" category
 
-### 2. Prepare Your Data
+### Data Transformation
+- Cleans and structures product data
+- Extracts categories and subcategories
+- Processes affiliate links (Amazon SiteStripe)
+- Handles product images and metadata
+- Sorts by timestamp (newest first)
 
-Create your product data in one of these formats:
+## 🚀 Features
 
-#### Option A: JSON Format (`data/products.json`)
-```json
-[
-  {
-    "id": "1",
-    "name": "Stylish T-Shirt",
-    "title": "Premium Cotton T-Shirt",
-    "description": "Comfortable and stylish cotton t-shirt perfect for everyday wear.",
-    "price": 29.99,
-    "category": "clothing",
-    "image": "https://example.com/image1.jpg",
-    "brand": "VibeDrips"
-  }
-]
-```
+### Smart Currency Loading
+- Detects user's region via IP geolocation
+- Shows only currencies with available products
+- Falls back to INR (Indian market) as default
+- No currency conversion - direct regional pricing
 
-#### Option B: CSV Format (`data/products.csv`)
-```csv
-id,name,title,description,price,category,image,brand
-1,"Stylish T-Shirt","Premium Cotton T-Shirt","Comfortable and stylish cotton t-shirt",29.99,clothing,https://example.com/image1.jpg,VibeDrips
-2,"Cool Sneakers","Urban Street Sneakers","Modern sneakers for the urban lifestyle",89.99,shoes,https://example.com/image2.jpg,VibeDrips
-```
+### Responsive Design
+- Device-type detection (mobile/tablet/desktop)
+- Adaptive layouts based on screen size
+- Network-aware loading for slower connections
+- Modern purple/cyan color scheme
 
-### 3. Launch the Store
+### Product Categories
+- **Featured Products** - Curated highlights
+- **New Arrivals** - Recent additions
+- **Trending Now** - Popular items
+- **Random Drops** - Miscellaneous finds
+- **All Products** - Complete catalog
 
-#### Local Development
-```bash
-# Using Python (Python 3)
-python -m http.server 8000
-
-# Using Node.js (if you have http-server installed)
-npx http-server
-
-# Using PHP
-php -S localhost:8000
-```
-
-Then open `http://localhost:8000` in your browser.
-
-#### Deploy to GitHub Pages
-1. Push your code to GitHub
-2. Go to Settings > Pages
-3. Select source branch (usually `main`)
-4. Your store will be live at `https://yourusername.github.io/VibeDrips`
-
-## 📊 Data Source Integration
-
-### Supported Data Fields
-
-The store automatically detects and uses these fields from your data:
-
-| Field | Aliases | Description |
-|-------|---------|-------------|
-| `id` | - | Unique identifier |
-| `name` | `title` | Product name |
-| `description` | - | Product description |
-| `price` | - | Price (number or string like "$29.99") |
-| `category` | - | Product category |
-| `image` | `image_url`, `imageurl` | Image URL |
-| `brand` | - | Brand name |
-
-### Google Sheets Integration
-
-1. **Set up your Google Sheet** with the columns above
-2. **Configure n8n workflow** to export CSV to `/data/products.csv`
-3. **GitHub Action** will automatically convert CSV to JSON daily
-
-### Manual Data Updates
-
-To update products manually:
-
-```bash
-# If you have Node.js
-node convert-csv.js
-
-# This converts data/products.csv to data/products.json
-```
-
-## 🎨 Customization
-
-### Styling
-- Edit the CSS in `index.html` or create separate files in `assets/css/`
-- Color scheme uses CSS custom properties for easy theming
-- Responsive design uses CSS Grid and Flexbox
-
-### Adding Features
-- Custom JavaScript can be added to `assets/js/main.js`
-- Product detail page can be customized in `product.html`
-- Add new filter options by modifying the filter functions
-
-### Branding
-- Replace the logo text in the header
-- Update the hero section content
-- Modify the color gradients and brand colors
-
-## 🔄 Automated Updates
-
-### GitHub Actions Workflow
-
-The included workflow (`/.github/workflows/process-csv.yml`) automatically:
-
-1. Runs daily at 6 AM UTC
-2. Converts CSV to JSON format
-3. Updates the `last_updated.txt` timestamp
-4. Commits changes back to the repository
-
-### Manual Trigger
-
-You can manually trigger updates via:
-- GitHub Actions tab > "Process CSV Data" > "Run workflow"
-- Or push changes to the `main` branch
-
-## 🌐 Deployment Options
-
-### GitHub Pages (Free)
-- Automatic deployment from your repository
-- Custom domain support
-- HTTPS enabled by default
-
-### Netlify (Free tier available)
-- Drag and drop deployment
-- Form handling and serverless functions
-- Branch previews
-
-### Vercel (Free tier available)
-- Git integration
-- Automatic deployments
-- Edge network
-
-### Traditional Web Hosting
-- Upload files via FTP
-- Works on any static hosting service
-- No server requirements
+### Search & Filter
+- Real-time search across all product fields
+- Category filtering
+- Price sorting (low-to-high, high-to-low)
+- Rating-based sorting
+- Brand filtering
 
 ## 🛠️ Development
 
-### Adding New Product Fields
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+- GitHub repository with Actions enabled
 
-1. Update your data source to include the new field
-2. Modify the `createProductCard()` function in `index.html`
-3. Update the product detail template if needed
+### Setup
+```bash
+# Clone repository
+git clone https://github.com/JOLT-dailyAi/VibeDrips.git
+cd VibeDrips
 
-### Custom Filters
+# Install dependencies
+npm init -y
+npm install csv-parser
 
-Add new filter options by:
-1. Adding HTML elements in the filters section
-2. Extending the `filterProducts()` function
-3. Adding corresponding filter logic
+# Convert CSV to JSON (manual)
+node convert-csv.js
+```
 
-### SEO Optimization
+### Adding New Products
+1. Add products to `data/products.csv`
+2. Ensure `Currency` column is populated
+3. Push to main branch
+4. GitHub Actions will automatically process the data
 
-- Update meta tags in the HTML head
-- Add structured data for products
-- Optimize image alt texts
-- Use semantic HTML elements
+### File Structure Benefits
+- **Modular**: Separate HTML, CSS, and JS files
+- **Maintainable**: Easy to update individual components
+- **Scalable**: Add new currencies without breaking existing functionality
+- **SEO-Friendly**: Clean HTML structure
 
-## 📱 Browser Support
+## 📊 Data Format
 
-- Chrome/Edge 90+
-- Firefox 88+
-- Safari 14+
-- Mobile browsers (iOS Safari, Chrome Mobile)
+### CSV Columns (Key Fields)
+- `Timestamp` - When product was added
+- `productTitle` - Product name
+- `Description` - Product description
+- `price` - Price with currency symbol
+- `Currency` - ISO currency code (INR, USD, etc.)
+- `brand` - Product brand
+- `categoryHierarchy` - Product category
+- `MainImage` - Primary product image
+- `AllImages` - Additional product images
+- `Amazon SiteStripe (Short)` - Affiliate link
+- `customerRating` - Product rating
+- `reviewCount` - Number of reviews
 
-## 🐛 Troubleshooting
+### JSON Output Structure
+```json
+{
+  "asin": "B09153RZST",
+  "name": "Banpresto Demon Slayer Figure",
+  "description": "Officially Licensed Anime Figurine...",
+  "price": 1999,
+  "currency": "INR",
+  "brand": "Banpresto",
+  "category": "Toys & Games",
+  "main_image": "https://m.media-amazon.com/images/...",
+  "affiliate_link": "https://amzn.to/...",
+  "customer_rating": 4.8,
+  "review_count": 128,
+  "timestamp": "2025-01-15T10:30:00Z"
+}
+```
 
-### Products Not Loading
-- Check if `data/products.json` or `data/products.csv` exists
-- Verify the data format matches the expected structure
-- Check browser console for errors
+## 🎨 Design System
 
-### Images Not Displaying
-- Ensure image URLs are publicly accessible
-- Check for CORS issues with external image hosts
-- Verify image URLs are valid
+### Color Palette
+- **Primary Background**: `#2E1D80` (Deep Purple)
+- **Text Color**: `#80DFFF` (Cyan Blue)
+- **Accent Gradients**: Purple to Cyan
+- **Cards**: Semi-transparent overlays with blur effects
+- **Buttons**: Gradient backgrounds with hover effects
 
-### GitHub Pages Not Updating
-- Check GitHub Actions tab for workflow status
-- Ensure the workflow has proper permissions
-- Verify the data files are in the correct location
+### Typography
+- **Font Stack**: `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif`
+- **Headings**: Bold weights with gradient text effects
+- **Body**: Clean, readable sans-serif
+
+## 🔗 Affiliate Integration
+
+- **Amazon Associates**: Full SiteStripe link support
+- **Link Tracking**: Product ID-based analytics
+- **External Links**: Opens in new tabs with proper attribution
+- **Fallback Handling**: Graceful degradation for missing links
+
+## 📱 Mobile Optimization
+
+- **Responsive Grid**: Auto-fit product cards
+- **Touch Friendly**: Large tap targets
+- **Performance**: Lazy loading for images
+- **PWA Ready**: Service worker and manifest support
+
+## 🚦 Status & Monitoring
+
+- **Build Status**: Automated via GitHub Actions
+- **Data Freshness**: Timestamp tracking
+- **Error Handling**: Graceful fallbacks for missing data
+- **Performance**: Optimized loading strategies
 
 ## 📄 License
 
-This project is open source and available under the [MIT License](LICENSE).
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📞 Support
-
-- **Issues**: [GitHub Issues](https://github.com/JOLT-dailyAi/VibeDrips/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/JOLT-dailyAi/VibeDrips/discussions)
-- **Documentation**: This README and inline code comments
-
-## 🎯 Roadmap
-
-- [ ] Shopping cart functionality
-- [ ] Product wishlist
-- [ ] Advanced filtering (price range, ratings)
-- [ ] Product reviews and ratings
-- [ ] Inventory management
-- [ ] Multi-language support
-- [ ] Dark mode theme
-- [ ] Progressive Web App (PWA) features
+This project is proprietary and confidential. All rights reserved.
 
 ---
 
-Made with ❤️ for modern e-commerce experiences
+**VibeDrips** - Where digital curation meets global commerce. 🛍️✨
