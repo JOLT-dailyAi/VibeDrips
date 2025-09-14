@@ -1,4 +1,4 @@
-# VibeDrips
+# [VibeDrips](https://raw.githubusercontent.com/JOLT-dailyAi/VibeDrips/refs/heads/main/assets/images/VibeDrips.png)
 **Drops that Drip. Curated Finds, Digitally Yours.**
 
 A modern, static affiliate e-commerce platform showcasing curated digital finds and trending products across global markets. Built with vanilla HTML, CSS, and JavaScript for maximum performance and compatibility.
