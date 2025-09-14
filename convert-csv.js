@@ -1,9 +1,8 @@
-// convert-csv.js - Enhanced Multi-Currency Product Processor
-const fs = require('fs');
+// convert-csv.js - Enhanced Multi-Currency Product Processor (STDIN Version)
 const csv = require('csv-parser');
+const fs = require('fs');
 const path = require('path');
 
-const csvFilePath = path.join(__dirname, 'data', 'products.csv');
 const dataDir = path.join(__dirname, 'data');
 
 // Currency mapping for supported countries/regions
@@ -27,7 +26,7 @@ const CURRENCY_MAP = {
 // Currency symbol detection patterns
 const CURRENCY_PATTERNS = {
     '₹': 'INR',
-    '$': 'USD', // Default $ to USD, context needed for CAD/AUD/MXN
+    '$': 'USD',
     '€': 'EUR',
     '£': 'GBP',
     '¥': 'JPY',
@@ -91,24 +90,26 @@ function convertCsvToJson() {
         brandsFound: new Set()
     };
     
-    if (!fs.existsSync(csvFilePath)) {
-        console.error('CSV file not found:', csvFilePath);
-        process.exit(1);
-    }
-    
     // Ensure data directory exists
     if (!fs.existsSync(dataDir)) {
         fs.mkdirSync(dataDir, { recursive: true });
     }
     
-    console.log('🔄 Processing CSV file...');
+    console.log('🔄 Processing CSV from input...');
     
-    fs.createReadStream(csvFilePath)
+    // Read from standard input instead of file
+    process.stdin
         .pipe(csv())
         .on('data', (data) => {
             processingStats.total++;
             
             try {
+                // Debug: Log first few rows to see what columns we're getting
+                if (processingStats.total <= 3) {
+                    console.log(`Row ${processingStats.total} columns:`, Object.keys(data));
+                    console.log(`Sample data:`, data);
+                }
+                
                 // Detect currency - primary from Currency column, fallback to price parsing
                 let currency = null;
                 
@@ -143,8 +144,8 @@ function convertCsvToJson() {
                 // Clean and transform the data
                 const product = {
                     asin: data.asin || generateAsin(),
-                    name: (data.productTitle || 'Untitled Product').trim(),
-                    description: (data.Description || '').trim(),
+                    name: (data.productTitle || data.title || data.name || 'Untitled Product').trim(),
+                    description: (data.Description || data.description || '').trim(),
                     price: cleanAndValidatePrice(data.price),
                     currency: currency,
                     brand: (data.brand || 'VibeDrips').trim(),
@@ -152,7 +153,7 @@ function convertCsvToJson() {
                     subcategory: data.productType || data.itemTypeName || '',
                     
                     // Images
-                    main_image: data.MainImage || '',
+                    main_image: data.MainImage || data.image || '',
                     all_images: allImages.filter(img => img && img.length > 0),
                     
                     // Product details
@@ -256,10 +257,10 @@ function convertCsvToJson() {
                     filename: filename,
                     categories: [...new Set(products.map(p => p.category))].filter(Boolean),
                     brands: [...new Set(products.map(p => p.brand))].filter(Boolean),
-                    price_range: {
+                    price_range: products.length > 0 ? {
                         min: Math.min(...products.map(p => p.price).filter(p => p > 0)),
                         max: Math.max(...products.map(p => p.price))
-                    }
+                    } : { min: 0, max: 0 }
                 };
                 
                 currencyManifest.available_currencies.push(currencyInfo);
@@ -276,8 +277,7 @@ function convertCsvToJson() {
             
             // Write processing summary
             const summaryPath = path.join(dataDir, 'last_updated.txt');
-            const summary = `
-VibeDrips Data Processing Summary
+            const summary = `VibeDrips Data Processing Summary
 Generated: ${new Date().toISOString()}
 
 📊 STATISTICS
@@ -300,8 +300,7 @@ Generated: ${new Date().toISOString()}
 
 📁 FILES GENERATED
 ${Object.keys(currencyResults).map(currency => `- products-${currency}.json (${currencyResults[currency].length} products)`).join('\n')}
-- currencies.json (manifest)
-            `.trim();
+- currencies.json (manifest)`;
             
             fs.writeFileSync(summaryPath, summary);
             
@@ -313,7 +312,6 @@ ${Object.keys(currencyResults).map(currency => `- products-${currency}.json (${c
             if (processingStats.errors > 0) {
                 console.log(`⚠️  ${processingStats.errors} rows had processing errors`);
             }
-            
         })
         .on('error', (error) => {
             console.error('❌ Error processing CSV:', error);
@@ -322,6 +320,6 @@ ${Object.keys(currencyResults).map(currency => `- products-${currency}.json (${c
 }
 
 // Run the conversion
-console.log('🚀 VibeDrips Multi-Currency Product Processor');
-console.log('===========================================');
+console.log('🚀 VibeDrips Multi-Currency Product Processor (STDIN)');
+console.log('====================================================');
 convertCsvToJson();
