@@ -32,7 +32,7 @@ jobs:
         
     - name: Convert CSV to JSON
       run: |
-        node convert-csv.js
+        cat data/products.csv | node convert-csv.js
         
     - name: Commit processed data
       run: |
