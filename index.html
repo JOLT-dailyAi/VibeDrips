@@ -790,6 +790,12 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             showCurrencyModal();
+            
+            // Add event listener for continue button
+            const continueBtn = document.getElementById('continue-btn');
+            if (continueBtn) {
+                continueBtn.addEventListener('click', setCurrency);
+            }
         });
 
         function showCurrencyModal() {
