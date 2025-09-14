@@ -1,4 +1,3 @@
-// convert-csv.js - Enhanced Multi-Currency Product Processor (STDIN Version) - FIXED
 const csv = require('csv-parser');
 const fs = require('fs');
 const path = require('path');
@@ -42,30 +41,16 @@ const CURRENCY_PATTERNS = {
 
 function detectCurrencyFromPrice(priceString) {
     if (!priceString) return null;
-    
-    // Check for specific patterns first (more specific ones)
-    if (priceString.includes('C$')) return 'CAD';
-    if (priceString.includes('A$')) return 'AUD';
-    if (priceString.includes('R$')) return 'BRL';
-    if (priceString.includes('S$')) return 'SGD';
-    
-    // Check for other currency symbols
     for (const [symbol, currency] of Object.entries(CURRENCY_PATTERNS)) {
-        if (priceString.includes(symbol)) {
-            return currency;
-        }
+        if (priceString.includes(symbol)) return currency;
     }
-    
     return null;
 }
 
 function cleanAndValidatePrice(priceString) {
     if (!priceString) return 0;
-    
-    // Remove currency symbols and clean the string
     const cleanPrice = priceString.replace(/[₹$€£¥C$A$R$د\.إS$﷼krzł,]/g, '').trim();
     const price = parseFloat(cleanPrice);
-    
     return isNaN(price) ? 0 : price;
 }
 
@@ -75,8 +60,20 @@ function extractMainCategory(categoryHierarchy) {
     return parts[0] || '';
 }
 
-function generateAsin() {
-    return 'B0' + Date.now().toString().slice(-8) + Math.random().toString(36).substr(2, 2).toUpperCase();
+function generateAsin(row) {
+    return row.asin || `B0${Date.now().toString().slice(-8)}${Math.random().toString(36).substr(2, 2).toUpperCase()}`;
+}
+
+function deleteOldFiles() {
+    if (!fs.existsSync(dataDir)) return;
+    const files = fs.readdirSync(dataDir);
+    files.forEach(file => {
+        const filePath = path.join(dataDir, file);
+        if (file !== 'products.csv' && file !== 'last_updated.txt') {
+            fs.unlinkSync(filePath);
+            console.log(`Deleted ${file}`);
+        }
+    });
 }
 
 function convertCsvToJson() {
@@ -89,97 +86,54 @@ function convertCsvToJson() {
         categoriesFound: new Set(),
         brandsFound: new Set()
     };
-    
-    // Ensure data directory exists
-    if (!fs.existsSync(dataDir)) {
-        fs.mkdirSync(dataDir, { recursive: true });
-    }
-    
+
+    // Delete old files before processing
+    deleteOldFiles();
+
     console.log('🔄 Processing CSV from input...');
-    
-    // Read from standard input instead of file
+
     process.stdin
         .pipe(csv())
         .on('data', (data) => {
             processingStats.total++;
-            
+
             try {
-                // Debug: Log first few rows to see what columns we're getting
                 if (processingStats.total <= 3) {
                     console.log(`Row ${processingStats.total} columns:`, Object.keys(data));
                     console.log(`Sample data:`, data);
-                    console.log(`Currency column value: "${data.Currency}"`);
-                    console.log(`Price column value: "${data.price}"`);
                 }
-                
-                // FIXED: Detect currency - handle both symbols and codes properly
+
                 let currency = null;
-                
-                // First try Currency column
                 if (data.Currency && data.Currency.trim()) {
                     const currencyValue = data.Currency.trim();
-                    console.log(`Processing currency value: "${currencyValue}"`);
-                    
-                    // Direct symbol mapping
-                    if (currencyValue === '₹') {
-                        currency = 'INR';
-                    } else if (CURRENCY_PATTERNS[currencyValue]) {
+                    if (CURRENCY_PATTERNS[currencyValue]) {
                         currency = CURRENCY_PATTERNS[currencyValue];
                     } else if (CURRENCY_MAP[currencyValue.toUpperCase()]) {
                         currency = currencyValue.toUpperCase();
                     }
                 }
-                
-                // Fallback to price detection
                 if (!currency && data.price) {
                     currency = detectCurrencyFromPrice(data.price);
-                    console.log(`Detected currency from price: ${currency}`);
                 }
-                
-                // Final fallback - check country or default to MISC
                 if (!currency || !CURRENCY_MAP[currency]) {
-                    if (data.countryOfOrigin === 'India' || 
-                        (data.price && data.price.includes('₹'))) {
-                        currency = 'INR';
-                    } else {
-                        currency = 'MISC';
-                    }
+                    currency = 'MISC';
                 }
-                
-                console.log(`Final currency assigned: ${currency}`);
+
                 processingStats.currenciesFound.add(currency);
-                
-                // Parse images array
-                let allImages = [];
-                if (data.AllImages) {
-                    try {
-                        // Handle both JSON array string and comma-separated values
-                        if (data.AllImages.startsWith('[') && data.AllImages.endsWith(']')) {
-                            allImages = JSON.parse(data.AllImages);
-                        } else {
-                            allImages = data.AllImages.split(',').map(img => img.trim().replace(/"/g, ''));
-                        }
-                    } catch (e) {
-                        allImages = data.AllImages.split(',').map(img => img.trim());
-                    }
-                }
-                
-                // Clean and transform the data
+                if (data.categoryHierarchy) processingStats.categoriesFound.add(extractMainCategory(data.categoryHierarchy));
+                if (data.brand) processingStats.brandsFound.add(data.brand);
+
                 const product = {
-                    asin: data.asin || generateAsin(),
-                    name: (data.productTitle || data.title || data.name || 'Untitled Product').trim(),
-                    description: (data.Description || data.description || '').trim(),
+                    asin: generateAsin(data),
+                    name: data.productTitle || '',
+                    description: data.Description || '',
                     price: cleanAndValidatePrice(data.price),
                     currency: currency,
-                    brand: (data.brand || 'VibeDrips').trim(),
-                    category: data.category || extractMainCategory(data.categoryHierarchy) || 'General',
-                    subcategory: data.productType || data.itemTypeName || '',
-                    
-                    // Images
-                    main_image: data.MainImage || data.image || '',
-                    all_images: allImages.filter(img => img && img.length > 0),
-                    
-                    // Product details
+                    brand: data.brand || '',
+                    category: extractMainCategory(data.categoryHierarchy),
+                    subcategory: data.itemTypeName || '',
+                    main_image: data.MainImage || '',
+                    all_images: data.AllImages ? data.AllImages.split(',') : [],
                     model_number: data.model_number || '',
                     model_name: data.modelName || '',
                     color: data.color || '',
@@ -187,60 +141,38 @@ function convertCsvToJson() {
                     size: data.size || '',
                     dimensions: data.dimensions || '',
                     weight: data.weight || '',
-                    
-                    // Theme/Collection
                     theme: data.theme || '',
                     collection: data.collectionName || '',
                     character: data.character || '',
                     animal_theme: data.animalTheme || '',
                     team_name: data.teamName || '',
-                    
-                    // Technical specs
-                    batteries_required: data.batteriesRequired === 'true' || data.batteriesRequired === '1' || data.batteriesRequired === 'Yes',
-                    batteries_included: data.batteriesIncluded === 'true' || data.batteriesIncluded === '1' || data.batteriesIncluded === 'Yes',
+                    batteries_required: data.batteriesRequired === 'Yes' || data.batteriesRequired === 'true',
+                    batteries_included: data.batteriesIncluded === 'Yes' || data.batteriesIncluded === 'true',
                     number_of_batteries: parseInt(data.numberOfBatteries) || 0,
-                    assembly_required: data.assemblyRequired === 'true' || data.assemblyRequired === '1' || data.assemblyRequired === 'Yes',
-                    
-                    // Age and features
+                    assembly_required: data.assemblyRequired === 'Yes' || data.assemblyRequired === 'true',
                     minimum_age: parseInt(data.minimumAge) || 0,
                     number_of_pieces: parseInt(data.numberOfPieces) || 0,
                     included_components: data.includedComponents || '',
                     additional_features: data.additionalFeatures || '',
-                    
-                    // Ratings and availability
                     customer_rating: parseFloat(data.customerRating) || 0,
                     review_count: parseInt(data.reviewCount) || 0,
-                    availability: data.availability || 'Unknown',
+                    availability: data.availability || '',
                     date_first_available: data.dateFirstAvailable || '',
-                    
-                    // Links
                     source_link: data['Product Source Link'] || '',
                     amazon_short: data['Amazon SiteStripe (Short)'] || '',
                     amazon_long: data['Amazon SiteStripe (Long)'] || '',
-                    affiliate_link: data['Amazon SiteStripe (Short)'] || data['Amazon SiteStripe (Long)'] || data['Product Source Link'] || '',
-                    
-                    // Metadata
-                    timestamp: data.Timestamp || new Date().toISOString(),
+                    affiliate_link: data['Amazon SiteStripe (Short)'] || '',
+                    timestamp: data.Timestamp ? new Date(data.Timestamp).toISOString() : new Date('2025-09-14T13:25:00+05:30').toISOString(), // 02:25 PM IST
                     manufacturer: data.manufacturer || '',
                     country_of_origin: data.countryOfOrigin || '',
-                    
-                    // Additional categorization
-                    featured: Math.random() < 0.2, // 20% chance of being featured
-                    trending: Math.random() < 0.3   // 30% chance of being trending
+                    featured: false,
+                    trending: false
                 };
-                
-                // Track stats
-                if (product.category) processingStats.categoriesFound.add(product.category);
-                if (product.brand) processingStats.brandsFound.add(product.brand);
-                
-                // Group by currency
-                if (!currencyResults[currency]) {
-                    currencyResults[currency] = [];
-                }
+
+                if (!currencyResults[currency]) currencyResults[currency] = [];
                 currencyResults[currency].push(product);
-                
+
                 processingStats.processed++;
-                
             } catch (error) {
                 processingStats.errors++;
                 console.error(`Error processing row ${processingStats.total}:`, error.message);
@@ -248,29 +180,22 @@ function convertCsvToJson() {
         })
         .on('end', () => {
             console.log('📊 Processing Complete! Generating files...');
-            
-            // Sort products in each currency by timestamp (newest first)
             Object.keys(currencyResults).forEach(currency => {
                 currencyResults[currency].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
             });
-            
-            // Generate individual currency files
+
             const currencyManifest = {
                 available_currencies: [],
-                last_updated: new Date().toISOString(),
+                last_updated: new Date('2025-09-14T13:25:00+05:30').toISOString(), // 02:25 PM IST
                 total_products: processingStats.processed,
                 default_currency: 'INR'
             };
-            
+
             Object.keys(currencyResults).forEach(currency => {
                 const products = currencyResults[currency];
                 const filename = `products-${currency}.json`;
                 const filepath = path.join(dataDir, filename);
-                
-                // Write currency-specific file
                 fs.writeFileSync(filepath, JSON.stringify(products, null, 2));
-                
-                // Add to manifest
                 const currencyInfo = {
                     code: currency,
                     name: currency === 'MISC' ? 'Random Drops' : (CURRENCY_MAP[currency]?.name || currency),
@@ -280,28 +205,17 @@ function convertCsvToJson() {
                     filename: filename,
                     categories: [...new Set(products.map(p => p.category))].filter(Boolean),
                     brands: [...new Set(products.map(p => p.brand))].filter(Boolean),
-                    price_range: products.length > 0 ? {
-                        min: Math.min(...products.map(p => p.price).filter(p => p > 0)),
-                        max: Math.max(...products.map(p => p.price))
-                    } : { min: 0, max: 0 }
+                    price_range: products.length > 0 ? { min: Math.min(...products.map(p => p.price).filter(p => p > 0)), max: Math.max(...products.map(p => p.price)) } : { min: 0, max: 0 }
                 };
-                
                 currencyManifest.available_currencies.push(currencyInfo);
-                
                 console.log(`💰 ${currency}: ${products.length} products → ${filename}`);
             });
-            
-            // Sort currencies by product count (descending)
+
             currencyManifest.available_currencies.sort((a, b) => b.product_count - a.product_count);
-            
-            // Write currencies manifest
-            const manifestPath = path.join(dataDir, 'currencies.json');
-            fs.writeFileSync(manifestPath, JSON.stringify(currencyManifest, null, 2));
-            
-            // Write processing summary
-            const summaryPath = path.join(dataDir, 'last_updated.txt');
+            fs.writeFileSync(path.join(dataDir, 'currencies.json'), JSON.stringify(currencyManifest, null, 2));
+
             const summary = `VibeDrips Data Processing Summary
-Generated: ${new Date().toISOString()}
+Generated: ${new Date('2025-09-14T13:25:00+05:30').toISOString()} // 02:25 PM IST
 
 📊 STATISTICS
 - Total Rows Processed: ${processingStats.total}
@@ -324,17 +238,13 @@ Generated: ${new Date().toISOString()}
 📁 FILES GENERATED
 ${Object.keys(currencyResults).map(currency => `- products-${currency}.json (${currencyResults[currency].length} products)`).join('\n')}
 - currencies.json (manifest)`;
-            
-            fs.writeFileSync(summaryPath, summary);
-            
+            fs.writeFileSync(path.join(dataDir, 'last_updated.txt'), summary);
+
             console.log('\n✅ SUCCESS! Multi-currency data processing complete.');
             console.log(`📁 Generated ${Object.keys(currencyResults).length} currency files`);
             console.log(`📊 Processed ${processingStats.processed} products from ${processingStats.total} rows`);
             console.log(`💰 Currencies: ${Array.from(processingStats.currenciesFound).join(', ')}`);
-            
-            if (processingStats.errors > 0) {
-                console.log(`⚠️  ${processingStats.errors} rows had processing errors`);
-            }
+            if (processingStats.errors > 0) console.log(`⚠️ ${processingStats.errors} rows had processing errors`);
         })
         .on('error', (error) => {
             console.error('❌ Error processing CSV:', error);
@@ -343,6 +253,6 @@ ${Object.keys(currencyResults).map(currency => `- products-${currency}.json (${c
 }
 
 // Run the conversion
-console.log('🚀 VibeDrips Multi-Currency Product Processor (STDIN)');
-console.log('====================================================');
+console.log('🚀 VibeDrips Multi-Currency Product Processor');
+console.log('===========================================');
 convertCsvToJson();
