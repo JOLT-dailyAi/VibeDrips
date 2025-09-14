@@ -1,350 +1,558 @@
-/* products.css - Product Display and Card Styling */
+// products.js - Fixed Product Display and Filtering Functions
 
-/* Products Grid */
-.products-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 25px;
-    padding: 20px 0;
-}
+/**
+ * Set time-based filter for products
+ */
+function setTimeFilter(filter) {
+    console.log(`Setting time filter: ${filter}`);
+    VibeDrips.currentTimeFilter = filter;
+    
+    // Update active state
+    document.querySelectorAll('.time-category').forEach(cat => {
+        cat.classList.remove('active');
+        if (cat.getAttribute('data-filter') === filter) {
+            cat.classList.add('active');
+        }
+    });
 
-/* Product Card */
-.product-card {
-    background: white;
-    border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-    overflow: hidden;
-    transition: all 0.3s ease;
-    position: relative;
-}
+    // Filter products based on time category
+    switch (filter) {
+        case 'hot':
+            // Hot = Recent products (last 30 days) with good ratings
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+            VibeDrips.filteredProducts = VibeDrips.allProducts.filter(product => {
+                const productDate = new Date(product.date_first_available || product.timestamp);
+                return productDate >= thirtyDaysAgo && parseFloat(product.customer_rating) >= 4.0;
+            });
+            break;
+            
+        case 'featured':
+            // Featured = High rated products with good reviews
+            VibeDrips.filteredProducts = VibeDrips.allProducts.filter(product => 
+                parseFloat(product.customer_rating) >= 4.5 || parseInt(product.review_count) >= 50);
+            break;
+            
+        case 'new':
+            // New = Products from last 60 days
+            const sixtyDaysAgo = new Date();
+            sixtyDaysAgo.setDate(sixtyDaysAgo.getDate() - 60);
+            VibeDrips.filteredProducts = VibeDrips.allProducts.filter(product => {
+                const productDate = new Date(product.date_first_available || product.timestamp);
+                return productDate >= sixtyDaysAgo;
+            });
+            break;
+            
+        case 'trending':
+            // Trending = Products with high review activity
+            VibeDrips.filteredProducts = VibeDrips.allProducts.filter(product => 
+                parseInt(product.review_count) >= 20);
+            break;
+            
+        case 'all':
+        default:
+            VibeDrips.filteredProducts = [...VibeDrips.allProducts];
+    }
 
-.product-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
-}
+    // Update section title
+    const titles = {
+        'hot': 'Hot This Month',
+        'featured': 'Featured Products', 
+        'new': 'New Arrivals',
+        'trending': 'Trending Now',
+        'all': 'All Products'
+    };
+    
+    const subtitles = {
+        'hot': 'Trending products that just dropped and making waves',
+        'featured': 'Hand-picked premium selections with top ratings',
+        'new': 'Latest arrivals fresh from our curated collection',
+        'trending': 'Popular picks generating buzz right now',
+        'all': 'Complete collection of curated finds and drops'
+    };
+    
+    const titleEl = document.getElementById('section-title');
+    const subtitleEl = document.getElementById('section-subtitle');
+    
+    if (titleEl) titleEl.textContent = titles[filter] || 'Products';
+    if (subtitleEl) subtitleEl.textContent = subtitles[filter] || '';
 
-/* Product Image */
-.product-image {
-    position: relative;
-    width: 100%;
-    height: 250px;
-    overflow: hidden;
-    background: #f8f9fa;
-}
-
-.product-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.product-card:hover .product-image img {
-    transform: scale(1.05);
-}
-
-.product-image-placeholder {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    font-size: 48px;
-    color: #cbd5e0;
-    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
-}
-
-/* Product Badges */
-.product-badge {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-    color: white;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-    z-index: 10;
-}
-
-.product-badge.hot {
-    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
-    animation: pulse 2s infinite;
-}
-
-.product-badge.featured {
-    background: linear-gradient(135deg, #feca57 0%, #ff9ff3 100%);
-}
-
-.product-badge.trending {
-    background: linear-gradient(135deg, #48cae4 0%, #023e8a 100%);
-}
-
-@keyframes pulse {
-    0% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0.4); }
-    70% { box-shadow: 0 0 0 10px rgba(255, 107, 107, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(255, 107, 107, 0); }
-}
-
-.image-count {
-    position: absolute;
-    bottom: 15px;
-    right: 15px;
-    background: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 500;
-}
-
-/* Product Info */
-.product-info {
-    padding: 25px;
-}
-
-.product-category {
-    color: #667eea;
-    font-size: 12px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 8px;
-}
-
-.product-title {
-    font-size: 18px;
-    font-weight: 700;
-    color: #2d3748;
-    margin-bottom: 10px;
-    line-height: 1.4;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.product-description {
-    color: #718096;
-    font-size: 14px;
-    line-height: 1.5;
-    margin-bottom: 15px;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.product-price {
-    font-size: 20px;
-    font-weight: 700;
-    color: #667eea;
-    margin-bottom: 15px;
-}
-
-/* Product Meta */
-.product-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.brand {
-    color: #4a5568;
-    font-size: 13px;
-    font-weight: 500;
-}
-
-.rating {
-    color: #4a5568;
-    font-size: 13px;
-    font-weight: 500;
-}
-
-.rating.no-rating {
-    color: #a0aec0;
-}
-
-/* Product Actions */
-.product-actions {
-    display: flex;
-    gap: 10px;
-}
-
-.amazon-button,
-.details-button {
-    flex: 1;
-    padding: 12px 16px;
-    border: none;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    text-align: center;
-}
-
-.amazon-button {
-    background: linear-gradient(135deg, #ff9500 0%, #ff6b00 100%);
-    color: white;
-    box-shadow: 0 4px 15px rgba(255, 149, 0, 0.3);
-}
-
-.amazon-button:hover {
-    background: linear-gradient(135deg, #ff8c00 0%, #ff5500 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(255, 149, 0, 0.4);
-}
-
-.details-button {
-    background: rgba(102, 126, 234, 0.1);
-    color: #667eea;
-    border: 2px solid rgba(102, 126, 234, 0.2);
-}
-
-.details-button:hover {
-    background: #667eea;
-    color: white;
-    transform: translateY(-2px);
-}
-
-/* Simple Modal (temporary) */
-.simple-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    backdrop-filter: blur(10px);
-}
-
-.simple-modal-content {
-    background: white;
-    border-radius: 20px;
-    max-width: 500px;
-    width: 90%;
-    max-height: 80%;
-    overflow-y: auto;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-}
-
-.simple-modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 25px 30px 20px;
-    border-bottom: 1px solid #e2e8f0;
-}
-
-.simple-modal-header h2 {
-    font-size: 20px;
-    color: #2d3748;
-    margin: 0;
-}
-
-.simple-modal-header button {
-    background: none;
-    border: none;
-    font-size: 24px;
-    color: #a0aec0;
-    cursor: pointer;
-    padding: 5px;
-    border-radius: 5px;
-    transition: all 0.2s;
-}
-
-.simple-modal-header button:hover {
-    background: #f7fafc;
-    color: #4a5568;
-}
-
-.simple-modal-body {
-    padding: 30px;
-    text-align: center;
-}
-
-.simple-modal-body img {
-    border-radius: 15px;
-    margin-bottom: 20px;
-}
-
-.simple-modal-body p {
-    margin-bottom: 15px;
-    text-align: left;
-    line-height: 1.6;
-}
-
-.simple-modal-body .amazon-button {
-    margin-top: 20px;
-    width: 100%;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .products-grid {
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 20px;
+    // Apply current search/category filters
+    applyCurrentFilters();
+    
+    // Default sort by rating (highest to lowest) for "all" products
+    if (filter === 'all') {
+        const sortEl = document.getElementById('price-sort');
+        if (sortEl && sortEl.value !== 'rating') {
+            sortEl.value = 'rating';
+        }
+        sortProductsByRating();
     }
     
-    .product-card {
-        border-radius: 15px;
-    }
+    renderProducts();
+}
+
+/**
+ * Apply current search and category filters
+ */
+function applyCurrentFilters() {
+    const searchInput = document.getElementById('search');
+    const categoryFilter = document.getElementById('category-filter');
     
-    .product-info {
-        padding: 20px;
-    }
-    
-    .product-actions {
-        flex-direction: column;
-    }
-    
-    .amazon-button,
-    .details-button {
-        width: 100%;
-    }
-    
-    .simple-modal-content {
-        width: 95%;
-        max-height: 90%;
-    }
-    
-    .simple-modal-header,
-    .simple-modal-body {
-        padding: 20px;
+    const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    const categoryValue = categoryFilter ? categoryFilter.value.trim() : '';
+
+    if (searchTerm || categoryValue) {
+        VibeDrips.filteredProducts = VibeDrips.filteredProducts.filter(product => {
+            const searchFields = [
+                product.name, 
+                product.description, 
+                product.brand,
+                product.category,
+                product.subcategory,
+                product.productTitle
+            ].filter(field => field); // Remove null/undefined fields
+            
+            const matchesSearch = !searchTerm || searchFields.some(field => 
+                field.toString().toLowerCase().includes(searchTerm)
+            );
+
+            const matchesCategory = !categoryValue || 
+                product.category === categoryValue || 
+                product.subcategory === categoryValue ||
+                (product.categoryHierarchy && product.categoryHierarchy.includes(categoryValue));
+
+            return matchesSearch && matchesCategory;
+        });
     }
 }
 
-@media (max-width: 480px) {
-    .products-grid {
-        grid-template-columns: 1fr;
-        gap: 15px;
-    }
+/**
+ * Filter products (called by search/category inputs)
+ */
+function filterProducts() {
+    setTimeFilter(VibeDrips.currentTimeFilter);
+}
+
+/**
+ * Sort products by selected criteria
+ */
+function sortProducts() {
+    const sortSelect = document.getElementById('price-sort');
+    if (!sortSelect) return;
     
-    .product-image {
-        height: 200px;
+    const sortBy = sortSelect.value;
+
+    switch (sortBy) {
+        case 'price-low':
+            VibeDrips.filteredProducts.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+            break;
+        case 'price-high':
+            VibeDrips.filteredProducts.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+            break;
+        case 'name':
+            VibeDrips.filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+            break;
+        case 'rating':
+            sortProductsByRating();
+            break;
+        default:
+            // Default sorting - featured products first, then by rating
+            VibeDrips.filteredProducts.sort((a, b) => {
+                const aRating = parseFloat(a.customer_rating) || 0;
+                const bRating = parseFloat(b.customer_rating) || 0;
+                const aReviews = parseInt(a.review_count) || 0;
+                const bReviews = parseInt(b.review_count) || 0;
+                
+                // Featured products first
+                const aFeatured = aRating >= 4.5 || aReviews >= 50;
+                const bFeatured = bRating >= 4.5 || bReviews >= 50;
+                
+                if (aFeatured && !bFeatured) return -1;
+                if (!aFeatured && bFeatured) return 1;
+                
+                // Then by rating
+                if (bRating !== aRating) return bRating - aRating;
+                
+                // Finally by name
+                return a.name.localeCompare(b.name);
+            });
     }
+
+    renderProducts();
+}
+
+/**
+ * Sort products by rating (highest to lowest)
+ */
+function sortProductsByRating() {
+    VibeDrips.filteredProducts.sort((a, b) => {
+        const aRating = parseFloat(a.customer_rating) || 0;
+        const bRating = parseFloat(b.customer_rating) || 0;
+        const aReviews = parseInt(a.review_count) || 0;
+        const bReviews = parseInt(b.review_count) || 0;
+        
+        // Sort by rating first (highest to lowest)
+        if (bRating !== aRating) return bRating - aRating;
+        
+        // If ratings are equal, sort by review count
+        if (bReviews !== aReviews) return bReviews - aReviews;
+        
+        // Finally by name
+        return a.name.localeCompare(b.name);
+    });
+}
+
+/**
+ * Render products grid
+ */
+function renderProducts() {
+    const container = document.getElementById('products-container');
+    if (!container) return;
     
-    .product-title {
-        font-size: 16px;
+    if (VibeDrips.filteredProducts.length === 0) {
+        container.innerHTML = `
+            <div class="no-products">
+                <h3>No products found</h3>
+                <p>Try adjusting your search or filters to see more products.</p>
+                <button onclick="setTimeFilter('all')" class="retry-button" style="margin-top: 1rem;">
+                    Show All Products
+                </button>
+            </div>`;
+        updateStats();
+        return;
     }
+
+    const productsGrid = document.createElement('div');
+    productsGrid.className = 'products-grid';
+
+    VibeDrips.filteredProducts.forEach(product => {
+        const productCard = createProductCard(product);
+        productsGrid.appendChild(productCard);
+    });
+
+    container.innerHTML = '';
+    container.appendChild(productsGrid);
+    updateStats();
+}
+
+/**
+ * Create individual product card
+ */
+function createProductCard(product) {
+    const card = document.createElement('div');
+    card.className = 'product-card';
     
-    .product-price {
-        font-size: 18px;
+    const primaryImage = product.main_image || product.MainImage;
+    const imageElement = primaryImage ? 
+        `<img src="${primaryImage}" alt="${escapeHtml(product.name)}" 
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" loading="lazy">
+         <div class="product-image-placeholder" style="display:none;">🛍️</div>` :
+        `<div class="product-image-placeholder">🛍️</div>`;
+
+    const formattedPrice = formatPrice(parseFloat(product.price) || 0);
+    
+    // Determine badge
+    let badge = '';
+    const rating = parseFloat(product.customer_rating) || 0;
+    const reviews = parseInt(product.review_count) || 0;
+    
+    if (rating >= 4.5) {
+        badge = `<div class="product-badge">Featured</div>`;
+    } else if (reviews >= 50) {
+        badge = `<div class="product-badge">Popular</div>`;
+    } else if (rating >= 4.0 && reviews >= 20) {
+        badge = `<div class="product-badge">Trending</div>`;
     }
-    
-    .product-meta {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
+
+    // FIXED: Rating display - don't show (0) when review count is 0
+    let ratingDisplay;
+    if (rating > 0) {
+        if (reviews > 0) {
+            ratingDisplay = `<div style="color: #fbbf24;">★ ${rating.toFixed(1)} (${reviews})</div>`;
+        } else {
+            ratingDisplay = `<div style="color: #fbbf24;">★ ${rating.toFixed(1)}</div>`;
+        }
+    } else {
+        ratingDisplay = `<div style="opacity: 0.5;">No ratings</div>`;
+    }
+
+    // Extract category for display
+    const displayCategory = product.subcategory || 
+                          (product.categoryHierarchy ? product.categoryHierarchy.split(' › ').pop() : '') ||
+                          product.category || 
+                          'General';
+
+    card.innerHTML = `
+        <div class="product-image">
+            ${imageElement}
+            ${badge}
+        </div>
+        <div class="product-info">
+            <div class="product-category">${escapeHtml(displayCategory)}</div>
+            <h3 class="product-title">${escapeHtml(product.name || product.productTitle || 'Untitled Product')}</h3>
+            <div class="product-description">${escapeHtml((product.description || 'No description available').substring(0, 100))}${product.description && product.description.length > 100 ? '...' : ''}</div>
+            <div class="product-price">${formattedPrice}</div>
+            <div class="product-meta">
+                <span>${escapeHtml(product.brand || 'VibeDrips')}</span>
+                ${ratingDisplay}
+            </div>
+            <div class="product-actions">
+                <button class="action-button btn-primary" onclick="event.stopPropagation(); openAmazonLink('${product.id}')">
+                    🛒 Buy on Amazon
+                </button>
+                <button class="action-button btn-secondary" onclick="event.stopPropagation(); showProductModal('${product.id}')">
+                    Details
+                </button>
+            </div>
+        </div>
+    `;
+
+    return card;
+}
+
+/**
+ * FIXED: Open Amazon affiliate link with priority system
+ */
+function openAmazonLink(productId) {
+    const product = VibeDrips.allProducts.find(p => p.id === productId);
+    if (!product) {
+        showNotification('Product not found');
+        return;
+    }
+
+    // Priority: Short -> Long -> Source Link
+    let amazonLink = product.amazon_short || 
+                    product['Amazon SiteStripe (Short)'] ||
+                    product.amazon_long ||
+                    product['Amazon SiteStripe (Long)'] ||
+                    product.source_link ||
+                    product['Product Source Link'];
+
+    if (amazonLink && amazonLink !== '#' && amazonLink.trim() !== '') {
+        console.log('Opening Amazon affiliate link:', amazonLink);
+        console.log('Product:', product.name);
+        
+        // Track the click
+        try {
+            // You can add analytics tracking here if needed
+            console.log('Affiliate click tracked for:', productId);
+        } catch (e) {
+            console.warn('Analytics tracking failed:', e);
+        }
+        
+        window.open(amazonLink, '_blank', 'noopener,noreferrer');
+        showNotification('Opening Amazon product page...');
+    } else {
+        showNotification('Amazon link not available for this product');
+        console.warn('No valid Amazon link found for product:', product);
     }
 }
+
+/**
+ * Show product detail modal
+ */
+function showProductModal(productId) {
+    const product = VibeDrips.allProducts.find(p => p.id === productId);
+    if (!product) {
+        showNotification('Product not found');
+        return;
+    }
+
+    const modal = document.getElementById('product-modal');
+    const modalTitle = document.getElementById('modal-product-title');
+    const modalImage = document.getElementById('modal-product-image');
+    const modalDetails = document.getElementById('modal-product-details');
+    const modalGallery = document.getElementById('modal-image-gallery');
+
+    if (!modal || !modalTitle || !modalImage || !modalDetails) return;
+
+    modalTitle.textContent = product.name || product.productTitle || 'Product Details';
+    
+    const primaryImage = product.main_image || product.MainImage;
+    modalImage.src = primaryImage || 'https://via.placeholder.com/400x400/667eea/ffffff?text=No+Image';
+    modalImage.alt = product.name || 'Product Image';
+
+    // Setup image gallery if multiple images exist
+    if (modalGallery) {
+        modalGallery.innerHTML = '';
+        
+        let allImages = [];
+        try {
+            if (product.all_images) {
+                if (typeof product.all_images === 'string') {
+                    // Parse string array format
+                    const cleanedImages = product.all_images
+                        .replace(/^\["|"\]$/g, '')
+                        .split('","')
+                        .map(img => img.trim())
+                        .filter(img => img.length > 0);
+                    allImages = cleanedImages;
+                } else if (Array.isArray(product.all_images)) {
+                    allImages = product.all_images;
+                }
+            } else if (product.AllImages) {
+                allImages = Array.isArray(product.AllImages) ? product.AllImages : [];
+            }
+        } catch (e) {
+            console.warn('Error parsing product images:', e);
+        }
+
+        if (allImages.length > 1) {
+            allImages.slice(0, 5).forEach((imgUrl, index) => {
+                const thumbImg = document.createElement('img');
+                thumbImg.src = imgUrl;
+                thumbImg.className = 'gallery-thumb';
+                thumbImg.onclick = () => {
+                    modalImage.src = imgUrl;
+                };
+                modalGallery.appendChild(thumbImg);
+            });
+        }
+    }
+
+    const formattedPrice = formatPrice(parseFloat(product.price) || 0);
+    const rating = parseFloat(product.customer_rating) || 0;
+    const reviews = parseInt(product.review_count) || 0;
+    
+    // FIXED: Rating display in modal
+    let ratingText;
+    if (rating > 0) {
+        if (reviews > 0) {
+            ratingText = `★ ${rating.toFixed(1)} (${reviews} reviews)`;
+        } else {
+            ratingText = `★ ${rating.toFixed(1)}`;
+        }
+    } else {
+        ratingText = 'No ratings yet';
+    }
+
+    modalDetails.innerHTML = `
+        <div class="detail-item">
+            <div class="detail-label">Price</div>
+            <div class="detail-value">${formattedPrice}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Brand</div>
+            <div class="detail-value">${escapeHtml(product.brand || 'VibeDrips')}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Category</div>
+            <div class="detail-value">${escapeHtml(product.subcategory || product.category || 'General')}</div>
+        </div>
+        <div class="detail-item">
+            <div class="detail-label">Rating</div>
+            <div class="detail-value">${ratingText}</div>
+        </div>
+        ${product.material ? `
+        <div class="detail-item">
+            <div class="detail-label">Material</div>
+            <div class="detail-value">${escapeHtml(product.material)}</div>
+        </div>` : ''}
+        ${product.color ? `
+        <div class="detail-item">
+            <div class="detail-label">Color</div>
+            <div class="detail-value">${escapeHtml(product.color)}</div>
+        </div>` : ''}
+        ${product.dimensions ? `
+        <div class="detail-item">
+            <div class="detail-label">Dimensions</div>
+            <div class="detail-value">${escapeHtml(product.dimensions)}</div>
+        </div>` : ''}
+        <div class="detail-item" style="grid-column: 1 / -1;">
+            <div class="detail-label">Description</div>
+            <div class="detail-value">${escapeHtml(product.description || 'No description available')}</div>
+        </div>
+        <div class="detail-item" style="grid-column: 1 / -1;">
+            <button class="action-button btn-primary" onclick="openAmazonLink('${product.id}')" 
+                    style="width: 100%; margin-top: 1rem; font-size: 16px; padding: 15px;">
+                🛒 Buy on Amazon - ${formattedPrice}
+            </button>
+        </div>
+    `;
+
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden'; // Prevent background scroll
+}
+
+/**
+ * Close product modal
+ */
+function closeProductModal() {
+    const modal = document.getElementById('product-modal');
+    if (modal) {
+        modal.classList.remove('show');
+        document.body.style.overflow = ''; // Restore scroll
+    }
+}
+
+/**
+ * Format price with currency symbol
+ */
+function formatPrice(price) {
+    if (!price || isNaN(price)) return 'Price not available';
+    
+    // Simple INR formatting for now - can be enhanced for multi-currency
+    return `₹${price.toLocaleString('en-IN')}`;
+}
+
+/**
+ * Update statistics display
+ */
+function updateStats() {
+    const productCountEl = document.getElementById('product-count');
+    const categoryCountEl = document.getElementById('category-count');
+    
+    if (productCountEl) productCountEl.textContent = VibeDrips.filteredProducts.length;
+    if (categoryCountEl) categoryCountEl.textContent = VibeDrips.categories.size;
+}
+
+/**
+ * Escape HTML to prevent XSS
+ */
+function escapeHtml(unsafe) {
+    if (!unsafe) return '';
+    return unsafe
+        .toString()
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+/**
+ * Show notification message
+ */
+function showNotification(message) {
+    // Remove existing notifications
+    const existingNotifications = document.querySelectorAll('.notification');
+    existingNotifications.forEach(notif => notif.remove());
+    
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => notification.classList.add('show'), 100);
+    
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+            if (document.body.contains(notification)) {
+                document.body.removeChild(notification);
+            }
+        }, 400);
+    }, 3000);
+}
+
+// Export functions to global scope
+window.setTimeFilter = setTimeFilter;
+window.filterProducts = filterProducts;
+window.sortProducts = sortProducts;
+window.showProductModal = showProductModal;
+window.closeProductModal = closeProductModal;
+window.openAmazonLink = openAmazonLink;
+
+console.log('🔧 Fixed Products.js loaded successfully');
