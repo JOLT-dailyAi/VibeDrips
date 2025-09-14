@@ -15,7 +15,7 @@
         <div class="currency-content">
             <h2>Welcome to VibeDrips</h2>
             <p>Select your preferred currency to see localized pricing</p>
-            <select id="currency-selector" class="currency-select">
+            <select id="currency-selector" class="currency-select" onchange="setCurrency()">
                 <option value="">Choose your currency...</option>
                 <!-- Dynamic options loaded from currencies.json -->
             </select>
@@ -29,7 +29,7 @@
             <div class="header-content">
                 <a href="#" class="logo">
                     <img src="https://raw.githubusercontent.com/JOLT-dailyAi/VibeDrips/refs/heads/main/assets/images/VibeDrips.png" 
-                         alt="VibeDrips" class="logo-img" width="300" height="60">
+                         alt="VibeDrips" class="logo-img" width="200" height="200">
                 </a>
             </div>
         </div>
@@ -102,7 +102,7 @@
                     </div>
                 </div>
 
-                <div id="products-container">
+                <div id="products-container" class="products-grid">
                     <div class="loading-state">
                         <div class="loading-spinner"></div>
                         <div>Loading your curated drops...</div>
@@ -128,7 +128,7 @@
 
     <!-- Floating Social Links -->
     <div class="social-float">
-        <button id="theme-toggle"></button> <!-- Removed label -->
+        <button id="theme-toggle"></button> <!-- Removed label, 50x50 -->
         <a href="https://www.instagram.com/vibedrips.dailyai/" target="_blank"><i class="fab fa-instagram"></i></a>
         <button id="currency-trigger">INR</button> <!-- Currency trigger -->
     </div>
