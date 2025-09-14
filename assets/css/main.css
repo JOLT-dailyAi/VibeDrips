@@ -8,20 +8,20 @@
 
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #2E1D80; /* Solid color for light theme */
     min-height: 100vh;
-    color: #333;
+    color: #FFFFFF; /* Adjusted for light theme */
     transition: background 0.3s, color 0.3s;
 }
 
 body.dark-theme {
-    background: linear-gradient(135deg, #2E1D80 0%, #4A3ABF 100%);
+    background: #2E1D80; /* Same as light for consistency, can adjust if needed */
     color: #FFFFFF;
 }
 
 body.light-theme {
-    background: linear-gradient(135deg, #FFFFFF 0%, #E0E7FF 100%);
-    color: #333;
+    background: #2E1D80; /* Solid color for light theme */
+    color: #FFFFFF;
 }
 
 .container {
@@ -90,7 +90,7 @@ body.light-theme {
 
 /* Header */
 .main-header {
-    background: #2E1D80; /* Match body dark theme */
+    background: #2E1D80; /* Solid color matching body */
     padding: 20px 0;
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
     position: sticky;
@@ -105,9 +105,9 @@ body.light-theme {
 }
 
 .logo-img {
-    height: 80px;
-    width: auto;
-    max-width: 400px; /* Ensure it fits within container */
+    width: 100%; /* Fit the header width */
+    max-height: 120px; /* Adjust to fit header height */
+    object-fit: contain; /* Maintain aspect ratio */
 }
 
 /* Main Content */
@@ -137,6 +137,7 @@ body.light-theme {
     white-space: nowrap;
     font-weight: 500;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    color: #333;
 }
 
 .time-category:hover {
@@ -149,6 +150,20 @@ body.light-theme {
     background: #667eea;
     color: white;
     transform: translateY(-2px);
+}
+
+body.dark-theme .time-category {
+    background: rgba(0, 0, 0, 0.9); /* Black background */
+    color: #FFFFFF; /* White text */
+}
+
+body.dark-theme .time-category:hover {
+    background: rgba(0, 0, 0, 1); /* Black */
+}
+
+body.dark-theme .time-category.active {
+    background: #667eea;
+    color: white;
 }
 
 .filter-controls {
@@ -176,11 +191,34 @@ body.light-theme {
     border-radius: 8px;
     font-size: 14px;
     transition: border-color 0.3s;
+    background: #FFFFFF;
+    color: #333;
 }
 
 .filter-group input:focus,
 .filter-group select:focus {
     outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+body.dark-theme .filter-controls {
+    background: rgba(0, 0, 0, 0.9); /* Black background */
+}
+
+body.dark-theme .filter-group label {
+    color: #FFFFFF; /* White text */
+}
+
+body.dark-theme .filter-group input,
+body.dark-theme .filter-group select {
+    background: #333333; /* Dark gray for input background */
+    color: #FFFFFF; /* White text */
+    border-color: #555555; /* Darker border */
+}
+
+body.dark-theme .filter-group input:focus,
+body.dark-theme .filter-group select:focus {
     border-color: #667eea;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
@@ -193,7 +231,7 @@ body.light-theme {
 
 .section-header h2 {
     font-size: 32px;
-    color: white;
+    color: #FFFFFF;
     margin-bottom: 10px;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
@@ -232,6 +270,22 @@ body.light-theme {
     letter-spacing: 0.5px;
 }
 
+body.dark-theme .stats-bar {
+    background: rgba(0, 0, 0, 0.9); /* Black background */
+}
+
+body.dark-theme .stat-item {
+    background: rgba(0, 0, 0, 0.9); /* Black */
+}
+
+body.dark-theme .stat-number {
+    color: #667eea;
+}
+
+body.dark-theme .stat-label {
+    color: #CCCCCC; /* Light gray for contrast */
+}
+
 .products-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -255,6 +309,16 @@ body.light-theme {
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     color: #333;
+}
+
+body.dark-theme .product-item {
+    background: rgba(0, 0, 0, 0.9); /* Black */
+    color: #FFFFFF; /* White text */
+}
+
+body.dark-theme .no-products {
+    background: rgba(0, 0, 0, 0.95); /* Black */
+    color: #FFFFFF; /* White text */
 }
 
 /* Loading/Error/Coming Soon States */
@@ -302,6 +366,21 @@ body.light-theme {
     margin-bottom: 25px;
 }
 
+body.dark-theme .loading-state,
+body.dark-theme .error-state,
+body.dark-theme .coming-soon-state {
+    background: rgba(0, 0, 0, 0.95); /* Black */
+}
+
+body.dark-theme .coming-soon-state h3,
+body.dark-theme .error-state .error-message {
+    color: #FFFFFF; /* White text */
+}
+
+body.dark-theme .coming-soon-state p {
+    color: #CCCCCC; /* Light gray for contrast */
+}
+
 .available-now {
     background: #f7fafc;
     padding: 20px;
@@ -326,6 +405,18 @@ body.light-theme {
     text-decoration: underline;
 }
 
+body.dark-theme .available-now {
+    background: #333333; /* Dark gray */
+}
+
+body.dark-theme .available-now strong {
+    color: #FFFFFF; /* White text */
+}
+
+body.dark-theme .available-now a {
+    color: #667eea;
+}
+
 .retry-button {
     background: #667eea;
     color: white;
@@ -344,7 +435,7 @@ body.light-theme {
 
 /* Footer */
 .main-footer {
-    background: #2E1D80; /* Match body dark theme */
+    background: #2E1D80; /* Solid color matching body */
     padding: 60px 0 40px;
     margin-top: 80px;
 }
@@ -531,8 +622,7 @@ body.light-theme .social-float #theme-toggle::before {
     }
     
     .logo-img {
-        height: 60px;
-        max-width: 300px;
+        max-height: 80px;
     }
 }
 
