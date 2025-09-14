@@ -302,6 +302,51 @@ body.dark-theme .stat-label {
     color: #333;
 }
 
+.product-item h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.product-item p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.product-item .price {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.product-item .brand {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.product-item .rating {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.product-item a {
+    display: inline-block;
+    margin: 5px;
+    padding: 8px 15px;
+    text-decoration: none;
+    color: #667eea;
+    border: 1px solid #667eea;
+    border-radius: 5px;
+}
+
+.product-item a:hover {
+    background: #667eea;
+    color: #FFFFFF;
+}
+
 .no-products {
     text-align: center;
     padding: 80px 40px;
@@ -311,14 +356,77 @@ body.dark-theme .stat-label {
     color: #333;
 }
 
-body.dark-theme .product-item {
-    background: rgba(0, 0, 0, 0.9); /* Black */
+.no-products p {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.no-products a {
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #667eea;
+    border: 1px solid #667eea;
+    border-radius: 5px;
+}
+
+.no-products a:hover {
+    background: #667eea;
+    color: #FFFFFF;
+}
+
+body.dark-theme .products-grid .product-item {
+    background: rgba(0, 0, 0, 0.9); /* Black background */
     color: #FFFFFF; /* White text */
+}
+
+body.dark-theme .products-grid .product-item h3 {
+    color: #FFFFFF;
+}
+
+body.dark-theme .products-grid .product-item p {
+    color: #CCCCCC; /* Light gray for contrast */
+}
+
+body.dark-theme .products-grid .product-item .price {
+    color: #FFFFFF;
+}
+
+body.dark-theme .products-grid .product-item .brand {
+    color: #CCCCCC;
+}
+
+body.dark-theme .products-grid .product-item .rating {
+    color: #CCCCCC;
+}
+
+body.dark-theme .products-grid .product-item a {
+    color: #667eea;
+    border-color: #667eea;
+}
+
+body.dark-theme .products-grid .product-item a:hover {
+    background: #667eea;
+    color: #FFFFFF;
 }
 
 body.dark-theme .no-products {
     background: rgba(0, 0, 0, 0.95); /* Black */
     color: #FFFFFF; /* White text */
+}
+
+body.dark-theme .no-products p {
+    color: #CCCCCC; /* Light gray for contrast */
+}
+
+body.dark-theme .no-products a {
+    color: #667eea;
+    border-color: #667eea;
+}
+
+body.dark-theme .no-products a:hover {
+    background: #667eea;
+    color: #FFFFFF;
 }
 
 /* Loading/Error/Coming Soon States */
