@@ -88,14 +88,94 @@ body.light-theme {
     position: sticky;
     top: 0;
     z-index: 100;
-    height: 200px;
+    padding: 20px 0; /* Use padding instead of fixed height */
     text-align: center;
 }
 
 .logo-img {
-    width: 200px;
-    height: 200px;
-    object-fit: fill; /* This will stretch/squash the image to exactly 600×200 */
+    width: min(300px, 80vw); /* Maximum 300px, but 80% of viewport width on smaller screens */
+    height: auto; /* Let height scale proportionally - this prevents distortion */
+    object-fit: contain; /* Maintain aspect ratio */
+    max-width: 100%; /* Ensure it never overflows */
+}
+
+/* Responsive Design - Updated logo breakpoints */
+@media (max-width: 768px) {
+    .main-header {
+        padding: 15px 0; /* Reduce padding on smaller screens */
+    }
+    
+    .logo-img {
+        width: min(250px, 75vw); /* Smaller on tablets */
+    }
+    
+    .filter-controls {
+        grid-template-columns: 1fr;
+    }
+    
+    .stats-bar {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .time-categories {
+        justify-content: flex-start;
+    }
+    
+    .social-float {
+        flex-direction: column;
+        right: 10px;
+        bottom: 10px;
+    }
+    
+    .social-float #theme-toggle,
+    .social-float .fab.fa-instagram,
+    .social-float .currency-display {
+        width: 100%;
+        text-align: center;
+        border-radius: 5px;
+    }
+    
+    .social-float #theme-toggle {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .products-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-header {
+        padding: 10px 0; /* Even less padding on mobile */
+    }
+    
+    .logo-img {
+        width: min(200px, 70vw); /* Even smaller on mobile phones */
+    }
+    
+    .stats-bar {
+        grid-template-columns: 1fr;
+    }
+    
+    .section-header h2 {
+        font-size: 24px;
+    }
+    
+    .section-header p {
+        font-size: 16px;
+    }
+    
+    .footer-logo {
+        max-width: 300px;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 320px) {
+    .logo-img {
+        width: min(180px, 65vw); /* Ensure it fits on very small screens */
+    }
 }
 
 /* Main Content */
