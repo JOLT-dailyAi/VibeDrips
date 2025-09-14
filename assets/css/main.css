@@ -90,39 +90,24 @@ body.light-theme {
 
 /* Header */
 .main-header {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    padding: 15px 0; /* Adjusted for 60px image + padding */
+    background: #2E1D80; /* Match body dark theme */
+    padding: 20px 0;
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
     position: sticky;
     top: 0;
     z-index: 100;
-    min-height: 90px; /* 60px image + 15px padding top/bottom */
 }
 
 .header-content {
     display: flex;
-    justify-content: space-between;
+    justify-content: center; /* Center the logo */
     align-items: center;
 }
 
 .logo-img {
-    height: 60px;
+    height: 80px;
     width: auto;
-}
-
-.currency-display {
-    background: #667eea;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 25px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: background 0.3s;
-}
-
-.currency-display:hover {
-    background: #5a67d8;
+    max-width: 400px; /* Ensure it fits within container */
 }
 
 /* Main Content */
@@ -359,8 +344,7 @@ body.light-theme {
 
 /* Footer */
 .main-footer {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
+    background: #2E1D80; /* Match body dark theme */
     padding: 60px 0 40px;
     margin-top: 80px;
 }
@@ -377,12 +361,12 @@ body.light-theme {
 
 .footer-tagline {
     font-size: 24px;
-    color: #333;
+    color: #FFFFFF; /* Adjusted for dark background */
     margin-bottom: 15px;
 }
 
 .footer-description {
-    color: #666;
+    color: rgba(255, 255, 255, 0.9); /* Adjusted for dark background */
     line-height: 1.6;
     margin-bottom: 30px;
     max-width: 600px;
@@ -505,10 +489,6 @@ body.light-theme .social-float #theme-toggle::before {
         gap: 20px;
     }
     
-    .currency-content {
-        padding: 30px 20px;
-    }
-    
     .social-float {
         flex-direction: column;
         right: 10px;
@@ -547,6 +527,11 @@ body.light-theme .social-float #theme-toggle::before {
     }
     
     .footer-logo {
+        max-width: 300px;
+    }
+    
+    .logo-img {
+        height: 60px;
         max-width: 300px;
     }
 }
