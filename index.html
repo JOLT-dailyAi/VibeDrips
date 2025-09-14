@@ -1068,13 +1068,988 @@
             const convertedPrice = convertPrice(priceINR);
             
             const symbols = {
-                'USD': ',
+                'USD': '
+            
+            const symbol = symbols[currency] || currency + ' ';
+            const formattedPrice = currency === 'JPY' ? 
+                Math.round(convertedPrice).toLocaleString() : 
+                convertedPrice.toFixed(2);
+            
+            return symbol + formattedPrice;
+        }
+
+        function filterByTime(timeFilter) {
+            currentTimeFilter = timeFilter;
+            
+            // Update active state
+            document.querySelectorAll('.time-category').forEach(cat => {
+                cat.classList.remove('active');
+                if (cat.getAttribute('data-filter') === timeFilter) {
+                    cat.classList.add('active');
+                }
+            });
+
+            // Filter products
+            switch (timeFilter) {
+                case 'featured':
+                    filteredProducts = allProducts.filter(product => product.featured);
+                    break;
+                case 'new':
+                    const thirtyDaysAgo = new Date();
+                    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+                    filteredProducts = allProducts.filter(product => 
+                        new Date(product.timestamp) >= thirtyDaysAgo);
+                    break;
+                case 'trending':
+                    filteredProducts = allProducts.filter(product => product.trending);
+                    break;
+                case 'all':
+                    filteredProducts = [...allProducts];
+                    break;
+                default:
+                    filteredProducts = [...allProducts];
+            }
+
+            // Update section title
+            const titles = {
+                'featured': 'Featured Products',
+                'new': 'New Arrivals',
+                'trending': 'Trending Now',
+                'all': 'All Products'
+            };
+            
+            const titleEl = document.getElementById('section-title');
+            if (titleEl) {
+                titleEl.textContent = titles[timeFilter] || 'Products';
+            }
+
+            applyCurrentFilters();
+            renderProducts();
+        }
+
+        function applyCurrentFilters() {
+            const searchInput = document.getElementById('search');
+            const categoryFilter = document.getElementById('category-filter');
+            
+            const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
+            const categoryValue = categoryFilter ? categoryFilter.value.trim() : '';
+
+            if (searchTerm || categoryValue) {
+                filteredProducts = filteredProducts.filter(product => {
+                    const searchFields = [
+                        product.name, 
+                        product.description, 
+                        product.category,
+                        product.subcategory,
+                        product.brand
+                    ].filter(field => field); // Remove null/undefined fields
+                    
+                    const matchesSearch = !searchTerm || searchFields.some(field => 
+                        field.toString().toLowerCase().includes(searchTerm)
+                    );
+
+                    const matchesCategory = !categoryValue || 
+                        product.category === categoryValue || 
+                        product.subcategory === categoryValue;
+
+                    return matchesSearch && matchesCategory;
+                });
+            }
+        }
+
+        function filterProducts() {
+            filterByTime(currentTimeFilter);
+        }
+
+        function sortProducts() {
+            const sortSelect = document.getElementById('price-sort');
+            if (!sortSelect) return;
+            
+            const sortBy = sortSelect.value;
+
+            switch (sortBy) {
+                case 'price-low':
+                    filteredProducts.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-high':
+                    filteredProducts.sort((a, b) => b.price - a.price);
+                    break;
+                case 'name':
+                    filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'rating':
+                    filteredProducts.sort((a, b) => b.rating - a.rating);
+                    break;
+                default:
+                    // Default sorting - featured first, then by name
+                    filteredProducts.sort((a, b) => {
+                        if (a.featured && !b.featured) return -1;
+                        if (!a.featured && b.featured) return 1;
+                        return a.name.localeCompare(b.name);
+                    });
+            }
+
+            renderProducts();
+        }
+
+        function renderProducts() {
+            const container = document.getElementById('products-container');
+            if (!container) return;
+            
+            if (filteredProducts.length === 0) {
+                container.innerHTML = `
+                    <div class="no-products">
+                        <h3>No products found</h3>
+                        <p>Try adjusting your search or filters to see more products.</p>
+                        <button onclick="filterByTime('all')" class="action-button btn-primary" style="margin-top: 1rem;">
+                            Show All Products
+                        </button>
+                    </div>`;
+                updateStats();
+                return;
+            }
+
+            const productsGrid = document.createElement('div');
+            productsGrid.className = 'products-grid';
+
+            filteredProducts.forEach(product => {
+                const productCard = createProductCard(product);
+                productsGrid.appendChild(productCard);
+            });
+
+            container.innerHTML = '';
+            container.appendChild(productsGrid);
+            updateStats();
+        }
+
+        function createProductCard(product) {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            
+            const primaryImage = product.image;
+            const imageElement = primaryImage ? 
+                `<img src="${primaryImage}" alt="${product.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" loading="lazy">
+                 <div class="product-image-placeholder" style="display:none;">🛍️</div>` :
+                `<div class="product-image-placeholder">🛍️</div>`;
+
+            const formattedPrice = formatPrice(product.price);
+            
+            let badge = '';
+            if (product.featured) {
+                badge = `<div class="product-badge">Featured</div>`;
+            } else if (product.trending) {
+                badge = `<div class="product-badge">Trending</div>`;
+            }
+
+            const ratingStars = product.rating > 0 ? 
+                `<div style="color: #fbbf24;">★ ${product.rating.toFixed(1)}</div>` : 
+                `<div style="opacity: 0.5;">No ratings</div>`;
+
+            card.innerHTML = `
+                <div class="product-image">
+                    ${imageElement}
+                    ${badge}
+                </div>
+                <div class="product-info">
+                    <div class="product-category">${product.subcategory || product.category}</div>
+                    <h3 class="product-title">${escapeHtml(product.name)}</h3>
+                    <div class="product-description">${escapeHtml(product.description)}</div>
+                    <div class="product-price">${formattedPrice}</div>
+                    <div class="product-meta">
+                        <span>${escapeHtml(product.brand)}</span>
+                        ${ratingStars}
+                    </div>
+                    <div class="product-actions">
+                        <button class="action-button btn-primary" onclick="event.stopPropagation(); openAffiliate('${escapeHtml(product.affiliateLink)}', '${product.id}')">
+                            🛒 Buy on Amazon
+                        </button>
+                        <button class="action-button btn-secondary" onclick="event.stopPropagation(); showProductModal('${product.id}')">
+                            Details
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        function escapeHtml(unsafe) {
+            if (!unsafe) return '';
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function openAffiliate(link, productId) {
+            if (link && link !== '#' && link !== '') {
+                console.log('Affiliate click:', productId);
+                window.open(link, '_blank', 'noopener,noreferrer');
+                showNotification('Opening Amazon product page...');
+            } else {
+                showNotification('Amazon link not available for this product');
+            }
+        }
+
+        function showProductModal(productId) {
+            const product = allProducts.find(p => p.id === productId);
+            if (!product) {
+                showNotification('Product not found');
+                return;
+            }
+
+            const modal = document.getElementById('product-modal');
+            const modalTitle = document.getElementById('modal-product-title');
+            const modalImage = document.getElementById('modal-product-image');
+            const modalDetails = document.getElementById('modal-product-details');
+
+            if (!modal || !modalTitle || !modalImage || !modalDetails) return;
+
+            modalTitle.textContent = product.name;
+            modalImage.src = product.image || 'https://via.placeholder.com/400x400/2E1D80/80DFFF?text=No+Image';
+            modalImage.alt = product.name;
+
+            const formattedPrice = formatPrice(product.price);
+
+            modalDetails.innerHTML = `
+                <div class="detail-item">
+                    <div class="detail-label">Price</div>
+                    <div class="detail-value">${formattedPrice}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Brand</div>
+                    <div class="detail-value">${escapeHtml(product.brand)}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Category</div>
+                    <div class="detail-value">${escapeHtml(product.subcategory || product.category)}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Rating</div>
+                    <div class="detail-value">${product.rating > 0 ? `★ ${product.rating.toFixed(1)} (${product.reviews} reviews)` : 'No ratings yet'}</div>
+                </div>
+                ${product.material ? `
+                <div class="detail-item">
+                    <div class="detail-label">Material</div>
+                    <div class="detail-value">${escapeHtml(product.material)}</div>
+                </div>` : ''}
+                ${product.color ? `
+                <div class="detail-item">
+                    <div class="detail-label">Color</div>
+                    <div class="detail-value">${escapeHtml(product.color)}</div>
+                </div>` : ''}
+                <div class="detail-item" style="grid-column: 1 / -1;">
+                    <div class="detail-label">Description</div>
+                    <div class="detail-value">${escapeHtml(product.description)}</div>
+                </div>
+                <div class="detail-item" style="grid-column: 1 / -1;">
+                    <button class="action-button btn-primary" onclick="openAffiliate('${escapeHtml(product.affiliateLink)}', '${product.id}')" style="width: 100%; margin-top: 1rem;">
+                        🛒 Buy on Amazon - ${formattedPrice}
+                    </button>
+                </div>
+            `;
+
+            modal.classList.add('show');
+        }
+
+        function closeProductModal() {
+            const modal = document.getElementById('product-modal');
+            if (modal) {
+                modal.classList.remove('show');
+            }
+        }
+
+        function updateStats() {
+            const productCountEl = document.getElementById('product-count');
+            const categoryCountEl = document.getElementById('category-count');
+            
+            if (productCountEl) productCountEl.textContent = filteredProducts.length;
+            if (categoryCountEl) categoryCountEl.textContent = categories.size;
+        }
+
+        function showNotification(message) {
+            // Remove existing notifications
+            const existingNotifications = document.querySelectorAll('.notification');
+            existingNotifications.forEach(notif => notif.remove());
+            
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.classList.add('show'), 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 400);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>,
                 'EUR': '€',
                 'GBP': '£',
                 'INR': '₹',
                 'JPY': '¥',
-                'CAD': 'C,
+                'CAD': 'C
+            
+            const symbol = symbols[currency] || currency + ' ';
+            const formattedPrice = currency === 'JPY' ? 
+                Math.round(convertedPrice).toLocaleString() : 
+                convertedPrice.toFixed(2);
+            
+            return symbol + formattedPrice;
+        }
+
+        function filterByTime(timeFilter) {
+            currentTimeFilter = timeFilter;
+            
+            // Update active state
+            document.querySelectorAll('.time-category').forEach(cat => {
+                cat.classList.remove('active');
+                if (cat.getAttribute('data-filter') === timeFilter) {
+                    cat.classList.add('active');
+                }
+            });
+
+            // Filter products
+            switch (timeFilter) {
+                case 'featured':
+                    filteredProducts = allProducts.filter(product => product.featured);
+                    break;
+                case 'new':
+                    const thirtyDaysAgo = new Date();
+                    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+                    filteredProducts = allProducts.filter(product => 
+                        new Date(product.timestamp) >= thirtyDaysAgo);
+                    break;
+                case 'trending':
+                    filteredProducts = allProducts.filter(product => product.trending);
+                    break;
+                case 'all':
+                    filteredProducts = [...allProducts];
+                    break;
+                default:
+                    filteredProducts = [...allProducts];
+            }
+
+            // Update section title
+            const titles = {
+                'featured': 'Featured Products',
+                'new': 'New Arrivals',
+                'trending': 'Trending Now',
+                'all': 'All Products'
+            };
+            
+            const titleEl = document.getElementById('section-title');
+            if (titleEl) {
+                titleEl.textContent = titles[timeFilter] || 'Products';
+            }
+
+            applyCurrentFilters();
+            renderProducts();
+        }
+
+        function applyCurrentFilters() {
+            const searchInput = document.getElementById('search');
+            const categoryFilter = document.getElementById('category-filter');
+            
+            const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
+            const categoryValue = categoryFilter ? categoryFilter.value.trim() : '';
+
+            if (searchTerm || categoryValue) {
+                filteredProducts = filteredProducts.filter(product => {
+                    const searchFields = [
+                        product.name, 
+                        product.description, 
+                        product.category,
+                        product.subcategory,
+                        product.brand
+                    ].filter(field => field); // Remove null/undefined fields
+                    
+                    const matchesSearch = !searchTerm || searchFields.some(field => 
+                        field.toString().toLowerCase().includes(searchTerm)
+                    );
+
+                    const matchesCategory = !categoryValue || 
+                        product.category === categoryValue || 
+                        product.subcategory === categoryValue;
+
+                    return matchesSearch && matchesCategory;
+                });
+            }
+        }
+
+        function filterProducts() {
+            filterByTime(currentTimeFilter);
+        }
+
+        function sortProducts() {
+            const sortSelect = document.getElementById('price-sort');
+            if (!sortSelect) return;
+            
+            const sortBy = sortSelect.value;
+
+            switch (sortBy) {
+                case 'price-low':
+                    filteredProducts.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-high':
+                    filteredProducts.sort((a, b) => b.price - a.price);
+                    break;
+                case 'name':
+                    filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'rating':
+                    filteredProducts.sort((a, b) => b.rating - a.rating);
+                    break;
+                default:
+                    // Default sorting - featured first, then by name
+                    filteredProducts.sort((a, b) => {
+                        if (a.featured && !b.featured) return -1;
+                        if (!a.featured && b.featured) return 1;
+                        return a.name.localeCompare(b.name);
+                    });
+            }
+
+            renderProducts();
+        }
+
+        function renderProducts() {
+            const container = document.getElementById('products-container');
+            if (!container) return;
+            
+            if (filteredProducts.length === 0) {
+                container.innerHTML = `
+                    <div class="no-products">
+                        <h3>No products found</h3>
+                        <p>Try adjusting your search or filters to see more products.</p>
+                        <button onclick="filterByTime('all')" class="action-button btn-primary" style="margin-top: 1rem;">
+                            Show All Products
+                        </button>
+                    </div>`;
+                updateStats();
+                return;
+            }
+
+            const productsGrid = document.createElement('div');
+            productsGrid.className = 'products-grid';
+
+            filteredProducts.forEach(product => {
+                const productCard = createProductCard(product);
+                productsGrid.appendChild(productCard);
+            });
+
+            container.innerHTML = '';
+            container.appendChild(productsGrid);
+            updateStats();
+        }
+
+        function createProductCard(product) {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            
+            const primaryImage = product.image;
+            const imageElement = primaryImage ? 
+                `<img src="${primaryImage}" alt="${product.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" loading="lazy">
+                 <div class="product-image-placeholder" style="display:none;">🛍️</div>` :
+                `<div class="product-image-placeholder">🛍️</div>`;
+
+            const formattedPrice = formatPrice(product.price);
+            
+            let badge = '';
+            if (product.featured) {
+                badge = `<div class="product-badge">Featured</div>`;
+            } else if (product.trending) {
+                badge = `<div class="product-badge">Trending</div>`;
+            }
+
+            const ratingStars = product.rating > 0 ? 
+                `<div style="color: #fbbf24;">★ ${product.rating.toFixed(1)}</div>` : 
+                `<div style="opacity: 0.5;">No ratings</div>`;
+
+            card.innerHTML = `
+                <div class="product-image">
+                    ${imageElement}
+                    ${badge}
+                </div>
+                <div class="product-info">
+                    <div class="product-category">${product.subcategory || product.category}</div>
+                    <h3 class="product-title">${escapeHtml(product.name)}</h3>
+                    <div class="product-description">${escapeHtml(product.description)}</div>
+                    <div class="product-price">${formattedPrice}</div>
+                    <div class="product-meta">
+                        <span>${escapeHtml(product.brand)}</span>
+                        ${ratingStars}
+                    </div>
+                    <div class="product-actions">
+                        <button class="action-button btn-primary" onclick="event.stopPropagation(); openAffiliate('${escapeHtml(product.affiliateLink)}', '${product.id}')">
+                            🛒 Buy on Amazon
+                        </button>
+                        <button class="action-button btn-secondary" onclick="event.stopPropagation(); showProductModal('${product.id}')">
+                            Details
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        function escapeHtml(unsafe) {
+            if (!unsafe) return '';
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function openAffiliate(link, productId) {
+            if (link && link !== '#' && link !== '') {
+                console.log('Affiliate click:', productId);
+                window.open(link, '_blank', 'noopener,noreferrer');
+                showNotification('Opening Amazon product page...');
+            } else {
+                showNotification('Amazon link not available for this product');
+            }
+        }
+
+        function showProductModal(productId) {
+            const product = allProducts.find(p => p.id === productId);
+            if (!product) {
+                showNotification('Product not found');
+                return;
+            }
+
+            const modal = document.getElementById('product-modal');
+            const modalTitle = document.getElementById('modal-product-title');
+            const modalImage = document.getElementById('modal-product-image');
+            const modalDetails = document.getElementById('modal-product-details');
+
+            if (!modal || !modalTitle || !modalImage || !modalDetails) return;
+
+            modalTitle.textContent = product.name;
+            modalImage.src = product.image || 'https://via.placeholder.com/400x400/2E1D80/80DFFF?text=No+Image';
+            modalImage.alt = product.name;
+
+            const formattedPrice = formatPrice(product.price);
+
+            modalDetails.innerHTML = `
+                <div class="detail-item">
+                    <div class="detail-label">Price</div>
+                    <div class="detail-value">${formattedPrice}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Brand</div>
+                    <div class="detail-value">${escapeHtml(product.brand)}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Category</div>
+                    <div class="detail-value">${escapeHtml(product.subcategory || product.category)}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Rating</div>
+                    <div class="detail-value">${product.rating > 0 ? `★ ${product.rating.toFixed(1)} (${product.reviews} reviews)` : 'No ratings yet'}</div>
+                </div>
+                ${product.material ? `
+                <div class="detail-item">
+                    <div class="detail-label">Material</div>
+                    <div class="detail-value">${escapeHtml(product.material)}</div>
+                </div>` : ''}
+                ${product.color ? `
+                <div class="detail-item">
+                    <div class="detail-label">Color</div>
+                    <div class="detail-value">${escapeHtml(product.color)}</div>
+                </div>` : ''}
+                <div class="detail-item" style="grid-column: 1 / -1;">
+                    <div class="detail-label">Description</div>
+                    <div class="detail-value">${escapeHtml(product.description)}</div>
+                </div>
+                <div class="detail-item" style="grid-column: 1 / -1;">
+                    <button class="action-button btn-primary" onclick="openAffiliate('${escapeHtml(product.affiliateLink)}', '${product.id}')" style="width: 100%; margin-top: 1rem;">
+                        🛒 Buy on Amazon - ${formattedPrice}
+                    </button>
+                </div>
+            `;
+
+            modal.classList.add('show');
+        }
+
+        function closeProductModal() {
+            const modal = document.getElementById('product-modal');
+            if (modal) {
+                modal.classList.remove('show');
+            }
+        }
+
+        function updateStats() {
+            const productCountEl = document.getElementById('product-count');
+            const categoryCountEl = document.getElementById('category-count');
+            
+            if (productCountEl) productCountEl.textContent = filteredProducts.length;
+            if (categoryCountEl) categoryCountEl.textContent = categories.size;
+        }
+
+        function showNotification(message) {
+            // Remove existing notifications
+            const existingNotifications = document.querySelectorAll('.notification');
+            existingNotifications.forEach(notif => notif.remove());
+            
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.classList.add('show'), 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 400);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>,
                 'AUD': 'A
+            
+            const symbol = symbols[currency] || currency + ' ';
+            const formattedPrice = currency === 'JPY' ? 
+                Math.round(convertedPrice).toLocaleString() : 
+                convertedPrice.toFixed(2);
+            
+            return symbol + formattedPrice;
+        }
+
+        function filterByTime(timeFilter) {
+            currentTimeFilter = timeFilter;
+            
+            // Update active state
+            document.querySelectorAll('.time-category').forEach(cat => {
+                cat.classList.remove('active');
+                if (cat.getAttribute('data-filter') === timeFilter) {
+                    cat.classList.add('active');
+                }
+            });
+
+            // Filter products
+            switch (timeFilter) {
+                case 'featured':
+                    filteredProducts = allProducts.filter(product => product.featured);
+                    break;
+                case 'new':
+                    const thirtyDaysAgo = new Date();
+                    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+                    filteredProducts = allProducts.filter(product => 
+                        new Date(product.timestamp) >= thirtyDaysAgo);
+                    break;
+                case 'trending':
+                    filteredProducts = allProducts.filter(product => product.trending);
+                    break;
+                case 'all':
+                    filteredProducts = [...allProducts];
+                    break;
+                default:
+                    filteredProducts = [...allProducts];
+            }
+
+            // Update section title
+            const titles = {
+                'featured': 'Featured Products',
+                'new': 'New Arrivals',
+                'trending': 'Trending Now',
+                'all': 'All Products'
+            };
+            
+            const titleEl = document.getElementById('section-title');
+            if (titleEl) {
+                titleEl.textContent = titles[timeFilter] || 'Products';
+            }
+
+            applyCurrentFilters();
+            renderProducts();
+        }
+
+        function applyCurrentFilters() {
+            const searchInput = document.getElementById('search');
+            const categoryFilter = document.getElementById('category-filter');
+            
+            const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
+            const categoryValue = categoryFilter ? categoryFilter.value.trim() : '';
+
+            if (searchTerm || categoryValue) {
+                filteredProducts = filteredProducts.filter(product => {
+                    const searchFields = [
+                        product.name, 
+                        product.description, 
+                        product.category,
+                        product.subcategory,
+                        product.brand
+                    ].filter(field => field); // Remove null/undefined fields
+                    
+                    const matchesSearch = !searchTerm || searchFields.some(field => 
+                        field.toString().toLowerCase().includes(searchTerm)
+                    );
+
+                    const matchesCategory = !categoryValue || 
+                        product.category === categoryValue || 
+                        product.subcategory === categoryValue;
+
+                    return matchesSearch && matchesCategory;
+                });
+            }
+        }
+
+        function filterProducts() {
+            filterByTime(currentTimeFilter);
+        }
+
+        function sortProducts() {
+            const sortSelect = document.getElementById('price-sort');
+            if (!sortSelect) return;
+            
+            const sortBy = sortSelect.value;
+
+            switch (sortBy) {
+                case 'price-low':
+                    filteredProducts.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-high':
+                    filteredProducts.sort((a, b) => b.price - a.price);
+                    break;
+                case 'name':
+                    filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'rating':
+                    filteredProducts.sort((a, b) => b.rating - a.rating);
+                    break;
+                default:
+                    // Default sorting - featured first, then by name
+                    filteredProducts.sort((a, b) => {
+                        if (a.featured && !b.featured) return -1;
+                        if (!a.featured && b.featured) return 1;
+                        return a.name.localeCompare(b.name);
+                    });
+            }
+
+            renderProducts();
+        }
+
+        function renderProducts() {
+            const container = document.getElementById('products-container');
+            if (!container) return;
+            
+            if (filteredProducts.length === 0) {
+                container.innerHTML = `
+                    <div class="no-products">
+                        <h3>No products found</h3>
+                        <p>Try adjusting your search or filters to see more products.</p>
+                        <button onclick="filterByTime('all')" class="action-button btn-primary" style="margin-top: 1rem;">
+                            Show All Products
+                        </button>
+                    </div>`;
+                updateStats();
+                return;
+            }
+
+            const productsGrid = document.createElement('div');
+            productsGrid.className = 'products-grid';
+
+            filteredProducts.forEach(product => {
+                const productCard = createProductCard(product);
+                productsGrid.appendChild(productCard);
+            });
+
+            container.innerHTML = '';
+            container.appendChild(productsGrid);
+            updateStats();
+        }
+
+        function createProductCard(product) {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            
+            const primaryImage = product.image;
+            const imageElement = primaryImage ? 
+                `<img src="${primaryImage}" alt="${product.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" loading="lazy">
+                 <div class="product-image-placeholder" style="display:none;">🛍️</div>` :
+                `<div class="product-image-placeholder">🛍️</div>`;
+
+            const formattedPrice = formatPrice(product.price);
+            
+            let badge = '';
+            if (product.featured) {
+                badge = `<div class="product-badge">Featured</div>`;
+            } else if (product.trending) {
+                badge = `<div class="product-badge">Trending</div>`;
+            }
+
+            const ratingStars = product.rating > 0 ? 
+                `<div style="color: #fbbf24;">★ ${product.rating.toFixed(1)}</div>` : 
+                `<div style="opacity: 0.5;">No ratings</div>`;
+
+            card.innerHTML = `
+                <div class="product-image">
+                    ${imageElement}
+                    ${badge}
+                </div>
+                <div class="product-info">
+                    <div class="product-category">${product.subcategory || product.category}</div>
+                    <h3 class="product-title">${escapeHtml(product.name)}</h3>
+                    <div class="product-description">${escapeHtml(product.description)}</div>
+                    <div class="product-price">${formattedPrice}</div>
+                    <div class="product-meta">
+                        <span>${escapeHtml(product.brand)}</span>
+                        ${ratingStars}
+                    </div>
+                    <div class="product-actions">
+                        <button class="action-button btn-primary" onclick="event.stopPropagation(); openAffiliate('${escapeHtml(product.affiliateLink)}', '${product.id}')">
+                            🛒 Buy on Amazon
+                        </button>
+                        <button class="action-button btn-secondary" onclick="event.stopPropagation(); showProductModal('${product.id}')">
+                            Details
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        function escapeHtml(unsafe) {
+            if (!unsafe) return '';
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function openAffiliate(link, productId) {
+            if (link && link !== '#' && link !== '') {
+                console.log('Affiliate click:', productId);
+                window.open(link, '_blank', 'noopener,noreferrer');
+                showNotification('Opening Amazon product page...');
+            } else {
+                showNotification('Amazon link not available for this product');
+            }
+        }
+
+        function showProductModal(productId) {
+            const product = allProducts.find(p => p.id === productId);
+            if (!product) {
+                showNotification('Product not found');
+                return;
+            }
+
+            const modal = document.getElementById('product-modal');
+            const modalTitle = document.getElementById('modal-product-title');
+            const modalImage = document.getElementById('modal-product-image');
+            const modalDetails = document.getElementById('modal-product-details');
+
+            if (!modal || !modalTitle || !modalImage || !modalDetails) return;
+
+            modalTitle.textContent = product.name;
+            modalImage.src = product.image || 'https://via.placeholder.com/400x400/2E1D80/80DFFF?text=No+Image';
+            modalImage.alt = product.name;
+
+            const formattedPrice = formatPrice(product.price);
+
+            modalDetails.innerHTML = `
+                <div class="detail-item">
+                    <div class="detail-label">Price</div>
+                    <div class="detail-value">${formattedPrice}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Brand</div>
+                    <div class="detail-value">${escapeHtml(product.brand)}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Category</div>
+                    <div class="detail-value">${escapeHtml(product.subcategory || product.category)}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">Rating</div>
+                    <div class="detail-value">${product.rating > 0 ? `★ ${product.rating.toFixed(1)} (${product.reviews} reviews)` : 'No ratings yet'}</div>
+                </div>
+                ${product.material ? `
+                <div class="detail-item">
+                    <div class="detail-label">Material</div>
+                    <div class="detail-value">${escapeHtml(product.material)}</div>
+                </div>` : ''}
+                ${product.color ? `
+                <div class="detail-item">
+                    <div class="detail-label">Color</div>
+                    <div class="detail-value">${escapeHtml(product.color)}</div>
+                </div>` : ''}
+                <div class="detail-item" style="grid-column: 1 / -1;">
+                    <div class="detail-label">Description</div>
+                    <div class="detail-value">${escapeHtml(product.description)}</div>
+                </div>
+                <div class="detail-item" style="grid-column: 1 / -1;">
+                    <button class="action-button btn-primary" onclick="openAffiliate('${escapeHtml(product.affiliateLink)}', '${product.id}')" style="width: 100%; margin-top: 1rem;">
+                        🛒 Buy on Amazon - ${formattedPrice}
+                    </button>
+                </div>
+            `;
+
+            modal.classList.add('show');
+        }
+
+        function closeProductModal() {
+            const modal = document.getElementById('product-modal');
+            if (modal) {
+                modal.classList.remove('show');
+            }
+        }
+
+        function updateStats() {
+            const productCountEl = document.getElementById('product-count');
+            const categoryCountEl = document.getElementById('category-count');
+            
+            if (productCountEl) productCountEl.textContent = filteredProducts.length;
+            if (categoryCountEl) categoryCountEl.textContent = categories.size;
+        }
+
+        function showNotification(message) {
+            // Remove existing notifications
+            const existingNotifications = document.querySelectorAll('.notification');
+            existingNotifications.forEach(notif => notif.remove());
+            
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => notification.classList.add('show'), 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
+                }, 400);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
             };
             
             const symbol = symbols[currency] || currency + ' ';
