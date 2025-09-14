@@ -1,5 +1,5 @@
 # .github/workflows/process-csv.yml
-name: Process CSV Data
+name: Process Multi-Currency CSV Data
 
 on:
   schedule:
@@ -7,7 +7,14 @@ on:
   push:
     paths:
       - 'data/products.csv'
+      - 'convert-csv.js'
   workflow_dispatch:
+    inputs:
+      force_process:
+        description: 'Force processing even if CSV unchanged'
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: write
@@ -18,31 +25,138 @@ jobs:
     
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
-      
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Full history for better git operations
+        
     - name: Setup Node.js
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: '18'
+        cache: 'npm'
+        
+    - name: Check if CSV file exists
+      run: |
+        if [ ! -f "data/products.csv" ]; then
+          echo "❌ CSV file not found at data/products.csv"
+          exit 1
+        fi
+        echo "✅ CSV file found"
         
     - name: Install dependencies
       run: |
         npm init -y
         npm install csv-parser
         
-    - name: Convert CSV to JSON
+    - name: Convert CSV to Multi-Currency JSON
       run: |
+        echo "🚀 Starting multi-currency CSV processing..."
         node convert-csv.js
+        echo "✅ CSV processing completed"
         
-    - name: Update timestamp
+    - name: Verify generated files
       run: |
-        echo "$(date)" > data/last_updated.txt
+        echo "📁 Checking generated files..."
+        ls -la data/
         
-    - name: Commit processed data
+        # Check if currency files were generated
+        if ls data/products-*.json 1> /dev/null 2>&1; then
+          echo "✅ Currency-specific JSON files generated:"
+          ls data/products-*.json
+        else
+          echo "❌ No currency-specific JSON files found"
+          exit 1
+        fi
+        
+        # Check manifest file
+        if [ -f "data/currencies.json" ]; then
+          echo "✅ Currency manifest file generated"
+        else
+          echo "❌ Currency manifest file missing"
+          exit 1
+        fi
+        
+    - name: Display processing summary
+      run: |
+        if [ -f "data/last_updated.txt" ]; then
+          echo "📊 Processing Summary:"
+          cat data/last_updated.txt
+        fi
+        
+    - name: Configure Git
       run: |
         git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git pull origin main
-        git add data/products.json data/last_updated.txt
-        git diff --staged --quiet || git commit -m "Process CSV data - $(date)"
-        git push
+        git config --local user.name "VibeDrips CSV Processor"
+        
+    - name: Pull latest changes
+      run: |
+        git pull origin main --rebase
+        
+    - name: Stage processed files
+      run: |
+        # Add all generated JSON files and manifests
+        git add data/products-*.json || echo "No currency JSON files to add"
+        git add data/currencies.json || echo "No currency manifest to add"
+        git add data/last_updated.txt || echo "No summary file to add"
+        
+        # Show what's being committed
+        echo "📋 Files staged for commit:"
+        git diff --cached --name-only
+        
+    - name: Commit and push changes
+      run: |
+        # Check if there are changes to commit
+        if git diff --cached --quiet; then
+          echo "ℹ️ No changes to commit"
+          exit 0
+        fi
+        
+        # Count currency files for commit message
+        CURRENCY_COUNT=$(ls data/products-*.json 2>/dev/null | wc -l)
+        TIMESTAMP=$(date -u '+%Y-%m-%d %H:%M:%S UTC')
+        
+        # Create detailed commit message
+        COMMIT_MSG="🔄 Process multi-currency CSV data - $TIMESTAMP
+
+        📊 Generated $CURRENCY_COUNT currency-specific product files
+        🔗 Updated currency manifest and processing summary
+        🤖 Automated processing via GitHub Actions"
+        
+        git commit -m "$COMMIT_MSG"
+        git push origin main
+        
+    - name: Create processing report
+      if: success()
+      run: |
+        echo "🎉 Multi-currency CSV processing completed successfully!" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "## 📊 Processing Results" >> $GITHUB_STEP_SUMMARY
+        
+        # Count generated files
+        JSON_COUNT=$(ls data/products-*.json 2>/dev/null | wc -l)
+        echo "- **Currency Files Generated:** $JSON_COUNT" >> $GITHUB_STEP_SUMMARY
+        
+        # List currency files
+        echo "- **Generated Files:**" >> $GITHUB_STEP_SUMMARY
+        for file in data/products-*.json; do
+          if [ -f "$file" ]; then
+            filename=$(basename "$file")
+            echo "  - $filename" >> $GITHUB_STEP_SUMMARY
+          fi
+        done
+        
+        echo "- **Manifest:** currencies.json" >> $GITHUB_STEP_SUMMARY
+        echo "- **Summary:** last_updated.txt" >> $GITHUB_STEP_SUMMARY
+        
+        # Add timestamp
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Processed:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+        
+    - name: Handle processing errors
+      if: failure()
+      run: |
+        echo "❌ CSV processing failed!" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "Please check the workflow logs for details." >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "**Failed at:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
