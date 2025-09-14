@@ -142,11 +142,41 @@ body {
 
 .social-float {
   position: fixed;
-  left: 60px; /* Next to Ko-fi button at bottom-left */
+  right: 20px; /* Bottom-right */
   bottom: 20px;
   display: flex;
   gap: 15px; /* Increased gap */
   z-index: 1000;
+}
+
+.social-float #theme-toggle {
+  background-color: #2E1D80;
+  color: #FFFFFF;
+  border: 2px solid #4A3ABF;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s;
+  border-radius: 50%; /* Circular button */
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  line-height: 20px;
+}
+
+.social-float #theme-toggle::before {
+  content: "\f186"; /* Moon icon for dark theme */
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+}
+
+.light-theme .social-float #theme-toggle::before {
+  content: "\f185"; /* Sun icon for light theme */
+}
+
+.social-float #theme-toggle:hover {
+  background-color: #4A3ABF;
+  border-color: #6A5EDB;
 }
 
 .social-float .fab.fa-instagram {
@@ -176,39 +206,6 @@ body {
 
 .social-float #currency-trigger:hover {
   background-color: #00A1D6;
-}
-
-#theme-toggle {
-  background-color: #2E1D80;
-  color: #FFFFFF;
-  border: 2px solid #4A3ABF;
-  padding: 10px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: all 0.3s;
-  border-radius: 50%; /* Circular button */
-  width: 40px;
-  height: 40px;
-  position: absolute;
-  top: 15px;
-  right: 30px;
-  text-align: center;
-  line-height: 20px;
-}
-
-#theme-toggle::before {
-  content: "\f186"; /* Moon icon for dark theme */
-  font-family: "Font Awesome 6 Free";
-  font-weight: 900;
-}
-
-.light-theme #theme-toggle::before {
-  content: "\f185"; /* Sun icon for light theme */
-}
-
-#theme-toggle:hover {
-  background-color: #4A3ABF;
-  border-color: #6A5EDB;
 }
 
 .currency-modal {
@@ -278,17 +275,15 @@ body {
   }
   .social-float {
     flex-direction: column;
-    left: 10px;
+    right: 10px;
     bottom: 10px;
   }
-  .social-float .fab.fa-instagram, .social-float #currency-trigger {
+  .social-float #theme-toggle, .social-float .fab.fa-instagram, .social-float #currency-trigger {
     width: 100%; /* Full width on mobile */
     text-align: center;
     border-radius: 5px;
   }
-  #theme-toggle {
-    top: 10px;
-    right: 15px;
+  .social-float #theme-toggle {
     width: 35px;
     height: 35px;
   }
