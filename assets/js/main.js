@@ -43,9 +43,10 @@ async function initializeApp() {
         await detectUserRegion();
         await loadAvailableCurrencies();
         await initializeCurrency();
+        await loadProducts();
         setupCollapsibleHeader();
         setupThemeToggle();
-        setupKoFiTrigger();
+        setupCurrencyTrigger();
         
         console.log('✅ VibeDrips initialized successfully!');
         
@@ -62,7 +63,6 @@ function cacheElements() {
     elements.currencyModal = document.getElementById('currency-modal');
     elements.currencySelector = document.getElementById('currency-selector');
     elements.currentCurrency = document.getElementById('current-currency');
-    elements.currencyDisplay = document.getElementById('currency-display');
     elements.productsContainer = document.getElementById('products-container');
     elements.sectionTitle = document.getElementById('section-title');
     elements.sectionSubtitle = document.getElementById('section-subtitle');
@@ -74,7 +74,7 @@ function cacheElements() {
     elements.priceSort = document.getElementById('price-sort');
     elements.header = document.querySelector('.main-header');
     elements.themeToggle = document.getElementById('theme-toggle');
-    elements.kofiTrigger = document.getElementById('kofi-trigger');
+    elements.currencyTrigger = document.getElementById('currency-trigger');
     
     console.log('📋 DOM elements cached');
 }
@@ -97,7 +97,7 @@ function setupEventListeners() {
 
     // Close modal on outside click
     document.addEventListener('click', (e) => {
-        if (!elements.currencyModal.contains(e.target) && e.target !== elements.currencyDisplay) {
+        if (!elements.currencyModal.contains(e.target)) {
             hideCurrencyModal();
         }
     });
@@ -133,13 +133,11 @@ function setupThemeToggle() {
     });
 }
 
-// Setup Ko-fi trigger
-function setupKoFiTrigger() {
-    if (VibeDrips.elements.kofiTrigger) {
-        VibeDrips.elements.kofiTrigger.addEventListener('click', () => {
-            if (typeof kofiWidgetOverlay !== 'undefined') {
-                kofiWidgetOverlay.show();
-            }
+// Setup currency trigger
+function setupCurrencyTrigger() {
+    if (VibeDrips.elements.currencyTrigger) {
+        VibeDrips.elements.currencyTrigger.addEventListener('click', () => {
+            showCurrencyModal();
         });
     }
 }
@@ -197,6 +195,23 @@ async function initializeCurrency() {
     showCurrencyModal();
 }
 
+// Load products
+async function loadProducts() {
+    try {
+        showLoadingState();
+        const response = await fetch(`${VibeDrips.config.dataUrl}/products-${VibeDrips.currentCurrency}.json`);
+        VibeDrips.allProducts = await response.json();
+        VibeDrips.categories = new Set(VibeDrips.allProducts.map(p => p.category));
+        VibeDrips.elements.productCount.textContent = VibeDrips.allProducts.length;
+        VibeDrips.elements.categoryCount.textContent = VibeDrips.categories.size;
+        VibeDrips.elements.lastUpdated.textContent = '9/15/2025'; // Current date
+        filterProducts(); // Initial filter
+    } catch (error) {
+        console.error('❌ Failed to load products:', error);
+        showError('Failed to load products. Please try again later.');
+    }
+}
+
 // Show currency modal
 function showCurrencyModal() {
     if (VibeDrips.elements.currencyModal) {
@@ -219,21 +234,51 @@ function setCurrency() {
         VibeDrips.currentCurrency = selectedCurrency;
         VibeDrips.elements.currentCurrency.textContent = VibeDrips.currentCurrency;
         localStorage.setItem('selectedCurrency', VibeDrips.currentCurrency);
+        loadProducts(); // Reload products with new currency
         hideCurrencyModal();
-        filterProducts(); // Refresh products with new currency
     }
 }
 
-// Filter products (to be implemented with products.js integration)
+// Filter products
 function filterProducts() {
-    // This will be enhanced in products.js
-    console.log('Filtering products...', VibeDrips.currentTimeFilter);
+    VibeDrips.filteredProducts = VibeDrips.allProducts.filter(product => {
+        const searchTerm = VibeDrips.elements.search.value.toLowerCase();
+        const category = VibeDrips.elements.categoryFilter.value;
+        return (!searchTerm || product.name.toLowerCase().includes(searchTerm)) &&
+               (!category || product.category === category) &&
+               (VibeDrips.currentTimeFilter === 'all' || product.timeFilter === VibeDrips.currentTimeFilter);
+    });
+    // Placeholder for rendering (to be enhanced in products.js)
+    console.log('Filtered products:', VibeDrips.filteredProducts.length);
+    if (VibeDrips.elements.productsContainer) {
+        VibeDrips.elements.productsContainer.innerHTML = VibeDrips.filteredProducts.length > 0 ?
+            VibeDrips.filteredProducts.map(p => `<div>${p.name}</div>`).join('') :
+            '<div>No products found.</div>';
+    }
 }
 
-// Sort products (to be implemented with products.js integration)
+// Sort products
 function sortProducts() {
-    // This will be enhanced in products.js
-    console.log('Sorting products...');
+    const sortBy = VibeDrips.elements.priceSort.value;
+    if (sortBy) {
+        VibeDrips.filteredProducts.sort((a, b) => {
+            switch (sortBy) {
+                case 'price-low': return a.price - b.price;
+                case 'price-high': return b.price - a.price;
+                case 'name': return a.name.localeCompare(b.name);
+                case 'rating': return (b.rating || 0) - (a.rating || 0);
+                case 'date-new': return new Date(b.date) - new Date(a.date);
+                default: return 0;
+            }
+        });
+    }
+    // Placeholder for rendering
+    console.log('Sorted products:', sortBy);
+    if (VibeDrips.elements.productsContainer) {
+        VibeDrips.elements.productsContainer.innerHTML = VibeDrips.filteredProducts.length > 0 ?
+            VibeDrips.filteredProducts.map(p => `<div>${p.name}</div>`).join('') :
+            '<div>No products found.</div>';
+    }
 }
 
 // Show different UI states
