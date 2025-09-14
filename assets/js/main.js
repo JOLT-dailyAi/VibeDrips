@@ -60,7 +60,6 @@ function cacheElements() {
     
     elements.currencyModal = document.getElementById('currency-modal');
     elements.currencySelector = document.getElementById('currency-selector');
-    elements.currentCurrency = document.getElementById('current-currency');
     elements.currencyDisplay = document.getElementById('currency-display');
     elements.currencyTrigger = document.getElementById('currency-trigger');
     elements.productsContainer = document.getElementById('products-container');
@@ -118,6 +117,10 @@ function setupThemeToggle() {
             body.classList.add('light-theme');
         }
         localStorage.setItem('theme', body.className);
+        // Re-render products to apply new theme
+        if (typeof filterProducts === 'function') {
+            filterProducts();
+        }
     });
 }
 
@@ -299,9 +302,6 @@ async function setCurrency() {
     VibeDrips.currentCurrency = selectedCurrency;
     
     // Update UI displays
-    if (VibeDrips.elements.currentCurrency) {
-        VibeDrips.elements.currentCurrency.textContent = selectedCurrency;
-    }
     if (VibeDrips.elements.currencyDisplay) {
         VibeDrips.elements.currencyDisplay.textContent = selectedCurrency;
     }
@@ -434,10 +434,20 @@ function filterProducts() {
     });
     if (VibeDrips.elements.productsContainer) {
         VibeDrips.elements.productsContainer.innerHTML = VibeDrips.filteredProducts.length > 0 ?
-            VibeDrips.filteredProducts.map(p => `<div class="product-item">${p.name || 'Unnamed Product'}</div>`).join('') :
+            VibeDrips.filteredProducts.map(p => `
+                <div class="product-item">
+                    <h3>${p.name || 'Unnamed Product'}</h3>
+                    <p>${p.description || 'No description'}</p>
+                    <div class="price">${p.price ? `₹${p.price.toFixed(2)}` : 'N/A'}</div>
+                    <div class="brand">🏷️ ${p.brand || 'Unknown'}</div>
+                    <div class="rating">⭐ ${p.customer_rating || '0'} (${p.review_count || '0'})</div>
+                    ${p.affiliate_link ? `<a href="${p.affiliate_link}" target="_blank">🛒 Buy on Amazon</a>` : ''}
+                    ${p.source_link ? `<a href="${p.source_link}" target="_blank">👁️ Details</a>` : ''}
+                </div>
+            `).join('') :
             '<div class="no-products">No products found.</div>';
     }
-    console.log('Filtered products:', VibeDrips.filteredProducts.length);
+    console.log('🔍 Filtered products:', VibeDrips.filteredProducts.length);
 }
 
 // Sort products
@@ -457,10 +467,20 @@ function sortProducts() {
     }
     if (VibeDrips.elements.productsContainer) {
         VibeDrips.elements.productsContainer.innerHTML = VibeDrips.filteredProducts.length > 0 ?
-            VibeDrips.filteredProducts.map(p => `<div class="product-item">${p.name || 'Unnamed Product'}</div>`).join('') :
+            VibeDrips.filteredProducts.map(p => `
+                <div class="product-item">
+                    <h3>${p.name || 'Unnamed Product'}</h3>
+                    <p>${p.description || 'No description'}</p>
+                    <div class="price">${p.price ? `₹${p.price.toFixed(2)}` : 'N/A'}</div>
+                    <div class="brand">🏷️ ${p.brand || 'Unknown'}</div>
+                    <div class="rating">⭐ ${p.customer_rating || '0'} (${p.review_count || '0'})</div>
+                    ${p.affiliate_link ? `<a href="${p.affiliate_link}" target="_blank">🛒 Buy on Amazon</a>` : ''}
+                    ${p.source_link ? `<a href="${p.source_link}" target="_blank">👁️ Details</a>` : ''}
+                </div>
+            `).join('') :
             '<div class="no-products">No products found.</div>';
     }
-    console.log('Sorted products:', sortBy);
+    console.log('🔧 Sorted products:', sortBy);
 }
 
 // Show different UI states
@@ -516,9 +536,6 @@ async function fallbackInitialization() {
     
     VibeDrips.currentCurrency = 'INR';
     
-    if (VibeDrips.elements.currentCurrency) {
-        VibeDrips.elements.currentCurrency.textContent = 'INR';
-    }
     if (VibeDrips.elements.currencyDisplay) {
         VibeDrips.elements.currencyDisplay.textContent = 'INR';
     }
