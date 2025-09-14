@@ -7,15 +7,14 @@
     <link rel="icon" type="image/png" sizes="32x32" href="https://raw.githubusercontent.com/JOLT-dailyAi/VibeDrips/refs/heads/main/assets/images/VibeDrips_DP.png">
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/products.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body class="dark-theme">
+<body>
     <!-- Currency Selection Modal -->
     <div id="currency-modal" class="currency-modal hidden">
         <div class="currency-content">
             <h2>Welcome to VibeDrips</h2>
             <p>Select your preferred currency to see localized pricing</p>
-            <select id="currency-selector" class="currency-select" onchange="setCurrency()">
+            <select id="currency-selector" class="currency-select">
                 <option value="">Choose your currency...</option>
                 <!-- Dynamic options loaded from currencies.json -->
             </select>
@@ -29,8 +28,16 @@
             <div class="header-content">
                 <a href="#" class="logo">
                     <img src="https://raw.githubusercontent.com/JOLT-dailyAi/VibeDrips/refs/heads/main/assets/images/VibeDrips.png" 
-                         alt="VibeDrips" class="logo-img" width="200" height="200">
+                         alt="VibeDrips" class="logo-img" width="300" height="60">
                 </a>
+                <div class="header-actions">
+                    <div class="currency-display" onclick="showCurrencyModal()">
+                        <span id="current-currency">Loading...</span>
+                    </div>
+                    <div class="theme-controls hidden">
+                        <!-- Future: Theme toggle and volume controls -->
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -93,16 +100,16 @@
                         <div class="stat-label">Categories</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number" id="current-currency">INR</div>
+                        <div class="stat-number" id="currency-display">INR</div>
                         <div class="stat-label">Currency</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number" id="last-updated">9/15/2025</div>
+                        <div class="stat-number" id="last-updated">Today</div>
                         <div class="stat-label">Updated</div>
                     </div>
                 </div>
 
-                <div id="products-container" class="products-grid">
+                <div id="products-container">
                     <div class="loading-state">
                         <div class="loading-spinner"></div>
                         <div>Loading your curated drops...</div>
@@ -117,34 +124,24 @@
         <div class="container">
             <div class="footer-brand">
                 <img src="https://raw.githubusercontent.com/JOLT-dailyAi/VibeDrips/refs/heads/main/assets/images/VibeDrips_DP.png" 
-                     alt="VibeDrips Brand" class="footer-logo" width="400" height="200">
+                     alt="VibeDrips Brand" class="footer-logo" width="550" height="350">
                 <h3 class="footer-tagline">Drops that Drip. Curated Finds, Digitally Yours.</h3>
                 <p class="footer-description">
                     Curated digital finds and affiliate drops — aesthetic tools, festive picks, and everyday scroll-stoppers.
                 </p>
+                <div class="footer-links">
+                    <a href="https://www.instagram.com/vibedrips.dailyai/" target="_blank" 
+                       rel="noopener noreferrer" class="footer-link">
+                        📸 Follow @vibedrips.dailyai
+                    </a>
+                    <a href="https://ko-fi.com/dailyai/tiers" target="_blank" 
+                       rel="noopener noreferrer" class="footer-link">
+                        ☕ Support on Ko-fi
+                    </a>
+                </div>
             </div>
         </div>
     </footer>
-
-    <!-- Floating Social Links -->
-    <div class="social-float">
-        <button id="theme-toggle"></button> <!-- Removed label, 50x50 -->
-        <a href="https://www.instagram.com/vibedrips.dailyai/" target="_blank"><i class="fab fa-instagram"></i></a>
-        <button id="currency-trigger">INR</button> <!-- Currency trigger -->
-    </div>
-
-    <!-- Ko-fi Script -->
-    <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script>
-    <script>
-        kofiWidgetOverlay.draw('dailyai', {
-            'type': 'floating-chat',
-            'floating-chat.donateButton.text': 'Support me',
-            'floating-chat.donateButton.background-color': '#00b9fe',
-            'floating-chat.donateButton.text-color': '#fff',
-            'floating-chat.donateButton.left': '20px',
-            'floating-chat.donateButton.bottom': '20px'
-        });
-    </script>
 
     <!-- Core Scripts -->
     <script src="assets/js/main.js"></script>
