@@ -1,4 +1,4 @@
-// convert-csv.js - Enhanced Multi-Currency Product Processor (STDIN Version)
+// convert-csv.js - Enhanced Multi-Currency Product Processor (STDIN Version) - FIXED
 const csv = require('csv-parser');
 const fs = require('fs');
 const path = require('path');
@@ -108,22 +108,45 @@ function convertCsvToJson() {
                 if (processingStats.total <= 3) {
                     console.log(`Row ${processingStats.total} columns:`, Object.keys(data));
                     console.log(`Sample data:`, data);
+                    console.log(`Currency column value: "${data.Currency}"`);
+                    console.log(`Price column value: "${data.price}"`);
                 }
                 
-                // Detect currency - primary from Currency column, fallback to price parsing
+                // FIXED: Detect currency - handle both symbols and codes properly
                 let currency = null;
                 
+                // First try Currency column
                 if (data.Currency && data.Currency.trim()) {
-                    currency = data.Currency.trim().toUpperCase();
-                } else if (data.price) {
+                    const currencyValue = data.Currency.trim();
+                    console.log(`Processing currency value: "${currencyValue}"`);
+                    
+                    // Direct symbol mapping
+                    if (currencyValue === '₹') {
+                        currency = 'INR';
+                    } else if (CURRENCY_PATTERNS[currencyValue]) {
+                        currency = CURRENCY_PATTERNS[currencyValue];
+                    } else if (CURRENCY_MAP[currencyValue.toUpperCase()]) {
+                        currency = currencyValue.toUpperCase();
+                    }
+                }
+                
+                // Fallback to price detection
+                if (!currency && data.price) {
                     currency = detectCurrencyFromPrice(data.price);
+                    console.log(`Detected currency from price: ${currency}`);
                 }
                 
-                // Default to MISC if no currency detected
+                // Final fallback - check country or default to MISC
                 if (!currency || !CURRENCY_MAP[currency]) {
-                    currency = 'MISC';
+                    if (data.countryOfOrigin === 'India' || 
+                        (data.price && data.price.includes('₹'))) {
+                        currency = 'INR';
+                    } else {
+                        currency = 'MISC';
+                    }
                 }
                 
+                console.log(`Final currency assigned: ${currency}`);
                 processingStats.currenciesFound.add(currency);
                 
                 // Parse images array
