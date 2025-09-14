@@ -139,6 +139,7 @@ function setupCurrencyTrigger() {
         VibeDrips.elements.currencyTrigger.addEventListener('click', () => {
             showCurrencyModal();
         });
+        VibeDrips.elements.currencyTrigger.textContent = VibeDrips.currentCurrency || 'INR'; // Set initial currency
     }
 }
 
@@ -190,6 +191,9 @@ async function initializeCurrency() {
     }
 
     VibeDrips.elements.currentCurrency.textContent = VibeDrips.currentCurrency;
+    if (VibeDrips.elements.currencyTrigger) {
+        VibeDrips.elements.currencyTrigger.textContent = VibeDrips.currentCurrency;
+    }
     localStorage.setItem('selectedCurrency', VibeDrips.currentCurrency);
 
     showCurrencyModal();
@@ -200,15 +204,17 @@ async function loadProducts() {
     try {
         showLoadingState();
         const response = await fetch(`${VibeDrips.config.dataUrl}/products-${VibeDrips.currentCurrency}.json`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         VibeDrips.allProducts = await response.json();
+        console.log('Products loaded:', VibeDrips.allProducts); // Debug log
         VibeDrips.categories = new Set(VibeDrips.allProducts.map(p => p.category));
-        VibeDrips.elements.productCount.textContent = VibeDrips.allProducts.length;
-        VibeDrips.elements.categoryCount.textContent = VibeDrips.categories.size;
+        VibeDrips.elements.productCount.textContent = VibeDrips.allProducts.length || 0;
+        VibeDrips.elements.categoryCount.textContent = VibeDrips.categories.size || 0;
         VibeDrips.elements.lastUpdated.textContent = '9/15/2025'; // Current date
         filterProducts(); // Initial filter
     } catch (error) {
-        console.error('❌ Failed to load products:', error);
-        showError('Failed to load products. Please try again later.');
+        console.error('❌ Failed to load products:', error, `URL: ${VibeDrips.config.dataUrl}/products-${VibeDrips.currentCurrency}.json`);
+        showError('Failed to load products. Check console for details.');
     }
 }
 
@@ -233,6 +239,9 @@ function setCurrency() {
     if (selectedCurrency && VibeDrips.availableCurrencies.some(c => c.code === selectedCurrency)) {
         VibeDrips.currentCurrency = selectedCurrency;
         VibeDrips.elements.currentCurrency.textContent = VibeDrips.currentCurrency;
+        if (VibeDrips.elements.currencyTrigger) {
+            VibeDrips.elements.currencyTrigger.textContent = VibeDrips.currentCurrency;
+        }
         localStorage.setItem('selectedCurrency', VibeDrips.currentCurrency);
         loadProducts(); // Reload products with new currency
         hideCurrencyModal();
@@ -242,43 +251,41 @@ function setCurrency() {
 // Filter products
 function filterProducts() {
     VibeDrips.filteredProducts = VibeDrips.allProducts.filter(product => {
-        const searchTerm = VibeDrips.elements.search.value.toLowerCase();
+        const searchTerm = (VibeDrips.elements.search.value || '').toLowerCase();
         const category = VibeDrips.elements.categoryFilter.value;
-        return (!searchTerm || product.name.toLowerCase().includes(searchTerm)) &&
-               (!category || product.category === category) &&
-               (VibeDrips.currentTimeFilter === 'all' || product.timeFilter === VibeDrips.currentTimeFilter);
+        return (!searchTerm || (product.name && product.name.toLowerCase().includes(searchTerm))) &&
+               (!category || (product.category && product.category === category)) &&
+               (VibeDrips.currentTimeFilter === 'all' || (product.timeFilter && product.timeFilter === VibeDrips.currentTimeFilter));
     });
-    // Placeholder for rendering (to be enhanced in products.js)
-    console.log('Filtered products:', VibeDrips.filteredProducts.length);
     if (VibeDrips.elements.productsContainer) {
         VibeDrips.elements.productsContainer.innerHTML = VibeDrips.filteredProducts.length > 0 ?
-            VibeDrips.filteredProducts.map(p => `<div>${p.name}</div>`).join('') :
-            '<div>No products found.</div>';
+            VibeDrips.filteredProducts.map(p => `<div class="product-item">${p.name || 'Unnamed Product'}</div>`).join('') :
+            '<div class="no-products">No products found.</div>';
     }
+    console.log('Filtered products:', VibeDrips.filteredProducts.length);
 }
 
 // Sort products
 function sortProducts() {
     const sortBy = VibeDrips.elements.priceSort.value;
-    if (sortBy) {
+    if (sortBy && VibeDrips.filteredProducts.length) {
         VibeDrips.filteredProducts.sort((a, b) => {
             switch (sortBy) {
-                case 'price-low': return a.price - b.price;
-                case 'price-high': return b.price - a.price;
-                case 'name': return a.name.localeCompare(b.name);
+                case 'price-low': return (a.price || 0) - (b.price || 0);
+                case 'price-high': return (b.price || 0) - (a.price || 0);
+                case 'name': return (a.name || '').localeCompare(b.name || '');
                 case 'rating': return (b.rating || 0) - (a.rating || 0);
-                case 'date-new': return new Date(b.date) - new Date(a.date);
+                case 'date-new': return new Date(b.date || 0) - new Date(a.date || 0);
                 default: return 0;
             }
         });
     }
-    // Placeholder for rendering
-    console.log('Sorted products:', sortBy);
     if (VibeDrips.elements.productsContainer) {
         VibeDrips.elements.productsContainer.innerHTML = VibeDrips.filteredProducts.length > 0 ?
-            VibeDrips.filteredProducts.map(p => `<div>${p.name}</div>`).join('') :
-            '<div>No products found.</div>';
+            VibeDrips.filteredProducts.map(p => `<div class="product-item">${p.name || 'Unnamed Product'}</div>`).join('') :
+            '<div class="no-products">No products found.</div>';
     }
+    console.log('Sorted products:', sortBy);
 }
 
 // Show different UI states
@@ -336,6 +343,9 @@ async function fallbackInitialization() {
     
     if (VibeDrips.elements.currentCurrency) {
         VibeDrips.elements.currentCurrency.textContent = 'INR';
+    }
+    if (VibeDrips.elements.currencyTrigger) {
+        VibeDrips.elements.currencyTrigger.textContent = 'INR';
     }
     
     showComingSoonState();
