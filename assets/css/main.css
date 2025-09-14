@@ -95,7 +95,7 @@ body.light-theme {
 .logo-img {
     width: 600px;
     height: 200px;
-    object-fit: cover; /* This will crop the image to fill 600×200 */
+    object-fit: fill; /* This will stretch/squash the image to exactly 600×200 */
 }
 
 /* Main Content */
