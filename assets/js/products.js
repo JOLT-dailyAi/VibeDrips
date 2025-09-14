@@ -1,11 +1,10 @@
-// products.js - Product Display and Filtering Functions
+// products.js - Product Display and Filtering Functions (Fixed)
 
 /**
  * Set time-based filter for products
- * @param {string} filter - Filter type (hot, featured, new, trending, all)
  */
 function setTimeFilter(filter) {
-    console.log(`🎯 Setting time filter: ${filter}`);
+    console.log(`Setting time filter: ${filter}`);
     VibeDrips.currentTimeFilter = filter;
     
     // Update active filter UI
@@ -16,7 +15,7 @@ function setTimeFilter(filter) {
         }
     });
 
-    // Filter products based on the selected time filter
+    // Filter products based on selected filter
     switch (filter) {
         case 'hot':
             VibeDrips.filteredProducts = getHotProducts();
@@ -37,19 +36,13 @@ function setTimeFilter(filter) {
             VibeDrips.filteredProducts = [...VibeDrips.allProducts];
     }
 
-    // Update section titles
     updateSectionTitle(filter);
-    
-    // Apply any existing search/category filters
     applyCurrentFilters();
-    
-    // Render products
     renderProducts();
 }
 
 /**
  * Get "Hot This Month" products based on dateFirstAvailable
- * Prioritizes dateFirstAvailable, falls back to timestamp
  */
 function getHotProducts() {
     const currentDate = new Date();
@@ -57,17 +50,13 @@ function getHotProducts() {
     const currentYear = currentDate.getFullYear();
     
     return VibeDrips.allProducts.filter(product => {
-        // Use dateFirstAvailable if available, otherwise fall back to timestamp
         const dateStr = product.date_first_available || product.dateFirstAvailable || product.timestamp;
         if (!dateStr) return false;
         
         try {
             const productDate = new Date(dateStr);
-            
-            // Check if product was first available this month (Sep/Oct 2025)
             return (productDate.getMonth() === currentMonth && 
                     productDate.getFullYear() === currentYear) ||
-                   // Also include products from last month to ensure we have enough content
                    (productDate.getMonth() === (currentMonth - 1 + 12) % 12 && 
                     productDate.getFullYear() === currentYear);
         } catch (error) {
@@ -75,7 +64,6 @@ function getHotProducts() {
             return false;
         }
     }).sort((a, b) => {
-        // Sort by dateFirstAvailable (newest first)
         const dateA = new Date(a.date_first_available || a.dateFirstAvailable || a.timestamp);
         const dateB = new Date(b.date_first_available || b.dateFirstAvailable || b.timestamp);
         return dateB - dateA;
@@ -98,28 +86,28 @@ function getNewArrivals() {
 }
 
 /**
- * Update section title based on current filter
+ * Update section titles
  */
 function updateSectionTitle(filter) {
     const titles = {
         'hot': { 
-            title: '🔥 Hot This Month', 
+            title: 'Hot This Month', 
             subtitle: 'Trending products that just dropped and making waves'
         },
         'featured': { 
-            title: '⭐ Featured Products', 
+            title: 'Featured Products', 
             subtitle: 'Our hand-picked recommendations just for you'
         },
         'new': { 
-            title: '🆕 New Arrivals', 
+            title: 'New Arrivals', 
             subtitle: 'Fresh drops from the last 30 days'
         },
         'trending': { 
-            title: '📈 Trending Now', 
+            title: 'Trending Now', 
             subtitle: 'What everyone is talking about'
         },
         'all': { 
-            title: '🛍️ All Products', 
+            title: 'All Products', 
             subtitle: 'Complete collection of curated finds'
         }
     };
@@ -151,9 +139,7 @@ function applyCurrentFilters() {
                 product.description, 
                 product.category,
                 product.subcategory,
-                product.brand,
-                product.theme,
-                product.character
+                product.brand
             ].filter(field => field && field.toString().trim());
             
             const matchesSearch = !searchTerm || searchFields.some(field => 
@@ -206,7 +192,6 @@ function sortProducts() {
             });
             break;
         default:
-            // Default sorting - featured first, then by date
             VibeDrips.filteredProducts.sort((a, b) => {
                 if (a.featured && !b.featured) return -1;
                 if (!a.featured && b.featured) return 1;
@@ -255,39 +240,28 @@ function renderProducts() {
 }
 
 /**
- * Create a product card element with new layout requirements
- * @param {Object} product - Product data
- * @returns {HTMLElement} Product card element
+ * Create a product card element
  */
 function createProductCard(product) {
     const card = document.createElement('div');
     card.className = 'product-card';
     
-    // Prepare images for carousel
     const images = [product.main_image, ...product.all_images].filter(img => img && img.trim());
     const primaryImage = images[0] || '';
     
-    // Format price using currency utilities
-    const formattedPrice = window.CurrencyUtils ? 
-        window.CurrencyUtils.formatPrice(product.price, product.currency) :
-        `₹${product.price}`;
+    const formattedPrice = product.price ? `₹${product.price}` : 'Price not available';
     
-    // Create badge if applicable
     let badge = '';
     if (VibeDrips.currentTimeFilter === 'hot') {
         badge = `<div class="product-badge hot">🔥 Hot</div>`;
     } else if (product.featured) {
         badge = `<div class="product-badge featured">⭐ Featured</div>`;
-    } else if (product.trending) {
-        badge = `<div class="product-badge trending">📈 Trending</div>`;
     }
 
-    // Rating display
     const ratingDisplay = product.customer_rating > 0 ? 
         `<div class="rating">⭐ ${product.customer_rating.toFixed(1)} (${product.review_count})</div>` : 
         `<div class="rating no-rating">No ratings yet</div>`;
 
-    // Amazon redirect link priority: Short > Long > Source
     const redirectLink = product.amazon_short || product.amazon_long || product.source_link || '#';
 
     card.innerHTML = `
@@ -328,197 +302,58 @@ function createProductCard(product) {
 }
 
 /**
- * Open Amazon/affiliate link in new tab
+ * Open Amazon/affiliate link
  */
 function openAmazonLink(link, productId) {
     if (link && link !== '#' && link !== '') {
-        console.log('🔗 Amazon redirect:', productId, link);
+        console.log('Amazon redirect:', productId, link);
         window.open(link, '_blank', 'noopener,noreferrer');
     } else {
-        console.warn('⚠️ No Amazon link available for product:', productId);
+        console.warn('No Amazon link available for product:', productId);
     }
 }
 
 /**
- * Show detailed product modal with new layout
+ * Show detailed product modal
  */
 function showProductModal(productId) {
     const product = VibeDrips.allProducts.find(p => p.id === productId);
     if (!product) {
-        console.error('❌ Product not found:', productId);
+        console.error('Product not found:', productId);
         return;
     }
 
-    console.log('📖 Opening product modal:', product.name);
-
-    // Get modal elements
-    const modal = document.getElementById('product-modal');
-    const modalTitle = document.getElementById('modal-product-title');
-    const sourceEmbed = document.getElementById('modal-source-embed');
-    const sourceIframe = document.getElementById('source-iframe');
-    const carousel = document.getElementById('modal-image-carousel');
-    const details = document.getElementById('modal-product-details');
-    const amazonBtn = document.getElementById('amazon-buy-btn');
-
-    if (!modal) return;
-
-    // Set title
-    if (modalTitle) {
-        modalTitle.textContent = product.name;
-    }
-
-    // Set source embed (left side)
-    if (sourceEmbed && sourceIframe && product.source_link) {
-        sourceIframe.src = product.source_link;
-        sourceEmbed.style.display = 'block';
-    } else if (sourceEmbed) {
-        sourceEmbed.style.display = 'none';
-    }
-
-    // Set up image carousel (right side)
-    setupImageCarousel(product);
-
-    // Set product details
-    if (details) {
-        const formattedPrice = product.price ? `₹${product.price}` : 'Price not available';
-
-        details.innerHTML = `
-            <div class="detail-grid">
-                <div class="detail-item">
-                    <div class="detail-label">Price</div>
-                    <div class="detail-value price">${formattedPrice}</div>
+    // Simple modal for now - will enhance later
+    const modalContent = `
+        <div class="simple-modal">
+            <div class="simple-modal-content">
+                <div class="simple-modal-header">
+                    <h2>${escapeHtml(product.name)}</h2>
+                    <button onclick="closeSimpleModal()">×</button>
                 </div>
-                <div class="detail-item">
-                    <div class="detail-label">Brand</div>
-                    <div class="detail-value">${escapeHtml(product.brand)}</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">Category</div>
-                    <div class="detail-value">${escapeHtml(product.category)}</div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-label">Rating</div>
-                    <div class="detail-value">
-                        ${product.customer_rating > 0 ? 
-                            `⭐ ${product.customer_rating.toFixed(1)} (${product.review_count} reviews)` : 
-                            'No ratings yet'}
-                    </div>
-                </div>
-                ${product.color ? `
-                <div class="detail-item">
-                    <div class="detail-label">Color</div>
-                    <div class="detail-value">${escapeHtml(product.color)}</div>
-                </div>` : ''}
-                ${product.material ? `
-                <div class="detail-item">
-                    <div class="detail-label">Material</div>
-                    <div class="detail-value">${escapeHtml(product.material)}</div>
-                </div>` : ''}
-                <div class="detail-item full-width">
-                    <div class="detail-label">Description</div>
-                    <div class="detail-value">${escapeHtml(product.description)}</div>
+                <div class="simple-modal-body">
+                    <img src="${product.main_image}" alt="${escapeHtml(product.name)}" style="max-width: 200px;">
+                    <p><strong>Price:</strong> ₹${product.price}</p>
+                    <p><strong>Brand:</strong> ${escapeHtml(product.brand)}</p>
+                    <p><strong>Category:</strong> ${escapeHtml(product.category)}</p>
+                    <p><strong>Description:</strong> ${escapeHtml(product.description)}</p>
+                    <button onclick="openAmazonLink('${escapeHtml(product.amazon_short || product.amazon_long || product.source_link || '#')}', '${product.id}')" 
+                            class="amazon-button">🛒 Buy on Amazon</button>
                 </div>
             </div>
-        `;
-    }
-
-    // Set Amazon button
-    if (amazonBtn) {
-        const redirectLink = product.amazon_short || product.amazon_long || product.source_link || '#';
-        amazonBtn.onclick = () => openAmazonLink(redirectLink, product.id);
-        
-        const formattedPrice = window.CurrencyUtils ? 
-            window.CurrencyUtils.formatPrice(product.price, product.currency) :
-            `₹${product.price}`;
-        amazonBtn.textContent = `🛒 Buy on Amazon - ${formattedPrice}`;
-    }
-
-    // Show modal
-    modal.classList.add('show');
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', modalContent);
 }
 
 /**
- * Set up image carousel for product modal
+ * Close simple modal
  */
-function setupImageCarousel(product) {
-    const carouselTrack = document.getElementById('carousel-track');
-    const carouselDots = document.getElementById('carousel-dots');
-    const prevBtn = document.getElementById('carousel-prev');
-    const nextBtn = document.getElementById('carousel-next');
-    
-    if (!carouselTrack) return;
-
-    // Prepare images
-    const images = [product.main_image, ...product.all_images].filter(img => img && img.trim());
-    
-    if (images.length === 0) {
-        carouselTrack.innerHTML = '<div class="no-image-placeholder">🛍️<br>No Image Available</div>';
-        return;
-    }
-
-    // Create carousel slides
-    carouselTrack.innerHTML = '';
-    images.forEach((image, index) => {
-        const slide = document.createElement('div');
-        slide.className = 'carousel-slide';
-        slide.innerHTML = `<img src="${image}" alt="${escapeHtml(product.name)} - Image ${index + 1}" loading="lazy">`;
-        carouselTrack.appendChild(slide);
-    });
-
-    // Create dots
-    if (carouselDots && images.length > 1) {
-        carouselDots.innerHTML = '';
-        images.forEach((_, index) => {
-            const dot = document.createElement('button');
-            dot.className = 'carousel-dot';
-            if (index === 0) dot.classList.add('active');
-            dot.onclick = () => goToSlide(index);
-            carouselDots.appendChild(dot);
-        });
-    }
-
-    // Set up navigation
-    let currentSlide = 0;
-    
-    function goToSlide(slideIndex) {
-        currentSlide = slideIndex;
-        const translateX = -slideIndex * 100;
-        carouselTrack.style.transform = `translateX(${translateX}%)`;
-        
-        // Update dots
-        document.querySelectorAll('.carousel-dot').forEach((dot, index) => {
-            dot.classList.toggle('active', index === slideIndex);
-        });
-    }
-    
-    if (prevBtn) {
-        prevBtn.onclick = () => {
-            currentSlide = (currentSlide - 1 + images.length) % images.length;
-            goToSlide(currentSlide);
-        };
-    }
-    
-    if (nextBtn) {
-        nextBtn.onclick = () => {
-            currentSlide = (currentSlide + 1) % images.length;
-            goToSlide(currentSlide);
-        };
-    }
-}
-
-/**
- * Close product modal
- */
-function closeProductModal() {
-    const modal = document.getElementById('product-modal');
+function closeSimpleModal() {
+    const modal = document.querySelector('.simple-modal');
     if (modal) {
-        modal.classList.remove('show');
-        
-        // Clear iframe src to stop any loading
-        const iframe = document.getElementById('source-iframe');
-        if (iframe) {
-            iframe.src = '';
-        }
+        modal.remove();
     }
 }
 
@@ -535,8 +370,31 @@ function updateStats() {
 }
 
 /**
- * Utility function to escape HTML
+ * Utility functions
  */
 function escapeHtml(unsafe) {
     if (!unsafe) return '';
     return unsafe
+        .toString()
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function truncateText(text, maxLength) {
+    if (!text) return '';
+    if (text.length <= maxLength) return text;
+    return text.substr(0, maxLength) + '...';
+}
+
+// Export functions to global scope
+window.setTimeFilter = setTimeFilter;
+window.filterProducts = filterProducts;
+window.sortProducts = sortProducts;
+window.openAmazonLink = openAmazonLink;
+window.showProductModal = showProductModal;
+window.closeSimpleModal = closeSimpleModal;
+
+console.log('Products.js loaded successfully');
