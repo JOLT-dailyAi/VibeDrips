@@ -1,0 +1,32 @@
+{
+  "available_currencies": [
+    {
+      "code": "MISC",
+      "name": "Random Drops",
+      "symbol": "🎁",
+      "countries": [
+        "Global"
+      ],
+      "product_count": 7,
+      "filename": "products-MISC.json",
+      "categories": [
+        "General",
+        "Toys & Games › Action & Toy Figures › Toy Figures"
+      ],
+      "brands": [
+        "Ignyte",
+        "Axor",
+        "CodersParadise",
+        "Junkyard",
+        "Banpresto"
+      ],
+      "price_range": {
+        "min": 189,
+        "max": 6045
+      }
+    }
+  ],
+  "last_updated": "2025-09-14T08:18:05.333Z",
+  "total_products": 7,
+  "default_currency": "INR"
+}
