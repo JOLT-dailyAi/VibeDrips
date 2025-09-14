@@ -3,7 +3,7 @@ name: Process CSV Data
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Run daily at 12:00 AM UTC (midnight)
+    - cron: '0 0 * * *'  # Run daily at 12:00 AM UTC (05:30 AM IST)
   push:
     paths:
       - 'data/products.csv'
@@ -33,6 +33,11 @@ jobs:
     - name: Convert CSV to JSON
       run: |
         cat data/products.csv | node convert-csv.js
+        
+    - name: Remove old files from Git
+      run: |
+        git rm -r --quiet data/products-*.json data/currencies.json data/last_updated.txt 2>/dev/null || true
+        git add data/products-*.json data/currencies.json data/last_updated.txt
         
     - name: Commit processed data
       run: |
