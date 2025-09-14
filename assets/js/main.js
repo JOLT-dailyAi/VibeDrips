@@ -1,8 +1,7 @@
-// main.js - Core VibeDrips Application Logic
+// main.js - Fixed VibeDrips Application with Hybrid Approach
 
 // Global application state
 window.VibeDrips = {
-    // App State
     currentCurrency: null,
     currentRegion: null,
     allProducts: [],
@@ -10,9 +9,9 @@ window.VibeDrips = {
     categories: new Set(),
     currentTimeFilter: 'hot',
     
-    // Configuration
+    // Configuration - FIXED URLs
     config: {
-        dataUrl: 'https://raw.githubusercontent.com/JOLT-dailyAi/VibeDrips/main/data',
+        dataUrl: './data', // Relative path for GitHub Pages
         fallbackCurrency: 'INR',
         ipApiUrl: 'https://ipapi.co/json/',
         
@@ -24,27 +23,13 @@ window.VibeDrips = {
             'DE': 'EUR', 'Germany': 'EUR',
             'FR': 'EUR', 'France': 'EUR', 
             'IT': 'EUR', 'Italy': 'EUR',
-            'ES': 'EUR', 'Spain': 'EUR',
-            'NL': 'EUR', 'Netherlands': 'EUR',
-            'BE': 'EUR', 'Belgium': 'EUR',
-            'IE': 'EUR', 'Ireland': 'EUR',
             'JP': 'JPY', 'Japan': 'JPY',
             'CA': 'CAD', 'Canada': 'CAD',
-            'AU': 'AUD', 'Australia': 'AUD',
-            'BR': 'BRL', 'Brazil': 'BRL',
-            'MX': 'MXN', 'Mexico': 'MXN',
-            'AE': 'AED', 'UAE': 'AED', 'United Arab Emirates': 'AED',
-            'SG': 'SGD', 'Singapore': 'SGD',
-            'SA': 'SAR', 'Saudi Arabia': 'SAR',
-            'SE': 'SEK', 'Sweden': 'SEK',
-            'PL': 'PLN', 'Poland': 'PLN'
+            'AU': 'AUD', 'Australia': 'AUD'
         }
     },
     
-    // Available currencies (loaded dynamically)
     availableCurrencies: [],
-    
-    // UI Elements Cache
     elements: {}
 };
 
@@ -53,37 +38,26 @@ async function initializeApp() {
     console.log('🎯 Starting VibeDrips initialization...');
     
     try {
-        // Cache DOM elements
         cacheElements();
-        
-        // Set up event listeners
         setupEventListeners();
-        
-        // Detect user region and currency
         await detectUserRegion();
-        
-        // Load available currencies
         await loadAvailableCurrencies();
-        
-        // Show currency selection or auto-select based on region
         await initializeCurrency();
         
         console.log('✅ VibeDrips initialized successfully!');
         
     } catch (error) {
         console.error('❌ Initialization failed:', error);
-        // Fallback to INR if everything fails
         await fallbackInitialization();
     }
 }
 
-// Cache frequently used DOM elements
+// Cache DOM elements
 function cacheElements() {
     const elements = VibeDrips.elements;
     
     elements.currencyModal = document.getElementById('currency-modal');
     elements.currencySelector = document.getElementById('currency-selector');
-    elements.currencyLoading = document.getElementById('currency-loading');
     elements.currentCurrency = document.getElementById('current-currency');
     elements.currencyDisplay = document.getElementById('currency-display');
     elements.productsContainer = document.getElementById('products-container');
@@ -99,9 +73,8 @@ function cacheElements() {
     console.log('📋 DOM elements cached');
 }
 
-// Set up global event listeners
+// Set up event listeners
 function setupEventListeners() {
-    // Time category filters
     document.querySelectorAll('.time-category').forEach(category => {
         category.addEventListener('click', function() {
             const filter = this.getAttribute('data-filter');
@@ -109,24 +82,14 @@ function setupEventListeners() {
         });
     });
     
-    // Currency selector change
     if (VibeDrips.elements.currencySelector) {
         VibeDrips.elements.currencySelector.addEventListener('change', setCurrency);
     }
     
-    // Modal close handlers
-    document.addEventListener('click', (e) => {
-        if (e.target === VibeDrips.elements.currencyModal) {
-            // Don't close currency modal by clicking outside on first visit
-        }
-    });
-    
-    // Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             closeAllModals();
         }
-        
         if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
             e.preventDefault();
             VibeDrips.elements.search?.focus();
@@ -136,7 +99,7 @@ function setupEventListeners() {
     console.log('🎧 Event listeners set up');
 }
 
-// Detect user region using IP geolocation
+// Detect user region using IP
 async function detectUserRegion() {
     try {
         console.log('🌍 Detecting user region...');
@@ -148,13 +111,11 @@ async function detectUserRegion() {
         VibeDrips.currentRegion = {
             country: data.country_name,
             countryCode: data.country_code,
-            currency: data.currency,
-            timezone: data.timezone
+            currency: data.currency
         };
         
         console.log('📍 Region detected:', VibeDrips.currentRegion);
         
-        // Map region to our supported currency
         const detectedCurrency = VibeDrips.config.regionToCurrency[data.country_code] || 
                                  VibeDrips.config.regionToCurrency[data.country_name] || 
                                  data.currency;
@@ -165,14 +126,13 @@ async function detectUserRegion() {
         }
         
     } catch (error) {
-        console.warn('⚠️ Region detection failed:', error.message);
-        // Fallback to INR
+        console.warn('⚠️ Region detection failed, using fallback');
         VibeDrips.currentCurrency = VibeDrips.config.fallbackCurrency;
         VibeDrips.currentRegion = { country: 'India', countryCode: 'IN' };
     }
 }
 
-// Load available currencies from GitHub data
+// HYBRID APPROACH: Load only available currencies
 async function loadAvailableCurrencies() {
     try {
         console.log('💱 Loading available currencies...');
@@ -181,98 +141,139 @@ async function loadAvailableCurrencies() {
         if (!response.ok) throw new Error('Failed to load currencies');
         
         const data = await response.json();
-        VibeDrips.availableCurrencies = data.available_currencies || [];
+        const potentialCurrencies = data.available_currencies || [];
+        
+        // Test which currencies actually have product files
+        const availableCurrencies = [];
+        
+        for (const currency of potentialCurrencies) {
+            try {
+                const testResponse = await fetch(`${VibeDrips.config.dataUrl}/${currency.filename}`, 
+                    { method: 'HEAD' }); // Just check if file exists
+                
+                if (testResponse.ok) {
+                    availableCurrencies.push(currency);
+                    console.log(`✅ ${currency.code} products available`);
+                } else {
+                    console.log(`⏳ ${currency.code} products coming soon`);
+                }
+            } catch (error) {
+                console.log(`❌ ${currency.code} products not available`);
+            }
+        }
+        
+        // Add "Coming Soon" placeholder if no currencies available
+        if (availableCurrencies.length === 0) {
+            availableCurrencies.push({
+                code: 'COMING_SOON',
+                name: 'Products Coming Soon',
+                symbol: '⏳',
+                product_count: 0,
+                filename: 'none'
+            });
+        }
+        
+        VibeDrips.availableCurrencies = availableCurrencies;
         
         // Update last updated info
-        if (VibeDrips.elements.lastUpdated) {
+        if (VibeDrips.elements.lastUpdated && data.last_updated) {
             const lastUpdated = new Date(data.last_updated);
             VibeDrips.elements.lastUpdated.textContent = lastUpdated.toLocaleDateString();
         }
         
-        console.log(`💼 Loaded ${VibeDrips.availableCurrencies.length} currencies`);
-        
-        // Populate currency selector
+        console.log(`💼 Found ${availableCurrencies.length} available currencies`);
         populateCurrencySelector();
         
     } catch (error) {
         console.error('❌ Failed to load currencies:', error);
-        // Use fallback currencies
-        VibeDrips.availableCurrencies = [
-            { code: 'INR', name: 'Indian Rupee', symbol: '₹', product_count: 0 }
-        ];
+        // Ultimate fallback
+        VibeDrips.availableCurrencies = [{
+            code: 'INR',
+            name: 'Indian Rupee',
+            symbol: '₹',
+            product_count: 0,
+            filename: 'products-INR.json'
+        }];
         populateCurrencySelector();
     }
 }
 
-// Populate the currency selector dropdown
+// Populate currency selector with only available currencies
 function populateCurrencySelector() {
     const selector = VibeDrips.elements.currencySelector;
     if (!selector) return;
     
-    // Clear existing options except the first one
+    // Clear existing options except the first
     while (selector.children.length > 1) {
         selector.removeChild(selector.lastChild);
     }
     
     // Add available currencies
-    VibeDrips.availableCurrencies
-        .filter(currency => currency.product_count > 0) // Only show currencies with products
-        .sort((a, b) => b.product_count - a.product_count) // Sort by product count
-        .forEach(currency => {
-            const option = document.createElement('option');
-            option.value = currency.code;
+    VibeDrips.availableCurrencies.forEach(currency => {
+        const option = document.createElement('option');
+        option.value = currency.code;
+        
+        if (currency.code === 'COMING_SOON') {
+            option.textContent = `${currency.symbol} ${currency.name}`;
+            option.disabled = true;
+        } else {
             option.textContent = `${currency.code} - ${currency.name} (${currency.product_count} products)`;
-            selector.appendChild(option);
-        });
+        }
+        
+        selector.appendChild(option);
+    });
     
-    console.log('🎛️ Currency selector populated');
+    console.log('🎛️ Currency selector populated with available options');
 }
 
 // Initialize currency selection
 async function initializeCurrency() {
     const detectedCurrency = VibeDrips.currentCurrency;
-    const availableCurrencies = VibeDrips.availableCurrencies.map(c => c.code);
+    const availableCodes = VibeDrips.availableCurrencies.map(c => c.code);
     
     // Check if detected currency is available
-    if (detectedCurrency && availableCurrencies.includes(detectedCurrency)) {
+    if (detectedCurrency && availableCodes.includes(detectedCurrency)) {
         console.log(`🎯 Auto-selecting detected currency: ${detectedCurrency}`);
         VibeDrips.elements.currencySelector.value = detectedCurrency;
         await setCurrency();
+    } else if (availableCodes.length > 0 && availableCodes[0] !== 'COMING_SOON') {
+        // Auto-select first available currency
+        console.log(`🎯 Auto-selecting first available: ${availableCodes[0]}`);
+        VibeDrips.elements.currencySelector.value = availableCodes[0];
+        await setCurrency();
     } else {
-        // Show modal for manual selection
-        console.log('🎯 Showing currency selection modal');
-        showCurrencyModal();
+        // Show coming soon state
+        showComingSoonState();
     }
 }
 
-// Show currency selection modal
+// Show/hide currency modal
 function showCurrencyModal() {
     if (VibeDrips.elements.currencyModal) {
         VibeDrips.elements.currencyModal.classList.remove('hidden');
-        
-        // Focus on selector after a brief delay
         setTimeout(() => {
             VibeDrips.elements.currencySelector?.focus();
         }, 300);
     }
 }
 
-// Hide currency selection modal
 function hideCurrencyModal() {
     if (VibeDrips.elements.currencyModal) {
         VibeDrips.elements.currencyModal.classList.add('hidden');
     }
 }
 
-// Set the selected currency and load products
+// Set selected currency and load products
 async function setCurrency() {
     const selector = VibeDrips.elements.currencySelector;
-    if (!selector || !selector.value) return;
+    if (!selector || !selector.value || selector.value === 'COMING_SOON') {
+        showComingSoonState();
+        return;
+    }
     
     const selectedCurrency = selector.value;
     console.log(`💰 Currency selected: ${selectedCurrency}`);
     
-    // Update app state
     VibeDrips.currentCurrency = selectedCurrency;
     
     // Update UI displays
@@ -283,10 +284,8 @@ async function setCurrency() {
         VibeDrips.elements.currencyDisplay.textContent = selectedCurrency;
     }
     
-    // Hide currency modal
     hideCurrencyModal();
     
-    // Load products for selected currency
     try {
         await loadProducts(selectedCurrency);
     } catch (error) {
@@ -295,27 +294,23 @@ async function setCurrency() {
     }
 }
 
-// Load products for the specified currency
+// Load products for specified currency
 async function loadProducts(currency) {
     console.log(`📦 Loading products for ${currency}...`);
     
     try {
-        // Show loading state
         showLoadingState();
         
-        // Try to load currency-specific products
-        let productUrl = `${VibeDrips.config.dataUrl}/products-${currency}.json`;
-        let response = await fetch(productUrl);
-        
-        // Fallback to MISC if currency-specific file doesn't exist
-        if (!response.ok && currency !== 'MISC') {
-            console.warn(`⚠️ No products found for ${currency}, trying MISC...`);
-            productUrl = `${VibeDrips.config.dataUrl}/products-MISC.json`;
-            response = await fetch(productUrl);
+        // Find the currency data
+        const currencyData = VibeDrips.availableCurrencies.find(c => c.code === currency);
+        if (!currencyData) {
+            throw new Error(`Currency ${currency} not found`);
         }
         
+        // Load the specific JSON file
+        const response = await fetch(`${VibeDrips.config.dataUrl}/${currencyData.filename}`);
         if (!response.ok) {
-            throw new Error(`Failed to load products: ${response.status}`);
+            throw new Error(`Failed to load ${currencyData.filename}: ${response.status}`);
         }
         
         const products = await response.json();
@@ -325,22 +320,18 @@ async function loadProducts(currency) {
         VibeDrips.allProducts = products.map(processProductData);
         VibeDrips.filteredProducts = [...VibeDrips.allProducts];
         
-        // Extract categories
         extractCategories();
         populateCategoryFilter();
-        
-        // Apply current time filter
         setTimeFilter(VibeDrips.currentTimeFilter);
         
     } catch (error) {
         console.error('❌ Product loading failed:', error);
-        showError('Unable to load products. Please check your internet connection.');
+        showError('Unable to load products. Please check your connection and try again.');
     }
 }
 
 // Process raw product data
 function processProductData(product) {
-    // Ensure all required fields exist with defaults
     return {
         ...product,
         id: product.asin || product.id || generateId(),
@@ -361,12 +352,12 @@ function processProductData(product) {
     };
 }
 
-// Generate a random ID for products without one
+// Generate random ID
 function generateId() {
     return 'prod-' + Math.random().toString(36).substr(2, 9);
 }
 
-// Extract unique categories from products
+// Extract categories
 function extractCategories() {
     VibeDrips.categories.clear();
     VibeDrips.allProducts.forEach(product => {
@@ -381,15 +372,14 @@ function extractCategories() {
     console.log(`📂 Found ${VibeDrips.categories.size} categories`);
 }
 
-// Populate category filter dropdown
+// Populate category filter
 function populateCategoryFilter() {
     const categoryFilter = VibeDrips.elements.categoryFilter;
     if (!categoryFilter) return;
     
     categoryFilter.innerHTML = '<option value="">All Categories</option>';
     
-    const sortedCategories = Array.from(VibeDrips.categories).sort();
-    sortedCategories.forEach(category => {
+    Array.from(VibeDrips.categories).sort().forEach(category => {
         const option = document.createElement('option');
         option.value = category;
         option.textContent = category;
@@ -397,20 +387,7 @@ function populateCategoryFilter() {
     });
 }
 
-// Fallback initialization when everything fails
-async function fallbackInitialization() {
-    console.log('🆘 Running fallback initialization...');
-    
-    VibeDrips.currentCurrency = 'INR';
-    
-    if (VibeDrips.elements.currentCurrency) {
-        VibeDrips.elements.currentCurrency.textContent = 'INR';
-    }
-    
-    showError('Unable to load product data. Please check your internet connection and refresh the page.');
-}
-
-// Show loading state
+// Show different UI states
 function showLoadingState() {
     if (VibeDrips.elements.productsContainer) {
         VibeDrips.elements.productsContainer.innerHTML = `
@@ -422,7 +399,29 @@ function showLoadingState() {
     }
 }
 
-// Show error message
+function showComingSoonState() {
+    if (VibeDrips.elements.productsContainer) {
+        const availableList = VibeDrips.availableCurrencies
+            .filter(c => c.code !== 'COMING_SOON')
+            .map(c => `<a href="?currency=${c.code}" onclick="selectCurrency('${c.code}'); return false;">
+                       ${c.symbol} ${c.name}</a>`)
+            .join(' • ');
+
+        VibeDrips.elements.productsContainer.innerHTML = `
+            <div class="coming-soon-state">
+                <div class="coming-soon-icon">⏳</div>
+                <h3>Products Loading Soon</h3>
+                <p>We're curating amazing drops for this region. Check back soon!</p>
+                ${availableList ? `
+                <div class="available-now">
+                    <strong>Available Now:</strong><br>
+                    ${availableList}
+                </div>` : ''}
+            </div>
+        `;
+    }
+}
+
 function showError(message) {
     if (VibeDrips.elements.productsContainer) {
         VibeDrips.elements.productsContainer.innerHTML = `
@@ -435,20 +434,41 @@ function showError(message) {
     }
 }
 
-// Close all open modals
+// Fallback initialization
+async function fallbackInitialization() {
+    console.log('🆘 Running fallback initialization...');
+    
+    VibeDrips.currentCurrency = 'INR';
+    
+    if (VibeDrips.elements.currentCurrency) {
+        VibeDrips.elements.currentCurrency.textContent = 'INR';
+    }
+    
+    showComingSoonState();
+}
+
+// Close all modals
 function closeAllModals() {
-    // Close currency modal (only if currency is already selected)
     if (VibeDrips.currentCurrency) {
         hideCurrencyModal();
     }
-    
-    // Close product modal
-    window.closeProductModal && window.closeProductModal();
+    if (window.closeProductModal) {
+        window.closeProductModal();
+    }
 }
 
-// Export functions to global scope for HTML onclick handlers
+// Helper function for URL currency selection
+function selectCurrency(currencyCode) {
+    if (VibeDrips.elements.currencySelector) {
+        VibeDrips.elements.currencySelector.value = currencyCode;
+        setCurrency();
+    }
+}
+
+// Export functions to global scope
 window.initializeApp = initializeApp;
 window.showCurrencyModal = showCurrencyModal;
 window.setCurrency = setCurrency;
+window.selectCurrency = selectCurrency;
 
-console.log('🔧 Main.js loaded successfully');
+console.log('🔧 Fixed Main.js loaded successfully');
