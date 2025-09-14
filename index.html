@@ -31,7 +31,6 @@
                     <img src="https://raw.githubusercontent.com/JOLT-dailyAi/VibeDrips/refs/heads/main/assets/images/VibeDrips.png" 
                          alt="VibeDrips" class="logo-img" width="300" height="60">
                 </a>
-                <button id="theme-toggle">Toggle Theme</button>
             </div>
         </div>
     </header>
@@ -129,8 +128,9 @@
 
     <!-- Floating Social Links -->
     <div class="social-float">
+        <button id="theme-toggle"></button> <!-- Removed label -->
         <a href="https://www.instagram.com/vibedrips.dailyai/" target="_blank"><i class="fab fa-instagram"></i></a>
-        <button id="kofi-trigger">Support on Ko-fi</button>
+        <button id="currency-trigger">INR</button> <!-- Currency trigger -->
     </div>
 
     <!-- Ko-fi Script -->
@@ -141,7 +141,7 @@
             'floating-chat.donateButton.text': 'Support me',
             'floating-chat.donateButton.background-color': '#00b9fe',
             'floating-chat.donateButton.text-color': '#fff',
-            'floating-chat.donateButton.left': '20px', // Move to bottom-left
+            'floating-chat.donateButton.left': '20px',
             'floating-chat.donateButton.bottom': '20px'
         });
     </script>
