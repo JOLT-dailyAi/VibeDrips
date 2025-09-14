@@ -47,6 +47,37 @@ function detectCurrencyFromPrice(priceString) {
     return null;
 }
 
+// ENHANCED: Better currency field detection
+function detectCurrencyFromField(currencyField) {
+    if (!currencyField || !currencyField.trim()) return null;
+    
+    const trimmed = currencyField.trim();
+    console.log(`🔍 Detecting currency from field: "${trimmed}"`);
+    
+    // Direct currency code match (INR, USD, etc.)
+    if (CURRENCY_MAP[trimmed.toUpperCase()]) {
+        console.log(`✅ Direct code match: ${trimmed.toUpperCase()}`);
+        return trimmed.toUpperCase();
+    }
+    
+    // Symbol match (₹, $, €, etc.)
+    if (CURRENCY_PATTERNS[trimmed]) {
+        console.log(`✅ Symbol match: ${trimmed} → ${CURRENCY_PATTERNS[trimmed]}`);
+        return CURRENCY_PATTERNS[trimmed];
+    }
+    
+    // Check if it contains a known symbol
+    for (const [symbol, currency] of Object.entries(CURRENCY_PATTERNS)) {
+        if (trimmed.includes(symbol)) {
+            console.log(`✅ Contains symbol: ${symbol} → ${currency}`);
+            return currency;
+        }
+    }
+    
+    console.log(`❌ No currency detected from: "${trimmed}"`);
+    return null;
+}
+
 function cleanAndValidatePrice(priceString) {
     if (!priceString) return 0;
     const cleanPrice = priceString.replace(/[₹$€£¥C$A$R$د\.إS$﷼krzł,]/g, '').trim();
@@ -116,7 +147,7 @@ function convertCsvToJson() {
     console.log('🔄 Deleting old files...');
     const deletedFiles = deleteOldFiles();
     console.log('✅ Old files deletion complete.');
-    let lastUpdatedContent = `VibeDrips Data Processing Summary\nGenerated: ${new Date('2025-09-14T14:34:00+05:30').toISOString()} // 03:34 PM IST\n\n📊 STATISTICS\n- Total Rows Processed: 0\n- Products Successfully Processed: 0\n- Errors Encountered: 0\n- Success Rate: 0.0%\n\n💰 CURRENCIES\n- Currencies Found: 0\n- Available: \n\n📦 CATEGORIES\n- Categories Found: 0\n- Top Categories: \n\n🏷️ BRANDS\n- Brands Found: 0\n- Top Brands: \n\n📁 FILES BEFORE DELETION\n${filesBeforeDeletion.map(file => `- ${file}`).join('\n') || '- None'}\n\n📁 FILES DELETED\n${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '- None'}\n\n📁 FILES PRESENT AFTER DELETION\n`;
+    let lastUpdatedContent = `VibeDrips Data Processing Summary\nGenerated: ${new Date().toISOString()}\n\n📊 STATISTICS\n- Total Rows Processed: 0\n- Products Successfully Processed: 0\n- Errors Encountered: 0\n- Success Rate: 0.0%\n\n💰 CURRENCIES\n- Currencies Found: 0\n- Available: \n\n📦 CATEGORIES\n- Categories Found: 0\n- Top Categories: \n\n🏷️ BRANDS\n- Brands Found: 0\n- Top Brands: \n\n📁 FILES BEFORE DELETION\n${filesBeforeDeletion.map(file => `- ${file}`).join('\n') || '- None'}\n\n📁 FILES DELETED\n${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '- None'}\n\n📁 FILES PRESENT AFTER DELETION\n`;
     const filesAfterDeletion = fs.existsSync(dataDir) ? fs.readdirSync(dataDir) : [];
     const expectedFiles = ['last_updated.txt', 'products.csv'];
     const unexpectedFiles = filesAfterDeletion.filter(file => !expectedFiles.includes(file));
@@ -134,18 +165,30 @@ function convertCsvToJson() {
             processingStats.total++;
 
             try {
-                console.log(`Row ${processingStats.total} - Currency: "${data.Currency}", Price: "${data.price}"`);
+                console.log(`\n--- Row ${processingStats.total} ---`);
+                console.log(`Currency field: "${data.Currency}"`);
+                console.log(`Price field: "${data.price}"`);
 
                 let currency = null;
+                
+                // ENHANCED: Use the improved currency detection
                 if (data.Currency && data.Currency.trim()) {
-                    const currencyValue = data.Currency.trim();
-                    console.log(`Detected Currency Value: "${currencyValue}"`);
-                    currency = CURRENCY_PATTERNS[currencyValue] || currencyValue.toUpperCase();
-                    if (!CURRENCY_MAP[currency] && currency !== 'MISC') currency = 'MISC';
+                    currency = detectCurrencyFromField(data.Currency);
                 }
+                
+                // Fallback to price detection
                 if (!currency && data.price) {
-                    currency = detectCurrencyFromPrice(data.price) || 'MISC';
+                    currency = detectCurrencyFromPrice(data.price);
+                    console.log(`🔍 Currency from price: ${currency}`);
                 }
+                
+                // Default to MISC if no currency detected
+                if (!currency) {
+                    currency = 'MISC';
+                    console.log(`🎁 Defaulting to MISC`);
+                }
+                
+                console.log(`✅ Final currency: ${currency}`);
 
                 processingStats.currenciesFound.add(currency);
                 if (data.categoryHierarchy) processingStats.categoriesFound.add(extractMainCategory(data.categoryHierarchy));
@@ -191,7 +234,7 @@ function convertCsvToJson() {
                     amazon_short: data['Amazon SiteStripe (Short)'] || '',
                     amazon_long: data['Amazon SiteStripe (Long)'] || '',
                     affiliate_link: data['Amazon SiteStripe (Short)'] || '',
-                    timestamp: data.Timestamp ? new Date(data.Timestamp).toISOString() : new Date('2025-09-14T14:34:00+05:30').toISOString(), // 03:34 PM IST
+                    timestamp: data.Timestamp ? new Date(data.Timestamp).toISOString() : new Date().toISOString(),
                     manufacturer: data.manufacturer || '',
                     country_of_origin: data.country_of_origin || '',
                     featured: false,
@@ -215,7 +258,7 @@ function convertCsvToJson() {
 
             const currencyManifest = {
                 available_currencies: [],
-                last_updated: new Date('2025-09-14T14:34:00+05:30').toISOString(), // 03:34 PM IST
+                last_updated: new Date().toISOString(),
                 total_products: processingStats.processed,
                 default_currency: 'INR'
             };
@@ -227,7 +270,7 @@ function convertCsvToJson() {
                 fs.writeFileSync(filepath, JSON.stringify(products, null, 2));
                 const currencyInfo = {
                     code: currency,
-                    name: currency === 'MISC' ? 'Random Drops' : (CURRENCY_MAP[currency]?.name || currency),
+                    name: currency === 'MISC' ? 'Mixed Currency Products' : (CURRENCY_MAP[currency]?.name || currency),
                     symbol: currency === 'MISC' ? '🎁' : (CURRENCY_MAP[currency]?.symbol || currency),
                     countries: currency === 'MISC' ? ['Global'] : (CURRENCY_MAP[currency]?.countries || []),
                     product_count: products.length,
@@ -240,35 +283,20 @@ function convertCsvToJson() {
                 console.log(`💰 ${currency}: ${products.length} products → ${filename}`);
             });
 
-            // Handle MISC file if no products and not deleted
-            if ((!currencyResults['MISC'] || currencyResults['MISC'].length === 0) && fs.existsSync(path.join(dataDir, 'products-MISC.json'))) {
-                const miscFilepath = path.join(dataDir, 'products-MISC.json');
-                fs.writeFileSync(miscFilepath, JSON.stringify({ note: "No products to display at the moment." }, null, 2));
-                console.log(`💰 MISC: 0 products → products-MISC.json (note added)`);
-                const miscInfo = {
-                    code: 'MISC',
-                    name: 'Random Drops',
-                    symbol: '🎁',
-                    countries: ['Global'],
-                    product_count: 0,
-                    filename: 'products-MISC.json',
-                    categories: [],
-                    brands: [],
-                    price_range: { min: 0, max: 0 }
-                };
-                currencyManifest.available_currencies.push(miscInfo);
-            }
+            currencyManifest.available_currencies.sort((a, b) => b.product_count - a.product_count);
+            const manifestPath = path.join(dataDir, 'currencies.json');
+            fs.writeFileSync(manifestPath, JSON.stringify(currencyManifest, null, 2));
 
             // Final file state check
             const finalFiles = fs.existsSync(dataDir) ? fs.readdirSync(dataDir) : [];
             const generatedFiles = new Set(['last_updated.txt', 'products.csv', ...Object.keys(currencyResults).map(c => `products-${c}.json`), 'currencies.json']);
-            const remnantFiles = finalFiles.filter(file => !generatedFiles.has(file) && file !== 'products-MISC.json');
+            const remnantFiles = finalFiles.filter(file => !generatedFiles.has(file));
 
-            const summary = `VibeDrips Data Processing Summary\nGenerated: ${new Date('2025-09-14T14:34:00+05:30').toISOString()} // 03:34 PM IST\n\n📊 STATISTICS\n- Total Rows Processed: ${processingStats.total}\n- Products Successfully Processed: ${processingStats.processed}\n- Errors Encountered: ${processingStats.errors}\n- Success Rate: ${((processingStats.processed / processingStats.total) * 100).toFixed(1)}%\n\n💰 CURRENCIES\n- Currencies Found: ${processingStats.currenciesFound.size}\n- Available: ${Array.from(processingStats.currenciesFound).join(', ')}\n\n📦 CATEGORIES\n- Categories Found: ${processingStats.categoriesFound.size}\n- Top Categories: ${Array.from(processingStats.categoriesFound).slice(0, 5).join(', ') || 'None'}\n\n🏷️ BRANDS\n- Brands Found: ${processingStats.brandsFound.size}\n- Top Brands: ${Array.from(processingStats.brandsFound).slice(0, 5).join(', ') || 'None'}\n\n📁 FILES BEFORE DELETION\n${filesBeforeDeletion.map(file => `- ${file}`).join('\n') || '- None'}\n\n📁 FILES DELETED\n${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '- None'}\n\n📁 FILES PRESENT AFTER DELETION\n${filesAfterDeletion.map(file => `- ${file}`).join('\n') || '- None'}\n${unexpectedFiles.length > 0 ? `\n⚠️ Deletion failed for unexpected files:\n${unexpectedFiles.map(file => `- ${file}`).join('\n')}` : ''}\n\n📁 FILES GENERATED\n${Object.keys(currencyResults).map(currency => `- products-${currency}.json (${currencyResults[currency].length} products)`).join('\n')}\n${(!currencyResults['MISC'] || currencyResults['MISC'].length === 0) && fs.existsSync(path.join(dataDir, 'products-MISC.json')) ? '- products-MISC.json (note)' : ''}\n- currencies.json (manifest)\n\n📁 FINAL FILES PRESENT\n${finalFiles.map(file => `- ${file}`).join('\n') || '- None'}\n${remnantFiles.length > 0 ? `\n⚠️ Remnant files detected:\n${remnantFiles.map(file => `- ${file}`).join('\n')}` : ''}`;
+            const summary = `VibeDrips Data Processing Summary\nGenerated: ${new Date().toISOString()}\n\n📊 STATISTICS\n- Total Rows Processed: ${processingStats.total}\n- Products Successfully Processed: ${processingStats.processed}\n- Errors Encountered: ${processingStats.errors}\n- Success Rate: ${((processingStats.processed / processingStats.total) * 100).toFixed(1)}%\n\n💰 CURRENCIES\n- Currencies Found: ${processingStats.currenciesFound.size}\n- Available: ${Array.from(processingStats.currenciesFound).join(', ')}\n\n📦 CATEGORIES\n- Categories Found: ${processingStats.categoriesFound.size}\n- Top Categories: ${Array.from(processingStats.categoriesFound).slice(0, 5).join(', ') || 'None'}\n\n🏷️ BRANDS\n- Brands Found: ${processingStats.brandsFound.size}\n- Top Brands: ${Array.from(processingStats.brandsFound).slice(0, 5).join(', ') || 'None'}\n\n📁 FILES BEFORE DELETION\n${filesBeforeDeletion.map(file => `- ${file}`).join('\n') || '- None'}\n\n📁 FILES DELETED\n${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '- None'}\n\n📁 FILES PRESENT AFTER DELETION\n${filesAfterDeletion.map(file => `- ${file}`).join('\n') || '- None'}\n${unexpectedFiles.length > 0 ? `\n⚠️ Deletion failed for unexpected files:\n${unexpectedFiles.map(file => `- ${file}`).join('\n')}` : ''}\n\n📁 FILES GENERATED\n${Object.keys(currencyResults).map(currency => `- products-${currency}.json (${currencyResults[currency].length} products)`).join('\n')}\n- currencies.json (manifest)\n\n📁 FINAL FILES PRESENT\n${finalFiles.map(file => `- ${file}`).join('\n') || '- None'}\n${remnantFiles.length > 0 ? `\n⚠️ Remnant files detected:\n${remnantFiles.map(file => `- ${file}`).join('\n')}` : ''}`;
             fs.writeFileSync(path.join(dataDir, 'last_updated.txt'), summary);
 
             console.log('\n✅ SUCCESS! Multi-currency data processing complete.');
-            console.log(`📁 Generated ${Object.keys(currencyResults).length + ((!currencyResults['MISC'] || currencyResults['MISC'].length === 0) && fs.existsSync(path.join(dataDir, 'products-MISC.json')) ? 1 : 0)} currency files`);
+            console.log(`📁 Generated ${Object.keys(currencyResults).length} currency files`);
             console.log(`📊 Processed ${processingStats.processed} products from ${processingStats.total} rows`);
             console.log(`💰 Currencies: ${Array.from(processingStats.currenciesFound).join(', ')}`);
             if (processingStats.errors > 0) console.log(`⚠️ ${processingStats.errors} rows had processing errors`);
