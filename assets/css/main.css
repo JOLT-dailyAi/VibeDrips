@@ -24,12 +24,6 @@ body.light-theme {
     color: #FFFFFF;
 }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
 /* Currency Modal */
 .currency-modal {
     position: fixed;
@@ -91,26 +85,16 @@ body.light-theme {
 /* Header */
 .main-header {
     background: #2E1D80; /* Solid color matching body */
-    padding: 30px 0; /* Increased padding to accommodate larger logo */
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
     position: sticky;
     top: 0;
     z-index: 100;
-}
-
-.header-content {
-    display: flex;
-    justify-content: center; /* Center the logo */
-    align-items: center;
+    text-align: center; /* Center the logo without container */
 }
 
 .logo-img {
-    width: 100%; /* Fit the header width */
-    max-width: 100%; /* Ensure it doesn't exceed container */
-    min-width: 400px; /* Increased minimum width */
-    min-height: 100px; /* Increased minimum height */
-    max-height: 150px; /* Adjusted max-height to fit header */
-    object-fit: contain; /* Maintain aspect ratio */
+    width: 412px; /* Exact width as specified */
+    height: 124px; /* Exact height as specified */
+    object-fit: contain; /* Maintain aspect ratio within specified dimensions */
 }
 
 /* Main Content */
@@ -715,9 +699,8 @@ body.light-theme .social-float #theme-toggle::before {
     }
     
     .logo-img {
-        min-width: 300px; /* Reduced for smaller screens */
-        min-height: 75px; /* Adjusted for smaller screens */
-        max-height: 120px;
+        width: 300px; /* Adjusted for smaller screens */
+        height: 90px; /* Adjusted proportionally */
     }
 }
 
@@ -739,9 +722,8 @@ body.light-theme .social-float #theme-toggle::before {
     }
     
     .logo-img {
-        min-width: 250px; /* Further reduced for very small screens */
-        min-height: 60px; /* Adjusted for very small screens */
-        max-height: 100px;
+        width: 250px; /* Further reduced for very small screens */
+        height: 75px; /* Adjusted proportionally */
     }
 }
 
