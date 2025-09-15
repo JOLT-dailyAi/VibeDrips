@@ -314,7 +314,7 @@ body.dark-theme .filter-group select:focus {
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
     margin-bottom: 40px;
-    background: #000000; /* Changed from rgba(0, 0, 0, 0.9) to solid black to fix strip issue */
+    background: transparent; /* Reverted to transparent to remove black strip in light theme */
 }
 
 .stat-item {
@@ -340,7 +340,7 @@ body.dark-theme .filter-group select:focus {
 }
 
 body.dark-theme .stats-bar {
-    background: #000000; /* Changed to solid black to address strip issue */
+    background: rgba(0, 0, 0, 0.9); /* Restored original dark theme background */
 }
 
 body.dark-theme .stat-item {
