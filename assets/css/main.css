@@ -148,8 +148,13 @@ body.dark-theme .currency-select:focus {
     }
     
     .time-categories {
-        justify-content: flex-start;
-    }
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    justify-content: center; /* Added to center-align items */
+}
     
     .social-float {
         flex-direction: column;
