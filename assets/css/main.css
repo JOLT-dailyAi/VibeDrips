@@ -788,7 +788,7 @@ body.light-theme .social-float #theme-toggle::before {
 }
 
 #currency-trigger {
-    font-size: 30px !important; /* Set text size to 30px */
+    font-size: 28px !important; /* Set text size to 30px */
 }
 
 /* Responsive Design */
@@ -862,7 +862,7 @@ body.light-theme .social-float #theme-toggle::before {
     }
     
     #currency-trigger {
-        font-size: 30px !important; /* Maintain text size in mobile */
+        font-size: 28px !important; /* Maintain text size in mobile */
     }
     
     .products-grid {
