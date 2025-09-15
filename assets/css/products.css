@@ -274,6 +274,7 @@ body.dark-theme .product-meta .rating.no-rating {
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); /* Lifted effect */
     margin: 20px; /* Minimal padding for lifted appearance */
     padding: 20px; /* Internal padding */
+    z-index: 1001; /* Above the overlay */
 }
 
 .simple-modal-header {
@@ -294,7 +295,7 @@ body.dark-theme .product-meta .rating.no-rating {
     background: none;
     border: none;
     font-size: 24px;
-    color: #a0aec0;
+    color: #E53E3E; /* Red color for close button */
     cursor: pointer;
     padding: 5px;
     border-radius: 5px;
@@ -302,8 +303,8 @@ body.dark-theme .product-meta .rating.no-rating {
 }
 
 .simple-modal-header button:hover {
-    background: #f7fafc;
-    color: #4a5568;
+    background: #fed7d7; /* Light red background on hover */
+    color: #C53030; /* Darker red on hover */
 }
 
 .simple-modal-body {
@@ -321,6 +322,10 @@ body.dark-theme .product-meta .rating.no-rating {
     text-align: left;
     line-height: 1.6;
     color: #718096; /* Darker text for readability on white background */
+}
+
+.simple-modal-body p strong {
+    color: #667EEA; /* Consistent solid color for field names */
 }
 
 .simple-modal-body .amazon-button {
@@ -341,16 +346,20 @@ body.dark-theme .simple-modal-header h2 {
 }
 
 body.dark-theme .simple-modal-header button {
-    color: #a0aec0; /* Consistent with light theme */
+    color: #E53E3E; /* Red color for close button */
 }
 
 body.dark-theme .simple-modal-header button:hover {
-    background: #2d3748; /* Darker hover background */
-    color: #CBD5E0; /* Lighter hover text */
+    background: #742A2A; /* Darker red background on hover */
+    color: #FEB2B2; /* Lighter red on hover */
 }
 
 body.dark-theme .simple-modal-body p {
     color: #CCCCCC; /* Light gray for contrast on dark background */
+}
+
+body.dark-theme .simple-modal-body p strong {
+    color: #667EEA; /* Consistent solid color for field names */
 }
 
 /* Responsive Design */
