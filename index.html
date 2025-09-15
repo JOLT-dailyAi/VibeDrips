@@ -23,6 +23,23 @@
         </div>
     </div>
 
+    <!-- Simple Modal -->
+    <div class="simple-modal" onclick="closeSimpleModal()">
+        <div class="simple-modal-content">
+            <div class="simple-modal-header">
+                <h2>Product Details</h2>
+                <button onclick="closeSimpleModal()">×</button>
+            </div>
+            <div class="simple-modal-body">
+                <img src="https://via.placeholder.com/400x300" alt="Product Image">
+                <p><strong>Name:</strong> Sample Product</p>
+                <p><strong>Price:</strong> $99.99</p>
+                <p><strong>Description:</strong> This is a sample product description that provides details about the item.</p>
+                <a href="#" class="amazon-button">Buy on Amazon</a>
+            </div>
+        </div>
+    </div>
+
     <!-- Header -->
     <header class="main-header">
         <img src="https://raw.githubusercontent.com/JOLT-dailyAi/VibeDrips/refs/heads/main/assets/images/VibeDrips_logo.png" 
@@ -152,6 +169,11 @@
             console.log('🚀 VibeDrips Initializing...');
             initializeApp();
         });
+
+        // Example function to close modal (to be defined in main.js or products.js)
+        function closeSimpleModal() {
+            document.querySelector('.simple-modal').classList.add('hidden');
+        }
     </script>
 </body>
 </html>
