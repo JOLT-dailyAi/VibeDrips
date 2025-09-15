@@ -1,5 +1,3 @@
-// products.js - Product Display and Filtering Functions (Fixed)
-
 /**
  * Set time-based filter for products
  */
@@ -259,7 +257,7 @@ function createProductCard(product) {
     }
 
     const ratingDisplay = product.customer_rating > 0 ? 
-        `<div class="rating">⭐ ${product.customer_rating.toFixed(1)} (${product.review_count})</div>` : 
+        `<div class="rating">⭐ ${product.customer_rating.toFixed(1)}</div>` : 
         `<div class="rating no-rating">No ratings yet</div>`;
 
     const redirectLink = product.amazon_short || product.amazon_long || product.source_link || '#';
