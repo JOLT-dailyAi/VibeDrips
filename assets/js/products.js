@@ -323,13 +323,13 @@ function showProductModal(productId) {
         return;
     }
 
-    // Simple modal for now - will enhance later
+    // Create dynamic modal
     const modalContent = `
-        <div class="simple-modal">
+        <div class="simple-modal dynamic-modal" onclick="closeDynamicModal(event)">
             <div class="simple-modal-content">
                 <div class="simple-modal-header">
                     <h2>${escapeHtml(product.name)}</h2>
-                    <button onclick="closeSimpleModal()">×</button>
+                    <button onclick="closeDynamicModal(event)">X</button>
                 </div>
                 <div class="simple-modal-body">
                     <img src="${product.main_image}" alt="${escapeHtml(product.name)}" style="max-width: 200px;">
@@ -348,10 +348,11 @@ function showProductModal(productId) {
 }
 
 /**
- * Close simple modal
+ * Close dynamic modal (specific to modals created by showProductModal)
  */
-function closeSimpleModal() {
-    const modal = document.querySelector('.simple-modal');
+function closeDynamicModal(event) {
+    event.stopPropagation(); // Prevent event from bubbling to parent .simple-modal
+    const modal = event.target.closest('.dynamic-modal');
     if (modal) {
         modal.remove();
     }
@@ -395,6 +396,6 @@ window.filterProducts = filterProducts;
 window.sortProducts = sortProducts;
 window.openAmazonLink = openAmazonLink;
 window.showProductModal = showProductModal;
-window.closeSimpleModal = closeSimpleModal;
+// Do not export closeDynamicModal to avoid conflict with closeSimpleModal
 
 console.log('Products.js loaded successfully');
