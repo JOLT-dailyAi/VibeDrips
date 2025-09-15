@@ -262,6 +262,7 @@ body.dark-theme .product-meta .rating.no-rating {
     backdrop-filter: blur(10px);
 }
 
+/* Existing .simple-modal-content (unchanged, just for reference) */
 .simple-modal-content {
     background: white;
     border-radius: 20px;
@@ -275,6 +276,30 @@ body.dark-theme .product-meta .rating.no-rating {
     margin: 20px; /* Minimal padding for lifted appearance */
     padding: 20px; /* Internal padding */
     z-index: 1001; /* Above the overlay */
+}
+
+/* New/Updated .dynamic-modal */
+.dynamic-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Below .simple-modal-content but above other content */
+}
+
+/* New/Updated .modal-overlay */
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+    z-index: 1000; /* Same as .dynamic-modal to ensure it covers the screen */
 }
 
 .simple-modal-header {
