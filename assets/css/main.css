@@ -787,6 +787,10 @@ body.light-theme .social-float #theme-toggle::before {
     background: #5a67d8;
 }
 
+#currency-trigger {
+    font-size: 30px; /* Set text size to 30px */
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .filter-controls {
@@ -855,6 +859,10 @@ body.light-theme .social-float #theme-toggle::before {
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+    
+    #currency-trigger {
+        font-size: 30px; /* Maintain text size in mobile */
     }
     
     .products-grid {
