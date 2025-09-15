@@ -23,6 +23,14 @@
     box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
 }
 
+body.dark-theme .product-card {
+    background: rgba(0, 0, 0, 0.9); /* Matches dark theme background of other components */
+}
+
+body.dark-theme .product-card:hover {
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3); /* Adjusted shadow for dark theme */
+}
+
 /* Product Image */
 .product-image {
     position: relative;
@@ -52,6 +60,15 @@
     font-size: 48px;
     color: #cbd5e0;
     background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+}
+
+body.dark-theme .product-image {
+    background: #333333; /* Darker placeholder background for consistency */
+}
+
+body.dark-theme .product-image-placeholder {
+    color: #a0aec0; /* Lighter gray for contrast in dark theme */
+    background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%); /* Dark gradient */
 }
 
 /* Product Badges */
@@ -143,6 +160,14 @@
     margin-bottom: 15px;
 }
 
+body.dark-theme .product-title {
+    color: #FFFFFF; /* White text for dark theme */
+}
+
+body.dark-theme .product-description {
+    color: #CCCCCC; /* Light gray for contrast, matching other components */
+}
+
 /* Product Meta */
 .product-meta {
     display: flex;
@@ -167,6 +192,15 @@
 
 .rating.no-rating {
     color: #a0aec0;
+}
+
+body.dark-theme .product-meta .brand,
+body.dark-theme .product-meta .rating {
+    color: #CCCCCC; /* Light gray for contrast */
+}
+
+body.dark-theme .product-meta .rating.no-rating {
+    color: #a0aec0; /* Keep no-rating color consistent */
 }
 
 /* Product Actions */
@@ -231,11 +265,15 @@
 .simple-modal-content {
     background: white;
     border-radius: 20px;
-    max-width: 500px;
-    width: 90%;
-    max-height: 80%;
+    width: 90%; /* Wide/landscape, responsive to viewport */
+    max-width: 1200px; /* Limit maximum width for large screens */
+    height: auto; /* Dynamic height based on content */
+    min-height: 60vh; /* Minimum height for flexibility */
+    max-height: 80vh; /* Limit to avoid overflow */
     overflow-y: auto;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); /* Lifted effect */
+    margin: 20px; /* Minimal padding for lifted appearance */
+    padding: 20px; /* Internal padding */
 }
 
 .simple-modal-header {
@@ -248,7 +286,7 @@
 
 .simple-modal-header h2 {
     font-size: 20px;
-    color: #2d3748;
+    color: #2d3748; /* Dark text for readability on white background */
     margin: 0;
 }
 
@@ -282,11 +320,37 @@
     margin-bottom: 15px;
     text-align: left;
     line-height: 1.6;
+    color: #718096; /* Darker text for readability on white background */
 }
 
 .simple-modal-body .amazon-button {
     margin-top: 20px;
     width: 100%;
+}
+
+body.dark-theme .simple-modal-content {
+    background: rgba(0, 0, 0, 0.9); /* Dark theme modal */
+}
+
+body.dark-theme .simple-modal-header {
+    border-bottom: 1px solid #4a5568; /* Darker border */
+}
+
+body.dark-theme .simple-modal-header h2 {
+    color: #FFFFFF; /* White text for readability on dark background */
+}
+
+body.dark-theme .simple-modal-header button {
+    color: #a0aec0; /* Consistent with light theme */
+}
+
+body.dark-theme .simple-modal-header button:hover {
+    background: #2d3748; /* Darker hover background */
+    color: #CBD5E0; /* Lighter hover text */
+}
+
+body.dark-theme .simple-modal-body p {
+    color: #CCCCCC; /* Light gray for contrast on dark background */
 }
 
 /* Responsive Design */
@@ -314,8 +378,10 @@
     }
     
     .simple-modal-content {
-        width: 95%;
-        max-height: 90%;
+        width: 95%; /* Slightly wider on smaller screens */
+        min-height: 70vh; /* Adjust minimum height for smaller devices */
+        margin: 10px; /* Reduced margin for smaller screens */
+        padding: 15px; /* Reduced internal padding */
     }
     
     .simple-modal-header,
@@ -346,5 +412,12 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 5px;
+    }
+    
+    .simple-modal-content {
+        width: 98%; /* Full width on very small screens */
+        min-height: 80vh; /* More height for small screens */
+        margin: 5px; /* Minimal margin */
+        padding: 10px; /* Minimal padding */
     }
 }
