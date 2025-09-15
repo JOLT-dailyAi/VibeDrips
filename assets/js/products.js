@@ -354,8 +354,10 @@ function showProductModal(productId) {
 function closeDynamicModal(event) {
     event.stopPropagation(); // Prevent event from bubbling further if needed
     const modal = event.target.closest('.dynamic-modal');
-    if (modal && event.target.classList.contains('modal-overlay')) {
-        modal.remove();
+    if (modal) {
+        if (event.target.classList.contains('modal-overlay') || event.target.closest('button')) {
+            modal.remove();
+        }
     }
 }
 
