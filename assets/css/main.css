@@ -123,7 +123,7 @@ body.dark-theme .currency-select:focus {
 }
 
 .logo-img {
-    width: min(300px, 80vw); /* Maximum 300px, but 80% of viewport width on smaller screens */
+    width: min(300px, 80vw); /* Reverted to original size */
     height: auto; /* Let height scale proportionally - this prevents distortion */
     object-fit: contain; /* Maintain aspect ratio */
     max-width: 100%; /* Ensure it never overflows */
@@ -691,13 +691,13 @@ body.dark-theme .available-now a {
     background-color: #667eea;
     color: #FFFFFF;
     border: 2px solid #5a67d8;
-    padding: 10px; /* Adjusted padding for consistency */
+    padding: 10px; /* Reverted to original padding */
     cursor: pointer;
     font-size: 16px;
     transition: all 0.3s;
     border-radius: 50%;
-    width: 50px; /* Consistent size */
-    height: 50px; /* Consistent size */
+    width: 50px; /* Reverted to original size */
+    height: 50px; /* Reverted to original size */
     text-align: center;
     line-height: 30px; /* Adjusted for icon centering */
 }
@@ -722,11 +722,11 @@ body.light-theme .social-float #theme-toggle::before {
     font-size: 30px;
     color: #FFFFFF;
     transition: color 0.3s;
-    padding: 10px;
+    padding: 10px; /* Reverted to original padding */
     background-color: #667eea;
     border-radius: 50%;
-    width: 50px;
-    height: 50px;
+    width: 50px; /* Reverted to original size */
+    height: 50px; /* Reverted to original size */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -746,7 +746,7 @@ body.light-theme .social-float #theme-toggle::before {
 .social-float .currency-display {
     background: #667eea;
     color: white;
-    padding: 10px 20px;
+    padding: 10px 20px; /* Reverted to original padding */
     border-radius: 25px;
     cursor: pointer;
     font-weight: 600;
@@ -813,10 +813,10 @@ body.light-theme .social-float #theme-toggle::before {
     .social-float #theme-toggle,
     .social-float .fab.fa-instagram,
     .social-float .currency-display {
-        width: 40px; /* Reduced size */
-        height: 40px;
-        padding: 8px; /* Reduced padding */
-        font-size: 14px; /* Adjusted font size */
+        width: 50px; /* Reverted to original size */
+        height: 50px; /* Reverted to original size */
+        padding: 10px; /* Reverted to original padding */
+        font-size: 16px; /* Reverted to original font size */
     }
     
     .products-grid {
@@ -824,7 +824,7 @@ body.light-theme .social-float #theme-toggle::before {
     }
     
     .logo-img {
-        width: min(200px, 70vw); /* Further reduced for smaller screens */
+        width: min(250px, 75vw); /* Reverted to original size */
     }
 }
 
@@ -852,17 +852,17 @@ body.light-theme .social-float #theme-toggle::before {
     }
     
     .footer-logo {
-        max-width: 250px; /* Further reduced */
+        max-width: 300px; /* Reverted to original size */
     }
     
     .logo-img {
-        width: min(150px, 65vw); /* Further reduced */
+        width: min(200px, 70vw); /* Reverted to original size */
     }
 }
 
 @media (max-width: 320px) {
     .logo-img {
-        width: min(140px, 60vw); /* Further reduced */
+        width: min(180px, 65vw); /* Reverted to original size */
     }
 }
 
