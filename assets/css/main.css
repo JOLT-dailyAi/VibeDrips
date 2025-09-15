@@ -760,18 +760,43 @@ body.light-theme .social-float #theme-toggle::before {
 /* Responsive Design */
 @media (max-width: 768px) {
     .filter-controls {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr; /* Single column layout */
+        gap: 15px; /* Reduce gap slightly */
+        padding: 15px; /* Reduce overall padding */
     }
-    
-    .stats-bar {
-        grid-template-columns: repeat(2, 1fr);
+
+    .filter-group input,
+    .filter-group select {
+        padding: 10px; /* Reduce input padding */
     }
-    
+
+    .filter-group label {
+        font-size: 14px; /* Reduce label font size slightly */
+        margin-bottom: 5px; /* Reduce label margin */
+    }
+
     .time-categories {
-        justify-content: flex-start; /* Revert to left-align with scroll on mobile */
-        overflow-x: auto; /* Restore scrolling on mobile */
+        justify-content: flex-start; /* Left alignment with scroll */
+        overflow-x: auto; /* Horizontal scroll */
+        padding: 10px 0; /* Reduce vertical padding */
+        gap: 10px; /* Slightly reduce gap */
     }
-    
+
+    .time-category {
+        min-width: 100px; /* Reduce from 120px */
+        padding: 10px 15px; /* Reduce padding */
+    }
+
+    .stats-bar {
+        grid-template-columns: repeat(2, 1fr); /* Two columns on tablets */
+        gap: 15px; /* Reduce gap */
+        padding: 10px; /* Reduce padding */
+    }
+
+    .stat-item {
+        padding: 15px; /* Reduce padding inside items */
+    }
+
     .social-float {
         flex-direction: row; /* Changed to row for horizontal layout */
         right: 10px;
@@ -799,9 +824,9 @@ body.light-theme .social-float #theme-toggle::before {
 
 @media (max-width: 480px) {
     .stats-bar {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr; /* Single column on phones */
     }
-    
+
     .section-header h2 {
         font-size: 24px;
     }
