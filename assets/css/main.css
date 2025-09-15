@@ -156,6 +156,14 @@ body.dark-theme .currency-select:focus {
     justify-content: center; /* Added to center-align items */
 }
     
+/* Responsive Design - If centering causes layout issues on small screens, add a media query to revert to justify-content: flex-start or reduce gap */
+    @media (max-width: 480px) {
+    .time-categories {
+        justify-content: flex-start;
+        gap: 10px;
+    }
+}
+    
     .social-float {
         flex-direction: column;
         right: 10px;
