@@ -314,7 +314,6 @@ body.dark-theme .filter-group select:focus {
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
     margin-bottom: 40px;
-    background: transparent; /* Reverted to transparent to remove black strip in light theme */
 }
 
 .stat-item {
@@ -340,11 +339,11 @@ body.dark-theme .filter-group select:focus {
 }
 
 body.dark-theme .stats-bar {
-    background: rgba(0, 0, 0, 0.9); /* Restored original dark theme background */
+    background: rgba(0, 0, 0, 0.9); /* Black background */
 }
 
 body.dark-theme .stat-item {
-    background: rgba(50, 50, 50, 0.9); /* Adjusted for dark theme consistency */
+    background: rgba(0, 0, 0, 0.9); /* Black */
 }
 
 body.dark-theme .stat-number {
