@@ -344,15 +344,15 @@ body.dark-theme .stats-bar {
 }
 
 body.dark-theme .stat-item {
-    background: rgba(50, 50, 50, 0.9); /* Changed to dark theme background */
+    background: rgba(0, 0, 0, 0.9); /* Aligned with other dark theme components */
 }
 
 body.dark-theme .stat-number {
-    color: #667eea;
+    color: #FFFFFF; /* White text for dark theme */
 }
 
 body.dark-theme .stat-label {
-    color: #CCCCCC; /* Light gray for contrast */
+    color: #CCCCCC; /* Light gray for contrast, matching other components */
 }
 
 .products-grid {
