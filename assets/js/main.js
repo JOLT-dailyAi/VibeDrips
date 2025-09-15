@@ -72,6 +72,7 @@ function cacheElements() {
     elements.categoryFilter = document.getElementById('category-filter');
     elements.priceSort = document.getElementById('price-sort');
     elements.themeToggle = document.getElementById('theme-toggle');
+    elements.staticModal = document.getElementById('static-modal'); // Cache the static modal
     
     console.log('📋 DOM elements cached');
 }
@@ -425,62 +426,82 @@ function setTimeFilter(filter) {
 
 // Filter products
 function filterProducts() {
-    VibeDrips.filteredProducts = VibeDrips.allProducts.filter(product => {
-        const searchTerm = (VibeDrips.elements.search.value || '').toLowerCase();
-        const category = VibeDrips.elements.categoryFilter.value;
-        return (!searchTerm || (product.name && product.name.toLowerCase().includes(searchTerm))) &&
-               (!category || (product.category && product.category === category)) &&
-               (VibeDrips.currentTimeFilter === 'all' || (product.timeFilter && product.timeFilter === VibeDrips.currentTimeFilter));
-    });
-    if (VibeDrips.elements.productsContainer) {
-        VibeDrips.elements.productsContainer.innerHTML = VibeDrips.filteredProducts.length > 0 ?
-            VibeDrips.filteredProducts.map(p => `
-                <div class="product-item">
-                    <h3>${p.name || 'Unnamed Product'}</h3>
-                    <p>${p.description || 'No description'}</p>
-                    <div class="price">${p.price ? `₹${p.price.toFixed(2)}` : 'N/A'}</div>
-                    <div class="brand">🏷️ ${p.brand || 'Unknown'}</div>
-                    <div class="rating">⭐ ${p.customer_rating || '0'} (${p.review_count || '0'})</div>
-                    ${p.affiliate_link ? `<a href="${p.affiliate_link}" target="_blank">🛒 Buy on Amazon</a>` : ''}
-                    ${p.source_link ? `<a href="${p.source_link}" target="_blank">👁️ Details</a>` : ''}
-                </div>
-            `).join('') :
-            '<div class="no-products">No products found.</div>';
+    VibeDrips.filteredProducts = [...VibeDrips.allProducts];
+    applyCurrentFilters();
+    sortProducts(); // Ensure sorting is applied after filtering
+    renderProducts();
+}
+
+// Apply current search and category filters
+function applyCurrentFilters() {
+    const searchInput = VibeDrips.elements.search;
+    const categoryFilter = VibeDrips.elements.categoryFilter;
+    
+    const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
+    const categoryValue = categoryFilter ? categoryFilter.value.trim() : '';
+
+    if (searchTerm || categoryValue) {
+        VibeDrips.filteredProducts = VibeDrips.filteredProducts.filter(product => {
+            const searchFields = [
+                product.name, 
+                product.description, 
+                product.category,
+                product.subcategory,
+                product.brand
+            ].filter(field => field && field.toString().trim());
+            
+            const matchesSearch = !searchTerm || searchFields.some(field => 
+                field.toString().toLowerCase().includes(searchTerm)
+            );
+
+            const matchesCategory = !categoryValue || 
+                product.category === categoryValue || 
+                product.subcategory === categoryValue;
+
+            return matchesSearch && matchesCategory;
+        });
     }
-    console.log('🔍 Filtered products:', VibeDrips.filteredProducts.length);
 }
 
 // Sort products
 function sortProducts() {
-    const sortBy = VibeDrips.elements.priceSort.value;
-    if (sortBy && VibeDrips.filteredProducts.length) {
-        VibeDrips.filteredProducts.sort((a, b) => {
-            switch (sortBy) {
-                case 'price-low': return (a.price || 0) - (b.price || 0);
-                case 'price-high': return (b.price || 0) - (a.price || 0);
-                case 'name': return (a.name || '').localeCompare(b.name || '');
-                case 'rating': return (b.customer_rating || 0) - (a.customer_rating || 0);
-                case 'date-new': return new Date(b.date_first_available || 0) - new Date(a.date_first_available || 0);
-                default: return 0;
-            }
-        });
+    const sortSelect = VibeDrips.elements.priceSort;
+    if (!sortSelect) return;
+    
+    const sortBy = sortSelect.value;
+
+    switch (sortBy) {
+        case 'price-low':
+            VibeDrips.filteredProducts.sort((a, b) => a.price - b.price);
+            break;
+        case 'price-high':
+            VibeDrips.filteredProducts.sort((a, b) => b.price - a.price);
+            break;
+        case 'name':
+            VibeDrips.filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+            break;
+        case 'rating':
+            VibeDrips.filteredProducts.sort((a, b) => b.customer_rating - a.customer_rating);
+            break;
+        case 'date-new':
+            VibeDrips.filteredProducts.sort((a, b) => {
+                const dateA = new Date(a.date_first_available || a.timestamp);
+                const dateB = new Date(b.date_first_available || b.timestamp);
+                return dateB - dateA;
+            });
+            break;
+        default:
+            VibeDrips.filteredProducts.sort((a, b) => {
+                if (a.featured && !b.featured) return -1;
+                if (!a.featured && b.featured) return 1;
+                
+                const dateA = new Date(a.date_first_available || a.timestamp);
+                const dateB = new Date(b.date_first_available || b.timestamp);
+                return dateB - dateA;
+            });
     }
-    if (VibeDrips.elements.productsContainer) {
-        VibeDrips.elements.productsContainer.innerHTML = VibeDrips.filteredProducts.length > 0 ?
-            VibeDrips.filteredProducts.map(p => `
-                <div class="product-item">
-                    <h3>${p.name || 'Unnamed Product'}</h3>
-                    <p>${p.description || 'No description'}</p>
-                    <div class="price">${p.price ? `₹${p.price.toFixed(2)}` : 'N/A'}</div>
-                    <div class="brand">🏷️ ${p.brand || 'Unknown'}</div>
-                    <div class="rating">⭐ ${p.customer_rating || '0'} (${p.review_count || '0'})</div>
-                    ${p.affiliate_link ? `<a href="${p.affiliate_link}" target="_blank">🛒 Buy on Amazon</a>` : ''}
-                    ${p.source_link ? `<a href="${p.source_link}" target="_blank">👁️ Details</a>` : ''}
-                </div>
-            `).join('') :
-            '<div class="no-products">No products found.</div>';
-    }
-    console.log('🔧 Sorted products:', sortBy);
+
+    renderProducts();
 }
 
 // Show different UI states
@@ -554,11 +575,10 @@ function closeAllModals() {
     closeSimpleModal(); // Call the simple modal close function
 }
 
-// Close simple modal
+// Close simple modal (for static modal with ID 'static-modal')
 function closeSimpleModal() {
-    const modal = document.querySelector('.simple-modal');
-    if (modal) {
-        modal.classList.add('hidden');
+    if (VibeDrips.elements.staticModal) {
+        VibeDrips.elements.staticModal.classList.add('hidden');
     }
 }
 
