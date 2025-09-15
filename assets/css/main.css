@@ -151,16 +151,23 @@ body.dark-theme .currency-select:focus {
     display: flex;
     gap: 15px;
     margin-bottom: 30px;
-    overflow-x: auto;
     padding-bottom: 10px;
-    justify-content: center; /* Added to center-align items */
+    justify-content: center; /* Center-align items */
+    /* Remove overflow-x: auto to test centering */
 }
-    
-/* Responsive Design - If centering causes layout issues on small screens, add a media query to revert to justify-content: flex-start or reduce gap */
-    @media (max-width: 480px) {
+
+/* Ensure centering works on larger screens, revert to flex-start with scroll on small screens */
+@media (min-width: 769px) {
     .time-categories {
-        justify-content: flex-start;
-        gap: 10px;
+        justify-content: center;
+        overflow-x: hidden; /* Prevent scrolling on desktop */
+    }
+}
+
+@media (max-width: 768px) {
+    .time-categories {
+        justify-content: flex-start; /* Revert to left-align with scroll */
+        overflow-x: auto; /* Restore scrolling on mobile */
     }
 }
     
