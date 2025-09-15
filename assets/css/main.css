@@ -28,7 +28,7 @@ body.light-theme {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20 20px; /* Restore horizontal padding for spaciousness */
+    padding: 0 20px; /* Fixed invalid syntax from original (20 20px) */
 }
 
 /* Currency Modal */
@@ -761,40 +761,47 @@ body.light-theme .social-float #theme-toggle::before {
 @media (max-width: 768px) {
     .filter-controls {
         grid-template-columns: 1fr; /* Single column layout */
-        gap: 15px; /* Reduce gap slightly */
-        padding: 15px; /* Reduce overall padding */
+        gap: 10px; /* Further reduced gap */
+        padding: 10px; /* Further reduced padding */
     }
 
     .filter-group input,
     .filter-group select {
-        padding: 10px; /* Reduce input padding */
+        padding: 8px; /* Reduced input padding */
+        font-size: 13px; /* Slightly smaller font */
     }
 
     .filter-group label {
-        font-size: 14px; /* Reduce label font size slightly */
-        margin-bottom: 5px; /* Reduce label margin */
+        font-size: 13px; /* Reduced label font size */
+        margin-bottom: 3px; /* Reduced label margin */
     }
 
     .time-categories {
         justify-content: flex-start; /* Left alignment with scroll */
         overflow-x: auto; /* Horizontal scroll */
-        padding: 10px 0; /* Reduce vertical padding */
-        gap: 10px; /* Slightly reduce gap */
+        padding: 5px 0; /* Further reduced vertical padding */
+        gap: 8px; /* Further reduced gap */
     }
 
     .time-category {
-        min-width: 100px; /* Reduce from 120px */
-        padding: 10px 15px; /* Reduce padding */
+        min-width: 90px; /* Further reduced from 100px */
+        padding: 8px 12px; /* Further reduced padding */
+        font-size: 14px; /* Slightly smaller text */
     }
 
     .stats-bar {
         grid-template-columns: repeat(2, 1fr); /* Two columns on tablets */
-        gap: 15px; /* Reduce gap */
-        padding: 10px; /* Reduce padding */
+        gap: 10px; /* Further reduced gap */
+        padding: 5px; /* Further reduced padding */
     }
 
     .stat-item {
-        padding: 15px; /* Reduce padding inside items */
+        padding: 10px; /* Further reduced padding inside items */
+        font-size: 14px; /* Slightly smaller text */
+    }
+
+    .stat-number {
+        font-size: 20px; /* Reduced stat number size */
     }
 
     .social-float {
@@ -806,11 +813,10 @@ body.light-theme .social-float #theme-toggle::before {
     .social-float #theme-toggle,
     .social-float .fab.fa-instagram,
     .social-float .currency-display {
-        width: 50px; /* Reset to circular size */
-        height: 50px;
-        text-align: center;
-        border-radius: 50%; /* Restore circular shape */
-        padding: 10px; /* Consistent padding */
+        width: 40px; /* Reduced size */
+        height: 40px;
+        padding: 8px; /* Reduced padding */
+        font-size: 14px; /* Adjusted font size */
     }
     
     .products-grid {
@@ -818,35 +824,45 @@ body.light-theme .social-float #theme-toggle::before {
     }
     
     .logo-img {
-        width: min(250px, 75vw); /* Adjusted for smaller screens */
+        width: min(200px, 70vw); /* Further reduced for smaller screens */
     }
 }
 
 @media (max-width: 480px) {
     .stats-bar {
         grid-template-columns: 1fr; /* Single column on phones */
+        gap: 8px; /* Further reduced gap */
+        padding: 5px; /* Further reduced padding */
+    }
+
+    .stat-item {
+        padding: 8px; /* Further reduced padding */
+    }
+
+    .stat-number {
+        font-size: 18px; /* Further reduced stat number size */
     }
 
     .section-header h2 {
-        font-size: 24px;
+        font-size: 20px; /* Further reduced */
     }
     
     .section-header p {
-        font-size: 16px;
+        font-size: 14px; /* Further reduced */
     }
     
     .footer-logo {
-        max-width: 300px;
+        max-width: 250px; /* Further reduced */
     }
     
     .logo-img {
-        width: min(200px, 70vw); /* Further reduced for very small screens */
+        width: min(150px, 65vw); /* Further reduced */
     }
 }
 
 @media (max-width: 320px) {
     .logo-img {
-        width: min(180px, 65vw); /* Ensure it fits on very small screens */
+        width: min(140px, 60vw); /* Further reduced */
     }
 }
 
