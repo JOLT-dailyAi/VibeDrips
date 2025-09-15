@@ -95,7 +95,6 @@ body.light-theme {
 .logo-img {
     width: min(300px, 80vw); /* Maximum 300px, but 80% of viewport width on smaller screens */
     height: auto; /* Let height scale proportionally - this prevents distortion */
-    max-height: 100px; /* Cap the vertical size while preserving aspect ratio */
     object-fit: contain; /* Maintain aspect ratio */
     max-width: 100%; /* Ensure it never overflows */
 }
