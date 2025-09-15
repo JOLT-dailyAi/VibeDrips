@@ -775,7 +775,12 @@ body.light-theme .social-float #theme-toggle::before {
     cursor: pointer;
     font-weight: 600;
     transition: background 0.3s;
-    border-radius: 25px; /* Circular by default */
+    border-radius: 10px; /* Rectangular with rounded sides */
+    height: 50px; /* Match height with theme-toggle and instagram */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
 }
 
 .social-float .currency-display:hover {
@@ -844,8 +849,12 @@ body.light-theme .social-float #theme-toggle::before {
     }
     
     .social-float .currency-display {
-        border-radius: 0; /* Remove circular styling for currency-display in mobile */
-        padding: 10px; /* Adjust padding for rectangular shape */
+        border-radius: 10px; /* Maintain rounded rectangular shape in mobile */
+        padding: 10px 15px; /* Adjust padding for mobile fit */
+        height: 50px; /* Consistent height */
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     
     .products-grid {
