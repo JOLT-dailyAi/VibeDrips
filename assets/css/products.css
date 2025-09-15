@@ -270,7 +270,7 @@ body.dark-theme .product-meta .rating.no-rating {
     height: auto; /* Dynamic height based on content */
     min-height: 60vh; /* Minimum height for flexibility */
     max-height: 80vh; /* Limit to avoid overflow */
-    overflow-y: hidden; /* Remove scrollbar */
+    overflow-y: auto; /* Restore scrollbar functionality */
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); /* Lifted effect */
     margin: 20px; /* Minimal padding for lifted appearance */
     padding: 20px; /* Internal padding */
@@ -294,8 +294,10 @@ body.dark-theme .product-meta .rating.no-rating {
 .simple-modal-header button {
     background: none;
     border: 2px solid #E53E3E; /* Box border */
-    width: 30px; /* Square box */
+    width: 30px; /* Fixed square box */
     height: 30px;
+    min-width: 30px; /* Ensure fixed size */
+    min-height: 30px;
     font-size: 18px; /* Adjust X size */
     color: #E53E3E; /* Red color for close button */
     cursor: pointer;
