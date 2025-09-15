@@ -196,7 +196,7 @@ body.dark-theme .time-category.active {
 
 .filter-group input,
 .filter-group select {
-    width: fit-content;
+    width: 160px; /* Base width for all */
     padding: 6px;
     border: 2px solid #e2e8f0;
     border-radius: 8px;
@@ -204,16 +204,18 @@ body.dark-theme .time-category.active {
     transition: border-color 0.3s;
     background: #FFFFFF;
     color: #333;
-    /* Max-width based on character length approximations */
-    max-width: 20ch; /* Search (🔍) */
 }
 
-.filter-group select {
-    max-width: 20ch; /* Category (e.g., "All Categories") */
+#search {
+    width: 300px; /* Specific width for search */
+}
+
+#category-filter {
+    width: 160px; /* Specific width for category */
 }
 
 #price-sort {
-    max-width: 13ch; /* Sort By: Default + options */
+    width: 160px; /* Specific width for sort */
 }
 
 .filter-group input:focus,
@@ -790,8 +792,21 @@ body.light-theme .social-float #theme-toggle::before {
 
     .filter-group input,
     .filter-group select {
+        width: 120px; /* Adjusted for mobile */
         padding: 6px;
         font-size: 14px;
+    }
+
+    #search {
+        width: 200px; /* Narrower but still prominent for mobile */
+    }
+
+    #category-filter {
+        width: 120px;
+    }
+
+    #price-sort {
+        width: 120px;
     }
 
     .time-categories {
@@ -871,6 +886,23 @@ body.light-theme .social-float #theme-toggle::before {
     
     .logo-img {
         width: min(200px, 70vw);
+    }
+    
+    .filter-group input,
+    .filter-group select {
+        width: 100px; /* Further adjusted for smaller screens */
+    }
+
+    #search {
+        width: 150px;
+    }
+
+    #category-filter {
+        width: 100px;
+    }
+
+    #price-sort {
+        width: 100px;
     }
 }
 
