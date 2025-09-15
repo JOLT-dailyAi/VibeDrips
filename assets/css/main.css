@@ -734,17 +734,12 @@ body.light-theme .social-float #theme-toggle::before {
 }
 
 .social-float .fab.fa-instagram {
-    font-size: 30px; /* Icon size */
+    font-size: 30px;
     color: #FFFFFF;
     transition: color 0.3s;
-    padding: 10px; /* Consistent padding */
+    padding: 10px;
     background-color: #667eea;
     border-radius: 50%;
-    width: 50px; /* Consistent size */
-    height: 50px; /* Consistent size */
-    display: flex;
-    align-items: center;
-    justify-content: center; /* Center the icon */
 }
 
 .social-float .fab.fa-instagram:hover {
