@@ -352,8 +352,9 @@ body.dark-theme .stat-label {
     border-radius: 10px;
     color: #fff;
     font-weight: bold;
-    min-width: 80px; /* Consistent minimum width */
+    width: 100px; /* Fixed width for consistency */
     text-align: center; /* Center the text */
+    box-sizing: border-box; /* Ensure padding doesn’t exceed width */
 }
 
 .product-badge.hot {
@@ -717,7 +718,7 @@ body.light-theme .social-float #theme-toggle::before {
     border-color: #4c52b6;
 }
 
-.social-float .instagram-icon {
+.social-float .fab.fa-instagram {
     font-size: 30px;
     color: #FFFFFF;
     transition: color 0.3s;
@@ -729,13 +730,9 @@ body.light-theme .social-float #theme-toggle::before {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: url('assets/images/instagram.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
-.social-float .instagram-icon:hover {
+.social-float .fab.fa-instagram:hover {
     color: #E1306C;
     background-color: #5a67d8;
 }
@@ -776,7 +773,7 @@ body.light-theme .social-float #theme-toggle::before {
     }
     
     .social-float #theme-toggle,
-    .social-float .instagram-icon,
+    .social-float .fab.fa-instagram,
     .social-float .currency-display {
         width: 50px; /* Reset to circular size */
         height: 50px;
