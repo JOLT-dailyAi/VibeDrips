@@ -205,11 +205,11 @@ body.dark-theme .time-category.active {
     background: #FFFFFF;
     color: #333;
     /* Max-width based on character length approximations */
-    max-width: 1ch; /* Search (🔍) */
+    max-width: 20ch; /* Search (🔍) */
 }
 
 .filter-group select {
-    max-width: 12ch; /* Category (e.g., "All Categories") */
+    max-width: 20ch; /* Category (e.g., "All Categories") */
 }
 
 #price-sort {
