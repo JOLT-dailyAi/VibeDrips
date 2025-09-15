@@ -730,11 +730,17 @@ body.light-theme .social-float #theme-toggle::before {
     display: flex;
     align-items: center;
     justify-content: center;
+    text-decoration: none; /* Remove any underline from text decoration */
+    border-bottom: none; /* Explicitly remove bottom border if present */
 }
 
 .social-float .fab.fa-instagram:hover {
     color: #E1306C;
     background-color: #5a67d8;
+}
+
+.social-float a {
+    text-decoration: none; /* Ensure no underline on the anchor tag */
 }
 
 .social-float .currency-display {
