@@ -24,6 +24,13 @@ body.light-theme {
     color: #FFFFFF;
 }
 
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px; /* Restore horizontal padding for spaciousness */
+}
+
 /* Currency Modal */
 .currency-modal {
     position: fixed;
