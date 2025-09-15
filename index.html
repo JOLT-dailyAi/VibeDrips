@@ -61,7 +61,7 @@
                 
                 <div class="filter-controls">
                     <div class="filter-group">
-                        <input type="text" id="search" placeholder=" " oninput="filterProducts()" onfocus="this.placeholder='Search products, brands, categories...'" onblur="this.placeholder=' '">
+                        <input type="text" id="search" placeholder="🔍" oninput="filterProducts()">
                     </div>
                     <div class="filter-group">
                         <select id="category-filter" onchange="filterProducts()">
@@ -70,7 +70,7 @@
                     </div>
                     <div class="filter-group">
                         <select id="price-sort" onchange="sortProducts()">
-                            <option value="">Default</option>
+                            <option value="">Sort By: Default</option>
                             <option value="price-low">Price: Low to High</option>
                             <option value="price-high">Price: High to Low</option>
                             <option value="name">Name A-Z</option>
@@ -165,7 +165,7 @@
             console.log('🚀 VibeDrips Initializing...');
             initializeApp();
 
-            // Search input expansion/collapse
+            // Search input expansion/collapse with placeholder toggle
             const searchInput = document.getElementById('search');
             searchInput.addEventListener('click', function() {
                 this.style.width = '150px';
@@ -177,14 +177,14 @@
                 if (e.key === 'Enter') {
                     this.style.width = '1ch';
                     this.blur();
-                    this.placeholder = ' ';
+                    this.placeholder = '🔍';
                 }
             });
 
             searchInput.addEventListener('blur', function() {
                 if (this.value === '') {
                     this.style.width = '1ch';
-                    this.placeholder = ' ';
+                    this.placeholder = '🔍';
                 }
             });
         });
