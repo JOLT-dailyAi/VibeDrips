@@ -45,6 +45,7 @@ async function initializeApp() {
         await initializeCurrency();
         await loadProducts(VibeDrips.currentCurrency); // Load products after currency
         setupThemeToggle(); // Add theme toggle
+        closeSimpleModal(); // Ensure modal is hidden
         
         console.log('✅ VibeDrips initialized successfully!');
         
