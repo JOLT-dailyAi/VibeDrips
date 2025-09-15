@@ -164,29 +164,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             console.log('🚀 VibeDrips Initializing...');
             initializeApp();
-
-            // Search input expansion/collapse with placeholder toggle
-            const searchInput = document.getElementById('search');
-            searchInput.addEventListener('click', function() {
-                this.style.width = '150px';
-                this.focus();
-                this.placeholder = 'Search products, brands, categories...';
-            });
-
-            searchInput.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') {
-                    this.style.width = '1ch';
-                    this.blur();
-                    this.placeholder = '🔍';
-                }
-            });
-
-            searchInput.addEventListener('blur', function() {
-                if (this.value === '') {
-                    this.style.width = '1ch';
-                    this.placeholder = '🔍';
-                }
-            });
         });
     </script>
 </body>
