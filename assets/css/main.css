@@ -191,6 +191,7 @@ body.dark-theme .time-category.active {
     padding: 5px;
     border-radius: 15px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden; /* Prevent overflow */
 }
 
 .filter-group input,
@@ -203,7 +204,16 @@ body.dark-theme .time-category.active {
     transition: border-color 0.3s;
     background: #FFFFFF;
     color: #333;
-    min-width: 1ch; /* Fit to 1 char for search, adjust for "Default" */
+    /* Max-width based on character length approximations */
+    max-width: 1ch; /* Search (🔍) */
+}
+
+.filter-group select {
+    max-width: 12ch; /* Category (e.g., "All Categories") */
+}
+
+#price-sort {
+    max-width: 13ch; /* Sort By: Default + options */
 }
 
 .filter-group input:focus,
@@ -225,11 +235,11 @@ body.dark-theme .time-category.active {
 
 /* Specific placeholder styles */
 .filter-group input[type="text"]::placeholder {
-    content: "\1F50D"; /* Magnifying glass emoji */
+    content: "🔍";
 }
 
 .filter-group select::placeholder {
-    content: "Default";
+    content: "Sort By: Default";
 }
 
 body.dark-theme .filter-controls {
@@ -782,15 +792,6 @@ body.light-theme .social-float #theme-toggle::before {
     .filter-group select {
         padding: 6px;
         font-size: 14px;
-        min-width: 1ch;
-    }
-
-    .filter-group input[type="text"]::placeholder {
-        content: "\1F50D";
-    }
-
-    .filter-group select::placeholder {
-        content: "Default";
     }
 
     .time-categories {
@@ -825,15 +826,6 @@ body.light-theme .social-float #theme-toggle::before {
         flex-direction: row;
         right: 10px;
         bottom: 10px;
-    }
-    
-    .social-float #theme-toggle,
-    .social-float .fab.fa-instagram,
-    .social-float .currency-display {
-        width: 50px;
-        height: 50px;
-        padding: 10px;
-        font-size: 24px;
     }
     
     .products-grid {
