@@ -323,9 +323,10 @@ function showProductModal(productId) {
         return;
     }
 
-    // Create dynamic modal
+    // Create dynamic modal with separate overlay and content
     const modalContent = `
-        <div class="simple-modal dynamic-modal" onclick="closeDynamicModal(event)">
+        <div class="simple-modal dynamic-modal">
+            <div class="modal-overlay" onclick="closeDynamicModal(event)"></div>
             <div class="simple-modal-content">
                 <div class="simple-modal-header">
                     <h2>${escapeHtml(product.name)}</h2>
@@ -351,9 +352,9 @@ function showProductModal(productId) {
  * Close dynamic modal (specific to modals created by showProductModal)
  */
 function closeDynamicModal(event) {
-    event.stopPropagation(); // Prevent event from bubbling to parent .simple-modal
+    event.stopPropagation(); // Prevent event from bubbling further if needed
     const modal = event.target.closest('.dynamic-modal');
-    if (modal) {
+    if (modal && event.target.classList.contains('modal-overlay')) {
         modal.remove();
     }
 }
