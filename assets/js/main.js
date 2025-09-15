@@ -548,11 +548,17 @@ async function fallbackInitialization() {
 
 // Close all modals
 function closeAllModals() {
-    if (VibeDrips.currentCurrency) {
-        hideCurrencyModal();
+    if (VibeDrips.elements.currencyModal) {
+        VibeDrips.elements.currencyModal.classList.add('hidden');
     }
-    if (window.closeProductModal) {
-        window.closeProductModal();
+    closeSimpleModal(); // Call the simple modal close function
+}
+
+// Close simple modal
+function closeSimpleModal() {
+    const modal = document.querySelector('.simple-modal');
+    if (modal) {
+        modal.classList.add('hidden');
     }
 }
 
@@ -569,5 +575,6 @@ window.initializeApp = initializeApp;
 window.showCurrencyModal = showCurrencyModal;
 window.setCurrency = setCurrency;
 window.selectCurrency = selectCurrency;
+window.closeSimpleModal = closeSimpleModal; // Export the function
 
 console.log('🔧 Fixed Main.js loaded successfully');
