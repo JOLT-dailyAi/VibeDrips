@@ -16,9 +16,9 @@
       "brands": [
         "Ignyte",
         "Axor",
-        "Junkyard",
         "CodersParadise",
-        "Banpresto"
+        "Banpresto",
+        "Junkyard"
       ],
       "price_range": {
         "min": 189,
@@ -26,7 +26,7 @@
       }
     }
   ],
-  "last_updated": "2025-09-17T11:44:52.206Z",
+  "last_updated": "2025-09-18T03:08:04.822Z",
   "total_products": 7,
   "default_currency": "INR"
 }
