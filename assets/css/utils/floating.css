@@ -1,6 +1,6 @@
 /* utils/floating.css - Floating social links and controls */
 
-/* RIGHT-SIDE FLOATING ICONS (ORIGINAL - REVERTED) */
+/* RIGHT-SIDE FLOATING ICONS (ORIGINAL RESTORED) */
 .social-float {
     position: fixed;
     bottom: 20px;
@@ -12,7 +12,38 @@
     align-items: center;
 }
 
-/* Instagram Link (original) */
+/* Theme Toggle Button */
+#theme-toggle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    color: white;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+#theme-toggle::before {
+    content: "☀️";
+    font-size: 24px;
+}
+
+body.dark-theme #theme-toggle::before {
+    content: "🌙";
+}
+
+#theme-toggle:hover {
+    transform: scale(1.1);
+}
+
+/* Instagram Link */
 .social-float a {
     width: 50px;
     height: 50px;
@@ -35,29 +66,8 @@
     font-size: 24px;
 }
 
-/* Theme Toggle (original) */
-#theme-toggle {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border: none;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    color: white;
-    font-size: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-#theme-toggle:hover {
-    transform: scale(1.1);
-}
-
-/* Currency Display (original) */
-.currency-display {
+/* Currency Display Button */
+.social-float .currency-display {
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -71,32 +81,32 @@
     justify-content: center;
 }
 
-.currency-display:hover {
+.social-float .currency-display:hover {
     transform: scale(1.1);
     background: #667eea;
 }
 
-.currency-display span {
+.social-float .currency-display span {
     color: #333;
     font-weight: 600;
     font-size: 14px;
 }
 
-.currency-display:hover span {
+.social-float .currency-display:hover span {
     color: white;
 }
 
 /* Dark theme currency */
-body.dark-theme .currency-display {
+body.dark-theme .social-float .currency-display {
     background: rgba(255, 255, 255, 0.15);
     border-color: rgba(255, 255, 255, 0.3);
 }
 
-body.dark-theme .currency-display span {
+body.dark-theme .social-float .currency-display span {
     color: white;
 }
 
-body.dark-theme .currency-display:hover {
+body.dark-theme .social-float .currency-display:hover {
     background: rgba(255, 255, 255, 0.25);
 }
 
@@ -128,12 +138,12 @@ body.dark-theme .currency-display:hover {
     text-decoration: none;
     font-size: 28px;
     padding: 0;
-    overflow: hidden; /* NEW: Hide overflow */
+    overflow: hidden;
 }
 
 .linktree-button img {
-    width: 28px; /* CHANGED: from 30px */
-    height: 28px; /* CHANGED: from 30px */
+    width: 28px;
+    height: 28px;
     object-fit: contain;
 }
 
@@ -183,6 +193,7 @@ body.dark-theme .currency-display:hover {
     transform: translateX(-20px);
     transition: all 0.3s ease;
     pointer-events: none;
+    white-space: nowrap;
 }
 
 .music-control-wrapper:hover .volume-panel {
@@ -241,13 +252,18 @@ body.dark-theme .currency-display:hover {
     cursor: pointer;
     border: none;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+.volume-slider::-moz-range-thumb:hover {
+    transform: scale(1.2);
 }
 
 body.dark-theme .volume-panel {
     background: rgba(0, 0, 0, 0.8);
 }
 
-/* Mobile */
+/* Mobile responsive */
 @media (max-width: 768px) {
     .social-float,
     .media-float {
@@ -265,7 +281,7 @@ body.dark-theme .volume-panel {
 
     .social-float a,
     #theme-toggle,
-    .currency-display,
+    .social-float .currency-display,
     .linktree-button,
     .music-control-button {
         width: 45px;
@@ -276,8 +292,21 @@ body.dark-theme .volume-panel {
         font-size: 20px;
     }
 
+    #theme-toggle::before {
+        font-size: 20px;
+    }
+
+    .social-float .currency-display span {
+        font-size: 12px;
+    }
+
     .linktree-button {
         font-size: 24px;
+    }
+
+    .linktree-button img {
+        width: 24px;
+        height: 24px;
     }
 
     .music-control-button {
@@ -285,9 +314,18 @@ body.dark-theme .volume-panel {
     }
 
     .volume-panel {
+        padding: 6px 10px;
         opacity: 1;
         transform: translateX(0);
         pointer-events: all;
+    }
+
+    .volume-slider {
+        width: 80px;
+    }
+
+    .volume-btn {
+        font-size: 18px;
     }
 }
 
