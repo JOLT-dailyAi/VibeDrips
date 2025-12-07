@@ -1,9 +1,9 @@
 /* utils/glassmorphism.css - Global glassmorphism effect */
 
 /* Uncomment the block below to enable glassmorphism on all components */
+/* Excludes: header, theme toggle, instagram icon, currency button */
 
 
-.main-header,
 .time-categories .time-category,
 .filter-controls,
 .stats-bar .stat-item,
@@ -13,10 +13,7 @@
 .loading-state,
 .error-state,
 .coming-soon-state,
-.no-products,
-.social-float #theme-toggle,
-.social-float .fab.fa-instagram,
-.social-float .currency-display {
+.no-products {
     backdrop-filter: blur(10px) saturate(120%);
     -webkit-backdrop-filter: blur(10px) saturate(120%);
     background: rgba(255, 255, 255, 0.85) !important;
