@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VibeDrips</title>
 
+    <!-- Short names for mobile home screen -->
+    <meta name="application-name" content="VibeDrips">
+    <meta name="apple-mobile-web-app-title" content="VibeDrips">
+
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
     
@@ -15,10 +19,9 @@
     <link rel="apple-touch-icon" href="assets/images/VibeDrips.png">
     <link rel="icon" type="image/png" sizes="192x192" href="assets/images/VibeDrips.png">
     <link rel="icon" type="image/png" sizes="512x512" href="assets/images/VibeDrips.png">
-    <!-- End Option 1 -->
+    End Option 1 -->
     
-    <!--
-    Option 2: VibeDrips_DP.png (uncomment block below to use) (currently active) -->
+    <!-- Option 2: VibeDrips_DP.png (currently active) -->
     <link rel="icon" type="image/png" href="assets/images/VibeDrips_DP.png">
     <link rel="apple-touch-icon" href="assets/images/VibeDrips_DP.png">
     <link rel="icon" type="image/png" sizes="192x192" href="assets/images/VibeDrips_DP.png">
@@ -159,13 +162,10 @@
         </div>
     </footer>
 
-    <!-- Floating Social Links -->
-   <!-- Right-side Floating Controls (ORIGINAL RESTORED) -->
+    <!-- Right-side Floating Controls (ORIGINAL) -->
     <div class="social-float">
-        <a href="https://www.instagram.com/vibedrips.dailyai/" target="_blank" rel="noopener">
-            <i class="fab fa-instagram"></i>
-        </a>
         <button id="theme-toggle"></button>
+        <a href="https://www.instagram.com/vibedrips.dailyai/" target="_blank"><i class="fab fa-instagram"></i></a>
         <div class="currency-display" onclick="showCurrencyModal()">
             <span id="currency-trigger">INR</span>
         </div>
@@ -190,10 +190,10 @@
     <div class="media-float">
         <!-- Linktree -->
         <a href="https://linktr.ee/JOLT_dailyAi" target="_blank" rel="noopener" class="linktree-button" aria-label="Linktree">
-            🌲
+            <img src="assets/images/linktree.png" alt="Linktree" onerror="this.parentElement.innerHTML='🌲';">
         </a>
         
-        <!-- Music control will be added here by JS -->
+        <!-- Music control button added here by JS -->
     </div>
     
     <!-- Background Music -->
@@ -223,11 +223,14 @@
 
     <!-- PWA Scripts - Load after app initialization -->
     <script src="assets/js/install-prompt.js"></script>
+
+    <!-- Music Control - Load after DOM ready -->
+    <script src="assets/js/music-control.js"></script>
     
     <!-- PWA Service Worker Registration -->
     <script>
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
+            navigator.serviceWorker.register('/VibeDrips/sw.js')
                 .then(reg => console.log('Service Worker registered:', reg))
                 .catch(err => console.log('Service Worker registration failed:', err));
         }
