@@ -1,12 +1,15 @@
 /* layout/header.css - Header and logo */
 
 .main-header {
-    background: #2E1D80;
+    background: transparent; /* Changed from #2E1D80 */
     position: sticky;
     top: 0;
     z-index: 100;
     padding: 5px 0;
     text-align: center;
+    backdrop-filter: blur(10px); /* Add blur effect */
+    -webkit-backdrop-filter: blur(10px); /* Safari support */
+    transition: background 0.3s ease; /* Smooth transition */
 }
 
 .logo-img {
@@ -14,8 +17,14 @@
     height: auto;
     object-fit: contain;
     max-width: 100%;
+    transition: transform 0.3s ease; /* Add hover effect */
 }
 
+.logo-img:hover {
+    transform: scale(1.05); /* Slight zoom on hover */
+}
+
+/* Responsive breakpoints */
 @media (max-width: 768px) {
     .logo-img {
         width: min(250px, 75vw);
