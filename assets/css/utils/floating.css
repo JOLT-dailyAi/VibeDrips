@@ -328,10 +328,3 @@ body.dark-theme .volume-panel {
         font-size: 18px;
     }
 }
-
-@media (max-width: 480px) {
-    .social-float,
-    .media-float {
-        flex-direction: column;
-    }
-}
