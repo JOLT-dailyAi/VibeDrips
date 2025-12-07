@@ -1,0 +1,110 @@
+/* utils/floating.css - Floating social links and currency display */
+
+.social-float {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    display: flex;
+    gap: 15px;
+    z-index: 1000;
+}
+
+.social-float #theme-toggle {
+    background-color: #667eea;
+    color: #FFFFFF;
+    border: 2px solid #5a67d8;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 24px;
+    transition: all 0.3s;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    line-height: 30px;
+}
+
+.social-float #theme-toggle::before {
+    content: "\f186";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+}
+
+body.light-theme .social-float #theme-toggle::before {
+    content: "\f185";
+}
+
+.social-float #theme-toggle:hover {
+    background-color: #5a67d8;
+    border-color: #4c52b6;
+}
+
+.social-float .fab.fa-instagram {
+    font-size: 30px;
+    color: #FFFFFF;
+    transition: color 0.3s;
+    padding: 10px;
+    background-color: #667eea;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    border-bottom: none;
+}
+
+.social-float .fab.fa-instagram:hover {
+    color: #E1306C;
+    background-color: #5a67d8;
+}
+
+.social-float a {
+    text-decoration: none;
+}
+
+.social-float .currency-display {
+    background: #667eea;
+    color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.3s;
+    border-radius: 10px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.social-float .currency-display:hover {
+    background: #5a67d8;
+}
+
+#currency-trigger {
+    font-size: 28px !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .social-float {
+        flex-direction: row;
+        right: 10px;
+        bottom: 10px;
+    }
+
+    .social-float .currency-display {
+        border-radius: 10px;
+        padding: 10px 15px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #currency-trigger {
+        font-size: 28px !important;
+    }
+}
