@@ -2,7 +2,7 @@
 
 /* Uncomment the block below to enable glassmorphism on all components */
 
-/*
+
 .main-header,
 .time-categories .time-category,
 .filter-controls,
@@ -38,4 +38,4 @@ body.dark-theme .no-products {
     background: rgba(0, 0, 0, 0.7) !important;
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
-*/
+
