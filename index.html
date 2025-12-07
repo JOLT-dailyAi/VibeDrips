@@ -185,14 +185,16 @@
     -->
     
     <!-- NEW: Left-side Floating Media Controls (Same style as right) -->
+    <!-- Left-side Floating Media Controls -->
     <div class="media-float">
         <!-- Linktree -->
         <a href="https://linktr.ee/JOLT_dailyAi" target="_blank" rel="noopener" class="linktree-button" aria-label="Linktree">
-            <img src="assets/images/linktree.png" alt="Linktree">
+            <img src="assets/images/linktree.png" alt="Linktree" onerror="this.style.display='none'; this.parentElement.innerHTML='🔗';">
         </a>
         
         <!-- Music control added here by music-control.js -->
     </div>
+
     
     <!-- Background Music -->
     <audio id="bg-music" autoplay loop style="display: none;">
