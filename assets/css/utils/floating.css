@@ -106,7 +106,7 @@ body.dark-theme .social-float .currency-display span {
     color: white;
 }
 
-body.dark-theme .social-float .currency-display:hover {
+body.dark-theme .social-flat .currency-display:hover {
     background: rgba(255, 255, 255, 0.25);
 }
 
@@ -180,7 +180,7 @@ body.dark-theme .social-float .currency-display:hover {
     gap: 10px;
 }
 
-/* Volume Panel */
+/* Volume Panel - Hidden by default, shows on interaction */
 .volume-panel {
     display: flex;
     align-items: center;
@@ -196,6 +196,14 @@ body.dark-theme .social-float .currency-display:hover {
     white-space: nowrap;
 }
 
+/* Show volume panel when visible class is added (JS controlled) */
+.volume-panel.visible {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: all;
+}
+
+/* Also show on hover (desktop only) */
 .music-control-wrapper:hover .volume-panel {
     opacity: 1;
     transform: translateX(0);
@@ -315,6 +323,10 @@ body.dark-theme .volume-panel {
 
     .volume-panel {
         padding: 6px 10px;
+    }
+
+    /* On mobile, keep volume hidden by default (controlled by JS) */
+    .volume-panel.visible {
         opacity: 1;
         transform: translateX(0);
         pointer-events: all;
