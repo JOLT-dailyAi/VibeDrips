@@ -1,0 +1,35 @@
+/* layout/header.css - Header and logo */
+
+.main-header {
+    background: #2E1D80;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 5px 0;
+    text-align: center;
+}
+
+.logo-img {
+    width: min(300px, 80vw);
+    height: auto;
+    object-fit: contain;
+    max-width: 100%;
+}
+
+@media (max-width: 768px) {
+    .logo-img {
+        width: min(250px, 75vw);
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-img {
+        width: min(200px, 70vw);
+    }
+}
+
+@media (max-width: 320px) {
+    .logo-img {
+        width: min(180px, 65vw);
+    }
+}
