@@ -1,6 +1,6 @@
 /* utils/floating.css - Floating social links and controls */
 
-/* Right-side floating icons (existing) */
+/* RIGHT-SIDE FLOATING ICONS (Original - Don't Touch) */
 .social-float {
     position: fixed;
     bottom: 20px;
@@ -73,29 +73,7 @@ body.dark-theme .currency-display:hover {
     background: rgba(255, 255, 255, 0.25);
 }
 
-/* Ko-fi (commented out) */
-/*
-.ko-fi-button {
-    background: #13C3FF;
-    color: white;
-    width: 160px;
-    border-radius: 8px;
-    padding: 8px 16px;
-    font-weight: 600;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.ko-fi-button:hover {
-    background: #0BA8DB;
-    transform: scale(1.05);
-}
-*/
-
-/* NEW: Left-side floating icons */
+/* LEFT-SIDE FLOATING ICONS (NEW - Same style as right) */
 .media-float {
     position: fixed;
     bottom: 20px;
@@ -138,7 +116,7 @@ body.dark-theme .currency-display:hover {
     box-shadow: 0 6px 20px rgba(67, 233, 123, 0.4);
 }
 
-/* Music Control Button */
+/* Music Control Button (matches right-side style) */
 .music-control-button {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
@@ -151,7 +129,12 @@ body.dark-theme .currency-display:hover {
     box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
 }
 
-/* Volume Control Panel (appears on hover) */
+/* Music Control Wrapper */
+.music-control-wrapper {
+    position: relative;
+}
+
+/* Volume Control Panel (appears to the right on hover) */
 .volume-panel {
     position: absolute;
     left: 60px;
@@ -167,9 +150,10 @@ body.dark-theme .currency-display:hover {
     transform: translateX(-20px);
     transition: all 0.3s ease;
     pointer-events: none;
+    white-space: nowrap;
 }
 
-.media-float .music-control-wrapper:hover .volume-panel {
+.music-control-wrapper:hover .volume-panel {
     opacity: 1;
     transform: translateX(0);
     pointer-events: all;
@@ -242,10 +226,6 @@ body.dark-theme .volume-panel {
     background: rgba(0, 0, 0, 0.8);
 }
 
-body.dark-theme .volume-slider {
-    background: linear-gradient(to right, #667eea 0%, #764ba2 100%);
-}
-
 /* Mobile responsive */
 @media (max-width: 768px) {
     .social-float,
@@ -298,27 +278,8 @@ body.dark-theme .volume-slider {
     }
 }
 
-/* Responsive - Stack on very small screens */
 @media (max-width: 480px) {
-    .social-float,
     .media-float {
-        flex-direction: row;
-        gap: 10px;
-    }
-
-    .social-float {
-        bottom: 15px;
-        right: 15px;
-        left: auto;
-    }
-
-    .media-float {
-        bottom: 80px; /* Above right-side icons */
-        left: 15px;
-    }
-
-    .volume-panel {
-        bottom: 55px;
-        left: 0;
+        bottom: 80px; /* Stack above right-side icons */
     }
 }
