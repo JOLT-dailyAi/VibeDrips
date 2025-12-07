@@ -1,12 +1,12 @@
 /* utils/floating.css - Floating social links and controls */
 
-/* RIGHT-SIDE FLOATING ICONS (Original - Don't Touch) */
+/* RIGHT-SIDE FLOATING ICONS (Horizontal row at bottom-right) */
 .social-float {
     position: fixed;
     bottom: 20px;
     right: 20px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row; /* Horizontal */
     gap: 15px;
     z-index: 1000;
 }
@@ -73,18 +73,18 @@ body.dark-theme .currency-display:hover {
     background: rgba(255, 255, 255, 0.25);
 }
 
-/* LEFT-SIDE FLOATING ICONS (NEW - Same style as right) */
+/* LEFT-SIDE FLOATING ICONS (Horizontal row at bottom-left) */
 .media-float {
     position: fixed;
     bottom: 20px;
     left: 20px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row; /* Horizontal */
     gap: 15px;
     z-index: 1000;
 }
 
-.media-float > * {
+.media-float > *:not(.music-control-wrapper) {
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -108,7 +108,7 @@ body.dark-theme .currency-display:hover {
 .linktree-button img {
     width: 28px;
     height: 28px;
-    filter: brightness(0) invert(1); /* Make icon white */
+    filter: brightness(0) invert(1);
 }
 
 .linktree-button:hover {
@@ -116,12 +116,29 @@ body.dark-theme .currency-display:hover {
     box-shadow: 0 6px 20px rgba(67, 233, 123, 0.4);
 }
 
-/* Music Control Button (matches right-side style) */
+/* Music Control Wrapper */
+.music-control-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Music Control Button */
 .music-control-button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border: none;
     font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .music-control-button:hover {
@@ -129,23 +146,15 @@ body.dark-theme .currency-display:hover {
     box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
 }
 
-/* Music Control Wrapper */
-.music-control-wrapper {
-    position: relative;
-}
-
-/* Volume Control Panel (appears to the right on hover) */
+/* Volume Panel (slides out to the right) */
 .volume-panel {
-    position: absolute;
-    left: 60px;
-    bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     background: rgba(255, 255, 255, 0.95);
     padding: 8px 12px;
     border-radius: 25px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    display: flex;
-    align-items: center;
-    gap: 10px;
     opacity: 0;
     transform: translateX(-20px);
     transition: all 0.3s ease;
@@ -231,6 +240,7 @@ body.dark-theme .volume-panel {
     .social-float,
     .media-float {
         bottom: 15px;
+        gap: 10px;
     }
 
     .social-float {
@@ -242,7 +252,8 @@ body.dark-theme .volume-panel {
     }
 
     .social-float > *,
-    .media-float > * {
+    .media-float > *:not(.music-control-wrapper),
+    .music-control-button {
         width: 45px;
         height: 45px;
         font-size: 20px;
@@ -259,7 +270,6 @@ body.dark-theme .volume-panel {
 
     .volume-panel {
         padding: 6px 10px;
-        left: 55px;
     }
 
     .volume-slider {
@@ -278,8 +288,10 @@ body.dark-theme .volume-panel {
     }
 }
 
+/* Very small screens - stack vertically */
 @media (max-width: 480px) {
+    .social-float,
     .media-float {
-        bottom: 80px; /* Stack above right-side icons */
+        flex-direction: column;
     }
 }
