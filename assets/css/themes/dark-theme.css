@@ -1,0 +1,198 @@
+/* themes/dark-theme.css - All dark theme overrides */
+
+body.dark-theme {
+    background: #2E1D80;
+    color: #FFFFFF;
+}
+
+/* Currency Modal */
+body.dark-theme .currency-content {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+body.dark-theme .currency-content h2 {
+    color: #FFFFFF;
+}
+
+body.dark-theme .currency-content p {
+    color: #CCCCCC;
+}
+
+body.dark-theme .currency-select {
+    background: #333333;
+    color: #FFFFFF;
+    border-color: #555555;
+}
+
+body.dark-theme .currency-select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Filters */
+body.dark-theme .time-category {
+    background: rgba(0, 0, 0, 0.9);
+    color: #FFFFFF;
+}
+
+body.dark-theme .time-category:hover {
+    background: rgba(0, 0, 0, 1);
+}
+
+body.dark-theme .time-category.active {
+    background: #667eea;
+    color: white;
+}
+
+body.dark-theme .filter-controls {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+body.dark-theme .filter-group input,
+body.dark-theme .filter-group select {
+    background: #333333;
+    color: #FFFFFF;
+    border-color: #555555;
+}
+
+body.dark-theme .filter-group input:focus,
+body.dark-theme .filter-group select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+body.dark-theme .filter-group input::placeholder,
+body.dark-theme .filter-group select::placeholder {
+    color: #CCCCCC;
+}
+
+/* Stats Bar */
+body.dark-theme .stats-bar {
+    background: #2E1D80;
+}
+
+body.dark-theme .stat-item {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+body.dark-theme .stat-number {
+    color: #FFFFFF;
+}
+
+body.dark-theme .stat-label {
+    color: #CCCCCC;
+}
+
+/* Product Cards */
+body.dark-theme .product-card {
+    background: rgba(0, 0, 0, 0.9) !important;
+    color: #FFFFFF !important;
+}
+
+body.dark-theme .product-card:hover {
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-theme .product-image {
+    background: #333333;
+}
+
+body.dark-theme .product-image-placeholder {
+    color: #a0aec0;
+    background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+}
+
+body.dark-theme .product-title {
+    color: #FFFFFF;
+}
+
+body.dark-theme .product-description {
+    color: #CCCCCC;
+}
+
+body.dark-theme .product-meta .brand,
+body.dark-theme .product-meta .rating {
+    color: #CCCCCC;
+}
+
+body.dark-theme .product-meta .rating.no-rating {
+    color: #a0aec0;
+}
+
+/* States */
+body.dark-theme .loading-state,
+body.dark-theme .error-state,
+body.dark-theme .coming-soon-state {
+    background: rgba(0, 0, 0, 0.95);
+}
+
+body.dark-theme .coming-soon-state h3,
+body.dark-theme .error-state .error-message {
+    color: #FFFFFF;
+}
+
+body.dark-theme .coming-soon-state p {
+    color: #CCCCCC;
+}
+
+body.dark-theme .available-now {
+    background: #333333;
+}
+
+body.dark-theme .available-now strong {
+    color: #FFFFFF;
+}
+
+body.dark-theme .available-now a {
+    color: #667eea;
+}
+
+body.dark-theme .no-products {
+    background: rgba(0, 0, 0, 0.95);
+    color: #FFFFFF;
+}
+
+body.dark-theme .no-products p {
+    color: #CCCCCC;
+}
+
+body.dark-theme .no-products a {
+    color: #667eea;
+    border-color: #667eea;
+}
+
+body.dark-theme .no-products a:hover {
+    background: #667eea;
+    color: #FFFFFF;
+}
+
+/* Modals */
+body.dark-theme .simple-modal-content {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+body.dark-theme .simple-modal-header {
+    border-bottom: 1px solid #4a5568;
+}
+
+body.dark-theme .simple-modal-header h2 {
+    color: #FFFFFF;
+}
+
+body.dark-theme .simple-modal-header button {
+    border-color: #E53E3E;
+    color: #E53E3E;
+}
+
+body.dark-theme .simple-modal-header button:hover {
+    background: #742A2A;
+    color: #FEB2B2;
+}
+
+body.dark-theme .simple-modal-body p {
+    color: #CCCCCC;
+}
+
+body.dark-theme .simple-modal-body p strong {
+    color: #667EEA;
+}
