@@ -1,0 +1,29 @@
+/* states/empty.css - No products state */
+
+.no-products {
+    text-align: center;
+    padding: 80px 40px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    color: #333;
+}
+
+.no-products p {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.no-products a {
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #667eea;
+    border: 1px solid #667eea;
+    border-radius: 5px;
+}
+
+.no-products a:hover {
+    background: #667eea;
+    color: #FFFFFF;
+}
