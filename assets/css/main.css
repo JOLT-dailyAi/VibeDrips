@@ -25,6 +25,7 @@
 /* Utils */
 @import url('./utils/floating.css');
 @import url('./utils/responsive.css');
+@import url('./utils/glassmorphism.css'); /* NEW: Global glassmorphism effect */
 
 /* Themes (load last) */
 @import url('./themes/light-theme.css');
