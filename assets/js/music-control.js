@@ -1,9 +1,12 @@
-// music-control.js - Background music control (left-side floating)
+// music-control.js - Background music control with desktop autoplay fix
 
 (function() {
     const audio = document.getElementById('bg-music');
     
-    if (!audio) return;
+    if (!audio) {
+        console.error('Audio element #bg-music not found');
+        return;
+    }
 
     // Load saved preferences
     const isMuted = localStorage.getItem('musicMuted') === 'true';
@@ -11,12 +14,16 @@
     
     audio.volume = parseFloat(savedVolume);
     
-    if (isMuted) {
-        audio.pause();
-    } else {
-        audio.play().catch(() => {
-            console.log('Auto-play blocked - waiting for user interaction');
-        });
+    // Try autoplay
+    if (!isMuted) {
+        const playPromise = audio.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.log('Autoplay blocked - waiting for user interaction');
+                // Will play when user clicks music button
+            });
+        }
     }
 
     // Add music control to existing media-float container
@@ -32,10 +39,9 @@
 
         const musicWrapper = document.createElement('div');
         musicWrapper.className = 'music-control-wrapper';
-        musicWrapper.style.position = 'relative';
         musicWrapper.innerHTML = `
-            <button id="music-toggle" class="music-control-button" title="${isMuted ? 'Play music' : 'Pause music'}">
-                ${isMuted ? '▶️' : '⏸️'}
+            <button id="music-toggle" class="music-control-button" title="${isMuted || audio.paused ? 'Play music' : 'Pause music'}">
+                ${isMuted || audio.paused ? '▶️' : '⏸️'}
             </button>
             <div class="volume-panel">
                 <button id="volume-toggle" class="volume-btn" title="Mute/Unmute">
@@ -58,10 +64,15 @@
         const playBtn = document.getElementById('music-toggle');
         
         if (audio.paused) {
-            audio.play();
-            playBtn.innerHTML = '⏸️';
-            playBtn.title = 'Pause music';
-            localStorage.setItem('musicMuted', 'false');
+            audio.play()
+                .then(() => {
+                    playBtn.innerHTML = '⏸️';
+                    playBtn.title = 'Pause music';
+                    localStorage.setItem('musicMuted', 'false');
+                })
+                .catch(error => {
+                    console.error('Play failed:', error);
+                });
         } else {
             audio.pause();
             playBtn.innerHTML = '▶️';
@@ -112,4 +123,4 @@
     }
 })();
 
-console.log('Music control loaded (left-side floating)');
+console.log('Music control loaded');
