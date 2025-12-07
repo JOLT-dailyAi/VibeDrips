@@ -1,0 +1,8 @@
+/* themes/light-theme.css - Light theme (default state, minimal overrides) */
+
+body.light-theme {
+    background: #2E1D80;
+    color: #FFFFFF;
+}
+
+/* Light theme is the default, so minimal overrides needed */
