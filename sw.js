@@ -11,6 +11,7 @@ const urlsToCache = [
   '/VibeDrips/assets/js/products.js',
   '/VibeDrips/assets/images/VibeDrips.png',
   '/VibeDrips/assets/images/VibeDrips_DP.png'
+   '/VibeDrips/assets/music/Losstime.mp3' // ← Background music cached (one-time download)
   // ❌ NO JSON files
   // ❌ NO music files
   // ❌ NO product images
