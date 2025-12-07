@@ -1,0 +1,53 @@
+/* states/error.css - Error and coming soon states */
+
+.error-state,
+.coming-soon-state {
+    text-align: center;
+    padding: 80px 40px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.coming-soon-icon,
+.error-icon {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.coming-soon-state h3,
+.error-state .error-message {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.coming-soon-state p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+.available-now {
+    background: #f7fafc;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+.available-now strong {
+    color: #333;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.available-now a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+    margin: 0 5px;
+}
+
+.available-now a:hover {
+    text-decoration: underline;
+}
