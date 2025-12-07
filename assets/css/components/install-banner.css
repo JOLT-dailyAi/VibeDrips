@@ -1,0 +1,131 @@
+/* components/install-banner.css - Install prompt banner */
+
+.install-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 12px 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.install-banner-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+
+.install-banner-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.install-banner-text strong {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.install-banner-text span {
+    font-size: 13px;
+    opacity: 0.95;
+}
+
+.install-banner-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.install-btn {
+    background: white;
+    color: #667eea;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.install-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.3);
+}
+
+.dismiss-btn {
+    background: transparent;
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    padding: 0;
+    line-height: 1;
+}
+
+.dismiss-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: white;
+}
+
+/* iOS specific prompt styling */
+.install-banner.ios-prompt .install-banner-text span {
+    font-size: 12px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .install-banner {
+        padding: 10px 15px;
+    }
+
+    .install-banner-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .install-banner-text strong {
+        font-size: 14px;
+    }
+
+    .install-banner-text span {
+        font-size: 12px;
+    }
+
+    .install-banner-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .install-btn {
+        flex: 1;
+    }
+}
