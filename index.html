@@ -161,14 +161,15 @@
 
     <!-- Floating Social Links -->
     <div class="social-float">
-        <button id="theme-toggle"></button>
-        <a href="https://www.instagram.com/vibedrips.dailyai/" target="_blank"><i class="fab fa-instagram"></i></a>
-        <div class="currency-display" onclick="showCurrencyModal()">
-            <span id="currency-trigger">INR</span>
-        </div>
+        <button id="theme-toggle" aria-label="Toggle theme"></button>
+        <a href="https://instagram.com/vibedrips" target="_blank" rel="noopener" aria-label="Instagram">
+            <i class="fab fa-instagram"></i>
+        </a>
+        <button class="currency-display" id="currency-selector" aria-label="Select currency">INR</button>
     </div>
-
+    
     <!-- Ko-fi Script -->
+    <!--
     <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script>
     <script>
         kofiWidgetOverlay.draw('dailyai', {
@@ -180,6 +181,17 @@
             'floating-chat.donateButton.bottom': '20px'
         });
     </script>
+    -->
+
+    <!-- NEW: Left-side Floating Media Controls -->
+    <div class="media-float">
+        <!-- Linktree -->
+        <a href="https://linktr.ee/vibedrips" target="_blank" rel="noopener" class="linktree-button" aria-label="Linktree">
+            <img src="assets/images/linktree.png" alt="Linktree">
+        </a>
+        
+        <!-- Music control added here by music-control.js -->
+    </div>
     
     <!-- Background Music -->
     <audio id="bg-music" autoplay loop style="display: none;">
