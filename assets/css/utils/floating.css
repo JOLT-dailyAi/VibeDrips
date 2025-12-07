@@ -1,6 +1,6 @@
 /* utils/floating.css - Floating social links and controls */
 
-/* RIGHT-SIDE FLOATING ICONS (Original restored) */
+/* RIGHT-SIDE FLOATING ICONS (ORIGINAL - REVERTED) */
 .social-float {
     position: fixed;
     bottom: 20px;
@@ -12,85 +12,95 @@
     align-items: center;
 }
 
-/* Theme Toggle Button */
+/* Instagram Link (original) */
+.social-float a {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.social-float a:hover {
+    transform: scale(1.1);
+}
+
+.social-float a i {
+    font-size: 24px;
+}
+
+/* Theme Toggle (original) */
 #theme-toggle {
     width: 50px;
     height: 50px;
     border-radius: 50%;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
     border: none;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    color: white;
+    font-size: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    font-size: 24px;
 }
 
 #theme-toggle:hover {
     transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
 }
 
-/* Instagram Link */
-.social-float .fa-instagram {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    text-decoration: none;
-    font-size: 24px;
-}
-
-.social-float .fa-instagram:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(188, 24, 136, 0.4);
-}
-
-/* Currency Display Button */
+/* Currency Display (original) */
 .currency-display {
     width: 50px;
     height: 50px;
     border-radius: 50%;
     background: white;
-    color: #333;
-    font-weight: 600;
-    font-size: 14px;
     border: 2px solid #667eea;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .currency-display:hover {
     transform: scale(1.1);
     background: #667eea;
+}
+
+.currency-display span {
+    color: #333;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.currency-display:hover span {
     color: white;
 }
 
+/* Dark theme currency */
 body.dark-theme .currency-display {
     background: rgba(255, 255, 255, 0.15);
-    color: white;
     border-color: rgba(255, 255, 255, 0.3);
+}
+
+body.dark-theme .currency-display span {
+    color: white;
 }
 
 body.dark-theme .currency-display:hover {
     background: rgba(255, 255, 255, 0.25);
 }
 
-/* LEFT-SIDE FLOATING ICONS (New) */
+/* LEFT-SIDE FLOATING ICONS (NEW) */
 .media-float {
     position: fixed;
     bottom: 20px;
@@ -108,34 +118,19 @@ body.dark-theme .currency-display:hover {
     height: 50px;
     border-radius: 50%;
     background: linear-gradient(135deg, #43E97B 0%, #38F9D7 100%);
-    padding: 0;
     border: none;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     text-decoration: none;
-}
-
-.linktree-button img {
-    width: 30px;
-    height: 30px;
-    object-fit: contain;
+    font-size: 28px;
 }
 
 .linktree-button:hover {
     transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(67, 233, 123, 0.4);
-}
-
-/* Music Control Wrapper */
-.music-control-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 10px;
 }
 
 /* Music Control Button */
@@ -146,9 +141,9 @@ body.dark-theme .currency-display:hover {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border: none;
-    font-size: 20px;
+    font-size: 22px;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
@@ -157,10 +152,17 @@ body.dark-theme .currency-display:hover {
 
 .music-control-button:hover {
     transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
 }
 
-/* Volume Panel (slides out horizontally) */
+/* Music Control Wrapper */
+.music-control-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Volume Panel */
 .volume-panel {
     display: flex;
     align-items: center;
@@ -173,7 +175,6 @@ body.dark-theme .currency-display:hover {
     transform: translateX(-20px);
     transition: all 0.3s ease;
     pointer-events: none;
-    white-space: nowrap;
 }
 
 .music-control-wrapper:hover .volume-panel {
@@ -182,7 +183,6 @@ body.dark-theme .currency-display:hover {
     pointer-events: all;
 }
 
-/* Volume Button */
 .volume-btn {
     background: transparent;
     border: none;
@@ -199,7 +199,6 @@ body.dark-theme .currency-display:hover {
     transform: scale(1.2);
 }
 
-/* Volume Slider */
 .volume-slider {
     width: 100px;
     height: 6px;
@@ -213,7 +212,6 @@ body.dark-theme .currency-display:hover {
 
 .volume-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
-    appearance: none;
     width: 16px;
     height: 16px;
     border-radius: 50%;
@@ -225,7 +223,6 @@ body.dark-theme .currency-display:hover {
 
 .volume-slider::-webkit-slider-thumb:hover {
     transform: scale(1.2);
-    box-shadow: 0 3px 8px rgba(102, 126, 234, 0.4);
 }
 
 .volume-slider::-moz-range-thumb {
@@ -236,20 +233,13 @@ body.dark-theme .currency-display:hover {
     cursor: pointer;
     border: none;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    transition: all 0.2s ease;
 }
 
-.volume-slider::-moz-range-thumb:hover {
-    transform: scale(1.2);
-    box-shadow: 0 3px 8px rgba(102, 126, 234, 0.4);
-}
-
-/* Dark theme */
 body.dark-theme .volume-panel {
     background: rgba(0, 0, 0, 0.8);
 }
 
-/* Mobile responsive */
+/* Mobile */
 @media (max-width: 768px) {
     .social-float,
     .media-float {
@@ -265,30 +255,27 @@ body.dark-theme .volume-panel {
         left: 15px;
     }
 
+    .social-float a,
     #theme-toggle,
-    .social-float .fa-instagram,
     .currency-display,
     .linktree-button,
     .music-control-button {
         width: 45px;
         height: 45px;
+    }
+
+    .social-float a i {
         font-size: 20px;
     }
 
-    .linktree-button img {
-        width: 26px;
-        height: 26px;
+    .linktree-button {
+        font-size: 24px;
     }
 
-    .volume-panel {
-        padding: 6px 10px;
+    .music-control-button {
+        font-size: 18px;
     }
 
-    .volume-slider {
-        width: 80px;
-    }
-
-    /* Always show volume on mobile */
     .volume-panel {
         opacity: 1;
         transform: translateX(0);
