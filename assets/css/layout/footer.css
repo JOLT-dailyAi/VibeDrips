@@ -1,0 +1,38 @@
+/* layout/footer.css - Footer styles */
+
+.main-footer {
+    background: #2E1D80;
+    padding: 60px 0 40px;
+    margin-top: 80px;
+}
+
+.footer-brand {
+    text-align: center;
+}
+
+.footer-logo {
+    max-width: 550px;
+    height: auto;
+    margin-bottom: 30px;
+}
+
+.footer-tagline {
+    font-size: 24px;
+    color: #FFFFFF;
+    margin-bottom: 15px;
+}
+
+.footer-description {
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.6;
+    margin-bottom: 30px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 480px) {
+    .footer-logo {
+        max-width: 300px;
+    }
+}
