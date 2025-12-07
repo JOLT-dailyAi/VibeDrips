@@ -1,0 +1,49 @@
+/* base/variables.css - CSS Custom Properties */
+
+:root {
+    /* Brand Colors */
+    --color-primary: #667eea;
+    --color-primary-dark: #5a67d8;
+    --color-secondary: #764ba2;
+    --color-bg-main: #2E1D80;
+    
+    /* Neutrals */
+    --color-text-dark: #2d3748;
+    --color-text-gray: #718096;
+    --color-text-light: #a0aec0;
+    --color-border: #e2e8f0;
+    
+    /* White/Black */
+    --color-white: #FFFFFF;
+    --color-black: #000000;
+    
+    /* Semantic Colors */
+    --color-success: #48bb78;
+    --color-warning: #ed8936;
+    --color-error: #f56565;
+    --color-info: #4299e1;
+    
+    /* Amazon Orange */
+    --color-amazon: #ff9500;
+    --color-amazon-dark: #ff6b00;
+    
+    /* Spacing */
+    --spacing-xs: 5px;
+    --spacing-sm: 10px;
+    --spacing-md: 15px;
+    --spacing-lg: 20px;
+    --spacing-xl: 30px;
+    --spacing-2xl: 40px;
+    
+    /* Border Radius */
+    --radius-sm: 8px;
+    --radius-md: 15px;
+    --radius-lg: 20px;
+    --radius-full: 9999px;
+    
+    /* Shadows */
+    --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.12);
+    --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.18);
+    --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
