@@ -1,9 +1,9 @@
 /* utils/glassmorphism.css - Global glassmorphism effect */
 
-/* Uncomment the block below to enable glassmorphism on all components */
+/* ACTIVE by default - Comment out the block below to DISABLE glassmorphism */
 /* Excludes: header, theme toggle, instagram icon, currency button */
 
-
+/* Light theme glassmorphism */
 .time-categories .time-category,
 .filter-controls,
 .stats-bar .stat-item,
@@ -21,7 +21,7 @@
     border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-Dark theme glassmorphism adjustments
+/* Dark theme glassmorphism */
 body.dark-theme .time-category,
 body.dark-theme .filter-controls,
 body.dark-theme .stat-item,
@@ -35,4 +35,3 @@ body.dark-theme .no-products {
     background: rgba(0, 0, 0, 0.7) !important;
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
-
