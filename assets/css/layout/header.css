@@ -8,8 +8,8 @@
     padding: 5px 0;
     text-align: center;
     backdrop-filter: blur(10px); /* Add blur effect */
-    -webkit-backdrop-filter: blur(10px); /* Safari support */
-    transition: background 0.3s ease; /* Smooth transition */
+ /* backdrop-filter: blur(10px); */ /* Uncomment for glassmorphism effect */
+ /* -webkit-backdrop-filter: blur(10px); */ /* Safari support */
 }
 
 .logo-img {
