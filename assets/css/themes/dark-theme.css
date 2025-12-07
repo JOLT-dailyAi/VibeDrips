@@ -110,6 +110,14 @@ body.dark-theme .product-description {
     color: #CCCCCC;
 }
 
+body.dark-theme .product-price {
+    color: #FFFFFF;
+}
+
+body.dark-theme .product-category {
+    color: #667eea;
+}
+
 body.dark-theme .product-meta .brand,
 body.dark-theme .product-meta .rating {
     color: #CCCCCC;
