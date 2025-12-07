@@ -224,18 +224,17 @@ function renderProducts() {
         return;
     }
 
-    const productsGrid = document.createElement('div');
-    productsGrid.className = 'products-grid';
-
+    // Clear container and add cards directly (no wrapper needed)
+    container.innerHTML = '';
+    
     VibeDrips.filteredProducts.forEach(product => {
         const productCard = createProductCard(product);
-        productsGrid.appendChild(productCard);
+        container.appendChild(productCard);  // ← Append directly to container
     });
 
-    container.innerHTML = '';
-    container.appendChild(productsGrid);
     updateStats();
 }
+
 
 /**
  * Create a product card element
