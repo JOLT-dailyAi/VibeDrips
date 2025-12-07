@@ -2,8 +2,8 @@
 
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
     margin-top: 20px;
 }
 
@@ -37,10 +37,11 @@
     letter-spacing: 0.5px;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* Responsive - Only apply single column on actual mobile screens */
+@media (max-width: 600px) {
     .products-grid {
         grid-template-columns: 1fr;
+        gap: 20px;
     }
 
     .stats-bar {
@@ -72,5 +73,19 @@
 
     .stat-number {
         font-size: 16px;
+    }
+}
+
+/* Tablets - 2 columns */
+@media (min-width: 601px) and (max-width: 900px) {
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Desktop - 3+ columns (auto-fill handles this naturally) */
+@media (min-width: 901px) {
+    .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     }
 }
