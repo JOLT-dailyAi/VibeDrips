@@ -1,110 +1,324 @@
-/* utils/floating.css - Floating social links and currency display */
+/* utils/floating.css - Floating social links and controls */
 
+/* Right-side floating icons (existing) */
 .social-float {
     position: fixed;
-    right: 20px;
     bottom: 20px;
+    right: 20px;
     display: flex;
+    flex-direction: column;
     gap: 15px;
     z-index: 1000;
 }
 
-.social-float #theme-toggle {
-    background-color: #667eea;
-    color: #FFFFFF;
-    border: 2px solid #5a67d8;
-    padding: 10px;
-    cursor: pointer;
-    font-size: 24px;
-    transition: all 0.3s;
-    border-radius: 50%;
+.social-float > * {
     width: 50px;
     height: 50px;
-    text-align: center;
-    line-height: 30px;
-}
-
-.social-float #theme-toggle::before {
-    content: "\f186";
-    font-family: "Font Awesome 6 Free";
-    font-weight: 900;
-}
-
-body.light-theme .social-float #theme-toggle::before {
-    content: "\f185";
-}
-
-.social-float #theme-toggle:hover {
-    background-color: #5a67d8;
-    border-color: #4c52b6;
-}
-
-.social-float .fab.fa-instagram {
-    font-size: 30px;
-    color: #FFFFFF;
-    transition: color 0.3s;
-    padding: 10px;
-    background-color: #667eea;
     border-radius: 50%;
-    width: 50px;
-    height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     text-decoration: none;
-    border-bottom: none;
+    font-size: 24px;
 }
 
-.social-float .fab.fa-instagram:hover {
-    color: #E1306C;
-    background-color: #5a67d8;
+/* Theme Toggle */
+#theme-toggle {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
 }
 
-.social-float a {
-    text-decoration: none;
+#theme-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
 }
 
-.social-float .currency-display {
+/* Instagram */
+.fa-instagram {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    color: white;
+}
+
+.fa-instagram:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(188, 24, 136, 0.4);
+}
+
+/* Currency Display */
+.currency-display {
+    background: white;
+    color: #333;
+    font-weight: 600;
+    font-size: 16px;
+    border: 2px solid #667eea;
+}
+
+.currency-display:hover {
+    transform: scale(1.1);
     background: #667eea;
     color: white;
-    padding: 10px 20px;
-    cursor: pointer;
+}
+
+body.dark-theme .currency-display {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+body.dark-theme .currency-display:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* Ko-fi (commented out) */
+/*
+.ko-fi-button {
+    background: #13C3FF;
+    color: white;
+    width: 160px;
+    border-radius: 8px;
+    padding: 8px 16px;
     font-weight: 600;
-    transition: background 0.3s;
-    border-radius: 10px;
-    height: 50px;
+    font-size: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-sizing: border-box;
+    gap: 8px;
 }
 
-.social-float .currency-display:hover {
-    background: #5a67d8;
+.ko-fi-button:hover {
+    background: #0BA8DB;
+    transform: scale(1.05);
+}
+*/
+
+/* NEW: Left-side floating icons */
+.media-float {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 1000;
 }
 
-#currency-trigger {
-    font-size: 28px !important;
+.media-float > * {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    font-size: 24px;
 }
 
-/* Responsive */
+/* Linktree Button */
+.linktree-button {
+    background: linear-gradient(135deg, #43E97B 0%, #38F9D7 100%);
+    padding: 0;
+    border: none;
+}
+
+.linktree-button img {
+    width: 28px;
+    height: 28px;
+    filter: brightness(0) invert(1); /* Make icon white */
+}
+
+.linktree-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(67, 233, 123, 0.4);
+}
+
+/* Music Control Button */
+.music-control-button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    font-size: 20px;
+}
+
+.music-control-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* Volume Control Panel (appears on hover) */
+.volume-panel {
+    position: absolute;
+    left: 60px;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 8px 12px;
+    border-radius: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.media-float .music-control-wrapper:hover .volume-panel {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: all;
+}
+
+/* Volume Button */
+.volume-btn {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+}
+
+.volume-btn:hover {
+    transform: scale(1.2);
+}
+
+/* Volume Slider */
+.volume-slider {
+    width: 100px;
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(to right, #667eea 0%, #764ba2 100%);
+    outline: none;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #667eea;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+.volume-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 3px 8px rgba(102, 126, 234, 0.4);
+}
+
+.volume-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #667eea;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+.volume-slider::-moz-range-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 3px 8px rgba(102, 126, 234, 0.4);
+}
+
+/* Dark theme adjustments */
+body.dark-theme .volume-panel {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+body.dark-theme .volume-slider {
+    background: linear-gradient(to right, #667eea 0%, #764ba2 100%);
+}
+
+/* Mobile responsive */
 @media (max-width: 768px) {
+    .social-float,
+    .media-float {
+        bottom: 15px;
+    }
+
     .social-float {
+        right: 15px;
+    }
+
+    .media-float {
+        left: 15px;
+    }
+
+    .social-float > *,
+    .media-float > * {
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+    }
+
+    .linktree-button img {
+        width: 24px;
+        height: 24px;
+    }
+
+    .music-control-button {
+        font-size: 18px;
+    }
+
+    .volume-panel {
+        padding: 6px 10px;
+        left: 55px;
+    }
+
+    .volume-slider {
+        width: 80px;
+    }
+
+    .volume-btn {
+        font-size: 18px;
+    }
+
+    /* Always show volume on mobile */
+    .volume-panel {
+        opacity: 1;
+        transform: translateX(0);
+        pointer-events: all;
+    }
+}
+
+/* Responsive - Stack on very small screens */
+@media (max-width: 480px) {
+    .social-float,
+    .media-float {
         flex-direction: row;
-        right: 10px;
-        bottom: 10px;
+        gap: 10px;
     }
 
-    .social-float .currency-display {
-        border-radius: 10px;
-        padding: 10px 15px;
-        height: 50px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    .social-float {
+        bottom: 15px;
+        right: 15px;
+        left: auto;
     }
 
-    #currency-trigger {
-        font-size: 28px !important;
+    .media-float {
+        bottom: 80px; /* Above right-side icons */
+        left: 15px;
+    }
+
+    .volume-panel {
+        bottom: 55px;
+        left: 0;
     }
 }
