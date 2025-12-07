@@ -1,20 +1,46 @@
 /* utils/floating.css - Floating social links and controls */
 
-/* RIGHT-SIDE FLOATING ICONS (Horizontal row at bottom-right) */
+/* RIGHT-SIDE FLOATING ICONS (Original restored) */
 .social-float {
     position: fixed;
     bottom: 20px;
     right: 20px;
     display: flex;
-    flex-direction: row; /* Horizontal */
+    flex-direction: row;
     gap: 15px;
     z-index: 1000;
+    align-items: center;
 }
 
-.social-float > * {
+/* Theme Toggle Button */
+#theme-toggle {
     width: 50px;
     height: 50px;
     border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    font-size: 24px;
+}
+
+#theme-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* Instagram Link */
+.social-float .fa-instagram {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -25,36 +51,27 @@
     font-size: 24px;
 }
 
-/* Theme Toggle */
-#theme-toggle {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-}
-
-#theme-toggle:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-}
-
-/* Instagram */
-.fa-instagram {
-    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-    color: white;
-}
-
-.fa-instagram:hover {
+.social-float .fa-instagram:hover {
     transform: scale(1.1);
     box-shadow: 0 6px 20px rgba(188, 24, 136, 0.4);
 }
 
-/* Currency Display */
+/* Currency Display Button */
 .currency-display {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
     background: white;
     color: #333;
     font-weight: 600;
-    font-size: 16px;
+    font-size: 14px;
     border: 2px solid #667eea;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .currency-display:hover {
@@ -73,21 +90,26 @@ body.dark-theme .currency-display:hover {
     background: rgba(255, 255, 255, 0.25);
 }
 
-/* LEFT-SIDE FLOATING ICONS (Horizontal row at bottom-left) */
+/* LEFT-SIDE FLOATING ICONS (New) */
 .media-float {
     position: fixed;
     bottom: 20px;
     left: 20px;
     display: flex;
-    flex-direction: row; /* Horizontal */
+    flex-direction: row;
     gap: 15px;
     z-index: 1000;
+    align-items: center;
 }
 
-.media-float > *:not(.music-control-wrapper) {
+/* Linktree Button */
+.linktree-button {
     width: 50px;
     height: 50px;
     border-radius: 50%;
+    background: linear-gradient(135deg, #43E97B 0%, #38F9D7 100%);
+    padding: 0;
+    border: none;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -95,20 +117,12 @@ body.dark-theme .currency-display:hover {
     transition: all 0.3s ease;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     text-decoration: none;
-    font-size: 24px;
-}
-
-/* Linktree Button */
-.linktree-button {
-    background: linear-gradient(135deg, #43E97B 0%, #38F9D7 100%);
-    padding: 0;
-    border: none;
 }
 
 .linktree-button img {
-    width: 28px;
-    height: 28px;
-    filter: brightness(0) invert(1);
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
 }
 
 .linktree-button:hover {
@@ -146,7 +160,7 @@ body.dark-theme .currency-display:hover {
     box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
 }
 
-/* Volume Panel (slides out to the right) */
+/* Volume Panel (slides out horizontally) */
 .volume-panel {
     display: flex;
     align-items: center;
@@ -230,7 +244,7 @@ body.dark-theme .currency-display:hover {
     box-shadow: 0 3px 8px rgba(102, 126, 234, 0.4);
 }
 
-/* Dark theme adjustments */
+/* Dark theme */
 body.dark-theme .volume-panel {
     background: rgba(0, 0, 0, 0.8);
 }
@@ -251,8 +265,10 @@ body.dark-theme .volume-panel {
         left: 15px;
     }
 
-    .social-float > *,
-    .media-float > *:not(.music-control-wrapper),
+    #theme-toggle,
+    .social-float .fa-instagram,
+    .currency-display,
+    .linktree-button,
     .music-control-button {
         width: 45px;
         height: 45px;
@@ -260,12 +276,8 @@ body.dark-theme .volume-panel {
     }
 
     .linktree-button img {
-        width: 24px;
-        height: 24px;
-    }
-
-    .music-control-button {
-        font-size: 18px;
+        width: 26px;
+        height: 26px;
     }
 
     .volume-panel {
@@ -276,10 +288,6 @@ body.dark-theme .volume-panel {
         width: 80px;
     }
 
-    .volume-btn {
-        font-size: 18px;
-    }
-
     /* Always show volume on mobile */
     .volume-panel {
         opacity: 1;
@@ -288,7 +296,6 @@ body.dark-theme .volume-panel {
     }
 }
 
-/* Very small screens - stack vertically */
 @media (max-width: 480px) {
     .social-float,
     .media-float {
