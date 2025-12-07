@@ -1,0 +1,41 @@
+/* utils/glassmorphism.css - Global glassmorphism effect */
+
+/* Uncomment the block below to enable glassmorphism on all components */
+
+/*
+.main-header,
+.time-categories .time-category,
+.filter-controls,
+.stats-bar .stat-item,
+.product-card,
+.simple-modal-content,
+.currency-content,
+.loading-state,
+.error-state,
+.coming-soon-state,
+.no-products,
+.social-float #theme-toggle,
+.social-float .fab.fa-instagram,
+.social-float .currency-display {
+    backdrop-filter: blur(10px) saturate(120%);
+    -webkit-backdrop-filter: blur(10px) saturate(120%);
+    background: rgba(255, 255, 255, 0.85) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+Dark theme glassmorphism adjustments
+body.dark-theme .time-category,
+body.dark-theme .filter-controls,
+body.dark-theme .stat-item,
+body.dark-theme .product-card,
+body.dark-theme .simple-modal-content,
+body.dark-theme .currency-content,
+body.dark-theme .loading-state,
+body.dark-theme .error-state,
+body.dark-theme .coming-soon-state,
+body.dark-theme .no-products {
+    background: rgba(0, 0, 0, 0.7) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+*/
