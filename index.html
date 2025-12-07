@@ -160,13 +160,15 @@
     </footer>
 
     <!-- Floating Social Links -->
-    <!-- Right-side Floating Controls (UNCHANGED - Original Structure) -->
+   <!-- Right-side Floating Controls (ORIGINAL RESTORED) -->
     <div class="social-float">
-        <button id="theme-toggle" aria-label="Toggle theme"></button>
-        <a href="https://instagram.com/vibedrips" target="_blank" rel="noopener" aria-label="Instagram">
+        <a href="https://www.instagram.com/vibedrips.dailyai/" target="_blank" rel="noopener">
             <i class="fab fa-instagram"></i>
         </a>
-        <button class="currency-display" id="currency-selector" aria-label="Select currency">INR</button>
+        <button id="theme-toggle"></button>
+        <div class="currency-display" onclick="showCurrencyModal()">
+            <span id="currency-trigger">INR</span>
+        </div>
     </div>
     
     <!-- Ko-fi Script (commented out) -->
@@ -184,22 +186,19 @@
     </script>
     -->
     
-    <!-- NEW: Left-side Floating Media Controls (Same style as right) -->
-    <!-- Left-side Floating Media Controls -->
+    <!-- Left-side Floating Media Controls (NEW) -->
     <div class="media-float">
         <!-- Linktree -->
         <a href="https://linktr.ee/JOLT_dailyAi" target="_blank" rel="noopener" class="linktree-button" aria-label="Linktree">
-            <img src="assets/images/linktree.png" alt="Linktree" onerror="this.style.display='none'; this.parentElement.innerHTML='🔗';">
+            🌲
         </a>
         
-        <!-- Music control added here by music-control.js -->
+        <!-- Music control will be added here by JS -->
     </div>
-
     
     <!-- Background Music -->
-    <audio id="bg-music" autoplay loop style="display: none;">
+    <audio id="bg-music" loop>
         <source src="assets/music/Losstime.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
     </audio>
     
     <!-- Core Scripts - Load in order -->
