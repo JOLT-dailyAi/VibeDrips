@@ -16,6 +16,7 @@
 @import url('./components/modals.css');
 @import url('./components/badges.css');
 @import url('./components/stats.css');
+@import url('./components/install-banner.css'); /* NEW: Install prompt banner */
 
 /* States */
 @import url('./states/loading.css');
