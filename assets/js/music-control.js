@@ -1,4 +1,4 @@
-// music-control.js - Background music control with desktop autoplay fix
+// music-control.js - Background music control with user activation
 
 (function() {
     const audio = document.getElementById('bg-music');
@@ -9,24 +9,30 @@
     }
 
     // Load saved preferences
-    const isMuted = localStorage.getItem('musicMuted') === 'true';
     const savedVolume = localStorage.getItem('musicVolume') || '0.5';
+    const musicEnabled = localStorage.getItem('musicEnabled') !== 'false'; // Default true
     
     audio.volume = parseFloat(savedVolume);
-    
-    // Try autoplay
-    if (!isMuted) {
+    audio.loop = true;
+
+    // Try autoplay (will likely be blocked on desktop)
+    let musicStarted = false;
+    if (musicEnabled) {
         const playPromise = audio.play();
-        
         if (playPromise !== undefined) {
-            playPromise.catch(error => {
-                console.log('Autoplay blocked - waiting for user interaction');
-                // Will play when user clicks music button
-            });
+            playPromise
+                .then(() => {
+                    musicStarted = true;
+                    console.log('Music autoplayed successfully');
+                })
+                .catch(() => {
+                    console.log('Autoplay blocked - user must click music button');
+                    musicStarted = false;
+                });
         }
     }
 
-    // Add music control to existing media-float container
+    // Add music control to media-float
     addMusicControl();
 
     function addMusicControl() {
@@ -40,8 +46,8 @@
         const musicWrapper = document.createElement('div');
         musicWrapper.className = 'music-control-wrapper';
         musicWrapper.innerHTML = `
-            <button id="music-toggle" class="music-control-button" title="${isMuted || audio.paused ? 'Play music' : 'Pause music'}">
-                ${isMuted || audio.paused ? '▶️' : '⏸️'}
+            <button id="music-toggle" class="music-control-button" title="${audio.paused ? 'Play music' : 'Pause music'}">
+                ${audio.paused ? '▶️' : '⏸️'}
             </button>
             <div class="volume-panel">
                 <button id="volume-toggle" class="volume-btn" title="Mute/Unmute">
@@ -58,6 +64,11 @@
         document.getElementById('music-toggle').addEventListener('click', togglePlayPause);
         document.getElementById('volume-toggle').addEventListener('click', toggleMute);
         document.getElementById('volume-slider').addEventListener('input', changeVolume);
+
+        // Update button state after a short delay (check if autoplay worked)
+        setTimeout(() => {
+            updatePlayButton();
+        }, 500);
     }
 
     function togglePlayPause() {
@@ -68,16 +79,32 @@
                 .then(() => {
                     playBtn.innerHTML = '⏸️';
                     playBtn.title = 'Pause music';
-                    localStorage.setItem('musicMuted', 'false');
+                    localStorage.setItem('musicEnabled', 'true');
+                    console.log('Music playing');
                 })
                 .catch(error => {
                     console.error('Play failed:', error);
+                    alert('Unable to play music. Please check your browser settings.');
                 });
         } else {
             audio.pause();
             playBtn.innerHTML = '▶️';
             playBtn.title = 'Play music';
-            localStorage.setItem('musicMuted', 'true');
+            localStorage.setItem('musicEnabled', 'false');
+            console.log('Music paused');
+        }
+    }
+
+    function updatePlayButton() {
+        const playBtn = document.getElementById('music-toggle');
+        if (!playBtn) return;
+
+        if (audio.paused) {
+            playBtn.innerHTML = '▶️';
+            playBtn.title = 'Play music';
+        } else {
+            playBtn.innerHTML = '⏸️';
+            playBtn.title = 'Pause music';
         }
     }
 
@@ -109,6 +136,7 @@
 
     function updateVolumeIcon() {
         const volumeBtn = document.getElementById('volume-toggle');
+        if (!volumeBtn) return;
         
         if (audio.volume === 0) {
             volumeBtn.innerHTML = '🔇';
@@ -121,6 +149,11 @@
             volumeBtn.title = 'Volume: High';
         }
     }
+
+    // Listen for audio events
+    audio.addEventListener('play', updatePlayButton);
+    audio.addEventListener('pause', updatePlayButton);
+    audio.addEventListener('ended', updatePlayButton);
 })();
 
 console.log('Music control loaded');
