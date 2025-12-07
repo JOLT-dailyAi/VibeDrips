@@ -8,10 +8,7 @@ and this project uses single decimal versioning: v1.0, v1.1, v1.2... v1.9, v2.0
 ## [Unreleased]
 
 ### Planned
-- Build system for CSS/JS concatenation
-- Performance optimizations
-- Additional theme variants
-- Component documentation
+- 
 
 ---
 
