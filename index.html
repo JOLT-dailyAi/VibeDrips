@@ -162,31 +162,16 @@
         </div>
     </footer>
 
-    <!-- Right-side Floating Controls (ORIGINAL) -->
+        <!-- Right-side Floating Controls (ORIGINAL) -->
     <div class="social-float">
         <button id="theme-toggle"></button>
-       <!-- <a href="https://www.instagram.com/vibedrips.dailyai/" target="_blank"><i class="fab fa-instagram"></i></a>   -->
+        <a href="https://www.instagram.com/vibedrips.dailyai/" target="_blank"><i class="fab fa-instagram"></i></a>
         <div class="currency-display" onclick="showCurrencyModal()">
             <span id="currency-trigger">INR</span>
         </div>
     </div>
     
-    <!-- Ko-fi Script (commented out) -->
-    <!--
-    <script src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"></script>
-    <script>
-        kofiWidgetOverlay.draw('dailyai', {
-            'type': 'floating-chat',
-            'floating-chat.donateButton.text': 'Support me',
-            'floating-chat.donateButton.background-color': '#00b9fe',
-            'floating-chat.donateButton.text-color': '#fff',
-            'floating-chat.donateButton.left': '20px',
-            'floating-chat.donateButton.bottom': '20px'
-        });
-    </script>
-    -->
-    
-    <!-- Left-side Floating Media Controls (NEW) -->
+    <!-- Left-side Floating Media Controls -->
     <div class="media-float">
         <!-- Linktree -->
         <a href="https://linktr.ee/JOLT_dailyAi" target="_blank" rel="noopener" class="linktree-button" aria-label="Linktree">
@@ -195,11 +180,21 @@
         
         <!-- Music control button added here by JS -->
     </div>
+
+    <!-- Center Bottom Badge (Credits/Share Toggle) -->
+    <div class="center-badge-container">
+        <!-- Dynamically populated by JS -->
+    </div>
     
     <!-- Background Music -->
     <audio id="bg-music" loop>
         <source src="assets/music/Losstime.mp3" type="audio/mpeg">
     </audio>
+
+    <!-- Toast Notification (for clipboard fallback) -->
+    <div id="toast-notification" class="toast-notification hidden">
+        ✓ Link copied to clipboard!
+    </div>
     
     <!-- Core Scripts - Load in order -->
     <script src="assets/js/dom-cache.js"></script>
@@ -221,11 +216,12 @@
         });
     </script>
 
-    <!-- PWA Scripts - Load after app initialization -->
+    <!-- PWA Scripts -->
     <script src="assets/js/install-prompt.js"></script>
 
-    <!-- Music Control - Load after DOM ready -->
+    <!-- Music Control & Share -->
     <script src="assets/js/music-control.js"></script>
+    <script src="assets/js/share.js"></script>
     
     <!-- PWA Service Worker Registration -->
     <script>
@@ -237,3 +233,4 @@
     </script>
 </body>
 </html>
+
