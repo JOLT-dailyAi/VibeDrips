@@ -37,6 +37,25 @@
     letter-spacing: 0.5px;
 }
 
+/* Glass theme - Stats Bar */
+body.glass-theme .stat-item {
+    background: rgba(255, 255, 255, var(--glass-refraction));
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 
+        0 4px 15px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+body.glass-theme .stat-number {
+    color: white;
+}
+
+body.glass-theme .stat-label {
+    color: rgba(255, 255, 255, 0.9);
+}
+
 /* Responsive - Only apply single column on actual mobile screens */
 @media (max-width: 600px) {
     .products-grid {
