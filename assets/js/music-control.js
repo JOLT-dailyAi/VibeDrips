@@ -75,14 +75,23 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Show share button
-    function showShareBadge() {
-        centerBadgeContainer.innerHTML = `
+    // Show share button (with install button if PWA installable)
+function showShareBadge() {
+    centerBadgeContainer.innerHTML = `
+        <div style="display: flex; gap: 10px; align-items: center;">
             <button class="center-badge" id="share-badge" onclick="handleShare()">
                 SHARE ↗️
             </button>
-        `;
-    }
+            <button class="center-badge" id="install-badge" style="display: none;" onclick="handleInstall()">
+                📱 INSTALL
+            </button>
+        </div>
+    `;
+    
+    // Check if PWA is installable and show install button
+    checkPWAInstallable();
+}
+
     
     // Show credits badge with truncation
     function showCreditsBadge() {
@@ -311,6 +320,70 @@ document.addEventListener('DOMContentLoaded', function() {
             truncateCreditsText();
         }
     });
+
+    // Check if PWA is installable
+function checkPWAInstallable() {
+    const installBtn = document.getElementById('install-badge');
+    if (!installBtn) return;
+    
+    // Show if deferredPrompt exists (set by install-prompt.js)
+    if (window.deferredPrompt) {
+        installBtn.style.display = 'inline-flex';
+    }
+    
+    // Listen for beforeinstallprompt
+    window.addEventListener('beforeinstallprompt', (e) => {
+        if (installBtn) {
+            installBtn.style.display = 'inline-flex';
+        }
+    });
+    
+    // Hide after installation
+    window.addEventListener('appinstalled', () => {
+        if (installBtn) {
+            installBtn.style.display = 'none';
+        }
+    });
+}
+
+// Make handleInstall global
+window.handleInstall = function() {
+    if (window.deferredPrompt) {
+        window.deferredPrompt.prompt();
+        window.deferredPrompt.userChoice.then((result) => {
+            console.log('Install result:', result.outcome);
+            window.deferredPrompt = null;
+            
+            // Hide install button
+            const installBtn = document.getElementById('install-badge');
+            if (installBtn) {
+                installBtn.style.display = 'none';
+            }
+        });
+    } else {
+        // Fallback: show manual instructions
+        showInstallInstructions();
+    }
+};
+
+// Show manual install instructions
+function showInstallInstructions() {
+    const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+    const isAndroid = /Android/.test(navigator.userAgent);
+    
+    let message = '';
+    
+    if (isIOS) {
+        message = 'To install VibeDrips on iOS:\n\n1. Tap Share (□↑) in Safari\n2. Scroll and tap "Add to Home Screen"\n3. Tap "Add"';
+    } else if (isAndroid) {
+        message = 'To install VibeDrips:\n\n1. Tap menu (⋮) in browser\n2. Select "Add to Home Screen"\n3. Tap "Install"';
+    } else {
+        message = 'To install VibeDrips:\n\n1. Click install icon in address bar\n2. Or use browser menu > "Install VibeDrips"';
+    }
+    
+    alert(message);
+}
+
     
     console.log('✅ Music control fully initialized');
 });
