@@ -16,7 +16,7 @@
 @import url('./components/modals.css');
 @import url('./components/badges.css');
 @import url('./components/stats.css');
-@import url('./components/install-banner.css'); /* NEW: Install prompt banner */
+@import url('./components/install-banner.css');
 
 /* States */
 @import url('./states/loading.css');
@@ -26,7 +26,7 @@
 /* Utils */
 @import url('./utils/floating.css');
 @import url('./utils/responsive.css');
-@import url('./utils/glassmorphism.css'); /* NEW: Global glassmorphism effect */
+@import url('./utils/glass.css'); /* Glass morphism with CSS variables */
 
 /* Themes (load last) */
 @import url('./themes/light-theme.css');
