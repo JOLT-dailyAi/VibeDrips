@@ -30,19 +30,6 @@
     position: relative;
 }
 
-#theme-toggle::before {
-    content: "☀️";
-    font-size: 24px;
-}
-
-body.dark-theme #theme-toggle::before {
-    content: "🌙";
-}
-
-body.glass-theme #theme-toggle::before {
-    content: "🪟";
-}
-
 #theme-toggle:hover {
     transform: scale(1.1);
 }
