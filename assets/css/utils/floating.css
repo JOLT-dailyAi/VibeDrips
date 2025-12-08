@@ -545,9 +545,10 @@ body.dark-theme .credits-tooltip-divider {
         gap: 6px;
     }
 
+    /* 
     .credits-tooltip {
         max-width: calc(100vw - 40px);
-        white-space: normal;
-    }
+        white-space: normal;             
+    }    */
 }
 
