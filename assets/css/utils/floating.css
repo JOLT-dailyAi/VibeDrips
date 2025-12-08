@@ -122,44 +122,44 @@ body.dark-theme .social-float .currency-display:hover {
     align-items: center;
 }
 
-/* Linktree Button - Match Currency Style */
+/* Linktree Button - EXACT match to Currency style */
 .linktree-button {
     width: 50px;
     height: 50px;
     border-radius: 50%;
     background: white; /* White bg like currency */
-    border: 2px solid #43E97B; /* Green border */
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    border: 2px solid #43E97B; /* Green border (matches Linktree brand) */
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     text-decoration: none;
     padding: 0;
-    overflow: hidden;
 }
 
 .linktree-button:hover {
     transform: scale(1.1);
-    background: #43E97B; /* Green on hover */
+    background: #43E97B; /* Green background on hover */
+    border-color: #43E97B;
 }
 
 .linktree-button img {
     width: 28px;
     height: 28px;
     object-fit: contain;
-    transition: filter 0.3s ease;
+    /* Image stays as-is (black icon) */
 }
 
 .linktree-button:hover img {
-    filter: brightness(0) invert(1); /* White icon on hover */
+    filter: brightness(0) invert(1); /* Turn white on hover */
 }
 
-/* Dark theme */
+/* Dark theme - Match currency exactly */
 body.dark-theme .linktree-button {
-    background: rgba(0, 0, 0, 0.8); /* Black bg like currency */
-    border-color: rgba(67, 233, 123, 0.5); /* Faded green border */
+    background: rgba(0, 0, 0, 0.8); /* Black bg like currency dark theme */
+    border-color: rgba(67, 233, 123, 0.3); /* Faded green border */
 }
 
 body.dark-theme .linktree-button img {
@@ -167,9 +167,22 @@ body.dark-theme .linktree-button img {
 }
 
 body.dark-theme .linktree-button:hover {
-    background: rgba(67, 233, 123, 0.25);
+    background: rgba(67, 233, 123, 0.25); /* Subtle green on hover */
+    border-color: rgba(67, 233, 123, 0.5);
 }
 
+/* Mobile */
+@media (max-width: 768px) {
+    .linktree-button {
+        width: 45px;
+        height: 45px;
+    }
+
+    .linktree-button img {
+        width: 24px;
+        height: 24px;
+    }
+}
 
 /* Music Control Button */
 .music-control-button {
