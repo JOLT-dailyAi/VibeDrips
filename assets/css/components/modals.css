@@ -58,6 +58,41 @@
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
+/* Glass theme - Currency Modal */
+body.glass-theme .currency-content {
+    background: rgba(255, 255, 255, var(--glass-refraction));
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+body.glass-theme .currency-content h2 {
+    color: white;
+}
+
+body.glass-theme .currency-content p {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+body.glass-theme .currency-select {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+body.glass-theme .currency-select:focus {
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+body.glass-theme .currency-select option {
+    background: #2E1D80;
+    color: white;
+}
+
 /* Product Modal */
 .simple-modal {
     position: fixed;
@@ -86,6 +121,17 @@
     margin: 20px;
     padding: 20px;
     z-index: 1001;
+}
+
+/* Glass theme - Product Modal */
+body.glass-theme .simple-modal-content {
+    background: rgba(255, 255, 255, var(--glass-refraction));
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .dynamic-modal {
@@ -124,6 +170,14 @@
     margin: 0;
 }
 
+body.glass-theme .simple-modal-header {
+    border-bottom-color: rgba(255, 255, 255, 0.3);
+}
+
+body.glass-theme .simple-modal-header h2 {
+    color: white;
+}
+
 .simple-modal-header button {
     background: none;
     border: 2px solid #E53E3E;
@@ -147,6 +201,17 @@
     color: #C53030;
 }
 
+body.glass-theme .simple-modal-header button {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+body.glass-theme .simple-modal-header button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
 .simple-modal-body {
     padding: 30px;
     text-align: center;
@@ -164,8 +229,16 @@
     color: #718096;
 }
 
+body.glass-theme .simple-modal-body p {
+    color: rgba(255, 255, 255, 0.9);
+}
+
 .simple-modal-body p strong {
     color: #667EEA;
+}
+
+body.glass-theme .simple-modal-body p strong {
+    color: white;
 }
 
 .simple-modal-body .amazon-button {
