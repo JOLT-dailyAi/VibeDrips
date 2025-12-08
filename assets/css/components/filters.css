@@ -40,6 +40,33 @@
     transform: translateY(-2px);
 }
 
+/* Glass theme - Time Categories */
+body.glass-theme .time-category {
+    background: rgba(255, 255, 255, var(--glass-refraction));
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    box-shadow: 
+        0 4px 15px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+body.glass-theme .time-category:hover {
+    background: rgba(255, 255, 255, calc(var(--glass-refraction) + 0.05));
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+body.glass-theme .time-category.active {
+    background: rgba(255, 255, 255, calc(var(--glass-refraction) + 0.1));
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    color: white;
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.15),
+        inset 0 2px 0 rgba(255, 255, 255, 0.7);
+}
+
 /* Filter Controls */
 .filter-controls {
     display: grid;
@@ -50,6 +77,17 @@
     border-radius: 15px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     overflow: hidden;
+}
+
+/* Glass theme - Filter Controls Container */
+body.glass-theme .filter-controls {
+    background: rgba(255, 255, 255, var(--glass-refraction));
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 
+        0 4px 20px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 .filter-group input,
@@ -76,11 +114,36 @@
     width: 160px;
 }
 
+/* Glass theme - Filter Inputs */
+body.glass-theme .filter-group input,
+body.glass-theme .filter-group select {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+body.glass-theme .filter-group input::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+body.glass-theme .filter-group select option {
+    background: #2E1D80;
+    color: white;
+}
+
 .filter-group input:focus,
 .filter-group select:focus {
     outline: none;
     border-color: #667eea;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+body.glass-theme .filter-group input:focus,
+body.glass-theme .filter-group select:focus {
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
 }
 
 .filter-group input::placeholder,
