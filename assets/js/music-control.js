@@ -1,4 +1,4 @@
-// music-control.js - Background music control with mobile detection
+// music-control.js - Background music control with credits/share toggle
 
 console.log('🎵 Music control script loading...');
 
@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const mediaFloat = document.querySelector('.media-float');
     const audio = document.getElementById('bg-music');
+    const centerBadgeContainer = document.querySelector('.center-badge-container');
     
     if (!mediaFloat) {
         console.error('❌ .media-float container not found!');
@@ -17,19 +18,25 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('❌ #bg-music audio element not found!');
         return;
     }
+
+    if (!centerBadgeContainer) {
+        console.error('❌ .center-badge-container not found!');
+        return;
+    }
     
-    console.log('✅ Found media-float and audio element');
+    console.log('✅ Found required containers');
     
-    // Detect if mobile device
+    // Detect mobile
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
-    let hideTimeout;
+    let hideVolumeTimeout;
+    let hideTooltipTimeout;
+    let currentTooltip = null;
     
-    // Create music control
+    // Create music control button
     const musicWrapper = document.createElement('div');
     musicWrapper.className = 'music-control-wrapper';
     
-    // On mobile, hide volume controls (they don't work anyway)
     if (isMobile) {
         musicWrapper.innerHTML = `
             <button id="music-toggle" class="music-control-button" title="Play music">
@@ -52,26 +59,183 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     mediaFloat.appendChild(musicWrapper);
-    console.log('✅ Music control added to DOM');
     
     const volumePanel = document.querySelector('.volume-panel');
     
-    // Set initial volume (desktop only)
     if (!isMobile) {
         audio.volume = 0.5;
     }
     
-    // Function to show volume panel temporarily (desktop only)
+    // Update center badge based on music state
+    function updateCenterBadge() {
+        if (audio.paused) {
+            showShareBadge();
+        } else {
+            showCreditsBadge();
+        }
+    }
+    
+    // Show share button
+    function showShareBadge() {
+        centerBadgeContainer.innerHTML = `
+            <button class="center-badge" id="share-badge" onclick="handleShare()">
+                SHARE ↗️
+            </button>
+        `;
+    }
+    
+    // Show credits badge with truncation
+    function showCreditsBadge() {
+        const songName = 'Losstime';
+        const artistName = 'Creepy Nuts';
+        const fullText = `♪ ${songName} • ${artistName} 🎵`;
+        
+        centerBadgeContainer.innerHTML = `
+            <div style="position: relative;">
+                <a href="https://youtu.be/O6WjVGEVbNc" 
+                   target="_blank" 
+                   rel="noopener"
+                   class="center-badge" 
+                   id="credits-badge">
+                    <span class="credits-text">${fullText}</span>
+                </a>
+                <div class="credits-tooltip" id="credits-tooltip">
+                    <div class="credits-tooltip-title">🎵 ${songName}</div>
+                    <div class="credits-tooltip-artist">${artistName}</div>
+                    <div class="credits-tooltip-divider"></div>
+                    <a href="https://youtu.be/O6WjVGEVbNc" 
+                       target="_blank" 
+                       rel="noopener"
+                       class="credits-tooltip-link"
+                       onclick="audio.pause()">
+                        Listen on YouTube ↗️
+                    </a>
+                </div>
+            </div>
+        `;
+        
+        // Truncate text dynamically on mobile
+        setTimeout(() => {
+            truncateCreditsText();
+        }, 100);
+        
+        // Setup tooltip behavior
+        setupCreditsTooltip();
+    }
+    
+    // Truncate credits text to fit
+    function truncateCreditsText() {
+        const badge = document.getElementById('credits-badge');
+        const textSpan = badge?.querySelector('.credits-text');
+        
+        if (!badge || !textSpan) return;
+        
+        const maxWidth = window.innerWidth < 768 
+            ? window.innerWidth - 140  // Mobile: leave space for side buttons
+            : 400; // Desktop
+        
+        const fullText = '♪ Losstime • Creepy Nuts 🎵';
+        textSpan.textContent = fullText;
+        
+        // Check if truncation needed
+        if (badge.offsetWidth > maxWidth) {
+            const shortText = '♪ Losstime... 🎵';
+            textSpan.textContent = shortText;
+        }
+    }
+    
+    // Setup credits tooltip behavior
+    function setupCreditsTooltip() {
+        const badge = document.getElementById('credits-badge');
+        const tooltip = document.getElementById('credits-tooltip');
+        
+        if (!badge || !tooltip) return;
+        
+        // Desktop: hover
+        if (!isMobile) {
+            badge.addEventListener('mouseenter', () => {
+                showTooltip(tooltip);
+            });
+            
+            badge.addEventListener('mouseleave', () => {
+                hideTooltip(tooltip);
+            });
+            
+            // Click opens YouTube
+            badge.addEventListener('click', (e) => {
+                audio.pause();
+            });
+        } else {
+            // Mobile: tap to show tooltip
+            let tapCount = 0;
+            
+            badge.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                if (tapCount === 0) {
+                    // First tap: show tooltip
+                    showTooltip(tooltip);
+                    tapCount = 1;
+                    
+                    // Reset after delay
+                    setTimeout(() => {
+                        tapCount = 0;
+                    }, 6000);
+                }
+                // Second tap handled by link inside tooltip
+            });
+        }
+        
+        // Click outside to close
+        document.addEventListener('click', (e) => {
+            if (tooltip && !badge.contains(e.target) && !tooltip.contains(e.target)) {
+                hideTooltip(tooltip);
+            }
+        });
+    }
+    
+    // Show tooltip
+    function showTooltip(tooltip) {
+        if (!tooltip) return;
+        
+        // Close any existing tooltip
+        if (currentTooltip && currentTooltip !== tooltip) {
+            hideTooltip(currentTooltip);
+        }
+        
+        tooltip.classList.add('visible');
+        currentTooltip = tooltip;
+        
+        // Auto-hide after 5 seconds
+        if (hideTooltipTimeout) {
+            clearTimeout(hideTooltipTimeout);
+        }
+        
+        hideTooltipTimeout = setTimeout(() => {
+            hideTooltip(tooltip);
+        }, 5000);
+    }
+    
+    // Hide tooltip
+    function hideTooltip(tooltip) {
+        if (!tooltip) return;
+        tooltip.classList.remove('visible');
+        if (currentTooltip === tooltip) {
+            currentTooltip = null;
+        }
+    }
+    
+    // Show volume panel
     function showVolumePanel() {
         if (isMobile || !volumePanel) return;
         
         volumePanel.classList.add('visible');
         
-        if (hideTimeout) {
-            clearTimeout(hideTimeout);
+        if (hideVolumeTimeout) {
+            clearTimeout(hideVolumeTimeout);
         }
         
-        hideTimeout = setTimeout(() => {
+        hideVolumeTimeout = setTimeout(() => {
             volumePanel.classList.remove('visible');
         }, 5000);
     }
@@ -83,6 +247,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.innerHTML = '⏸️';
                 this.title = 'Pause music';
                 showVolumePanel();
+                updateCenterBadge();
                 console.log('▶️ Music playing');
             }).catch(err => {
                 console.error('❌ Play failed:', err);
@@ -92,13 +257,13 @@ document.addEventListener('DOMContentLoaded', function() {
             this.innerHTML = '▶️';
             this.title = 'Play music';
             showVolumePanel();
+            updateCenterBadge();
             console.log('⏸️ Music paused');
         }
     });
     
-    // Desktop-only volume controls
+    // Desktop volume controls
     if (!isMobile) {
-        // Mute toggle
         document.getElementById('volume-toggle').addEventListener('click', function() {
             const slider = document.getElementById('volume-slider');
             if (audio.volume > 0) {
@@ -114,7 +279,6 @@ document.addEventListener('DOMContentLoaded', function() {
             showVolumePanel();
         });
         
-        // Volume slider
         document.getElementById('volume-slider').addEventListener('input', function() {
             const btn = document.getElementById('volume-toggle');
             audio.volume = this.value;
@@ -129,11 +293,24 @@ document.addEventListener('DOMContentLoaded', function() {
             showVolumePanel();
         });
         
-        // Show panel on hover
         musicWrapper.addEventListener('mouseenter', function() {
             showVolumePanel();
         });
     }
     
-    console.log('✅ Music control fully initialized' + (isMobile ? ' (mobile mode - no volume controls)' : ' with auto-hide volume'));
+    // Initialize with share badge
+    updateCenterBadge();
+    
+    // Listen for audio state changes
+    audio.addEventListener('play', updateCenterBadge);
+    audio.addEventListener('pause', updateCenterBadge);
+    
+    // Handle window resize for truncation
+    window.addEventListener('resize', () => {
+        if (!audio.paused) {
+            truncateCreditsText();
+        }
+    });
+    
+    console.log('✅ Music control fully initialized');
 });
