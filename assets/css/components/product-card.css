@@ -14,6 +14,24 @@
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
+/* Glass theme - Product Cards */
+body.glass-theme .product-card {
+    background: rgba(255, 255, 255, var(--glass-refraction));
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    box-shadow: 
+        0 4px 15px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+body.glass-theme .product-card:hover {
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
 /* Product Image */
 .product-image {
     position: relative;
@@ -23,6 +41,10 @@
     align-items: center;
     justify-content: center;
     background: #f8f9fa;
+}
+
+body.glass-theme .product-image {
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .product-image img {
@@ -47,6 +69,11 @@
     background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
 }
 
+body.glass-theme .product-image-placeholder {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+    color: rgba(255, 255, 255, 0.5);
+}
+
 /* Product Info */
 .product-info {
     padding: 15px;
@@ -61,6 +88,10 @@
     margin-bottom: 8px;
 }
 
+body.glass-theme .product-category {
+    color: rgba(255, 255, 255, 0.9);
+}
+
 .product-title {
     font-size: 18px;
     font-weight: 700;
@@ -73,6 +104,10 @@
     overflow: hidden;
 }
 
+body.glass-theme .product-title {
+    color: white;
+}
+
 .product-description {
     color: #718096;
     font-size: 14px;
@@ -82,11 +117,19 @@
     overflow: hidden;
 }
 
+body.glass-theme .product-description {
+    color: rgba(255, 255, 255, 0.85);
+}
+
 .product-price {
     font-size: 16px;
     font-weight: 600;
     color: #333;
     margin-bottom: 10px;
+}
+
+body.glass-theme .product-price {
+    color: white;
 }
 
 /* Product Meta */
@@ -103,14 +146,26 @@
     font-weight: 500;
 }
 
+body.glass-theme .brand {
+    color: rgba(255, 255, 255, 0.9);
+}
+
 .rating {
     color: #ffcc00;
     font-size: 13px;
     font-weight: 500;
 }
 
+body.glass-theme .rating {
+    color: #ffd700;
+}
+
 .rating.no-rating {
     color: #999;
+}
+
+body.glass-theme .rating.no-rating {
+    color: rgba(255, 255, 255, 0.5);
 }
 
 /* Section Header */
