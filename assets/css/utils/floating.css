@@ -110,6 +110,27 @@ body.dark-theme .social-float .currency-display:hover {
     background: rgba(255, 255, 255, 0.25);
 }
 
+/* Currency button active state when modal is open */
+.social-float .currency-display.active {
+    background: #667eea;
+    transform: scale(1.05);
+    border-color: #667eea;
+}
+
+.social-float .currency-display.active span {
+    color: white;
+}
+
+body.dark-theme .social-float .currency-display.active {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+body.dark-theme .social-float .currency-display.active span {
+    color: white;
+}
+
+
 /* LEFT-SIDE FLOATING ICONS */
 .media-float {
     position: fixed;
