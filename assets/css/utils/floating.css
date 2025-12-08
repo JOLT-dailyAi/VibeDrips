@@ -485,7 +485,7 @@ body.dark-theme .credits-tooltip-divider {
     background: white;
     border-radius: 16px;
     padding: 28px 24px;
-    max-width: 400px;
+    max-width: 420px;
     width: 90%;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     max-height: 80vh;
@@ -501,22 +501,56 @@ body.dark-theme .install-modal-content {
     margin: 0 0 20px 0;
     text-align: center;
     color: #333;
-    font-size: 22px;
+    font-size: 20px;
+    font-weight: 600;
 }
 
 body.dark-theme .install-modal-content h3 {
     color: white;
 }
 
-.install-modal-content pre {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+.install-instructions {
     font-size: 15px;
-    color: #555;
+    line-height: 1.8;
+    color: #444;
     margin: 0 0 24px 0;
+    text-align: left;
 }
 
-body.dark-theme .install-modal-content pre {
+body.dark-theme .install-instructions {
     color: #ccc;
+}
+
+.install-instructions br {
+    margin-bottom: 8px;
+}
+
+/* Inline icon styling */
+.inline-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: #667eea;
+    color: white;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 0 4px;
+    vertical-align: middle;
+}
+
+.share-icon {
+    background: #007AFF; /* iOS blue */
+}
+
+.install-icon {
+    background: #34A853; /* Chrome green */
+}
+
+body.dark-theme .inline-icon {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .install-modal-close {
@@ -535,6 +569,22 @@ body.dark-theme .install-modal-content pre {
 .install-modal-close:hover {
     background: #764ba2;
     transform: scale(1.02);
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+    .install-modal-content {
+        max-width: 90%;
+        padding: 24px 20px;
+    }
+    
+    .install-modal-content h3 {
+        font-size: 18px;
+    }
+    
+    .install-instructions {
+        font-size: 14px;
+    }
 }
 
 
