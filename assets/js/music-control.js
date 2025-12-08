@@ -75,21 +75,24 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Show share button (with install button if PWA installable)
+    // Show share button (with install button - always visible unless already installed)
     function showShareBadge() {
+        // Check if already installed (PWA standalone mode)
+        const isInstalled = window.matchMedia('(display-mode: standalone)').matches 
+                         || window.navigator.standalone === true;
+        
         centerBadgeContainer.innerHTML = `
             <div style="display: flex; gap: 10px; align-items: center;">
                 <button class="center-badge" id="share-badge" onclick="handleShare()">
                     SHARE ↗️
                 </button>
-                <button class="center-badge" id="install-badge" style="display: none;" onclick="handleInstall()">
-                    📱 INSTALL
-                </button>
+                ${!isInstalled ? `
+                    <button class="center-badge" id="install-badge" onclick="handleInstall()">
+                        📱 INSTALL
+                    </button>
+                ` : ''}
             </div>
         `;
-        
-        // Check if PWA is installable and show install button
-        checkPWAInstallable();
     }
     
     // Show credits badge with truncation
@@ -320,67 +323,132 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Check if PWA is installable
-    function checkPWAInstallable() {
-        const installBtn = document.getElementById('install-badge');
-        if (!installBtn) return;
-        
-        // Show if deferredPrompt exists (set by install-prompt.js)
-        if (window.deferredPrompt) {
-            installBtn.style.display = 'inline-flex';
-        }
-        
-        // Listen for beforeinstallprompt
-        window.addEventListener('beforeinstallprompt', (e) => {
-            if (installBtn) {
-                installBtn.style.display = 'inline-flex';
-            }
-        });
-        
-        // Hide after installation
-        window.addEventListener('appinstalled', () => {
-            if (installBtn) {
-                installBtn.style.display = 'none';
-            }
-        });
-    }
-
     // Make handleInstall global
     window.handleInstall = function() {
+        // Check if native prompt is available
         if (window.deferredPrompt) {
+            // Chrome/Edge: Use native prompt
             window.deferredPrompt.prompt();
             window.deferredPrompt.userChoice.then((result) => {
                 console.log('Install result:', result.outcome);
+                
+                if (result.outcome === 'accepted') {
+                    showToast('✓ Installing VibeDrips...');
+                }
+                
                 window.deferredPrompt = null;
                 
-                // Hide install button
+                // Remove install button after acceptance
                 const installBtn = document.getElementById('install-badge');
-                if (installBtn) {
-                    installBtn.style.display = 'none';
+                if (installBtn && result.outcome === 'accepted') {
+                    setTimeout(() => {
+                        if (installBtn.parentElement) {
+                            installBtn.remove();
+                        }
+                    }, 2000);
                 }
             });
         } else {
-            // Fallback: show manual instructions
+            // Safari/Opera/Others: Show manual instructions
             showInstallInstructions();
         }
     };
 
-    // Show manual install instructions
+    // Show manual install instructions with device detection
     function showInstallInstructions() {
-        const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
-        const isAndroid = /Android/.test(navigator.userAgent);
+        const userAgent = navigator.userAgent;
+        const isIOS = /iPhone|iPad|iPod/.test(userAgent);
+        const isAndroid = /Android/.test(userAgent);
+        const isSafari = /Safari/.test(userAgent) && !/Chrome/.test(userAgent);
         
+        let title = 'Install VibeDrips';
         let message = '';
         
-        if (isIOS) {
-            message = 'To install VibeDrips on iOS:\n\n1. Tap Share (□↑) in Safari\n2. Scroll and tap "Add to Home Screen"\n3. Tap "Add"';
+        if (isIOS || isSafari) {
+            title = 'Install VibeDrips on iOS';
+            message = `
+📱 To install on iPhone/iPad:
+
+1. Tap the Share button (□↑) below
+2. Scroll down in the menu
+3. Tap "Add to Home Screen"
+4. Tap "Add" to confirm
+
+✨ You'll get a home screen icon!
+            `.trim();
         } else if (isAndroid) {
-            message = 'To install VibeDrips:\n\n1. Tap menu (⋮) in browser\n2. Select "Add to Home Screen"\n3. Tap "Install"';
+            title = 'Install VibeDrips';
+            message = `
+📱 To install on Android:
+
+1. Tap the menu (⋮) in your browser
+2. Look for "Add to Home Screen" or "Install App"
+3. Tap "Install" to confirm
+
+✨ You'll get a home screen icon!
+            `.trim();
         } else {
-            message = 'To install VibeDrips:\n\n1. Click install icon in address bar\n2. Or use browser menu > "Install VibeDrips"';
+            // Desktop (non-Chrome)
+            title = 'Install VibeDrips';
+            message = `
+💻 To install on desktop:
+
+• Look for an install icon (⊕) in the address bar
+• Or use browser menu > "Install VibeDrips"
+• Some browsers may not support installation
+
+✨ Get quick access from your desktop!
+            `.trim();
         }
         
-        alert(message);
+        // Use custom modal instead of alert
+        showInstallModal(title, message);
+    }
+
+    // Show custom install instructions modal
+    function showInstallModal(title, message) {
+        // Remove existing modal if any
+        const existing = document.querySelector('.install-modal');
+        if (existing) existing.remove();
+        
+        const modal = document.createElement('div');
+        modal.className = 'install-modal';
+        modal.innerHTML = `
+            <div class="install-modal-content">
+                <h3>${title}</h3>
+                <pre style="white-space: pre-wrap; text-align: left; line-height: 1.6;">${message}</pre>
+                <button class="install-modal-close" onclick="this.closest('.install-modal').remove()">
+                    Got it!
+                </button>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        setTimeout(() => modal.classList.add('visible'), 10);
+        
+        // Close on background click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.remove();
+            }
+        });
+    }
+
+    // Show toast notification (reuse from share.js)
+    function showToast(message) {
+        const toast = document.getElementById('toast-notification');
+        if (!toast) return;
+        
+        toast.textContent = message;
+        toast.classList.remove('hidden');
+        toast.classList.add('visible');
+        
+        setTimeout(() => {
+            toast.classList.remove('visible');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 300);
+        }, 3000);
     }
     
     console.log('✅ Music control fully initialized');
