@@ -1,0 +1,259 @@
+/* glass.css - Glass morphism styles with CSS variables */
+
+/* CSS Variables for dynamic glass control */
+:root {
+    --glass-blur: 5px;
+    --glass-refraction: 0.15;
+    --glass-depth: 0px;
+    --glass-border-radius: 20px;
+}
+
+/* Base glass effect */
+.glass {
+    background: rgba(255, 255, 255, var(--glass-refraction));
+    backdrop-filter: blur(var(--glass-blur)) saturate(120%);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(120%);
+    border-radius: var(--glass-border-radius);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+        inset 0 0 var(--glass-depth) 5px rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Top edge gradient shine */
+.glass::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.8),
+        transparent
+    );
+    pointer-events: none;
+}
+
+/* Left edge gradient highlight */
+.glass::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.8),
+        transparent,
+        rgba(255, 255, 255, 0.3)
+    );
+    pointer-events: none;
+}
+
+/* Glass hover effect */
+.glass-hover {
+    transition: all 0.3s ease;
+}
+
+.glass-hover:hover {
+    background: rgba(255, 255, 255, calc(var(--glass-refraction) + 0.05));
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 
+        0 12px 40px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.15),
+        inset 0 0 var(--glass-depth) 5px rgba(255, 255, 255, 0.15);
+}
+
+/* Glass Settings Panel */
+.glass-settings-panel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 520px;
+    max-width: 90vw;
+    max-height: 70vh;
+    z-index: 10000;
+    padding: 32px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.glass-settings-panel.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Panel header */
+.glass-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.glass-panel-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    user-select: none;
+}
+
+.glass-panel-title:hover {
+    opacity: 0.8;
+}
+
+.glass-panel-close {
+    width: 32px;
+    height: 32px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.glass-panel-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.7);
+}
+
+/* Sliders container */
+.glass-sliders {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    gap: 40px;
+    margin-top: 20px;
+}
+
+/* Individual slider wrapper */
+.glass-slider-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.glass-slider-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    text-align: center;
+}
+
+.glass-slider-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    min-width: 60px;
+    text-align: center;
+}
+
+/* Vertical slider */
+.glass-slider {
+    -webkit-appearance: slider-vertical;
+    writing-mode: bt-lr;
+    width: 8px;
+    height: 180px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+}
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+.glass-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s;
+}
+
+.glass-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Firefox */
+.glass-slider::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s;
+}
+
+.glass-slider::-moz-range-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Firefox track */
+.glass-slider::-moz-range-track {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+/* Min/Max labels */
+.glass-slider-limits {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.6);
+    text-align: center;
+    margin-top: 8px;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .glass-settings-panel {
+        width: 90vw;
+        padding: 24px;
+    }
+    
+    .glass-panel-title {
+        font-size: 20px;
+    }
+    
+    .glass-sliders {
+        gap: 24px;
+    }
+    
+    .glass-slider {
+        height: 150px;
+    }
+    
+    .glass-slider-value {
+        font-size: 16px;
+    }
+}
+
+/* Hidden utility */
+.glass-hidden {
+    display: none !important;
+}
