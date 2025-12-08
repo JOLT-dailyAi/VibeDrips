@@ -3,12 +3,150 @@
 All notable changes to VibeDrips will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project uses single decimal versioning: v1.0, v1.1, v1.2... v1.9, v2.0
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+---
 
-### Planned
-- ...thinking...
+## [1.3.0] - 2025-12-08
+
+### 🎵 Major Features
+
+#### Background Music Control
+- Added play/pause music button in left footer
+- Implemented auto-hide volume slider (5-second timeout on desktop)
+- Volume controls hidden on mobile due to browser limitations
+- Music file: "Losstime" by Creepy Nuts
+
+#### Song Credits Display
+- Dynamic credits badge appears when music plays
+- Displays: "♪ Losstime • Creepy Nuts 🎵"
+- Clickable YouTube link: https://youtu.be/O6WjVGEVbNc
+- Tooltip shows full song info on hover (desktop) or first tap (mobile)
+- Smart text truncation on mobile devices
+- Auto-hide tooltip after 5 seconds
+
+#### Share & Install Buttons
+- Native Web Share API integration for sharing VibeDrips
+- PWA install button with browser-specific handling
+- Both buttons appear in center footer when music is paused
+- Share content: "VibeDrips - Drops that Drip" with tagline
+- Clipboard fallback for browsers without Web Share API
+- Toast notifications for copy confirmations
+
+#### PWA Installation
+- Native install prompt on Chrome/Edge browsers
+- Custom instruction modals for Safari/iOS/Opera
+- Browser and device-specific installation guides
+- Install button auto-hides after app is installed
+- Detects standalone mode to prevent duplicate installs
+
+### Added
+- **New Files:**
+  - `assets/js/share.js` - Share functionality with native API
+  - `assets/music/Losstime.mp3` - Background music file
+  
+- **UI Components:**
+  - Music control button with play/pause toggle
+  - Volume panel with slider and mute button
+  - Credits badge with tooltip system
+  - Share button with native integration
+  - Install button with smart detection
+  - Toast notification system
+  - Install instruction modal
+  - Center badge container for dynamic content
+
+- **Features:**
+  - Auto-hide mechanisms (5-second timers for volume & tooltips)
+  - Device/browser detection for install instructions
+  - Dynamic text truncation algorithm for mobile
+  - Tooltip system with click-outside-to-close
+  - Modal system with backdrop blur
+  - Web Share API with clipboard fallback
+
+### Changed
+- **Footer Redesign:**
+  - Left side: Linktree + Music control
+  - Center: Dynamic badge (Credits or Share/Install)
+  - Right side: Theme toggle + Currency selector
+  - Replaced Instagram icon with Linktree button
+  
+- **Button Styling:**
+  - Linktree button now matches currency button style (white bg, colored border)
+  - Currency text made bold (font-weight: bold)
+  - All footer icons standardized to 50px desktop, 45px mobile
+  
+- **Mobile Optimization:**
+  - Center badge font size reduced to 11px
+  - Tighter padding: 8px 14px (was 8px 16px)
+  - Max-width increased to calc(100vw - 160px) to prevent overlap
+  - Gap reduced to 6px between icon and text
+  - All footer elements aligned to same 45px height
+
+- **Dark Theme:**
+  - Currency button background: rgba(0, 0, 0, 0.8) instead of transparent
+  - Linktree button background: rgba(0, 0, 0, 0.8) in dark mode
+  - All tooltips and modals adapt to dark theme
+  - Consistent opacity and border styling
+
+### Removed
+- Instagram icon from right footer (replaced by Linktree on left)
+
+### Fixed
+- Currency display button transparency issue in dark theme
+- Center badge vertical alignment on mobile (was elevated)
+- Footer icon horizontal alignment across all screen sizes
+- Volume controls incorrectly showing on mobile browsers
+- Tooltip text wrapping on mobile (now single line with proper width)
+- Linktree icon background color mismatch
+
+### Technical
+- **JavaScript:**
+  - Rewrote `music-control.js` with modular functions
+  - Added global `handleShare()` and `handleInstall()` functions
+  - Implemented `beforeinstallprompt` event handling
+  - Browser/device detection using navigator.userAgent
+  - Display mode detection for PWA standalone check
+  
+- **CSS:**
+  - Added `.center-badge-container` with fixed positioning
+  - Implemented `.credits-tooltip` with arrow pointer
+  - Created `.install-modal` with backdrop and content styling
+  - Added `.toast-notification` for clipboard feedback
+  - Mobile-first responsive design with @media queries
+  
+- **PWA:**
+  - Updated `install-prompt.js` to store `deferredPrompt` globally
+  - Web Share API feature detection
+  - Clipboard API with document.execCommand fallback
+
+### Browser Support
+- Chrome: ✅ Full support (native install)
+- Edge: ✅ Full support (native install)
+- Safari: ✅ Functional (manual install instructions)
+- Opera: ✅ Functional (manual install instructions)
+- Firefox: ✅ Functional (manual install instructions)
+- iOS Safari/Chrome: ✅ Share & manual install
+- Android Chrome/Opera: ✅ Share & install support
+
+### Performance
+- Tooltips render only when needed (not in DOM by default)
+- Lazy initialization of music controls
+- Efficient event delegation for dynamic elements
+- Minimal DOM manipulations with innerHTML updates
+
+### User Experience
+- **Desktop:**
+  - Hover to preview volume slider
+  - Hover credits for full song information
+  - One-click share and install
+  - Native browser install prompt
+  
+- **Mobile:**
+  - Tap music to play, credits appear automatically
+  - Tap credits once to see full tooltip
+  - Tap YouTube link in tooltip to open song
+  - Native share sheet integration
+  - Browser-specific install instructions
 
 ---
 
