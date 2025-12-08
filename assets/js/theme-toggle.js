@@ -4,7 +4,7 @@ console.log('🎨 Theme toggle module loading...');
 
 // Theme state
 const ThemeState = {
-    current: 'light', // 'light', 'dark', or 'glass'
+    current: 'glass', // 'light', 'dark', or 'glass'
     button: null
 };
 
@@ -113,8 +113,8 @@ function loadTheme() {
             ThemeState.current = saved;
             console.log(`💾 Theme loaded: ${saved}`);
         } else {
-            ThemeState.current = 'light';
-            console.log('💾 Using default theme: light');
+            ThemeState.current = 'glass';
+            console.log('💾 Using default theme: glass');
         }
         
         // Apply loaded theme (without opening panel)
