@@ -360,50 +360,142 @@ document.addEventListener('DOMContentLoaded', function() {
         const isIOS = /iPhone|iPad|iPod/.test(userAgent);
         const isAndroid = /Android/.test(userAgent);
         const isSafari = /Safari/.test(userAgent) && !/Chrome/.test(userAgent);
+        const isChrome = /Chrome/.test(userAgent) && !/Edg/.test(userAgent);
+        const isOpera = /OPR|Opera/.test(userAgent);
         
         let title = 'Install VibeDrips';
         let message = '';
         
-        if (isIOS || isSafari) {
-            title = 'Install VibeDrips on iOS';
-            message = `
-📱 To install on iPhone/iPad:
-
-1. Tap the Share button (□↑) below
-2. Scroll down in the menu
-3. Tap "Add to Home Screen"
-4. Tap "Add" to confirm
-
-✨ You'll get a home screen icon!
-            `.trim();
+        if (isIOS) {
+            if (isSafari) {
+                // Safari iOS
+                title = 'Install on iPhone/iPad (Safari)';
+                message = `
+    📱 To install VibeDrips:
+    
+    1. Tap the Share icon [image:2] in the toolbar
+       (bottom of screen on iPhone, top on iPad)
+       
+    2. Scroll down and tap "Add to Home Screen"
+    
+    3. Tap "Add" to confirm
+    
+    ✨ App icon will appear on your home screen!
+                `.trim();
+            } else if (isChrome) {
+                // Chrome iOS
+                title = 'Install on iPhone/iPad (Chrome)';
+                message = `
+    📱 To install VibeDrips:
+    
+    1. Tap the Share icon [image:2] in the address bar
+       (top right corner)
+       
+    2. Scroll down and tap "Add to Home Screen"
+    
+    3. Tap "Add" to confirm
+    
+    ✨ App icon will appear on your home screen!
+                `.trim();
+            } else if (isOpera) {
+                // Opera iOS
+                title = 'Install on iPhone/iPad (Opera)';
+                message = `
+    📱 To install VibeDrips:
+    
+    1. Tap the Opera menu (bottom center)
+    
+    2. Find and tap the Share icon [image:2]
+    
+    3. Scroll down and tap "Add to Home Screen"
+    
+    4. Tap "Add" to confirm
+    
+    ✨ App icon will appear on your home screen!
+                `.trim();
+            } else {
+                // Other iOS browsers
+                title = 'Install on iPhone/iPad';
+                message = `
+    📱 To install VibeDrips:
+    
+    1. Look for the Share icon [image:2]
+       (usually in browser menu or toolbar)
+       
+    2. Tap "Add to Home Screen"
+    
+    3. Tap "Add" to confirm
+    
+    ✨ App icon will appear on your home screen!
+                `.trim();
+            }
         } else if (isAndroid) {
-            title = 'Install VibeDrips';
-            message = `
-📱 To install on Android:
-
-1. Tap the menu (⋮) in your browser
-2. Look for "Add to Home Screen" or "Install App"
-3. Tap "Install" to confirm
-
-✨ You'll get a home screen icon!
-            `.trim();
+            if (isChrome) {
+                // Chrome Android
+                title = 'Install on Android (Chrome)';
+                message = `
+    📱 To install VibeDrips:
+    
+    1. Tap the menu icon (⋮) in the top right
+    
+    2. Look for "Add to Home screen" or "Install app"
+    
+    3. Tap "Install" to confirm
+    
+    ✨ App icon will appear on your home screen!
+                `.trim();
+            } else if (isOpera) {
+                // Opera Android
+                title = 'Install on Android (Opera)';
+                message = `
+    📱 To install VibeDrips:
+    
+    1. Tap the Opera menu (⊕) at the bottom
+    
+    2. Look for "Add to Home screen"
+    
+    3. Tap "Add" to confirm
+    
+    ✨ App icon will appear on your home screen!
+                `.trim();
+            } else {
+                // Other Android browsers
+                title = 'Install on Android';
+                message = `
+    📱 To install VibeDrips:
+    
+    1. Tap the browser menu (⋮ or ≡)
+    
+    2. Look for "Add to Home screen" or "Install app"
+    
+    3. Tap "Install" to confirm
+    
+    ✨ App icon will appear on your home screen!
+                `.trim();
+            }
         } else {
-            // Desktop (non-Chrome)
-            title = 'Install VibeDrips';
+            // Desktop
+            title = 'Install on Desktop';
             message = `
-💻 To install on desktop:
-
-• Look for an install icon (⊕) in the address bar
-• Or use browser menu > "Install VibeDrips"
-• Some browsers may not support installation
-
-✨ Get quick access from your desktop!
+    💻 To install VibeDrips:
+    
+    • Look for the install icon [image:3] in your browser:
+      
+      Chrome/Edge: Address bar (right side)
+      Opera: Address bar or menu
+      
+    • Click the install icon and confirm
+    
+    • Or use: Browser Menu > "Install VibeDrips"
+    
+    ✨ Quick access from your desktop/taskbar!
             `.trim();
         }
         
-        // Use custom modal instead of alert
+        // Use custom modal with icon support
         showInstallModal(title, message);
     }
+
 
     // Show custom install instructions modal
     function showInstallModal(title, message) {
@@ -411,12 +503,17 @@ document.addEventListener('DOMContentLoaded', function() {
         const existing = document.querySelector('.install-modal');
         if (existing) existing.remove();
         
+        // Replace [image:X] with actual icon display
+        const messageWithIcons = message
+            .replace(/\[image:2\]/g, '<span class="inline-icon share-icon">⎋</span>') // iOS share icon placeholder
+            .replace(/\[image:3\]/g, '<span class="inline-icon install-icon">⊕</span>'); // Desktop install icon
+        
         const modal = document.createElement('div');
         modal.className = 'install-modal';
         modal.innerHTML = `
             <div class="install-modal-content">
                 <h3>${title}</h3>
-                <pre style="white-space: pre-wrap; text-align: left; line-height: 1.6;">${message}</pre>
+                <div class="install-instructions">${messageWithIcons.replace(/\n/g, '<br>')}</div>
                 <button class="install-modal-close" onclick="this.closest('.install-modal').remove()">
                     Got it!
                 </button>
@@ -433,6 +530,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
 
     // Show toast notification (reuse from share.js)
     function showToast(message) {
