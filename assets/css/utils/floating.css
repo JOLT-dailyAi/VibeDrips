@@ -149,17 +149,20 @@ body.dark-theme .social-float .currency-display:hover {
     width: 28px;
     height: 28px;
     object-fit: contain;
+    filter: grayscale(100%) brightness(0); /* Force to black */
     /* Image stays as-is (black icon) */
 }
 
 .linktree-button:hover img {
     filter: brightness(0) invert(1); /* Turn white on hover */
+    filter: grayscale(100%) brightness(0) invert(1); /* Force to white on hover */
 }
 
 /* Dark theme - Match currency exactly */
 body.dark-theme .linktree-button {
     background: rgba(0, 0, 0, 0.8); /* Black bg like currency dark theme */
     border-color: rgba(67, 233, 123, 0.3); /* Faded green border */
+    filter: grayscale(100%) brightness(0) invert(1); /* Force to white */
 }
 
 body.dark-theme .linktree-button img {
