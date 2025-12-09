@@ -7,6 +7,43 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.4.0] - 2025-12-09
+
+### Added
+- **Glass Theme**: New glassmorphism theme with real-time adjustable controls
+  - Blur slider (5-50px)
+  - Opacity slider (0.05-0.4)
+  - Depth slider (0-30px inner glow)
+  - Auto-close timer (30 seconds)
+- Glass effects applied to all UI components:
+  - Product cards
+  - Filter controls
+  - Stats bar
+  - Modals (currency, product details)
+  - Floating controls (theme toggle, currency, music, linktree)
+  - Center badges and tooltips
+- Glass settings panel with interactive controls
+- Theme cycling: Light → Dark → Glass → Light
+
+### Changed
+- Theme icon changed from 🪟 (window) to 💎 (diamond) for better cross-platform consistency
+- Glass theme set as default theme on first load
+- Glass panel auto-close timer extended from 7 to 30 seconds
+- Glass panel title styled as centered button (matches UI patterns)
+
+### Fixed
+- Mobile portrait credits pill displaying as circular icon instead of pill shape
+- Theme toggle button showing double emojis (removed CSS ::before conflicts)
+- Glass panel close button positioning (moved to top-right corner)
+- Mobile responsive layout for center badges
+
+### Technical
+- New files: `assets/css/utils/glass.css`, `assets/js/glass-settings.js`
+- Updated: `theme-toggle.js`, `floating.css`, `modals.css`, `filters.css`, `grid.css`, `product-card.css`
+- CSS variables for dynamic glass theming: `--glass-blur`, `--glass-refraction`, `--glass-depth`
+
+---
+
 ## [1.3.0] - 2025-12-08
 
 ### 🎵 Major Features
