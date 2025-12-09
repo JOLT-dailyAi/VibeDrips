@@ -5,14 +5,16 @@
     --glass-blur: 5px;
     --glass-refraction: 0.15;
     --glass-depth: 0px;
+    --glass-saturation: 180%;  /* NEW: iOS-like saturation */
     --glass-border-radius: 20px;
 }
+
 
 /* Base glass effect */
 .glass {
     background: rgba(255, 255, 255, var(--glass-refraction));
-    backdrop-filter: blur(var(--glass-blur)) saturate(120%);
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(120%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     border-radius: var(--glass-border-radius);
     border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: 
