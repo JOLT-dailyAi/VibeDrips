@@ -145,8 +145,9 @@ window.applyTheme = applyTheme;
 window.ThemeState = ThemeState;
 
 // Initialize on DOM load
+/*
 document.addEventListener('DOMContentLoaded', () => {
     setupThemeToggle();
-});
+}); */
 
 console.log('✅ Theme toggle module loaded');
