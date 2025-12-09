@@ -15,7 +15,7 @@ const GlassSettings = {
         refraction: 0.07,  // Low opacity for transparency
         depth: 0,          // No inner glow (iOS doesn't use it)
         saturation: 180    // Vibrant colors
-    }
+    },
     
     // Current values
     current: {
