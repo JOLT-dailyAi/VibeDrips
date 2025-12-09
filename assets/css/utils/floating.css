@@ -779,18 +779,19 @@ body.dark-theme .inline-icon {
         display: flex;
         gap: 8px;
         flex-wrap: nowrap;
+        justify-content: center; /* Center the buttons */
     }
-
+    
     .center-badge {
         padding: 8px 12px;
         font-size: 11px;
-        max-width: 100%;
-        min-height: 45px;      /* ← Changed from height to min-height */
-        height: auto;           /* ← Allow height to grow with content */
-        min-width: 45px;        /* ← Ensure minimum width for single emoji */
+        width: auto;           /* ← CHANGED: was max-width: 100% */
+        min-width: fit-content; /* ← NEW: Allow content to determine width */
+        height: 45px;
         display: inline-flex;
         align-items: center;
         gap: 4px;
         white-space: nowrap;
     }
+
 }
