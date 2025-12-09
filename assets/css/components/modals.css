@@ -61,8 +61,8 @@
 /* Glass theme - Currency Modal */
 body.glass-theme .currency-content {
     background: rgba(255, 255, 255, var(--glass-refraction));
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: 
         0 20px 40px rgba(0, 0, 0, 0.3),
@@ -126,8 +126,8 @@ body.glass-theme .currency-select option {
 /* Glass theme - Product Modal */
 body.glass-theme .simple-modal-content {
     background: rgba(255, 255, 255, var(--glass-refraction));
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: 
         0 20px 40px rgba(0, 0, 0, 0.3),
