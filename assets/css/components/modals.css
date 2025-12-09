@@ -257,6 +257,43 @@ body.glass-theme .simple-modal-body p strong {
     width: 100%;
 }
 
+/* Dark theme text colors */
+body.dark-theme .currency-content h2 {
+    color: white;
+}
+
+body.dark-theme .currency-content p {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+body.dark-theme .currency-select {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+body.dark-theme .currency-select option {
+    background: #1a1a1a;
+    color: white;
+}
+
+body.dark-theme .simple-modal-header {
+    border-bottom-color: rgba(255, 255, 255, 0.2);
+}
+
+body.dark-theme .simple-modal-header h2 {
+    color: white;
+}
+
+body.dark-theme .simple-modal-body p {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+body.dark-theme .simple-modal-body p strong {
+    color: white;
+}
+
+
 /* Responsive */
 @media (max-width: 768px) {
     .simple-modal-content {
