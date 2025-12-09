@@ -13,14 +13,16 @@ const GlassSettings = {
     preset: {
         blur: 5,
         refraction: 0.15,
-        depth: 0
+        depth: 0,
+        saturation: 180  /* NEW: Default 180% */
     },
     
     // Current values
     current: {
         blur: 5,
         refraction: 0.15,
-        depth: 0
+        depth: 0,
+        saturation: 180  /* NEW: Default 180% */
     }
 };
 
@@ -40,7 +42,8 @@ function initGlassSettings() {
     GlassSettings.sliders = {
         blur: document.getElementById('glass-blur-slider'),
         refraction: document.getElementById('glass-refraction-slider'),
-        depth: document.getElementById('glass-depth-slider')
+        depth: document.getElementById('glass-depth-slider'),
+        saturation: document.getElementById('glass-saturation-slider')  /* NEW */
     };
     
     // Load saved settings or use defaults
@@ -84,6 +87,13 @@ function setupGlassEventListeners() {
             updateGlassValue('depth', parseFloat(e.target.value));
         });
     }
+
+    if (GlassSettings.sliders.saturation) {
+        GlassSettings.sliders.saturation.addEventListener('input', (e) => {
+            updateGlassValue('saturation', parseFloat(e.target.value));
+        });
+    }
+
     
     // ESC key to close
     document.addEventListener('keydown', (e) => {
@@ -148,6 +158,7 @@ function applyGlassSettings() {
     root.style.setProperty('--glass-blur', `${GlassSettings.current.blur}px`);
     root.style.setProperty('--glass-refraction', GlassSettings.current.refraction);
     root.style.setProperty('--glass-depth', `${GlassSettings.current.depth}px`);
+    root.style.setProperty('--glass-saturation', `${GlassSettings.current.saturation}%`);  /* NEW */
 }
 
 // Reset to preset values
@@ -166,11 +177,16 @@ function resetGlassToPreset() {
     if (GlassSettings.sliders.depth) {
         GlassSettings.sliders.depth.value = GlassSettings.preset.depth;
     }
-    
+
+    if (GlassSettings.sliders.saturation) {
+        GlassSettings.sliders.saturation.value = GlassSettings.preset.saturation;
+    }
+
     // Update displays
     document.getElementById('glass-blur-value').textContent = GlassSettings.preset.blur;
     document.getElementById('glass-refraction-value').textContent = GlassSettings.preset.refraction;
     document.getElementById('glass-depth-value').textContent = GlassSettings.preset.depth;
+    document.getElementById('glass-saturation-value').textContent = GlassSettings.preset.saturation;
     
     // Apply changes
     applyGlassSettings();
@@ -212,6 +228,11 @@ function loadGlassSettings() {
         if (GlassSettings.sliders.depth) {
             GlassSettings.sliders.depth.value = GlassSettings.current.depth;
         }
+
+        if (GlassSettings.sliders.saturation) {
+            GlassSettings.sliders.saturation.value = GlassSettings.current.saturation;
+        }
+
         
         // Update displays
         const blurDisplay = document.getElementById('glass-blur-value');
@@ -221,6 +242,10 @@ function loadGlassSettings() {
         if (blurDisplay) blurDisplay.textContent = GlassSettings.current.blur;
         if (refractionDisplay) refractionDisplay.textContent = GlassSettings.current.refraction;
         if (depthDisplay) depthDisplay.textContent = GlassSettings.current.depth;
+
+        const saturationDisplay = document.getElementById('glass-saturation-value');
+        if (saturationDisplay) saturationDisplay.textContent = GlassSettings.current.saturation;
+
         
         // Apply settings
         applyGlassSettings();
