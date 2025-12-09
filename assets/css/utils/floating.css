@@ -92,8 +92,8 @@ body.dark-theme .social-float .currency-display:hover {
 /* Glass theme - apply glass effect to currency button */
 body.glass-theme .social-float .currency-display {
     background: rgba(255, 255, 255, var(--glass-refraction));
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: 
         0 8px 32px rgba(0, 0, 0, 0.1),
@@ -191,8 +191,8 @@ body.dark-theme .linktree-button:hover {
 /* Glass theme - apply glass effect to linktree button */
 body.glass-theme .linktree-button {
     background: rgba(255, 255, 255, var(--glass-refraction));
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: 
         0 8px 32px rgba(0, 0, 0, 0.1),
@@ -232,8 +232,8 @@ body.glass-theme .linktree-button:hover {
 /* Glass theme - apply glass effect to music button */
 body.glass-theme .music-control-button {
     background: rgba(255, 255, 255, var(--glass-refraction));
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: 
         0 8px 32px rgba(0, 0, 0, 0.1),
@@ -284,8 +284,8 @@ body.glass-theme .music-control-button:hover {
 /* Glass theme - apply glass effect to volume panel */
 body.glass-theme .volume-panel {
     background: rgba(255, 255, 255, var(--glass-refraction));
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
@@ -398,8 +398,8 @@ body.dark-theme .center-badge {
 /* Glass theme - apply glass effect to center badge */
 body.glass-theme .center-badge {
     background: rgba(255, 255, 255, var(--glass-refraction));
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     border: 1px solid rgba(255, 255, 255, 0.3);
     color: white;
     box-shadow: 
@@ -458,8 +458,8 @@ body.dark-theme .credits-tooltip::after {
 /* Glass theme - apply glass effect to tooltip */
 body.glass-theme .credits-tooltip {
     background: rgba(255, 255, 255, var(--glass-refraction));
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     border: 1px solid rgba(255, 255, 255, 0.3);
     color: white;
 }
@@ -596,8 +596,8 @@ body.dark-theme .install-modal-content {
 /* Glass theme - apply glass effect to modal */
 body.glass-theme .install-modal-content {
     background: rgba(255, 255, 255, var(--glass-refraction));
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     border: 1px solid rgba(255, 255, 255, 0.3);
     color: white;
 }
