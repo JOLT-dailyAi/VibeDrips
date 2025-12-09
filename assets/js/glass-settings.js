@@ -11,11 +11,11 @@ const GlassSettings = {
     
     // Default preset values
     preset: {
-        blur: 5,
-        refraction: 0.15,
+        blur: 20,          // Changed from 5
+        refraction: 0.07,  // Changed from 0.15
         depth: 0,
-        saturation: 180  /* NEW: Default 180% */
-    },
+        saturation: 180
+    }
     
     // Current values
     current: {
