@@ -20,77 +20,13 @@
 }
 
 .currency-content {
-    background: white;  /* Default for light theme */
+    background: white;
     padding: 40px;
     border-radius: 20px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
     text-align: center;
     max-width: 400px;
     width: 90%;
-}
-
-/* Dark theme - solid dark background */
-body.dark-theme .currency-content {
-    background: #1a1a1a;
-}
-
-/* Dark theme text colors */
-body.dark-theme .currency-content h2 {
-    color: white;
-}
-
-body.dark-theme .currency-content p {
-    color: rgba(255, 255, 255, 0.9);
-}
-
-body.dark-theme .currency-select {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.3);
-    color: white;
-}
-
-body.dark-theme .currency-select option {
-    background: #1a1a1a;
-    color: white;
-}
-
-body.dark-theme .simple-modal-header {
-    border-bottom-color: rgba(255, 255, 255, 0.2);
-}
-
-body.dark-theme .simple-modal-header h2 {
-    color: white;
-}
-
-body.dark-theme .simple-modal-header button {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.3);
-    color: white;
-}
-
-body.dark-theme .simple-modal-header button:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.5);
-}
-
-body.dark-theme .simple-modal-body p {
-    color: rgba(255, 255, 255, 0.9);
-}
-
-body.dark-theme .simple-modal-body p strong {
-    color: white;
-}
-
-
-/* Glass theme - transparent glass (MUST come after dark theme) */
-body.glass-theme .currency-content {
-    background: rgba(255, 255, 255, var(--glass-refraction)) !important;
-    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation)) !important;
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation)) !important;
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
-    box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
 }
 
 .currency-content h2 {
@@ -120,6 +56,41 @@ body.glass-theme .currency-content {
     outline: none;
     border-color: #667eea;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Dark theme - Currency Modal */
+body.dark-theme .currency-content {
+    background: #1a1a1a;
+}
+
+body.dark-theme .currency-content h2 {
+    color: white;
+}
+
+body.dark-theme .currency-content p {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+body.dark-theme .currency-select {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+body.dark-theme .currency-select option {
+    background: #1a1a1a;
+    color: white;
+}
+
+/* Glass theme - Currency Modal */
+body.glass-theme .currency-content {
+    background: rgba(255, 255, 255, var(--glass-refraction)) !important;
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation)) !important;
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation)) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
 }
 
 body.glass-theme .currency-content h2 {
@@ -162,7 +133,7 @@ body.glass-theme .currency-select option {
 }
 
 .simple-modal-content {
-    background: white;  /* Default for light theme */
+    background: white;
     border-radius: 20px;
     width: 90%;
     max-width: 1200px;
@@ -174,22 +145,6 @@ body.glass-theme .currency-select option {
     margin: 20px;
     padding: 20px;
     z-index: 1001;
-}
-
-/* Dark theme - solid dark background */
-body.dark-theme .simple-modal-content {
-    background: #1a1a1a;
-}
-
-/* Glass theme - transparent glass (MUST come after dark theme) */
-body.glass-theme .simple-modal-content {
-    background: rgba(255, 255, 255, var(--glass-refraction)) !important;
-    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation)) !important;
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation)) !important;
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
-    box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
 }
 
 .dynamic-modal {
@@ -228,14 +183,6 @@ body.glass-theme .simple-modal-content {
     margin: 0;
 }
 
-body.glass-theme .simple-modal-header {
-    border-bottom-color: rgba(255, 255, 255, 0.3);
-}
-
-body.glass-theme .simple-modal-header h2 {
-    color: white;
-}
-
 .simple-modal-header button {
     background: none;
     border: 2px solid #E53E3E;
@@ -259,17 +206,6 @@ body.glass-theme .simple-modal-header h2 {
     color: #C53030;
 }
 
-body.glass-theme .simple-modal-header button {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.3);
-    color: white;
-}
-
-body.glass-theme .simple-modal-header button:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.5);
-}
-
 .simple-modal-body {
     padding: 30px;
     text-align: center;
@@ -287,21 +223,83 @@ body.glass-theme .simple-modal-header button:hover {
     color: #718096;
 }
 
-body.glass-theme .simple-modal-body p {
-    color: rgba(255, 255, 255, 0.9);
-}
-
 .simple-modal-body p strong {
     color: #667EEA;
-}
-
-body.glass-theme .simple-modal-body p strong {
-    color: white;
 }
 
 .simple-modal-body .amazon-button {
     margin-top: 20px;
     width: 100%;
+}
+
+/* Dark theme - Product Modal */
+body.dark-theme .simple-modal-content {
+    background: #1a1a1a;
+}
+
+body.dark-theme .simple-modal-header {
+    border-bottom-color: rgba(255, 255, 255, 0.2);
+}
+
+body.dark-theme .simple-modal-header h2 {
+    color: white;
+}
+
+body.dark-theme .simple-modal-header button {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+body.dark-theme .simple-modal-header button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+body.dark-theme .simple-modal-body p {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+body.dark-theme .simple-modal-body p strong {
+    color: white;
+}
+
+/* Glass theme - Product Modal */
+body.glass-theme .simple-modal-content {
+    background: rgba(255, 255, 255, var(--glass-refraction)) !important;
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation)) !important;
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation)) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+}
+
+body.glass-theme .simple-modal-header {
+    border-bottom-color: rgba(255, 255, 255, 0.3);
+}
+
+body.glass-theme .simple-modal-header h2 {
+    color: white;
+}
+
+body.glass-theme .simple-modal-header button {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+body.glass-theme .simple-modal-header button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+body.glass-theme .simple-modal-body p {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+body.glass-theme .simple-modal-body p strong {
+    color: white;
 }
 
 /* Responsive */
