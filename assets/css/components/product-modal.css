@@ -30,7 +30,7 @@
     z-index: 1000;
 }
 
-/* Modal Content */
+/* Prevent clicks on modal content from closing */
 .simple-modal-content {
     background: white;
     border-radius: 16px;
@@ -44,6 +44,7 @@
     margin: 20px;
     padding: 0;
     z-index: 1001;
+    position: relative;  /* Important for click handling */
 }
 
 /* Modal Header */
