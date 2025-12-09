@@ -426,7 +426,9 @@ body.glass-theme .center-badge:hover {
     opacity: 0;
     pointer-events: none;
     transition: all 0.2s ease-out;
-    white-space: nowrap;
+    white-space: normal;        /* CHANGED: Allow wrapping */
+    max-width: 300px;           /* NEW: Set maximum width */
+    text-align: center;         /* NEW: Center text */
     z-index: 1001;
 }
 
@@ -473,6 +475,10 @@ body.glass-theme .credits-tooltip::after {
     font-weight: 600;
     margin-bottom: 4px;
     color: #333;
+    overflow: hidden;           /* NEW */
+    text-overflow: ellipsis;    /* NEW */
+    white-space: nowrap;         /* NEW */
+    max-width: 250px;            /* NEW - Adjust based on your needs */
 }
 
 body.dark-theme .credits-tooltip-title {
@@ -487,6 +493,10 @@ body.glass-theme .credits-tooltip-title {
     font-size: 13px;
     color: #666;
     margin-bottom: 8px;
+    overflow: hidden;           /* NEW */
+    text-overflow: ellipsis;    /* NEW */
+    white-space: nowrap;         /* NEW */
+    max-width: 250px;            /* NEW */
 }
 
 body.dark-theme .credits-tooltip-artist {
