@@ -97,8 +97,9 @@
 
 /* Panel header */
 .glass-panel-header {
+    position: relative; /* For absolute positioning close button */
     display: flex;
-    flex-direction: column;
+    justify-content: center; /* Center title */
     align-items: center;
     gap: 20px;
     margin-bottom: 32px;
@@ -129,6 +130,9 @@
 
 
 .glass-panel-close {
+    position: absolute;
+    top: 0;
+    right: 0;
     width: 32px;
     height: 32px;
     border: 2px solid rgba(255, 255, 255, 0.5);
