@@ -43,8 +43,8 @@
 /* Glass theme - Time Categories */
 body.glass-theme .time-category {
     background: rgba(255, 255, 255, var(--glass-refraction));
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     border: 1px solid rgba(255, 255, 255, 0.3);
     color: white;
     box-shadow: 
@@ -82,8 +82,8 @@ body.glass-theme .time-category.active {
 /* Glass theme - Filter Controls Container */
 body.glass-theme .filter-controls {
     background: rgba(255, 255, 255, var(--glass-refraction));
-    backdrop-filter: blur(var(--glass-blur));
-    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: 
         0 4px 20px rgba(0, 0, 0, 0.1),
