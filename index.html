@@ -54,8 +54,8 @@
     </div>
 
     <!-- Static Simple Modal -->
-    <div id="static-modal" class="simple-modal hidden" onclick="closeSimpleModal()">
-        <div class="simple-modal-content">
+    <div id="static-modal" class="simple-modal hidden" onclick="closeSimpleModal(event)">
+        <div class="simple-modal-content" onclick="event.stopPropagation()">
             <div class="simple-modal-header">
                 <h2>Product Details</h2>
                 <button onclick="closeSimpleModal()">X</button>
