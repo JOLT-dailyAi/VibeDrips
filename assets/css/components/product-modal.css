@@ -1,16 +1,21 @@
 /* components/product-modal.css - Product details modal */
 
-/* Product Modal - No Overlay */
+/* Product Modal - With Dark Overlay */
 .simple-modal {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    background: rgba(0, 0, 0, 0.7);  /* Dark overlay - same as install modal */
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 1000;
+}
+
+.simple-modal.hidden {
+    display: none;
 }
 
 .dynamic-modal {
