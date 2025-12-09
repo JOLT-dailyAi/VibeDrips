@@ -11,10 +11,10 @@ const GlassSettings = {
     
     // Default preset values
     preset: {
-        blur: 20,          // Changed from 5
-        refraction: 0.07,  // Changed from 0.15
-        depth: 0,
-        saturation: 180
+        blur: 20,          // High blur for clarity
+        refraction: 0.07,  // Low opacity for transparency
+        depth: 0,          // No inner glow (iOS doesn't use it)
+        saturation: 180    // Vibrant colors
     }
     
     // Current values
