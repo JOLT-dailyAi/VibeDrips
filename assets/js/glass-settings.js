@@ -9,20 +9,20 @@ const GlassSettings = {
     autoCloseTimer: null,
     isOpen: false,
     
-    // Default preset values
+// Default preset values
     preset: {
-        blur: 0,           // NO blur at all
-        refraction: 0.12,  // Slightly more visible (no blur needs more opacity)
-        depth: 0,
-        saturation: 110    // Very subtle
+        blur: 0,           // Changed from 8
+        refraction: 0,     // Changed from 0.12
+        depth: 0,          // Same
+        saturation: 110    // Changed from 120
     },
     
     // Current values
     current: {
-        blur: 5,
-        refraction: 0.15,
+        blur: 0,
+        refraction: 0,
         depth: 0,
-        saturation: 180  /* NEW: Default 180% */
+        saturation: 110
     }
 };
 
