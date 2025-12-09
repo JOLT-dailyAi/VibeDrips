@@ -1,0 +1,229 @@
+/* components/product-modal.css - Product details modal */
+
+/* Product Modal - No Overlay */
+.simple-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.dynamic-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Modal Content */
+.simple-modal-content {
+    background: white;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 1200px;
+    height: auto;
+    min-height: 60vh;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    margin: 20px;
+    padding: 0;
+    z-index: 1001;
+}
+
+/* Modal Header */
+.simple-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 24px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.simple-modal-header h2 {
+    font-size: 20px;
+    color: #333;
+    margin: 0;
+    font-weight: 600;
+}
+
+.simple-modal-header button {
+    background: white;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
+    font-size: 18px;
+    color: #333;
+    cursor: pointer;
+    padding: 0;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.simple-modal-header button:hover {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Modal Body */
+.simple-modal-body {
+    padding: 28px 24px;
+    text-align: center;
+}
+
+.simple-modal-body img {
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.simple-modal-body p {
+    margin-bottom: 15px;
+    text-align: left;
+    line-height: 1.6;
+    color: #444;
+    font-size: 15px;
+}
+
+.simple-modal-body p strong {
+    color: #667EEA;
+    font-weight: 600;
+}
+
+.simple-modal-body .amazon-button {
+    margin-top: 24px;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    background: #667eea;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.simple-modal-body .amazon-button:hover {
+    background: #764ba2;
+    transform: scale(1.02);
+}
+
+/* Dark Theme */
+body.dark-theme .simple-modal-content {
+    background: #1a1a1a;
+}
+
+body.dark-theme .simple-modal-header {
+    border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-theme .simple-modal-header h2 {
+    color: white;
+}
+
+body.dark-theme .simple-modal-header button {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+body.dark-theme .simple-modal-header button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+body.dark-theme .simple-modal-body p {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+body.dark-theme .simple-modal-body p strong {
+    color: white;
+}
+
+/* Glass Theme - Matches Install Modal Exactly */
+body.glass-theme .simple-modal-content {
+    background: rgba(255, 255, 255, var(--glass-refraction));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    color: white;
+}
+
+body.glass-theme .simple-modal-header {
+    border-bottom-color: rgba(255, 255, 255, 0.2);
+}
+
+body.glass-theme .simple-modal-header h2 {
+    color: white;
+}
+
+body.glass-theme .simple-modal-header button {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+body.glass-theme .simple-modal-header button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+body.glass-theme .simple-modal-body p {
+    color: rgba(255, 255, 255, 0.95);
+}
+
+body.glass-theme .simple-modal-body p strong {
+    color: white;
+    font-weight: 700;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .simple-modal-content {
+        width: 95%;
+        min-height: 70vh;
+        margin: 10px;
+    }
+
+    .simple-modal-header {
+        padding: 24px 20px;
+    }
+
+    .simple-modal-body {
+        padding: 24px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .simple-modal-content {
+        width: 98%;
+        min-height: 80vh;
+        margin: 5px;
+    }
+
+    .simple-modal-header {
+        padding: 20px;
+    }
+
+    .simple-modal-body {
+        padding: 20px;
+    }
+}
