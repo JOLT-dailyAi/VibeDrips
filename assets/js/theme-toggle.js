@@ -22,7 +22,7 @@ const themes = {
     },
     glass: {
         name: 'Glass',
-        icon: '🪟',
+        icon: '💎',  // Diamond
         next: 'light',
         openPanel: true // Only glass opens panel
     }
