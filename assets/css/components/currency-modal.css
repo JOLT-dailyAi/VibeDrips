@@ -1,0 +1,118 @@
+/* components/currency-modal.css - Currency selection modal */
+
+/* Currency Modal Overlay */
+.currency-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.currency-modal.hidden {
+    display: none;
+}
+
+/* Currency Modal Content */
+.currency-content {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+.currency-content h2 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 24px;
+}
+
+.currency-content p {
+    color: #666;
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+.currency-select {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    font-size: 16px;
+    background: white;
+    cursor: pointer;
+    transition: border-color 0.3s;
+}
+
+.currency-select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Dark Theme */
+body.dark-theme .currency-content {
+    background: #1a1a1a;
+}
+
+body.dark-theme .currency-content h2 {
+    color: white;
+}
+
+body.dark-theme .currency-content p {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+body.dark-theme .currency-select {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+body.dark-theme .currency-select option {
+    background: #1a1a1a;
+    color: white;
+}
+
+/* Glass Theme */
+body.glass-theme .currency-content {
+    background: rgba(255, 255, 255, var(--glass-refraction));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+}
+
+body.glass-theme .currency-content h2 {
+    color: white;
+}
+
+body.glass-theme .currency-content p {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+body.glass-theme .currency-select {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+body.glass-theme .currency-select:focus {
+    border-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+}
+
+body.glass-theme .currency-select option {
+    background: #2E1D80;
+    color: white;
+}
