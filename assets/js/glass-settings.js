@@ -238,7 +238,7 @@ function startAutoCloseTimer() {
     GlassSettings.autoCloseTimer = setTimeout(() => {
         console.log('⏰ Auto-closing glass panel');
         closeGlassPanel();
-    }, 7000); // 7 seconds
+    }, 30000); // 30 seconds
 }
 
 // Clear auto-close timer
