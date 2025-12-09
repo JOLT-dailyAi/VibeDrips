@@ -515,9 +515,7 @@ body.glass-theme .credits-tooltip-divider {
     font-size: 13px;
     color: #667eea;
     text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
+    display: inline;  /* ← CHANGED from inline-flex */
     transition: color 0.2s ease;
 }
 
