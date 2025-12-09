@@ -426,9 +426,7 @@ body.glass-theme .center-badge:hover {
     opacity: 0;
     pointer-events: none;
     transition: all 0.2s ease-out;
-    white-space: normal;        /* CHANGED: Allow wrapping */
-    max-width: 300px;           /* NEW: Set maximum width */
-    text-align: center;         /* NEW: Center text */
+    white-space: nowrap;
     z-index: 1001;
 }
 
