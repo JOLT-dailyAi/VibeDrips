@@ -19,7 +19,7 @@
 @import url('./components/stats.css');
 @import url('./components/install-banner.css');
 /* ADD THIS NEW ONE */
-@import 'components/reels-modal.css';
+@import 'components/reels-feed.css';
 
 /* States */
 @import url('./states/loading.css');
