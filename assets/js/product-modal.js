@@ -23,14 +23,6 @@ function closeSimpleModal(event) {
     const modal = document.getElementById('static-modal');
     if (!modal) return;
     
-    // If event exists, check if we should close
-    if (event) {
-        // Only close if clicking directly on the overlay (not on content)
-        if (!event.target.classList.contains('simple-modal')) {
-            return; // Don't close if not clicking overlay
-        }
-    }
-    
     console.log('❌ Closing product modal');
     modal.classList.add('hidden');
     
@@ -55,7 +47,8 @@ function handleProductModalOutsideClick(event) {
     
     console.log('🖱️ Product modal click detected:', {
         clickedInside,
-        targetClass: event.target.className
+        targetClass: event.target.className,
+        target: event.target
     });
     
     if (!clickedInside) {
