@@ -84,14 +84,33 @@ function loadReel(reelData, testMethod) {
   if (!embedContainer) return;
   
   if (testMethod === 'embed') {
-    // Method 1: Official Embed
-    console.log('✅ Testing: Instagram Official Embed');
+  // Method 1: Official Embed
+  console.log('✅ Testing: Instagram Official Embed');
+  
+  // Show loading spinner first
+  embedContainer.innerHTML = `
+    <div style="text-align: center; margin-bottom: 20px;">
+      <h3 style="color: #667eea; margin: 0 0 10px 0;">Method 1: Official Instagram Embed</h3>
+      <p style="color: #666; font-size: 14px;">Uses Instagram's oEmbed - Should load and play</p>
+    </div>
+    <div style="display: flex; align-items: center; justify-content: center; min-height: 580px;">
+      <div style="text-align: center;">
+        <div style="font-size: 40px; margin-bottom: 10px;">⏳</div>
+        <p style="color: #666;">Loading Instagram reel...</p>
+      </div>
+    </div>
+  `;
+  
+  // Load embed after a brief delay
+  setTimeout(() => {
     embedContainer.innerHTML = `
       <div style="text-align: center; margin-bottom: 20px;">
         <h3 style="color: #667eea; margin: 0 0 10px 0;">Method 1: Official Instagram Embed</h3>
         <p style="color: #666; font-size: 14px;">Uses Instagram's oEmbed - Should load and play</p>
       </div>
-      ${reelData.embedCode}
+      <div style="min-height: 580px; display: flex; align-items: flex-start; justify-content: center;">
+        ${reelData.embedCode}
+      </div>
     `;
     
     // Load Instagram embed script
@@ -103,7 +122,9 @@ function loadReel(reelData, testMethod) {
       script.src = '//www.instagram.com/embed.js';
       document.body.appendChild(script);
     }
-  }
+  }, 100);
+}
+
   
   else if (testMethod === 'link') {
     // Method 2: Direct Link Button
