@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.5.0] - 2025-12-10
+
+### Added
+- Separate CSS files for currency and product modals for better maintainability
+- Separate JavaScript modules for currency modal, product modal, and shared utilities
+- Dark overlay (0.7 opacity) on all modals for improved text readability
+- Click-outside-to-close functionality for product modals
+- Glass theme set as default on page load
+- Modal overlay CSS styling for clickable background areas
+
+### Changed
+- Refactored modal system from single file to modular architecture
+- Updated service worker cache to v1.5 with new file structure
+- Improved modal closing behavior with proper event handling
+- Enhanced glass theme consistency across all modal types
+
+### Fixed
+- Product modal now closes when clicking outside modal content
+- Glass theme now loads correctly on initial page visit
+- Service worker cache errors resolved with updated file paths
+- Modal overlay click detection improved
+
+### Removed
+- `modal-manager.js` (replaced by separate modal modules)
+- `modals.css` (replaced by currency-modal.css and product-modal.css)
+
+---
+
 ## [1.4.0] - 2025-12-09
 
 ### Added
