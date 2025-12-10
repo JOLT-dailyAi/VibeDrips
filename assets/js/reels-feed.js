@@ -46,9 +46,14 @@ function showReelsFeed() {
     return;
   }
   
-  // Update section title (optional - can remove if you want no header)
-  if (sectionTitle) sectionTitle.textContent = '';
-  if (sectionSubtitle) sectionSubtitle.textContent = '';
+// Hide section headers completely
+if (sectionTitle) {
+  sectionTitle.style.display = 'none';
+}
+if (sectionSubtitle) {
+  sectionSubtitle.style.display = 'none';
+}
+
   
   // Hide products, show feed
   productsContainer.classList.add('hidden');
