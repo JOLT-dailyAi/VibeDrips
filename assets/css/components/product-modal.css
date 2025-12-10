@@ -7,7 +7,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7);  /* Dark overlay - same as install modal */
+    background: rgba(0, 0, 0, 0.7); /* Dark overlay - same as install modal */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -28,9 +28,22 @@
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    background: rgba(0, 0, 0, 0.7); /* Dark overlay */
 }
 
-/* Prevent clicks on modal content from closing */
+/* Modal Overlay - Clickable background */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+    cursor: pointer;
+}
+
+/* Modal Content - Centered, above overlay */
 .simple-modal-content {
     background: white;
     border-radius: 16px;
@@ -44,7 +57,7 @@
     margin: 20px;
     padding: 0;
     z-index: 1001;
-    position: relative;  /* Important for click handling */
+    position: relative;
 }
 
 /* Modal Header */
