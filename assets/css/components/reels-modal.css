@@ -247,3 +247,16 @@ body.glass-theme .reel-product-card {
 body.glass-theme .reel-product-card h4 {
   color: white;
 }
+
+body.glass-theme .reels-modal-header button {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: white;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+body.glass-theme .reels-modal-header button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.6);
+}
