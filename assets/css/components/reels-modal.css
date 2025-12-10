@@ -149,6 +149,32 @@
   font-weight: 600;
 }
 
+/* Fix Instagram embed jumping */
+.instagram-section {
+  flex: 2;
+  padding: 20px;
+  background: #fafafa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 600px; /* CHANGED from 400px to 600px */
+}
+
+#instagram-embed-container {
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto;
+  min-height: 580px; /* ADD THIS - reserves space */
+}
+
+/* Stabilize Instagram embed */
+#instagram-embed-container .instagram-media {
+  margin: 0 auto !important;
+  max-width: 100% !important;
+  min-height: 580px !important; /* ADD THIS */
+}
+
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
   .reels-modal-content {
