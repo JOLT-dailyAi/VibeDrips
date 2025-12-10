@@ -10,55 +10,49 @@ function showSimpleModal() {
     
     console.log('✅ Opening product modal');
     modal.classList.remove('hidden');
-    
-    // Add click-outside listener after a delay
-    setTimeout(() => {
-        console.log('👂 Adding product modal outside click listener');
-        document.addEventListener('click', handleProductModalOutsideClick);
-    }, 150);
 }
 
-// Close simple modal
-function closeSimpleModal(event) {
+// Close simple modal (for static modal with ID 'static-modal')
+function closeSimpleModal() {
     const modal = document.getElementById('static-modal');
     if (!modal) return;
     
-    console.log('❌ Closing product modal');
+    console.log('❌ Closing simple modal');
     modal.classList.add('hidden');
-    
-    // Remove click-outside listener
-    console.log('🔇 Removing product modal outside click listener');
-    document.removeEventListener('click', handleProductModalOutsideClick);
 }
 
-// Handle clicks outside the product modal content
-function handleProductModalOutsideClick(event) {
-    const modal = document.getElementById('static-modal');
-    const modalContent = document.querySelector('.simple-modal-content');
+// Close dynamic modal (for dynamically generated product modals)
+function closeDynamicModal(event) {
+    console.log('🖱️ Close dynamic modal triggered');
     
-    if (!modal) return;
+    // Find the closest modal parent
+    const modal = event.target.closest('.simple-modal');
     
-    // Check if modal is visible
-    const isHidden = modal.classList.contains('hidden');
-    if (isHidden) return;
+    if (!modal) {
+        console.error('❌ Could not find modal to close');
+        return;
+    }
     
-    // Don't close if clicking inside the content box
-    const clickedInside = modalContent && modalContent.contains(event.target);
+    // Check if clicking on overlay or close button (not modal content)
+    const clickedOverlay = event.target.classList.contains('modal-overlay');
+    const clickedCloseButton = event.target.tagName === 'BUTTON';
     
-    console.log('🖱️ Product modal click detected:', {
-        clickedInside,
+    console.log('🖱️ Click details:', {
+        clickedOverlay,
+        clickedCloseButton,
         targetClass: event.target.className,
-        target: event.target
+        targetTag: event.target.tagName
     });
     
-    if (!clickedInside) {
-        console.log('💥 Clicked outside product modal content! Closing...');
-        closeSimpleModal();
+    if (clickedOverlay || clickedCloseButton) {
+        console.log('💥 Closing modal...');
+        modal.remove(); // Remove dynamically created modal from DOM
     }
 }
 
 // Export to global scope
 window.showSimpleModal = showSimpleModal;
 window.closeSimpleModal = closeSimpleModal;
+window.closeDynamicModal = closeDynamicModal;
 
 console.log('✅ Product modal module loaded');
