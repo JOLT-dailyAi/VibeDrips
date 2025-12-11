@@ -22,12 +22,12 @@
 
 /* Glass theme support */
 body.glass-theme .product-card {
-  background: rgba(255, 255, 255, 0.08) !important;
-  backdrop-filter: blur(10px) saturate(100%) !important;
-  -webkit-backdrop-filter: blur(10px) saturate(100%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
-  color: white !important;
-}
+  background: rgba(255, 255, 255, var(--glass-refraction));
+  backdrop-filter: blur(var(--glass-blur)) saturate(1); /* ← HARDCODE 100% */
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+
 
 body.glass-theme .product-card:hover {
   background: rgba(255, 255, 255, 0.12) !important;
