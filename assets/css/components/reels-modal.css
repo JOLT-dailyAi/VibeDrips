@@ -1,0 +1,193 @@
+/* Reels Modal - Fullscreen Overlay */
+
+.reels-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.reels-modal.hidden {
+  display: none;
+}
+
+/* Close Button - Floating */
+.reels-close-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  color: white;
+  font-size: 24px;
+  font-weight: 300;
+  cursor: pointer;
+  z-index: 1002;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  line-height: 1;
+  padding: 0;
+}
+
+.reels-close-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+/* Scroll Container - Flexible Scroll */
+.reels-scroll-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  
+  /* Option A: Gentle Snap (Active by default) */
+  scroll-snap-type: y proximity;
+  scroll-behavior: smooth;
+  
+  /* Option B: No Snap (Uncomment to enable complete freedom)
+  scroll-snap-type: none;
+  scroll-behavior: smooth;
+  */
+}
+
+/* Smooth scrollbar styling */
+.reels-scroll-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.reels-scroll-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.reels-scroll-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.reels-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Reel Section - Snap Target */
+.reel-section {
+  scroll-snap-align: center;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* Desktop: Side-by-Side Layout (>1200px) */
+@media (min-width: 1200px) {
+  .reel-content {
+    display: flex;
+    gap: 30px;
+    max-width: 1400px;
+    width: 100%;
+    height: 90vh;
+  }
+  
+  .reel-video {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .reel-products {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+/* Tablet: Side-by-Side (768px-1199px) */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .reel-content {
+    display: flex;
+    gap: 20px;
+    max-width: 1000px;
+    width: 100%;
+    height: 85vh;
+  }
+  
+  .reel-video {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .reel-products {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+/* Mobile: Stacked (<768px) */
+@media (max-width: 767px) {
+  .reel-section {
+    padding: 10px;
+    min-height: 100vh;
+  }
+  
+  .reel-content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .reel-video {
+    flex: 0 0 75%; /* 75% of screen */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .reel-products {
+    flex: 0 0 25%; /* 25% of screen */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 10px;
+  }
+  
+  .reels-close-btn {
+    top: 10px;
+    right: 10px;
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+  }
+}
+
+/* Animation - Fade In */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.reels-modal:not(.hidden) {
+  animation: fadeIn 0.3s ease;
+}
