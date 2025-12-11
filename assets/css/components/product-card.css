@@ -106,7 +106,7 @@ body.glass-theme .product-card .product-category {
   color: rgba(255, 255, 255, 0.9);
 }
 
-/* Product Name */
+/* Product Name - DEFAULT: Gray for Light Theme */
 .product-card .product-name {
   color: #2d3748;
   font-size: 0.95rem;
@@ -121,10 +121,6 @@ body.glass-theme .product-card .product-category {
   min-height: 2.6em;
 }
 
-body.glass-theme .product-card .product-name {
-  color: white;
-}
-
 /* Price Row - Price and Rating on Same Line */
 .product-card .product-price-row {
   display: flex;
@@ -134,38 +130,46 @@ body.glass-theme .product-card .product-name {
   margin: 0;
 }
 
-/* Price - Green Color */
+/* Price - DEFAULT: Dark Green for Light Theme */
 .product-card .product-price {
-  color: #4ade80;
+  color: #16a34a;
   font-size: 1.1rem;
   font-weight: 600;
   margin: 0;
 }
 
-/* Rating - Same Line as Price */
+/* Rating - DEFAULT: Dark Gold for Light Theme */
 .product-card .rating {
-  color: #ffd700;
+  color: #ca8a04;
   font-weight: 500;
   font-size: 13px;
   white-space: nowrap;
 }
 
-/* Light Theme - Darker colors for better readability */
-body.light-theme .product-card .product-price {
-  color: #16a34a !important;
+/* Glass Theme - White name, Bright colors */
+body.glass-theme .product-card .product-name {
+  color: white;
 }
 
-body.light-theme .product-card .rating {
-  color: #ca8a04 !important;
+body.glass-theme .product-card .product-price {
+  color: #4ade80;
 }
 
-/* Dark Theme - White name, Green price */
+body.glass-theme .product-card .rating {
+  color: #ffd700;
+}
+
+/* Dark Theme - White name, Bright colors */
 body.dark-theme .product-card .product-name {
   color: #FFFFFF;
 }
 
 body.dark-theme .product-card .product-price {
   color: #4ade80;
+}
+
+body.dark-theme .product-card .rating {
+  color: #ffd700;
 }
 
 /* Amazon Button - Full Width */
