@@ -249,19 +249,23 @@ function createProductCard(product) {
   const svgFallback = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23333' width='200' height='200'/%3E%3Ctext fill='%23fff' font-size='14' x='50%25' y='50%25' text-anchor='middle' dy='.3em'%3E${encodeURIComponent(productName?.substring(0, 20) || 'No Image')}%3C/text%3E%3C/svg%3E`;
   
   card.innerHTML = `
-    <img src="${imageUrl || svgFallback}" 
-         alt="${productName}"
-         loading="lazy"
-         onerror="this.src='${svgFallback}'">
-    
-    ${imageCount > 1 ? `<div class="image-count">${imageCount} photos</div>` : ''}
-    ${brand ? `<div class="brand-tag">🏷️ ${brand}</div>` : ''}
+    <div class="product-image-wrapper">
+      <img src="${imageUrl || svgFallback}" 
+           alt="${productName}"
+           loading="lazy"
+           onerror="this.src='${svgFallback}'">
+      
+      ${imageCount > 1 ? `<div class="image-count">${imageCount} photos</div>` : ''}
+      ${brand ? `<div class="brand-tag">🏷️ ${brand}</div>` : ''}
+    </div>
     
     <div class="product-category">${category}</div>
     <h3 class="product-name">${productName}</h3>
-    <div class="product-price">${priceFormatted}</div>
     
-    ${rating > 0 ? `<div class="product-meta"><div class="rating">⭐ ${rating.toFixed(1)}</div></div>` : ''}
+    <div class="product-price-row">
+      <span class="product-price">${priceFormatted}</span>
+      ${rating > 0 ? `<span class="rating">⭐ ${rating.toFixed(1)}</span>` : ''}
+    </div>
     
     <button class="amazon-button" onclick="event.stopPropagation(); openAmazonLink('${amazonLink}', '${productAsin}')">
       🛒 Buy on Amazon
@@ -274,8 +278,6 @@ function createProductCard(product) {
   
   return card;
 }
-
-
 
 // Navigate carousel (prev/next)
 function navigateCarousel(carousel, direction) {
