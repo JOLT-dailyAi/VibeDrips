@@ -151,6 +151,14 @@ body.glass-theme .product-card .product-name {
   white-space: nowrap;
 }
 
+body.light-theme .product-price {
+  color: #16a34a;  /* Darker green for light theme */
+}
+
+body.light-theme .rating {
+  color: #ca8a04;  /* Darker gold for light theme */
+}
+
 /* Amazon Button - Full Width */
 .product-card .amazon-button {
   width: 100%;
