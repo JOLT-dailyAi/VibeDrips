@@ -52,15 +52,20 @@
   overflow-y: auto;
   overflow-x: hidden;
   
-  /* Option A: Gentle Snap (Active by default) */
+  /* Option A: Gentle Snap (Active by default) 
   scroll-snap-type: y proximity;
   scroll-behavior: smooth;
+  */
   
   /* Option B: No Snap (Uncomment to enable complete freedom)
   scroll-snap-type: none;
   scroll-behavior: smooth;
   */
 }
+
+  /* Option C: Hard Snap (Active by default) */
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
 
 /* Smooth scrollbar styling */
 .reels-scroll-container::-webkit-scrollbar {
@@ -82,8 +87,8 @@
 
 /* Reel Section - Snap Target */
 .reel-section {
-  scroll-snap-align: center;
-  min-height: 100vh;
+  scroll-snap-align: start;
+  height: 100vh;  /* Force exact screen height */
   display: flex;
   align-items: center;
   justify-content: center;
