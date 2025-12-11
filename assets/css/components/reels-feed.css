@@ -210,9 +210,31 @@
   backdrop-filter: blur(4px);
 }
 
+/* Larger Image Size */
+.product-card .product-image {
+  height: 250px; /* Bigger than main page's 200px */
+}
+
+/* Green Price Color */
+.product-card .product-price {
+  color: #4ade80; /* Green */
+  font-size: 20px;
+  font-weight: 700;
+}
+
+body.glass-theme .product-card .product-price {
+  color: #4ade80; /* Keep green in glass theme too */
+}
+
 /* Ensure image is positioned relatively for absolute brand tag */
 .product-card {
   position: relative;
+cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
 }
 
 .product-card img {
