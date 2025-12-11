@@ -273,19 +273,17 @@
     <!-- NEW: Reels Modal -->
     <div id="reels-modal" class="reels-modal hidden">
         <button class="reels-close-btn" onclick="closeReelsModal()">×</button>
-        <!-- Navigation Arrows (add after reels-close-btn) -->
+        
+        <!-- Navigation Arrows -->
         <button class="reels-nav-btn up" aria-label="Previous Reel">▲</button>
         <button class="reels-nav-btn down" aria-label="Next Reel">▼</button>
         
-        <div class="reels-scroll-container">
-            <div id="reels-feed-container" class="reels-feed">
-                <div class="loading-state">
-                    <div class="loading-spinner"></div>
-                    <div>Loading reels...</div>
-                </div>
-            </div>
+        <!-- Scroll Container -->
+        <div class="reels-scroll-container" id="reels-feed-container">
+            <!-- Reels content loads here dynamically -->
         </div>
     </div>
+
     
     <!-- Core Scripts - Load in order -->
     <script src="assets/js/dom-cache.js"></script>
