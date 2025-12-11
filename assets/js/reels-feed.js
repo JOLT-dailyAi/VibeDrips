@@ -1,26 +1,94 @@
-// assets/js/reels-feed.js - Clean iframe Implementation
+// assets/js/reels-feed.js - Instagram-Style Reels Feed with Grid Layouts
 
 console.log('🎬 Reels feed module loading...');
 
-// Reels data - Just store Instagram URLs!
-const REELS_FEED_DATA = [
-  {
-    id: 'reel1',
-    instagramUrl: 'https://www.instagram.com/reel/DNgI781ReJo/',
-    productIds: ['B0BQHTML8D'] // Add more product ASINs here
+// Render the reels feed (called from modal)
+function renderReelsFeed() {
+  console.log('🎬 Rendering reels feed...');
+  
+  const feedContainer = document.getElementById('reels-feed-container');
+  
+  if (!feedContainer) {
+    console.error('❌ Reels feed container not found');
+    return;
   }
-  // Add more reels here:
-  // {
-  //   id: 'reel2',
-  //   instagramUrl: 'https://www.instagram.com/reel/ANOTHER_ID/',
-  //   productIds: ['ASIN1', 'ASIN2', 'ASIN3']
-  // }
-];
+  
+  // Clear loading state
+  feedContainer.innerHTML = '';
+  
+  // Get products with reel URLs
+  const reelsData = getReelsDataFromProducts();
+  
+  // Check if we have reels
+  if (reelsData.length === 0) {
+    feedContainer.innerHTML = `
+      <div class="empty-state">
+        <h3>🎬 No Reels Yet</h3>
+        <p>Check back soon for curated Instagram reels!</p>
+      </div>
+    `;
+    return;
+  }
+  
+  // Create each reel section
+  reelsData.forEach((reel, index) => {
+    const reelSection = createReelSection(reel, index);
+    if (reelSection) {
+      feedContainer.appendChild(reelSection);
+    }
+  });
+  
+  console.log(`✅ Rendered ${reelsData.length} reel sections`);
+}
 
-// Extract post ID from Instagram URL and create embed URL
+// Get reels data from products CSV
+function getReelsDataFromProducts() {
+  if (!window.VibeDrips || !window.VibeDrips.allProducts) {
+    console.warn('⚠️ VibeDrips.allProducts not available');
+    return [];
+  }
+  
+  // Filter products with "Product Source Link"
+  const productsWithReels = window.VibeDrips.allProducts.filter(p => {
+    const sourceLink = p['Product Source Link'] || p.productSourceLink || p.source_link;
+    return sourceLink && sourceLink.trim() !== '';
+  });
+  
+  // Group products by reel URL
+  const reelsMap = {};
+  
+  productsWithReels.forEach(product => {
+    let reelUrl = product['Product Source Link'] || product.productSourceLink || product.source_link;
+    
+    // Handle multiple URLs (take first one)
+    if (reelUrl.includes(',')) {
+      reelUrl = reelUrl.split(',')[0].trim();
+    }
+    
+    // Validate URL
+    if (!reelUrl.includes('instagram.com')) {
+      console.warn('⚠️ Invalid Instagram URL:', reelUrl);
+      return;
+    }
+    
+    // Group by URL
+    if (!reelsMap[reelUrl]) {
+      reelsMap[reelUrl] = {
+        url: reelUrl,
+        products: []
+      };
+    }
+    
+    reelsMap[reelUrl].products.push(product);
+  });
+  
+  // Convert to array
+  return Object.values(reelsMap);
+}
+
+// Extract Instagram post ID and create embed URL
 function getInstagramEmbedUrl(instagramUrl) {
   try {
-    // Match both /p/ and /reel/ formats
     const match = instagramUrl.match(/\/(p|reel)\/([^\/\?]+)/);
     if (match && match[2]) {
       const postId = match[2];
@@ -32,84 +100,24 @@ function getInstagramEmbedUrl(instagramUrl) {
   return null;
 }
 
-// Show reels feed
-function showReelsFeed() {
-  console.log('🎬 Showing reels feed...');
-  
-  const feedContainer = document.getElementById('reels-feed-container');
-  const productsContainer = document.getElementById('products-container');
-  const sectionTitle = document.getElementById('section-title');
-  const sectionSubtitle = document.getElementById('section-subtitle');
-  
-  if (!feedContainer || !productsContainer) {
-    console.error('❌ Containers not found');
-    return;
-  }
-  
-// Hide section headers completely
-if (sectionTitle) {
-  sectionTitle.style.display = 'none';
-}
-if (sectionSubtitle) {
-  sectionSubtitle.style.display = 'none';
-}
-
-  
-  // Hide products, show feed
-  productsContainer.classList.add('hidden');
-  productsContainer.style.display = 'none';
-  feedContainer.classList.remove('hidden');
-  feedContainer.style.display = 'block';
-  
-  // Render feed
-  renderReelsFeed();
-  
-  console.log('✅ Reels feed displayed');
-}
-
-// Render the complete reels feed
-function renderReelsFeed() {
-  const feedContainer = document.getElementById('reels-feed-container');
-  
-  if (!feedContainer) return;
-  
-  // Clear loading state
-  feedContainer.innerHTML = '';
-  
-  // Check if we have reels
-  if (REELS_FEED_DATA.length === 0) {
-    feedContainer.innerHTML = `
-      <div class="empty-state">
-        <h3>🎬 No Reels Yet</h3>
-        <p>Check back soon for curated Instagram reels!</p>
-      </div>
-    `;
-    return;
-  }
-  
-  // Create each reel section
-  REELS_FEED_DATA.forEach((reel, index) => {
-    const reelSection = createReelSection(reel, index);
-    if (reelSection) {
-      feedContainer.appendChild(reelSection);
-    }
-  });
-}
-
-// Create a single reel section (reel + products side by side)
+// Create a single reel section
 function createReelSection(reelData, index) {
-  const embedUrl = getInstagramEmbedUrl(reelData.instagramUrl);
+  const embedUrl = getInstagramEmbedUrl(reelData.url);
   
   if (!embedUrl) {
-    console.error('❌ Invalid Instagram URL:', reelData.instagramUrl);
+    console.error('❌ Invalid Instagram URL:', reelData.url);
     return null;
   }
   
   const section = document.createElement('div');
   section.className = 'reel-section';
-  section.setAttribute('data-reel-id', reelData.id);
+  section.setAttribute('data-reel-index', index);
   
-  // Create video container (left side on desktop)
+  // Create content wrapper
+  const content = document.createElement('div');
+  content.className = 'reel-content';
+  
+  // Create video container
   const videoDiv = document.createElement('div');
   videoDiv.className = 'reel-video';
   videoDiv.innerHTML = `
@@ -123,78 +131,186 @@ function createReelSection(reelData, index) {
     </iframe>
   `;
   
-  // Create products container (right side on desktop)
+  // Create products container with carousel
   const productsDiv = document.createElement('div');
   productsDiv.className = 'reel-products';
   
-  const productsGrid = document.createElement('div');
-  productsGrid.className = 'reel-products-grid';
+  const carousel = createProductsCarousel(reelData.products, index);
+  productsDiv.appendChild(carousel);
   
-  // Find and add product cards
-  reelData.productIds.forEach(productId => {
-    const product = findProductById(productId);
-    if (product) {
-      const card = createReelProductCard(product);
-      productsGrid.appendChild(card);
-    }
-  });
-  
-  // Handle empty products
-  if (productsGrid.children.length === 0) {
-    productsGrid.innerHTML = '<p style="color: #999; padding: 20px;">No products found for this reel</p>';
-  }
-  
-  productsDiv.appendChild(productsGrid);
-  
-  // Assemble section (side by side on desktop, stacked on mobile)
-  section.appendChild(videoDiv);
-  section.appendChild(productsDiv);
+  // Assemble section
+  content.appendChild(videoDiv);
+  content.appendChild(productsDiv);
+  section.appendChild(content);
   
   return section;
 }
 
-// Create product card
-function createReelProductCard(product) {
-  const card = document.createElement('div');
-  card.className = 'reel-product-card';
-  card.onclick = () => {
-    if (window.showProductModal) {
-      window.showProductModal(product.id);
-    }
-  };
+// Create products carousel with pagination
+function createProductsCarousel(products, reelIndex) {
+  const carousel = document.createElement('div');
+  carousel.className = 'products-carousel';
+  carousel.setAttribute('data-reel-index', reelIndex);
   
+  // Determine products per page based on screen size
+  const isMobile = window.innerWidth < 768;
+  const isTablet = window.innerWidth >= 768 && window.innerWidth < 1200;
+  const productsPerPage = isMobile ? 2 : (isTablet ? 4 : 6);
+  
+  // Calculate total pages
+  const totalPages = Math.ceil(products.length / productsPerPage);
+  let currentPage = 0;
+  
+  // Create navigation (arrows)
+  const prevBtn = document.createElement('button');
+  prevBtn.className = 'carousel-nav prev';
+  prevBtn.innerHTML = '◄';
+  prevBtn.onclick = () => navigateCarousel(carousel, -1);
+  
+  const nextBtn = document.createElement('button');
+  nextBtn.className = 'carousel-nav next';
+  nextBtn.innerHTML = '►';
+  nextBtn.onclick = () => navigateCarousel(carousel, 1);
+  
+  // Create products grid
+  const grid = document.createElement('div');
+  grid.className = 'products-grid';
+  
+  // Create dots indicator
+  const dotsContainer = document.createElement('div');
+  dotsContainer.className = 'carousel-dots';
+  
+  for (let i = 0; i < totalPages; i++) {
+    const dot = document.createElement('span');
+    dot.className = i === 0 ? 'dot active' : 'dot';
+    dot.onclick = () => goToPage(carousel, i);
+    dotsContainer.appendChild(dot);
+  }
+  
+  // Store carousel state
+  carousel.dataset.currentPage = '0';
+  carousel.dataset.totalPages = totalPages;
+  carousel.dataset.productsPerPage = productsPerPage;
+  
+  // Render initial page
+  renderProductsPage(grid, products, 0, productsPerPage);
+  
+  // Assemble carousel
+  if (totalPages > 1) {
+    carousel.appendChild(prevBtn);
+  }
+  carousel.appendChild(grid);
+  if (totalPages > 1) {
+    carousel.appendChild(nextBtn);
+    carousel.appendChild(dotsContainer);
+  }
+  
+  return carousel;
+}
+
+// Render products for current page
+function renderProductsPage(grid, allProducts, page, perPage) {
+  grid.innerHTML = '';
+  
+  const startIdx = page * perPage;
+  const endIdx = Math.min(startIdx + perPage, allProducts.length);
+  const pageProducts = allProducts.slice(startIdx, endIdx);
+  
+  pageProducts.forEach(product => {
+    const card = createProductCard(product);
+    grid.appendChild(card);
+  });
+}
+
+// Create product card with buy button
+function createProductCard(product) {
+  const card = document.createElement('div');
+  card.className = 'product-card';
+  
+  // Image
   const img = document.createElement('img');
   img.src = product.mainimage || 'https://via.placeholder.com/200';
   img.alt = product.name || 'Product';
   img.onerror = () => { img.src = 'https://via.placeholder.com/200'; };
   
-  const title = document.createElement('h4');
-  title.textContent = product.name || 'Product';
+  // Name
+  const name = document.createElement('h4');
+  name.className = 'product-name';
+  name.textContent = product.name || 'Product';
+  name.onclick = () => openProductModal(product);
   
-  const price = document.createElement('div');
+  // Footer (price + buy button)
+  const footer = document.createElement('div');
+  footer.className = 'product-footer';
+  
+  const price = document.createElement('span');
   price.className = 'price';
-  price.textContent = product.price ? `₹${product.price}` : 'Price not available';
+  price.textContent = product.price ? `₹${product.price}` : 'Price N/A';
   
+  const buyBtn = document.createElement('a');
+  buyBtn.className = 'amazon-btn';
+  buyBtn.href = product.link || product.amazonLink || '#';
+  buyBtn.target = '_blank';
+  buyBtn.rel = 'noopener noreferrer';
+  buyBtn.innerHTML = '🛒 Buy';
+  buyBtn.onclick = (e) => e.stopPropagation(); // Don't trigger product modal
+  
+  footer.appendChild(price);
+  footer.appendChild(buyBtn);
+  
+  // Assemble card
   card.appendChild(img);
-  card.appendChild(title);
-  card.appendChild(price);
+  card.appendChild(name);
+  card.appendChild(footer);
   
   return card;
 }
 
-// Find product by ID (ASIN)
-function findProductById(productId) {
-  if (!window.VibeDrips || !window.VibeDrips.allProducts) {
-    console.warn('⚠️ VibeDrips.allProducts not available');
-    return null;
-  }
+// Navigate carousel (prev/next)
+function navigateCarousel(carousel, direction) {
+  const currentPage = parseInt(carousel.dataset.currentPage);
+  const totalPages = parseInt(carousel.dataset.totalPages);
   
-  return window.VibeDrips.allProducts.find(p => 
-    p.asin === productId || p.id === productId
-  );
+  let newPage = currentPage + direction;
+  
+  // Wrap around
+  if (newPage < 0) newPage = totalPages - 1;
+  if (newPage >= totalPages) newPage = 0;
+  
+  goToPage(carousel, newPage);
+}
+
+// Go to specific page
+function goToPage(carousel, page) {
+  const grid = carousel.querySelector('.products-grid');
+  const dots = carousel.querySelectorAll('.dot');
+  const reelIndex = carousel.dataset.reelIndex;
+  const productsPerPage = parseInt(carousel.dataset.productsPerPage);
+  
+  // Get all products for this reel
+  const reelsData = getReelsDataFromProducts();
+  const products = reelsData[reelIndex].products;
+  
+  // Update page
+  carousel.dataset.currentPage = page;
+  
+  // Render new page
+  renderProductsPage(grid, products, page, productsPerPage);
+  
+  // Update dots
+  dots.forEach((dot, i) => {
+    dot.classList.toggle('active', i === page);
+  });
+}
+
+// Open product modal
+function openProductModal(product) {
+  if (window.showProductModal) {
+    window.showProductModal(product.id || product.asin);
+  }
 }
 
 // Export to global scope
-window.showReelsFeed = showReelsFeed;
+window.renderReelsFeed = renderReelsFeed;
 
 console.log('✅ Reels feed module loaded');
