@@ -17,11 +17,11 @@
   display: none;
 }
 
-/* Close Button - Floating */
+/* Close Button - Floating (Moved Left) */
 .reels-close-btn {
   position: fixed;
   top: 20px;
-  right: 20px;
+  right: 40px;
   width: 40px;
   height: 40px;
   background: rgba(255, 255, 255, 0.2);
@@ -46,7 +46,50 @@
   transform: scale(1.1);
 }
 
-/* Scroll Container - MANDATORY Snap */
+/* Navigation Arrows - Up/Down (NEW) */
+.reels-nav-btn {
+  position: fixed;
+  right: 40px;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  color: white;
+  font-size: 20px;
+  font-weight: 300;
+  cursor: pointer;
+  z-index: 1002;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  line-height: 1;
+  padding: 0;
+}
+
+.reels-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.reels-nav-btn.up {
+  top: 25vh;
+}
+
+.reels-nav-btn.down {
+  top: 75vh;
+}
+
+/* Hide nav buttons on mobile */
+@media (max-width: 767px) {
+  .reels-nav-btn {
+    display: none;
+  }
+}
+
+/* Scroll Container - MANDATORY Snap, NO SCROLLBAR */
 .reels-scroll-container {
   flex: 1;
   overflow-y: auto;
@@ -66,27 +109,18 @@
   /* PEEK EFFECT - Option C: Overlay Shadow Method (COMMENTED OUT)
   padding: 0;
   */
+  
+  /* HIDE SCROLLBAR COMPLETELY */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
 }
 
-/* Smooth scrollbar styling */
+/* Hide scrollbar for Webkit browsers */
 .reels-scroll-container::-webkit-scrollbar {
-  width: 8px;
+  display: none;
 }
 
-.reels-scroll-container::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.reels-scroll-container::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
-}
-
-.reels-scroll-container::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-/* Reel Section - Snap Target */
+/* Reel Section - Snap Target with Overflow Hidden */
 .reel-section {
   scroll-snap-align: start;
   height: 100vh;
@@ -94,6 +128,7 @@
   align-items: center;
   justify-content: center;
   padding: 20px;
+  overflow: hidden; /* Prevent content bleeding */
   
   /* PEEK EFFECT - Option A: Padding Method (RECOMMENDED - ACTIVE) */
   /* No additional styles needed - padding on container handles it */
@@ -146,6 +181,7 @@
     max-width: 1400px;
     width: 100%;
     height: 80vh;
+    max-height: 80vh;
   }
   
   .reel-video {
@@ -153,6 +189,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+  }
+  
+  .reel-video iframe {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
   }
   
   .reel-products {
@@ -160,6 +203,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    overflow: hidden;
   }
 }
 
@@ -171,6 +215,7 @@
     max-width: 1000px;
     width: 100%;
     height: 80vh;
+    max-height: 80vh;
   }
   
   .reel-video {
@@ -178,6 +223,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+  }
+  
+  .reel-video iframe {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
   }
   
   .reel-products {
@@ -185,6 +237,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    overflow: hidden;
   }
   
   /* Reduce peek padding on tablet */
@@ -198,6 +251,7 @@
   .reel-section {
     padding: 10px;
     height: 100vh;
+    width: 100vw;
   }
   
   .reel-content {
@@ -205,21 +259,34 @@
     flex-direction: column;
     width: 100%;
     height: 100%;
+    max-height: 100vh;
   }
   
   .reel-video {
-    flex: 0 0 75%;
+    flex: 0 0 70%;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+    max-height: 70vh;
+  }
+  
+  .reel-video iframe {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+    object-fit: contain;
   }
   
   .reel-products {
-    flex: 0 0 25%;
+    flex: 0 0 30%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     padding-top: 10px;
+    overflow: hidden;
+    max-height: 30vh;
   }
   
   .reels-close-btn {
