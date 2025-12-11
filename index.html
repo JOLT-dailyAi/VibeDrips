@@ -83,8 +83,8 @@
         <section class="filters-section">
             <div class="container">
                 <div class="time-categories">
-                    <!-- UPDATED: Changed onclick to showReelsFeed() -->
-                    <div class="time-category" data-filter="reels" onclick="showReelsFeed()">🎬 Reels</div>
+                    <!-- UPDATED: Changed to openReelsModal() -->
+                    <div class="time-category" data-filter="reels" onclick="openReelsModal()">🎬 Reels</div>
                     <div class="time-category" data-filter="hot">🔥 Hot This Month</div>
                     <div class="time-category" data-filter="featured">⭐ Featured</div>
                     <div class="time-category" data-filter="new">🆕 New Arrivals</div>
@@ -147,14 +147,6 @@
                     <div class="loading-state">
                         <div class="loading-spinner"></div>
                         <div>Loading your curated drops...</div>
-                    </div>
-                </div>
-                
-                <!-- NEW: Reels Feed Container -->
-                <div id="reels-feed-container" class="reels-feed hidden">
-                    <div class="loading-state">
-                        <div class="loading-spinner"></div>
-                        <div>Loading reels...</div>
                     </div>
                 </div>
             </div>
@@ -248,8 +240,6 @@
     <!-- Right-side Floating Controls -->
     <div class="social-float">
         <button id="theme-toggle"></button>
-        <!-- Instagram removed -->
-        <!--    <a href="https://www.instagram.com/vibedrips.dailyai/" target="_blank"><i class="fab fa-instagram"></i></a>    -->
         <div class="currency-display" onclick="showCurrencyModal()">
             <span id="currency-trigger">INR</span>
         </div>
@@ -279,6 +269,20 @@
     <div id="toast-notification" class="toast-notification hidden">
         ✓ Link copied to clipboard!
     </div>
+
+    <!-- NEW: Reels Modal -->
+    <div id="reels-modal" class="reels-modal hidden">
+        <button class="reels-close-btn" onclick="closeReelsModal()">×</button>
+        
+        <div class="reels-scroll-container">
+            <div id="reels-feed-container" class="reels-feed">
+                <div class="loading-state">
+                    <div class="loading-spinner"></div>
+                    <div>Loading reels...</div>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <!-- Core Scripts - Load in order -->
     <script src="assets/js/dom-cache.js"></script>
@@ -294,8 +298,9 @@
     <script src="assets/js/products.js"></script>
     <script src="assets/js/glass-settings.js"></script>
     <script src="assets/js/main.js"></script>
-    <!-- UPDATED: Reels Feed JS (not modal) -->
+    <!-- NEW: Reels Scripts -->
     <script src="assets/js/reels-feed.js"></script>
+    <script src="assets/js/reels-modal.js"></script>
     
     <script>
         // Initialize the application
