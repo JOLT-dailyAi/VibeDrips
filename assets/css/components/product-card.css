@@ -2,15 +2,12 @@
 
 /* Product Card - Modern Compact Design */
 .product-card {
-  background: rgba(255, 255, 255, 0.08) !important;
-  backdrop-filter: blur(10px) saturate(100%) !important;  /* ← ADD saturate(100%) */
-  -webkit-backdrop-filter: blur(10px) saturate(100%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
-  color: white !important;
+  color: #333;
   display: flex;
   flex-direction: column;
   cursor: pointer;
@@ -18,9 +15,22 @@
   gap: 8px;
 }
 
-
 .product-card:hover {
-  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Glass theme support */
+body.glass-theme .product-card {
+  background: rgba(255, 255, 255, 0.08) !important;
+  backdrop-filter: blur(10px) saturate(100%) !important;
+  -webkit-backdrop-filter: blur(10px) saturate(100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: white !important;
+}
+
+body.glass-theme .product-card:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
   border-color: rgba(255, 255, 255, 0.3);
   transform: translateY(-4px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
@@ -81,7 +91,7 @@
 
 /* Category - After Image */
 .product-card .product-category {
-  color: rgba(255, 255, 255, 0.7);
+  color: #667eea;
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
@@ -89,9 +99,13 @@
   margin: 0;
 }
 
+body.glass-theme .product-card .product-category {
+  color: rgba(255, 255, 255, 0.9);
+}
+
 /* Product Name */
 .product-card .product-name {
-  color: white;
+  color: #2d3748;
   font-size: 0.95rem;
   font-weight: 500;
   margin: 0;
@@ -102,6 +116,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
   min-height: 2.6em;
+}
+
+body.glass-theme .product-card .product-name {
+  color: white;
 }
 
 /* Price Row - Price and Rating on Same Line */
