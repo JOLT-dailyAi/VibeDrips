@@ -152,11 +152,11 @@ body.glass-theme .product-card .product-name {
 
 /* Light Theme - Darker colors for better readability */
 body.light-theme .product-card .product-price {
-  color: #16a34a;
+  color: #16a34a !important;
 }
 
 body.light-theme .product-card .rating {
-  color: #ca8a04;
+  color: #ca8a04 !important;
 }
 
 /* Dark Theme - White name, Green price */
