@@ -192,6 +192,35 @@
   min-height: 2.6em;
 }
 
+/* Brand Tag (positioned over image) */
+.product-card .brand-tag {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(102, 126, 234, 0.95);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+}
+
+/* Ensure image is positioned relatively for absolute brand tag */
+.product-card {
+  position: relative;
+}
+
+.product-card img {
+  position: relative;
+  z-index: 1;
+}
+
+
 /* Product Footer (Price + Buy Button) */
 .product-footer {
   display: flex;
