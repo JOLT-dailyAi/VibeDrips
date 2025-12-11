@@ -222,46 +222,46 @@ function renderProductsPage(grid, allProducts, page, perPage) {
   });
 }
 
-// Create product card with buy button
+// Create product card HTML
 function createProductCard(product) {
   const card = document.createElement('div');
   card.className = 'product-card';
   
-  // Image
-  const img = document.createElement('img');
-  img.src = product.mainimage || 'https://via.placeholder.com/200';
-  img.alt = product.name || 'Product';
-  img.onerror = () => { img.src = 'https://via.placeholder.com/200'; };
+  // Use correct field names from your data
+  const imageUrl = product.main_image || '';
+  const amazonLink = product.amazon_short || product.amazon_long || product.source_link || '#';
   
-  // Name
-  const name = document.createElement('h4');
-  name.className = 'product-name';
-  name.textContent = product.name || 'Product';
-  name.onclick = () => openProductModal(product);
+  // Format price
+  const price = product.price;
+  const currency = product.symbol || '₹';
+  const priceFormatted = typeof price === 'number' 
+    ? `${currency}${price.toLocaleString('en-IN')}` 
+    : price;
   
-  // Footer (price + buy button)
-  const footer = document.createElement('div');
-  footer.className = 'product-footer';
+  // SVG fallback with product name
+  const svgFallback = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23333' width='200' height='200'/%3E%3Ctext fill='%23fff' font-size='14' x='50%25' y='50%25' text-anchor='middle' dy='.3em'%3E${encodeURIComponent(product.name?.substring(0, 20) || 'No Image')}%3C/text%3E%3C/svg%3E`;
   
-  const price = document.createElement('span');
-  price.className = 'price';
-  price.textContent = product.price ? `₹${product.price}` : 'Price N/A';
-  
-  const buyBtn = document.createElement('a');
-  buyBtn.className = 'amazon-btn';
-  buyBtn.href = product.link || product.amazonLink || '#';
-  buyBtn.target = '_blank';
-  buyBtn.rel = 'noopener noreferrer';
-  buyBtn.innerHTML = '🛒 Buy';
-  buyBtn.onclick = (e) => e.stopPropagation(); // Don't trigger product modal
-  
-  footer.appendChild(price);
-  footer.appendChild(buyBtn);
-  
-  // Assemble card
-  card.appendChild(img);
-  card.appendChild(name);
-  card.appendChild(footer);
+  card.innerHTML = `
+    <img src="${imageUrl || svgFallback}" 
+         alt="${product.name || 'Product'}"
+         loading="lazy"
+         onerror="this.src='${svgFallback}'">
+    
+    ${product.brand ? `<div class="brand-tag">🏷️ ${product.brand}</div>` : ''}
+    
+    <h3 class="product-name">${product.name || 'Product Name'}</h3>
+    
+    <div class="product-footer">
+      <span class="price">${priceFormatted}</span>
+      <a href="${amazonLink}" 
+         target="_blank" 
+         rel="noopener noreferrer"
+         class="amazon-btn"
+         onclick="event.stopPropagation()">
+        Buy Now →
+      </a>
+    </div>
+  `;
   
   return card;
 }
