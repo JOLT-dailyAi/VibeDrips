@@ -46,7 +46,7 @@
   transform: scale(1.1);
 }
 
-/* Navigation Arrows - Up/Down (NEW) */
+/* Navigation Arrows - Up/Down */
 .reels-nav-btn {
   position: fixed;
   right: 40px;
@@ -89,26 +89,18 @@
   }
 }
 
-/* Scroll Container - MANDATORY Snap, NO SCROLLBAR */
+/* Scroll Container - INSTAGRAM/SHORTS MODE (NO PEEKING) */
 .reels-scroll-container {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
   
-  /* MANDATORY SNAP - Active by default */
+  /* MANDATORY SNAP - Strict Instagram/Shorts behavior */
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
   
-  /* PEEK EFFECT - Option A: Padding Method (RECOMMENDED - ACTIVE) */
-  padding: 10vh 0;
-  
-  /* PEEK EFFECT - Option B: Transform/Scale Method (COMMENTED OUT)
+  /* NO PADDING - No peeking effect */
   padding: 0;
-  */
-  
-  /* PEEK EFFECT - Option C: Overlay Shadow Method (COMMENTED OUT)
-  padding: 0;
-  */
   
   /* HIDE SCROLLBAR COMPLETELY */
   scrollbar-width: none; /* Firefox */
@@ -120,68 +112,35 @@
   display: none;
 }
 
-/* Reel Section - Snap Target with Overflow Hidden */
+/* Reel Section - EXACT 100vh per reel (Instagram/Shorts style) */
 .reel-section {
   scroll-snap-align: start;
+  scroll-snap-stop: always;
   height: 100vh;
+  min-height: 100vh;
+  max-height: 100vh;
+  width: 100vw;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  overflow: hidden; /* Prevent content bleeding */
-  
-  /* PEEK EFFECT - Option A: Padding Method (RECOMMENDED - ACTIVE) */
-  /* No additional styles needed - padding on container handles it */
-  
-  /* PEEK EFFECT - Option B: Transform/Scale Method (COMMENTED OUT)
-  transition: transform 0.3s ease, opacity 0.3s ease;
-  transform: scale(0.9);
-  opacity: 0.5;
-  */
-}
-
-/* PEEK EFFECT - Option B: Scale focused reel (COMMENTED OUT)
-.reel-section:focus-within,
-.reel-section:hover {
-  transform: scale(1);
-  opacity: 1;
-}
-*/
-
-/* PEEK EFFECT - Option C: Overlay Shadow on non-focused reels (COMMENTED OUT)
-.reel-section::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-  z-index: 1;
-}
-
-.reel-section:focus-within::before,
-.reel-section:hover::before {
-  opacity: 0;
-}
-
-.reel-section .reel-content {
+  padding: 0;
+  overflow: hidden;
   position: relative;
-  z-index: 2;
 }
-*/
 
 /* Desktop: Side-by-Side Layout (>1200px) */
 @media (min-width: 1200px) {
+  .reel-section {
+    padding: 20px;
+  }
+  
   .reel-content {
     display: flex;
     gap: 30px;
     max-width: 1400px;
     width: 100%;
-    height: 80vh;
-    max-height: 80vh;
+    height: 100%;
+    max-height: 100%;
   }
   
   .reel-video {
@@ -190,11 +149,14 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    height: 100%;
   }
   
   .reel-video iframe {
     max-width: 100%;
     max-height: 100%;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
   }
   
@@ -204,18 +166,23 @@
     flex-direction: column;
     justify-content: center;
     overflow: hidden;
+    height: 100%;
   }
 }
 
 /* Tablet: Side-by-Side (768px-1199px) */
 @media (min-width: 768px) and (max-width: 1199px) {
+  .reel-section {
+    padding: 20px;
+  }
+  
   .reel-content {
     display: flex;
     gap: 20px;
     max-width: 1000px;
     width: 100%;
-    height: 80vh;
-    max-height: 80vh;
+    height: 100%;
+    max-height: 100%;
   }
   
   .reel-video {
@@ -224,11 +191,14 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    height: 100%;
   }
   
   .reel-video iframe {
     max-width: 100%;
     max-height: 100%;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
   }
   
@@ -238,19 +208,17 @@
     flex-direction: column;
     justify-content: center;
     overflow: hidden;
-  }
-  
-  /* Reduce peek padding on tablet */
-  .reels-scroll-container {
-    padding: 5vh 0;
+    height: 100%;
   }
 }
 
-/* Mobile: Stacked (<768px) */
+/* Mobile: Stacked (<768px) - STRICT HEIGHT CONTROL */
 @media (max-width: 767px) {
   .reel-section {
-    padding: 10px;
+    padding: 0;
     height: 100vh;
+    min-height: 100vh;
+    max-height: 100vh;
     width: 100vw;
   }
   
@@ -260,15 +228,18 @@
     width: 100%;
     height: 100%;
     max-height: 100vh;
+    padding: 10px;
+    box-sizing: border-box;
   }
   
   .reel-video {
-    flex: 0 0 70%;
+    flex: 0 0 65%;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    max-height: 70vh;
+    max-height: 65vh;
+    width: 100%;
   }
   
   .reel-video iframe {
@@ -280,13 +251,13 @@
   }
   
   .reel-products {
-    flex: 0 0 30%;
+    flex: 0 0 35%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding-top: 10px;
     overflow: hidden;
-    max-height: 30vh;
+    max-height: 35vh;
+    width: 100%;
   }
   
   .reels-close-btn {
@@ -295,11 +266,6 @@
     width: 36px;
     height: 36px;
     font-size: 20px;
-  }
-  
-  /* No peek effect on mobile */
-  .reels-scroll-container {
-    padding: 0;
   }
 }
 
