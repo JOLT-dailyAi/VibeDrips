@@ -18,8 +18,8 @@
 @import url('./components/badges.css');
 @import url('./components/stats.css');
 @import url('./components/install-banner.css');
-/* ADD THIS NEW ONE */
-@import 'components/reels-feed.css';
+@import url('./components/reels-feed.css');
+@import url('./components/reels-modal.css'); /* NEW - Add this line */
 
 /* States */
 @import url('./states/loading.css');
