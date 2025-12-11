@@ -222,7 +222,7 @@ function renderProductsPage(grid, allProducts, page, perPage) {
   });
 }
 
-// Create product card HTML - Hybrid: Main page structure + Reels styling
+// Create product card HTML - Final hybrid version
 function createProductCard(product) {
   const card = document.createElement('div');
   card.className = 'product-card';
@@ -236,53 +236,42 @@ function createProductCard(product) {
   const productAsin = product.asin || product.id || '';
   const category = product.subcategory || product.itemTypeName || product.category || 'General';
   const brand = product.brand || 'VibeDrips';
-  const description = product.description || 'No description available';
   const rating = parseFloat(product.customer_rating) || 0;
   
-  // Format price with green color
+  // Format price
   const price = product.price || 0;
   const currency = product.symbol || '₹';
   const priceFormatted = typeof price === 'number' 
     ? `${currency}${price.toLocaleString('en-IN')}` 
     : price;
   
-  // Truncate description
-  const shortDescription = description.length > 100 
-    ? description.substring(0, 100) + '...' 
-    : description;
-  
   // SVG fallback
   const svgFallback = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23333' width='200' height='200'/%3E%3Ctext fill='%23fff' font-size='14' x='50%25' y='50%25' text-anchor='middle' dy='.3em'%3E${encodeURIComponent(productName?.substring(0, 20) || 'No Image')}%3C/text%3E%3C/svg%3E`;
   
   card.innerHTML = `
-    <div class="product-image">
-      <img src="${imageUrl || svgFallback}" 
-           alt="${productName}"
-           onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-           loading="lazy">
-      <div class="product-image-placeholder" style="display:none;">🛍️</div>
-      ${imageCount > 1 ? `<div class="image-count">${imageCount} photos</div>` : ''}
-      ${brand ? `<div class="brand-tag">🏷️ ${brand}</div>` : ''}
+    <img src="${imageUrl || svgFallback}" 
+         alt="${productName}"
+         loading="lazy"
+         onerror="this.src='${svgFallback}'">
+    
+    ${imageCount > 1 ? `<div class="image-count">${imageCount} photos</div>` : ''}
+    ${brand ? `<div class="brand-tag">🏷️ ${brand}</div>` : ''}
+    
+    <div class="product-category">${category}</div>
+    <h3 class="product-name">${productName}</h3>
+    <div class="product-price">${priceFormatted}</div>
+    
+    <div class="product-meta">
+      <div class="rating">${rating > 0 ? `⭐ ${rating.toFixed(1)}` : '<span class="no-rating">No rating</span>'}</div>
     </div>
-    <div class="product-info">
-      <div class="product-category">${category}</div>
-      <h3 class="product-title">${productName}</h3>
-      <div class="product-description">${shortDescription}</div>
-      <div class="product-price">${priceFormatted}</div>
-      
-      <div class="product-meta">
-        <span class="brand">🏷️ ${brand}</span>
-        <div class="rating">${rating > 0 ? `⭐ ${rating.toFixed(1)}` : '<span class="no-rating">No rating</span>'}</div>
-      </div>
-      
-      <div class="product-actions">
-        <button class="amazon-button" onclick="event.stopPropagation(); openAmazonLink('${amazonLink}', '${productAsin}')">
-          🛒 Buy on Amazon
-        </button>
-        <button class="details-button" onclick="event.stopPropagation(); showProductModal('${productAsin}')">
-          ℹ️ Details
-        </button>
-      </div>
+    
+    <div class="product-footer">
+      <button class="amazon-button" onclick="event.stopPropagation(); openAmazonLink('${amazonLink}', '${productAsin}')">
+        🛒 Buy on Amazon
+      </button>
+      <button class="details-button" onclick="event.stopPropagation(); showProductModal('${productAsin}')">
+        ℹ️ Details
+      </button>
     </div>
   `;
   
@@ -292,6 +281,7 @@ function createProductCard(product) {
   
   return card;
 }
+
 
 // Navigate carousel (prev/next)
 function navigateCarousel(carousel, direction) {
