@@ -32,7 +32,6 @@ body.glass-theme .product-card {
     inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
-
 body.glass-theme .product-card:hover {
   background: rgba(255, 255, 255, 0.12) !important;
   border-color: rgba(255, 255, 255, 0.3);
@@ -90,7 +89,7 @@ body.glass-theme .product-card:hover {
   letter-spacing: 0.5px;
   z-index: 10;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(4px) saturate(100%);  /* ← ADD saturate(100%) */
+  backdrop-filter: blur(4px) saturate(100%);
 }
 
 /* Category - After Image */
@@ -151,12 +150,22 @@ body.glass-theme .product-card .product-name {
   white-space: nowrap;
 }
 
-body.light-theme .product-price {
-  color: #16a34a;  /* Darker green for light theme */
+/* Light Theme - Darker colors for better readability */
+body.light-theme .product-card .product-price {
+  color: #16a34a;
 }
 
-body.light-theme .rating {
-  color: #ca8a04;  /* Darker gold for light theme */
+body.light-theme .product-card .rating {
+  color: #ca8a04;
+}
+
+/* Dark Theme - White name, Green price */
+body.dark-theme .product-card .product-name {
+  color: #FFFFFF;
+}
+
+body.dark-theme .product-card .product-price {
+  color: #4ade80;
 }
 
 /* Amazon Button - Full Width */
