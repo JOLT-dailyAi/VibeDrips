@@ -261,18 +261,11 @@ function createProductCard(product) {
     <h3 class="product-name">${productName}</h3>
     <div class="product-price">${priceFormatted}</div>
     
-    <div class="product-meta">
-      <div class="rating">${rating > 0 ? `⭐ ${rating.toFixed(1)}` : '<span class="no-rating">No rating</span>'}</div>
-    </div>
+    ${rating > 0 ? `<div class="product-meta"><div class="rating">⭐ ${rating.toFixed(1)}</div></div>` : ''}
     
-    <div class="product-footer">
-      <button class="amazon-button" onclick="event.stopPropagation(); openAmazonLink('${amazonLink}', '${productAsin}')">
-        🛒 Buy on Amazon
-      </button>
-      <button class="details-button" onclick="event.stopPropagation(); showProductModal('${productAsin}')">
-        ℹ️ Details
-      </button>
-    </div>
+    <button class="amazon-button" onclick="event.stopPropagation(); openAmazonLink('${amazonLink}', '${productAsin}')">
+      🛒 Buy on Amazon
+    </button>
   `;
   
   // Make entire card clickable to open modal
@@ -281,6 +274,7 @@ function createProductCard(product) {
   
   return card;
 }
+
 
 
 // Navigate carousel (prev/next)
