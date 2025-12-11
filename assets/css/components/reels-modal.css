@@ -46,26 +46,27 @@
   transform: scale(1.1);
 }
 
-/* Scroll Container - Flexible Scroll */
+/* Scroll Container - MANDATORY Snap */
 .reels-scroll-container {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
   
-  /* Option A: Gentle Snap (Active by default) 
-  scroll-snap-type: y proximity;
-  scroll-behavior: smooth;
-  */
-  
-  /* Option B: No Snap (Uncomment to enable complete freedom)
-  scroll-snap-type: none;
-  scroll-behavior: smooth;
-  */
-}
-
-  /* Option C: Hard Snap (Active by default) */
+  /* MANDATORY SNAP - Active by default */
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
+  
+  /* PEEK EFFECT - Option A: Padding Method (RECOMMENDED - ACTIVE) */
+  padding: 10vh 0;
+  
+  /* PEEK EFFECT - Option B: Transform/Scale Method (COMMENTED OUT)
+  padding: 0;
+  */
+  
+  /* PEEK EFFECT - Option C: Overlay Shadow Method (COMMENTED OUT)
+  padding: 0;
+  */
+}
 
 /* Smooth scrollbar styling */
 .reels-scroll-container::-webkit-scrollbar {
@@ -88,12 +89,54 @@
 /* Reel Section - Snap Target */
 .reel-section {
   scroll-snap-align: start;
-  height: 100vh;  /* Force exact screen height */
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
+  
+  /* PEEK EFFECT - Option A: Padding Method (RECOMMENDED - ACTIVE) */
+  /* No additional styles needed - padding on container handles it */
+  
+  /* PEEK EFFECT - Option B: Transform/Scale Method (COMMENTED OUT)
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  transform: scale(0.9);
+  opacity: 0.5;
+  */
 }
+
+/* PEEK EFFECT - Option B: Scale focused reel (COMMENTED OUT)
+.reel-section:focus-within,
+.reel-section:hover {
+  transform: scale(1);
+  opacity: 1;
+}
+*/
+
+/* PEEK EFFECT - Option C: Overlay Shadow on non-focused reels (COMMENTED OUT)
+.reel-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+.reel-section:focus-within::before,
+.reel-section:hover::before {
+  opacity: 0;
+}
+
+.reel-section .reel-content {
+  position: relative;
+  z-index: 2;
+}
+*/
 
 /* Desktop: Side-by-Side Layout (>1200px) */
 @media (min-width: 1200px) {
@@ -102,7 +145,7 @@
     gap: 30px;
     max-width: 1400px;
     width: 100%;
-    height: 90vh;
+    height: 80vh;
   }
   
   .reel-video {
@@ -127,7 +170,7 @@
     gap: 20px;
     max-width: 1000px;
     width: 100%;
-    height: 85vh;
+    height: 80vh;
   }
   
   .reel-video {
@@ -143,13 +186,18 @@
     flex-direction: column;
     justify-content: center;
   }
+  
+  /* Reduce peek padding on tablet */
+  .reels-scroll-container {
+    padding: 5vh 0;
+  }
 }
 
 /* Mobile: Stacked (<768px) */
 @media (max-width: 767px) {
   .reel-section {
     padding: 10px;
-    min-height: 100vh;
+    height: 100vh;
   }
   
   .reel-content {
@@ -160,14 +208,14 @@
   }
   
   .reel-video {
-    flex: 0 0 75%; /* 75% of screen */
+    flex: 0 0 75%;
     display: flex;
     align-items: center;
     justify-content: center;
   }
   
   .reel-products {
-    flex: 0 0 25%; /* 25% of screen */
+    flex: 0 0 25%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -180,6 +228,11 @@
     width: 36px;
     height: 36px;
     font-size: 20px;
+  }
+  
+  /* No peek effect on mobile */
+  .reels-scroll-container {
+    padding: 0;
   }
 }
 
