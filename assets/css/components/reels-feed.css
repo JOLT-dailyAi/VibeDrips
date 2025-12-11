@@ -156,7 +156,7 @@
   padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   transition: all 0.3s ease;
   cursor: pointer;
   position: relative;
@@ -170,6 +170,12 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
+/* Product Image Wrapper */
+.product-card .product-image-wrapper {
+  position: relative;
+  width: 100%;
+}
+
 /* Product Image */
 .product-card img {
   width: 100%;
@@ -177,15 +183,14 @@
   object-fit: cover;
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.05);
-  position: relative;
-  z-index: 1;
+  display: block;
 }
 
-/* Image Count Badge - Bottom Right (like products.js) */
+/* Image Count Badge - Bottom Right Inside Image */
 .product-card .image-count {
   position: absolute;
-  bottom: 20px;
-  right: 20px;
+  bottom: 8px;
+  right: 8px;
   background: rgba(0, 0, 0, 0.7);
   color: white;
   padding: 4px 8px;
@@ -198,8 +203,8 @@
 /* Brand Tag - Top Left Over Image */
 .product-card .brand-tag {
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: 8px;
+  left: 8px;
   background: rgba(102, 126, 234, 0.95);
   color: white;
   padding: 4px 10px;
@@ -213,7 +218,7 @@
   backdrop-filter: blur(4px);
 }
 
-/* Category */
+/* Category - After Image */
 .product-card .product-category {
   color: rgba(255, 255, 255, 0.7);
   font-size: 11px;
@@ -238,33 +243,36 @@
   min-height: 2.6em;
 }
 
+/* Price Row - Price and Rating on Same Line */
+.product-card .product-price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
 /* Price - Green Color */
 .product-card .product-price {
   color: #4ade80;
   font-size: 1.1rem;
   font-weight: 600;
-  margin: 4px 0;
+  margin: 0;
 }
 
 body.glass-theme .product-card .product-price {
   color: #4ade80;
 }
 
-/* Product Meta - Rating Right-Aligned */
-.product-card .product-meta {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  font-size: 13px;
-  margin: 4px 0;
-}
-
+/* Rating - Same Line as Price */
 .product-card .rating {
   color: #ffd700;
   font-weight: 500;
+  font-size: 13px;
+  white-space: nowrap;
 }
 
-/* Amazon Button - Centered, Full Width */
+/* Amazon Button - Full Width, Next Line After Price Row */
 .product-card .amazon-button {
   width: 100%;
   padding: 10px 16px;
@@ -276,7 +284,7 @@ body.glass-theme .product-card .product-price {
   transition: all 0.3s ease;
   white-space: nowrap;
   text-align: center;
-  margin-top: auto;
+  margin: 0;
   background: linear-gradient(135deg, #ff9900 0%, #ff6600 100%);
   color: white;
   box-shadow: 0 2px 8px rgba(255, 153, 0, 0.3);
@@ -305,19 +313,27 @@ body.glass-theme .product-card .product-price {
     font-size: 0.95rem;
   }
   
+  .product-card .rating {
+    font-size: 11px;
+  }
+  
   .product-card .amazon-button {
     padding: 8px 12px;
     font-size: 0.8rem;
   }
   
   .product-card .image-count {
-    bottom: 12px;
-    right: 12px;
+    bottom: 6px;
+    right: 6px;
+    font-size: 10px;
+    padding: 3px 6px;
   }
   
   .product-card .brand-tag {
-    top: 12px;
-    left: 12px;
+    top: 6px;
+    left: 6px;
+    font-size: 10px;
+    padding: 3px 8px;
   }
 }
 
