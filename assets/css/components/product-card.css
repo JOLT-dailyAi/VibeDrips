@@ -86,7 +86,7 @@ body.glass-theme .product-card:hover {
   letter-spacing: 0.5px;
   z-index: 10;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px) saturate(100%);  /* ← ADD saturate(100%) */
 }
 
 /* Category - After Image */
