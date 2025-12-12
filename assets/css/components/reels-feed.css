@@ -1,241 +1,404 @@
-/* Reels Feed - Clean iframe Implementation */
+/* Reels Feed - Instagram-Style Grid Layouts */
 
-.reels-feed {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-  display: block;
+/* ALL RULES SCOPED TO REELS MODAL ONLY */
+
+/* Feed Container (inside reels modal) */
+.reels-modal .reels-feed {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
 }
 
-.reels-feed.hidden {
+.reels-modal .reels-feed.hidden {
   display: none;
 }
 
-/* Individual Reel Section */
-.reel-section {
+/* Empty State */
+.reels-modal .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  padding: 40px;
+}
+
+.reels-modal .empty-state h3 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.reels-modal .empty-state p {
+  font-size: 1.1rem;
+  opacity: 0.8;
+}
+
+/* Reel Section (each reel + products) */
+.reels-modal .reel-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  height: 100vh;
+  min-height: 100vh;
+  max-height: 100vh;
+  width: 100%;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Reel Content Wrapper */
+.reels-modal .reel-content {
   display: flex;
   gap: 30px;
-  margin-bottom: 60px;
-  padding-bottom: 40px;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-  animation: fadeInUp 0.5s ease;
+  max-width: 1400px;
+  margin: 0 auto;
+  overflow: hidden;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
-.reel-section:last-child {
-  border-bottom: none;
-}
-
-/* Reel Video (Left Side - Desktop) */
-.reel-video {
+/* Reel Video Container */
+.reels-modal .reel-video {
   flex: 1;
-  min-width: 0;
-}
-
-.reel-video iframe {
-  width: 100%;
-  height: 600px;
-  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 12px;
-  background: #000;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  position: relative;
 }
 
-/* Products Grid (Right Side - Desktop) */
-.reel-products {
+.reels-modal .reel-video iframe {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Reel Products Container */
+.reels-modal .reel-products {
   flex: 1;
-  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  overflow: hidden;
 }
 
-/* Product Cards Grid (Desktop: Stacked) */
-.reel-products-grid {
+/* Products Carousel */
+.reels-modal .products-carousel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==================== PRODUCTS GRID - LAYOUT ONLY ==================== */
+/* ✅ Product cards use DEFAULT homepage styling from product-card.css */
+
+.reels-modal .products-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
   gap: 15px;
-}
-
-/* Product Card */
-.reel-product-card {
-  background: var(--card-bg);
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-}
-
-.reel-product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
-.reel-product-card img {
   width: 100%;
-  height: 180px;
-  object-fit: cover;
-  display: block;
+  height: 100%;
+  transition: opacity 0.3s ease;
+  scrollbar-width: thin;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 10px;
+  box-sizing: border-box;
+  touch-action: pan-x; /* ✅ Allow horizontal touch scrolling */
+  cursor: grab; /* ✅ Restore grab cursor */
 }
 
-.reel-product-card h4 {
-  padding: 12px;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin: 0;
-  line-height: 1.4;
-  min-height: 60px;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.reels-modal .products-grid:active {
+  cursor: grabbing; /* ✅ Show grabbing on drag */
 }
 
-.reel-product-card .price {
-  padding: 0 12px 12px;
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--accent-color);
+/* Scrollbar styling */
+.reels-modal .products-grid::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
 }
 
-/* Fade in animation */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
+.reels-modal .products-grid::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.reels-modal .products-grid::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.reels-modal .products-grid::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.reels-modal .products-carousel[data-transitioning="true"] .products-grid {
+  opacity: 0.5;
+}
+
+/* ==================== DESKTOP: 3×2 GRID ==================== */
+@media (min-width: 1200px) {
+  .reels-modal .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-auto-flow: row;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+}
+
+/* ==================== TABLET: 2×2 GRID ==================== */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .reels-modal .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    grid-auto-flow: row;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .reels-modal .reel-video iframe {
+    max-width: 400px;
   }
 }
 
-/* Mobile: Vertical Layout */
-@media (max-width: 768px) {
-  .reels-feed {
-    padding: 15px 10px;
+/* ==================== MOBILE PORTRAIT: 1 ROW × 2 COLUMNS ==================== */
+@media (max-width: 767px) and (orientation: portrait) {
+  .reels-modal .reel-section {
+    padding: 0;
+    height: 100vh;
+    min-height: 100vh;
+    max-height: 100vh;
+    width: 100vw;
   }
-  
-  .reel-section {
+
+  .reels-modal .reel-content {
     flex-direction: column;
-    gap: 20px;
-    margin-bottom: 40px;
-    padding-bottom: 30px;
+    gap: 10px;
+    width: 100%;
+    max-width: 100vw;
+    padding: 10px;
+    box-sizing: border-box;
   }
-  
-  .reel-video iframe {
-    height: 500px;
+
+  .reels-modal .reel-video {
+    border-radius: 8px;
   }
-  
-  /* Mobile: Horizontal Scroll */
-  .reel-products-grid {
-    display: flex;
-    gap: 15px;
+
+  .reels-modal .reel-video iframe {
+    max-width: 100%;
+    width: 100%;
+    border-radius: 8px;
+  }
+
+  .reels-modal .reel-products {
+    justify-content: flex-start;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .reels-modal .products-carousel {
+    height: 100%;
+    max-height: 100%;
+  }
+
+  /* ✅ 1 ROW × 2 COLUMNS - HORIZONTAL SCROLL */
+  .reels-modal .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    grid-auto-flow: row;
+    gap: 10px;  /* ✅ Match homepage mobile gap */
+    overflow-x: auto;  /* ✅ Must be auto, not hidden */
+    overflow-y: hidden;  /* ✅ Block vertical scroll */
+    width: 100%;
+    height: 100%;
+    padding-bottom: 5px;
+    align-content: start;
+    touch-action: pan-x; /* ✅ Allow horizontal panning */
+  }
+}
+
+/* ==================== MOBILE LANDSCAPE: 1 ROW × 2 COLUMNS ==================== */
+@media (max-width: 767px) and (orientation: landscape) {
+  .reels-modal .reel-section {
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+  }
+
+  .reels-modal .reel-content {
+    flex-direction: row;
+    gap: 10px;
+    width: 100vw;
+    max-width: 100vw;
+    padding: 10px;
+    box-sizing: border-box;
+    margin: 0;
+  }
+
+  .reels-modal .reel-video {
+    border-radius: 8px;
+  }
+
+  .reels-modal .reel-video iframe {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 8px;
+  }
+
+  .reels-modal .reel-products {
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .reels-modal .products-carousel {
+    height: 100%;
+    max-height: 100%;
+  }
+
+  /* ✅ 1 ROW × 2 COLUMNS - HORIZONTAL SCROLL */
+  .reels-modal .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    grid-auto-flow: row;
+    gap: 8px;
     overflow-x: auto;
     overflow-y: hidden;
-    padding: 10px 0 20px 0;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+    height: 100%;
+    max-height: 100%;
+    padding-bottom: 5px;
   }
-  
-  .reel-products-grid::-webkit-scrollbar {
+}
+
+/* ==================== CAROUSEL NAVIGATION ==================== */
+
+/* Carousel Navigation Arrows */
+.reels-modal .carousel-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px; /* ✅ Increased from 40px */
+  height: 44px; /* ✅ Increased from 40px */
+  background: linear-gradient(135deg, #ff9900 0%, #ff6600 100%); /* ✅ Orange gradient like Amazon button */
+  backdrop-filter: blur(10px) saturate(1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  color: white; /* ✅ White arrow icon */
+  font-size: 20px; /* ✅ Increased from 18px */
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(255, 153, 0, 0.4); /* ✅ Orange glow */
+}
+
+.reels-modal .carousel-nav:hover {
+  background: linear-gradient(135deg, #ffaa00 0%, #ff7700 100%); /* ✅ Brighter orange on hover */
+  transform: translateY(-50%) scale(1.15); /* ✅ Slightly bigger scale */
+  box-shadow: 0 4px 12px rgba(255, 153, 0, 0.6); /* ✅ Stronger glow */
+}
+
+.reels-modal .carousel-nav.prev {
+  left: -20px;
+}
+
+.reels-modal .carousel-nav.next {
+  right: -20px;
+}
+
+/* Mobile: Smaller arrows inside container */
+@media (max-width: 767px) {
+  .reels-modal .carousel-nav {
+    width: 36px; /* ✅ Increased from 32px */
+    height: 36px; /* ✅ Increased from 32px */
+    font-size: 16px; /* ✅ Increased from 14px */
+  }
+
+  .reels-modal .carousel-nav.prev {
+    left: 5px;
+  }
+
+  .reels-modal .carousel-nav.next {
+    right: 5px;
+  }
+}
+
+/* Carousel Dots */
+.reels-modal .carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+  flex-shrink: 0;
+}
+
+.reels-modal .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.reels-modal .dot:hover {
+  background: rgba(255, 255, 255, 0.5);
+  transform: scale(1.2);
+}
+
+.reels-modal .dot.active {
+  background: white;
+  width: 24px;
+  border-radius: 4px;
+}
+
+/* Mobile: Smaller dots */
+@media (max-width: 767px) {
+  .reels-modal .carousel-dots {
+    margin-top: 5px;
+    gap: 6px;
+  }
+
+  .reels-modal .dot {
+    width: 6px;
     height: 6px;
   }
-  
-  .reel-products-grid::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 3px;
-  }
-  
-  .reel-products-grid::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 3px;
-  }
-  
-  .reel-product-card {
-    min-width: 160px;
-    max-width: 160px;
-    flex-shrink: 0;
-    scroll-snap-align: start;
-  }
-  
-  .reel-product-card img {
-    height: 160px;
-  }
-  
-  .reel-product-card h4 {
-    font-size: 13px;
-    min-height: 50px;
-  }
-  
-  .reel-product-card .price {
-    font-size: 14px;
+
+  .reels-modal .dot.active {
+    width: 18px;
   }
 }
 
-/* Tablet: Balance between desktop and mobile */
-@media (min-width: 769px) and (max-width: 1024px) {
-  .reel-video iframe {
-    height: 500px;
-  }
-  
-  .reel-product-card img {
-    height: 150px;
-  }
+/* ==================== LOADING STATE ==================== */
+
+.reels-modal .loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 80vh;
+  color: rgba(255, 255, 255, 0.7);
+  gap: 20px;
 }
 
-/* Glass Theme Support */
-body.glass-theme .reel-section {
-  border-bottom-color: rgba(255, 255, 255, 0.15);
-}
-
-body.glass-theme .reel-product-card {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-body.glass-theme .reel-video iframe {
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
-}
-
-/* Dark Theme Support */
-body.dark-theme .reel-section {
-  border-bottom-color: rgba(255, 255, 255, 0.1);
-}
-
-/* Empty State */
-.reels-feed .empty-state {
-  text-align: center;
-  padding: 60px 20px;
-  color: var(--text-secondary);
-}
-
-.reels-feed .empty-state h3 {
-  font-size: 24px;
-  margin-bottom: 10px;
-  color: var(--text-primary);
-}
-
-.reels-feed .empty-state p {
-  font-size: 16px;
-}
-
-/* Loading State */
-.reels-feed .loading-state {
-  text-align: center;
-  padding: 60px 20px;
-  color: var(--text-secondary);
-}
-
-.reels-feed .loading-spinner {
-  width: 40px;
-  height: 40px;
+.reels-modal .loading-spinner {
+  width: 50px;
+  height: 50px;
   border: 4px solid rgba(255, 255, 255, 0.1);
-  border-top-color: var(--accent-color);
+  border-top-color: white;
   border-radius: 50%;
-  margin: 0 auto 20px;
   animation: spin 1s linear infinite;
 }
 

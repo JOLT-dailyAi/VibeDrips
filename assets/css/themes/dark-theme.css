@@ -85,8 +85,8 @@ body.dark-theme .stat-label {
 
 /* Product Cards */
 body.dark-theme .product-card {
-    background: rgba(0, 0, 0, 0.9) !important;
-    color: #FFFFFF !important;
+    background: rgba(0, 0, 0, 0.9);  /* ← Remove !important */
+    color: #FFFFFF;  /* ← Remove !important */
 }
 
 body.dark-theme .product-card:hover {
