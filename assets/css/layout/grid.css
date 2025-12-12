@@ -79,8 +79,31 @@ body.glass-theme .stat-label {
     }
 }
 
-/* ✅ NEW: Standard mobile (400-767px) - 2 COLUMNS */
-@media (min-width: 400px) and (max-width: 767px) {
+/* ✅ FIXED: Standard mobile portrait (400-767px) - 2 COLUMNS */
+@media (min-width: 400px) and (max-width: 767px) and (orientation: portrait) {
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px; /* ✅ Reduced from 20px to match stat item width */
+    }
+
+    .stats-bar {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        padding: 5px;
+    }
+
+    .stat-item {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .stat-number {
+        font-size: 18px;
+    }
+}
+
+/* Mobile landscape - keep default gap */
+@media (min-width: 400px) and (max-width: 767px) and (orientation: landscape) {
     .products-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
