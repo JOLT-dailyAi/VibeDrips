@@ -79,16 +79,16 @@ body.glass-theme .stat-label {
     }
 }
 
-/* ✅ FIXED: Standard mobile portrait (400-767px) - 2 COLUMNS */
+/* ✅ FIXED: Standard mobile portrait (400-767px) - MATCH STAT ITEMS */
 @media (min-width: 400px) and (max-width: 767px) and (orientation: portrait) {
     .products-grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 18px; /* ✅ Reduced from 20px to match stat item width */
+        gap: 10px; /* ✅ Match stat items gap */
     }
 
     .stats-bar {
         grid-template-columns: 1fr 1fr;
-        gap: 10px;
+        gap: 10px; /* Same as products grid */
         padding: 5px;
     }
 
