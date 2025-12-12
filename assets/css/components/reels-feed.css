@@ -113,6 +113,12 @@
   -webkit-overflow-scrolling: touch;
   padding-bottom: 10px;
   box-sizing: border-box;
+  touch-action: pan-x; /* ✅ Allow horizontal touch scrolling */
+  cursor: grab; /* ✅ Restore grab cursor */
+}
+
+.reels-modal .products-grid:active {
+  cursor: grabbing; /* ✅ Show grabbing on drag */
 }
 
 /* Scrollbar styling */
