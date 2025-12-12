@@ -82,7 +82,7 @@
   top: 75vh;
 }
 
-/* ✅ HIDE arrows when at boundaries (controlled by JS) */
+/* HIDE arrows when at boundaries (controlled by JS) */
 .reels-nav-btn.hidden {
   display: none !important;
 }
@@ -99,22 +99,18 @@
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  /* MANDATORY SNAP - Strict Instagram/Shorts behavior */
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
-  /* NO PADDING - No peeking effect */
   padding: 0;
-  /* HIDE SCROLLBAR COMPLETELY */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-/* Hide scrollbar for Webkit browsers */
 .reels-scroll-container::-webkit-scrollbar {
   display: none;
 }
 
-/* Reel Section - EXACT 100vh per reel (Instagram/Shorts style) */
+/* Reel Section - EXACT 100vh per reel */
 .reel-section {
   scroll-snap-align: start;
   scroll-snap-stop: always;
@@ -271,7 +267,7 @@
   }
 }
 
-/* ✅ Mobile Landscape: Side-by-Side - FULL VIEWPORT */
+/* Mobile Landscape: Side-by-Side - FULL VIEWPORT */
 @media (max-width: 767px) and (orientation: landscape) {
   .reel-section {
     padding: 0;
@@ -281,17 +277,18 @@
 
   .reel-content {
     display: flex;
-    flex-direction: row; /* ✅ Side-by-side */
+    flex-direction: row;
     gap: 10px;
-    width: 100vw;
-    max-width: 100vw;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    margin: 0;
     height: 100vh;
     padding: 10px;
     box-sizing: border-box;
   }
 
   .reel-video {
-    flex: 0 0 50%; /* ✅ 50% width for video */
+    flex: 0 0 50%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -309,7 +306,7 @@
   }
 
   .reel-products {
-    flex: 0 0 50%; /* ✅ 50% width for products */
+    flex: 0 0 50%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
