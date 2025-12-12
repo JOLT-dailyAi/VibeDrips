@@ -108,3 +108,10 @@ body.glass-theme .stat-label {
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     }
 }
+
+/* ✅ EMERGENCY FIX: Force homepage 2 columns on mobile */
+@media (max-width: 767px) {
+  body:not(.reels-modal-open) .products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
