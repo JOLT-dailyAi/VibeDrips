@@ -163,6 +163,7 @@
   display: flex;
   flex-direction: column;
   padding: 0;
+  box-sizing: border-box; /* ← ADDED */
 }
 
 /* Image wrapper - 55% of card */
@@ -209,15 +210,14 @@
   align-items: center;
 }
 
-/* Amazon button - ALWAYS VISIBLE */
+/* Make sure button is always at bottom and visible */
 .reels-modal .product-card .amazon-button {
-  flex: 0 0 auto;
+  flex: 0 0 auto; /* Don't grow or shrink */
+  flex-shrink: 0; /* ← ADDED: Never compress */
   margin: 4px 10px 8px;
   padding: 6px 12px;
   font-size: 0.8rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  min-height: 32px; /* ← ADDED: Ensure minimum button height */
 }
 
 /* ==================== DESKTOP: 3x2 GRID ==================== */
