@@ -7,18 +7,17 @@ function renderReelsFeed() {
   console.log('🎬 Rendering reels feed...');
   
   const feedContainer = document.getElementById('reels-feed-container');
-  
   if (!feedContainer) {
     console.error('❌ Reels feed container not found');
     return;
   }
-  
+
   // Clear loading state
   feedContainer.innerHTML = '';
-  
+
   // Get products with reel URLs
   const reelsData = getReelsDataFromProducts();
-  
+
   // Check if we have reels
   if (reelsData.length === 0) {
     feedContainer.innerHTML = `
@@ -29,241 +28,267 @@ function renderReelsFeed() {
     `;
     return;
   }
-  
-  // Create each reel section
-  reelsData.forEach((reel, index) => {
-    const reelSection = createReelSection(reel, index);
-    if (reelSection) {
-      feedContainer.appendChild(reelSection);
-    }
+
+  // Render each reel section
+  reelsData.forEach((reelData, index) => {
+    const reelSection = createReelSection(reelData, index);
+    feedContainer.appendChild(reelSection);
   });
-  
-  console.log(`✅ Rendered ${reelsData.length} reel sections`);
+
+  console.log(`✅ Rendered ${reelsData.length} reels`);
 }
 
-// Get reels data from products CSV
+// Get reels data from products
 function getReelsDataFromProducts() {
-  if (!window.VibeDrips || !window.VibeDrips.allProducts) {
-    console.warn('⚠️ VibeDrips.allProducts not available');
+  if (!window.allProducts || !Array.isArray(window.allProducts)) {
+    console.warn('⚠️ No products available');
     return [];
   }
-  
-  // Filter products with "Product Source Link"
-  const productsWithReels = window.VibeDrips.allProducts.filter(p => {
-    const sourceLink = p['Product Source Link'] || p.productSourceLink || p.source_link;
-    return sourceLink && sourceLink.trim() !== '';
-  });
-  
-  // Group products by reel URL
-  const reelsMap = {};
-  
-  productsWithReels.forEach(product => {
-    let reelUrl = product['Product Source Link'] || product.productSourceLink || product.source_link;
-    
-    // Handle multiple URLs (take first one)
-    if (reelUrl.includes(',')) {
-      reelUrl = reelUrl.split(',')[0].trim();
-    }
-    
-    // Validate URL
-    if (!reelUrl.includes('instagram.com')) {
-      console.warn('⚠️ Invalid Instagram URL:', reelUrl);
-      return;
-    }
-    
-    // Group by URL
-    if (!reelsMap[reelUrl]) {
-      reelsMap[reelUrl] = {
-        url: reelUrl,
-        products: []
-      };
-    }
-    
-    reelsMap[reelUrl].products.push(product);
-  });
-  
-  // Convert to array
-  return Object.values(reelsMap);
+
+  return window.allProducts
+    .filter(product => product.reel_url)
+    .map(product => ({
+      reel_url: product.reel_url,
+      products: window.allProducts.filter(p => p.reel_url === product.reel_url)
+    }))
+    .filter((reel, index, self) => 
+      index === self.findIndex(r => r.reel_url === reel.reel_url)
+    );
 }
 
-// Extract Instagram post ID and create embed URL
-function getInstagramEmbedUrl(instagramUrl) {
-  try {
-    const match = instagramUrl.match(/\/(p|reel)\/([^\/\?]+)/);
-    if (match && match[2]) {
-      const postId = match[2];
-      return `https://www.instagram.com/p/${postId}/embed`;
-    }
-  } catch (error) {
-    console.error('Error parsing Instagram URL:', error);
-  }
-  return null;
-}
-
-// Create a single reel section
+// Create a reel section
 function createReelSection(reelData, index) {
-  const embedUrl = getInstagramEmbedUrl(reelData.url);
-  
-  if (!embedUrl) {
-    console.error('❌ Invalid Instagram URL:', reelData.url);
-    return null;
-  }
-  
   const section = document.createElement('div');
   section.className = 'reel-section';
-  section.setAttribute('data-reel-index', index);
-  
+  section.dataset.reelIndex = index;
+
   // Create content wrapper
   const content = document.createElement('div');
   content.className = 'reel-content';
-  
+
   // Create video container
-  const videoDiv = document.createElement('div');
-  videoDiv.className = 'reel-video';
-  videoDiv.innerHTML = `
-    <iframe 
-      src="${embedUrl}" 
-      frameborder="0" 
-      scrolling="no" 
-      allowtransparency="true" 
-      allowfullscreen="true"
-      loading="lazy">
-    </iframe>
-  `;
+  const videoContainer = document.createElement('div');
+  videoContainer.className = 'reel-video';
   
-  // Create products container with carousel
-  const productsDiv = document.createElement('div');
-  productsDiv.className = 'reel-products';
+  const iframe = document.createElement('iframe');
+  iframe.src = reelData.reel_url;
+  iframe.frameBorder = '0';
+  iframe.allowFullscreen = true;
+  iframe.allow = 'autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share';
   
-  const carousel = createProductsCarousel(reelData.products, index);
-  productsDiv.appendChild(carousel);
-  
-  // Assemble section
-  content.appendChild(videoDiv);
-  content.appendChild(productsDiv);
+  videoContainer.appendChild(iframe);
+
+  // Create products container
+  const productsContainer = document.createElement('div');
+  productsContainer.className = 'reel-products';
+
+  // Create products carousel
+  const carousel = createProductsCarousel(reelData.products);
+  productsContainer.appendChild(carousel);
+
+  // Append to content
+  content.appendChild(videoContainer);
+  content.appendChild(productsContainer);
   section.appendChild(content);
-  
+
   return section;
 }
 
 // Create products carousel with pagination
-function createProductsCarousel(products, reelIndex) {
-  const carousel = document.createElement('div');
-  carousel.className = 'products-carousel';
-  carousel.setAttribute('data-reel-index', reelIndex);
-  
-  // Determine products per page based on screen size AND orientation
-  const isMobile = window.innerWidth < 768;
-  const isTablet = window.innerWidth >= 768 && window.innerWidth < 1200;
-  const isMobileLandscape = isMobile && window.matchMedia('(orientation: landscape)').matches;
-  
-  // Mobile landscape: 2×2 = 4, Mobile portrait: 1×2 = 2, Tablet: 2×2 = 4, Desktop: 3×2 = 6
-  const productsPerPage = isMobileLandscape ? 4 : (isMobile ? 2 : (isTablet ? 4 : 6));
-  
-  // Calculate total pages
-  const totalPages = Math.ceil(products.length / productsPerPage);
-  let currentPage = 0;
-  
-  // Create navigation (arrows)
-  const prevBtn = document.createElement('button');
-  prevBtn.className = 'carousel-nav prev';
-  prevBtn.innerHTML = '◄';
-  prevBtn.onclick = () => navigateCarousel(carousel, -1);
-  
-  const nextBtn = document.createElement('button');
-  nextBtn.className = 'carousel-nav next';
-  nextBtn.innerHTML = '►';
-  nextBtn.onclick = () => navigateCarousel(carousel, 1);
-  
-  // Create products grid
+function createProductsCarousel(products) {
+  const carouselContainer = document.createElement('div');
+  carouselContainer.className = 'products-carousel';
+
+  // Products grid
   const grid = document.createElement('div');
   grid.className = 'products-grid';
-  
-  // Create dots indicator
-  const dotsContainer = document.createElement('div');
-  dotsContainer.className = 'carousel-dots';
-  
-  for (let i = 0; i < totalPages; i++) {
-    const dot = document.createElement('span');
-    dot.className = i === 0 ? 'dot active' : 'dot';
-    dot.onclick = () => goToPage(carousel, i);
-    dotsContainer.appendChild(dot);
-  }
-  
-  // Store carousel state
-  carousel.dataset.currentPage = '0';
-  carousel.dataset.totalPages = totalPages;
-  carousel.dataset.productsPerPage = productsPerPage;
-  
-  // Render initial page
-  renderProductsPage(grid, products, 0, productsPerPage);
-  
-  // Assemble carousel
-  if (totalPages > 1) {
-    carousel.appendChild(prevBtn);
-  }
-  carousel.appendChild(grid);
-  if (totalPages > 1) {
-    carousel.appendChild(nextBtn);
-    carousel.appendChild(dotsContainer);
-  }
-  
-  return carousel;
-}
 
-// Render products for current page
-function renderProductsPage(grid, allProducts, page, perPage) {
-  grid.innerHTML = '';
-  
-  const startIdx = page * perPage;
-  const endIdx = Math.min(startIdx + perPage, allProducts.length);
-  const pageProducts = allProducts.slice(startIdx, endIdx);
-  
-  pageProducts.forEach(product => {
-    // Use global createProductCard from products.js
-    const card = window.createProductCard(product);
+  // ✅ NEW: Enable horizontal scroll with proper touch handling
+  enableHorizontalScroll(grid);
+
+  // Render product cards
+  products.forEach(product => {
+    const card = createProductCard(product);
     grid.appendChild(card);
   });
+
+  carouselContainer.appendChild(grid);
+  return carouselContainer;
 }
 
-// Navigate carousel (prev/next)
-function navigateCarousel(carousel, direction) {
-  const currentPage = parseInt(carousel.dataset.currentPage);
-  const totalPages = parseInt(carousel.dataset.totalPages);
-  
-  let newPage = currentPage + direction;
-  
-  // Wrap around
-  if (newPage < 0) newPage = totalPages - 1;
-  if (newPage >= totalPages) newPage = 0;
-  
-  goToPage(carousel, newPage);
-}
+// ✅ NEW: Enable horizontal scroll with touch support
+function enableHorizontalScroll(gridElement) {
+  // For desktop: Enable click+drag scrolling
+  let isDown = false;
+  let startX;
+  let scrollLeft;
+  let hasMoved = false;
 
-// Go to specific page
-function goToPage(carousel, page) {
-  const grid = carousel.querySelector('.products-grid');
-  const dots = carousel.querySelectorAll('.dot');
-  const reelIndex = carousel.dataset.reelIndex;
-  const productsPerPage = parseInt(carousel.dataset.productsPerPage);
-  
-  // Get all products for this reel
-  const reelsData = getReelsDataFromProducts();
-  const products = reelsData[reelIndex].products;
-  
-  // Update page
-  carousel.dataset.currentPage = page;
-  
-  // Render new page
-  renderProductsPage(grid, products, page, productsPerPage);
-  
-  // Update dots
-  dots.forEach((dot, i) => {
-    dot.classList.toggle('active', i === page);
+  gridElement.addEventListener('mousedown', (e) => {
+    // Only handle if not clicking on a button or link
+    if (e.target.closest('button') || e.target.closest('a')) return;
+    
+    isDown = true;
+    hasMoved = false;
+    startX = e.pageX - gridElement.offsetLeft;
+    scrollLeft = gridElement.scrollLeft;
+    gridElement.style.cursor = 'grabbing';
+    gridElement.style.userSelect = 'none';
+  });
+
+  gridElement.addEventListener('mouseleave', () => {
+    isDown = false;
+    gridElement.style.cursor = 'grab';
+    gridElement.style.userSelect = 'auto';
+  });
+
+  gridElement.addEventListener('mouseup', () => {
+    isDown = false;
+    gridElement.style.cursor = 'grab';
+    gridElement.style.userSelect = 'auto';
+  });
+
+  gridElement.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    hasMoved = true;
+    const x = e.pageX - gridElement.offsetLeft;
+    const walk = (x - startX) * 2; // Scroll speed multiplier
+    gridElement.scrollLeft = scrollLeft - walk;
+  });
+
+  // Store hasMoved state for click detection
+  gridElement.dataset.hasMoved = 'false';
+  gridElement.addEventListener('mousedown', () => {
+    gridElement.dataset.hasMoved = 'false';
+  });
+  gridElement.addEventListener('mousemove', () => {
+    if (isDown) gridElement.dataset.hasMoved = 'true';
   });
 }
 
-// Export to global scope
-window.renderReelsFeed = renderReelsFeed;
+// Create a product card
+function createProductCard(product) {
+  const card = document.createElement('div');
+  card.className = 'product-card';
+  card.style.cursor = 'pointer';
+
+  // ✅ NEW: Touch event handling for mobile (distinguish tap from swipe)
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchStartTime = 0;
+
+  card.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    touchStartTime = Date.now();
+  }, { passive: true });
+
+  card.addEventListener('touchend', (e) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    const touchDuration = Date.now() - touchStartTime;
+    
+    const deltaX = Math.abs(touchEndX - touchStartX);
+    const deltaY = Math.abs(touchEndY - touchStartY);
+    
+    // Only open modal if it's a tap (not a swipe):
+    // 1. Duration < 300ms (quick tap)
+    // 2. Movement < 10px horizontally (not swiping)
+    if (touchDuration < 300 && deltaX < 10 && deltaY < 10) {
+      e.preventDefault(); // Prevent any default behavior
+      openSimpleModal(product);
+    }
+  });
+
+  // ✅ Desktop click handler (only if not dragging)
+  card.addEventListener('click', (e) => {
+    // Check if user was dragging
+    const grid = card.closest('.products-grid');
+    if (grid && grid.dataset.hasMoved === 'true') {
+      return; // Don't open modal if user was scrolling
+    }
+
+    // Only trigger on mouse click, not touch
+    if (e.pointerType === 'mouse' || !e.pointerType) {
+      openSimpleModal(product);
+    }
+  });
+
+  // Image wrapper
+  const imageWrapper = document.createElement('div');
+  imageWrapper.className = 'product-image-wrapper';
+
+  const img = document.createElement('img');
+  img.src = product.images[0];
+  img.alt = product.name;
+  img.loading = 'lazy';
+
+  // Brand tag (if exists)
+  if (product.brand) {
+    const brandTag = document.createElement('div');
+    brandTag.className = 'brand-tag';
+    brandTag.textContent = product.brand;
+    imageWrapper.appendChild(brandTag);
+  }
+
+  // Image count badge
+  if (product.images.length > 1) {
+    const imageCount = document.createElement('div');
+    imageCount.className = 'image-count';
+    imageCount.textContent = `📸 ${product.images.length}`;
+    imageWrapper.appendChild(imageCount);
+  }
+
+  imageWrapper.appendChild(img);
+  card.appendChild(imageWrapper);
+
+  // Category
+  const category = document.createElement('div');
+  category.className = 'product-category';
+  category.textContent = product.category;
+  card.appendChild(category);
+
+  // Product name
+  const name = document.createElement('h3');
+  name.className = 'product-name';
+  name.textContent = product.name;
+  card.appendChild(name);
+
+  // Price row
+  const priceRow = document.createElement('div');
+  priceRow.className = 'product-price-row';
+
+  const price = document.createElement('div');
+  price.className = 'product-price';
+  price.textContent = product.price;
+  priceRow.appendChild(price);
+
+  if (product.rating) {
+    const rating = document.createElement('div');
+    rating.className = 'rating';
+    rating.textContent = `⭐ ${product.rating}`;
+    priceRow.appendChild(rating);
+  }
+
+  card.appendChild(priceRow);
+
+  // Amazon button
+  const button = document.createElement('a');
+  button.href = product.amazon_url;
+  button.target = '_blank';
+  button.rel = 'noopener noreferrer';
+  button.className = 'amazon-button';
+  button.textContent = '🛒 Buy on Amazon';
+  
+  // Prevent button click from opening modal
+  button.addEventListener('click', (e) => {
+    e.stopPropagation();
+  });
+
+  card.appendChild(button);
+
+  return card;
+}
 
 console.log('✅ Reels feed module loaded');
