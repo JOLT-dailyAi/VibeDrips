@@ -163,15 +163,16 @@
   display: flex;
   flex-direction: column;
   padding: 0;
-  box-sizing: border-box; /* ← ADDED */
+  box-sizing: border-box;
 }
 
-/* Image wrapper - 55% of card */
+/* Image wrapper - 50% of card (REDUCED from 55%) */
 .reels-modal .product-card .product-image-wrapper {
-  flex: 0 0 55%;
+  flex: 0 0 50%;
   width: 100%;
   position: relative;
   overflow: hidden;
+  min-height: 0; /* Allow flex shrinking */
 }
 
 .reels-modal .product-card .product-image-wrapper img {
@@ -180,45 +181,62 @@
   object-fit: cover;
 }
 
-/* Category - small space */
+/* Category - fixed small space */
 .reels-modal .product-card .product-category {
   flex: 0 0 auto;
-  padding: 6px 10px 2px;
-  font-size: 0.75rem;
+  padding: 4px 8px 2px;
+  font-size: 0.7rem;
   opacity: 0.8;
+  line-height: 1.2;
 }
 
-/* Product name - 2 lines max */
+/* Product name - flexible but limited to 2 lines */
 .reels-modal .product-card .product-name {
-  flex: 1 1 auto;
-  padding: 0 10px;
-  font-size: 0.85rem;
-  line-height: 1.3;
+  flex: 0 1 auto; /* Can shrink if needed */
+  padding: 0 8px;
+  font-size: 0.8rem;
+  line-height: 1.2;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   margin: 0;
+  max-height: 2.4em; /* 2 lines max */
 }
 
 /* Price row - fixed space */
 .reels-modal .product-card .product-price-row {
   flex: 0 0 auto;
-  padding: 4px 10px;
+  padding: 3px 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: 0.75rem;
 }
 
-/* Make sure button is always at bottom and visible */
+/* Amazon button - ALWAYS VISIBLE, NEVER HIDDEN */
 .reels-modal .product-card .amazon-button {
-  flex: 0 0 auto; /* Don't grow or shrink */
-  flex-shrink: 0; /* ← ADDED: Never compress */
-  margin: 4px 10px 8px;
-  padding: 6px 12px;
-  font-size: 0.8rem;
-  min-height: 32px; /* ← ADDED: Ensure minimum button height */
+  flex: 0 0 auto; /* Fixed size, don't grow or shrink */
+  flex-shrink: 0 !important; /* NEVER compress */
+  margin: 4px 8px 6px; /* Reduced bottom margin */
+  padding: 5px 10px;
+  font-size: 0.75rem;
+  min-height: 28px; /* Ensure minimum height */
+  white-space: nowrap;
+  overflow: visible; /* Show emoji */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
 }
+
+/* Brand tag and image count - adjust sizing */
+.reels-modal .product-card .brand-tag,
+.reels-modal .product-card .image-count {
+  font-size: 0.65rem;
+  padding: 2px 6px;
+}
+
 
 /* ==================== DESKTOP: 3x2 GRID ==================== */
 @media (min-width: 1200px) {
@@ -292,60 +310,65 @@
   }
 
   .reels-modal .products-grid {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    grid-template-rows: 240px;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    grid-template-rows: 220px; /* REDUCED from 240px */
+    grid-auto-flow: row;
     gap: 8px;
     overflow-x: auto;
     overflow-y: hidden;
     width: 100%;
     height: auto;
-    max-height: 240px;
+    max-height: 220px;
     padding-bottom: 5px;
     align-content: start;
   }
 
   .reels-modal .product-card {
-    height: 240px;
-    min-height: 240px;
-    max-height: 240px;
+    height: 220px; /* REDUCED from 240px */
+    min-height: 220px;
+    max-height: 220px;
   }
 
-  /* Image wrapper - 50% in portrait */
+  /* Image wrapper - 45% in portrait (REDUCED from 50%) */
   .reels-modal .product-card .product-image-wrapper {
-    flex: 0 0 50%;
+    flex: 0 0 45%;
   }
 
   /* Smaller text in portrait */
   .reels-modal .product-card .product-category {
-    padding: 4px 8px 2px;
-    font-size: 0.7rem;
+    padding: 3px 6px 1px;
+    font-size: 0.65rem;
   }
 
   .reels-modal .product-card .product-name {
-    padding: 0 8px;
-    font-size: 0.75rem;
-    line-height: 1.2;
+    padding: 0 6px;
+    font-size: 0.7rem;
+    line-height: 1.15;
+    max-height: 2.3em;
   }
 
   .reels-modal .product-card .product-price-row {
-    padding: 3px 8px;
-    font-size: 0.75rem;
+    padding: 2px 6px;
+    font-size: 0.7rem;
   }
 
-  /* Smaller button in portrait */
+  /* Button MUST be visible */
   .reels-modal .product-card .amazon-button {
-    margin: 3px 8px 6px;
-    padding: 5px 10px;
-    font-size: 0.7rem;
+    margin: 3px 6px 4px;
+    padding: 4px 8px;
+    font-size: 0.65rem;
+    min-height: 24px;
   }
 }
 
-/* ==================== MOBILE LANDSCAPE ==================== */
+
+/* ==================== MOBILE LANDSCAPE: 50/50 SPLIT, 2×2 GRID ==================== */
 @media (max-width: 767px) and (orientation: landscape) {
   .reels-modal .reel-section {
     padding: 0;
     height: 100vh;
     width: 100vw;
+    margin: 0;
   }
 
   .reels-modal .reel-content {
@@ -356,6 +379,7 @@
     height: 100vh;
     padding: 10px;
     box-sizing: border-box;
+    margin: 0;
   }
 
   .reels-modal .reel-video {
@@ -384,52 +408,54 @@
     max-height: 100%;
   }
 
+  /* 2×2 GRID - FILL ROWS FIRST */
   .reels-modal .products-grid {
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, 1fr);
     grid-auto-flow: row;
     gap: 8px;
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow: hidden;
     height: 100%;
     max-height: 100%;
-    padding-bottom: 5px;
+    padding-bottom: 0;
   }
 
   .reels-modal .product-card {
-    height: 100%;
+    height: 100%; /* Fill grid cell */
     max-height: none;
-    min-height: 140px;
+    min-height: 120px; /* REDUCED from 140px */
   }
 
-  /* Image wrapper - 45% in landscape */
+  /* Image wrapper - 40% in landscape (REDUCED from 45%) */
   .reels-modal .product-card .product-image-wrapper {
-    flex: 0 0 45%;
+    flex: 0 0 40%;
   }
 
   /* Smaller text in landscape */
   .reels-modal .product-card .product-category {
-    padding: 3px 6px 1px;
-    font-size: 0.65rem;
+    padding: 2px 4px 1px;
+    font-size: 0.6rem;
   }
 
   .reels-modal .product-card .product-name {
-    padding: 0 6px;
-    font-size: 0.7rem;
-    line-height: 1.2;
+    padding: 0 4px;
+    font-size: 0.65rem;
+    line-height: 1.15;
     -webkit-line-clamp: 2;
+    max-height: 2.3em;
   }
 
   .reels-modal .product-card .product-price-row {
-    padding: 2px 6px;
-    font-size: 0.7rem;
+    padding: 2px 4px;
+    font-size: 0.65rem;
   }
 
-  /* Smaller button in landscape */
+  /* Button MUST be visible */
   .reels-modal .product-card .amazon-button {
-    margin: 2px 6px 4px;
-    padding: 4px 8px;
-    font-size: 0.65rem;
+    margin: 2px 4px 3px;
+    padding: 3px 6px;
+    font-size: 0.6rem;
+    min-height: 22px;
   }
 }
 
