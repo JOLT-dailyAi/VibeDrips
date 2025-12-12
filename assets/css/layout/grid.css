@@ -56,10 +56,33 @@ body.glass-theme .stat-label {
     color: rgba(255, 255, 255, 0.9);
 }
 
-/* Responsive - Only apply single column on actual mobile screens */
-@media (max-width: 600px) {
+/* ✅ FIXED: Very small screens only - 1 column */
+@media (max-width: 399px) {
     .products-grid {
         grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .stats-bar {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        padding: 5px;
+    }
+
+    .stat-item {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .stat-number {
+        font-size: 18px;
+    }
+}
+
+/* ✅ NEW: Standard mobile (400-767px) - 2 COLUMNS */
+@media (min-width: 400px) and (max-width: 767px) {
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
         gap: 20px;
     }
 
@@ -96,7 +119,7 @@ body.glass-theme .stat-label {
 }
 
 /* Tablets - 2 columns */
-@media (min-width: 601px) and (max-width: 900px) {
+@media (min-width: 768px) and (max-width: 900px) {
     .products-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -108,5 +131,3 @@ body.glass-theme .stat-label {
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     }
 }
-
-
