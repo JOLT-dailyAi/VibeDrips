@@ -99,24 +99,20 @@
   flex-direction: column;
 }
 
-/* ==================== PRODUCTS GRID - DYNAMIC SIZING ==================== */
+/* ==================== PRODUCTS GRID - LAYOUT ONLY ==================== */
+/* ✅ Product cards use DEFAULT homepage styling from product-card.css */
+
 .reels-modal .products-grid {
   display: grid;
   gap: 15px;
-  width: 100%; /* ✅ Fill carousel width */
-  height: 100%; /* ✅ Fill carousel height */
-  grid-auto-flow: row; /* ✅ Fill rows first (horizontally) */
+  width: 100%;
+  height: 100%;
   transition: opacity 0.3s ease;
   scrollbar-width: thin;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
-  cursor: grab;
   padding-bottom: 10px;
   box-sizing: border-box;
-}
-
-.reels-modal .products-grid:active {
-  cursor: grabbing;
 }
 
 /* Scrollbar styling */
@@ -143,95 +139,11 @@
   opacity: 0.5;
 }
 
-/* ==================== PRODUCT CARD - DYNAMIC STRUCTURE ==================== */
-
-.reels-modal .product-card {
-  width: 100%;
-  height: 100%; /* ✅ Fill grid cell height dynamically */
-  min-height: 140px; /* ✅ Safety minimum */
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* Image wrapper - FLEXIBLE (lowest priority) */
-.reels-modal .product-card .product-image-wrapper {
-  flex: 1 1 auto; /* ✅ Can grow/shrink as needed */
-  width: 100%;
-  position: relative;
-  overflow: hidden;
-  min-height: 80px; /* ✅ Safety minimum so image doesn't disappear */
-}
-
-.reels-modal .product-card .product-image-wrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Category - fixed */
-.reels-modal .product-card .product-category {
-  flex: 0 0 auto;
-  padding: 4px 8px 2px;
-  font-size: 0.7rem;
-  opacity: 0.8;
-  line-height: 1.2;
-}
-
-/* Product name - can shrink slightly */
-.reels-modal .product-card .product-name {
-  flex: 0 1 auto;
-  padding: 0 8px;
-  font-size: 0.8rem;
-  line-height: 1.2;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  margin: 0;
-  max-height: 2.4em;
-}
-
-/* Price row - fixed */
-.reels-modal .product-card .product-price-row {
-  flex: 0 0 auto;
-  padding: 3px 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.75rem;
-}
-
-/* Amazon button - HIGHEST PRIORITY, ALWAYS VISIBLE */
-.reels-modal .product-card .amazon-button {
-  flex: 0 0 auto;
-  flex-shrink: 0 !important; /* ✅ NEVER compress */
-  margin: 4px 8px 6px;
-  padding: 5px 10px;
-  font-size: 0.75rem;
-  min-height: 28px;
-  white-space: nowrap;
-  overflow: visible;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-}
-
-/* Brand tag and image count */
-.reels-modal .product-card .brand-tag,
-.reels-modal .product-card .image-count {
-  font-size: 0.65rem;
-  padding: 2px 6px;
-}
-
 /* ==================== DESKTOP: 3×2 GRID ==================== */
 @media (min-width: 1200px) {
   .reels-modal .products-grid {
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, 1fr); /* ✅ Dynamic rows */
+    grid-template-rows: repeat(2, 1fr);
     grid-auto-flow: row;
     overflow-y: auto;
     overflow-x: hidden;
@@ -242,7 +154,7 @@
 @media (min-width: 768px) and (max-width: 1199px) {
   .reels-modal .products-grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr); /* ✅ Dynamic rows */
+    grid-template-rows: repeat(2, 1fr);
     grid-auto-flow: row;
     overflow-y: auto;
     overflow-x: hidden;
@@ -295,41 +207,16 @@
 
   /* ✅ 1 ROW × 2 COLUMNS - HORIZONTAL SCROLL */
   .reels-modal .products-grid {
-    grid-template-columns: repeat(2, 1fr); /* ✅ Always 2 columns */
-    grid-template-rows: 1fr; /* ✅ Single row */
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
     grid-auto-flow: row;
-    gap: 8px;
-    overflow-x: auto; /* ✅ Horizontal scroll */
+    gap: 10px; /* ✅ Match homepage mobile gap */
+    overflow-x: auto;
     overflow-y: hidden;
     width: 100%;
     height: 100%;
     padding-bottom: 5px;
     align-content: start;
-  }
-
-  /* Smaller text in portrait */
-  .reels-modal .product-card .product-category {
-    padding: 3px 6px 1px;
-    font-size: 0.65rem;
-  }
-
-  .reels-modal .product-card .product-name {
-    padding: 0 6px;
-    font-size: 0.7rem;
-    line-height: 1.15;
-    max-height: 2.3em;
-  }
-
-  .reels-modal .product-card .product-price-row {
-    padding: 2px 6px;
-    font-size: 0.7rem;
-  }
-
-  .reels-modal .product-card .amazon-button {
-    margin: 3px 6px 4px;
-    padding: 4px 8px;
-    font-size: 0.65rem;
-    min-height: 24px;
   }
 }
 
@@ -374,41 +261,15 @@
 
   /* ✅ 1 ROW × 2 COLUMNS - HORIZONTAL SCROLL */
   .reels-modal .products-grid {
-    grid-template-columns: repeat(2, 1fr); /* ✅ Always 2 columns */
-    grid-template-rows: 1fr; /* ✅ Single row */
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
     grid-auto-flow: row;
     gap: 8px;
-    overflow-x: auto; /* ✅ Horizontal scroll */
+    overflow-x: auto;
     overflow-y: hidden;
     height: 100%;
     max-height: 100%;
     padding-bottom: 5px;
-  }
-
-  /* Smaller text in landscape */
-  .reels-modal .product-card .product-category {
-    padding: 2px 4px 1px;
-    font-size: 0.6rem;
-  }
-
-  .reels-modal .product-card .product-name {
-    padding: 0 4px;
-    font-size: 0.65rem;
-    line-height: 1.15;
-    -webkit-line-clamp: 2;
-    max-height: 2.3em;
-  }
-
-  .reels-modal .product-card .product-price-row {
-    padding: 2px 4px;
-    font-size: 0.65rem;
-  }
-
-  .reels-modal .product-card .amazon-button {
-    margin: 2px 4px 3px;
-    padding: 3px 6px;
-    font-size: 0.6rem;
-    min-height: 22px;
   }
 }
 
