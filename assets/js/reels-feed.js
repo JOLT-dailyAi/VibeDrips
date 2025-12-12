@@ -15,11 +15,33 @@ function renderReelsFeed() {
   // Clear loading state
   feedContainer.innerHTML = '';
 
+  // ✅ FIX: Check if products exist first
+  if (!window.allProducts || !Array.isArray(window.allProducts)) {
+    console.warn('⚠️ Products not loaded yet');
+    feedContainer.innerHTML = `
+      <div class="empty-state">
+        <h3>⏳ Loading Products...</h3>
+        <p>Please wait while we load your curated drops.</p>
+      </div>
+    `;
+    
+    // ✅ Try again after products load
+    setTimeout(() => {
+      if (window.allProducts && window.allProducts.length > 0) {
+        renderReelsFeed();
+      }
+    }, 1000);
+    return;
+  }
+
+  console.log(`📦 Found ${window.allProducts.length} total products`);
+
   // Get products with reel URLs
   const reelsData = getReelsDataFromProducts();
 
   // Check if we have reels
   if (reelsData.length === 0) {
+    console.log('ℹ️ No products with reel URLs found');
     feedContainer.innerHTML = `
       <div class="empty-state">
         <h3>🎬 No Reels Yet</h3>
@@ -45,15 +67,25 @@ function getReelsDataFromProducts() {
     return [];
   }
 
-  return window.allProducts
-    .filter(product => product.reel_url)
-    .map(product => ({
-      reel_url: product.reel_url,
-      products: window.allProducts.filter(p => p.reel_url === product.reel_url)
-    }))
-    .filter((reel, index, self) => 
-      index === self.findIndex(r => r.reel_url === reel.reel_url)
-    );
+  const productsWithReels = window.allProducts.filter(product => product.reel_url);
+  console.log(`🎬 Found ${productsWithReels.length} products with reel URLs`);
+
+  if (productsWithReels.length === 0) {
+    return [];
+  }
+
+  const reelsMap = {};
+  productsWithReels.forEach(product => {
+    if (!reelsMap[product.reel_url]) {
+      reelsMap[product.reel_url] = {
+        reel_url: product.reel_url,
+        products: []
+      };
+    }
+    reelsMap[product.reel_url].products.push(product);
+  });
+
+  return Object.values(reelsMap);
 }
 
 // Create a reel section
@@ -103,7 +135,7 @@ function createProductsCarousel(products) {
   const grid = document.createElement('div');
   grid.className = 'products-grid';
 
-  // ✅ NEW: Enable horizontal scroll with proper touch handling
+  // ✅ Enable horizontal scroll with proper touch handling
   enableHorizontalScroll(grid);
 
   // Render product cards
@@ -116,7 +148,7 @@ function createProductsCarousel(products) {
   return carouselContainer;
 }
 
-// ✅ NEW: Enable horizontal scroll with touch support
+// ✅ Enable horizontal scroll with touch support
 function enableHorizontalScroll(gridElement) {
   // For desktop: Enable click+drag scrolling
   let isDown = false;
@@ -173,7 +205,7 @@ function createProductCard(product) {
   card.className = 'product-card';
   card.style.cursor = 'pointer';
 
-  // ✅ NEW: Touch event handling for mobile (distinguish tap from swipe)
+  // ✅ Touch event handling for mobile (distinguish tap from swipe)
   let touchStartX = 0;
   let touchStartY = 0;
   let touchStartTime = 0;
@@ -197,7 +229,11 @@ function createProductCard(product) {
     // 2. Movement < 10px horizontally (not swiping)
     if (touchDuration < 300 && deltaX < 10 && deltaY < 10) {
       e.preventDefault(); // Prevent any default behavior
-      openSimpleModal(product);
+      if (typeof openSimpleModal === 'function') {
+        openSimpleModal(product);
+      } else {
+        console.error('❌ openSimpleModal function not found');
+      }
     }
   });
 
@@ -211,7 +247,11 @@ function createProductCard(product) {
 
     // Only trigger on mouse click, not touch
     if (e.pointerType === 'mouse' || !e.pointerType) {
-      openSimpleModal(product);
+      if (typeof openSimpleModal === 'function') {
+        openSimpleModal(product);
+      } else {
+        console.error('❌ openSimpleModal function not found');
+      }
     }
   });
 
