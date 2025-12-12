@@ -17,7 +17,7 @@
   display: none;
 }
 
-/* Close Button - Floating (Moved Left) */
+/* Close Button - Floating */
 .reels-close-btn {
   position: fixed;
   top: 20px;
@@ -82,6 +82,11 @@
   top: 75vh;
 }
 
+/* ✅ HIDE arrows when at boundaries (controlled by JS) */
+.reels-nav-btn.hidden {
+  display: none !important;
+}
+
 /* Hide nav buttons on mobile */
 @media (max-width: 767px) {
   .reels-nav-btn {
@@ -94,14 +99,11 @@
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  
   /* MANDATORY SNAP - Strict Instagram/Shorts behavior */
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
-  
   /* NO PADDING - No peeking effect */
   padding: 0;
-  
   /* HIDE SCROLLBAR COMPLETELY */
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE/Edge */
@@ -133,7 +135,7 @@
   .reel-section {
     padding: 20px;
   }
-  
+
   .reel-content {
     display: flex;
     gap: 30px;
@@ -142,7 +144,7 @@
     height: 100%;
     max-height: 100%;
   }
-  
+
   .reel-video {
     flex: 1;
     display: flex;
@@ -151,7 +153,7 @@
     overflow: hidden;
     height: 100%;
   }
-  
+
   .reel-video iframe {
     max-width: 100%;
     max-height: 100%;
@@ -159,7 +161,7 @@
     height: 100%;
     object-fit: contain;
   }
-  
+
   .reel-products {
     flex: 1;
     display: flex;
@@ -175,7 +177,7 @@
   .reel-section {
     padding: 20px;
   }
-  
+
   .reel-content {
     display: flex;
     gap: 20px;
@@ -184,7 +186,7 @@
     height: 100%;
     max-height: 100%;
   }
-  
+
   .reel-video {
     flex: 1;
     display: flex;
@@ -193,7 +195,7 @@
     overflow: hidden;
     height: 100%;
   }
-  
+
   .reel-video iframe {
     max-width: 100%;
     max-height: 100%;
@@ -201,7 +203,7 @@
     height: 100%;
     object-fit: contain;
   }
-  
+
   .reel-products {
     flex: 1;
     display: flex;
@@ -212,8 +214,8 @@
   }
 }
 
-/* Mobile: Stacked (<768px) - STRICT HEIGHT CONTROL */
-@media (max-width: 767px) {
+/* Mobile Portrait: Stacked - STRICT HEIGHT CONTROL */
+@media (max-width: 767px) and (orientation: portrait) {
   .reel-section {
     padding: 0;
     height: 100vh;
@@ -221,7 +223,7 @@
     max-height: 100vh;
     width: 100vw;
   }
-  
+
   .reel-content {
     display: flex;
     flex-direction: column;
@@ -231,7 +233,7 @@
     padding: 10px;
     box-sizing: border-box;
   }
-  
+
   .reel-video {
     flex: 0 0 65%;
     display: flex;
@@ -241,7 +243,7 @@
     max-height: 65vh;
     width: 100%;
   }
-  
+
   .reel-video iframe {
     width: 100%;
     max-width: 100%;
@@ -249,7 +251,7 @@
     max-height: 100%;
     object-fit: contain;
   }
-  
+
   .reel-products {
     flex: 0 0 35%;
     display: flex;
@@ -259,13 +261,69 @@
     max-height: 35vh;
     width: 100%;
   }
-  
+
   .reels-close-btn {
     top: 10px;
     right: 10px;
     width: 36px;
     height: 36px;
     font-size: 20px;
+  }
+}
+
+/* ✅ Mobile Landscape: Side-by-Side - FULL VIEWPORT */
+@media (max-width: 767px) and (orientation: landscape) {
+  .reel-section {
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  .reel-content {
+    display: flex;
+    flex-direction: row; /* ✅ Side-by-side */
+    gap: 10px;
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  .reel-video {
+    flex: 0 0 50%; /* ✅ 50% width for video */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    height: 100%;
+    width: 50%;
+  }
+
+  .reel-video iframe {
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  .reel-products {
+    flex: 0 0 50%; /* ✅ 50% width for products */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow: hidden;
+    height: 100%;
+    width: 50%;
+  }
+
+  .reels-close-btn {
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
   }
 }
 
