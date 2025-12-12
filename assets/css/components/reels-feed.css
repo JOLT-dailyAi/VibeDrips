@@ -1,4 +1,5 @@
 /* Reels Feed - Instagram-Style Grid Layouts */
+
 /* ALL RULES SCOPED TO REELS MODAL ONLY */
 
 /* Feed Container (inside reels modal) */
@@ -107,12 +108,12 @@
   flex-direction: column;
 }
 
-/* Products Grid - WITH HORIZONTAL SCROLL AND FIXED CARD HEIGHTS */
+/* Products Grid - DYNAMIC SCALING */
 .reels-modal .products-grid {
   display: grid;
   gap: 15px;
   width: 100%;
-  height: auto;
+  height: 100%;
   max-height: 100%;
   transition: opacity 0.3s ease;
   overflow-x: auto;
@@ -151,21 +152,20 @@
   opacity: 0.5;
 }
 
-/* FIXED CARD DIMENSIONS IN REELS */
+/* DYNAMIC CARD DIMENSIONS - SCALE TO CONTAINER */
 .reels-modal .product-card {
   width: 100%;
-  height: 280px;
-  min-height: 280px;
+  height: 100%;
   max-height: 280px;
+  min-height: 180px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
 }
 
 .reels-modal .product-card img {
-  height: 160px;
-  min-height: 160px;
-  max-height: 160px;
+  flex: 0 0 55%;
+  width: 100%;
   object-fit: cover;
 }
 
@@ -174,33 +174,44 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  min-height: 120px;
+  padding: clamp(8px, 2vw, 12px);
+  min-height: 0;
 }
 
-/* Desktop: 3x2 Grid (6 products) */
+.reels-modal .product-card .product-name {
+  font-size: clamp(0.75rem, 2vw, 0.95rem);
+  line-height: 1.3;
+}
+
+.reels-modal .product-card .product-price {
+  font-size: clamp(0.85rem, 2.5vw, 1.05rem);
+  font-weight: bold;
+}
+
+/* Desktop: 3x2 Grid (6 products) - FILL ROWS FIRST */
 @media (min-width: 1200px) {
   .reels-modal .products-grid {
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, 280px);
-    grid-auto-flow: column;
+    grid-template-rows: repeat(2, 1fr);
+    grid-auto-flow: row; /* ✅ FIXED: Fill horizontally first */
   }
 }
 
-/* Tablet: 2x2 Grid (4 products) */
+/* Tablet: 2x2 Grid (4 products) - FILL ROWS FIRST */
 @media (min-width: 768px) and (max-width: 1199px) {
   .reels-modal .products-grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 280px);
-    grid-auto-flow: column;
+    grid-template-rows: repeat(2, 1fr);
+    grid-auto-flow: row; /* ✅ FIXED: Fill horizontally first */
   }
-  
+
   .reels-modal .reel-video iframe {
     max-width: 400px;
   }
 }
 
-/* Mobile: STRICT HEIGHT CONTROL (Instagram/Shorts style) */
-@media (max-width: 767px) {
+/* Mobile Portrait: KEEP 35% CONTAINER, SCROLLABLE CARDS */
+@media (max-width: 767px) and (orientation: portrait) {
   .reels-modal .reel-section {
     padding: 0;
     height: 100vh;
@@ -208,7 +219,7 @@
     max-height: 100vh;
     width: 100vw;
   }
-  
+
   .reels-modal .reel-content {
     flex-direction: column;
     gap: 10px;
@@ -219,62 +230,144 @@
     padding: 10px;
     box-sizing: border-box;
   }
-  
+
   .reels-modal .reel-video {
     flex: 0 0 65%;
     max-height: 65%;
     width: 100%;
     height: 65%;
   }
-  
+
   .reels-modal .reel-video iframe {
     max-width: 100%;
     width: 100%;
     height: 100%;
     max-height: 100%;
   }
-  
+
   .reels-modal .reel-products {
-    flex: 0 0 35%;
+    flex: 0 0 35%; /* ✅ KEEP 35% */
     justify-content: flex-start;
     width: 100%;
     max-height: 35%;
     height: 35%;
     gap: 10px;
+    overflow: visible; /* ✅ Allow overflow for scrolling */
   }
-  
+
   .reels-modal .products-carousel {
     height: 100%;
     max-height: 100%;
+    overflow: visible; /* ✅ Allow overflow */
   }
-  
+
   .reels-modal .products-grid {
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    grid-template-rows: 240px;
+    grid-template-rows: 1fr; /* ✅ FLEXIBLE HEIGHT */
     gap: 8px;
     overflow-x: auto;
     overflow-y: hidden;
     width: 100%;
-    height: auto;
-    max-height: 240px;
+    height: 100%; /* ✅ Fill container */
+    max-height: 100%;
     padding-bottom: 5px;
     align-content: start;
   }
-  
+
   .reels-modal .product-card {
-    height: 240px;
-    min-height: 240px;
-    max-height: 240px;
+    height: 100%; /* ✅ Fill grid cell */
+    max-height: 220px; /* ✅ Cap at 220px */
+    min-height: 160px; /* ✅ Don't go below 160px */
   }
-  
+
   .reels-modal .product-card img {
-    height: 130px;
-    min-height: 130px;
-    max-height: 130px;
+    flex: 0 0 60%; /* ✅ 60% of card height */
   }
-  
+
   .reels-modal .product-card .product-info {
-    min-height: 110px;
+    flex: 1; /* ✅ Take remaining 40% */
+    padding: 8px;
+  }
+}
+
+/* Mobile Landscape: SIDE-BY-SIDE LAYOUT */
+@media (max-width: 767px) and (orientation: landscape) {
+  .reels-modal .reel-section {
+    padding: 0;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  .reels-modal .reel-content {
+    flex-direction: row; /* ✅ Side-by-side */
+    gap: 10px;
+    width: 100vw;
+    max-width: 100vw;
+    height: 100vh;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+
+  .reels-modal .reel-video {
+    flex: 0 0 50%; /* ✅ 50% width for video */
+    height: 100%;
+    width: 50%;
+  }
+
+  .reels-modal .reel-video iframe {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .reels-modal .reel-products {
+    flex: 0 0 50%; /* ✅ 50% width for products */
+    height: 100%;
+    width: 50%;
+    justify-content: flex-start;
+    gap: 10px;
+    overflow: visible;
+  }
+
+  .reels-modal .products-carousel {
+    height: 100%;
+    max-height: 100%;
+  }
+
+  .reels-modal .products-grid {
+    grid-template-columns: repeat(2, 1fr); /* ✅ 2 columns */
+    grid-template-rows: repeat(2, 1fr); /* ✅ 2 rows, flexible */
+    grid-auto-flow: row; /* ✅ Fill rows first */
+    gap: 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    height: 100%;
+    max-height: 100%;
+    padding-bottom: 5px;
+  }
+
+  .reels-modal .product-card {
+    height: 100%;
+    max-height: 180px; /* ✅ Smaller for landscape */
+    min-height: 140px;
+  }
+
+  .reels-modal .product-card img {
+    flex: 0 0 55%;
+  }
+
+  .reels-modal .product-card .product-info {
+    flex: 1;
+    padding: 6px;
+  }
+
+  .reels-modal .product-card .product-name {
+    font-size: clamp(0.7rem, 1.8vw, 0.85rem);
+  }
+
+  .reels-modal .product-card .product-price {
+    font-size: clamp(0.8rem, 2vw, 0.95rem);
   }
 }
 
@@ -319,11 +412,11 @@
     height: 32px;
     font-size: 14px;
   }
-  
+
   .reels-modal .carousel-nav.prev {
     left: 5px;
   }
-  
+
   .reels-modal .carousel-nav.next {
     right: 5px;
   }
@@ -364,12 +457,12 @@
     margin-top: 5px;
     gap: 6px;
   }
-  
+
   .reels-modal .dot {
     width: 6px;
     height: 6px;
   }
-  
+
   .reels-modal .dot.active {
     width: 18px;
   }
