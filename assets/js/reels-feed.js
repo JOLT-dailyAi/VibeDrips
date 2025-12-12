@@ -15,7 +15,7 @@ function renderReelsFeed() {
   // Clear loading state
   feedContainer.innerHTML = '';
 
-  // ✅ FIX: Check if products exist first
+  // ✅ Check if products exist first
   if (!window.allProducts || !Array.isArray(window.allProducts)) {
     console.warn('⚠️ Products not loaded yet');
     feedContainer.innerHTML = `
@@ -25,7 +25,7 @@ function renderReelsFeed() {
       </div>
     `;
     
-    // ✅ Try again after products load
+    // Try again after products load
     setTimeout(() => {
       if (window.allProducts && window.allProducts.length > 0) {
         renderReelsFeed();
@@ -126,7 +126,7 @@ function createReelSection(reelData, index) {
   return section;
 }
 
-// Create products carousel with pagination
+// Create products carousel
 function createProductsCarousel(products) {
   const carouselContainer = document.createElement('div');
   carouselContainer.className = 'products-carousel';
@@ -135,12 +135,12 @@ function createProductsCarousel(products) {
   const grid = document.createElement('div');
   grid.className = 'products-grid';
 
-  // ✅ Enable horizontal scroll with proper touch handling
+  // ✅ Enable horizontal scroll with touch/drag support
   enableHorizontalScroll(grid);
 
-  // Render product cards
+  // Render product cards using REELS-SPECIFIC function
   products.forEach(product => {
-    const card = createProductCard(product);
+    const card = createReelsProductCard(product);
     grid.appendChild(card);
   });
 
@@ -150,22 +150,20 @@ function createProductsCarousel(products) {
 
 // ✅ Enable horizontal scroll with touch support
 function enableHorizontalScroll(gridElement) {
-  // For desktop: Enable click+drag scrolling
+  // Desktop: Enable click+drag scrolling
   let isDown = false;
   let startX;
   let scrollLeft;
-  let hasMoved = false;
 
   gridElement.addEventListener('mousedown', (e) => {
-    // Only handle if not clicking on a button or link
     if (e.target.closest('button') || e.target.closest('a')) return;
     
     isDown = true;
-    hasMoved = false;
     startX = e.pageX - gridElement.offsetLeft;
     scrollLeft = gridElement.scrollLeft;
     gridElement.style.cursor = 'grabbing';
     gridElement.style.userSelect = 'none';
+    gridElement.dataset.dragging = 'false';
   });
 
   gridElement.addEventListener('mouseleave', () => {
@@ -178,29 +176,24 @@ function enableHorizontalScroll(gridElement) {
     isDown = false;
     gridElement.style.cursor = 'grab';
     gridElement.style.userSelect = 'auto';
+    // Reset dragging flag after a small delay
+    setTimeout(() => {
+      gridElement.dataset.dragging = 'false';
+    }, 10);
   });
 
   gridElement.addEventListener('mousemove', (e) => {
     if (!isDown) return;
     e.preventDefault();
-    hasMoved = true;
+    gridElement.dataset.dragging = 'true';
     const x = e.pageX - gridElement.offsetLeft;
-    const walk = (x - startX) * 2; // Scroll speed multiplier
+    const walk = (x - startX) * 2;
     gridElement.scrollLeft = scrollLeft - walk;
-  });
-
-  // Store hasMoved state for click detection
-  gridElement.dataset.hasMoved = 'false';
-  gridElement.addEventListener('mousedown', () => {
-    gridElement.dataset.hasMoved = 'false';
-  });
-  gridElement.addEventListener('mousemove', () => {
-    if (isDown) gridElement.dataset.hasMoved = 'true';
   });
 }
 
-// Create a product card
-function createProductCard(product) {
+// ✅ REELS-SPECIFIC product card (separate from homepage)
+function createReelsProductCard(product) {
   const card = document.createElement('div');
   card.className = 'product-card';
   card.style.cursor = 'pointer';
@@ -224,33 +217,25 @@ function createProductCard(product) {
     const deltaX = Math.abs(touchEndX - touchStartX);
     const deltaY = Math.abs(touchEndY - touchStartY);
     
-    // Only open modal if it's a tap (not a swipe):
-    // 1. Duration < 300ms (quick tap)
-    // 2. Movement < 10px horizontally (not swiping)
+    // Only open modal if it's a tap (not a swipe)
     if (touchDuration < 300 && deltaX < 10 && deltaY < 10) {
-      e.preventDefault(); // Prevent any default behavior
+      e.preventDefault();
       if (typeof openSimpleModal === 'function') {
         openSimpleModal(product);
-      } else {
-        console.error('❌ openSimpleModal function not found');
       }
     }
   });
 
   // ✅ Desktop click handler (only if not dragging)
   card.addEventListener('click', (e) => {
-    // Check if user was dragging
     const grid = card.closest('.products-grid');
-    if (grid && grid.dataset.hasMoved === 'true') {
+    if (grid && grid.dataset.dragging === 'true') {
       return; // Don't open modal if user was scrolling
     }
 
-    // Only trigger on mouse click, not touch
     if (e.pointerType === 'mouse' || !e.pointerType) {
       if (typeof openSimpleModal === 'function') {
         openSimpleModal(product);
-      } else {
-        console.error('❌ openSimpleModal function not found');
       }
     }
   });
@@ -260,11 +245,18 @@ function createProductCard(product) {
   imageWrapper.className = 'product-image-wrapper';
 
   const img = document.createElement('img');
-  img.src = product.images[0];
-  img.alt = product.name;
+  // ✅ Handle both images array and single image
+  if (Array.isArray(product.images) && product.images.length > 0) {
+    img.src = product.images[0];
+  } else if (product.image) {
+    img.src = product.image;
+  } else {
+    img.src = 'assets/images/placeholder.png';
+  }
+  img.alt = product.name || 'Product';
   img.loading = 'lazy';
 
-  // Brand tag (if exists)
+  // Brand tag
   if (product.brand) {
     const brandTag = document.createElement('div');
     brandTag.className = 'brand-tag';
@@ -273,7 +265,7 @@ function createProductCard(product) {
   }
 
   // Image count badge
-  if (product.images.length > 1) {
+  if (Array.isArray(product.images) && product.images.length > 1) {
     const imageCount = document.createElement('div');
     imageCount.className = 'image-count';
     imageCount.textContent = `📸 ${product.images.length}`;
@@ -286,13 +278,13 @@ function createProductCard(product) {
   // Category
   const category = document.createElement('div');
   category.className = 'product-category';
-  category.textContent = product.category;
+  category.textContent = product.category || 'Product';
   card.appendChild(category);
 
   // Product name
   const name = document.createElement('h3');
   name.className = 'product-name';
-  name.textContent = product.name;
+  name.textContent = product.name || 'Unnamed Product';
   card.appendChild(name);
 
   // Price row
@@ -301,7 +293,7 @@ function createProductCard(product) {
 
   const price = document.createElement('div');
   price.className = 'product-price';
-  price.textContent = product.price;
+  price.textContent = product.price || 'N/A';
   priceRow.appendChild(price);
 
   if (product.rating) {
@@ -315,13 +307,12 @@ function createProductCard(product) {
 
   // Amazon button
   const button = document.createElement('a');
-  button.href = product.amazon_url;
+  button.href = product.amazon_url || '#';
   button.target = '_blank';
   button.rel = 'noopener noreferrer';
   button.className = 'amazon-button';
   button.textContent = '🛒 Buy on Amazon';
   
-  // Prevent button click from opening modal
   button.addEventListener('click', (e) => {
     e.stopPropagation();
   });
