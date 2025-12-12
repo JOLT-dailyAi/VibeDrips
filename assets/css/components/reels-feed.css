@@ -99,13 +99,14 @@
   flex-direction: column;
 }
 
-/* ==================== PRODUCTS GRID - DYNAMIC SIZING ==================== */
-.reels-modal .products-grid {
+/* ==================== PRODUCTS GRID - DYNAMIC SIZING (UNSCOPED!) ==================== */
+/* ⚠️ WARNING: This affects BOTH homepage and reels modal */
+.products-grid {
   display: grid;
   gap: 15px;
-  width: 100%; /* ✅ Fill carousel width */
-  height: 100%; /* ✅ Fill carousel height */
-  grid-auto-flow: row; /* ✅ Fill rows first (horizontally) */
+  width: 100%;
+  height: 100%;
+  grid-auto-flow: row;
   transition: opacity 0.3s ease;
   scrollbar-width: thin;
   scroll-behavior: smooth;
@@ -115,27 +116,27 @@
   box-sizing: border-box;
 }
 
-.reels-modal .products-grid:active {
+.products-grid:active {
   cursor: grabbing;
 }
 
 /* Scrollbar styling */
-.reels-modal .products-grid::-webkit-scrollbar {
+.products-grid::-webkit-scrollbar {
   height: 6px;
   width: 6px;
 }
 
-.reels-modal .products-grid::-webkit-scrollbar-track {
+.products-grid::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 3px;
 }
 
-.reels-modal .products-grid::-webkit-scrollbar-thumb {
+.products-grid::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.2);
   border-radius: 3px;
 }
 
-.reels-modal .products-grid::-webkit-scrollbar-thumb:hover {
+.products-grid::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.3);
 }
 
@@ -143,12 +144,13 @@
   opacity: 0.5;
 }
 
-/* ==================== PRODUCT CARD - DYNAMIC STRUCTURE ==================== */
+/* ==================== PRODUCT CARD - DYNAMIC STRUCTURE (UNSCOPED!) ==================== */
+/* ⚠️ WARNING: This affects BOTH homepage and reels modal */
 
-.reels-modal .product-card {
+.product-card {
   width: 100%;
-  height: 100%; /* ✅ Fill grid cell height dynamically */
-  min-height: 140px; /* ✅ Safety minimum */
+  height: 100%;
+  min-height: 140px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -157,22 +159,22 @@
 }
 
 /* Image wrapper - FLEXIBLE (lowest priority) */
-.reels-modal .product-card .product-image-wrapper {
-  flex: 1 1 auto; /* ✅ Can grow/shrink as needed */
+.product-card .product-image-wrapper {
+  flex: 1 1 auto;
   width: 100%;
   position: relative;
   overflow: hidden;
-  min-height: 80px; /* ✅ Safety minimum so image doesn't disappear */
+  min-height: 80px;
 }
 
-.reels-modal .product-card .product-image-wrapper img {
+.product-card .product-image-wrapper img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
 /* Category - fixed */
-.reels-modal .product-card .product-category {
+.product-card .product-category {
   flex: 0 0 auto;
   padding: 4px 8px 2px;
   font-size: 0.7rem;
@@ -181,7 +183,7 @@
 }
 
 /* Product name - can shrink slightly */
-.reels-modal .product-card .product-name {
+.product-card .product-name {
   flex: 0 1 auto;
   padding: 0 8px;
   font-size: 0.8rem;
@@ -195,7 +197,7 @@
 }
 
 /* Price row - fixed */
-.reels-modal .product-card .product-price-row {
+.product-card .product-price-row {
   flex: 0 0 auto;
   padding: 3px 8px;
   display: flex;
@@ -205,9 +207,9 @@
 }
 
 /* Amazon button - HIGHEST PRIORITY, ALWAYS VISIBLE */
-.reels-modal .product-card .amazon-button {
+.product-card .amazon-button {
   flex: 0 0 auto;
-  flex-shrink: 0 !important; /* ✅ NEVER compress */
+  flex-shrink: 0 !important;
   margin: 4px 8px 6px;
   padding: 5px 10px;
   font-size: 0.75rem;
@@ -221,8 +223,8 @@
 }
 
 /* Brand tag and image count */
-.reels-modal .product-card .brand-tag,
-.reels-modal .product-card .image-count {
+.product-card .brand-tag,
+.product-card .image-count {
   font-size: 0.65rem;
   padding: 2px 6px;
 }
@@ -231,7 +233,7 @@
 @media (min-width: 1200px) {
   .reels-modal .products-grid {
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, 1fr); /* ✅ Dynamic rows */
+    grid-template-rows: repeat(2, 1fr);
     grid-auto-flow: row;
     overflow-y: auto;
     overflow-x: hidden;
@@ -242,7 +244,7 @@
 @media (min-width: 768px) and (max-width: 1199px) {
   .reels-modal .products-grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr); /* ✅ Dynamic rows */
+    grid-template-rows: repeat(2, 1fr);
     grid-auto-flow: row;
     overflow-y: auto;
     overflow-x: hidden;
@@ -253,9 +255,10 @@
   }
 }
 
-/* ==================== MOBILE PORTRAIT: 1 ROW × 2 COLUMNS ==================== */
+/* ==================== MOBILE PORTRAIT: 1 ROW × 2 COLUMNS (UNSCOPED!) ==================== */
+/* ⚠️ This will affect BOTH homepage and reels modal */
 @media (max-width: 767px) and (orientation: portrait) {
-  .reels-modal .reel-section {
+  .reel-section {
     padding: 0;
     height: 100vh;
     min-height: 100vh;
@@ -263,7 +266,7 @@
     width: 100vw;
   }
 
-  .reels-modal .reel-content {
+  .reel-content {
     flex-direction: column;
     gap: 10px;
     width: 100%;
@@ -272,34 +275,34 @@
     box-sizing: border-box;
   }
 
-  .reels-modal .reel-video {
+  .reel-video {
     border-radius: 8px;
   }
 
-  .reels-modal .reel-video iframe {
+  .reel-video iframe {
     max-width: 100%;
     width: 100%;
     border-radius: 8px;
   }
 
-  .reels-modal .reel-products {
+  .reel-products {
     justify-content: flex-start;
     width: 100%;
     gap: 10px;
   }
 
-  .reels-modal .products-carousel {
+  .products-carousel {
     height: 100%;
     max-height: 100%;
   }
 
-  /* ✅ 1 ROW × 2 COLUMNS - HORIZONTAL SCROLL */
-  .reels-modal .products-grid {
-    grid-template-columns: repeat(2, 1fr); /* ✅ Always 2 columns */
-    grid-template-rows: 1fr; /* ✅ Single row */
+  /* ✅ 2 COLUMNS - HORIZONTAL SCROLL (affects homepage too!) */
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr) !important; /* Override grid.css */
+    grid-template-rows: 1fr;
     grid-auto-flow: row;
     gap: 8px;
-    overflow-x: auto; /* ✅ Horizontal scroll */
+    overflow-x: auto;
     overflow-y: hidden;
     width: 100%;
     height: 100%;
@@ -308,24 +311,24 @@
   }
 
   /* Smaller text in portrait */
-  .reels-modal .product-card .product-category {
+  .product-card .product-category {
     padding: 3px 6px 1px;
     font-size: 0.65rem;
   }
 
-  .reels-modal .product-card .product-name {
+  .product-card .product-name {
     padding: 0 6px;
     font-size: 0.7rem;
     line-height: 1.15;
     max-height: 2.3em;
   }
 
-  .reels-modal .product-card .product-price-row {
+  .product-card .product-price-row {
     padding: 2px 6px;
     font-size: 0.7rem;
   }
 
-  .reels-modal .product-card .amazon-button {
+  .product-card .amazon-button {
     margin: 3px 6px 4px;
     padding: 4px 8px;
     font-size: 0.65rem;
@@ -374,11 +377,11 @@
 
   /* ✅ 1 ROW × 2 COLUMNS - HORIZONTAL SCROLL */
   .reels-modal .products-grid {
-    grid-template-columns: repeat(2, 1fr); /* ✅ Always 2 columns */
-    grid-template-rows: 1fr; /* ✅ Single row */
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
     grid-auto-flow: row;
     gap: 8px;
-    overflow-x: auto; /* ✅ Horizontal scroll */
+    overflow-x: auto;
     overflow-y: hidden;
     height: 100%;
     max-height: 100%;
@@ -386,12 +389,12 @@
   }
 
   /* Smaller text in landscape */
-  .reels-modal .product-card .product-category {
+  .product-card .product-category {
     padding: 2px 4px 1px;
     font-size: 0.6rem;
   }
 
-  .reels-modal .product-card .product-name {
+  .product-card .product-name {
     padding: 0 4px;
     font-size: 0.65rem;
     line-height: 1.15;
@@ -399,12 +402,12 @@
     max-height: 2.3em;
   }
 
-  .reels-modal .product-card .product-price-row {
+  .product-card .product-price-row {
     padding: 2px 4px;
     font-size: 0.65rem;
   }
 
-  .reels-modal .product-card .amazon-button {
+  .product-card .amazon-button {
     margin: 2px 4px 3px;
     padding: 3px 6px;
     font-size: 0.6rem;
