@@ -236,6 +236,13 @@ body.dark-theme .product-card .rating {
   }
 }
 
+/* ✅ NEW: Mobile Portrait - Larger Vertical Rectangle Image */
+@media (max-width: 767px) and (orientation: portrait) {
+  .product-card img {
+    aspect-ratio: 3 / 4; /* ✅ Vertical rectangle (3:4 ratio) instead of square */
+  }
+}
+
 /* Section Header */
 .section-header {
   text-align: center;
