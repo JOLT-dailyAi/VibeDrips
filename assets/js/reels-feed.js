@@ -179,6 +179,9 @@ function createProductsCarousel(products, reelIndex) {
   const grid = document.createElement('div');
   grid.className = 'products-grid';
   
+  // ✅ NEW: Add swipe support to grid
+  enableSwipeNavigation(grid, carousel);
+  
   // Create dots indicator
   const dotsContainer = document.createElement('div');
   dotsContainer.className = 'carousel-dots';
@@ -209,6 +212,41 @@ function createProductsCarousel(products, reelIndex) {
   }
   
   return carousel;
+}
+
+// ✅ NEW FUNCTION: Enable swipe navigation for pagination
+function enableSwipeNavigation(grid, carousel) {
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchStartTime = 0;
+
+  grid.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    touchStartTime = Date.now();
+  }, { passive: true });
+
+  grid.addEventListener('touchend', (e) => {
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    const deltaX = touchEndX - touchStartX;
+    const deltaY = Math.abs(touchEndY - touchStartY);
+    const duration = Date.now() - touchStartTime;
+
+    // Only handle swipe if:
+    // 1. Horizontal movement > 50px
+    // 2. Vertical movement < 30px (not scrolling up/down)
+    // 3. Duration < 500ms (quick swipe)
+    if (Math.abs(deltaX) > 50 && deltaY < 30 && duration < 500) {
+      if (deltaX > 0) {
+        // Swipe right = previous page
+        navigateCarousel(carousel, -1);
+      } else {
+        // Swipe left = next page
+        navigateCarousel(carousel, 1);
+      }
+    }
+  });
 }
 
 // Render products for current page
