@@ -7,6 +7,196 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.6.0] - 2025-12-12
+
+### 🎬 Major Features - Instagram Reels Integration
+
+#### Fullscreen Reels Experience
+- **Immersive fullscreen modal** with dark overlay (95% black background)
+- **Smooth vertical scrolling** between reels with gentle snap behavior
+- **Floating close button** with glassmorphism effects
+- **Responsive layouts** for desktop, tablet, and mobile
+
+#### Instagram Iframe Integration
+- Direct Instagram reel embeds using native iframe
+- **URL Parsing:** Automatically extracts post ID from Instagram URLs
+  - Supports `/p/{postId}` format (posts)
+  - Supports `/reel/{postId}` format (reels)
+  - Converts to embed URL: `https://www.instagram.com/p/{postId}/embed`
+- **Responsive sizing:** Desktop (500×700px), Tablet (400×600px), Mobile (100% width)
+- **Native Instagram controls:** Play/pause, sound, like, share
+- **Lazy loading:** Iframes load only when modal opens for performance
+- **Rounded corners and shadows** for polished appearance
+
+#### Horizontal Product Carousel
+- **Desktop (>1200px):** 3×2 grid showing 6 products per page
+- **Tablet (768-1199px):** 2×2 grid showing 4 products per page
+- **Mobile Portrait (<768px):** Horizontal 1×2 layout showing 2 products side-by-side
+- **Mobile Landscape (<768px):** 2×2 grid showing 4 products per page
+- **Navigation controls:**
+  - Left/right arrow buttons with glassmorphism styling
+  - Touch swipe gestures for mobile pagination
+  - Pagination dots with active state highlighting
+  - Smooth opacity transitions during page changes
+- **Smart pagination:** Automatically calculates total pages based on product count
+- **Touch-friendly:** Mobile arrows positioned inside container for easy access
+
+#### Swipe Navigation
+- **Horizontal swipe gestures** on mobile/tablet for carousel pagination
+- **Intelligent detection:**
+  - Horizontal movement > 50px triggers page change
+  - Vertical movement < 30px ensures no conflict with scroll
+  - Duration < 500ms for responsive feel
+- **Direction-aware:**
+  - Swipe right = Previous page
+  - Swipe left = Next page
+- **Non-intrusive:** Doesn't interfere with vertical reel scrolling
+
+### Added
+- **New Files:**
+  - `assets/css/components/reels-modal.css` - Fullscreen modal structure and layouts
+  - `assets/css/components/reels-feed.css` - Product carousel and navigation styles
+  - `assets/js/reels-modal.js` - Modal open/close functionality
+  - `assets/js/reels-feed.js` - Instagram URL parsing, carousel pagination, and swipe logic
+  
+- **Modal Components:**
+  - Fullscreen overlay with z-index 1000
+  - Scroll container with smooth scrolling and snap points
+  - Reel sections with Instagram iframe + products layout
+  - Floating close button (top-right corner)
+  - Navigation arrows with hover effects
+  - Pagination dots with visual feedback
+  - Touch gesture detection system
+  
+- **Instagram Integration:**
+  - `getInstagramEmbedUrl()` - Parses Instagram URLs and extracts post ID
+  - `createReelSection()` - Generates reel section with iframe
+  - `getReelsDataFromProducts()` - Filters products with Instagram source links
+  - Support for both `/p/` and `/reel/` URL formats
+  - Validation for Instagram URLs only
+  
+- **Product Card Contexts:**
+  - Context-aware sizing (compact for reels, full-size for homepage)
+  - Maintained hover effects across all contexts
+  - Preserved click-to-open-details functionality in reels
+  
+- **Responsive Features:**
+  - Desktop: Side-by-side Instagram reel and products layout
+  - Tablet: Compact side-by-side layout with swipe support
+  - Mobile Portrait: Stacked vertical (70% reel, 30% products) with horizontal swipe
+  - Mobile Landscape: Adaptive layouts with 2×2 product grid
+
+### Changed
+- **Product Data Source:**
+  - Reads `Product Source Link` field from CSV
+  - Groups products by Instagram URL
+  - Handles multiple URLs (takes first one)
+  
+- **Product Card Styling:**
+  - Added `.reels-modal .product-card` specific styles for compact display
+  - Reduced font sizes and padding for carousel context
+  - Maintained full styling for homepage cards
+  
+- **Grid System:**
+  - Protected homepage grid with scoped CSS specificity
+  - Added `.reels-modal` namespace to all modal-specific grid rules
+  - Emergency fallback rules for mobile 2-column layout
+  - Orientation-aware breakpoints (portrait vs landscape)
+  
+- **Service Worker:**
+  - Updated cache version to `v1.6`
+  - Added new reels CSS and JS files to cache list
+
+### Fixed
+- **Critical Mobile Bug:** Homepage now correctly displays 2 columns on mobile portrait (was showing 1 column)
+- **CSS Cascade Issue:** Resolved unscoped `.products-grid` rules affecting homepage
+- **Grid Specificity:** Added `.reels-modal` parent selector to isolate modal styles
+- **Card Height Conflicts:** Fixed auto-height issues in different rendering contexts
+- **Navigation Positioning:** Carousel arrows now positioned correctly on mobile devices
+- **Pagination Sizing:** Dots scale appropriately for different screen sizes
+- **Scroll Behavior:** Smooth scrolling works consistently across all browsers
+- **Touch Conflicts:** Swipe gestures don't interfere with vertical scroll
+- **Orientation Detection:** Mobile landscape properly detected for 2×2 grid
+
+### Technical Details
+
+#### Instagram URL Parsing
+// Regex pattern: //(p|reel)/([^/?]+)/
+// Example input: https://www.instagram.com/reel/ABC123xyz/
+// Extracted ID: ABC123xyz
+// Embed URL: https://www.instagram.com/p/ABC123xyz/embed
+
+
+#### Touch Gesture Detection
+// Swipe thresholds:
+deltaX > 50px // Minimum horizontal movement
+deltaY < 30px // Maximum vertical movement
+duration < 500ms // Maximum swipe duration
+
+#### CSS Architecture
+- **Scoped Selectors:** All reels CSS uses `.reels-modal` parent selector
+- **Specificity Hierarchy:**
+  1. `.reels-modal .products-grid` (highest - modal context)
+  2. `.container .products-grid` (medium - homepage protection)
+  3. `.products-grid` (lowest - base styles)
+- **Media Query Strategy:** Separate breakpoints for modal vs homepage
+
+#### JavaScript Modules
+- **reels-modal.js:** 
+  - `openReelsModal()` - Opens fullscreen modal
+  - `closeReelsModal()` - Closes modal and cleans up
+  - Event listeners for close button and ESC key
+  
+- **reels-feed.js:**
+  - `renderReelsFeed()` - Main rendering function
+  - `getReelsDataFromProducts()` - Filters and groups products by Instagram URL
+  - `getInstagramEmbedUrl()` - URL parsing and embed URL generation
+  - `createReelSection()` - Generates reel section with iframe
+  - `createProductsCarousel()` - Builds carousel with pagination
+  - `enableSwipeNavigation()` - Touch gesture handling
+  - `navigateCarousel()` - Page navigation logic
+  - `goToPage()` - Direct page jump with dot updates
+
+#### Responsive Breakpoints
+/* Desktop: >1200px */
+.products-grid { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); }
+
+/* Tablet: 768px-1199px */
+.products-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); }
+
+/* Mobile Portrait: <768px */
+.products-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: 1fr; }
+
+/* Mobile Landscape: <768px + landscape */
+.products-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); }
+
+
+### Performance
+- **Lazy Rendering:** Products and iframes load only when modal opens
+- **Smooth Transitions:** CSS transitions for all state changes
+- **Efficient DOM:** Minimal reflows during carousel navigation
+- **Scroll Optimization:** Native smooth scrolling with snap points
+- **Touch Optimization:** Passive event listeners for better scroll performance
+
+### Browser Compatibility
+- ✅ Chrome/Edge: Full support with smooth scrolling and touch gestures
+- ✅ Safari: Full support with webkit prefixes
+- ✅ Firefox: Full support
+- ✅ Mobile Safari: Touch gestures + vertical scrolling + Instagram embeds
+- ✅ Android Chrome: Full touch support + Instagram embeds
+- ✅ Instagram In-App Browser: Full support
+
+### User Experience Improvements
+- **Immersive Design:** Fullscreen modal eliminates distractions
+- **Native Instagram:** Users get familiar Instagram interface
+- **Intuitive Navigation:** Familiar reels-style vertical scroll + horizontal carousel
+- **Visual Feedback:** Active states for all interactive elements
+- **Responsive Touch:** Optimized for mobile touch interactions with swipe gestures
+- **Keyboard Support:** ESC key closes modal
+- **Smooth Animations:** All transitions feel natural and polished
+
+---
+
 ## [1.5.0] - 2025-12-10
 
 ### Added
