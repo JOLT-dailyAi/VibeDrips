@@ -1,15 +1,41 @@
 // sw.js - Service worker for VibeDrips PWA
 
-const CACHE_NAME = 'vibedrips-v1.5'; 
+const CACHE_NAME = 'vibedrips-v1.6';
 const urlsToCache = [
   '/VibeDrips/',
   '/VibeDrips/index.html',
   
-  // CSS Files
+  // CSS Files - Base & Layout
   '/VibeDrips/assets/css/main.css',
-  '/VibeDrips/assets/css/utils/glass.css',
+  '/VibeDrips/assets/css/base/reset.css',
+  '/VibeDrips/assets/css/base/variables.css',
+  '/VibeDrips/assets/css/layout/header.css',
+  '/VibeDrips/assets/css/layout/footer.css',
+  '/VibeDrips/assets/css/layout/grid.css',
+  
+  // CSS Files - Components
+  '/VibeDrips/assets/css/components/filters.css',
+  '/VibeDrips/assets/css/components/buttons.css',
+  '/VibeDrips/assets/css/components/product-card.css',
+  '/VibeDrips/assets/css/components/modals.css',
   '/VibeDrips/assets/css/components/currency-modal.css',
   '/VibeDrips/assets/css/components/product-modal.css',
+  '/VibeDrips/assets/css/components/reels-modal.css',
+  '/VibeDrips/assets/css/components/reels-feed.css',
+  '/VibeDrips/assets/css/components/badges.css',
+  '/VibeDrips/assets/css/components/stats.css',
+  
+  // CSS Files - States
+  '/VibeDrips/assets/css/states/loading.css',
+  '/VibeDrips/assets/css/states/error.css',
+  '/VibeDrips/assets/css/states/empty.css',
+  
+  // CSS Files - Themes & Utils
+  '/VibeDrips/assets/css/themes/light-theme.css',
+  '/VibeDrips/assets/css/themes/dark-theme.css',
+  '/VibeDrips/assets/css/utils/glass.css',
+  '/VibeDrips/assets/css/utils/floating.css',
+  '/VibeDrips/assets/css/utils/responsive.css',
   
   // Core JS Files
   '/VibeDrips/assets/js/main.js',
@@ -18,10 +44,12 @@ const urlsToCache = [
   '/VibeDrips/assets/js/event-handlers.js',
   '/VibeDrips/assets/js/ui-states.js',
   
-  // Modal JS Files (NEW - replaced modal-manager.js)
+  // Modal JS Files
   '/VibeDrips/assets/js/currency-modal.js',
   '/VibeDrips/assets/js/product-modal.js',
   '/VibeDrips/assets/js/modal-utils.js',
+  '/VibeDrips/assets/js/reels-modal.js',
+  '/VibeDrips/assets/js/reels-feed.js',
   
   // Data Loader JS Files
   '/VibeDrips/assets/js/currency-loader.js',
@@ -50,39 +78,39 @@ const urlsToCache = [
 
 // Install - cache all resources
 self.addEventListener('install', event => {
-  console.log('[SW] Installing...');
+  console.log('[SW v1.6] Installing...');
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('[SW] Caching files');
+        console.log('[SW v1.6] Caching files');
         return cache.addAll(urlsToCache);
       })
       .then(() => {
-        console.log('[SW] Install complete');
+        console.log('[SW v1.6] Install complete');
         return self.skipWaiting(); // Activate immediately
       })
       .catch(error => {
-        console.error('[SW] Install failed:', error);
+        console.error('[SW v1.6] Install failed:', error);
       })
   );
 });
 
 // Activate - clean up old caches
 self.addEventListener('activate', event => {
-  console.log('[SW] Activating...');
+  console.log('[SW v1.6] Activating...');
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
           if (cacheName !== CACHE_NAME) {
-            console.log('[SW] Deleting old cache:', cacheName);
+            console.log('[SW v1.6] Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
       );
     })
     .then(() => {
-      console.log('[SW] Activated');
+      console.log('[SW v1.6] Activated');
       return self.clients.claim(); // Take control immediately
     })
   );
