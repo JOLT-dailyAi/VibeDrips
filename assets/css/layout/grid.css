@@ -109,19 +109,4 @@ body.glass-theme .stat-label {
     }
 }
 
-/* ========== MOBILE HOMEPAGE: 2 COLUMNS ========== */
-@media (max-width: 767px) {
-  /* Force homepage to 2 columns */
-  .container .products-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 15px !important;
-  }
-  
-  /* Ensure cards have proper height */
-  .container .product-card {
-    height: auto !important;
-    min-height: auto !important;
-    max-height: none !important;
-  }
-}
 
