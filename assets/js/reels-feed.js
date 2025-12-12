@@ -152,10 +152,13 @@ function createProductsCarousel(products, reelIndex) {
   carousel.className = 'products-carousel';
   carousel.setAttribute('data-reel-index', reelIndex);
   
-  // Determine products per page based on screen size
+  // Determine products per page based on screen size AND orientation
   const isMobile = window.innerWidth < 768;
   const isTablet = window.innerWidth >= 768 && window.innerWidth < 1200;
-  const productsPerPage = isMobile ? 2 : (isTablet ? 4 : 6);
+  const isMobileLandscape = isMobile && window.matchMedia('(orientation: landscape)').matches;
+  
+  // Mobile landscape: 2×2 = 4, Mobile portrait: 1×2 = 2, Tablet: 2×2 = 4, Desktop: 3×2 = 6
+  const productsPerPage = isMobileLandscape ? 4 : (isMobile ? 2 : (isTablet ? 4 : 6));
   
   // Calculate total pages
   const totalPages = Math.ceil(products.length / productsPerPage);
