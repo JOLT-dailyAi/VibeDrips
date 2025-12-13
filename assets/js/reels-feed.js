@@ -2,6 +2,15 @@
 
 console.log('🎬 Reels feed module loading...');
 
+// ========================================
+// SWIPE DETECTION CONSTANTS
+// ========================================
+const EDGE_ZONE = 60;              // px from left edge (browser back zone)
+const CLAIM_DISTANCE = 35;         // px to claim gesture early
+const MIN_SWIPE_DISTANCE = 50;     // px minimum for navigation
+const SWIPE_RATIO_HORIZONTAL = 1.5; // Horizontal intent threshold
+const SWIPE_RATIO_VERTICAL = 0.67;  // Vertical intent threshold
+
 // Render the reels feed (called from modal)
 function renderReelsFeed() {
   console.log('🎬 Rendering reels feed...');
@@ -214,30 +223,69 @@ function createProductsCarousel(products, reelIndex) {
   return carousel;
 }
 
-// ✅ NEW FUNCTION: Enable swipe navigation for pagination
+// ========================================
+// SWIPE NAVIGATION WITH INTENT DETECTION
+// ========================================
 function enableSwipeNavigation(grid, carousel) {
   let touchStartX = 0;
   let touchStartY = 0;
   let touchStartTime = 0;
+  let gestureClaimed = false;
 
   grid.addEventListener('touchstart', (e) => {
     touchStartX = e.touches[0].clientX;
     touchStartY = e.touches[0].clientY;
     touchStartTime = Date.now();
+    gestureClaimed = false;
   }, { passive: true });
+
+  grid.addEventListener('touchmove', (e) => {
+    if (gestureClaimed) return;
+
+    const touchCurrentX = e.touches[0].clientX;
+    const touchCurrentY = e.touches[0].clientY;
+    const deltaX = touchCurrentX - touchStartX;
+    const deltaY = touchCurrentY - touchStartY;
+    const absDeltaX = Math.abs(deltaX);
+    const absDeltaY = Math.abs(deltaY);
+
+    // Calculate swipe intent ratio
+    if (absDeltaX > 5 || absDeltaY > 5) { // Minimum movement to detect intent
+      const ratio = absDeltaX / (absDeltaY || 1); // Avoid division by zero
+
+      // Detect horizontal intent (carousel navigation)
+      if (ratio > SWIPE_RATIO_HORIZONTAL) {
+        // Check edge zone and claim distance
+        if (touchStartX > EDGE_ZONE && absDeltaX > CLAIM_DISTANCE) {
+          e.preventDefault(); // Claim gesture, block browser
+          gestureClaimed = true;
+        }
+      }
+      // Detect vertical intent (reel scrolling) - let native scroll happen
+      else if (ratio < SWIPE_RATIO_VERTICAL) {
+        // Don't preventDefault, allow vertical scroll
+        gestureClaimed = false;
+      }
+    }
+  }, { passive: false }); // Must be non-passive to preventDefault
 
   grid.addEventListener('touchend', (e) => {
     const touchEndX = e.changedTouches[0].clientX;
     const touchEndY = e.changedTouches[0].clientY;
     const deltaX = touchEndX - touchStartX;
-    const deltaY = Math.abs(touchEndY - touchStartY);
-    const duration = Date.now() - touchStartTime;
+    const deltaY = touchEndY - touchStartY;
+    const absDeltaX = Math.abs(deltaX);
+    const absDeltaY = Math.abs(deltaY);
+    const ratio = absDeltaX / (absDeltaY || 1);
 
-    // Only handle swipe if:
-    // 1. Horizontal movement > 50px
-    // 2. Vertical movement < 30px (not scrolling up/down)
-    // 3. Duration < 500ms (quick swipe)
-    if (Math.abs(deltaX) > 50 && deltaY < 30 && duration < 500) {
+    // Only navigate carousel if:
+    // 1. Started away from edge (touchStartX > EDGE_ZONE)
+    // 2. Horizontal movement > MIN_SWIPE_DISTANCE
+    // 3. Horizontal intent (ratio > SWIPE_RATIO_HORIZONTAL)
+    if (touchStartX > EDGE_ZONE && 
+        absDeltaX > MIN_SWIPE_DISTANCE && 
+        ratio > SWIPE_RATIO_HORIZONTAL) {
+      
       if (deltaX > 0) {
         // Swipe right = previous page
         navigateCarousel(carousel, -1);
@@ -246,8 +294,11 @@ function enableSwipeNavigation(grid, carousel) {
         navigateCarousel(carousel, 1);
       }
     }
+
+    gestureClaimed = false;
   });
 }
+
 
 // Render products for current page
 function renderProductsPage(grid, allProducts, page, perPage) {
@@ -299,7 +350,14 @@ function goToPage(carousel, page) {
   dots.forEach((dot, i) => {
     dot.classList.toggle('active', i === page);
   });
+
+  // ✅ NEW: Save position to localStorage
+  if (window.saveReelPosition) {
+    const reelUrl = reelsData[reelIndex].url;
+    window.saveReelPosition(reelUrl, page);
+  }
 }
+
 
 // Export to global scope
 window.renderReelsFeed = renderReelsFeed;
