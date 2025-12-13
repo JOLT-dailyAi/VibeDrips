@@ -172,7 +172,7 @@
 }
 
 /* ==================== MOBILE PORTRAIT: 1 ROW × 2 COLUMNS ==================== */
-@media (max-width: 767px) and (orientation: portrait) {
+@media (max-width: 767px) and (max-aspect-ratio: 1/1) {
   .reels-modal .reel-section {
     padding: 0;
     height: 100vh;
@@ -228,7 +228,7 @@
 }
 
 /* ==================== MOBILE LANDSCAPE: 1 ROW × 2 COLUMNS ==================== */
-@media (max-width: 767px) and (orientation: landscape) {
+@media (max-width: 767px) and (min-aspect-ratio: 1/1) {
   .reels-modal .reel-section {
     padding: 0;
     height: 100vh;
@@ -405,3 +405,71 @@
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+/* ========================================
+   REELS MODAL: FIXED 3:4 PRODUCT CARDS
+   ======================================== 
+   Scoped to reels modal only
+   Ensures consistent card appearance and
+   Amazon button always visible
+   ======================================== */
+
+.reels-modal .product-card {
+    aspect-ratio: 3 / 4;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.reels-modal .product-image {
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    flex: 0 0 auto;
+}
+
+.reels-modal .product-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 12px;
+    min-height: 0;
+}
+
+.reels-modal .product-name {
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 8px;
+}
+
+.reels-modal .product-price {
+    flex: 0 0 auto;
+    margin: 8px 0;
+}
+
+.reels-modal .amazon-button {
+    flex: 0 0 auto;
+    margin-top: auto;
+    min-height: 32px; /* Ensure button always visible */
+}
+
+/* Tablet landscape: Ensure button visible */
+@media (min-width: 768px) and (min-aspect-ratio: 4/3) {
+    .reels-modal .product-card {
+        aspect-ratio: 3 / 4; /* Maintain ratio */
+    }
+    
+    .reels-modal .amazon-button {
+        display: flex !important; /* Force visibility */
+        min-height: 28px;
+    }
+}
+
