@@ -278,10 +278,7 @@ function enableSwipeNavigation(grid, carousel) {
     const absDeltaY = Math.abs(deltaY);
     const ratio = absDeltaX / (absDeltaY || 1);
 
-    // Only navigate carousel if:
-    // 1. Started away from edge (touchStartX > EDGE_ZONE)
-    // 2. Horizontal movement > MIN_SWIPE_DISTANCE
-    // 3. Horizontal intent (ratio > SWIPE_RATIO_HORIZONTAL)
+    // ✅ HORIZONTAL INTENT: Navigate carousel
     if (touchStartX > EDGE_ZONE && 
         absDeltaX > MIN_SWIPE_DISTANCE && 
         ratio > SWIPE_RATIO_HORIZONTAL) {
@@ -294,11 +291,23 @@ function enableSwipeNavigation(grid, carousel) {
         navigateCarousel(carousel, 1);
       }
     }
+    // ✅ VERTICAL INTENT: Scroll to next/previous reel
+    else if (absDeltaY > MIN_SWIPE_DISTANCE && ratio < SWIPE_RATIO_VERTICAL) {
+      if (deltaY > 0) {
+        // Swipe down = previous reel
+        if (window.scrollToPreviousReel) {
+          window.scrollToPreviousReel();
+        }
+      } else {
+        // Swipe up = next reel
+        if (window.scrollToNextReel) {
+          window.scrollToNextReel();
+        }
+      }
+    }
 
     gestureClaimed = false;
   });
-}
-
 
 // Render products for current page
 function renderProductsPage(grid, allProducts, page, perPage) {
@@ -361,5 +370,6 @@ function goToPage(carousel, page) {
 
 // Export to global scope
 window.renderReelsFeed = renderReelsFeed;
+window.getReelsDataFromProducts = getReelsDataFromProducts; // ✅ NEW: Export for localStorage
 
 console.log('✅ Reels feed module loaded');
