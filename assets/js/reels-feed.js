@@ -308,6 +308,7 @@ function enableSwipeNavigation(grid, carousel) {
 
     gestureClaimed = false;
   });
+} // ✅ ADDED: Close enableSwipeNavigation function
 
 // Render products for current page
 function renderProductsPage(grid, allProducts, page, perPage) {
