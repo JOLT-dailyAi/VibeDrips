@@ -113,12 +113,12 @@
   -webkit-overflow-scrolling: touch;
   padding-bottom: 10px;
   box-sizing: border-box;
-  touch-action: pan-x; /* ✅ Allow horizontal touch scrolling */
-  cursor: grab; /* ✅ Restore grab cursor */
+  touch-action: pan-x;
+  cursor: grab;
 }
 
 .reels-modal .products-grid:active {
-  cursor: grabbing; /* ✅ Show grabbing on drag */
+  cursor: grabbing;
 }
 
 /* Scrollbar styling */
@@ -149,11 +149,11 @@
 @media (min-width: 1200px) {
   .reels-modal .products-grid {
     grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: auto; /* ✅ CHANGED: Let cards determine height */
+    grid-auto-rows: auto;
     grid-auto-flow: row;
     overflow-y: auto;
     overflow-x: hidden;
-    align-content: start; /* ✅ NEW: Align to top */
+    align-content: start;
   }
 }
 
@@ -161,11 +161,11 @@
 @media (min-width: 768px) and (max-width: 1199px) {
   .reels-modal .products-grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: auto; /* ✅ CHANGED: Let cards determine height */
+    grid-auto-rows: auto;
     grid-auto-flow: row;
     overflow-y: auto;
     overflow-x: hidden;
-    align-content: start; /* ✅ NEW: Align to top */
+    align-content: start;
   }
 
   .reels-modal .reel-video iframe {
@@ -216,31 +216,31 @@
   /* ✅ 1 ROW × 2 COLUMNS - HORIZONTAL SCROLL */
   .reels-modal .products-grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: auto; /* ✅ CHANGED: Let cards determine height */
+    grid-auto-rows: auto;
     grid-auto-flow: row;
     gap: 10px;
     overflow-x: auto;
     overflow-y: hidden;
     width: 100%;
-    height: auto; /* ✅ CHANGED: Don't force 100% height */
-    max-height: 100%; /* ✅ NEW: Limit to container */
+    height: auto;
+    max-height: 100%;
     padding-bottom: 5px;
     align-content: start;
     touch-action: pan-x;
   }
+}
 
-
-/* ==================== MOBILE LANDSCAPE: 1 ROW × 2 COLUMNS ==================== */
+/* ==================== MOBILE LANDSCAPE: SIDE-BY-SIDE LAYOUT ==================== */
 @media (max-width: 767px) and (min-aspect-ratio: 1/1) {
   .reels-modal .reel-section {
-    padding: 10px; /* ✅ CHANGED: Add padding */
+    padding: 10px;
     height: 100vh;
     width: 100vw;
     margin: 0;
-    display: flex; /* ✅ NEW: Flexbox for centering */
-    align-items: center; /* ✅ NEW: Vertical center */
-    justify-content: center; /* ✅ NEW: Horizontal center */
-    box-sizing: border-box; /* ✅ NEW: Include padding in height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
   }
 
   .reels-modal .reel-content {
@@ -269,7 +269,6 @@
     overflow: hidden;
   }
 
-
   .reels-modal .reel-video iframe {
     width: 100%;
     height: 100%;
@@ -297,7 +296,6 @@
     position: relative;
   }
 
-
   /* ✅ 1 ROW × 2 COLUMNS - HORIZONTAL SCROLL */
   .reels-modal .products-grid {
     display: grid;
@@ -316,15 +314,14 @@
     align-content: center;
     scrollbar-width: thin;
   }
-  
+
   /* Ensure cards fit in viewport */
   .reels-modal .products-grid .product-card {
     height: auto;
     max-height: 100%;
     min-height: 0;
   }
-
-
+}
 
 /* ==================== CAROUSEL NAVIGATION ==================== */
 
@@ -355,7 +352,7 @@
   transform: translateY(-50%) scale(1.15);
   box-shadow: 0 4px 12px rgba(255, 153, 0, 0.6);
 }
-  
+
 .reels-modal .products-carousel .carousel-nav.prev {
   left: -20px;
 }
@@ -363,7 +360,6 @@
 .reels-modal .products-carousel .carousel-nav.next {
   right: -20px;
 }
-
 
 /* Mobile: Smaller arrows inside container */
 @media (max-width: 767px) {
@@ -382,7 +378,6 @@
   }
 }
 
-
 /* Carousel Dots */
 .reels-modal .carousel-dots {
   display: flex;
@@ -392,9 +387,8 @@
   padding: 5px 0;
   flex-shrink: 0;
   position: relative;
-  z-index: 5; /* Ensure dots are above other elements */
+  z-index: 5;
 }
-
 
 .reels-modal .dot {
   width: 8px;
@@ -455,7 +449,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ========================================
@@ -467,110 +463,108 @@
    ======================================== */
 
 .reels-modal .product-card {
-    aspect-ratio: 3 / 4; /* Default: Portrait-ish card */
-    width: 100%;
-    height: auto;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+  aspect-ratio: 3 / 4;
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
-
-/* ✅ NEW: Mobile landscape - use squarer ratio to fit viewport */
-@media (max-width: 767px) and (min-aspect-ratio: 1/1) {
-  .reels-modal .product-card {
-    aspect-ratio: 1 / 1.2; /* Slightly taller than square */
-  }
-}
-
 
 .reels-modal .product-image {
-    aspect-ratio: 1 / 1;
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-    flex: 0 0 auto;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  flex: 0 0 auto;
 }
 
 .reels-modal .product-info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start; /* ✅ CHANGED: Start from top */
-    padding: 8px; /* ✅ REDUCED: Less padding */
-    min-height: 0;
-    gap: 4px; /* ✅ NEW: Consistent spacing */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 8px;
+  min-height: 0;
+  gap: 4px;
 }
 
 .reels-modal .product-name {
-    flex: 0 0 auto; /* ✅ CHANGED: Don't grow */
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 0.9rem; /* ✅ NEW: Slightly smaller */
-    line-height: 1.3; /* ✅ NEW: Tighter line height */
+  flex: 0 0 auto;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.9rem;
+  line-height: 1.3;
 }
 
 .reels-modal .product-price {
-    flex: 0 0 auto;
-    margin: 0; /* ✅ REMOVED: Gap handles spacing */
-    font-size: 0.85rem; /* ✅ NEW: Slightly smaller */
+  flex: 0 0 auto;
+  margin: 0;
+  font-size: 0.85rem;
 }
 
 .reels-modal .amazon-button {
-    flex: 0 0 auto;
-    margin-top: auto; /* ✅ Keep: Push to bottom */
-    min-height: 28px; /* ✅ REDUCED: Smaller button */
-    font-size: 0.8rem; /* ✅ NEW: Smaller font */
-    padding: 4px 8px; /* ✅ NEW: Less padding */
+  flex: 0 0 auto;
+  margin-top: auto;
+  min-height: 28px;
+  font-size: 0.8rem;
+  padding: 4px 8px;
 }
 
-/* ✅ NEW: Mobile - even smaller text */
+/* ✅ Mobile - even smaller text */
 @media (max-width: 767px) {
   .reels-modal .product-name {
     font-size: 0.8rem;
-    -webkit-line-clamp: 1; /* Only 1 line on mobile */
+    -webkit-line-clamp: 1;
   }
-  
+
   .reels-modal .product-price {
     font-size: 0.75rem;
   }
-  
+
   .reels-modal .amazon-button {
     min-height: 24px;
     font-size: 0.7rem;
     padding: 2px 6px;
   }
-  
+
   .reels-modal .product-info {
     padding: 6px;
     gap: 3px;
   }
 }
 
+/* ✅ Mobile landscape - compact card for horizontal layout */
+@media (max-width: 767px) and (min-aspect-ratio: 1/1) {
+  .reels-modal .product-card {
+    aspect-ratio: 1 / 1.2;
+  }
+}
 
 /* Tablet landscape: Ensure all content fits */
 @media (min-width: 768px) and (min-aspect-ratio: 4/3) {
   .reels-modal .product-card {
     aspect-ratio: 3 / 4;
-    max-height: 400px; /* Limit height to fit viewport */
+    max-height: 400px;
   }
-  
+
   .reels-modal .product-info {
     padding: 8px;
     gap: 4px;
   }
-  
+
   .reels-modal .product-name {
     font-size: 0.85rem;
     -webkit-line-clamp: 2;
   }
-  
+
   .reels-modal .product-price {
     font-size: 0.8rem;
   }
-  
+
   .reels-modal .amazon-button {
     display: flex !important;
     min-height: 28px;
@@ -578,5 +572,3 @@
     padding: 4px 8px;
   }
 }
-
-
