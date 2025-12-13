@@ -113,7 +113,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   overflow: hidden;
 }
 
@@ -125,8 +125,9 @@
   flex: 1;
   min-height: 0;
   gap: 15px;
-  padding: 0 10px 0 10px;
+  padding: 0 10px 10px 10px;
   box-sizing: border-box;
+  margin-bottom: 35px;
   
   /* NO SCROLL */
   overflow: hidden;
@@ -206,7 +207,8 @@
   .reels-modal .products-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 8px;
-    padding: 0 4px 0 4px;
+    padding: 0 4px 10px 4px;
+    margin-bottom: 30px;
   }
 }
 
@@ -244,7 +246,8 @@
   .reels-modal .products-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 6px;
-    padding: 0 4px 0 4px;
+    padding: 0 4px 10px 4px;
+    margin-bottom: 28px;
   }
 }
 
@@ -266,7 +269,8 @@
   
   .reels-modal .products-grid {
     gap: 5px;
-    padding: 0 3px 0 3px;
+    padding: 0 3px 10px 3px;
+    margin-bottom: 25px;
   }
 }
 
@@ -293,6 +297,7 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 2px 8px rgba(255, 153, 0, 0.4);
+  pointer-events: auto;
 }
 
 .reels-modal .products-carousel .carousel-nav:hover {
@@ -326,17 +331,23 @@
 }
 
 /* ==============================================================================
-   CAROUSEL DOTS
+   CAROUSEL DOTS - POSITIONED AT BOTTOM
    ============================================================================== */
 
 .reels-modal .carousel-dots {
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 8px;
-  margin-top: 8px;
   padding: 4px 0;
   flex-shrink: 0;
-  position: relative;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30px;
+  z-index: 5;
+  pointer-events: none;
 }
 
 .reels-modal .dot {
@@ -346,6 +357,7 @@
   background: rgba(255, 255, 255, 0.3);
   cursor: pointer;
   transition: all 0.3s ease;
+  pointer-events: auto;
 }
 
 .reels-modal .dot:hover {
@@ -361,8 +373,7 @@
 
 @media (max-width: 767px) {
   .reels-modal .carousel-dots {
-    margin-top: 5px;
-    gap: 6px;
+    height: 28px;
   }
   
   .reels-modal .dot {
@@ -423,32 +434,38 @@
   min-height: 0;
 }
 
-/* Image: Top 2/3 of card */
-.reels-modal .product-image,
+/* Image wrapper: Top ~65% of card */
 .reels-modal .product-image-wrapper {
   width: 100%;
-  height: 66.67%;
-  flex: 0 0 auto;
+  flex: 0 0 65%;
   position: relative;
   overflow: hidden;
+  background: rgba(0, 0, 0, 0.1);
 }
 
-.reels-modal .product-image-wrapper img,
-.reels-modal .product-image {
+.reels-modal .product-image-wrapper img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
-/* Info: Bottom 1/3 of card */
+/* Standalone product image (if no wrapper) */
+.reels-modal .product-card > .product-image {
+  width: 100%;
+  flex: 0 0 65%;
+  object-fit: cover;
+}
+
+/* Info: Bottom ~35% of card */
 .reels-modal .product-info {
-  height: 33.33%;
-  flex: 0 0 auto;
+  flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 8px;
-  gap: 4px;
+  justify-content: flex-start;
+  padding: 6px;
+  gap: 3px;
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -457,14 +474,15 @@
 .reels-modal .product-category {
   flex: 0 0 auto;
   font-size: 0.7rem;
-  opacity: 0.8;
+  opacity: 0.7;
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  line-height: 1.1;
 }
 
-/* Name: Top of info */
+/* Name: Limited lines */
 .reels-modal .product-name {
   flex: 0 0 auto;
   display: -webkit-box;
@@ -472,9 +490,10 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   line-height: 1.2;
   margin: 0;
+  word-break: break-word;
 }
 
 /* Price row (price + rating) */
@@ -487,11 +506,12 @@
   margin: 0;
 }
 
-/* Price: Middle of info */
+/* Price */
 .reels-modal .product-price {
-  flex: 0 0 auto;
+  flex: 0 1 auto;
   margin: 0;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -500,17 +520,17 @@
 /* Rating */
 .reels-modal .rating {
   flex: 0 0 auto;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   white-space: nowrap;
 }
 
-/* Button: Bottom of info, ALWAYS VISIBLE */
+/* Button: Always at bottom */
 .reels-modal .amazon-button {
   flex: 0 0 auto;
   margin-top: auto;
-  font-size: 0.75rem;
-  min-height: 26px;
-  padding: 4px 6px;
+  font-size: 0.7rem;
+  min-height: 24px;
+  padding: 3px 6px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -520,68 +540,107 @@
   box-sizing: border-box;
 }
 
-/* Image overlays (brand tag, image count) */
+/* Image overlays - FIX DIMENSIONS */
 .reels-modal .brand-tag,
 .reels-modal .image-count {
   position: absolute;
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   padding: 2px 4px;
   border-radius: 3px;
-  z-index: 1;
+  z-index: 2;
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
 }
 
 .reels-modal .brand-tag {
   top: 4px;
   left: 4px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
 }
 
 .reels-modal .image-count {
   top: 4px;
   right: 4px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
 }
 
-/* ==================== RESPONSIVE TEXT SCALING ==================== */
+/* ==================== DESKTOP (≥1200px) ==================== */
 
 @media (min-width: 1200px) {
+  .reels-modal .product-info { padding: 8px; gap: 4px; }
   .reels-modal .product-category { font-size: 0.75rem; }
-  .reels-modal .product-name { font-size: 0.9rem; }
+  .reels-modal .product-name { font-size: 0.85rem; -webkit-line-clamp: 2; }
   .reels-modal .product-price { font-size: 0.85rem; }
-  .reels-modal .rating { font-size: 0.8rem; }
-  .reels-modal .amazon-button { font-size: 0.8rem; min-height: 28px; }
-  .reels-modal .product-info { padding: 10px; gap: 5px; }
+  .reels-modal .rating { font-size: 0.75rem; }
+  .reels-modal .amazon-button { font-size: 0.75rem; min-height: 28px; padding: 4px 8px; }
   .reels-modal .brand-tag,
-  .reels-modal .image-count { font-size: 0.7rem; }
+  .reels-modal .image-count { font-size: 0.65rem; padding: 3px 5px; }
 }
 
-@media (min-width: 768px) and (max-width: 1199px) {
+/* ==================== TABLET LANDSCAPE (768-1199px, landscape) ==================== */
+
+@media (min-width: 768px) and (max-width: 1199px) and (orientation: landscape) {
+  .reels-modal .product-info { padding: 6px; gap: 3px; }
   .reels-modal .product-category { font-size: 0.7rem; }
-  .reels-modal .product-name { font-size: 0.8rem; }
+  .reels-modal .product-name { font-size: 0.75rem; -webkit-line-clamp: 2; }
   .reels-modal .product-price { font-size: 0.75rem; }
   .reels-modal .rating { font-size: 0.7rem; }
-  .reels-modal .amazon-button { font-size: 0.7rem; min-height: 24px; }
-  .reels-modal .product-info { padding: 7px; gap: 4px; }
+  .reels-modal .amazon-button { font-size: 0.7rem; min-height: 24px; padding: 3px 6px; }
   .reels-modal .brand-tag,
-  .reels-modal .image-count { font-size: 0.65rem; }
+  .reels-modal .image-count { font-size: 0.6rem; }
 }
 
-@media (max-width: 767px) {
+/* ==================== TABLET PORTRAIT (768-1199px, portrait) ==================== */
+
+@media (min-width: 768px) and (max-width: 1199px) and (orientation: portrait) {
+  .reels-modal .product-info { padding: 5px; gap: 2px; }
   .reels-modal .product-category { font-size: 0.65rem; }
   .reels-modal .product-name { font-size: 0.7rem; -webkit-line-clamp: 2; }
-  .reels-modal .product-price { font-size: 0.65rem; }
+  .reels-modal .product-price { font-size: 0.7rem; }
   .reels-modal .rating { font-size: 0.65rem; }
-  .reels-modal .amazon-button { font-size: 0.65rem; min-height: 22px; padding: 3px 4px; }
-  .reels-modal .product-info { padding: 5px; gap: 3px; }
+  .reels-modal .amazon-button { font-size: 0.65rem; min-height: 22px; padding: 2px 5px; }
   .reels-modal .brand-tag,
-  .reels-modal .image-count { font-size: 0.6rem; padding: 1px 3px; }
+  .reels-modal .image-count { font-size: 0.55rem; padding: 2px 3px; }
 }
 
-@media (max-width: 932px) and (max-height: 450px) and (orientation: landscape) {
-  .reels-modal .product-category { font-size: 0.6rem; }
-  .reels-modal .product-name { font-size: 0.65rem; -webkit-line-clamp: 1; }
-  .reels-modal .product-price { font-size: 0.6rem; }
-  .reels-modal .rating { font-size: 0.6rem; }
-  .reels-modal .amazon-button { font-size: 0.6rem; min-height: 20px; padding: 2px 3px; }
+/* ==================== MOBILE PORTRAIT (≤767px) ==================== */
+
+@media (max-width: 767px) and (orientation: portrait) {
   .reels-modal .product-info { padding: 4px; gap: 2px; }
+  .reels-modal .product-category { font-size: 0.6rem; }
+  .reels-modal .product-name { font-size: 0.65rem; -webkit-line-clamp: 2; }
+  .reels-modal .product-price { font-size: 0.65rem; }
+  .reels-modal .rating { font-size: 0.6rem; }
+  .reels-modal .amazon-button { font-size: 0.6rem; min-height: 20px; padding: 2px 4px; }
   .reels-modal .brand-tag,
-  .reels-modal .image-count { font-size: 0.55rem; padding: 1px 2px; }
+  .reels-modal .image-count { font-size: 0.55rem; padding: 1px 3px; }
+}
+
+/* ==================== MOBILE LANDSCAPE (≤767px) ==================== */
+
+@media (max-width: 767px) and (orientation: landscape) {
+  .reels-modal .product-info { padding: 3px; gap: 2px; }
+  .reels-modal .product-category { font-size: 0.55rem; }
+  .reels-modal .product-name { font-size: 0.6rem; -webkit-line-clamp: 1; }
+  .reels-modal .product-price { font-size: 0.6rem; }
+  .reels-modal .rating { font-size: 0.55rem; }
+  .reels-modal .amazon-button { font-size: 0.55rem; min-height: 18px; padding: 2px 3px; }
+  .reels-modal .brand-tag,
+  .reels-modal .image-count { font-size: 0.5rem; padding: 1px 2px; }
+}
+
+/* ==================== PRO MAX LANDSCAPE (≤932px, ≤450px) ==================== */
+
+@media (max-width: 932px) and (max-height: 450px) and (orientation: landscape) {
+  .reels-modal .product-info { padding: 3px; gap: 1px; }
+  .reels-modal .product-category { font-size: 0.5rem; }
+  .reels-modal .product-name { font-size: 0.55rem; -webkit-line-clamp: 1; }
+  .reels-modal .product-price { font-size: 0.55rem; }
+  .reels-modal .rating { font-size: 0.5rem; }
+  .reels-modal .amazon-button { font-size: 0.5rem; min-height: 16px; padding: 1px 2px; }
+  .reels-modal .brand-tag,
+  .reels-modal .image-count { font-size: 0.45rem; padding: 1px 2px; }
 }
