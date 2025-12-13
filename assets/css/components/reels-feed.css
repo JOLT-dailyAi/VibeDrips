@@ -100,8 +100,6 @@
 }
 
 /* ==================== PRODUCTS GRID - LAYOUT ONLY ==================== */
-/* ✅ Product cards use DEFAULT homepage styling from product-card.css */
-
 .reels-modal .products-grid {
   display: grid;
   gap: 15px;
@@ -213,7 +211,6 @@
     max-height: 100%;
   }
 
-  /* ✅ 1 ROW × 2 COLUMNS - HORIZONTAL SCROLL */
   .reels-modal .products-grid {
     grid-template-columns: repeat(2, 1fr);
     grid-auto-rows: auto;
@@ -241,12 +238,13 @@
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
+    overflow: hidden;
   }
 
   .reels-modal .reel-content {
     display: flex;
     flex-direction: row;
-    gap: 15px;
+    gap: 10px;
     width: 100%;
     height: 100%;
     max-width: 100%;
@@ -257,9 +255,9 @@
     align-items: center;
   }
 
-  /* Video takes 45% of width */
+  /* Video takes 40% of width */
   .reels-modal .reel-video {
-    flex: 0 0 45%;
+    flex: 0 0 40%;
     height: 100%;
     max-height: 100%;
     display: flex;
@@ -276,9 +274,9 @@
     border-radius: 8px;
   }
 
-  /* Products take 55% of width */
+  /* Products take 60% of width */
   .reels-modal .reel-products {
-    flex: 0 0 55%;
+    flex: 0 0 60%;
     height: 100%;
     max-height: 100%;
     display: flex;
@@ -289,43 +287,34 @@
   }
 
   .reels-modal .products-carousel {
-    height: 100%;
+    width: 100%;
+    height: fit-content;
     max-height: 100%;
     display: flex;
     flex-direction: column;
     position: relative;
   }
 
-  /* ✅ 1 ROW × 2 COLUMNS - HORIZONTAL SCROLL */
+  /* ✅ FIXED: Grid sizes to content, not 100% */
   .reels-modal .products-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: minmax(auto, 1fr);
+    grid-auto-rows: auto;
     grid-auto-flow: row;
     gap: 8px;
     overflow-x: auto;
     overflow-y: hidden;
     width: 100%;
-    height: 100%;
-    max-height: 100%;
+    height: fit-content;
+    max-height: calc(100vh - 40px);
     padding: 5px;
-    padding-bottom: 10px;
     box-sizing: border-box;
-    align-content: center;
+    align-content: start;
     scrollbar-width: thin;
-  }
-
-  /* Ensure cards fit in viewport */
-  .reels-modal .products-grid .product-card {
-    height: auto;
-    max-height: 100%;
-    min-height: 0;
   }
 }
 
 /* ==================== CAROUSEL NAVIGATION ==================== */
-
-/* Carousel Navigation Arrows - HORIZONTAL ONLY */
 .reels-modal .products-carousel .carousel-nav {
   position: absolute;
   top: 50%;
@@ -361,7 +350,6 @@
   right: -20px;
 }
 
-/* Mobile: Smaller arrows inside container */
 @media (max-width: 767px) {
   .reels-modal .products-carousel .carousel-nav {
     width: 36px;
@@ -410,7 +398,6 @@
   border-radius: 4px;
 }
 
-/* Mobile: Smaller dots */
 @media (max-width: 767px) {
   .reels-modal .carousel-dots {
     margin-top: 5px;
@@ -428,7 +415,6 @@
 }
 
 /* ==================== LOADING STATE ==================== */
-
 .reels-modal .loading-state {
   display: flex;
   flex-direction: column;
@@ -455,11 +441,7 @@
 }
 
 /* ========================================
-   REELS MODAL: FIXED 3:4 PRODUCT CARDS
-   ======================================== 
-   Scoped to reels modal only
-   Ensures consistent card appearance and
-   Amazon button always visible
+   REELS MODAL: PRODUCT CARDS
    ======================================== */
 
 .reels-modal .product-card {
@@ -514,7 +496,7 @@
   padding: 4px 8px;
 }
 
-/* ✅ Mobile - even smaller text */
+/* Mobile: Smaller text */
 @media (max-width: 767px) {
   .reels-modal .product-name {
     font-size: 0.8rem;
@@ -537,10 +519,11 @@
   }
 }
 
-/* ✅ Mobile landscape - compact card for horizontal layout */
+/* Mobile landscape: Keep 3:4 ratio, constrain height */
 @media (max-width: 767px) and (min-aspect-ratio: 1/1) {
   .reels-modal .product-card {
-    aspect-ratio: 1 / 1.2;
+    aspect-ratio: 3 / 4;
+    max-height: calc(100vh - 60px);
   }
 }
 
