@@ -149,10 +149,11 @@
 @media (min-width: 1200px) {
   .reels-modal .products-grid {
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, 1fr);
+    grid-auto-rows: auto; /* ✅ CHANGED: Let cards determine height */
     grid-auto-flow: row;
     overflow-y: auto;
     overflow-x: hidden;
+    align-content: start; /* ✅ NEW: Align to top */
   }
 }
 
@@ -160,10 +161,11 @@
 @media (min-width: 768px) and (max-width: 1199px) {
   .reels-modal .products-grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
+    grid-auto-rows: auto; /* ✅ CHANGED: Let cards determine height */
     grid-auto-flow: row;
     overflow-y: auto;
     overflow-x: hidden;
+    align-content: start; /* ✅ NEW: Align to top */
   }
 
   .reels-modal .reel-video iframe {
@@ -214,34 +216,41 @@
   /* ✅ 1 ROW × 2 COLUMNS - HORIZONTAL SCROLL */
   .reels-modal .products-grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: 1fr;
+    grid-auto-rows: auto; /* ✅ CHANGED: Let cards determine height */
     grid-auto-flow: row;
-    gap: 10px;  /* ✅ Match homepage mobile gap */
-    overflow-x: auto;  /* ✅ Must be auto, not hidden */
-    overflow-y: hidden;  /* ✅ Block vertical scroll */
+    gap: 10px;
+    overflow-x: auto;
+    overflow-y: hidden;
     width: 100%;
-    height: 100%;
+    height: auto; /* ✅ CHANGED: Don't force 100% height */
+    max-height: 100%; /* ✅ NEW: Limit to container */
     padding-bottom: 5px;
     align-content: start;
-    touch-action: pan-x; /* ✅ Allow horizontal panning */
+    touch-action: pan-x;
   }
-}
+
 
 /* ==================== MOBILE LANDSCAPE: 1 ROW × 2 COLUMNS ==================== */
 @media (max-width: 767px) and (min-aspect-ratio: 1/1) {
   .reels-modal .reel-section {
-    padding: 0;
+    padding: 10px; /* ✅ CHANGED: Add padding */
     height: 100vh;
     width: 100vw;
     margin: 0;
+    display: flex; /* ✅ NEW: Flexbox for centering */
+    align-items: center; /* ✅ NEW: Vertical center */
+    justify-content: center; /* ✅ NEW: Horizontal center */
+    box-sizing: border-box; /* ✅ NEW: Include padding in height */
   }
 
   .reels-modal .reel-content {
     flex-direction: row;
     gap: 10px;
-    width: 100vw;
-    max-width: 100vw;
-    padding: 10px;
+    width: 100%; /* ✅ CHANGED: Use 100% instead of 100vw */
+    max-width: 100%;
+    height: 100%; /* ✅ NEW: Fill section height */
+    max-height: calc(100vh - 20px); /* ✅ NEW: Account for padding */
+    padding: 0; /* ✅ CHANGED: Remove padding (section has it) */
     box-sizing: border-box;
     margin: 0;
   }
@@ -269,16 +278,17 @@
   /* ✅ 1 ROW × 2 COLUMNS - HORIZONTAL SCROLL */
   .reels-modal .products-grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: 1fr;
+    grid-auto-rows: auto; /* ✅ CHANGED: Let cards determine height */
     grid-auto-flow: row;
     gap: 8px;
     overflow-x: auto;
     overflow-y: hidden;
-    height: 100%;
-    max-height: 100%;
+    height: auto; /* ✅ CHANGED: Don't force 100% height */
+    max-height: 100%; /* ✅ Keep max constraint */
     padding-bottom: 5px;
+    align-content: start;
   }
-}
+
 
 /* ==================== CAROUSEL NAVIGATION ==================== */
 
@@ -415,13 +425,21 @@
    ======================================== */
 
 .reels-modal .product-card {
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 3 / 4; /* Default: Portrait-ish card */
     width: 100%;
     height: auto;
     display: flex;
     flex-direction: column;
     overflow: hidden;
 }
+
+/* ✅ NEW: Mobile landscape - use squarer ratio to fit viewport */
+@media (max-width: 767px) and (min-aspect-ratio: 1/1) {
+  .reels-modal .product-card {
+    aspect-ratio: 1 / 1.2; /* Slightly taller than square */
+  }
+}
+
 
 .reels-modal .product-image {
     aspect-ratio: 1 / 1;
@@ -435,31 +453,60 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    padding: 12px;
+    justify-content: flex-start; /* ✅ CHANGED: Start from top */
+    padding: 8px; /* ✅ REDUCED: Less padding */
     min-height: 0;
+    gap: 4px; /* ✅ NEW: Consistent spacing */
 }
 
 .reels-modal .product-name {
-    flex: 1;
+    flex: 0 0 auto; /* ✅ CHANGED: Don't grow */
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin-bottom: 8px;
+    font-size: 0.9rem; /* ✅ NEW: Slightly smaller */
+    line-height: 1.3; /* ✅ NEW: Tighter line height */
 }
 
 .reels-modal .product-price {
     flex: 0 0 auto;
-    margin: 8px 0;
+    margin: 0; /* ✅ REMOVED: Gap handles spacing */
+    font-size: 0.85rem; /* ✅ NEW: Slightly smaller */
 }
 
 .reels-modal .amazon-button {
     flex: 0 0 auto;
-    margin-top: auto;
-    min-height: 32px; /* Ensure button always visible */
+    margin-top: auto; /* ✅ Keep: Push to bottom */
+    min-height: 28px; /* ✅ REDUCED: Smaller button */
+    font-size: 0.8rem; /* ✅ NEW: Smaller font */
+    padding: 4px 8px; /* ✅ NEW: Less padding */
 }
+
+/* ✅ NEW: Mobile - even smaller text */
+@media (max-width: 767px) {
+  .reels-modal .product-name {
+    font-size: 0.8rem;
+    -webkit-line-clamp: 1; /* Only 1 line on mobile */
+  }
+  
+  .reels-modal .product-price {
+    font-size: 0.75rem;
+  }
+  
+  .reels-modal .amazon-button {
+    min-height: 24px;
+    font-size: 0.7rem;
+    padding: 2px 6px;
+  }
+  
+  .reels-modal .product-info {
+    padding: 6px;
+    gap: 3px;
+  }
+}
+
 
 /* Tablet landscape: Ensure button visible */
 @media (min-width: 768px) and (min-aspect-ratio: 4/3) {
