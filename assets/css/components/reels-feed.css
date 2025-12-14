@@ -1,16 +1,8 @@
 /* ==============================================================================
-   REELS FEED - SIMPLEST SOLUTION (NO WASTED SPACE)
+   REELS FEED - NO SCROLL CONFLICTS
    All rules scoped to .reels-modal only
    
-   STRATEGY:
-   - Desktop: 6 cards (3×2)
-   - Everything else: 2 cards (2×1)
-   - Cards use base styles from product-card.css
-   - Grid auto-sizes to content
-   - NO unnecessary padding/margins
-   - Scroll only if absolutely necessary
-   
-   GUARANTEE: Always readable, never truncated, minimal complexity
+   CRITICAL FIX: NO vertical scroll on products-grid (conflicts with reel navigation)
    ============================================================================== */
 
 /* ==================== FEED CONTAINER ==================== */
@@ -127,42 +119,26 @@
   overflow: hidden;
 }
 
-/* ==================== PRODUCTS GRID - ZERO FAT ==================== */
+/* ==================== PRODUCTS GRID - NO SCROLL (CRITICAL) ==================== */
 
 .reels-modal .products-grid {
   display: grid;
   width: 100%;
-  flex: 0 1 auto;
+  flex: 1; /* Expand to fill available space */
   min-height: 0;
   gap: 12px;
-  padding: 0; /* NO PADDING - cards have their own */
-  margin: 0; /* NO MARGIN - dots are absolute positioned */
+  padding: 0;
+  margin: 0;
   box-sizing: border-box;
   
-  /* Allow scroll only if truly needed */
-  overflow-y: auto;
-  overflow-x: hidden;
+  /* CRITICAL: NO SCROLL - conflicts with reel navigation */
+  overflow: hidden !important;
   
   align-content: start;
   justify-content: center;
   
   /* Rows auto-size to content */
   grid-auto-rows: minmax(min-content, max-content);
-}
-
-/* Smooth scrollbar (rarely needed) */
-.reels-modal .products-grid::-webkit-scrollbar {
-  width: 4px;
-}
-
-.reels-modal .products-grid::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 2px;
-}
-
-.reels-modal .products-grid::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 2px;
 }
 
 .reels-modal .products-carousel[data-transitioning="true"] .products-grid {
@@ -174,18 +150,27 @@
 @media (min-width: 1200px) {
   .reels-modal .products-grid {
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, minmax(min-content, max-content));
+    grid-template-rows: 1fr 1fr; /* Equal height rows that fill space */
     gap: 12px;
   }
 }
 
-/* ==================== EVERYTHING ELSE: 2 CARDS (2×1) ==================== */
+/* ==================== TABLET: 2 CARDS (2×1) - SINGLE ROW ==================== */
 
-@media (max-width: 1199px) {
+@media (min-width: 768px) and (max-width: 1199px) {
   .reels-modal .products-grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: minmax(min-content, max-content); /* Single row */
+    grid-template-rows: minmax(min-content, max-content); /* SINGLE ROW */
     gap: 10px;
+  }
+}
+
+/* ==================== IPAD EXPLICIT (768-1024px) - FORCE 1 ROW ==================== */
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .reels-modal .products-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-rows: minmax(min-content, max-content) !important; /* FORCE 1 ROW */
   }
 }
 
@@ -225,6 +210,8 @@
   }
   
   .reels-modal .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: minmax(min-content, max-content); /* SINGLE ROW */
     gap: 8px;
   }
 }
@@ -261,6 +248,8 @@
   }
   
   .reels-modal .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: minmax(min-content, max-content); /* SINGLE ROW */
     gap: 6px;
   }
 }
@@ -322,7 +311,7 @@
 }
 
 /* ==============================================================================
-   CAROUSEL DOTS - FLOATING OVER GRID
+   CAROUSEL DOTS
    ============================================================================== */
 
 .reels-modal .carousel-dots {
@@ -333,14 +322,12 @@
   padding: 8px 0;
   flex-shrink: 0;
   position: absolute;
-  bottom: 5px; /* Small offset from absolute bottom */
+  bottom: 5px;
   left: 0;
   right: 0;
   height: 28px;
   z-index: 10;
   pointer-events: none;
-  
-  /* Subtle gradient so dots visible over cards if overlapping */
   background: linear-gradient(to top, rgba(0, 0, 0, 0.4), transparent);
 }
 
@@ -408,17 +395,19 @@
 }
 
 /* ==============================================================================
-   PRODUCT CARDS - MINIMAL OVERRIDES
-   98% inherited from product-card.css
-   Only override what's absolutely necessary
+   PRODUCT CARDS - SLIGHTLY REDUCED FOR FIT
    ============================================================================== */
 
 .reels-modal .product-card {
-  /* Let card use its natural height from base styles */
-  height: auto;
+  height: 100%; /* Fill grid cell */
   width: 100%;
+  display: flex;
+  flex-direction: column;
   
-  /* Remove any transform conflicts */
+  /* Slightly smaller than base to guarantee fit */
+  padding: 10px !important; /* Base is 12px */
+  gap: 6px !important; /* Base is 8px */
+  
   transform: none !important;
 }
 
@@ -426,7 +415,7 @@
   transform: translateY(-2px) !important;
 }
 
-/* Ensure all elements display (safety) */
+/* Ensure all elements display */
 .reels-modal .product-card .product-image-wrapper,
 .reels-modal .product-card img,
 .reels-modal .product-card .product-category,
@@ -451,7 +440,7 @@
   text-align: center !important;
 }
 
-/* Fix text wrapping (only override needed) */
+/* Fix text wrapping */
 .reels-modal .product-card .product-name {
   display: -webkit-box !important;
   -webkit-box-orient: vertical !important;
@@ -461,8 +450,21 @@
   word-break: break-word !important;
 }
 
-/* Mobile landscape: single line to save space */
+/* Mobile: even tighter for guaranteed fit */
+@media (max-width: 767px) {
+  .reels-modal .product-card {
+    padding: 8px !important;
+    gap: 5px !important;
+  }
+}
+
+/* Mobile landscape: single line + tightest spacing */
 @media (max-width: 767px) and (orientation: landscape) {
+  .reels-modal .product-card {
+    padding: 7px !important;
+    gap: 4px !important;
+  }
+  
   .reels-modal .product-card .product-name {
     -webkit-line-clamp: 1 !important;
   }
