@@ -372,5 +372,6 @@ function goToPage(carousel, page) {
 // Export to global scope
 window.renderReelsFeed = renderReelsFeed;
 window.getReelsDataFromProducts = getReelsDataFromProducts; // ✅ NEW: Export for localStorage
+window.goToPage = goToPage;
 
 console.log('✅ Reels feed module loaded');
