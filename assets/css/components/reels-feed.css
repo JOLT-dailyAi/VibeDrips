@@ -1,5 +1,5 @@
 /* ==============================================================================
-   REELS FEED - OPTIMIZED RESPONSIVE LAYOUTS WITH PAGINATION
+   REELS FEED - OPTIMIZED RESPONSIVE LAYOUTS WITH SCROLL + PAGINATION
    ============================================================================== */
 
 /* ==================== FEED CONTAINER ==================== */
@@ -116,7 +116,7 @@
   overflow: hidden;
 }
 
-/* ==================== PRODUCTS GRID - PAGINATION ONLY (NO SCROLL) ==================== */
+/* ==================== PRODUCTS GRID - WITH SCROLL FOR SAFETY ==================== */
 
 .reels-modal .products-grid {
   display: grid;
@@ -127,10 +127,26 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  overflow: hidden; /* NO SCROLL - Pure pagination */
+  overflow-y: auto; /* ✅ KEEP SCROLL - handles resolution variations */
+  overflow-x: hidden;
   align-content: start;
   justify-content: center;
   grid-auto-rows: minmax(min-content, max-content);
+}
+
+/* Scrollbar styling */
+.reels-modal .products-grid::-webkit-scrollbar {
+  width: 4px;
+}
+
+.reels-modal .products-grid::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+.reels-modal .products-grid::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
 }
 
 .reels-modal .products-carousel[data-transitioning="true"] .products-grid {
