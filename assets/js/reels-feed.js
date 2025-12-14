@@ -1,14 +1,14 @@
-// assets/js/reels-feed.js - Instagram-Style Reels Feed with Product Grid
+// assets/js/reels-feed.js - Instagram-Style Reels Feed
 console.log('🎬 Reels feed module loading...');
 
 // ========================================
 // SWIPE DETECTION CONSTANTS
 // ========================================
-const EDGE_ZONE = 60; // px from left edge (browser back zone)
-const CLAIM_DISTANCE = 35; // px to claim gesture early
-const MIN_SWIPE_DISTANCE = 50; // px minimum for navigation
-const SWIPE_RATIO_HORIZONTAL = 1.5; // Horizontal intent threshold
-const SWIPE_RATIO_VERTICAL = 0.67; // Vertical intent threshold
+const EDGE_ZONE = 60;
+const CLAIM_DISTANCE = 35;
+const MIN_SWIPE_DISTANCE = 50;
+const SWIPE_RATIO_HORIZONTAL = 1.5;
+const SWIPE_RATIO_VERTICAL = 0.67;
 
 // Render the reels feed (called from modal)
 function renderReelsFeed() {
@@ -38,7 +38,7 @@ function renderReelsFeed() {
 
     console.log(`📊 Found ${reelsData.length} reels to display`);
 
-    // Render each reel as a section with grid
+    // Render each reel as a section
     reelsData.forEach(reel => {
         const reelSection = createReelSection(reel);
         feedContainer.appendChild(reelSection);
@@ -51,22 +51,21 @@ function renderReelsFeed() {
     });
 }
 
-// Create a reel section with video + products grid
+// Create a reel section - MATCHES CSS STRUCTURE EXACTLY
 function createReelSection(reel) {
+    // Main section wrapper
     const section = document.createElement('section');
     section.className = 'reel-section';
     section.dataset.reelId = reel.id;
     
-    // Create products grid container
-    const grid = document.createElement('div');
-    grid.className = 'products-grid';
+    // Content wrapper (flex container for video + products)
+    const content = document.createElement('div');
+    content.className = 'reel-content';
     
-    // 1. Add Instagram embed as first grid item
-    const videoCard = document.createElement('div');
-    videoCard.className = 'product-card reel-video';
-    
-    // Use Instagram embed iframe
-    videoCard.innerHTML = `
+    // === VIDEO SIDE ===
+    const videoContainer = document.createElement('div');
+    videoContainer.className = 'reel-video';
+    videoContainer.innerHTML = `
         <iframe 
             src="${reel.embedUrl}" 
             frameborder="0" 
@@ -75,15 +74,34 @@ function createReelSection(reel) {
             allowfullscreen="true">
         </iframe>
     `;
-    grid.appendChild(videoCard);
     
-    // 2. Add product cards using existing createProductCard function
+    // === PRODUCTS SIDE ===
+    const productsContainer = document.createElement('div');
+    productsContainer.className = 'reel-products';
+    
+    // Carousel wrapper
+    const carousel = document.createElement('div');
+    carousel.className = 'products-carousel';
+    
+    // Products grid
+    const grid = document.createElement('div');
+    grid.className = 'products-grid';
+    
+    // Add product cards
     reel.products.forEach(product => {
-        const card = createProductCard(product); // Reuse from products.js
+        const card = createProductCard(product); // From products.js
         grid.appendChild(card);
     });
     
-    section.appendChild(grid);
+    // Assemble structure
+    carousel.appendChild(grid);
+    productsContainer.appendChild(carousel);
+    
+    content.appendChild(videoContainer);
+    content.appendChild(productsContainer);
+    
+    section.appendChild(content);
+    
     return section;
 }
 
@@ -94,7 +112,7 @@ function getReelsDataFromProducts() {
         return [];
     }
 
-    // Filter products that have Instagram reel URLs in source_link
+    // Filter products with Instagram reel URLs in source_link
     const productsWithReels = window.VibeDrips.allProducts.filter(product => {
         const sourceLink = product.source_link || '';
         return sourceLink.includes('instagram.com/reel/') || 
@@ -133,12 +151,7 @@ function convertToInstagramEmbed(url) {
     if (!url) return '';
     
     try {
-        // Extract the reel/post ID from URL
-        // Formats:
-        // https://www.instagram.com/reel/ABC123/
-        // https://www.instagram.com/p/ABC123/
-        // https://instagr.am/p/ABC123/
-        
+        // Extract reel/post ID from URL
         const reelMatch = url.match(/\/reel\/([A-Za-z0-9_-]+)/);
         const postMatch = url.match(/\/p\/([A-Za-z0-9_-]+)/);
         
@@ -150,7 +163,6 @@ function convertToInstagramEmbed(url) {
         }
         
         if (postId) {
-            // Return Instagram embed URL
             return `https://www.instagram.com/p/${postId}/embed/`;
         } else {
             console.warn('⚠️ Could not extract Instagram post ID from:', url);
@@ -234,10 +246,8 @@ function handleTouchEnd(e) {
         swipeDuration < 500) {
         
         if (deltaX > 0) {
-            // Swipe right - go to previous reel
             navigateReels('prev');
         } else {
-            // Swipe left - go to next reel
             navigateReels('next');
         }
     }
@@ -255,9 +265,8 @@ function navigateReels(direction) {
     const sections = Array.from(feedContainer.querySelectorAll('.reel-section'));
     if (sections.length === 0) return;
 
-    // Find current section (first one in viewport)
+    // Find current section
     let currentIndex = 0;
-    const scrollTop = feedContainer.scrollTop;
     
     for (let i = 0; i < sections.length; i++) {
         const rect = sections[i].getBoundingClientRect();
