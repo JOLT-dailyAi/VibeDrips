@@ -69,7 +69,7 @@ function restoreReelPosition() {
           window.goToPage(carousel, savedPage);
           console.log(`✅ Restored to page ${savedPage}`);
         }
-      }, 800); // Wait for scroll animation and render
+      }, 2000);  // ← Give it 2 full seconds
     }
 
   } catch (error) {
