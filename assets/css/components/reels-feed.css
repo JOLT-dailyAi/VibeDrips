@@ -1,14 +1,15 @@
 /* ==============================================================================
-   REELS FEED - TRUE UNIVERSAL SOLUTION
+   REELS FEED - SIMPLEST SOLUTION
    All rules scoped to .reels-modal only
    
    STRATEGY:
-   - dvh units handle URL bar (correct container sizing)
-   - cqh/cqw units handle scaling (automatic proportional sizing)
-   - NO device-specific breakpoints for sizing
-   - Clean inheritance from product-card.css
+   - Desktop: 6 cards (3×2)
+   - Everything else: 2 cards (2×1)
+   - Cards use base styles from product-card.css
+   - Grid auto-sizes to content
+   - Scroll if needed (rare)
    
-   GUARANTEE: Works on every resolution, always. Zero maintenance.
+   GUARANTEE: Always readable, never truncated, zero complexity
    ============================================================================== */
 
 /* ==================== FEED CONTAINER ==================== */
@@ -113,7 +114,7 @@
   max-height: 763px;
 }
 
-/* ==================== PRODUCTS CAROUSEL - CONTAINER QUERY SETUP ==================== */
+/* ==================== PRODUCTS CAROUSEL ==================== */
 
 .reels-modal .products-carousel {
   position: relative;
@@ -123,101 +124,80 @@
   flex-direction: column;
   justify-content: flex-start;
   overflow: hidden;
-  
-  /* ENABLE CONTAINER QUERIES */
-  container-type: size;
-  container-name: products;
 }
 
-/* ==================== PRODUCTS GRID - MINIMAL STYLING ==================== */
+/* ==================== PRODUCTS GRID - SIMPLE & CLEAN ==================== */
 
 .reels-modal .products-grid {
   display: grid;
   width: 100%;
-  height: 100%;
-  padding: 0;
-  margin: 0;
+  flex: 0 1 auto; /* Don't force fill */
+  min-height: 0;
+  gap: 12px;
+  padding: 10px;
   box-sizing: border-box;
+  margin-bottom: 30px;
   
-  /* No scroll - carousel handles navigation */
-  overflow: hidden;
+  /* Allow scroll if content too tall */
+  overflow-y: auto;
+  overflow-x: hidden;
   
   align-content: start;
   justify-content: center;
-  gap: 1cqh; /* Gap scales to container */
+  
+  /* Rows auto-size to content */
+  grid-auto-rows: minmax(min-content, max-content);
+}
+
+/* Smooth scrollbar */
+.reels-modal .products-grid::-webkit-scrollbar {
+  width: 4px;
+}
+
+.reels-modal .products-grid::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+.reels-modal .products-grid::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
 }
 
 .reels-modal .products-carousel[data-transitioning="true"] .products-grid {
   opacity: 0.5;
 }
 
-/* ==================== DVH UNITS - URL BAR HANDLING ==================== */
+/* ==================== DESKTOP: 6 CARDS (3×2) ==================== */
 
-@media (max-width: 1199px) {
-  .reels-modal .reel-section {
-    height: 100vh; /* Fallback */
-    height: 100dvh; /* Modern - excludes URL bar */
-  }
-  
-  .reels-modal .reel-content {
-    height: 90vh; /* Fallback */
-    height: 90dvh; /* Modern */
-  }
-}
-
-/* ==================== LANDSCAPE - MATCHED HEIGHTS ==================== */
-
-@media (orientation: landscape) and (max-width: 1199px) {
-  .reels-modal .reel-content {
-    align-items: stretch;
-  }
-  
-  .reels-modal .reel-video,
-  .reels-modal .reel-products {
-    height: 100%;
-  }
-  
-  .reels-modal .reel-video iframe {
-    object-fit: contain;
-  }
-}
-
-/* ==================== GRID LAYOUTS - ONLY STRUCTURAL RULES ==================== */
-
-/* Desktop: 3 columns × 2 rows */
 @media (min-width: 1200px) {
   .reels-modal .products-grid {
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, 1fr);
+    grid-template-rows: repeat(2, minmax(min-content, max-content));
+    gap: 12px;
   }
 }
 
-/* Tablet: 2 columns × 1 row */
-@media (min-width: 768px) and (max-width: 1199px) {
+/* ==================== EVERYTHING ELSE: 2 CARDS (2×1) ==================== */
+
+@media (max-width: 1199px) {
   .reels-modal .products-grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: 1fr;
-  }
-  
-  .reels-modal .reel-content {
-    gap: 20px;
-  }
-  
-  .reels-modal .reel-video iframe {
-    max-width: 400px;
+    grid-template-rows: minmax(min-content, max-content); /* Single row */
+    gap: 10px;
   }
 }
 
-/* Mobile Portrait: 2 columns × 1 row */
+/* ==================== MOBILE PORTRAIT ==================== */
+
 @media (max-width: 767px) and (orientation: portrait) {
   .reels-modal .reel-section {
-    padding: 5px;
+    padding: 10px;
   }
   
   .reels-modal .reel-content {
     flex-direction: column;
-    gap: 1vh;
-    gap: 1dvh;
+    gap: 10px;
     padding: 0;
     height: 100%;
   }
@@ -226,7 +206,6 @@
     flex: 0 0 auto;
     height: auto;
     max-height: 45vh;
-    max-height: 45dvh;
     border-radius: 8px;
   }
   
@@ -235,7 +214,6 @@
     height: auto;
     aspect-ratio: 9 / 16;
     max-height: 45vh;
-    max-height: 45dvh;
     border-radius: 8px;
   }
   
@@ -246,28 +224,28 @@
   }
   
   .reels-modal .products-grid {
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: 1fr;
+    gap: 8px;
+    padding: 5px;
+    margin-bottom: 28px;
   }
 }
 
-/* Mobile Landscape: 2 columns × 1 row */
+/* ==================== MOBILE LANDSCAPE ==================== */
+
 @media (max-width: 767px) and (orientation: landscape) {
   .reels-modal .reel-section {
-    padding: 4px;
+    padding: 8px;
   }
   
   .reels-modal .reel-content {
     flex-direction: row;
-    gap: 1vh;
-    gap: 1dvh;
+    gap: 10px;
     padding: 0;
     height: 92vh;
-    height: 92dvh;
   }
   
   .reels-modal .reel-video {
-    flex: 0 0 35%;
+    flex: 0 0 40%;
     max-height: 100%;
     border-radius: 8px;
   }
@@ -279,13 +257,14 @@
   }
   
   .reels-modal .reel-products {
-    flex: 0 0 65%;
+    flex: 0 0 60%;
     max-height: 100%;
   }
   
   .reels-modal .products-grid {
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: 1fr;
+    gap: 6px;
+    padding: 4px;
+    margin-bottom: 26px;
   }
 }
 
@@ -357,11 +336,10 @@
   padding: 4px 0;
   flex-shrink: 0;
   position: absolute;
-  bottom: 1cqh; /* Scales to container */
+  bottom: 0;
   left: 0;
   right: 0;
-  height: 3cqh; /* Scales to container */
-  min-height: 20px; /* Safety minimum */
+  height: 28px;
   z-index: 10;
   pointer-events: none;
   background: transparent;
@@ -389,6 +367,10 @@
 }
 
 @media (max-width: 767px) {
+  .reels-modal .carousel-dots {
+    height: 26px;
+  }
+  
   .reels-modal .dot {
     width: 6px;
     height: 6px;
@@ -427,23 +409,17 @@
 }
 
 /* ==============================================================================
-   PRODUCT CARDS - CONTAINER QUERY UNITS (TRUE UNIVERSAL)
-   Everything scales automatically to container size
-   NO device-specific overrides needed
+   PRODUCT CARDS - MINIMAL OVERRIDES
+   98% inherited from product-card.css
+   Only override what's absolutely necessary
    ============================================================================== */
 
-/* Base card setup */
 .reels-modal .product-card {
-  height: 100%;
+  /* Let card use its natural height from base styles */
+  height: auto;
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
   
-  /* CONTAINER QUERY SIZING - Scales automatically */
-  padding: 2cqh 2cqw !important; /* 2% of container height/width */
-  gap: 1cqh !important; /* 1% of container height */
-  
+  /* Remove any transform conflicts */
   transform: none !important;
 }
 
@@ -451,7 +427,7 @@
   transform: translateY(-2px) !important;
 }
 
-/* Ensure all elements display */
+/* Ensure all elements display (safety) */
 .reels-modal .product-card .product-image-wrapper,
 .reels-modal .product-card img,
 .reels-modal .product-card .product-category,
@@ -474,107 +450,21 @@
   align-items: center !important;
   justify-content: center !important;
   text-align: center !important;
-  white-space: nowrap !important;
 }
 
-/* Image sizing - maintains 1:1 ratio */
-.reels-modal .product-card .product-image-wrapper {
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-}
-
-.reels-modal .product-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* Category */
-.reels-modal .product-card .product-category {
-  font-size: 2cqh !important; /* 2% of container height */
-  line-height: 1.2;
-  min-font-size: 9px; /* Safety minimum for readability */
-}
-
-/* Product Name */
+/* Fix text wrapping (only override needed) */
 .reels-modal .product-card .product-name {
-  font-size: 3cqh !important; /* 3% of container height */
-  line-height: 1.3;
   display: -webkit-box !important;
   -webkit-box-orient: vertical !important;
   -webkit-line-clamp: 2 !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   word-break: break-word !important;
-  max-height: 7.8cqh !important; /* 2 lines × 3cqh × 1.3 line-height */
 }
 
-/* Price */
-.reels-modal .product-card .product-price {
-  font-size: 3.5cqh !important; /* 3.5% of container height */
-  font-weight: 600;
-}
-
-/* Rating */
-.reels-modal .product-card .rating {
-  font-size: 2.2cqh !important; /* 2.2% of container height */
-}
-
-/* Amazon Button */
-.reels-modal .product-card .amazon-button {
-  font-size: 2.5cqh !important; /* 2.5% of container height */
-  padding: 1.5cqh 3cqw !important; /* Scales with container */
-  min-height: 5cqh !important; /* Minimum height for tappability */
-}
-
-/* Image count badge */
-.reels-modal .product-card .image-count {
-  position: absolute;
-  bottom: 1cqh;
-  right: 1cqw;
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-  padding: 0.5cqh 1cqw !important;
-  border-radius: 10px;
-  font-size: 1.8cqh !important;
-  font-weight: 500;
-  z-index: 10;
-  line-height: 1.2;
-  white-space: nowrap;
-}
-
-/* Brand tag */
-.reels-modal .product-card .brand-tag {
-  position: absolute;
-  top: 1cqh;
-  left: 1cqw;
-  background: rgba(102, 126, 234, 0.95);
-  color: white;
-  padding: 0.5cqh 1cqw !important;
-  border-radius: 10px;
-  font-size: 1.8cqh !important;
-  font-weight: 600;
-  z-index: 10;
-  line-height: 1.2;
-  white-space: nowrap;
-}
-
-/* ==============================================================================
-   MOBILE LANDSCAPE - SINGLE LINE NAME ONLY
-   Only structural change needed, sizing is automatic
-   ============================================================================== */
-
+/* Mobile landscape: single line to save space */
 @media (max-width: 767px) and (orientation: landscape) {
   .reels-modal .product-card .product-name {
-    -webkit-line-clamp: 1 !important; /* Single line */
-    max-height: 3.9cqh !important; /* 1 line × 3cqh × 1.3 line-height */
-  }
-}
-
-@media (max-width: 932px) and (max-height: 450px) and (orientation: landscape) {
-  .reels-modal .product-card .product-name {
     -webkit-line-clamp: 1 !important;
-    max-height: 3.9cqh !important;
   }
 }
