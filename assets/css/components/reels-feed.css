@@ -1,5 +1,5 @@
 /* ==============================================================================
-   REELS FEED - OPTIMIZED RESPONSIVE LAYOUTS
+   REELS FEED - OPTIMIZED RESPONSIVE LAYOUTS WITH PAGINATION
    ============================================================================== */
 
 /* ==================== FEED CONTAINER ==================== */
@@ -116,7 +116,7 @@
   overflow: hidden;
 }
 
-/* ==================== PRODUCTS GRID - BASE ==================== */
+/* ==================== PRODUCTS GRID - PAGINATION ONLY (NO SCROLL) ==================== */
 
 .reels-modal .products-grid {
   display: grid;
@@ -127,25 +127,10 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden; /* NO SCROLL - Pure pagination */
   align-content: start;
   justify-content: center;
   grid-auto-rows: minmax(min-content, max-content);
-}
-
-.reels-modal .products-grid::-webkit-scrollbar {
-  width: 4px;
-}
-
-.reels-modal .products-grid::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 2px;
-}
-
-.reels-modal .products-grid::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 2px;
 }
 
 .reels-modal .products-carousel[data-transitioning="true"] .products-grid {
@@ -166,21 +151,21 @@
 
 @media (min-width: 768px) and (max-width: 1199px) and (orientation: landscape) {
   .reels-modal .reel-content {
-    padding: 10px; /* ✅ Reduced padding */
-    gap: 15px; /* ✅ Reduced gap - products claim space */
+    padding: 10px;
+    gap: 15px;
   }
   
   .reels-modal .reel-video {
-    flex: 0 0 45%; /* ✅ Video takes less space */
+    flex: 0 0 45%;
   }
   
   .reels-modal .reel-products {
-    flex: 1; /* ✅ Products take more space */
+    flex: 1;
   }
   
   .reels-modal .products-grid {
-    grid-template-columns: repeat(2, 1fr); /* ✅ 2 columns */
-    grid-template-rows: repeat(2, minmax(min-content, max-content)); /* ✅ 2 rows = 4 cards */
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, minmax(min-content, max-content));
     gap: 10px;
   }
 }
@@ -190,7 +175,7 @@
 @media (min-width: 768px) and (max-width: 1199px) and (orientation: portrait) {
   .reels-modal .products-grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: minmax(min-content, max-content); /* Single row */
+    grid-template-rows: minmax(min-content, max-content);
     gap: 10px;
   }
 }
@@ -231,8 +216,8 @@
   }
   
   .reels-modal .products-grid {
-    grid-template-columns: repeat(2, 1fr); /* ✅ 2 columns */
-    grid-template-rows: minmax(min-content, max-content); /* ✅ 1 row */
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: minmax(min-content, max-content);
     gap: 8px;
   }
 }
@@ -246,13 +231,13 @@
   
   .reels-modal .reel-content {
     flex-direction: row;
-    gap: 8px; /* ✅ Tighter gap */
+    gap: 8px;
     padding: 0;
     height: 92vh;
   }
   
   .reels-modal .reel-video {
-    flex: 0 0 38%; /* ✅ Video takes less space */
+    flex: 0 0 38%;
     max-height: 100%;
     border-radius: 8px;
   }
@@ -264,13 +249,13 @@
   }
   
   .reels-modal .reel-products {
-    flex: 1; /* ✅ Products take more space */
+    flex: 1;
     max-height: 100%;
   }
   
   .reels-modal .products-grid {
-    grid-template-columns: repeat(2, 1fr); /* ✅ 2 columns (same as portrait) */
-    grid-template-rows: minmax(min-content, max-content); /* ✅ 1 row */
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: minmax(min-content, max-content);
     gap: 6px;
   }
 }
