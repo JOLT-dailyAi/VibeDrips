@@ -16,9 +16,16 @@ function openReelsModal() {
   // Disable body scroll
   document.body.style.overflow = 'hidden';
 
-  // Render reels feed inside modal
+    // Render reels feed inside modal
   if (window.renderReelsFeed) {
     window.renderReelsFeed();
+    
+    // ✅ NEW: Restore last position after render
+    setTimeout(() => {
+      if (window.restoreReelPosition) {
+        window.restoreReelPosition();
+      }
+    }, 200); // Small delay to ensure DOM is ready
   } else {
     console.error('❌ renderReelsFeed function not found');
   }
