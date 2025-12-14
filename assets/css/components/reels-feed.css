@@ -1,9 +1,11 @@
 /* ==============================================================================
-   REELS FEED - INSTAGRAM-STYLE GRID LAYOUTS
+   REELS FEED - HYBRID TOP-DOWN/BOTTOM-UP APPROACH
    All rules scoped to .reels-modal only
    
-   APPROACH: Inherit all base styles from product-card.css
-   Only override: font-sizes, grid layout, and spacing for reels context
+   STRATEGY:
+   1. Top-Down: Reels modal → Products carousel (fixed heights)
+   2. Bottom-Up: Product cards → Grid (auto-sizing with clamp())
+   3. Grid adapts: 3 rows → 2 rows → 1 row based on available space
    ============================================================================== */
 
 /* ==================== FEED CONTAINER ==================== */
@@ -95,7 +97,7 @@
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
 }
 
-/* ==================== REEL PRODUCTS CONTAINER ==================== */
+/* ==================== REEL PRODUCTS CONTAINER (TOP-DOWN) ==================== */
 
 .reels-modal .reel-products {
   flex: 1;
@@ -108,7 +110,7 @@
   max-height: 763px;
 }
 
-/* ==================== PRODUCTS CAROUSEL ==================== */
+/* ==================== PRODUCTS CAROUSEL (TOP-DOWN → BOTTOM-UP TRANSITION) ==================== */
 
 .reels-modal .products-carousel {
   position: relative;
@@ -118,9 +120,13 @@
   flex-direction: column;
   justify-content: flex-start;
   overflow: hidden;
+  
+  /* Enable container queries for responsive grid */
+  container-type: size;
+  container-name: carousel;
 }
 
-/* ==================== PRODUCTS GRID - FORCE 2x3 OR 2x2 ==================== */
+/* ==================== PRODUCTS GRID (BOTTOM-UP: AUTO ROWS) ==================== */
 
 .reels-modal .products-grid {
   display: grid;
@@ -132,14 +138,14 @@
   box-sizing: border-box;
   margin-bottom: 32px;
   
-  /* NO SCROLL - All cards visible */
+  /* NO SCROLL - Cards define height, grid adapts */
   overflow: hidden;
-  align-content: center;
+  align-content: start; /* Start from top, not center */
   justify-content: center;
   
-  /* FORCE EQUAL ROW HEIGHTS */
-  grid-template-rows: repeat(3, 1fr);
-  grid-auto-flow: column;
+  /* AUTO ROWS - Cards control height */
+  grid-template-rows: auto auto auto; /* Default: Try 3 rows */
+  grid-auto-flow: row; /* Fill rows first */
 }
 
 .reels-modal .products-carousel[data-transitioning="true"] .products-grid {
@@ -151,7 +157,7 @@
 @media (min-width: 1200px) {
   .reels-modal .products-grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(3, 1fr);
+    grid-template-rows: auto auto auto;
     gap: 12px;
   }
 }
@@ -161,7 +167,7 @@
 @media (min-width: 768px) and (max-width: 1199px) {
   .reels-modal .products-grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(3, 1fr);
+    grid-template-rows: auto auto auto;
     gap: 10px;
   }
   
@@ -211,7 +217,7 @@
   
   .reels-modal .products-grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
+    grid-template-rows: auto auto; /* Try 2 rows first */
     gap: 8px;
     padding: 0 5px 8px 5px;
     margin-bottom: 28px;
@@ -251,14 +257,14 @@
   
   .reels-modal .products-grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
+    grid-template-rows: auto auto; /* Try 2 rows first */
     gap: 6px;
     padding: 0 4px 8px 4px;
     margin-bottom: 26px;
   }
 }
 
-/* ==================== PRO MAX LANDSCAPE (≤932px, ≤450px) ==================== */
+/* ==================== PRO MAX LANDSCAPE: 1 ROW ONLY (≤932px, ≤450px) ==================== */
 
 @media (max-width: 932px) and (max-height: 450px) and (orientation: landscape) {
   .reels-modal .reel-content {
@@ -276,10 +282,35 @@
   
   .reels-modal .products-grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
+    grid-template-rows: auto; /* Force 1 row only */
     gap: 5px;
     padding: 0 3px 8px 3px;
     margin-bottom: 24px;
+  }
+}
+
+/* ==================== CONTAINER QUERIES (Progressive Enhancement) ==================== */
+
+@supports (container-type: size) {
+  /* If carousel height < 360px, force 1 row */
+  @container carousel (max-height: 359px) {
+    .products-grid {
+      grid-template-rows: auto !important;
+    }
+  }
+  
+  /* If carousel height >= 360px but < 540px, allow 2 rows */
+  @container carousel (min-height: 360px) and (max-height: 539px) {
+    .products-grid {
+      grid-template-rows: auto auto !important;
+    }
+  }
+  
+  /* If carousel height >= 540px, allow 3 rows */
+  @container carousel (min-height: 540px) {
+    .products-grid {
+      grid-template-rows: auto auto auto !important;
+    }
   }
 }
 
@@ -424,18 +455,23 @@
 }
 
 /* ==============================================================================
-   PRODUCT CARDS - INHERIT BASE, ONLY SCALE FONTS
-   Base styles come from product-card.css
-   We only override font-sizes and ensure all elements display
+   PRODUCT CARDS - BOTTOM-UP SCALING WITH CLAMP()
+   Base styles inherited from product-card.css
+   Dynamic font scaling based on viewport height (vh)
    ============================================================================== */
 
 /* FORCE CARD TO FIT GRID CELL */
 .reels-modal .product-card {
   /* Override base card padding for compact reels layout */
-  padding: 6px !important;
-  gap: 4px !important;
+  padding: clamp(3px, 1vh, 8px) !important;
+  gap: clamp(2px, 0.5vh, 5px) !important;
   
-  /* Ensure hover doesn't break layout */
+  /* Card fills grid cell */
+  width: 100%;
+  height: auto; /* Let content define height */
+  min-height: 0;
+  
+  /* Prevent hover breaking layout */
   transform: none !important;
 }
 
@@ -474,7 +510,7 @@
   color: white;
   padding: 2px 6px !important;
   border-radius: 10px;
-  font-size: 9px !important;
+  font-size: clamp(7px, 1.2vh, 10px) !important;
   font-weight: 500;
   z-index: 10;
   line-height: 1.2;
@@ -491,7 +527,7 @@
   color: white;
   padding: 2px 6px !important;
   border-radius: 10px;
-  font-size: 9px !important;
+  font-size: clamp(7px, 1.2vh, 10px) !important;
   font-weight: 600;
   z-index: 10;
   line-height: 1.2;
@@ -500,9 +536,42 @@
   height: auto !important;
 }
 
-/* ==================== FONT SIZE SCALING ONLY ==================== */
+/* ==================== DYNAMIC FONT SCALING WITH CLAMP() ==================== */
 
-/* Desktop (≥1200px) - Normal sizes */
+/* Category */
+.reels-modal .product-card .product-category {
+  font-size: clamp(7px, 1.5vh, 11px) !important;
+  line-height: 1.2;
+}
+
+/* Product Name */
+.reels-modal .product-card .product-name {
+  font-size: clamp(0.55rem, 1.8vh, 0.85rem) !important;
+  -webkit-line-clamp: 2 !important;
+  line-height: 1.2;
+  min-height: auto;
+}
+
+/* Price */
+.reels-modal .product-card .product-price {
+  font-size: clamp(0.65rem, 2vh, 0.95rem) !important;
+}
+
+/* Rating */
+.reels-modal .product-card .rating {
+  font-size: clamp(8px, 1.5vh, 12px) !important;
+}
+
+/* Amazon Button */
+.reels-modal .product-card .amazon-button {
+  font-size: clamp(0.55rem, 1.6vh, 0.75rem) !important;
+  padding: clamp(3px, 0.8vh, 8px) clamp(4px, 1vw, 10px) !important;
+  min-height: auto !important;
+}
+
+/* ==================== RESPONSIVE OVERRIDES ==================== */
+
+/* Desktop (≥1200px) - Larger sizes */
 @media (min-width: 1200px) {
   .reels-modal .product-card {
     padding: 8px !important;
@@ -518,7 +587,7 @@
   .reels-modal .product-card .brand-tag { font-size: 10px !important; padding: 3px 6px !important; }
 }
 
-/* Tablet (768-1199px) - Slightly smaller */
+/* Tablet (768-1199px) */
 @media (min-width: 768px) and (max-width: 1199px) {
   .reels-modal .product-card {
     padding: 6px !important;
@@ -534,7 +603,7 @@
   .reels-modal .product-card .brand-tag { font-size: 9px !important; }
 }
 
-/* Mobile Portrait (≤767px) - Compact */
+/* Mobile Portrait (≤767px) */
 @media (max-width: 767px) and (orientation: portrait) {
   .reels-modal .product-card {
     padding: 5px !important;
@@ -550,7 +619,7 @@
   .reels-modal .product-card .brand-tag { font-size: 8px !important; top: 4px; left: 4px; }
 }
 
-/* Mobile Landscape (≤767px) - Very compact */
+/* Mobile Landscape (≤767px) */
 @media (max-width: 767px) and (orientation: landscape) {
   .reels-modal .product-card {
     padding: 4px !important;
@@ -566,7 +635,7 @@
   .reels-modal .product-card .brand-tag { font-size: 7px !important; padding: 2px 4px !important; }
 }
 
-/* Pro Max Landscape (≤932px, ≤450px) - Ultra compact */
+/* Pro Max Landscape (≤932px, ≤450px) */
 @media (max-width: 932px) and (max-height: 450px) and (orientation: landscape) {
   .reels-modal .product-card {
     padding: 3px !important;
