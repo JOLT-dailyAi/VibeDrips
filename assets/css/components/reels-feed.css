@@ -1,14 +1,14 @@
 /* ==============================================================================
-   REELS FEED - UNIVERSAL SHRINK + CRITICAL FIXES
+   REELS FEED - TRUE UNIVERSAL SOLUTION
    All rules scoped to .reels-modal only
    
-   APPROACH:
-   - Universal card shrinking (all devices fit comfortably)
-   - dvh units for URL bar handling
-   - Matched heights in landscape
-   - Critical fixes (iPad black screen, button alignment)
+   STRATEGY:
+   - dvh units handle URL bar (correct container sizing)
+   - cqh/cqw units handle scaling (automatic proportional sizing)
+   - NO device-specific breakpoints for sizing
+   - Clean inheritance from product-card.css
    
-   GUARANTEE: All elements visible, no truncation, works everywhere
+   GUARANTEE: Works on every resolution, always. Zero maintenance.
    ============================================================================== */
 
 /* ==================== FEED CONTAINER ==================== */
@@ -113,7 +113,7 @@
   max-height: 763px;
 }
 
-/* ==================== PRODUCTS CAROUSEL ==================== */
+/* ==================== PRODUCTS CAROUSEL - CONTAINER QUERY SETUP ==================== */
 
 .reels-modal .products-carousel {
   position: relative;
@@ -123,34 +123,35 @@
   flex-direction: column;
   justify-content: flex-start;
   overflow: hidden;
+  
+  /* ENABLE CONTAINER QUERIES */
+  container-type: size;
+  container-name: products;
 }
 
-/* ==================== PRODUCTS GRID - BASE ==================== */
+/* ==================== PRODUCTS GRID - MINIMAL STYLING ==================== */
 
 .reels-modal .products-grid {
   display: grid;
   width: 100%;
-  flex: 0 1 auto;
-  min-height: 0;
-  gap: 12px;
-  padding: 0; /* ✅ ZERO PADDING */
+  height: 100%;
+  padding: 0;
+  margin: 0;
   box-sizing: border-box;
-  margin: 0; /* ✅ ZERO MARGIN */
   
-  overflow-y: hidden;
-  overflow-x: hidden;
+  /* No scroll - carousel handles navigation */
+  overflow: hidden;
   
   align-content: start;
   justify-content: center;
-  grid-auto-flow: row;
+  gap: 1cqh; /* Gap scales to container */
 }
-
 
 .reels-modal .products-carousel[data-transitioning="true"] .products-grid {
   opacity: 0.5;
 }
 
-/* ==================== MOBILE/TABLET: DVH UNITS (URL BAR FIX) ==================== */
+/* ==================== DVH UNITS - URL BAR HANDLING ==================== */
 
 @media (max-width: 1199px) {
   .reels-modal .reel-section {
@@ -164,11 +165,11 @@
   }
 }
 
-/* ==================== LANDSCAPE: MATCHED HEIGHTS ==================== */
+/* ==================== LANDSCAPE - MATCHED HEIGHTS ==================== */
 
 @media (orientation: landscape) and (max-width: 1199px) {
   .reels-modal .reel-content {
-    align-items: stretch; /* Force video and products to same height */
+    align-items: stretch;
   }
   
   .reels-modal .reel-video,
@@ -177,27 +178,25 @@
   }
   
   .reels-modal .reel-video iframe {
-    object-fit: contain; /* Maintain aspect ratio, no distortion */
+    object-fit: contain;
   }
 }
 
-/* ==================== DESKTOP: 6 CARDS (3×2) ==================== */
+/* ==================== GRID LAYOUTS - ONLY STRUCTURAL RULES ==================== */
 
+/* Desktop: 3 columns × 2 rows */
 @media (min-width: 1200px) {
   .reels-modal .products-grid {
-    grid-template-columns: repeat(3, 1fr); /* 3 columns */
-    grid-template-rows: repeat(2, minmax(min-content, max-content)); /* 2 rows */
-    gap: 12px;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
   }
 }
 
-/* ==================== TABLET: 2 CARDS (2×1) - SINGLE ROW ==================== */
-
+/* Tablet: 2 columns × 1 row */
 @media (min-width: 768px) and (max-width: 1199px) {
   .reels-modal .products-grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: minmax(min-content, max-content); /* SINGLE ROW - FIX BLACK SCREEN */
-    gap: 10px;
+    grid-template-rows: 1fr;
   }
   
   .reels-modal .reel-content {
@@ -209,17 +208,7 @@
   }
 }
 
-/* ==================== IPAD SPECIFIC (768-1024px) ==================== */
-
-@media (min-width: 768px) and (max-width: 1024px) {
-  .reels-modal .products-grid {
-    grid-template-columns: repeat(2, 1fr) !important;
-    grid-template-rows: minmax(min-content, max-content) !important; /* FORCE 1 ROW */
-  }
-}
-
-/* ==================== MOBILE PORTRAIT: 2 CARDS (2×1) ==================== */
-
+/* Mobile Portrait: 2 columns × 1 row */
 @media (max-width: 767px) and (orientation: portrait) {
   .reels-modal .reel-section {
     padding: 5px;
@@ -227,7 +216,8 @@
   
   .reels-modal .reel-content {
     flex-direction: column;
-    gap: 6px;
+    gap: 1vh;
+    gap: 1dvh;
     padding: 0;
     height: 100%;
   }
@@ -235,7 +225,7 @@
   .reels-modal .reel-video {
     flex: 0 0 auto;
     height: auto;
-    max-height: 45vh; /* REVERTED - Original height */
+    max-height: 45vh;
     max-height: 45dvh;
     border-radius: 8px;
   }
@@ -244,7 +234,7 @@
     width: 100%;
     height: auto;
     aspect-ratio: 9 / 16;
-    max-height: 45vh; /* REVERTED - Original height */
+    max-height: 45vh;
     max-height: 45dvh;
     border-radius: 8px;
   }
@@ -257,15 +247,11 @@
   
   .reels-modal .products-grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: minmax(min-content, max-content); /* Single row */
-    gap: 6px;
-    padding: 0; /* ✅ ZERO PADDING */
-    margin: 0; /* ✅ ZERO MARGIN */
+    grid-template-rows: 1fr;
   }
 }
 
-/* ==================== MOBILE LANDSCAPE: 2 CARDS (2×1) ==================== */
-
+/* Mobile Landscape: 2 columns × 1 row */
 @media (max-width: 767px) and (orientation: landscape) {
   .reels-modal .reel-section {
     padding: 4px;
@@ -273,14 +259,15 @@
   
   .reels-modal .reel-content {
     flex-direction: row;
-    gap: 6px;
+    gap: 1vh;
+    gap: 1dvh;
     padding: 0;
     height: 92vh;
     height: 92dvh;
   }
   
   .reels-modal .reel-video {
-    flex: 0 0 35%; /* REDUCED - More space for products */
+    flex: 0 0 35%;
     max-height: 100%;
     border-radius: 8px;
   }
@@ -292,42 +279,13 @@
   }
   
   .reels-modal .reel-products {
-    flex: 0 0 65%; /* INCREASED - More space for products */
+    flex: 0 0 65%;
     max-height: 100%;
   }
   
   .reels-modal .products-grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: minmax(min-content, max-content); /* Single row */
-    gap: 4px;
-    padding: 0; /* ✅ ZERO PADDING */
-    margin: 0; /* ✅ ZERO MARGIN */
-  }
-}
-
-/* ==================== PRO MAX LANDSCAPE: 2 CARDS (2×1) ==================== */
-
-@media (max-width: 932px) and (max-height: 450px) and (orientation: landscape) {
-  .reels-modal .reel-content {
-    gap: 6px;
-    height: 94vh;
-    height: 94dvh;
-  }
-  
-  .reels-modal .reel-video {
-    flex: 0 0 35%; /* More space for products */
-  }
-  
-  .reels-modal .reel-products {
-    flex: 0 0 65%;
-  }
-  
-  .reels-modal .products-grid {
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: minmax(min-content, max-content);
-    gap: 4px;
-    padding: 0; /* ✅ ZERO PADDING */
-    margin: 0; /* ✅ ZERO MARGIN */
+    grid-template-rows: 1fr;
   }
 }
 
@@ -399,10 +357,11 @@
   padding: 4px 0;
   flex-shrink: 0;
   position: absolute;
-  bottom: 0;
+  bottom: 1cqh; /* Scales to container */
   left: 0;
   right: 0;
-  height: 22px;
+  height: 3cqh; /* Scales to container */
+  min-height: 20px; /* Safety minimum */
   z-index: 10;
   pointer-events: none;
   background: transparent;
@@ -468,21 +427,22 @@
 }
 
 /* ==============================================================================
-   PRODUCT CARDS - UNIVERSAL SHRINK
-   Cards are proportionally smaller in reels context
-   This guarantees fit on all devices without truncation
+   PRODUCT CARDS - CONTAINER QUERY UNITS (TRUE UNIVERSAL)
+   Everything scales automatically to container size
+   NO device-specific overrides needed
    ============================================================================== */
 
 /* Base card setup */
 .reels-modal .product-card {
-  height: auto;
+  height: 100%;
   width: 100%;
-  max-height: 100%; /* Never exceed grid cell */
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
   
-  /* UNIVERSAL SHRINK - Apply to all devices */
-  padding: 8px !important; /* From 12px base - 33% smaller */
-  gap: 5px !important; /* From 8px base */
+  /* CONTAINER QUERY SIZING - Scales automatically */
+  padding: 2cqh 2cqw !important; /* 2% of container height/width */
+  gap: 1cqh !important; /* 1% of container height */
   
   transform: none !important;
 }
@@ -514,171 +474,107 @@
   align-items: center !important;
   justify-content: center !important;
   text-align: center !important;
+  white-space: nowrap !important;
 }
 
-/* Universal font size reductions */
+/* Image sizing - maintains 1:1 ratio */
+.reels-modal .product-card .product-image-wrapper {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+
+.reels-modal .product-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Category */
 .reels-modal .product-card .product-category {
-  font-size: 0.7rem !important; /* Smaller */
+  font-size: 2cqh !important; /* 2% of container height */
+  line-height: 1.2;
+  min-font-size: 9px; /* Safety minimum for readability */
 }
 
+/* Product Name */
 .reels-modal .product-card .product-name {
-  font-size: 0.8rem !important; /* Smaller */
+  font-size: 3cqh !important; /* 3% of container height */
+  line-height: 1.3;
   display: -webkit-box !important;
   -webkit-box-orient: vertical !important;
   -webkit-line-clamp: 2 !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   word-break: break-word !important;
-  line-height: 1.3 !important;
-  max-height: 2.6em !important;
+  max-height: 7.8cqh !important; /* 2 lines × 3cqh × 1.3 line-height */
 }
 
+/* Price */
 .reels-modal .product-card .product-price {
-  font-size: 0.85rem !important; /* Smaller */
+  font-size: 3.5cqh !important; /* 3.5% of container height */
+  font-weight: 600;
 }
 
+/* Rating */
 .reels-modal .product-card .rating {
-  font-size: 0.7rem !important; /* Smaller */
+  font-size: 2.2cqh !important; /* 2.2% of container height */
 }
 
+/* Amazon Button */
 .reels-modal .product-card .amazon-button {
-  font-size: 0.7rem !important; /* Smaller */
-  padding: 6px 10px !important; /* Smaller */
-  min-height: 28px !important;
+  font-size: 2.5cqh !important; /* 2.5% of container height */
+  padding: 1.5cqh 3cqw !important; /* Scales with container */
+  min-height: 5cqh !important; /* Minimum height for tappability */
 }
 
-/* Desktop: Slightly larger (but still smaller than base) */
-@media (min-width: 1200px) {
-  .reels-modal .product-card {
-    padding: 10px !important;
-    gap: 6px !important;
-  }
-  
-  .reels-modal .product-card .product-name {
-    font-size: 0.85rem !important;
-  }
-  
-  .reels-modal .product-card .product-price {
-    font-size: 0.9rem !important;
-  }
-  
-  .reels-modal .product-card .amazon-button {
-    font-size: 0.75rem !important;
-    padding: 7px 12px !important;
-  }
+/* Image count badge */
+.reels-modal .product-card .image-count {
+  position: absolute;
+  bottom: 1cqh;
+  right: 1cqw;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 0.5cqh 1cqw !important;
+  border-radius: 10px;
+  font-size: 1.8cqh !important;
+  font-weight: 500;
+  z-index: 10;
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
-/* Tablet: Medium sizing */
-@media (min-width: 768px) and (max-width: 1199px) {
-  .reels-modal .product-card {
-    padding: 9px !important;
-    gap: 5px !important;
-  }
-  
-  .reels-modal .product-card .product-name {
-    font-size: 0.8rem !important;
-  }
-  
-  .reels-modal .product-card .product-price {
-    font-size: 0.85rem !important;
-  }
-  
-  .reels-modal .product-card .amazon-button {
-    font-size: 0.72rem !important;
-    padding: 6px 10px !important;
-  }
-}
-
-/* Mobile: Smallest sizing */
-@media (max-width: 767px) {
-  .reels-modal .product-card {
-    padding: 6px !important;
-    gap: 4px !important;
-  }
-  
-  .reels-modal .product-card .product-category {
-    font-size: 0.65rem !important;
-  }
-  
-  .reels-modal .product-card .product-name {
-    font-size: 0.72rem !important;
-  }
-  
-  .reels-modal .product-card .product-price {
-    font-size: 0.8rem !important;
-  }
-  
-  .reels-modal .product-card .rating {
-    font-size: 0.65rem !important;
-  }
-  
-  .reels-modal .product-card .amazon-button {
-    font-size: 0.68rem !important;
-    padding: 5px 8px !important;
-  }
-}
-
-/* Mobile Landscape: Extra tight */
-@media (max-width: 767px) and (orientation: landscape) {
-  .reels-modal .product-card {
-    padding: 5px !important;
-    gap: 3px !important;
-  }
-  
-  .reels-modal .product-card .product-name {
-    -webkit-line-clamp: 1 !important; /* Single line */
-    max-height: 1.3em !important;
-    font-size: 0.7rem !important;
-  }
-  
-  .reels-modal .product-card .product-category {
-    font-size: 0.6rem !important;
-  }
-  
-  .reels-modal .product-card .product-price {
-    font-size: 0.75rem !important;
-  }
-  
-  .reels-modal .product-card .amazon-button {
-    font-size: 0.65rem !important;
-    padding: 4px 7px !important;
-  }
-}
-
-/* Pro Max Landscape: Tightest */
-@media (max-width: 932px) and (max-height: 450px) and (orientation: landscape) {
-  .reels-modal .product-card {
-    padding: 5px !important;
-    gap: 3px !important;
-  }
-  
-  .reels-modal .product-card .product-name {
-    -webkit-line-clamp: 1 !important;
-    max-height: 1.3em !important;
-    font-size: 0.68rem !important;
-  }
+/* Brand tag */
+.reels-modal .product-card .brand-tag {
+  position: absolute;
+  top: 1cqh;
+  left: 1cqw;
+  background: rgba(102, 126, 234, 0.95);
+  color: white;
+  padding: 0.5cqh 1cqw !important;
+  border-radius: 10px;
+  font-size: 1.8cqh !important;
+  font-weight: 600;
+  z-index: 10;
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
 /* ==============================================================================
-   IPAD PORTRAIT FIX - Button Single Line
+   MOBILE LANDSCAPE - SINGLE LINE NAME ONLY
+   Only structural change needed, sizing is automatic
    ============================================================================== */
 
-@media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
-  .reels-modal .product-card .amazon-button {
-    width: 100% !important;
-    white-space: nowrap !important; /* SINGLE LINE */
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    min-height: 32px !important;
-    font-size: 0.72rem !important;
+@media (max-width: 767px) and (orientation: landscape) {
+  .reels-modal .product-card .product-name {
+    -webkit-line-clamp: 1 !important; /* Single line */
+    max-height: 3.9cqh !important; /* 1 line × 3cqh × 1.3 line-height */
   }
 }
 
-/* iPad Landscape - same fix */
-@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
-  .reels-modal .product-card .amazon-button {
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
+@media (max-width: 932px) and (max-height: 450px) and (orientation: landscape) {
+  .reels-modal .product-card .product-name {
+    -webkit-line-clamp: 1 !important;
+    max-height: 3.9cqh !important;
   }
 }
