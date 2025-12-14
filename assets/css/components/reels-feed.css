@@ -1,5 +1,5 @@
 /* ==============================================================================
-   REELS FEED - SIMPLEST SOLUTION
+   REELS FEED - SIMPLEST SOLUTION (NO WASTED SPACE)
    All rules scoped to .reels-modal only
    
    STRATEGY:
@@ -7,9 +7,10 @@
    - Everything else: 2 cards (2×1)
    - Cards use base styles from product-card.css
    - Grid auto-sizes to content
-   - Scroll if needed (rare)
+   - NO unnecessary padding/margins
+   - Scroll only if absolutely necessary
    
-   GUARANTEE: Always readable, never truncated, zero complexity
+   GUARANTEE: Always readable, never truncated, minimal complexity
    ============================================================================== */
 
 /* ==================== FEED CONTAINER ==================== */
@@ -126,19 +127,19 @@
   overflow: hidden;
 }
 
-/* ==================== PRODUCTS GRID - SIMPLE & CLEAN ==================== */
+/* ==================== PRODUCTS GRID - ZERO FAT ==================== */
 
 .reels-modal .products-grid {
   display: grid;
   width: 100%;
-  flex: 0 1 auto; /* Don't force fill */
+  flex: 0 1 auto;
   min-height: 0;
   gap: 12px;
-  padding: 10px;
+  padding: 0; /* NO PADDING - cards have their own */
+  margin: 0; /* NO MARGIN - dots are absolute positioned */
   box-sizing: border-box;
-  margin-bottom: 30px;
   
-  /* Allow scroll if content too tall */
+  /* Allow scroll only if truly needed */
   overflow-y: auto;
   overflow-x: hidden;
   
@@ -149,7 +150,7 @@
   grid-auto-rows: minmax(min-content, max-content);
 }
 
-/* Smooth scrollbar */
+/* Smooth scrollbar (rarely needed) */
 .reels-modal .products-grid::-webkit-scrollbar {
   width: 4px;
 }
@@ -225,8 +226,6 @@
   
   .reels-modal .products-grid {
     gap: 8px;
-    padding: 5px;
-    margin-bottom: 28px;
   }
 }
 
@@ -263,8 +262,6 @@
   
   .reels-modal .products-grid {
     gap: 6px;
-    padding: 4px;
-    margin-bottom: 26px;
   }
 }
 
@@ -325,7 +322,7 @@
 }
 
 /* ==============================================================================
-   CAROUSEL DOTS
+   CAROUSEL DOTS - FLOATING OVER GRID
    ============================================================================== */
 
 .reels-modal .carousel-dots {
@@ -333,16 +330,18 @@
   justify-content: center;
   align-items: center;
   gap: 8px;
-  padding: 4px 0;
+  padding: 8px 0;
   flex-shrink: 0;
   position: absolute;
-  bottom: 0;
+  bottom: 5px; /* Small offset from absolute bottom */
   left: 0;
   right: 0;
   height: 28px;
   z-index: 10;
   pointer-events: none;
-  background: transparent;
+  
+  /* Subtle gradient so dots visible over cards if overlapping */
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.4), transparent);
 }
 
 .reels-modal .dot {
