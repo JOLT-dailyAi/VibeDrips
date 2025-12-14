@@ -133,11 +133,10 @@
   flex: 0 1 auto;
   min-height: 0;
   gap: 12px;
-  padding: 0 10px 10px 10px;
+  padding: 0; /* ✅ ZERO PADDING */
   box-sizing: border-box;
-  margin-bottom: 32px;
+  margin: 0; /* ✅ ZERO MARGIN */
   
-  /* No scroll - carousel handles navigation */
   overflow-y: hidden;
   overflow-x: hidden;
   
@@ -145,6 +144,7 @@
   justify-content: center;
   grid-auto-flow: row;
 }
+
 
 .reels-modal .products-carousel[data-transitioning="true"] .products-grid {
   opacity: 0.5;
@@ -259,8 +259,8 @@
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: minmax(min-content, max-content); /* Single row */
     gap: 6px;
-    padding: 0 3px 4px 3px;
-    margin-bottom: 20px;
+    padding: 0; /* ✅ ZERO PADDING */
+    margin: 0; /* ✅ ZERO MARGIN */
   }
 }
 
@@ -300,8 +300,8 @@
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: minmax(min-content, max-content); /* Single row */
     gap: 4px;
-    padding: 0 3px 4px 3px;
-    margin-bottom: 20px;
+    padding: 0; /* ✅ ZERO PADDING */
+    margin: 0; /* ✅ ZERO MARGIN */
   }
 }
 
@@ -326,8 +326,8 @@
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: minmax(min-content, max-content);
     gap: 4px;
-    padding: 0 3px 4px 3px;
-    margin-bottom: 20px;
+    padding: 0; /* ✅ ZERO PADDING */
+    margin: 0; /* ✅ ZERO MARGIN */
   }
 }
 
