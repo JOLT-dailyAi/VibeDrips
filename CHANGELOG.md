@@ -7,6 +7,133 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.7.0] - 2025-12-15
+
+### 🎬 Enhanced - Reels Modal Responsive Experience
+
+#### Responsive Layout Improvements
+- **iPad Landscape (768px-1199px):**
+  - Grid layout: **2×2** showing 4 products per page (was 2×1)
+  - Reduced content padding from 20px to 10px
+  - Reduced gap between video/products from 30px to 15px
+  - Video takes 45% width, products claim remaining space
+  - Optimized space utilization for tablet screens
+
+- **Mobile Landscape (<768px):**
+  - Grid layout: **2×1** showing 2 products (consistent with portrait)
+  - Video takes 38% width (reduced from 40%)
+  - Tighter 8px gap between video and products
+  - Unified pagination behavior across orientations
+
+- **Mobile Portrait (<768px):**
+  - Grid layout: **2×1** showing 2 products (unchanged)
+  - Maintained vertical stacked layout
+
+- **Desktop (≥1200px):**
+  - Grid layout: **3×2** showing 6 products (unchanged)
+
+#### Carousel Pagination Enhancements
+- **Universal Horizontal Navigation:**
+  - Orange carousel arrows visible on all devices
+  - Dot indicators for all pagination scenarios
+  - Touch swipe gestures for mobile/tablet
+  - Consistent behavior: no vertical scroll in product grids
+
+- **JavaScript Updates:**
+  - Dynamic `productsPerPage` calculation based on screen size and orientation
+  - Tablet landscape detection for 2×2 grid (4 cards)
+  - Mobile unified to 2 cards regardless of orientation
+  - Proper page calculation and navigation
+
+#### Position Persistence System
+- **LocalStorage Integration:**
+  - Saves current reel URL and carousel page on navigation
+  - Persists across modal close/reopen cycles
+  - Survives page refresh and browser restart
+  - Storage keys: `vibedrips-last-reel-url`, `vibedrips-last-page`
+
+- **Position Tracking:**
+  - `saveReelPosition()` called on carousel page change
+  - `saveReelPosition()` called on reel scroll navigation
+  - Automatic save on every interaction
+
+- **Position Restoration:**
+  - `restoreReelPosition()` called after modal render
+  - Scrolls to last viewed reel section
+  - Restores last carousel page with 500ms delay
+  - Graceful fallback to page 0 if position data invalid
+
+- **New Module:**
+  - `assets/js/reels-position.js` - LocalStorage position manager
+  - Functions: `saveReelPosition()`, `restoreReelPosition()`, `clearReelPosition()`
+  - Global window exports for cross-module access
+
+### Changed
+- **CSS Architecture:**
+  - Overflow scroll retained (`overflow-y: auto`) for resolution edge cases
+  - Added device-specific media queries for iPad landscape
+  - Unified mobile landscape behavior with portrait
+  - Scrollbar styling preserved for accessibility
+
+- **JavaScript Logic:**
+  - Updated `createProductsCarousel()` with orientation detection
+  - Mobile landscape now uses 2 cards (was 4)
+  - iPad landscape uses 4 cards (was 2)
+  - Position tracking integrated into navigation functions
+
+- **Service Worker:**
+  - Updated cache version to `v1.7`
+  - Added `reels-position.js` to cached files
+
+### Fixed
+- Mobile landscape black-out issue (products not displaying)
+- Inconsistent pagination behavior across device orientations
+- Carousel page not persisting on modal reopen
+- Reel position lost on page refresh
+- iPad landscape wasted space between video and products
+- Vertical scroll conflicts with horizontal pagination
+
+### Technical Details
+
+#### Responsive Grid Configuration
+
+// Mobile (portrait + landscape): 2 cards
+const productsPerPage = isMobile ? 2 : 
+  // Tablet landscape: 4 cards
+  (isTabletLandscape ? 4 : 
+  // Tablet portrait: 2 cards
+  (isTablet ? 2 : 
+  // Desktop: 6 cards
+  6));
+
+#### LocalStorage Schema
+{ "vibedrips-last-reel-url": "https://www.instagram.com/reel/ABC123/", "vibedrips-last-page": "2"}
+
+
+#### Position Restore Flow
+1. Modal opens → `renderReelsFeed()` renders all reels
+2. After 500ms → `restoreReelPosition()` reads localStorage
+3. Finds reel by URL → Scrolls section into view
+4. Finds carousel → Calls `goToPage(savedPage)`
+5. Updates dots and renders correct products
+
+### Browser Compatibility
+- ✅ Chrome/Edge: Full support with position persistence
+- ✅ Safari: Full support with localStorage
+- ✅ Firefox: Full support
+- ✅ Mobile Safari: Touch + position tracking
+- ✅ Android Chrome: Full support verified
+- ✅ iPad Safari: Optimized landscape layout
+
+### User Experience
+- **Consistent Behavior:** Same device = same pagination UX regardless of orientation
+- **Memory:** App remembers where you left off in reels
+- **Space Efficiency:** iPad landscape maximizes screen real estate
+- **Touch Friendly:** All gestures work intuitively on mobile/tablet
+- **Resolution Safe:** Scroll available for edge cases without breaking pagination
+
+---
+
 ## [1.6.0] - 2025-12-12
 
 ### 🎬 Major Features - Instagram Reels Integration
