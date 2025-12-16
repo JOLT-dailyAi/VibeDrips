@@ -3,6 +3,7 @@
  * Version: 2.0.0
  * Author: VibeDrips
  * 
+ *
  * Supports:
  * - Images (jpg, png, gif, webp, etc.)
  * - Video files (mp4, mov, webm, etc.)
