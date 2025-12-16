@@ -74,9 +74,17 @@ function getReelsDataFromProducts() {
       reelUrl = reelUrl.split(',')[0].trim();
     }
     
-    // Validate URL
-    if (!reelUrl.includes('instagram.com')) {
-      console.warn('⚠️ Invalid Instagram URL:', reelUrl);
+    // Validate URL (accept any video platform)
+    const isValidVideo = reelUrl.includes('instagram.com') || 
+                        reelUrl.includes('tiktok.com') || 
+                        reelUrl.includes('youtube.com') || 
+                        reelUrl.includes('youtu.be') ||
+                        reelUrl.includes('twitter.com') ||
+                        reelUrl.includes('x.com') ||
+                        reelUrl.match(/\.(mp4|webm|mov|avi)$/);
+    
+    if (!isValidVideo) {
+      console.warn('⚠️ Unsupported video URL:', reelUrl);
       return;
     }
     
@@ -95,23 +103,61 @@ function getReelsDataFromProducts() {
   return Object.values(reelsMap);
 }
 
-// Extract Instagram post ID and create embed URL
-function getInstagramEmbedUrl(instagramUrl) {
+// Extract video platform and create embed URL (Universal Support)
+function getUniversalVideoEmbedUrl(sourceUrl) {
   try {
-    const match = instagramUrl.match(/\/(p|reel)\/([^\/\?]+)/);
-    if (match && match[2]) {
-      const postId = match[2];
-      return `https://www.instagram.com/p/${postId}/embed`;
+    const url = sourceUrl.toLowerCase();
+    
+    // Instagram Reels/Posts
+    if (url.includes('instagram.com')) {
+      const match = sourceUrl.match(/\/(p|reel)\/([^\/\?]+)/);
+      if (match && match[2]) {
+        return `https://www.instagram.com/p/${match[2]}/embed`;
+      }
     }
+    
+    // TikTok Videos
+    if (url.includes('tiktok.com')) {
+      const match = sourceUrl.match(/\/video\/(\d+)/);
+      if (match && match[1]) {
+        return `https://www.tiktok.com/embed/v2/${match[1]}`;
+      }
+    }
+    
+    // YouTube Videos/Shorts
+    if (url.includes('youtube.com') || url.includes('youtu.be')) {
+      let videoId = null;
+      if (url.includes('youtu.be/')) {
+        videoId = sourceUrl.match(/youtu\.be\/([^?]+)/)?.[1];
+      } else if (url.includes('youtube.com/watch')) {
+        videoId = new URL(sourceUrl).searchParams.get('v');
+      } else if (url.includes('youtube.com/shorts/')) {
+        videoId = sourceUrl.match(/shorts\/([^?]+)/)?.[1];
+      }
+      if (videoId) {
+        return `https://www.youtube.com/embed/${videoId}`;
+      }
+    }
+    
+    // Twitter/X Videos
+    if (url.includes('twitter.com') || url.includes('x.com')) {
+      return sourceUrl; // Twitter embeds require different handling
+    }
+    
+    // Direct video files (.mp4, .webm, etc.)
+    if (url.match(/\.(mp4|webm|mov|avi|mkv|m4v|ogv)$/)) {
+      return sourceUrl; // Return as-is for HTML5 video
+    }
+    
   } catch (error) {
-    console.error('Error parsing Instagram URL:', error);
+    console.error('Error parsing video URL:', error);
   }
   return null;
 }
 
 // Create a single reel section
 function createReelSection(reelData, index) {
-  const embedUrl = getInstagramEmbedUrl(reelData.url);
+  const embedUrl = getUniversalVideoEmbedUrl(reelData.url);
   
   if (!embedUrl) {
     console.error('❌ Invalid Instagram URL:', reelData.url);
@@ -129,16 +175,33 @@ function createReelSection(reelData, index) {
   // Create video container
   const videoDiv = document.createElement('div');
   videoDiv.className = 'reel-video';
-  videoDiv.innerHTML = `
-    <iframe 
-      src="${embedUrl}" 
-      frameborder="0" 
-      scrolling="no" 
-      allowtransparency="true" 
-      allowfullscreen="true"
-      loading="lazy">
-    </iframe>
-  `;
+  
+  // Check if it's a direct video file
+  if (reelData.url.match(/\.(mp4|webm|mov|avi)$/i)) {
+    videoDiv.innerHTML = `
+      <video 
+        controls 
+        playsinline 
+        preload="metadata"
+        style="width: 100%; height: 100%; object-fit: cover;">
+        <source src="${embedUrl}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    `;
+  } else {
+    // Use iframe for embedded content (Instagram, TikTok, YouTube, Twitter)
+    videoDiv.innerHTML = `
+      <iframe 
+        src="${embedUrl}" 
+        frameborder="0" 
+        scrolling="no" 
+        allowtransparency="true" 
+        allowfullscreen="true"
+        loading="lazy"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
+      </iframe>
+    `;
+  }
   
   // Create products container with carousel
   const productsDiv = document.createElement('div');
