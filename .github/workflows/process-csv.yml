@@ -16,21 +16,21 @@ permissions:
 jobs:
   process-csv:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-      
+
       - name: Install dependencies
         run: |
           npm init -y
           npm install csv-parser
-      
+
       # NEW: Fix Git cached/ghost files
       - name: Remove cached ghost files
         run: |
@@ -51,51 +51,49 @@ jobs:
           # Verify removal
           echo "✅ Git index after cleanup:"
           git ls-files data/
-      
+
       - name: Clean old physical files
         run: |
           # Clean any remaining physical files
           find data/ -name "products-*.json" -type f -delete 2>/dev/null || true
           rm -f data/currencies.json 2>/dev/null || true
           echo "🧹 Physical file cleanup complete"
-      
-      # OPTIONAL: Auto-bump cache versions
+
+      # OPTIONAL: Auto-bump cache versions (timestamp-based)
       - name: Bump cache versions
         run: |
           echo "🔢 Auto-bumping version numbers..."
           
-          # Get current timestamp for DATA_VERSION
-          TIMESTAMP=$(date +%Y%m%d)
+          # Get current date for DATA_VERSION (YYYYMMDD)
+          DATA_TS=$(date +%Y%m%d)
           
           # Update product-loader.js DATA_VERSION
           if [ -f "assets/js/product-loader.js" ]; then
-            sed -i "s/const DATA_VERSION = '[^']*'/const DATA_VERSION = '${TIMESTAMP}-auto'/" assets/js/product-loader.js
-            echo "✅ Updated DATA_VERSION to ${TIMESTAMP}-auto"
+            sed -i "s/const DATA_VERSION = '[^']*'/const DATA_VERSION = '${DATA_TS}-auto'/" assets/js/product-loader.js
+            echo "✅ Updated DATA_VERSION to ${DATA_TS}-auto"
           fi
           
-          # Extract and increment SW version
+          # Get full timestamp for CACHE_VERSION (YYYYMMDDTHHMMSS)
+          SW_TS=$(date +%Y%m%dT%H%M%S)
+          NEW_VERSION="v${SW_TS}"
+          
+          # Update CACHE_VERSION in sw.js
           if [ -f "sw.js" ]; then
-            CURRENT_VERSION=$(grep -oP "const CACHE_VERSION = 'v\K[0-9]+\.[0-9]+(?=')" sw.js)
-            MAJOR=$(echo $CURRENT_VERSION | cut -d. -f1)
-            MINOR=$(echo $CURRENT_VERSION | cut -d. -f2)
-            NEW_MINOR=$((MINOR + 1))
-            NEW_VERSION="v${MAJOR}.${NEW_MINOR}"
-            
             sed -i "s/const CACHE_VERSION = 'v[^']*'/const CACHE_VERSION = '${NEW_VERSION}'/" sw.js
-            echo "✅ Updated CACHE_VERSION from v${CURRENT_VERSION} to ${NEW_VERSION}"
+            echo "✅ Updated CACHE_VERSION to ${NEW_VERSION}"
           fi
-      
+
       - name: Convert CSV to JSON
         run: |
           cat data/products.csv | node convert-csv.js
-      
+
       - name: List generated files
         run: |
           echo "📁 Generated files:"
           ls -la data/
           echo "📁 Git index files:"
           git ls-files data/
-      
+
       - name: Commit processed data
         run: |
           git config --local user.email "action@github.com"
