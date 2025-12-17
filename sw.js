@@ -1,6 +1,10 @@
 // sw.js - Service worker for VibeDrips PWA
+// Update CACHE_VERSION every time you update products.csv
 
-const CACHE_NAME = 'vibedrips-v1.6';
+const CACHE_VERSION = 'v2.0'; // ⬅️ INCREMENT THIS ON EVERY CSV UPDATE
+const CACHE_NAME = `vibedrips-static-${CACHE_VERSION}`;
+const DATA_CACHE = `vibedrips-data-${CACHE_VERSION}`;
+
 const urlsToCache = [
   '/VibeDrips/',
   '/VibeDrips/index.html',
@@ -76,44 +80,55 @@ const urlsToCache = [
   '/VibeDrips/manifest.json'
 ];
 
-// Install - cache all resources
+// Install - cache static resources only
 self.addEventListener('install', event => {
-  console.log('[SW v1.6] Installing...');
+  console.log(`[SW ${CACHE_VERSION}] Installing...`);
+  
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('[SW v1.6] Caching files');
+        console.log(`[SW ${CACHE_VERSION}] Caching static files`);
         return cache.addAll(urlsToCache);
       })
       .then(() => {
-        console.log('[SW v1.6] Install complete');
+        console.log(`[SW ${CACHE_VERSION}] Install complete - skipping waiting`);
         return self.skipWaiting(); // Activate immediately
       })
       .catch(error => {
-        console.error('[SW v1.6] Install failed:', error);
+        console.error(`[SW ${CACHE_VERSION}] Install failed:`, error);
       })
   );
 });
 
 // Activate - clean up old caches
 self.addEventListener('activate', event => {
-  console.log('[SW v1.6] Activating...');
+  console.log(`[SW ${CACHE_VERSION}] Activating...`);
+  
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
-            console.log('[SW v1.6] Deleting old cache:', cacheName);
+          // Delete any cache that doesn't match current version
+          if (cacheName !== CACHE_NAME && cacheName !== DATA_CACHE) {
+            console.log(`[SW ${CACHE_VERSION}] Deleting old cache:`, cacheName);
             return caches.delete(cacheName);
           }
         })
       );
     })
     .then(() => {
-      console.log('[SW v1.6] Activated');
+      console.log(`[SW ${CACHE_VERSION}] Activated - claiming clients`);
       return self.clients.claim(); // Take control immediately
     })
   );
+});
+
+// Listen for skip waiting message from update prompt
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    console.log(`[SW ${CACHE_VERSION}] Received SKIP_WAITING message`);
+    self.skipWaiting();
+  }
 });
 
 // Fetch strategy
@@ -126,29 +141,39 @@ self.addEventListener('fetch', event => {
     return;
   }
   
-  // Network-first for product data (always fresh)
+  // NETWORK-FIRST for product data (always fresh, cache as backup)
   if (url.pathname.includes('/assets/data/')) {
     event.respondWith(
       fetch(event.request)
         .then(response => {
-          // Clone and cache the response
-          const responseClone = response.clone();
-          caches.open(CACHE_NAME).then(cache => {
-            cache.put(event.request, responseClone);
-          });
+          // Clone and update data cache
+          if (response.ok) {
+            const responseClone = response.clone();
+            caches.open(DATA_CACHE).then(cache => {
+              cache.put(event.request, responseClone);
+            });
+          }
           return response;
         })
         .catch(() => {
           // Fallback to cache if offline
+          console.log(`[SW ${CACHE_VERSION}] Network failed, using cached data`);
           return caches.match(event.request)
             .then(cachedResponse => {
               if (cachedResponse) {
                 return cachedResponse;
               }
+              
               // Last resort - error response
               return new Response(
-                JSON.stringify({ error: 'Offline - products require internet' }),
-                { headers: { 'Content-Type': 'application/json' } }
+                JSON.stringify({ 
+                  error: 'Offline - products require internet connection',
+                  cached: false 
+                }),
+                { 
+                  status: 503,
+                  headers: { 'Content-Type': 'application/json' } 
+                }
               );
             });
         })
@@ -156,17 +181,18 @@ self.addEventListener('fetch', event => {
     return;
   }
   
-  // Cache-first for everything else (static assets)
+  // CACHE-FIRST for everything else (static assets)
   event.respondWith(
     caches.match(event.request)
       .then(cachedResponse => {
         if (cachedResponse) {
           return cachedResponse;
         }
+        
         // Not in cache, fetch from network
         return fetch(event.request)
           .then(response => {
-            // Cache the fetched response
+            // Cache successful responses
             if (response.status === 200) {
               const responseClone = response.clone();
               caches.open(CACHE_NAME).then(cache => {
