@@ -56,7 +56,7 @@
   },
   {
     "asin": "9388550072",
-    "name": "Ikigai (Hindi) : Héctor García, Francesc Miralles",
+    "name": "Ikigai (Hindi) [PB] : Héctor García, Francesc Miralles",
     "description": "शारीरिक स्वास्थ्य के लिए 80 प्रतिशत का रहस्य। चुस्त शरीर, चुस्त मन तनाव का लाभ लेने की कला स्टीव्ह जॉब्ज का जापानी संस्कृति के लिए प्रेम लोगोथैरपी और मोरिता थैरपी, तंत्रज्ञान और संस्कृति का संगम",
     "price": 235,
     "currency": "INR",
@@ -66,15 +66,7 @@
     "subcategory": "Book",
     "main_image": "https://m.media-amazon.com/images/I/61Td+yd3qaL.jpg",
     "all_images": [
-      "[\"https://m.media-amazon.com/images/I/61Td+yd3qaL.jpg\"",
-      "\"https://m.media-amazon.com/images/I/61ejP+-veEL.jpg\"",
-      "\"https://m.media-amazon.com/images/I/51PIGnEkj3L.jpg\"",
-      "\"https://m.media-amazon.com/images/I/31l0MXnpOaL.jpg\"",
-      "\"https://m.media-amazon.com/images/I/61DIw4n+k5L.jpg\"",
-      "\"https://m.media-amazon.com/images/I/618KedLDcSL.jpg\"",
-      "\"https://m.media-amazon.com/images/I/21VCaQluLdL.jpg\"",
-      "\"https://m.media-amazon.com/images/I/51CN1NRZvfL.jpg\"",
-      "\"https://m.media-amazon.com/images/I/41+Wp7RA6sL.jpg\"]"
+      "https://m.media-amazon.com/images/I/61Td+yd3qaL.jpg|https://m.media-amazon.com/images/I/61ejP+-veEL.jpg|https://m.media-amazon.com/images/I/51PIGnEkj3L.jpg|https://m.media-amazon.com/images/I/31l0MXnpOaL.jpg|https://m.media-amazon.com/images/I/61DIw4n+k5L.jpg|https://m.media-amazon.com/images/I/618KedLDcSL.jpg|https://m.media-amazon.com/images/I/21VCaQluLdL.jpg|https://m.media-amazon.com/images/I/51CN1NRZvfL.jpg|https://m.media-amazon.com/images/I/41+Wp7RA6sL.jpg"
     ],
     "model_number": "",
     "model_name": "",
@@ -98,7 +90,7 @@
     "additional_features": "",
     "customer_rating": 4.5,
     "review_count": 839,
-    "availability": "In stock",
+    "availability": "In Stock",
     "date_first_available": "",
     "source_link": "https://youtube.com/shorts/iDrWd2I_ZA8?si=ETOPQ2lu22RvWZ0o",
     "amazon_short": "https://amzn.to/48HAvgG",
