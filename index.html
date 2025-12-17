@@ -299,6 +299,7 @@
     <script src="assets/js/products.js"></script>
     <script src="assets/js/glass-settings.js"></script>
     <script src="assets/js/main.js"></script>
+    
     <!-- NEW: Reels Scripts -->
     <script src="assets/js/reels-feed.js"></script>
     <script src="assets/js/reels-position.js"></script>
@@ -322,13 +323,7 @@
     <script src="assets/js/music-control.js"></script>
     <script src="assets/js/share.js"></script>
     
-    <!-- PWA Service Worker Registration -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/VibeDrips/sw.js')
-                .then(reg => console.log('Service Worker registered:', reg))
-                .catch(err => console.log('Service Worker registration failed:', err));
-        }
-    </script>
+    <!-- PWA Service Worker Registration with Update Detection -->
+    <script src="assets/js/sw-update-detector.js"></script>
 </body>
 </html>
