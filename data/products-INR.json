@@ -168,7 +168,7 @@
   },
   {
     "asin": "9355991479",
-    "name": "Ikigai English (PB) : Keira Miki",
+    "name": "Ikigai (English) [PB] : Keira Miki",
     "description": "Ikigai English (PB) : Keira Miki - General product",
     "price": 150,
     "currency": "INR",
@@ -178,14 +178,7 @@
     "subcategory": "Book",
     "main_image": "https://m.media-amazon.com/images/I/71CvcFBz4pL.jpg",
     "all_images": [
-      "[\"https://m.media-amazon.com/images/I/71CvcFBz4pL.jpg\"",
-      "\"https://m.media-amazon.com/images/I/71p-ZplZQIL.jpg\"",
-      "\"https://m.media-amazon.com/images/I/51yv-ylzhnL.jpg\"",
-      "\"https://m.media-amazon.com/images/I/41+Il4NyDZL.jpg\"",
-      "\"https://m.media-amazon.com/images/I/41F5wpOupXL.jpg\"",
-      "\"https://m.media-amazon.com/images/I/51HwWkHpvjL.jpg\"",
-      "\"https://m.media-amazon.com/images/I/61UXNnEifJL.jpg\"",
-      "\"https://m.media-amazon.com/images/I/71F-UTAYaVL.jpg\"]"
+      "https://m.media-amazon.com/images/I/71CvcFBz4pL.jpg|https://m.media-amazon.com/images/I/71p-ZplZQIL.jpg|https://m.media-amazon.com/images/I/51yv-ylzhnL.jpg|https://m.media-amazon.com/images/I/41+Il4NyDZL.jpg|https://m.media-amazon.com/images/I/41F5wpOupXL.jpg|https://m.media-amazon.com/images/I/51HwWkHpvjL.jpg|https://m.media-amazon.com/images/I/61UXNnEifJL.jpg|https://m.media-amazon.com/images/I/71F-UTAYaVL.jpg"
     ],
     "model_number": "",
     "model_name": "",
@@ -209,7 +202,7 @@
     "additional_features": "",
     "customer_rating": 4.1,
     "review_count": 705,
-    "availability": "In stock",
+    "availability": "In Stock",
     "date_first_available": "",
     "source_link": "https://youtube.com/shorts/iDrWd2I_ZA8?si=ETOPQ2lu22RvWZ0o",
     "amazon_short": "https://amzn.to/3YhVUXP",
