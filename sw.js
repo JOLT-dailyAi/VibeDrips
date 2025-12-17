@@ -1,7 +1,7 @@
 // sw.js - Service worker for VibeDrips PWA
 // IMPORTANT: Update CACHE_VERSION every time you update products.csv
 
-const CACHE_VERSION = 'v2.1'; // ⬅️ INCREMENT THIS ON EVERY CSV UPDATE (v2.1, v2.2, etc.)
+const CACHE_VERSION = 'v3.0'; // Jump to v3 instead of auto-increment ⬅️ INCREMENT THIS ON EVERY CSV UPDATE (v2.1, v2.2, etc.)
 const CACHE_NAME = `vibedrips-static-${CACHE_VERSION}`;
 const DATA_CACHE = `vibedrips-data-${CACHE_VERSION}`;
 
@@ -204,3 +204,15 @@ self.addEventListener('fetch', event => {
       })
   );
 });
+
+// Nuclear option - clear everything
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => caches.delete(cacheName))
+      );
+    }).then(() => self.clients.claim())
+  );
+});
+
