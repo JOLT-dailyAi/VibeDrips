@@ -7,26 +7,27 @@
       "countries": [
         "India"
       ],
-      "product_count": 7,
+      "product_count": 9,
       "filename": "products-INR.json",
       "categories": [
+        "Electronics",
         "General",
-        "Toys & Games › Action & Toy Figures › Toy Figures"
+        "Toys & Games"
       ],
       "brands": [
-        "Ignyte",
-        "Axor",
+        "boAt",
+        "Diamond Books",
+        "MyMirror Publishing House Pvt. Ltd.",
         "CodersParadise",
-        "Banpresto",
-        "Junkyard"
+        "woopme"
       ],
       "price_range": {
-        "min": 189,
-        "max": 6045
+        "min": 150,
+        "max": 1499
       }
     }
   ],
-  "last_updated": "2025-12-16T02:07:19.003Z",
-  "total_products": 7,
+  "last_updated": "2025-12-17T13:09:30.903Z",
+  "total_products": 9,
   "default_currency": "INR"
 }
