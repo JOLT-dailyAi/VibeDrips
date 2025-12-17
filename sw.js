@@ -1,7 +1,7 @@
 // sw.js - Service worker for VibeDrips PWA
-// Update CACHE_VERSION every time you update products.csv
+// IMPORTANT: Update CACHE_VERSION every time you update products.csv
 
-const CACHE_VERSION = 'v2.0'; // ⬅️ INCREMENT THIS ON EVERY CSV UPDATE
+const CACHE_VERSION = 'v2.0'; // ⬅️ INCREMENT THIS ON EVERY CSV UPDATE (v2.1, v2.2, etc.)
 const CACHE_NAME = `vibedrips-static-${CACHE_VERSION}`;
 const DATA_CACHE = `vibedrips-data-${CACHE_VERSION}`;
 
