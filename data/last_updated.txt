@@ -1,9 +1,9 @@
 VibeDrips Data Processing Summary
-Generated: 2025-12-17T02:02:12.215Z
+Generated: 2025-12-17T12:45:30.952Z
 
 📊 STATISTICS
-- Total Rows Processed: 7
-- Products Successfully Processed: 7
+- Total Rows Processed: 9
+- Products Successfully Processed: 9
 - Errors Encountered: 0
 - Success Rate: 100.0%
 
@@ -12,12 +12,12 @@ Generated: 2025-12-17T02:02:12.215Z
 - Available: INR
 
 📦 CATEGORIES
-- Categories Found: 2
-- Top Categories: Toys & Games › Action & Toy Figures › Toy Figures, General
+- Categories Found: 3
+- Top Categories: General, Electronics, Toys & Games
 
 🏷️ BRANDS
 - Brands Found: 5
-- Top Brands: Banpresto, Junkyard, CodersParadise, Axor, Ignyte
+- Top Brands: Diamond Books, MyMirror Publishing House Pvt. Ltd., boAt, CodersParadise, woopme
 
 📁 FILES BEFORE DELETION
 - last_updated.txt
@@ -32,7 +32,7 @@ Generated: 2025-12-17T02:02:12.215Z
 
 
 📁 FILES GENERATED
-- products-INR.json (7 products)
+- products-INR.json (9 products)
 - currencies.json (manifest)
 
 📁 FINAL FILES PRESENT
