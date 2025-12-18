@@ -56,7 +56,13 @@ function processProductData(product) {
         if (!value) return 0;
         if (typeof value === 'number') return value;
         if (typeof value === 'string') {
-            return parseFloat(value.replace(/[^\d.]/g, '')) || 0;
+            const cleaned = value.replace(/[^\d.]/g, '');
+            const parsed = parseFloat(cleaned) || 0;
+            // 🐛 DEBUG LOG
+            if (product.asin === '9355995008' || product.asin === 'B0FM2Y25HP') {
+                console.log(`🔍 parsePrice("${value}") → cleaned: "${cleaned}" → parsed: ${parsed}`);
+            }
+            return parsed;
         }
         return 0;
     };
@@ -88,15 +94,29 @@ function processProductData(product) {
     
     if (hasOriginalPrice && currentPrice > originalPrice) {
         // INVALID: Current price higher than original (real data error)
-        // Action: Ignore discount, show only current price, log warning
         showDiscount = false;
-        console.warn(`⚠️ Invalid pricing for ${product.asin || 'unknown'}: price (${currentPrice}) > originalPrice (${originalPrice})`);
+        console.warn(`⚠️ Invalid pricing for ${product.asin}: price (${currentPrice}) > originalPrice (${originalPrice})`);
     } else if (!hasOriginalPrice || currentPrice === originalPrice) {
         // No discount: Original price missing or prices match
         showDiscount = false;
     } else if (discountPercent > 0 && originalPrice > currentPrice) {
-        // VALID: Show discount badge (any positive discount, no minimum threshold)
+        // VALID: Show discount badge
         showDiscount = true;
+    }
+    
+    // 🐛 ENHANCED DEBUG - Log first 3 products
+    const debugProducts = ['9355995008', 'B0FM2Y25HP', '9388550315'];
+    if (debugProducts.includes(product.asin)) {
+        console.log(`💰 ${product.asin}:`, {
+            rawPrice: product.price,
+            rawOriginal: product.originalPrice,
+            rawDiscount: product.discountPercentage,
+            parsedPrice: currentPrice,
+            parsedOriginal: originalPrice,
+            computedDiscount: discountPercent,
+            hasOriginalPrice,
+            showDiscount
+        });
     }
     
     // ========================================
