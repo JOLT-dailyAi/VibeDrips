@@ -205,7 +205,7 @@ function convertCsvToJson() {
         if (data.categoryHierarchy) processingStats.categoriesFound.add(extractMainCategory(data.categoryHierarchy));
         if (data.brand) processingStats.brandsFound.add(data.brand);
 
-      // UPDATED: Product object mapping for new CSV structure
+            // UPDATED: Product object mapping for new CSV structure
       const product = {
         asin: generateAsin(data),
         name: data.productTitle || data.Title || '',
@@ -268,8 +268,10 @@ function convertCsvToJson() {
         
         product_type: data.productType || '',
         
-        // ✅ FIXED: Pricing - Changed to camelCase
+        // ✅ FIXED: Pricing - Output BOTH formats for compatibility
+        original_price: cleanAndValidatePrice(data.originalPrice || ''),
         originalPrice: cleanAndValidatePrice(data.originalPrice || ''),
+        discount_percentage: data.discountPercentage || '',
         discountPercentage: data.discountPercentage || '',
         
         featured: false,
