@@ -229,15 +229,14 @@ function renderProducts() {
     
     VibeDrips.filteredProducts.forEach(product => {
         const productCard = createProductCard(product);
-        container.appendChild(productCard);  // ← Append directly to container
+        container.appendChild(productCard); // ← Append directly to container
     });
 
     updateStats();
 }
 
-
 /**
- * Create a product card element - NEW UNIFIED LAYOUT
+ * Create a product card element - UPDATED WITH DISCOUNT BADGE
  */
 function createProductCard(product) {
     const card = document.createElement('div');
@@ -253,13 +252,21 @@ function createProductCard(product) {
     const category = product.subcategory || product.itemTypeName || product.category || 'General';
     const brand = product.brand || 'VibeDrips';
     const rating = parseFloat(product.customer_rating) || 0;
+    const reviewCount = parseInt(product.review_count) || 0;
     
-    // Format price
-    const price = product.price || 0;
+    // Format price (always display current price only)
+    const price = product.display_price || product.price || 0;
     const currency = product.symbol || '₹';
     const priceFormatted = typeof price === 'number' 
         ? `${currency}${price.toLocaleString('en-IN')}` 
         : price;
+    
+    // Discount badge logic (NEW)
+    const showDiscount = product.show_discount || false;
+    const discountPercent = product.computed_discount || 0;
+    const discountBadge = showDiscount && discountPercent > 0 
+        ? `<span class="discount-badge">Save ${discountPercent}%</span>` 
+        : '';
     
     // SVG fallback
     const svgFallback = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23333' width='200' height='200'/%3E%3Ctext fill='%23fff' font-size='14' x='50%25' y='50%25' text-anchor='middle' dy='.3em'%3E${encodeURIComponent(productName?.substring(0, 20) || 'No Image')}%3C/text%3E%3C/svg%3E`;
@@ -279,8 +286,11 @@ function createProductCard(product) {
         <h3 class="product-name">${productName}</h3>
         
         <div class="product-price-row">
-            <span class="product-price">${priceFormatted}</span>
-            ${rating > 0 ? `<span class="rating">⭐ ${rating.toFixed(1)}</span>` : ''}
+            <div class="price-container">
+                ${discountBadge}
+                <span class="product-price">${priceFormatted}</span>
+            </div>
+            ${rating > 0 ? `<span class="rating">⭐ ${rating.toFixed(1)}${reviewCount > 0 ? ` (${reviewCount})` : ''}</span>` : ''}
         </div>
         
         <button class="amazon-button" onclick="event.stopPropagation(); openAmazonLink('${amazonLink}', '${productId}')">
@@ -294,7 +304,6 @@ function createProductCard(product) {
     
     return card;
 }
-
 
 /**
  * Open Amazon/affiliate link
@@ -395,5 +404,4 @@ window.sortProducts = sortProducts;
 window.openAmazonLink = openAmazonLink;
 window.showProductModal = showProductModal;
 // Do not export closeDynamicModal to avoid conflict with closeSimpleModal
-
 console.log('Products.js loaded successfully');
