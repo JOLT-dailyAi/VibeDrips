@@ -176,35 +176,50 @@ body.glass-theme .product-card .discount-badge {
 .product-card .discount-badge .live-dot {
   position: relative;
   display: inline-block;
-  width: 7px;
-  height: 7px;
-  margin-right: 6px;
+
+  width: 6px;
+  height: 6px;
   border-radius: 999px;
-  background: #4ade80; /* same green hue */
-  box-shadow: 0 0 10px rgba(74, 222, 128, 0.6);
+
+  background-color: #4ade80;         /* dot fill */
   flex: 0 0 auto;
+
+  /* keeps it from looking like “text” */
+  font-size: 0;
+  line-height: 0;
+
+  /* alignment */
+  vertical-align: middle;
+  margin-right: 6px;
+
+  box-shadow: 0 0 8px rgba(74, 222, 128, 0.55);
 }
+
 
 /* Pulsing ring */
 .product-card .discount-badge .live-dot::after {
   content: "";
   position: absolute;
-  inset: -5px; /* was -6px */ /* ring size */
+  inset: -3px;                         /* ring size */
   border-radius: 999px;
-  background: rgba(74, 222, 128, 0.45);
-  animation: livePulse 1.2s ease-out infinite; /* slightly faster = more “LIVE” */
-  /* opacity: 0.0;    */
+  background: rgba(74, 222, 128, 0.38);
+  animation: livePulse 1.25s ease-out infinite;
+  pointer-events: none;
 }
 
 @keyframes livePulse {
-  0%   { transform: scale(0.25); opacity: 0.75; }
-  70%  { transform: scale(1);    opacity: 0.0; }
-  100% { transform: scale(1.05); opacity: 0.0; }
+  0%   { transform: scale(0.1); opacity: 0.55; }
+  70%  { transform: scale(1);   opacity: 0; }
+  100% { transform: scale(1.05); opacity: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .product-card .discount-badge .live-dot::after { animation: none; opacity: 0; }
+  .product-card .discount-badge .live-dot::after {
+    animation: none;
+    opacity: 0;
+  }
 }
+
 
 /* ====================================== */
 /* PRICE ROW - Updated Layout */
