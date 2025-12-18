@@ -51,13 +51,27 @@ function processProductData(product) {
     // DISCOUNT VALIDATION & COMPUTATION LOGIC
     // ========================================
     
+    // Helper function to safely parse price (handles both string and number)
+    const parsePrice = (value) => {
+        if (!value) return 0;
+        if (typeof value === 'number') return value;
+        if (typeof value === 'string') {
+            return parseFloat(value.replace(/[^\d.]/g, '')) || 0;
+        }
+        return 0;
+    };
+    
     // Parse pricing fields from CSV (exact column names from products.csv)
-    const currentPrice = parseFloat(product.price?.replace(/[^\d.]/g, '')) || 0;
-    const originalPrice = parseFloat(product.originalPrice?.replace(/[^\d.]/g, '')) || 0;
-    let discountPercent = parseInt(product.discountPercentage?.replace(/[^\d]/g, '')) || 0;
+    const currentPrice = parsePrice(product.price);
+    const originalPrice = parsePrice(product.originalPrice);
+    let discountPercent = parseInt(
+        typeof product.discountPercentage === 'string' 
+            ? product.discountPercentage.replace(/[^\d]/g, '') 
+            : product.discountPercentage
+    ) || 0;
     
     // Auto-calculate discount if missing but prices differ
-    if (discountPercent === 0 && originalPrice > currentPrice) {
+    if (discountPercent === 0 && originalPrice > currentPrice && currentPrice > 0) {
         discountPercent = Math.round(((originalPrice - currentPrice) / originalPrice) * 100);
     }
     
