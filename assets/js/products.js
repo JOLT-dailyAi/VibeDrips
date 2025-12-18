@@ -265,7 +265,7 @@ function createProductCard(product) {
     const showDiscount = product.show_discount || false;
     const discountPercent = product.computed_discount || 0;
     const discountBadge = showDiscount && discountPercent > 0 
-        ? `<span class="discount-badge">Save ${discountPercent}%</span>` 
+        ? `<span class="discount-badge"><span class="save-dot" aria-hidden="true">⦿</span> ${discountPercent}%</span>`
         : '';
     
     // SVG fallback
