@@ -128,9 +128,12 @@ body.glass-theme .product-card .product-category {
 /* Price Container - Wrapper for badge + price */
 .product-card .price-container {
     display: flex;
-    flex-direction: row;      /* was column */
-    gap: 6px;                 /* small gap between badge and price */
-    align-items: center;  /* was flex-start */
+    flex-direction: row;
+    gap: 6px;
+    align-items: center;
+
+    flex: 1 1 auto;
+    min-width: 0; /* allows flex children to shrink properly */
 }
 
 /* Light theme: green chip (same hue as dark) */
@@ -191,8 +194,14 @@ body.glass-theme .product-card .discount-badge {
     color: #ca8a04;
     font-weight: 500;
     font-size: 13px;
+
+    flex: 0 1 auto;      /* allow shrink */
+    min-width: 0;
+    max-width: 45%;
+    overflow: hidden;
+    text-overflow: ellipsis;
     white-space: nowrap;
-    flex-shrink: 0; /* Prevent rating from shrinking */
+    text-align: right;
 }
 
 /* Glass Theme - White name, Bright colors */
