@@ -133,36 +133,36 @@ body.glass-theme .product-card .product-category {
     align-items: center;  /* was flex-start */
 }
 
-/* Light theme - Solid green with white text */
+/* Light theme: green chip (same hue as dark) */
 .product-card .discount-badge {
-    background: rgba(17, 24, 39, 0.86);
-    border: 1px solid rgba(22, 163, 74, 0.35); /* subtle value cue */
-    color: rgba(255,255,255,0.95);
-    padding: 2px 6px;
-    border-radius: 999px;
-    font-size: 0.65rem;
-    font-weight: 500;
-    letter-spacing: 0.3px;
-    white-space: nowrap;
-    text-transform: none;
+  background: rgba(74, 222, 128, 0.22);   /* #4ade80 tint */
+  border: 1px solid rgba(74, 222, 128, 0.35);
+  color: #14532d;                         /* deep green text for light bg */
+  padding: 2px 6px;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  text-transform: none;
 }
 
-/* Dark theme - keep green tint but use white text for consistency */
+/* Dark theme: same hue, higher contrast */
 body.dark-theme .product-card .discount-badge {
-    background: rgba(74, 222, 128, 0.22);
-    border: 1px solid rgba(74, 222, 128, 0.35);
-    color: #ffffff; /* changed from #4ade80 */
-    backdrop-filter: blur(10px) saturate(180%);
-    -webkit-backdrop-filter: blur(10px) saturate(180%);
+  background: rgba(74, 222, 128, 0.22);
+  border: 1px solid rgba(74, 222, 128, 0.35);
+  color: #ffffff;
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
 }
 
-/* Glass theme - Keep as is (looks good!) */
+/* Glass theme: keep glass look but tint it green */
 body.glass-theme .product-card .discount-badge {
-    background: rgba(255, 255, 255, 0.18);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: white;
-    backdrop-filter: blur(10px) saturate(180%);
-    -webkit-backdrop-filter: blur(10px) saturate(180%);
+  background: rgba(74, 222, 128, 0.16);  /* green-tinted glass */
+  border: 1px solid rgba(74, 222, 128, 0.28);
+  color: #ffffff;
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
 }
 
 /* ====================================== */
