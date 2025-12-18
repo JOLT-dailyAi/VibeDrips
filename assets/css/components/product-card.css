@@ -136,19 +136,21 @@ body.glass-theme .product-card .product-category {
     min-width: 0; /* allows flex children to shrink properly */
 }
 
-/* Light theme: green chip (same hue as dark) */
+/* Light theme: charcoal chip so green live-dot + % pop */
 .product-card .discount-badge {
-  background: rgba(74, 222, 128, 0.22);   /* #4ade80 tint */
-  border: 1px solid rgba(74, 222, 128, 0.35);
-  color: #14532d;                         /* deep green text for light bg */
-  padding: 2px 6px;
+  background: rgba(17, 24, 39, 0.92);     /* near-black */
+  border: 1px solid rgba(74, 222, 128, 0.5); /* green border (same hue) */
+  color: rgba(255, 255, 255, 0.95);       /* white text */
+
+  padding: 1px 5px;                       /* tighter */
   border-radius: 999px;
   font-size: 0.65rem;
   font-weight: 500;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.2px;                  /* slightly less */
   white-space: nowrap;
   text-transform: none;
 }
+
 
 /* Dark theme: same hue, higher contrast */
 body.dark-theme .product-card .discount-badge {
@@ -185,7 +187,7 @@ body.glass-theme .product-card .discount-badge {
 .product-card .discount-badge .live-dot::after {
   content: "";
   position: absolute;
-  inset: -6px; /* ring size */
+  inset: inset: -5px; /* was -6px */ /* ring size */
   border-radius: 999px;
   background: rgba(74, 222, 128, 0.35);
   animation: livePulse 1.6s ease-out infinite;
@@ -218,7 +220,7 @@ body.glass-theme .product-card .discount-badge {
 /* Price - DEFAULT: Dark Green for Light Theme */
 .product-card .product-price {
     color: #16a34a;
-    font-size: 1.1rem;
+    font-size: 1rem; /* from 1.1rem */
     font-weight: 600;
     margin: 0;
 }
@@ -306,11 +308,16 @@ body.dark-theme .product-card .rating {
     
     .product-card .rating {
         font-size: 11px;
+        max-width: 58%; /* was 45% */
+    }
+
+    .product-card .price-container {
+        gap: 4px; /* was 6px */
     }
     
     .product-card .discount-badge {
         font-size: 0.65rem; /* Even smaller on mobile */
-        padding: 2px 6px;
+        padding: 1px 5px; /* tighter */
     }
     
     .product-card .amazon-button {
