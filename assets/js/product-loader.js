@@ -51,7 +51,7 @@ function processProductData(product) {
     // DISCOUNT VALIDATION & COMPUTATION LOGIC
     // ========================================
     
-    // Helper function to safely parse price (handles both string and number)
+    // Helper function to safely parse price (handles both string and number, removes currency symbols)
     const parsePrice = (value) => {
         if (!value) return 0;
         if (typeof value === 'number') return value;
@@ -61,7 +61,7 @@ function processProductData(product) {
         return 0;
     };
     
-        // Parse pricing fields from CSV (exact column names from products.csv)
+    // Parse pricing fields from CSV (exact column names from products.csv)
     const currentPrice = parsePrice(product.price);
     const originalPrice = parsePrice(product.originalPrice);
     
@@ -80,7 +80,7 @@ function processProductData(product) {
     // Validate discount logic
     let showDiscount = false;
     
-    // Check if originalPrice field was actually provided (not just missing)
+    // Check if originalPrice field was actually provided (not just missing/empty)
     const hasOriginalPrice = product.originalPrice !== undefined && 
                              product.originalPrice !== null && 
                              product.originalPrice !== '' &&
@@ -98,7 +98,6 @@ function processProductData(product) {
         // VALID: Show discount badge (any positive discount, no minimum threshold)
         showDiscount = true;
     }
-
     
     // ========================================
     // RETURN NORMALIZED PRODUCT DATA
