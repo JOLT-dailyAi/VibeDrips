@@ -61,14 +61,16 @@ function processProductData(product) {
         return 0;
     };
     
-    // Parse pricing fields from CSV (exact column names from products.csv)
+        // Parse pricing fields from CSV (exact column names from products.csv)
     const currentPrice = parsePrice(product.price);
     const originalPrice = parsePrice(product.originalPrice);
-    let discountPercent = parseInt(
-        typeof product.discountPercentage === 'string' 
-            ? product.discountPercentage.replace(/[^\d]/g, '') 
-            : product.discountPercentage
-    ) || 0;
+    
+    // Parse discount percentage (handles "27%" format)
+    let discountPercent = 0;
+    if (product.discountPercentage) {
+        const percentStr = String(product.discountPercentage).replace(/[^\d.]/g, '');
+        discountPercent = parseInt(percentStr) || 0;
+    }
     
     // Auto-calculate discount if missing but prices differ
     if (discountPercent === 0 && originalPrice > currentPrice && currentPrice > 0) {
@@ -78,18 +80,25 @@ function processProductData(product) {
     // Validate discount logic
     let showDiscount = false;
     
-    if (currentPrice > originalPrice) {
-        // INVALID: Current price higher than original
+    // Check if originalPrice field was actually provided (not just missing)
+    const hasOriginalPrice = product.originalPrice !== undefined && 
+                             product.originalPrice !== null && 
+                             product.originalPrice !== '' &&
+                             originalPrice > 0;
+    
+    if (hasOriginalPrice && currentPrice > originalPrice) {
+        // INVALID: Current price higher than original (real data error)
         // Action: Ignore discount, show only current price, log warning
         showDiscount = false;
         console.warn(`⚠️ Invalid pricing for ${product.asin || 'unknown'}: price (${currentPrice}) > originalPrice (${originalPrice})`);
-    } else if (currentPrice === originalPrice || originalPrice === 0) {
-        // No discount: Prices match or no original price
+    } else if (!hasOriginalPrice || currentPrice === originalPrice) {
+        // No discount: Original price missing or prices match
         showDiscount = false;
     } else if (discountPercent > 0 && originalPrice > currentPrice) {
         // VALID: Show discount badge (any positive discount, no minimum threshold)
         showDiscount = true;
     }
+
     
     // ========================================
     // RETURN NORMALIZED PRODUCT DATA
