@@ -205,76 +205,76 @@ function convertCsvToJson() {
         if (data.categoryHierarchy) processingStats.categoriesFound.add(extractMainCategory(data.categoryHierarchy));
         if (data.brand) processingStats.brandsFound.add(data.brand);
 
-        // UPDATED: Product object mapping for new CSV structure
-        const product = {
-          asin: generateAsin(data),
-          name: data.productTitle || data.Title || '',
-          description: data.Description || '',
-          price: cleanAndValidatePrice(data.price),
-          currency: currency,
-          symbol: currency === 'MISC' ? '🎁' : (CURRENCY_MAP[currency]?.symbol || currency),
-          brand: data.brand || '',
-          
-          // Updated category mapping
-          category: extractMainCategory(data.categoryHierarchy || data.Category),
-          subcategory: data.itemTypeName || '',
-          
-          // Images - Handle JSON string format
-          main_image: data.MainImage || '',
-          all_images: (() => {
-            if (!data.AllImages) return [];
-            try {
-              return typeof data.AllImages === 'string' ? JSON.parse(data.AllImages) : data.AllImages;
-            } catch (e) {
-              return data.AllImages.split(',').map(url => url.trim());
-            }
-          })(),
-          
-          // Product details
-          color: data.color || '',
-          material: data.material || '',
-          dimensions: data.dimensions || '',
-          weight: data.weight || '',
-          theme: data.theme || '',
-          character: data.character || '',
-          
-          // Product specs
-          minimum_age: data.minimumAge || '',
-          number_of_pieces: data.numberOfPieces || '',
-          unit_count: data.unitCount || '',
-          included_components: data.includedComponents || '',
-          additional_features: data.additionalFeatures || '',
-          
-          // Rating - Support both field names
-          customer_rating: data.customerRating || data.Rating || '',
-          review_count: parseInt(data.reviewCount || data.ReviewCount) || 0,
-          
-          availability: data.availability || '',
-          
-          // Links
-          source_link: data['Product Source Link'] || '',
-          amazon_short: data['Amazon SiteStripe (Short)'] || '',
-          amazon_long: data['Amazon SiteStripe (Long)'] || '',
-          affiliate_link: data['Amazon SiteStripe (Short)'] || '',
-          
-          timestamp: data.Timestamp ? new Date(data.Timestamp).toISOString() : new Date().toISOString(),
-          
-          // Manufacturer info
-          manufacturer: data.manufacturer || '',
-          manufacturer_contact: data.manufacturerContact || '',
-          packer: data.packer || '',
-          importer: data.importer || '',
-          country_of_origin: data.countryOfOrigin || '',
-          
-          product_type: data.productType || '',
-          
-          // Pricing
-          original_price: data.originalPrice || '',
-          discount_percentage: data.discountPercentage || '',
-          
-          featured: false,
-          trending: false
-        };
+      // UPDATED: Product object mapping for new CSV structure
+      const product = {
+        asin: generateAsin(data),
+        name: data.productTitle || data.Title || '',
+        description: data.Description || '',
+        price: cleanAndValidatePrice(data.price),
+        currency: currency,
+        symbol: currency === 'MISC' ? '🎁' : (CURRENCY_MAP[currency]?.symbol || currency),
+        brand: data.brand || '',
+        
+        // Updated category mapping
+        category: extractMainCategory(data.categoryHierarchy || data.Category),
+        subcategory: data.itemTypeName || '',
+        
+        // Images - Handle JSON string format
+        main_image: data.MainImage || '',
+        all_images: (() => {
+          if (!data.AllImages) return [];
+          try {
+            return typeof data.AllImages === 'string' ? JSON.parse(data.AllImages) : data.AllImages;
+          } catch (e) {
+            return data.AllImages.split(',').map(url => url.trim());
+          }
+        })(),
+        
+        // Product details
+        color: data.color || '',
+        material: data.material || '',
+        dimensions: data.dimensions || '',
+        weight: data.weight || '',
+        theme: data.theme || '',
+        character: data.character || '',
+        
+        // Product specs
+        minimum_age: data.minimumAge || '',
+        number_of_pieces: data.numberOfPieces || '',
+        unit_count: data.unitCount || '',
+        included_components: data.includedComponents || '',
+        additional_features: data.additionalFeatures || '',
+        
+        // Rating - Support both field names
+        customer_rating: data.customerRating || data.Rating || '',
+        review_count: parseInt(data.reviewCount || data.ReviewCount) || 0,
+        
+        availability: data.availability || '',
+        
+        // Links
+        source_link: data['Product Source Link'] || '',
+        amazon_short: data['Amazon SiteStripe (Short)'] || '',
+        amazon_long: data['Amazon SiteStripe (Long)'] || '',
+        affiliate_link: data['Amazon SiteStripe (Short)'] || '',
+        
+        timestamp: data.Timestamp ? new Date(data.Timestamp).toISOString() : new Date().toISOString(),
+        
+        // Manufacturer info
+        manufacturer: data.manufacturer || '',
+        manufacturer_contact: data.manufacturerContact || '',
+        packer: data.packer || '',
+        importer: data.importer || '',
+        country_of_origin: data.countryOfOrigin || '',
+        
+        product_type: data.productType || '',
+        
+        // ✅ FIXED: Pricing - Changed to camelCase
+        originalPrice: cleanAndValidatePrice(data.originalPrice || ''),
+        discountPercentage: data.discountPercentage || '',
+        
+        featured: false,
+        trending: false
+      };
 
         if (!currencyResults[currency]) currencyResults[currency] = [];
         currencyResults[currency].push(product);
