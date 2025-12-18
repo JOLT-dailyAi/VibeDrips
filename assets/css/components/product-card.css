@@ -168,6 +168,36 @@ body.glass-theme .product-card .discount-badge {
   -webkit-backdrop-filter: blur(10px) saturate(180%);
 }
 
+/* Discount badge dot (always pulsing) */
+.product-card .discount-badge .save-dot {
+  display: inline-block;
+  margin-right: 4px;
+  color: #4ade80;
+  text-shadow: 0 0 10px rgba(74, 222, 128, 0.55);
+  transform-origin: center;
+  animation: saveDotPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes saveDotPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.85;
+    text-shadow: 0 0 8px rgba(74, 222, 128, 0.35);
+  }
+  50% {
+    transform: scale(1.18);
+    opacity: 1;
+    text-shadow: 0 0 14px rgba(74, 222, 128, 0.7);
+  }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .product-card .discount-badge .save-dot {
+    animation: none;
+  }
+}
+
 /* ====================================== */
 /* PRICE ROW - Updated Layout */
 /* ====================================== */
