@@ -287,8 +287,8 @@ function createProductCard(product) {
         
         <div class="product-price-row">
             <div class="price-container">
-                ${discountBadge}
                 <span class="product-price">${priceFormatted}</span>
+                ${discountBadge}
             </div>
             ${rating > 0 ? `<span class="rating">⭐ ${rating.toFixed(1)}${reviewCount > 0 ? ` (${reviewCount})` : ''}</span>` : ''}
         </div>
