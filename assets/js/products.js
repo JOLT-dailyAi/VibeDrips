@@ -253,6 +253,13 @@ function createProductCard(product) {
     const brand = product.brand || 'VibeDrips';
     const rating = parseFloat(product.customer_rating) || 0;
     const reviewCount = parseInt(product.review_count) || 0;
+
+    // ✅ ADD THIS RIGHT HERE (inside createProductCard)
+    const formatCount = (n) => {
+      if (!n || n < 1000) return String(n || 0);
+      if (n < 10000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+      return Math.round(n / 1000) + 'k';
+    };
     
     // Format price (always display current price only)
     const price = product.display_price || product.price || 0;
@@ -265,9 +272,7 @@ function createProductCard(product) {
     const showDiscount = product.show_discount || false;
     const discountPercent = product.computed_discount || 0;
     const discountBadge = showDiscount && discountPercent > 0 
-        ? `<span class="discount-badge">
-       <span class="live-dot" aria-hidden="true"></span>${discountPercent}%
-     </span>`
+        ? `<span class="discount-badge"><span class="live-dot" aria-hidden="true"></span>${discountPercent}%</span>`
         : '';
     
     // SVG fallback
@@ -292,7 +297,7 @@ function createProductCard(product) {
                 <span class="product-price">${priceFormatted}</span>
                 ${discountBadge}
             </div>
-            ${rating > 0 ? `<span class="rating">⭐ ${rating.toFixed(1)}${reviewCount > 0 ? ` (${reviewCount})` : ''}</span>` : ''}
+            ${rating > 0 ? `<span class="rating">⭐ ${rating.toFixed(1)}${reviewCount > 0 ? ` (${formatCount(reviewCount)})` : ''}</span>` : ''}
         </div>
         
         <button class="amazon-button" onclick="event.stopPropagation(); openAmazonLink('${amazonLink}', '${productId}')">
