@@ -45,8 +45,8 @@
     "importer": "Imagine Marketing Ltd",
     "country_of_origin": "China",
     "product_type": "Electronics",
-    "original_price": "₹3,490",
-    "discount_percentage": "57%",
+    "originalPrice": 3490,
+    "discountPercentage": "57%",
     "featured": false,
     "trending": false
   },
@@ -89,8 +89,8 @@
     "importer": "",
     "country_of_origin": "India",
     "product_type": "Book",
-    "original_price": "₹280",
-    "discount_percentage": "16%",
+    "originalPrice": 280,
+    "discountPercentage": "16%",
     "featured": false,
     "trending": false
   },
@@ -141,8 +141,8 @@
     "importer": "",
     "country_of_origin": "India",
     "product_type": "Book",
-    "original_price": "₹399",
-    "discount_percentage": "35%",
+    "originalPrice": 399,
+    "discountPercentage": "35%",
     "featured": false,
     "trending": false
   },
@@ -185,8 +185,8 @@
     "importer": "",
     "country_of_origin": "India",
     "product_type": "Book",
-    "original_price": "₹200",
-    "discount_percentage": "25%",
+    "originalPrice": 200,
+    "discountPercentage": "25%",
     "featured": false,
     "trending": false
   },
@@ -229,8 +229,8 @@
     "importer": "",
     "country_of_origin": "India",
     "product_type": "Book",
-    "original_price": "₹300",
-    "discount_percentage": "27%",
+    "originalPrice": 300,
+    "discountPercentage": "27%",
     "featured": false,
     "trending": false
   },
@@ -280,8 +280,8 @@
     "importer": "",
     "country_of_origin": "India",
     "product_type": "Sticker Pack",
-    "original_price": "₹699",
-    "discount_percentage": "63%",
+    "originalPrice": 699,
+    "discountPercentage": "63%",
     "featured": false,
     "trending": false
   },
@@ -328,8 +328,8 @@
     "importer": "",
     "country_of_origin": "India",
     "product_type": "Sticker Pack",
-    "original_price": "₹259",
-    "discount_percentage": "22%",
+    "originalPrice": 259,
+    "discountPercentage": "22%",
     "featured": false,
     "trending": false
   },
@@ -379,8 +379,8 @@
     "importer": "",
     "country_of_origin": "India",
     "product_type": "Sticker Pack",
-    "original_price": "₹259",
-    "discount_percentage": "22%",
+    "originalPrice": 259,
+    "discountPercentage": "22%",
     "featured": false,
     "trending": false
   },
@@ -430,8 +430,8 @@
     "importer": "",
     "country_of_origin": "India",
     "product_type": "Sticker Pack",
-    "original_price": "₹699",
-    "discount_percentage": "63%",
+    "originalPrice": 699,
+    "discountPercentage": "63%",
     "featured": false,
     "trending": false
   }
