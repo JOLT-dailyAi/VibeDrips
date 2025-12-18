@@ -189,8 +189,8 @@ body.glass-theme .product-card .discount-badge {
   position: absolute;
   inset: inset: -5px; /* was -6px */ /* ring size */
   border-radius: 999px;
-  background: rgba(74, 222, 128, 0.35);
-  animation: livePulse 1.6s ease-out infinite;
+  background: rgba(74, 222, 128, 0.45);
+  animation: livePulse 1.2s ease-out infinite; /* slightly faster = more “LIVE” */
   opacity: 0.0;
 }
 
