@@ -130,7 +130,7 @@ body.glass-theme .product-card .product-category {
     display: flex;
     flex-direction: row;
     gap: 6px;
-    align-items: center;
+    align-items: stretch;   /* ✅ was center */
 
     flex: 1 1 auto;
     min-width: 0; /* allows flex children to shrink properly */
@@ -141,8 +141,10 @@ body.glass-theme .product-card .product-category {
   background: rgba(17, 24, 39, 0.92);     /* near-black */
   border: 1px solid rgba(74, 222, 128, 0.5); /* green border (same hue) */
   color: rgba(255, 255, 255, 0.95);       /* white text */
-
-  padding: 1px 5px;                       /* tighter */
+  display: inline-flex;    /* ✅ allows centering + height */
+  align-items: center;
+  height: 18px;        /* same as price line-height */
+  padding: 0 6px;      /* since height is fixed, vertical padding should be 0 */
   border-radius: 999px;
   font-size: 0.65rem;
   font-weight: 500;
@@ -219,6 +221,7 @@ body.glass-theme .product-card .discount-badge {
 
 /* Price - DEFAULT: Dark Green for Light Theme */
 .product-card .product-price {
+    line-height: 18px;   /* adjust if needed */
     color: #16a34a;
     font-size: 1rem; /* from 1.1rem */
     font-weight: 600;
