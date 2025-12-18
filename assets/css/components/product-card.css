@@ -130,7 +130,7 @@ body.glass-theme .product-card .product-category {
     display: flex;
     flex-direction: row;      /* was column */
     gap: 6px;                 /* small gap between badge and price */
-    align-items: flex-start;
+    align-items: center;  /* was flex-start */
 }
 
 /* Discount Badge - Glass Morphism Style (Universal across all themes) */
