@@ -229,7 +229,7 @@ function renderProducts() {
 
     VibeDrips.filteredProducts.forEach(product => {
         const productCard = createProductCard(product);
-        container.appendChild(productCard); // ← Append directly to container
+        container.appendChild(productCard);
     });
 
     updateStats();
@@ -297,7 +297,7 @@ const formatPrice = (amount, currencyCode = 'INR', symbol = '₹', compact = tru
   const rules = CURRENCY_FORMAT_RULES[currencyCode] || CURRENCY_FORMAT_RULES['DEFAULT'];
 
   if (compact) {
-    // ✅ UPDATED: No decimals in compact mode
+    // No decimals in compact mode
     if (num < 1000) return `${symbol}${Math.round(num)}`;
     for (const unit of rules.units) {
       if (num >= unit.value) {
@@ -309,6 +309,17 @@ const formatPrice = (amount, currencyCode = 'INR', symbol = '₹', compact = tru
   } else {
     return `${symbol}${num.toLocaleString(rules.locale, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}`;
   }
+};
+
+// ✅ NEW: Truncate text with word boundary (for brand/category)
+const truncateTextAtWord = (text, maxChars = 18) => {
+  if (!text || text.length <= maxChars) return text;
+  const truncated = text.substring(0, maxChars);
+  const lastSpace = truncated.lastIndexOf(' ');
+  if (lastSpace > 0) {
+    return truncated.substring(0, lastSpace) + '...';
+  }
+  return truncated + '...';
 };
 
 /**
@@ -325,8 +336,11 @@ function createProductCard(product) {
     const amazonLink = product.amazon_short || product.amazon_long || product.source_link || '#';
     const productName = product.name || product.productTitle || 'Product Name';
     const productId = product.asin || product.id || '';
-    const category = product.subcategory || product.itemTypeName || product.category || 'General';
-    const brand = product.brand || 'VibeDrips';
+
+    // ✅ UPDATED: Truncate category and brand to 18 chars at word boundary
+    const category = truncateTextAtWord(product.subcategory || product.itemTypeName || product.category || 'General', 18);
+    const brand = truncateTextAtWord(product.brand || 'VibeDrips', 18);
+
     const rating = parseFloat(product.customer_rating) || 0;
     const reviewCount = parseInt(product.review_count) || 0;
 
@@ -343,7 +357,7 @@ function createProductCard(product) {
     const symbol = product.symbol || '₹';
     const priceFormatted = formatPrice(price, currencyCode, symbol, true); // Compact format
 
-    // Discount badge logic (NEW)
+    // Discount badge logic
     const showDiscount = product.show_discount || false;
     const discountPercent = product.computed_discount || 0;
     const discountBadge = showDiscount && discountPercent > 0 
@@ -443,7 +457,7 @@ function showProductModal(productId) {
  * Close dynamic modal (specific to modals created by showProductModal)
  */
 function closeDynamicModal(event) {
-    event.stopPropagation(); // Prevent event from bubbling further if needed
+    event.stopPropagation();
     const modal = event.target.closest('.dynamic-modal');
     if (modal) {
         if (event.target.classList.contains('modal-overlay') || event.target.closest('button')) {
@@ -490,5 +504,4 @@ window.filterProducts = filterProducts;
 window.sortProducts = sortProducts;
 window.openAmazonLink = openAmazonLink;
 window.showProductModal = showProductModal;
-// Do not export closeDynamicModal to avoid conflict with closeSimpleModal
-console.log('Products.js loaded successfully with currency-aware price formatting');
+console.log('Products.js loaded successfully with currency-aware price formatting and text truncation');
