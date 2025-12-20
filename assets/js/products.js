@@ -229,14 +229,14 @@ function renderProducts() {
 
     VibeDrips.filteredProducts.forEach(product => {
         const productCard = createProductCard(product);
-        container.appendChild(productCard); // ← Append directly to container
+        container.appendChild(productCard);
     });
 
     updateStats();
 }
 
 // ============================================
-// ✅ Currency-aware price formatting
+// ✅ CURRENCY-AWARE FORMATTING SYSTEM
 // ============================================
 
 const CURRENCY_FORMAT_RULES = {
@@ -289,6 +289,9 @@ const CURRENCY_FORMAT_RULES = {
   }
 };
 
+/**
+ * Format price with currency-aware abbreviations
+ */
 const formatPrice = (amount, currencyCode = 'INR', symbol = '₹', compact = true) => {
   if (!amount || amount === 0) return `${symbol}0`;
   const num = parseFloat(amount);
@@ -297,7 +300,7 @@ const formatPrice = (amount, currencyCode = 'INR', symbol = '₹', compact = tru
   const rules = CURRENCY_FORMAT_RULES[currencyCode] || CURRENCY_FORMAT_RULES['DEFAULT'];
 
   if (compact) {
-    // ✅ UPDATED: No decimals in compact mode
+    // No decimals in compact mode
     if (num < 1000) return `${symbol}${Math.round(num)}`;
     for (const unit of rules.units) {
       if (num >= unit.value) {
@@ -307,12 +310,39 @@ const formatPrice = (amount, currencyCode = 'INR', symbol = '₹', compact = tru
     }
     return `${symbol}${Math.round(num)}`;
   } else {
+    // Full format with decimals
     return `${symbol}${num.toLocaleString(rules.locale, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}`;
   }
 };
 
 /**
- * Create a product card element - UPDATED WITH DISCOUNT BADGE
+ * Format review count with K suffix
+ */
+const formatCount = (n) => {
+  if (!n || n < 1000) return String(n || 0);
+  if (n < 10000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+  return Math.round(n / 1000) + 'k';
+};
+
+/**
+ * Truncate text to max chars at last complete word
+ */
+const truncateText = (text, maxChars = 18) => {
+  if (!text || text.length <= maxChars) return text;
+  const truncated = text.substring(0, maxChars);
+  const lastSpace = truncated.lastIndexOf(' ');
+  if (lastSpace > 0) {
+    return truncated.substring(0, lastSpace) + '...';
+  }
+  return truncated + '...';
+};
+
+// ============================================
+// PRODUCT CARD CREATION
+// ============================================
+
+/**
+ * Create a product card element
  */
 function createProductCard(product) {
     const card = document.createElement('div');
@@ -325,28 +355,13 @@ function createProductCard(product) {
     const amazonLink = product.amazon_short || product.amazon_long || product.source_link || '#';
     const productName = product.name || product.productTitle || 'Product Name';
     const productId = product.asin || product.id || '';
+
+    // ✅ Truncate category and brand (18 char limit)
     const category = truncateText(product.subcategory || product.itemTypeName || product.category || 'General', 18);
     const brand = truncateText(product.brand || 'VibeDrips', 18);
+
     const rating = parseFloat(product.customer_rating) || 0;
     const reviewCount = parseInt(product.review_count) || 0;
-
-    // ✅ Format review count helper
-    const formatCount = (n) => {
-      if (!n || n < 1000) return String(n || 0);
-      if (n < 10000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
-      return Math.round(n / 1000) + 'k';
-    };
-
-    // ✅ Truncate text to max chars at last complete word (reusable)
-    const truncateText = (text, maxChars = 18) => {
-      if (!text || text.length <= maxChars) return text;
-      const truncated = text.substring(0, maxChars);
-      const lastSpace = truncated.lastIndexOf(' ');
-      if (lastSpace > 0) {
-        return truncated.substring(0, lastSpace) + '...';
-      }
-      return truncated + '...';
-    };
 
     // ✅ Use formatPrice with currency awareness (compact, no decimals)
     const price = product.display_price || product.price || 0;
@@ -354,7 +369,7 @@ function createProductCard(product) {
     const symbol = product.symbol || '₹';
     const priceFormatted = formatPrice(price, currencyCode, symbol, true); // Compact format
 
-    // Discount badge logic (NEW)
+    // Discount badge logic
     const showDiscount = product.show_discount || false;
     const discountPercent = product.computed_discount || 0;
     const discountBadge = showDiscount && discountPercent > 0 
@@ -454,7 +469,7 @@ function showProductModal(productId) {
  * Close dynamic modal (specific to modals created by showProductModal)
  */
 function closeDynamicModal(event) {
-    event.stopPropagation(); // Prevent event from bubbling further if needed
+    event.stopPropagation();
     const modal = event.target.closest('.dynamic-modal');
     if (modal) {
         if (event.target.classList.contains('modal-overlay') || event.target.closest('button')) {
@@ -501,5 +516,4 @@ window.filterProducts = filterProducts;
 window.sortProducts = sortProducts;
 window.openAmazonLink = openAmazonLink;
 window.showProductModal = showProductModal;
-// Do not export closeDynamicModal to avoid conflict with closeSimpleModal
-console.log('Products.js loaded successfully with currency-aware price formatting');
+console.log('Products.js loaded successfully with currency-aware formatting and text truncation');
