@@ -325,8 +325,8 @@ function createProductCard(product) {
     const amazonLink = product.amazon_short || product.amazon_long || product.source_link || '#';
     const productName = product.name || product.productTitle || 'Product Name';
     const productId = product.asin || product.id || '';
-    const category = product.subcategory || product.itemTypeName || product.category || 'General';
-    const brand = truncateBrand(product.brand || 'VibeDrips', 18);
+    const category = truncateText(product.subcategory || product.itemTypeName || product.category || 'General', 18);
+    const brand = truncateText(product.brand || 'VibeDrips', 18);
     const rating = parseFloat(product.customer_rating) || 0;
     const reviewCount = parseInt(product.review_count) || 0;
 
@@ -337,20 +337,14 @@ function createProductCard(product) {
       return Math.round(n / 1000) + 'k';
     };
 
-    // ✅ ADD THIS HELPER (after formatCount, around line 338)
-    const truncateBrand = (brandName, maxChars = 18) => {
-      if (!brandName || brandName.length <= maxChars) return brandName;
-      
-      // Find last complete word within limit
-      const truncated = brandName.substring(0, maxChars);
+    // ✅ Truncate text to max chars at last complete word (reusable)
+    const truncateText = (text, maxChars = 18) => {
+      if (!text || text.length <= maxChars) return text;
+      const truncated = text.substring(0, maxChars);
       const lastSpace = truncated.lastIndexOf(' ');
-      
-      // If there's a space, cut at last complete word
       if (lastSpace > 0) {
         return truncated.substring(0, lastSpace) + '...';
       }
-      
-      // Otherwise, just truncate at char limit
       return truncated + '...';
     };
 
