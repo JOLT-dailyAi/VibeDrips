@@ -236,7 +236,7 @@ function renderProducts() {
 }
 
 // ============================================
-// ✅ NEW: Currency-aware price formatting
+// ✅ Currency-aware price formatting
 // ============================================
 
 const CURRENCY_FORMAT_RULES = {
@@ -297,14 +297,15 @@ const formatPrice = (amount, currencyCode = 'INR', symbol = '₹', compact = tru
   const rules = CURRENCY_FORMAT_RULES[currencyCode] || CURRENCY_FORMAT_RULES['DEFAULT'];
 
   if (compact) {
-    if (num < 1000) return `${symbol}${num.toFixed(2)}`;
+    // ✅ UPDATED: No decimals in compact mode
+    if (num < 1000) return `${symbol}${Math.round(num)}`;
     for (const unit of rules.units) {
       if (num >= unit.value) {
         const formatted = (num / unit.value).toFixed(1).replace(/\.0$/, '');
         return `${symbol}${formatted}${unit.suffix}`;
       }
     }
-    return `${symbol}${num.toFixed(2)}`;
+    return `${symbol}${Math.round(num)}`;
   } else {
     return `${symbol}${num.toLocaleString(rules.locale, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}`;
   }
@@ -336,7 +337,7 @@ function createProductCard(product) {
       return Math.round(n / 1000) + 'k';
     };
 
-    // ✅ UPDATED: Use formatPrice with currency awareness
+    // ✅ Use formatPrice with currency awareness (compact, no decimals)
     const price = product.display_price || product.price || 0;
     const currencyCode = product.currency || 'INR';
     const symbol = product.symbol || '₹';
@@ -408,7 +409,7 @@ function showProductModal(productId) {
         return;
     }
 
-    // ✅ UPDATED: Use formatPrice for modal (full format)
+    // ✅ Use formatPrice for modal (full format with decimals)
     const currencyCode = product.currency || 'INR';
     const symbol = product.symbol || '₹';
     const priceFormatted = formatPrice(product.price, currencyCode, symbol, false); // Full format
