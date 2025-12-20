@@ -2,406 +2,567 @@
  * Set time-based filter for products
  */
 function setTimeFilter(filter) {
-    console.log(`Setting time filter: ${filter}`);
-    VibeDrips.currentTimeFilter = filter;
-    
-    // Update active filter UI
-    document.querySelectorAll('.time-category').forEach(cat => {
-        cat.classList.remove('active');
-        if (cat.getAttribute('data-filter') === filter) {
-            cat.classList.add('active');
-        }
-    });
+  console.log(`Setting time filter: ${filter}`);
+  VibeDrips.currentTimeFilter = filter;
 
-    // Filter products based on selected filter
-    switch (filter) {
-        case 'hot':
-            VibeDrips.filteredProducts = getHotProducts();
-            break;
-        case 'featured':
-            VibeDrips.filteredProducts = VibeDrips.allProducts.filter(product => product.featured);
-            break;
-        case 'new':
-            VibeDrips.filteredProducts = getNewArrivals();
-            break;
-        case 'trending':
-            VibeDrips.filteredProducts = VibeDrips.allProducts.filter(product => product.trending);
-            break;
-        case 'all':
-            VibeDrips.filteredProducts = [...VibeDrips.allProducts];
-            break;
-        default:
-            VibeDrips.filteredProducts = [...VibeDrips.allProducts];
+  // Update active filter UI
+  document.querySelectorAll('.time-category').forEach(cat => {
+    cat.classList.remove('active');
+    if (cat.getAttribute('data-filter') === filter) {
+      cat.classList.add('active');
     }
+  });
 
-    updateSectionTitle(filter);
-    applyCurrentFilters();
-    renderProducts();
+  // Filter products based on selected filter
+  switch (filter) {
+    case 'hot':
+      VibeDrips.filteredProducts = getHotProducts();
+      break;
+    case 'featured':
+      VibeDrips.filteredProducts = VibeDrips.allProducts.filter(product => product.featured);
+      break;
+    case 'new':
+      VibeDrips.filteredProducts = getNewArrivals();
+      break;
+    case 'trending':
+      VibeDrips.filteredProducts = VibeDrips.allProducts.filter(product => product.trending);
+      break;
+    case 'all':
+      VibeDrips.filteredProducts = [...VibeDrips.allProducts];
+      break;
+    default:
+      VibeDrips.filteredProducts = [...VibeDrips.allProducts];
+  }
+
+  updateSectionTitle(filter);
+  applyCurrentFilters();
+  renderProducts();
 }
 
 /**
  * Get "Hot This Month" products based on dateFirstAvailable
  */
 function getHotProducts() {
-    const currentDate = new Date();
-    const currentMonth = currentDate.getMonth();
-    const currentYear = currentDate.getFullYear();
-    
-    return VibeDrips.allProducts.filter(product => {
-        const dateStr = product.date_first_available || product.dateFirstAvailable || product.timestamp;
-        if (!dateStr) return false;
-        
-        try {
-            const productDate = new Date(dateStr);
-            return (productDate.getMonth() === currentMonth && 
-                    productDate.getFullYear() === currentYear) ||
-                   (productDate.getMonth() === (currentMonth - 1 + 12) % 12 && 
-                    productDate.getFullYear() === currentYear);
-        } catch (error) {
-            console.warn('Invalid date format for product:', product.name, dateStr);
-            return false;
-        }
-    }).sort((a, b) => {
-        const dateA = new Date(a.date_first_available || a.dateFirstAvailable || a.timestamp);
-        const dateB = new Date(b.date_first_available || b.dateFirstAvailable || b.timestamp);
-        return dateB - dateA;
-    });
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth();
+  const currentYear = currentDate.getFullYear();
+
+  return VibeDrips.allProducts.filter(product => {
+    const dateStr = product.date_first_available || product.dateFirstAvailable || product.timestamp;
+    if (!dateStr) return false;
+
+    try {
+      const productDate = new Date(dateStr);
+      return (productDate.getMonth() === currentMonth && productDate.getFullYear() === currentYear) ||
+             (productDate.getMonth() === (currentMonth - 1 + 12) % 12 && productDate.getFullYear() === currentYear);
+    } catch (error) {
+      console.warn('Invalid date format for product:', product.name, dateStr);
+      return false;
+    }
+  }).sort((a, b) => {
+    const dateA = new Date(a.date_first_available || a.dateFirstAvailable || a.timestamp);
+    const dateB = new Date(b.date_first_available || b.dateFirstAvailable || b.timestamp);
+    return dateB - dateA;
+  });
 }
 
 /**
  * Get new arrivals (last 30 days based on timestamp)
  */
 function getNewArrivals() {
-    const thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    
-    return VibeDrips.allProducts
-        .filter(product => {
-            const productDate = new Date(product.timestamp);
-            return productDate >= thirtyDaysAgo;
-        })
-        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+  return VibeDrips.allProducts
+    .filter(product => {
+      const productDate = new Date(product.timestamp);
+      return productDate >= thirtyDaysAgo;
+    })
+    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 }
 
 /**
  * Update section titles
  */
 function updateSectionTitle(filter) {
-    const titles = {
-        'hot': { 
-            title: 'Hot This Month', 
-            subtitle: 'Trending products that just dropped and making waves'
-        },
-        'featured': { 
-            title: 'Featured Products', 
-            subtitle: 'Our hand-picked recommendations just for you'
-        },
-        'new': { 
-            title: 'New Arrivals', 
-            subtitle: 'Fresh drops from the last 30 days'
-        },
-        'trending': { 
-            title: 'Trending Now', 
-            subtitle: 'What everyone is talking about'
-        },
-        'all': { 
-            title: 'All Products', 
-            subtitle: 'Complete collection of curated finds'
-        }
-    };
-    
-    const titleInfo = titles[filter] || titles['all'];
-    
-    if (VibeDrips.elements.sectionTitle) {
-        VibeDrips.elements.sectionTitle.textContent = titleInfo.title;
+  const titles = {
+    'hot': {
+      title: 'Hot This Month',
+      subtitle: 'Trending products that just dropped and making waves'
+    },
+    'featured': {
+      title: 'Featured Products',
+      subtitle: 'Our hand-picked recommendations just for you'
+    },
+    'new': {
+      title: 'New Arrivals',
+      subtitle: 'Fresh drops from the last 30 days'
+    },
+    'trending': {
+      title: 'Trending Now',
+      subtitle: 'What everyone is talking about'
+    },
+    'all': {
+      title: 'All Products',
+      subtitle: 'Complete collection of curated finds'
     }
-    if (VibeDrips.elements.sectionSubtitle) {
-        VibeDrips.elements.sectionSubtitle.textContent = titleInfo.subtitle;
-    }
+  };
+
+  const titleInfo = titles[filter] || titles['all'];
+
+  if (VibeDrips.elements.sectionTitle) {
+    VibeDrips.elements.sectionTitle.textContent = titleInfo.title;
+  }
+
+  if (VibeDrips.elements.sectionSubtitle) {
+    VibeDrips.elements.sectionSubtitle.textContent = titleInfo.subtitle;
+  }
 }
 
 /**
  * Apply current search and category filters
  */
 function applyCurrentFilters() {
-    const searchInput = VibeDrips.elements.search;
-    const categoryFilter = VibeDrips.elements.categoryFilter;
-    
-    const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
-    const categoryValue = categoryFilter ? categoryFilter.value.trim() : '';
+  const searchInput = VibeDrips.elements.search;
+  const categoryFilter = VibeDrips.elements.categoryFilter;
 
-    if (searchTerm || categoryValue) {
-        VibeDrips.filteredProducts = VibeDrips.filteredProducts.filter(product => {
-            const searchFields = [
-                product.name, 
-                product.description, 
-                product.category,
-                product.subcategory,
-                product.brand
-            ].filter(field => field && field.toString().trim());
-            
-            const matchesSearch = !searchTerm || searchFields.some(field => 
-                field.toString().toLowerCase().includes(searchTerm)
-            );
+  const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
+  const categoryValue = categoryFilter ? categoryFilter.value.trim() : '';
 
-            const matchesCategory = !categoryValue || 
-                product.category === categoryValue || 
-                product.subcategory === categoryValue;
+  if (searchTerm || categoryValue) {
+    VibeDrips.filteredProducts = VibeDrips.filteredProducts.filter(product => {
+      const searchFields = [
+        product.name,
+        product.description,
+        product.category,
+        product.subcategory,
+        product.brand
+      ].filter(field => field && field.toString().trim());
 
-            return matchesSearch && matchesCategory;
-        });
-    }
+      const matchesSearch = !searchTerm || searchFields.some(field =>
+        field.toString().toLowerCase().includes(searchTerm)
+      );
+
+      const matchesCategory = !categoryValue ||
+        product.category === categoryValue ||
+        product.subcategory === categoryValue;
+
+      return matchesSearch && matchesCategory;
+    });
+  }
 }
 
 /**
  * Filter products based on search and category
  */
 function filterProducts() {
-    setTimeFilter(VibeDrips.currentTimeFilter);
+  setTimeFilter(VibeDrips.currentTimeFilter);
 }
 
 /**
  * Sort products based on selected criteria
  */
 function sortProducts() {
-    const sortSelect = VibeDrips.elements.priceSort;
-    if (!sortSelect) return;
-    
-    const sortBy = sortSelect.value;
+  const sortSelect = VibeDrips.elements.priceSort;
+  if (!sortSelect) return;
 
-    switch (sortBy) {
-        case 'price-low':
-            VibeDrips.filteredProducts.sort((a, b) => a.price - b.price);
-            break;
-        case 'price-high':
-            VibeDrips.filteredProducts.sort((a, b) => b.price - a.price);
-            break;
-        case 'name':
-            VibeDrips.filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
-            break;
-        case 'rating':
-            VibeDrips.filteredProducts.sort((a, b) => b.customer_rating - a.customer_rating);
-            break;
-        case 'date-new':
-            VibeDrips.filteredProducts.sort((a, b) => {
-                const dateA = new Date(a.date_first_available || a.timestamp);
-                const dateB = new Date(b.date_first_available || b.timestamp);
-                return dateB - dateA;
-            });
-            break;
-        default:
-            VibeDrips.filteredProducts.sort((a, b) => {
-                if (a.featured && !b.featured) return -1;
-                if (!a.featured && b.featured) return 1;
-                
-                const dateA = new Date(a.date_first_available || a.timestamp);
-                const dateB = new Date(b.date_first_available || b.timestamp);
-                return dateB - dateA;
-            });
-    }
+  const sortBy = sortSelect.value;
 
-    renderProducts();
+  switch (sortBy) {
+    case 'price-low':
+      VibeDrips.filteredProducts.sort((a, b) => a.price - b.price);
+      break;
+    case 'price-high':
+      VibeDrips.filteredProducts.sort((a, b) => b.price - a.price);
+      break;
+    case 'name':
+      VibeDrips.filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+      break;
+    case 'rating':
+      VibeDrips.filteredProducts.sort((a, b) => b.customer_rating - a.customer_rating);
+      break;
+    case 'date-new':
+      VibeDrips.filteredProducts.sort((a, b) => {
+        const dateA = new Date(a.date_first_available || a.timestamp);
+        const dateB = new Date(b.date_first_available || b.timestamp);
+        return dateB - dateA;
+      });
+      break;
+    default:
+      VibeDrips.filteredProducts.sort((a, b) => {
+        if (a.featured && !b.featured) return -1;
+        if (!a.featured && b.featured) return 1;
+        const dateA = new Date(a.date_first_available || a.timestamp);
+        const dateB = new Date(b.date_first_available || b.timestamp);
+        return dateB - dateA;
+      });
+  }
+
+  renderProducts();
 }
 
 /**
  * Render all filtered products
  */
 function renderProducts() {
-    const container = VibeDrips.elements.productsContainer;
-    if (!container) return;
-    
-    if (VibeDrips.filteredProducts.length === 0) {
-        container.innerHTML = `
-            <div class="no-products">
-                <div class="no-products-icon">🔍</div>
-                <h3>No products found</h3>
-                <p>Try adjusting your search or filters to see more products.</p>
-                <button onclick="setTimeFilter('all')" class="retry-button">
-                    Show All Products
-                </button>
-            </div>`;
-        updateStats();
-        return;
-    }
+  const container = VibeDrips.elements.productsContainer;
+  if (!container) return;
 
-    // Clear container and add cards directly (no wrapper needed)
-    container.innerHTML = '';
-    
-    VibeDrips.filteredProducts.forEach(product => {
-        const productCard = createProductCard(product);
-        container.appendChild(productCard); // ← Append directly to container
-    });
-
+  if (VibeDrips.filteredProducts.length === 0) {
+    container.innerHTML = `
+      <div class="no-results">
+        <div class="no-results-icon">🔍</div>
+        <h3>No products found</h3>
+        <p>Try adjusting your search or filters to see more products.</p>
+        <button onclick="setTimeFilter('all')" class="btn btn-primary">Show All Products</button>
+      </div>
+    `;
     updateStats();
+    return;
+  }
+
+  // Clear container and add cards directly (no wrapper needed)
+  container.innerHTML = '';
+  VibeDrips.filteredProducts.forEach(product => {
+    const productCard = createProductCard(product);
+    container.appendChild(productCard);
+  });
+
+  updateStats();
 }
 
+// ============================================
+// ✅ NEW: CURRENCY-AWARE FORMATTING SYSTEM
+// ============================================
+
 /**
- * Create a product card element - UPDATED WITH DISCOUNT BADGE
+ * Currency formatting rules by region
+ */
+const CURRENCY_FORMAT_RULES = {
+  'INR': {
+    name: 'Indian Rupee',
+    units: [
+      { value: 10000000, suffix: 'Cr', name: 'Crore' },      // 1 Crore = 10 Million
+      { value: 100000, suffix: 'L', name: 'Lakh' },          // 1 Lakh = 100K
+      { value: 1000, suffix: 'K', name: 'Thousand' }
+    ],
+    fullFormat: { locale: 'en-IN', options: { maximumFractionDigits: 2, minimumFractionDigits: 2 } }
+  },
+  
+  'USD': {
+    name: 'US Dollar',
+    units: [
+      { value: 1000000000, suffix: 'B', name: 'Billion' },
+      { value: 1000000, suffix: 'M', name: 'Million' },
+      { value: 1000, suffix: 'K', name: 'Thousand' }
+    ],
+    fullFormat: { locale: 'en-US', options: { maximumFractionDigits: 2, minimumFractionDigits: 2 } }
+  },
+  
+  'EUR': {
+    name: 'Euro',
+    units: [
+      { value: 1000000000, suffix: 'Mrd', name: 'Milliarde' },
+      { value: 1000000, suffix: 'Mio', name: 'Million' },
+      { value: 1000, suffix: 'K', name: 'Thousand' }
+    ],
+    fullFormat: { locale: 'de-DE', options: { maximumFractionDigits: 2, minimumFractionDigits: 2 } }
+  },
+  
+  'GBP': {
+    name: 'British Pound',
+    units: [
+      { value: 1000000000, suffix: 'B', name: 'Billion' },
+      { value: 1000000, suffix: 'M', name: 'Million' },
+      { value: 1000, suffix: 'K', name: 'Thousand' }
+    ],
+    fullFormat: { locale: 'en-GB', options: { maximumFractionDigits: 2, minimumFractionDigits: 2 } }
+  },
+  
+  'JPY': {
+    name: 'Japanese Yen',
+    units: [
+      { value: 100000000, suffix: '億', name: 'Oku (100M)' },
+      { value: 10000, suffix: '万', name: 'Man (10K)' },
+      { value: 1000, suffix: 'K', name: 'Thousand' }
+    ],
+    fullFormat: { locale: 'ja-JP', options: { maximumFractionDigits: 0 } }
+  },
+  
+  'CAD': {
+    name: 'Canadian Dollar',
+    units: [
+      { value: 1000000000, suffix: 'B', name: 'Billion' },
+      { value: 1000000, suffix: 'M', name: 'Million' },
+      { value: 1000, suffix: 'K', name: 'Thousand' }
+    ],
+    fullFormat: { locale: 'en-CA', options: { maximumFractionDigits: 2, minimumFractionDigits: 2 } }
+  },
+  
+  'AUD': {
+    name: 'Australian Dollar',
+    units: [
+      { value: 1000000000, suffix: 'B', name: 'Billion' },
+      { value: 1000000, suffix: 'M', name: 'Million' },
+      { value: 1000, suffix: 'K', name: 'Thousand' }
+    ],
+    fullFormat: { locale: 'en-AU', options: { maximumFractionDigits: 2, minimumFractionDigits: 2 } }
+  },
+  
+  // Default for unsupported currencies
+  'DEFAULT': {
+    name: 'Generic',
+    units: [
+      { value: 1000000, suffix: 'M', name: 'Million' },
+      { value: 1000, suffix: 'K', name: 'Thousand' }
+    ],
+    fullFormat: { locale: 'en-US', options: { maximumFractionDigits: 2, minimumFractionDigits: 2 } }
+  }
+};
+
+/**
+ * Format price with currency-aware abbreviations
+ * @param {number} amount - Price amount
+ * @param {string} currencyCode - Currency code (INR, USD, etc.)
+ * @param {string} symbol - Currency symbol (₹, $, etc.)
+ * @param {boolean} compact - If true, use compact format (K/L/M), else full format
+ */
+const formatPrice = (amount, currencyCode = 'INR', symbol = '₹', compact = true) => {
+  if (!amount || amount === 0) return `${symbol}0`;
+  
+  const num = parseFloat(amount);
+  if (isNaN(num)) return `${symbol}0`;
+  
+  const rules = CURRENCY_FORMAT_RULES[currencyCode] || CURRENCY_FORMAT_RULES['DEFAULT'];
+  
+  // Compact format (for product cards)
+  if (compact) {
+    // Less than 1,000 - show full amount
+    if (num < 1000) {
+      return `${symbol}${num.toFixed(2)}`;
+    }
+    
+    // Find appropriate unit
+    for (const unit of rules.units) {
+      if (num >= unit.value) {
+        const formatted = (num / unit.value).toFixed(1).replace(/\.0$/, '');
+        return `${symbol}${formatted}${unit.suffix}`;
+      }
+    }
+    
+    return `${symbol}${num.toFixed(2)}`;
+  }
+  
+  // Full format (for product details/modal)
+  else {
+    return `${symbol}${num.toLocaleString(rules.fullFormat.locale, rules.fullFormat.options)}`;
+  }
+};
+
+/**
+ * Format review count with K suffix
+ */
+const formatCount = (n) => {
+  if (!n || n < 1000) return String(n || 0);
+  if (n < 10000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+  return Math.round(n / 1000) + 'k';
+};
+
+// ============================================
+// PRODUCT CARD CREATION
+// ============================================
+
+/**
+ * Create a product card element - UPDATED WITH CURRENCY-AWARE PRICING
  */
 function createProductCard(product) {
-    const card = document.createElement('div');
-    card.className = 'product-card';
-    
-    // Extract all fields from product data
-    const imageUrl = product.main_image || '';
-    const allImages = [product.main_image, ...(product.all_images || [])].filter(Boolean);
-    const imageCount = allImages.length;
-    const amazonLink = product.amazon_short || product.amazon_long || product.source_link || '#';
-    const productName = product.name || product.productTitle || 'Product Name';
-    const productId = product.asin || product.id || '';
-    const category = product.subcategory || product.itemTypeName || product.category || 'General';
-    const brand = product.brand || 'VibeDrips';
-    const rating = parseFloat(product.customer_rating) || 0;
-    const reviewCount = parseInt(product.review_count) || 0;
+  const card = document.createElement('div');
+  card.className = 'product-card';
 
-    // ✅ ADD THIS RIGHT HERE (inside createProductCard)
-    const formatCount = (n) => {
-      if (!n || n < 1000) return String(n || 0);
-      if (n < 10000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
-      return Math.round(n / 1000) + 'k';
-    };
-    
-    // Format price (always display current price only)
-    const price = product.display_price || product.price || 0;
-    const currency = product.symbol || '₹';
-    const priceFormatted = typeof price === 'number' 
-        ? `${currency}${price.toLocaleString('en-IN')}` 
-        : price;
-    
-    // Discount badge logic (NEW)
-    const showDiscount = product.show_discount || false;
-    const discountPercent = product.computed_discount || 0;
-    const discountBadge = showDiscount && discountPercent > 0 
-        ? `<span class="discount-badge"><span class="live-dot" aria-hidden="true"></span>${discountPercent}%</span>`
-        : '';
-    
-    // SVG fallback
-    const svgFallback = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23333' width='200' height='200'/%3E%3Ctext fill='%23fff' font-size='14' x='50%25' y='50%25' text-anchor='middle' dy='.3em'%3E${encodeURIComponent(productName?.substring(0, 20) || 'No Image')}%3C/text%3E%3C/svg%3E`;
-    
-    card.innerHTML = `
-        <div class="product-image-wrapper">
-            <img src="${imageUrl || svgFallback}" 
-                 alt="${productName}"
-                 loading="lazy"
-                 onerror="this.src='${svgFallback}'">
-            
-            ${imageCount > 1 ? `<div class="image-count">${imageCount} photos</div>` : ''}
-            ${brand ? `<div class="brand-tag">🏷️ ${brand}</div>` : ''}
+  // Extract all fields from product data
+  const imageUrl = product.main_image || '';
+  const allImages = [product.main_image, ...(product.all_images || [])].filter(Boolean);
+  const imageCount = allImages.length;
+  const amazonLink = product.amazon_short || product.amazon_long || product.source_link || '#';
+  const productName = product.name || product.productTitle || 'Product Name';
+  const productId = product.asin || product.id || '';
+  const category = product.subcategory || product.itemTypeName || product.category || 'General';
+  const brand = product.brand || 'VibeDrips';
+  const rating = parseFloat(product.customer_rating) || 0;
+  const reviewCount = parseInt(product.review_count) || 0;
+
+  // ✅ UPDATED: Use currency-aware formatting (COMPACT for cards)
+  const price = product.display_price || product.price || 0;
+  const currencyCode = product.currency || 'INR';
+  const symbol = product.symbol || '₹';
+  const priceFormatted = formatPrice(price, currencyCode, symbol, true);  // Compact format
+
+  // Discount badge logic
+  const showDiscount = product.show_discount || false;
+  const discountPercent = product.computed_discount || 0;
+  const discountBadge = showDiscount && discountPercent > 0 
+    ? `<span class="discount-badge">-${discountPercent}%</span>` 
+    : '';
+
+  // SVG fallback
+  const svgFallback = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23333' width='200' height='200'/%3E%3Ctext fill='%23fff' font-size='14' x='50%25' y='50%25' text-anchor='middle' dy='.3em'%3E${encodeURIComponent(productName?.substring(0, 20) || 'No Image')}%3C/text%3E%3C/svg%3E`;
+
+  card.innerHTML = `
+    <div class="product-image-wrapper">
+      <img 
+        src="${imageUrl}" 
+        alt="${productName}"
+        onerror="this.src='${svgFallback}'"
+        loading="lazy"
+      >
+      ${imageCount > 1 ? `
+        <div class="image-count-badge">
+          📷 ${imageCount} photos
         </div>
-        
-        <div class="product-category">${category}</div>
-        <h3 class="product-name">${productName}</h3>
-        
-        <div class="product-price-row">
-            <div class="price-container">
-                <span class="product-price">${priceFormatted}</span>
-                ${discountBadge}
-            </div>
-            ${rating > 0 ? `<span class="rating">⭐ ${rating.toFixed(1)}${reviewCount > 0 ? ` (${formatCount(reviewCount)})` : ''}</span>` : ''}
+      ` : ''}
+      ${brand ? `
+        <div class="brand-badge">
+          🏷️ ${brand}
         </div>
-        
-        <button class="amazon-button" onclick="event.stopPropagation(); openAmazonLink('${amazonLink}', '${productId}')">
-            🛒 Buy on Amazon
-        </button>
-    `;
-    
-    // Make entire card clickable to open modal
-    card.onclick = () => showProductModal(productId);
-    card.style.cursor = 'pointer';
-    
-    return card;
+      ` : ''}
+    </div>
+    <div class="product-details">
+      <span class="product-category">${category}</span>
+      <h3 class="product-name">${productName}</h3>
+      <div class="product-price-row">
+        <span class="product-price">${priceFormatted}</span>
+        ${discountBadge}
+      </div>
+      ${rating > 0 ? `
+        <div class="product-rating">
+          ⭐ ${rating.toFixed(1)}${reviewCount > 0 ? ` (${formatCount(reviewCount)})` : ''}
+        </div>
+      ` : ''}
+      <button 
+        class="btn btn-primary btn-buy" 
+        onclick="event.stopPropagation(); openAmazonLink('${amazonLink}', '${productId}')">
+        🛒 Buy on Amazon
+      </button>
+    </div>
+  `;
+
+  // Make entire card clickable to open modal
+  card.onclick = () => showProductModal(productId);
+  card.style.cursor = 'pointer';
+
+  return card;
 }
 
 /**
  * Open Amazon/affiliate link
  */
 function openAmazonLink(link, productId) {
-    if (link && link !== '#' && link !== '') {
-        console.log('Amazon redirect:', productId, link);
-        window.open(link, '_blank', 'noopener,noreferrer');
-    } else {
-        console.warn('No Amazon link available for product:', productId);
-    }
+  if (link && link !== '#' && link !== '') {
+    console.log('Amazon redirect:', productId, link);
+    window.open(link, '_blank', 'noopener,noreferrer');
+  } else {
+    console.warn('No Amazon link available for product:', productId);
+  }
 }
 
 /**
- * Show detailed product modal
+ * Show detailed product modal - UPDATED WITH CURRENCY-AWARE PRICING
  */
 function showProductModal(productId) {
-    const product = VibeDrips.allProducts.find(p => p.id === productId);
-    if (!product) {
-        console.error('Product not found:', productId);
-        return;
-    }
+  const product = VibeDrips.allProducts.find(p => p.id === productId || p.asin === productId);
+  if (!product) {
+    console.error('Product not found:', productId);
+    return;
+  }
 
-    // Create dynamic modal with separate overlay and content
-    const modalContent = `
-        <div class="simple-modal dynamic-modal">
-            <div class="modal-overlay" onclick="closeDynamicModal(event)"></div>
-            <div class="simple-modal-content">
-                <div class="simple-modal-header">
-                    <h2>${escapeHtml(product.name)}</h2>
-                    <button onclick="closeDynamicModal(event)">X</button>
-                </div>
-                <div class="simple-modal-body">
-                    <img src="${product.main_image}" alt="${escapeHtml(product.name)}" style="max-width: 200px;">
-                    <p><strong>Price:</strong> ₹${product.price}</p>
-                    <p><strong>Brand:</strong> ${escapeHtml(product.brand)}</p>
-                    <p><strong>Category:</strong> ${escapeHtml(product.category)}</p>
-                    <p><strong>Description:</strong> ${escapeHtml(product.description)}</p>
-                    <button onclick="openAmazonLink('${escapeHtml(product.amazon_short || product.amazon_long || product.source_link || '#')}', '${product.id}')" 
-                            class="amazon-button">🛒 Buy on Amazon</button>
-                </div>
-            </div>
+  // ✅ UPDATED: Use currency-aware formatting (FULL format for modal)
+  const currencyCode = product.currency || 'INR';
+  const symbol = product.symbol || '₹';
+  const currentPrice = formatPrice(product.price, currencyCode, symbol, false);  // Full format
+  
+  const originalPrice = product.original_price || product.originalPrice;
+  const originalPriceFormatted = originalPrice && originalPrice > product.price 
+    ? formatPrice(originalPrice, currencyCode, symbol, false) 
+    : null;
+
+  const amazonLink = product.amazon_short || product.amazon_long || product.source_link || '#';
+
+  // Create dynamic modal with separate overlay and content
+  const modalContent = `
+    <div class="dynamic-modal" onclick="closeDynamicModal(event)">
+      <div class="modal-overlay"></div>
+      <div class="modal-content" onclick="event.stopPropagation()">
+        <div class="modal-header">
+          <h2>${escapeHtml(product.name)}</h2>
+          <button class="modal-close" onclick="closeDynamicModal(event)">✕</button>
         </div>
-    `;
-    
-    document.body.insertAdjacentHTML('beforeend', modalContent);
+        <div class="modal-body">
+          <p><strong>Price:</strong> ${currentPrice} ${originalPriceFormatted ? `<span class="original-price" style="text-decoration: line-through; opacity: 0.6; margin-left: 8px;">${originalPriceFormatted}</span>` : ''}</p>
+          <p><strong>Brand:</strong> ${escapeHtml(product.brand || 'N/A')}</p>
+          <p><strong>Category:</strong> ${escapeHtml(product.category || 'N/A')}</p>
+          <p><strong>Description:</strong> ${escapeHtml(product.description || 'No description available')}</p>
+          ${product.customer_rating ? `<p><strong>Rating:</strong> ⭐ ${parseFloat(product.customer_rating).toFixed(1)} ${product.review_count ? `(${formatCount(parseInt(product.review_count))} reviews)` : ''}</p>` : ''}
+        </div>
+        <div class="modal-footer">
+          <a href="${amazonLink}" 
+             target="_blank" 
+             rel="noopener noreferrer" 
+             class="btn btn-primary">
+            🛒 Buy on Amazon
+          </a>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.insertAdjacentHTML('beforeend', modalContent);
 }
 
 /**
  * Close dynamic modal (specific to modals created by showProductModal)
  */
 function closeDynamicModal(event) {
-    event.stopPropagation(); // Prevent event from bubbling further if needed
-    const modal = event.target.closest('.dynamic-modal');
-    if (modal) {
-        if (event.target.classList.contains('modal-overlay') || event.target.closest('button')) {
-            modal.remove();
-        }
+  event.stopPropagation();
+  const modal = event.target.closest('.dynamic-modal');
+  if (modal) {
+    if (event.target.classList.contains('modal-overlay') || 
+        event.target.closest('button.modal-close')) {
+      modal.remove();
     }
+  }
 }
 
 /**
  * Update statistics display
  */
 function updateStats() {
-    if (VibeDrips.elements.productCount) {
-        VibeDrips.elements.productCount.textContent = VibeDrips.filteredProducts.length;
-    }
-    if (VibeDrips.elements.categoryCount) {
-        VibeDrips.elements.categoryCount.textContent = VibeDrips.categories.size;
-    }
+  if (VibeDrips.elements.productCount) {
+    VibeDrips.elements.productCount.textContent = VibeDrips.filteredProducts.length;
+  }
+
+  if (VibeDrips.elements.categoryCount) {
+    VibeDrips.elements.categoryCount.textContent = VibeDrips.categories.size;
+  }
 }
 
 /**
  * Utility functions
  */
 function escapeHtml(unsafe) {
-    if (!unsafe) return '';
-    return unsafe
-        .toString()
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+  if (!unsafe) return '';
+  return unsafe
+    .toString()
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
 function truncateText(text, maxLength) {
-    if (!text) return '';
-    if (text.length <= maxLength) return text;
-    return text.substr(0, maxLength) + '...';
+  if (!text) return '';
+  if (text.length <= maxLength) return text;
+  return text.substr(0, maxLength) + '...';
 }
 
 // Export functions to global scope
@@ -410,5 +571,5 @@ window.filterProducts = filterProducts;
 window.sortProducts = sortProducts;
 window.openAmazonLink = openAmazonLink;
 window.showProductModal = showProductModal;
-// Do not export closeDynamicModal to avoid conflict with closeSimpleModal
-console.log('Products.js loaded successfully');
+
+console.log('Products.js loaded successfully with currency-aware formatting');
