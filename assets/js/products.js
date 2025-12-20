@@ -232,135 +232,85 @@ function renderProducts() {
 }
 
 // ============================================
-// ✅ NEW: CURRENCY-AWARE FORMATTING SYSTEM
+// ✅ NEW: CURRENCY-AWARE FORMATTING (MINIMAL ADD)
 // ============================================
 
-/**
- * Currency formatting rules by region
- */
 const CURRENCY_FORMAT_RULES = {
   'INR': {
-    name: 'Indian Rupee',
     units: [
-      { value: 10000000, suffix: 'Cr', name: 'Crore' },      // 1 Crore = 10 Million
-      { value: 100000, suffix: 'L', name: 'Lakh' },          // 1 Lakh = 100K
-      { value: 1000, suffix: 'K', name: 'Thousand' }
+      { value: 10000000, suffix: 'Cr' },
+      { value: 100000, suffix: 'L' },
+      { value: 1000, suffix: 'K' }
     ],
-    fullFormat: { locale: 'en-IN', options: { maximumFractionDigits: 2, minimumFractionDigits: 2 } }
+    locale: 'en-IN'
   },
-  
   'USD': {
-    name: 'US Dollar',
     units: [
-      { value: 1000000000, suffix: 'B', name: 'Billion' },
-      { value: 1000000, suffix: 'M', name: 'Million' },
-      { value: 1000, suffix: 'K', name: 'Thousand' }
+      { value: 1000000000, suffix: 'B' },
+      { value: 1000000, suffix: 'M' },
+      { value: 1000, suffix: 'K' }
     ],
-    fullFormat: { locale: 'en-US', options: { maximumFractionDigits: 2, minimumFractionDigits: 2 } }
+    locale: 'en-US'
   },
-  
   'EUR': {
-    name: 'Euro',
     units: [
-      { value: 1000000000, suffix: 'Mrd', name: 'Milliarde' },
-      { value: 1000000, suffix: 'Mio', name: 'Million' },
-      { value: 1000, suffix: 'K', name: 'Thousand' }
+      { value: 1000000000, suffix: 'Mrd' },
+      { value: 1000000, suffix: 'Mio' },
+      { value: 1000, suffix: 'K' }
     ],
-    fullFormat: { locale: 'de-DE', options: { maximumFractionDigits: 2, minimumFractionDigits: 2 } }
+    locale: 'de-DE'
   },
-  
   'GBP': {
-    name: 'British Pound',
     units: [
-      { value: 1000000000, suffix: 'B', name: 'Billion' },
-      { value: 1000000, suffix: 'M', name: 'Million' },
-      { value: 1000, suffix: 'K', name: 'Thousand' }
+      { value: 1000000000, suffix: 'B' },
+      { value: 1000000, suffix: 'M' },
+      { value: 1000, suffix: 'K' }
     ],
-    fullFormat: { locale: 'en-GB', options: { maximumFractionDigits: 2, minimumFractionDigits: 2 } }
+    locale: 'en-GB'
   },
-  
   'JPY': {
-    name: 'Japanese Yen',
     units: [
-      { value: 100000000, suffix: '億', name: 'Oku (100M)' },
-      { value: 10000, suffix: '万', name: 'Man (10K)' },
-      { value: 1000, suffix: 'K', name: 'Thousand' }
+      { value: 100000000, suffix: '億' },
+      { value: 10000, suffix: '万' },
+      { value: 1000, suffix: 'K' }
     ],
-    fullFormat: { locale: 'ja-JP', options: { maximumFractionDigits: 0 } }
+    locale: 'ja-JP'
   },
-  
-  'CAD': {
-    name: 'Canadian Dollar',
-    units: [
-      { value: 1000000000, suffix: 'B', name: 'Billion' },
-      { value: 1000000, suffix: 'M', name: 'Million' },
-      { value: 1000, suffix: 'K', name: 'Thousand' }
-    ],
-    fullFormat: { locale: 'en-CA', options: { maximumFractionDigits: 2, minimumFractionDigits: 2 } }
-  },
-  
-  'AUD': {
-    name: 'Australian Dollar',
-    units: [
-      { value: 1000000000, suffix: 'B', name: 'Billion' },
-      { value: 1000000, suffix: 'M', name: 'Million' },
-      { value: 1000, suffix: 'K', name: 'Thousand' }
-    ],
-    fullFormat: { locale: 'en-AU', options: { maximumFractionDigits: 2, minimumFractionDigits: 2 } }
-  },
-  
-  // Default for unsupported currencies
   'DEFAULT': {
-    name: 'Generic',
     units: [
-      { value: 1000000, suffix: 'M', name: 'Million' },
-      { value: 1000, suffix: 'K', name: 'Thousand' }
+      { value: 1000000, suffix: 'M' },
+      { value: 1000, suffix: 'K' }
     ],
-    fullFormat: { locale: 'en-US', options: { maximumFractionDigits: 2, minimumFractionDigits: 2 } }
+    locale: 'en-US'
   }
 };
 
 /**
- * Format price with currency-aware abbreviations
- * @param {number} amount - Price amount
- * @param {string} currencyCode - Currency code (INR, USD, etc.)
- * @param {string} symbol - Currency symbol (₹, $, etc.)
- * @param {boolean} compact - If true, use compact format (K/L/M), else full format
+ * ✅ ONLY NEW FUNCTION - Format price with currency-aware abbreviations
  */
 const formatPrice = (amount, currencyCode = 'INR', symbol = '₹', compact = true) => {
   if (!amount || amount === 0) return `${symbol}0`;
-  
   const num = parseFloat(amount);
   if (isNaN(num)) return `${symbol}0`;
-  
+
   const rules = CURRENCY_FORMAT_RULES[currencyCode] || CURRENCY_FORMAT_RULES['DEFAULT'];
-  
-  // Compact format (for product cards)
+
   if (compact) {
-    // Less than 1,000 - show full amount
-    if (num < 1000) {
-      return `${symbol}${num.toFixed(2)}`;
-    }
-    
-    // Find appropriate unit
+    if (num < 1000) return `${symbol}${num.toFixed(2)}`;
     for (const unit of rules.units) {
       if (num >= unit.value) {
         const formatted = (num / unit.value).toFixed(1).replace(/\.0$/, '');
         return `${symbol}${formatted}${unit.suffix}`;
       }
     }
-    
     return `${symbol}${num.toFixed(2)}`;
-  }
-  
-  // Full format (for product details/modal)
-  else {
-    return `${symbol}${num.toLocaleString(rules.fullFormat.locale, rules.fullFormat.options)}`;
+  } else {
+    return `${symbol}${num.toLocaleString(rules.locale, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}`;
   }
 };
 
 /**
- * Format review count with K suffix
+ * ✅ ONLY NEW FUNCTION - Format review count
  */
 const formatCount = (n) => {
   if (!n || n < 1000) return String(n || 0);
@@ -369,88 +319,74 @@ const formatCount = (n) => {
 };
 
 // ============================================
-// PRODUCT CARD CREATION
+// ORIGINAL FUNCTION - MINIMAL CHANGES ONLY
 // ============================================
 
 /**
- * Create a product card element - UPDATED WITH CURRENCY-AWARE PRICING
+ * Create a product card element
  */
 function createProductCard(product) {
-  const card = document.createElement('div');
-  card.className = 'product-card';
+    const card = document.createElement('div');
+    card.className = 'product-card';
 
-  // Extract all fields from product data
-  const imageUrl = product.main_image || '';
-  const allImages = [product.main_image, ...(product.all_images || [])].filter(Boolean);
-  const imageCount = allImages.length;
-  const amazonLink = product.amazon_short || product.amazon_long || product.source_link || '#';
-  const productName = product.name || product.productTitle || 'Product Name';
-  const productId = product.asin || product.id || '';
-  const category = product.subcategory || product.itemTypeName || product.category || 'General';
-  const brand = product.brand || 'VibeDrips';
-  const rating = parseFloat(product.customer_rating) || 0;
-  const reviewCount = parseInt(product.review_count) || 0;
+    const imageUrl = product.main_image || '';
+    const allImages = [product.main_image, ...(product.all_images || [])].filter(Boolean);
+    const imageCount = allImages.length;
+    const amazonLink = product.amazon_short || product.amazon_long || product.source_link || '#';
+    const productName = product.name || product.productTitle || 'Product Name';
+    const productId = product.asin || product.id || '';
+    const category = product.subcategory || product.itemTypeName || product.category || 'General';
+    const brand = product.brand || '';
+    const rating = parseFloat(product.customer_rating) || 0;
+    const reviewCount = parseInt(product.review_count) || 0;
 
-  // ✅ UPDATED: Use currency-aware formatting (COMPACT for cards)
-  const price = product.display_price || product.price || 0;
-  const currencyCode = product.currency || 'INR';
-  const symbol = product.symbol || '₹';
-  const priceFormatted = formatPrice(price, currencyCode, symbol, true);  // Compact format
+    // ✅ ONLY CHANGE: Use formatPrice instead of toLocaleString
+    const price = product.display_price || product.price || 0;
+    const currencyCode = product.currency || 'INR';
+    const symbol = product.symbol || '₹';
+    const priceFormatted = formatPrice(price, currencyCode, symbol, true);
 
-  // Discount badge logic
-  const showDiscount = product.show_discount || false;
-  const discountPercent = product.computed_discount || 0;
-  const discountBadge = showDiscount && discountPercent > 0 
-    ? `<span class="discount-badge">-${discountPercent}%</span>` 
-    : '';
+    const showDiscount = product.show_discount || false;
+    const discountPercent = product.computed_discount || 0;
+    const discountBadge = showDiscount && discountPercent > 0 
+        ? `<span class="discount-badge">-${discountPercent}%</span>` 
+        : '';
 
-  // SVG fallback
-  const svgFallback = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23333' width='200' height='200'/%3E%3Ctext fill='%23fff' font-size='14' x='50%25' y='50%25' text-anchor='middle' dy='.3em'%3E${encodeURIComponent(productName?.substring(0, 20) || 'No Image')}%3C/text%3E%3C/svg%3E`;
+    const svgFallback = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23333' width='200' height='200'/%3E%3Ctext fill='%23fff' font-size='14' x='50%25' y='50%25' text-anchor='middle' dy='.3em'%3E${encodeURIComponent(productName?.substring(0, 20) || 'No Image')}%3C/text%3E%3C/svg%3E`;
 
-  card.innerHTML = `
-    <div class="product-image-wrapper">
-      <img 
-        src="${imageUrl}" 
-        alt="${productName}"
-        onerror="this.src='${svgFallback}'"
-        loading="lazy"
-      >
-      ${imageCount > 1 ? `
-        <div class="image-count-badge">
-          📷 ${imageCount} photos
+    // ✅ ORIGINAL HTML STRUCTURE - NO CHANGES
+    card.innerHTML = `
+        <div class="product-image-wrapper">
+            <img src="${imageUrl || svgFallback}" 
+                 alt="${productName}"
+                 loading="lazy"
+                 onerror="this.src='${svgFallback}'">
+
+            ${imageCount > 1 ? `<div class="image-count">${imageCount} photos</div>` : ''}
+            ${brand ? `<div class="brand-tag">🏷️ ${brand}</div>` : ''}
         </div>
-      ` : ''}
-      ${brand ? `
-        <div class="brand-badge">
-          🏷️ ${brand}
-        </div>
-      ` : ''}
-    </div>
-    <div class="product-details">
-      <span class="product-category">${category}</span>
-      <h3 class="product-name">${productName}</h3>
-      <div class="product-price-row">
-        <span class="product-price">${priceFormatted}</span>
-        ${discountBadge}
-      </div>
-      ${rating > 0 ? `
-        <div class="product-rating">
-          ⭐ ${rating.toFixed(1)}${reviewCount > 0 ? ` (${formatCount(reviewCount)})` : ''}
-        </div>
-      ` : ''}
-      <button 
-        class="btn btn-primary btn-buy" 
-        onclick="event.stopPropagation(); openAmazonLink('${amazonLink}', '${productId}')">
-        🛒 Buy on Amazon
-      </button>
-    </div>
-  `;
 
-  // Make entire card clickable to open modal
-  card.onclick = () => showProductModal(productId);
-  card.style.cursor = 'pointer';
+        <div class="product-category">${category}</div>
+        <h3 class="product-name">${productName}</h3>
 
-  return card;
+        <div class="product-price-row">
+            <div class="price-container">
+                <span class="product-price">${priceFormatted}</span>
+                ${discountBadge}
+            </div>
+            ${rating > 0 ? `<span class="rating">⭐ ${rating.toFixed(1)}${reviewCount > 0 ? ` (${formatCount(reviewCount)})` : ''}</span>` : ''}
+        </div>
+
+        <button class="btn btn-primary btn-buy" 
+                onclick="event.stopPropagation(); openAmazonLink('${amazonLink}', '${productId}')">
+            🛒 Buy on Amazon
+        </button>
+    `;
+
+    card.onclick = () => showProductModal(productId);
+    card.style.cursor = 'pointer';
+
+    return card;
 }
 
 /**
@@ -466,7 +402,7 @@ function openAmazonLink(link, productId) {
 }
 
 /**
- * Show detailed product modal - UPDATED WITH CURRENCY-AWARE PRICING
+ * Show detailed product modal
  */
 function showProductModal(productId) {
   const product = VibeDrips.allProducts.find(p => p.id === productId || p.asin === productId);
@@ -475,11 +411,10 @@ function showProductModal(productId) {
     return;
   }
 
-  // ✅ UPDATED: Use currency-aware formatting (FULL format for modal)
+  // ✅ ONLY CHANGE: Use formatPrice for modal too
   const currencyCode = product.currency || 'INR';
   const symbol = product.symbol || '₹';
-  const currentPrice = formatPrice(product.price, currencyCode, symbol, false);  // Full format
-  
+  const currentPrice = formatPrice(product.price, currencyCode, symbol, false);
   const originalPrice = product.original_price || product.originalPrice;
   const originalPriceFormatted = originalPrice && originalPrice > product.price 
     ? formatPrice(originalPrice, currencyCode, symbol, false) 
@@ -487,7 +422,6 @@ function showProductModal(productId) {
 
   const amazonLink = product.amazon_short || product.amazon_long || product.source_link || '#';
 
-  // Create dynamic modal with separate overlay and content
   const modalContent = `
     <div class="dynamic-modal" onclick="closeDynamicModal(event)">
       <div class="modal-overlay"></div>
@@ -497,17 +431,14 @@ function showProductModal(productId) {
           <button class="modal-close" onclick="closeDynamicModal(event)">✕</button>
         </div>
         <div class="modal-body">
-          <p><strong>Price:</strong> ${currentPrice} ${originalPriceFormatted ? `<span class="original-price" style="text-decoration: line-through; opacity: 0.6; margin-left: 8px;">${originalPriceFormatted}</span>` : ''}</p>
+          <p><strong>Price:</strong> ${currentPrice} ${originalPriceFormatted ? `<span class="original-price">${originalPriceFormatted}</span>` : ''}</p>
           <p><strong>Brand:</strong> ${escapeHtml(product.brand || 'N/A')}</p>
           <p><strong>Category:</strong> ${escapeHtml(product.category || 'N/A')}</p>
           <p><strong>Description:</strong> ${escapeHtml(product.description || 'No description available')}</p>
           ${product.customer_rating ? `<p><strong>Rating:</strong> ⭐ ${parseFloat(product.customer_rating).toFixed(1)} ${product.review_count ? `(${formatCount(parseInt(product.review_count))} reviews)` : ''}</p>` : ''}
         </div>
         <div class="modal-footer">
-          <a href="${amazonLink}" 
-             target="_blank" 
-             rel="noopener noreferrer" 
-             class="btn btn-primary">
+          <a href="${amazonLink}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
             🛒 Buy on Amazon
           </a>
         </div>
@@ -519,7 +450,7 @@ function showProductModal(productId) {
 }
 
 /**
- * Close dynamic modal (specific to modals created by showProductModal)
+ * Close dynamic modal
  */
 function closeDynamicModal(event) {
   event.stopPropagation();
@@ -572,4 +503,4 @@ window.sortProducts = sortProducts;
 window.openAmazonLink = openAmazonLink;
 window.showProductModal = showProductModal;
 
-console.log('Products.js loaded successfully with currency-aware formatting');
+console.log('Products.js loaded with currency-aware price formatting');
