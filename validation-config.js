@@ -3,6 +3,9 @@
  * 
  * Add new validation rules here without touching convert-csv.js
  * Integrates with existing currency-based processing system
+ * 
+ * @author VibeDrips Team
+ * @version 1.0.0
  */
 
 module.exports = {
@@ -22,11 +25,12 @@ module.exports = {
       min: 0,
       fallback: (data) => data.price || null,
       validate: (value, data) => {
+        // Case: originalPrice < price → invalid, normalize to price
         if (value && data.price && value < data.price) {
           return { 
             valid: false, 
             corrected: data.price, 
-            reason: 'INVALID_ORIGINAL: originalPrice < price, normalized' 
+            reason: 'INVALID_ORIGINAL: originalPrice < price, normalized to price' 
           };
         }
         return { valid: true };
@@ -38,7 +42,7 @@ module.exports = {
       type: 'number',
       min: 0,
       max: 100,
-      tolerance: 1,
+      tolerance: 1, // ±1% tolerance for mismatch detection
       computed: (data) => {
         const price = data.price || 0;
         const originalPrice = data.originalPrice || 0;
@@ -49,6 +53,7 @@ module.exports = {
         return 0;
       },
       validate: (value, data, computed) => {
+        // Cross-check scraped discount with computed discount (±1% tolerance)
         if (computed && value && Math.abs(value - computed) > 1) {
           return {
             valid: false,
@@ -71,6 +76,7 @@ module.exports = {
         return value;
       },
       cascade: (value, data) => {
+        // If unavailable, force price to 0 (won't display in UI)
         if (value === 'Currently Unavailable') {
           return { price: 0 };
         }
@@ -79,9 +85,39 @@ module.exports = {
     }
   },
 
-  // Global settings
+  // Global validation settings
   settings: {
     logAllErrors: true,
     generateStats: true
-  }
+  },
+
+  /**
+   * Future field examples (uncomment to enable):
+   * 
+   * warranty_period: {
+   *   required: false,
+   *   type: 'string',
+   *   default: 'N/A',
+   *   allowedValues: ['1 Year', '2 Years', 'Lifetime', 'N/A'],
+   *   validate: (value) => {
+   *     const validPeriods = ['1 Year', '2 Years', 'Lifetime', 'N/A'];
+   *     if (!validPeriods.includes(value)) {
+   *       return { valid: false, corrected: 'N/A', reason: 'INVALID_WARRANTY' };
+   *     }
+   *     return { valid: true };
+   *   }
+   * },
+   * 
+   * shipping_weight: {
+   *   required: false,
+   *   type: 'number',
+   *   min: 0,
+   *   max: 100000, // 100kg max
+   *   normalize: (value) => {
+   *     // Convert grams to kg if needed
+   *     if (value > 1000) return value / 1000;
+   *     return value;
+   *   }
+   * }
+   */
 };
