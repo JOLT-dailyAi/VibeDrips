@@ -1,11 +1,18 @@
 VibeDrips Data Processing Summary
-Generated: 2025-12-18T16:17:33.927Z
+Generated: 2025-12-20T15:58:16.282Z
 
 📊 STATISTICS
-- Total Rows Processed: 9
-- Products Successfully Processed: 9
+- Total Rows Processed: 10
+- Products Successfully Processed: 10
 - Errors Encountered: 0
 - Success Rate: 100.0%
+
+⚠️ VALIDATION
+- Records Flagged: 2
+- Auto-corrected: 2
+- Error Breakdown:
+  • INVALID_ORIGINAL: 1
+  • DISCOUNT_MISMATCH: 1
 
 💰 CURRENCIES
 - Currencies Found: 1
@@ -16,8 +23,8 @@ Generated: 2025-12-18T16:17:33.927Z
 - Top Categories: General, Electronics, Toys & Games
 
 🏷️ BRANDS
-- Brands Found: 5
-- Top Brands: Diamond Books, MyMirror Publishing House Pvt. Ltd., boAt, CodersParadise, woopme
+- Brands Found: 7
+- Top Brands: Nuwave, Diamond Books, MyMirror Publishing House Pvt. Ltd., Héctor García, Francesc Miralles, boAt
 
 📁 FILES BEFORE DELETION
 - last_updated.txt
@@ -32,7 +39,7 @@ Generated: 2025-12-18T16:17:33.927Z
 
 
 📁 FILES GENERATED
-- products-INR.json (9 products)
+- products-INR.json (10 products)
 - currencies.json (manifest)
 
 📁 FINAL FILES PRESENT

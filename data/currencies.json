@@ -7,27 +7,29 @@
       "countries": [
         "India"
       ],
-      "product_count": 9,
+      "product_count": 10,
       "filename": "products-INR.json",
       "categories": [
-        "Electronics",
         "General",
+        "Electronics",
         "Toys & Games"
       ],
       "brands": [
+        "Nuwave",
         "boAt",
-        "Diamond Books",
+        "Héctor García, Francesc Miralles",
         "MyMirror Publishing House Pvt. Ltd.",
+        "Diamond Books",
         "CodersParadise",
         "woopme"
       ],
       "price_range": {
         "min": 150,
-        "max": 1499
+        "max": 131130.99
       }
     }
   ],
-  "last_updated": "2025-12-18T16:17:33.926Z",
-  "total_products": 9,
+  "last_updated": "2025-12-20T15:58:16.281Z",
+  "total_products": 10,
   "default_currency": "INR"
 }
