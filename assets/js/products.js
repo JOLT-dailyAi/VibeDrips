@@ -4,7 +4,7 @@
 function setTimeFilter(filter) {
     console.log(`Setting time filter: ${filter}`);
     VibeDrips.currentTimeFilter = filter;
-    
+
     // Update active filter UI
     document.querySelectorAll('.time-category').forEach(cat => {
         cat.classList.remove('active');
@@ -46,11 +46,11 @@ function getHotProducts() {
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth();
     const currentYear = currentDate.getFullYear();
-    
+
     return VibeDrips.allProducts.filter(product => {
         const dateStr = product.date_first_available || product.dateFirstAvailable || product.timestamp;
         if (!dateStr) return false;
-        
+
         try {
             const productDate = new Date(dateStr);
             return (productDate.getMonth() === currentMonth && 
@@ -74,7 +74,7 @@ function getHotProducts() {
 function getNewArrivals() {
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    
+
     return VibeDrips.allProducts
         .filter(product => {
             const productDate = new Date(product.timestamp);
@@ -109,9 +109,9 @@ function updateSectionTitle(filter) {
             subtitle: 'Complete collection of curated finds'
         }
     };
-    
+
     const titleInfo = titles[filter] || titles['all'];
-    
+
     if (VibeDrips.elements.sectionTitle) {
         VibeDrips.elements.sectionTitle.textContent = titleInfo.title;
     }
@@ -126,7 +126,7 @@ function updateSectionTitle(filter) {
 function applyCurrentFilters() {
     const searchInput = VibeDrips.elements.search;
     const categoryFilter = VibeDrips.elements.categoryFilter;
-    
+
     const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
     const categoryValue = categoryFilter ? categoryFilter.value.trim() : '';
 
@@ -139,7 +139,7 @@ function applyCurrentFilters() {
                 product.subcategory,
                 product.brand
             ].filter(field => field && field.toString().trim());
-            
+
             const matchesSearch = !searchTerm || searchFields.some(field => 
                 field.toString().toLowerCase().includes(searchTerm)
             );
@@ -166,7 +166,7 @@ function filterProducts() {
 function sortProducts() {
     const sortSelect = VibeDrips.elements.priceSort;
     if (!sortSelect) return;
-    
+
     const sortBy = sortSelect.value;
 
     switch (sortBy) {
@@ -193,7 +193,7 @@ function sortProducts() {
             VibeDrips.filteredProducts.sort((a, b) => {
                 if (a.featured && !b.featured) return -1;
                 if (!a.featured && b.featured) return 1;
-                
+
                 const dateA = new Date(a.date_first_available || a.timestamp);
                 const dateB = new Date(b.date_first_available || b.timestamp);
                 return dateB - dateA;
@@ -209,7 +209,7 @@ function sortProducts() {
 function renderProducts() {
     const container = VibeDrips.elements.productsContainer;
     if (!container) return;
-    
+
     if (VibeDrips.filteredProducts.length === 0) {
         container.innerHTML = `
             <div class="no-products">
@@ -226,7 +226,7 @@ function renderProducts() {
 
     // Clear container and add cards directly (no wrapper needed)
     container.innerHTML = '';
-    
+
     VibeDrips.filteredProducts.forEach(product => {
         const productCard = createProductCard(product);
         container.appendChild(productCard); // ← Append directly to container
@@ -235,13 +235,88 @@ function renderProducts() {
     updateStats();
 }
 
+// ============================================
+// ✅ NEW: Currency-aware price formatting
+// ============================================
+
+const CURRENCY_FORMAT_RULES = {
+  'INR': {
+    units: [
+      { value: 10000000, suffix: 'Cr' },
+      { value: 100000, suffix: 'L' },
+      { value: 1000, suffix: 'K' }
+    ],
+    locale: 'en-IN'
+  },
+  'USD': {
+    units: [
+      { value: 1000000000, suffix: 'B' },
+      { value: 1000000, suffix: 'M' },
+      { value: 1000, suffix: 'K' }
+    ],
+    locale: 'en-US'
+  },
+  'EUR': {
+    units: [
+      { value: 1000000000, suffix: 'Mrd' },
+      { value: 1000000, suffix: 'Mio' },
+      { value: 1000, suffix: 'K' }
+    ],
+    locale: 'de-DE'
+  },
+  'GBP': {
+    units: [
+      { value: 1000000000, suffix: 'B' },
+      { value: 1000000, suffix: 'M' },
+      { value: 1000, suffix: 'K' }
+    ],
+    locale: 'en-GB'
+  },
+  'JPY': {
+    units: [
+      { value: 100000000, suffix: '億' },
+      { value: 10000, suffix: '万' },
+      { value: 1000, suffix: 'K' }
+    ],
+    locale: 'ja-JP'
+  },
+  'DEFAULT': {
+    units: [
+      { value: 1000000, suffix: 'M' },
+      { value: 1000, suffix: 'K' }
+    ],
+    locale: 'en-US'
+  }
+};
+
+const formatPrice = (amount, currencyCode = 'INR', symbol = '₹', compact = true) => {
+  if (!amount || amount === 0) return `${symbol}0`;
+  const num = parseFloat(amount);
+  if (isNaN(num)) return `${symbol}0`;
+
+  const rules = CURRENCY_FORMAT_RULES[currencyCode] || CURRENCY_FORMAT_RULES['DEFAULT'];
+
+  if (compact) {
+    if (num < 1000) return `${symbol}${num.toFixed(2)}`;
+    for (const unit of rules.units) {
+      if (num >= unit.value) {
+        const formatted = (num / unit.value).toFixed(1).replace(/\.0$/, '');
+        return `${symbol}${formatted}${unit.suffix}`;
+      }
+    }
+    return `${symbol}${num.toFixed(2)}`;
+  } else {
+    return `${symbol}${num.toLocaleString(rules.locale, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}`;
+  }
+};
+
 /**
  * Create a product card element - UPDATED WITH DISCOUNT BADGE
  */
 function createProductCard(product) {
     const card = document.createElement('div');
     card.className = 'product-card';
-    
+
     // Extract all fields from product data
     const imageUrl = product.main_image || '';
     const allImages = [product.main_image, ...(product.all_images || [])].filter(Boolean);
@@ -254,44 +329,43 @@ function createProductCard(product) {
     const rating = parseFloat(product.customer_rating) || 0;
     const reviewCount = parseInt(product.review_count) || 0;
 
-    // ✅ ADD THIS RIGHT HERE (inside createProductCard)
+    // ✅ Format review count helper
     const formatCount = (n) => {
       if (!n || n < 1000) return String(n || 0);
       if (n < 10000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
       return Math.round(n / 1000) + 'k';
     };
-    
-    // Format price (always display current price only)
+
+    // ✅ UPDATED: Use formatPrice with currency awareness
     const price = product.display_price || product.price || 0;
-    const currency = product.symbol || '₹';
-    const priceFormatted = typeof price === 'number' 
-        ? `${currency}${price.toLocaleString('en-IN')}` 
-        : price;
-    
+    const currencyCode = product.currency || 'INR';
+    const symbol = product.symbol || '₹';
+    const priceFormatted = formatPrice(price, currencyCode, symbol, true); // Compact format
+
     // Discount badge logic (NEW)
     const showDiscount = product.show_discount || false;
     const discountPercent = product.computed_discount || 0;
     const discountBadge = showDiscount && discountPercent > 0 
         ? `<span class="discount-badge"><span class="live-dot" aria-hidden="true"></span>${discountPercent}%</span>`
         : '';
-    
+
     // SVG fallback
     const svgFallback = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23333' width='200' height='200'/%3E%3Ctext fill='%23fff' font-size='14' x='50%25' y='50%25' text-anchor='middle' dy='.3em'%3E${encodeURIComponent(productName?.substring(0, 20) || 'No Image')}%3C/text%3E%3C/svg%3E`;
-    
+
     card.innerHTML = `
         <div class="product-image-wrapper">
             <img src="${imageUrl || svgFallback}" 
                  alt="${productName}"
                  loading="lazy"
                  onerror="this.src='${svgFallback}'">
-            
+
             ${imageCount > 1 ? `<div class="image-count">${imageCount} photos</div>` : ''}
             ${brand ? `<div class="brand-tag">🏷️ ${brand}</div>` : ''}
         </div>
-        
+
         <div class="product-category">${category}</div>
         <h3 class="product-name">${productName}</h3>
-        
+
         <div class="product-price-row">
             <div class="price-container">
                 <span class="product-price">${priceFormatted}</span>
@@ -299,16 +373,16 @@ function createProductCard(product) {
             </div>
             ${rating > 0 ? `<span class="rating">⭐ ${rating.toFixed(1)}${reviewCount > 0 ? ` (${formatCount(reviewCount)})` : ''}</span>` : ''}
         </div>
-        
+
         <button class="amazon-button" onclick="event.stopPropagation(); openAmazonLink('${amazonLink}', '${productId}')">
             🛒 Buy on Amazon
         </button>
     `;
-    
+
     // Make entire card clickable to open modal
     card.onclick = () => showProductModal(productId);
     card.style.cursor = 'pointer';
-    
+
     return card;
 }
 
@@ -334,6 +408,11 @@ function showProductModal(productId) {
         return;
     }
 
+    // ✅ UPDATED: Use formatPrice for modal (full format)
+    const currencyCode = product.currency || 'INR';
+    const symbol = product.symbol || '₹';
+    const priceFormatted = formatPrice(product.price, currencyCode, symbol, false); // Full format
+
     // Create dynamic modal with separate overlay and content
     const modalContent = `
         <div class="simple-modal dynamic-modal">
@@ -345,7 +424,7 @@ function showProductModal(productId) {
                 </div>
                 <div class="simple-modal-body">
                     <img src="${product.main_image}" alt="${escapeHtml(product.name)}" style="max-width: 200px;">
-                    <p><strong>Price:</strong> ₹${product.price}</p>
+                    <p><strong>Price:</strong> ${priceFormatted}</p>
                     <p><strong>Brand:</strong> ${escapeHtml(product.brand)}</p>
                     <p><strong>Category:</strong> ${escapeHtml(product.category)}</p>
                     <p><strong>Description:</strong> ${escapeHtml(product.description)}</p>
@@ -355,7 +434,7 @@ function showProductModal(productId) {
             </div>
         </div>
     `;
-    
+
     document.body.insertAdjacentHTML('beforeend', modalContent);
 }
 
@@ -395,7 +474,7 @@ function escapeHtml(unsafe) {
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+        .replace(/'/g, "'");
 }
 
 function truncateText(text, maxLength) {
@@ -411,4 +490,4 @@ window.sortProducts = sortProducts;
 window.openAmazonLink = openAmazonLink;
 window.showProductModal = showProductModal;
 // Do not export closeDynamicModal to avoid conflict with closeSimpleModal
-console.log('Products.js loaded successfully');
+console.log('Products.js loaded successfully with currency-aware price formatting');
