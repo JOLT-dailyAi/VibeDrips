@@ -326,7 +326,7 @@ function createProductCard(product) {
     const productName = product.name || product.productTitle || 'Product Name';
     const productId = product.asin || product.id || '';
     const category = product.subcategory || product.itemTypeName || product.category || 'General';
-    const brand = product.brand || 'VibeDrips';
+    const brand = truncateBrand(product.brand || 'VibeDrips', 18);
     const rating = parseFloat(product.customer_rating) || 0;
     const reviewCount = parseInt(product.review_count) || 0;
 
@@ -335,6 +335,23 @@ function createProductCard(product) {
       if (!n || n < 1000) return String(n || 0);
       if (n < 10000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
       return Math.round(n / 1000) + 'k';
+    };
+
+    // ✅ ADD THIS HELPER (after formatCount, around line 338)
+    const truncateBrand = (brandName, maxChars = 18) => {
+      if (!brandName || brandName.length <= maxChars) return brandName;
+      
+      // Find last complete word within limit
+      const truncated = brandName.substring(0, maxChars);
+      const lastSpace = truncated.lastIndexOf(' ');
+      
+      // If there's a space, cut at last complete word
+      if (lastSpace > 0) {
+        return truncated.substring(0, lastSpace) + '...';
+      }
+      
+      // Otherwise, just truncate at char limit
+      return truncated + '...';
     };
 
     // ✅ Use formatPrice with currency awareness (compact, no decimals)
