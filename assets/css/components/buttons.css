@@ -71,3 +71,56 @@
         width: 100%;
     }
 }
+
+/* ====================================== */
+/* UNIVERSAL CLOSE BUTTON - All Modals   */
+/* Added: 2025-12-21                      */
+/* ====================================== */
+
+.modal-close-button {
+  /* Layout */
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* Style - RED across all themes */
+  background: rgba(229, 62, 62, 0.1);
+  border: 2px solid #E53E3E;
+  border-radius: 8px;
+  color: #E53E3E;
+  
+  /* Typography */
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 1;
+  
+  /* Interaction */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  /* Reset */
+  outline: none;
+}
+
+.modal-close-button:hover {
+  background: rgba(229, 62, 62, 0.2);
+  transform: rotate(90deg);
+  border-color: #C53030;
+}
+
+.modal-close-button:active {
+  transform: rotate(90deg) scale(0.95);
+  background: rgba(229, 62, 62, 0.3);
+}
+
+.modal-close-button:focus {
+  outline: 2px solid rgba(229, 62, 62, 0.4);
+  outline-offset: 2px;
+}
+
+/* NO theme overrides - red stays red */
