@@ -229,6 +229,87 @@ function generateAsin(row) {
   return row.asin || `B0${Date.now().toString().slice(-8)}${Math.random().toString(36).substr(2, 2).toUpperCase()}`;
 }
 
+/**
+ * Parse reference_media column with flexible separator support
+ * Supports: pipe (|), comma (,), semicolon (;), or JSON array
+ * Always includes Product Source Link as first item
+ */
+function parseReferenceMedia(referenceMediaValue, productSourceLink) {
+    const urls = [];
+    
+    // If no reference_media value, return only source link
+    if (!referenceMediaValue || referenceMediaValue.trim() === '') {
+        return productSourceLink ? [productSourceLink] : [];
+    }
+    
+    const trimmed = referenceMediaValue.trim();
+    
+    // Try parsing as JSON array first
+    if (trimmed.startsWith('[')) {
+        try {
+            const parsed = JSON.parse(trimmed);
+            if (Array.isArray(parsed)) {
+                urls.push(...parsed.map(url => url.trim()).filter(Boolean));
+            }
+        } catch (e) {
+            console.warn(`⚠️ Invalid JSON in reference_media: ${trimmed.substring(0, 50)}...`);
+        }
+    } else {
+        // Auto-detect separator
+        let separator = '|';
+        if (trimmed.includes('|')) separator = '|';
+        else if (trimmed.includes(';')) separator = ';';
+        else if (trimmed.includes(',')) separator = ',';
+        
+        // Split and clean URLs
+        urls.push(...trimmed.split(separator).map(url => url.trim()).filter(Boolean));
+    }
+    
+    // Always include Product Source Link first if not already present
+    if (productSourceLink && !urls.includes(productSourceLink)) {
+        urls.unshift(productSourceLink);
+    }
+    
+    // Remove duplicates while preserving order
+    return [...new Set(urls)];
+}
+
+/**
+ * Detect regional variants based on shared reference media
+ * Creates bidirectional links between products with same videos
+ */
+function detectRegionalVariants(products) {
+    const regionalMap = {};
+    
+    // Build mapping of video URLs to products
+    products.forEach(product => {
+        product.referenceMedia.forEach(url => {
+            if (!regionalMap[url]) regionalMap[url] = [];
+            regionalMap[url].push(product);
+        });
+    });
+    
+    // Link products that share videos but have different currencies
+    Object.values(regionalMap).forEach(sharedProducts => {
+        if (sharedProducts.length > 1) {
+            // These products share a reference video
+            sharedProducts.forEach(productA => {
+                sharedProducts.forEach(productB => {
+                    if (productA.asin !== productB.asin && 
+                        productA.currency !== productB.currency) {
+                        // Link them as regional variants
+                        if (!productA.regional_variants) {
+                            productA.regional_variants = {};
+                        }
+                        productA.regional_variants[productB.currency] = productB.asin;
+                        productA.regional_availability = 1;
+                    }
+                });
+            });
+        }
+    });
+}
+
 function deleteOldFiles() {
   if (!fs.existsSync(dataDir)) {
     fs.mkdirSync(dataDir, { recursive: true });
@@ -436,6 +517,15 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
           // Rating
           customer_rating: data.customerRating || data.Rating || '',
           review_count: parseInt(data.reviewCount || data.ReviewCount) || 0,
+
+          // ✅ NEW: Reference Media & Regional Variants
+          source_link: data['Product Source Link'] || '',
+          referenceMedia: parseReferenceMedia(
+              data.reference_media,
+              data['Product Source Link']
+          ),
+          regional_availability: 0, // Will be set during regional detection
+          regional_variants: {}, // Will be populated during regional detection
           
           // Links
           source_link: data['Product Source Link'] || '',
@@ -468,6 +558,15 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
     })
     .on('end', () => {
       console.log('📊 Processing Complete! Generating files...');
+
+      // ✅ NEW: Detect regional variants across all products
+      const allProducts = Object.values(currencyResults).flat();
+      console.log(`🔍 Detecting regional variants across ${allProducts.length} products...`);
+      detectRegionalVariants(allProducts);
+      
+      // Count regional connections
+      const regionalCount = allProducts.filter(p => p.regional_availability === 1).length;
+      console.log(`✅ Found ${regionalCount} products with regional variants`);
       
       // Sort products by timestamp
       Object.keys(currencyResults).forEach(currency => {
