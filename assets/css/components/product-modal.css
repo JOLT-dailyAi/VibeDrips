@@ -76,28 +76,9 @@
     font-weight: 600;
 }
 
-.simple-modal-header button {
-    background: white;
-    border: 2px solid rgba(0, 0, 0, 0.1);
-    width: 32px;
-    height: 32px;
-    min-width: 32px;
-    min-height: 32px;
-    font-size: 18px;
-    color: #333;
-    cursor: pointer;
-    padding: 0;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-}
+/* Close button inherits from .modal-close-button in buttons.css */
+/* No additional styling needed - universal button handles all themes */
 
-.simple-modal-header button:hover {
-    background: rgba(0, 0, 0, 0.05);
-    border-color: rgba(0, 0, 0, 0.2);
-}
 
 /* Modal Body */
 .simple-modal-body {
@@ -124,23 +105,30 @@
 }
 
 .simple-modal-body .amazon-button {
-    margin-top: 24px;
-    width: 100%;
-    padding: 14px;
-    border: none;
-    border-radius: 8px;
-    background: #667eea;
-    color: white;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
+  margin-top: 24px;
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #ff9900 0%, #ff6600 100%);
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(255, 153, 0, 0.3);
 }
 
 .simple-modal-body .amazon-button:hover {
-    background: #764ba2;
-    transform: scale(1.02);
+  background: linear-gradient(135deg, #ffaa00 0%, #ff7700 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 153, 0, 0.5);
 }
+
+.simple-modal-body .amazon-button:active {
+  transform: translateY(0);
+}
+
 
 /* Dark Theme */
 body.dark-theme .simple-modal-content {
@@ -153,17 +141,6 @@ body.dark-theme .simple-modal-header {
 
 body.dark-theme .simple-modal-header h2 {
     color: white;
-}
-
-body.dark-theme .simple-modal-header button {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
-    color: white;
-}
-
-body.dark-theme .simple-modal-header button:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.3);
 }
 
 body.dark-theme .simple-modal-body p {
@@ -194,6 +171,7 @@ body.glass-theme .simple-modal-header h2 {
     color: white;
 }
 
+/*
 body.glass-theme .simple-modal-header button {
     background: rgba(255, 255, 255, 0.1);
     border-color: rgba(255, 255, 255, 0.3);
@@ -204,6 +182,7 @@ body.glass-theme .simple-modal-header button:hover {
     background: rgba(255, 255, 255, 0.2);
     border-color: rgba(255, 255, 255, 0.5);
 }
+*/
 
 body.glass-theme .simple-modal-body p {
     color: rgba(255, 255, 255, 0.95);
