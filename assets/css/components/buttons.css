@@ -95,7 +95,7 @@
   color: #E53E3E;
   
   /* Typography */
-  font-size: 18px;
+  font-size: 16px;  /* ← Changed from 18px to 16px for emoji */
   font-weight: bold;
   line-height: 1;
   
