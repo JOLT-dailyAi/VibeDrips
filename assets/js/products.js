@@ -435,7 +435,7 @@ function showProductModal(productId) {
             <div class="simple-modal-content">
                 <div class="simple-modal-header">
                     <h2>${escapeHtml(product.name)}</h2>
-                    <button class="modal-close-button" onclick="closeDynamicModal(event)">×</button>
+                    <button class="modal-close-button" onclick="closeDynamicModal(event)">❌</button>
                 </div>
                 <div class="simple-modal-body">
                     <img src="${product.main_image}" alt="${escapeHtml(product.name)}" style="max-width: 200px;">
