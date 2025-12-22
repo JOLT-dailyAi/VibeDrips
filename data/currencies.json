@@ -7,7 +7,7 @@
       "countries": [
         "India"
       ],
-      "product_count": 10,
+      "product_count": 15,
       "filename": "products-INR.json",
       "categories": [
         "General",
@@ -15,6 +15,10 @@
         "Toys & Games"
       ],
       "brands": [
+        "Honeywell",
+        "UBreathe",
+        "Praan",
+        "Hero Electronix Pvt. Ltd",
         "Nuwave",
         "boAt",
         "Héctor García, Francesc Miralles",
@@ -29,7 +33,7 @@
       }
     }
   ],
-  "last_updated": "2025-12-20T15:58:16.281Z",
-  "total_products": 10,
+  "last_updated": "2025-12-22T09:25:26.454Z",
+  "total_products": 15,
   "default_currency": "INR"
 }

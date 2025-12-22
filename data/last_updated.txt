@@ -1,9 +1,9 @@
 VibeDrips Data Processing Summary
-Generated: 2025-12-20T15:58:16.282Z
+Generated: 2025-12-22T09:25:26.455Z
 
 📊 STATISTICS
-- Total Rows Processed: 10
-- Products Successfully Processed: 10
+- Total Rows Processed: 15
+- Products Successfully Processed: 15
 - Errors Encountered: 0
 - Success Rate: 100.0%
 
@@ -23,7 +23,7 @@ Generated: 2025-12-20T15:58:16.282Z
 - Top Categories: General, Electronics, Toys & Games
 
 🏷️ BRANDS
-- Brands Found: 7
+- Brands Found: 11
 - Top Brands: Nuwave, Diamond Books, MyMirror Publishing House Pvt. Ltd., Héctor García, Francesc Miralles, boAt
 
 📁 FILES BEFORE DELETION
@@ -39,7 +39,7 @@ Generated: 2025-12-20T15:58:16.282Z
 
 
 📁 FILES GENERATED
-- products-INR.json (10 products)
+- products-INR.json (15 products)
 - currencies.json (manifest)
 
 📁 FINAL FILES PRESENT
