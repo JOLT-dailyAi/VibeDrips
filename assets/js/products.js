@@ -430,27 +430,56 @@ function showProductModal(productId) {
 
     // Create dynamic modal with separate overlay and content
     const modalContent = `
-        <div class="simple-modal dynamic-modal">
-            <div class="modal-overlay" onclick="closeDynamicModal(event)"></div>
-            <div class="simple-modal-content">
-                <div class="simple-modal-header">
-                    <h2>${escapeHtml(product.name)}</h2>
-                    <button class="modal-close-button" onclick="closeDynamicModal(event)">❌</button>
-                </div>
-                <div class="simple-modal-body">
-                    <img src="${product.main_image}" alt="${escapeHtml(product.name)}" style="max-width: 200px;">
-                    <p><strong>Price:</strong> ${priceFormatted}</p>
-                    <p><strong>Brand:</strong> ${escapeHtml(product.brand)}</p>
-                    <p><strong>Category:</strong> ${escapeHtml(product.category)}</p>
-                    <p><strong>Description:</strong> ${escapeHtml(product.description)}</p>
-                    <button onclick="openAmazonLink('${escapeHtml(product.amazon_short || product.amazon_long || product.source_link || '#')}', '${product.id}')" 
-                            class="amazon-button">🛒 Buy on Amazon</button>
-                </div>
-            </div>
+      <div class="simple-modal dynamic-modal" data-asin="${product.id}">
+        <div class="modal-overlay" onclick="closeDynamicModal(event)"></div>
+    
+        <!-- floating icons: sibling of overlay+content, above overlay -->
+        <div class="modal-float-icons" onclick="event.stopPropagation()">
+          <button type="button" class="modal-float-icon" data-action="reference-media" title="Reference media">🎬</button>
+          <button type="button" class="modal-float-icon" data-action="regional-variants" title="Regional variants">🌍</button>
         </div>
+    
+        <div class="simple-modal-content">
+          ...
+        </div>
+      </div>
     `;
-
     document.body.insertAdjacentHTML('beforeend', modalContent);
+    
+    // bind per-modal handlers
+    const modalEl = document.querySelector('.simple-modal.dynamic-modal:last-of-type');
+    const iconsEl = modalEl.querySelector('.modal-float-icons');
+    const refBtn = iconsEl.querySelector('[data-action="reference-media"]');
+    const regionBtn = iconsEl.querySelector('[data-action="regional-variants"]');
+    
+    refBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const videos =
+        product.referenceMedia ||
+        product.reference_media ||
+        [product.source_link || product.sourceLink || product.sourcelink].filter(Boolean);
+    
+      const arr = Array.isArray(videos) ? videos : String(videos).split('|').map(s => s.trim()).filter(Boolean);
+      if (arr.length === 1) openVideoLightbox(arr[0]);
+      else if (arr.length > 1) openVideoGallery(arr);
+    });
+    
+    const hasRegional =
+      product.regional_availability === 1 &&
+      product.regional_variants &&
+      Object.keys(product.regional_variants).length > 0;
+    
+    if (!hasRegional) {
+      regionBtn.classList.add('is-disabled');
+      regionBtn.title = 'Listings for this product may vary by region. None found for this selection.';
+    } else {
+      const regionCount = Object.keys(product.regional_variants).length + 1;
+      regionBtn.title = `View this product in ${regionCount} regions`;
+      regionBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showRegionalDropdown(product, regionBtn);
+      });
+    }
 }
 
 /**
