@@ -7,33 +7,58 @@
       "countries": [
         "India"
       ],
-      "product_count": 15,
+      "product_count": 13,
       "filename": "products-INR.json",
       "categories": [
         "General",
-        "Electronics",
-        "Toys & Games"
+        "Beauty & Personal Care",
+        "Furniture",
+        "Books"
       ],
       "brands": [
-        "Honeywell",
-        "UBreathe",
         "Praan",
-        "Hero Electronix Pvt. Ltd",
+        "Qubo",
+        "UBreathe",
+        "LEVOIT",
+        "Dreo",
         "Nuwave",
-        "boAt",
-        "Héctor García, Francesc Miralles",
-        "MyMirror Publishing House Pvt. Ltd.",
-        "Diamond Books",
-        "CodersParadise",
-        "woopme"
+        "Honeywell",
+        "MyMirror Publishing House",
+        "Diamond Books"
       ],
       "price_range": {
         "min": 150,
-        "max": 131130.99
+        "max": 126804
+      }
+    },
+    {
+      "code": "AUD",
+      "name": "Australian Dollar",
+      "symbol": "A$",
+      "countries": [
+        "Australia"
+      ],
+      "product_count": 10,
+      "filename": "products-AUD.json",
+      "categories": [
+        "General",
+        "Furniture",
+        "Books"
+      ],
+      "brands": [
+        "Winix",
+        "Breville",
+        "Levoit",
+        "Cornerstone Press",
+        "HUTCHINSON PUBLISHING - TRADE"
+      ],
+      "price_range": {
+        "min": 16,
+        "max": 343
       }
     }
   ],
-  "last_updated": "2025-12-22T09:27:07.604Z",
-  "total_products": 15,
+  "last_updated": "2026-01-03T17:57:25.635Z",
+  "total_products": 23,
   "default_currency": "INR"
 }

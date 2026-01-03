@@ -1,30 +1,30 @@
 VibeDrips Data Processing Summary
-Generated: 2025-12-22T09:27:07.605Z
+Generated: 2026-01-03T17:57:25.637Z
 
 📊 STATISTICS
-- Total Rows Processed: 15
-- Products Successfully Processed: 15
+- Total Rows Processed: 23
+- Products Successfully Processed: 23
 - Errors Encountered: 0
 - Success Rate: 100.0%
 
 ⚠️ VALIDATION
-- Records Flagged: 2
-- Auto-corrected: 2
+- Records Flagged: 3
+- Auto-corrected: 3
 - Error Breakdown:
+  • DISCOUNT_MISMATCH: 2
   • INVALID_ORIGINAL: 1
-  • DISCOUNT_MISMATCH: 1
 
 💰 CURRENCIES
-- Currencies Found: 1
-- Available: INR
+- Currencies Found: 2
+- Available: AUD, INR
 
 📦 CATEGORIES
-- Categories Found: 3
-- Top Categories: General, Electronics, Toys & Games
+- Categories Found: 4
+- Top Categories: Books, Furniture, General, Beauty & Personal Care
 
 🏷️ BRANDS
-- Brands Found: 11
-- Top Brands: Nuwave, Diamond Books, MyMirror Publishing House Pvt. Ltd., Héctor García, Francesc Miralles, boAt
+- Brands Found: 14
+- Top Brands: HUTCHINSON PUBLISHING - TRADE, Cornerstone Press, MyMirror Publishing House, Levoit, Breville
 
 📁 FILES BEFORE DELETION
 - last_updated.txt
@@ -39,11 +39,13 @@ Generated: 2025-12-22T09:27:07.605Z
 
 
 📁 FILES GENERATED
-- products-INR.json (15 products)
+- products-AUD.json (10 products)
+- products-INR.json (13 products)
 - currencies.json (manifest)
 
 📁 FINAL FILES PRESENT
 - currencies.json
 - last_updated.txt
+- products-AUD.json
 - products-INR.json
 - products.csv
