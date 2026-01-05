@@ -17,13 +17,13 @@
       ],
       "brands": [
         "Praan",
-        "Qubo",
         "UBreathe",
         "LEVOIT",
         "Dreo",
         "Nuwave",
-        "Honeywell",
         "MyMirror Publishing House",
+        "Qubo",
+        "Honeywell",
         "Diamond Books"
       ],
       "price_range": {
@@ -41,15 +41,15 @@
       "product_count": 10,
       "filename": "products-AUD.json",
       "categories": [
-        "General",
         "Furniture",
+        "General",
         "Books"
       ],
       "brands": [
-        "Winix",
-        "Breville",
         "Levoit",
+        "Winix",
         "Cornerstone Press",
+        "Breville",
         "HUTCHINSON PUBLISHING - TRADE"
       ],
       "price_range": {
@@ -58,7 +58,7 @@
       }
     }
   ],
-  "last_updated": "2026-01-05T18:37:15.035Z",
+  "last_updated": "2026-01-05T20:19:54.758Z",
   "total_products": 23,
   "default_currency": "INR"
 }

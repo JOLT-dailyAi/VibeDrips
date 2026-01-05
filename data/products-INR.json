@@ -50,7 +50,10 @@
     "amazon_short": "https://amzn.to/4q46SfP",
     "amazon_long": "https://www.amazon.in/HIVE-Advanced-Allergens-Real-Time-App-Controlled/dp/B0FJ5R8JN7?crid=7PDUGGXYJ7AK&dib=eyJ2IjoiMSJ9.WzRWHAE7n_7gxOy9QRfWvx-VyFC946kSJf0c_QU2uGuWvay12Uw0_iYycb090CsJUyeVG0MPp0JKj_3eXNidZ4PHVbxcJN7pGVJlI1x_AaC-XdY64szSbPqNbTqaWdSkSsh_8s7XSgJNy9Vh_O9KhiRatjo61Gnmdgy80AB8fJMv4ZfQkC-ZPBc8cec2w9ZIHr0NJKLf5rqXwsuoe_14uzMRUMwLE2goAdbYwDK-g7I.BxaeT_g-MzLJZXfcHpljaME2JJvRdM2edVopZsvgf4I&dib_tag=se&keywords=praan+hive+air+purifier&qid=1766085330&sprefix=praan+hive+air+purifier%2Caps%2C197&sr=8-3&linkCode=ll1&tag=vibedrips-21&linkId=f28292f686a16c4f44b809a95118c388&language=en_IN&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/4q46SfP",
-    "timestamp": "2026-01-03T14:46:29.000Z",
+    "release_date": "2025-01-01T00:00:00.000Z",
+    "influencer": "Food Pharmer",
+    "manual_collections": [],
+    "season": null,
     "featured": false,
     "trending": false,
     "productDetails": [
@@ -74,6 +77,44 @@
       }
     ],
     "additionalInfo": {
+      "Other": [
+        {
+          "key": "Timestamp",
+          "label": "Timestamp",
+          "category": "Other",
+          "value": "1/3/2026 14:46:29"
+        },
+        {
+          "key": "controller_type",
+          "label": "Controller Type",
+          "category": "Other",
+          "value": "Android, iOS, iPadOS"
+        },
+        {
+          "key": "manufacture_year",
+          "label": "Manufacture Year",
+          "category": "Other",
+          "value": "2025"
+        },
+        {
+          "key": "net_quantity",
+          "label": "Net Quantity",
+          "category": "Other",
+          "value": "1 Count"
+        },
+        {
+          "key": "specification_met",
+          "label": "Specification Met",
+          "category": "Other",
+          "value": "FCC Certified"
+        },
+        {
+          "key": "filter_class",
+          "label": "Filter Class",
+          "category": "Other",
+          "value": "HEPA H14 Filter + Activated Carbon Filter"
+        }
+      ],
       "Product Specs": [
         {
           "key": "Discount",
@@ -153,38 +194,6 @@
           "category": "Technical",
           "value": "50 Decibels"
         }
-      ],
-      "Other": [
-        {
-          "key": "controller_type",
-          "label": "Controller Type",
-          "category": "Other",
-          "value": "Android, iOS, iPadOS"
-        },
-        {
-          "key": "manufacture_year",
-          "label": "Manufacture Year",
-          "category": "Other",
-          "value": "2025"
-        },
-        {
-          "key": "net_quantity",
-          "label": "Net Quantity",
-          "category": "Other",
-          "value": "1 Count"
-        },
-        {
-          "key": "specification_met",
-          "label": "Specification Met",
-          "category": "Other",
-          "value": "FCC Certified"
-        },
-        {
-          "key": "filter_class",
-          "label": "Filter Class",
-          "category": "Other",
-          "value": "HEPA H14 Filter + Activated Carbon Filter"
-        }
       ]
     },
     "drop_signals": {
@@ -196,173 +205,9 @@
       "is_global": false,
       "is_high_visibility": false,
       "is_social_proof": false,
-      "is_this_month": true,
-      "drop_categories": [
-        "hot-this-month"
-      ]
-    }
-  },
-  {
-    "asin": "B0DHGFCG6P",
-    "name": "Qubo Car Air Purifier Pro from Hero Group | 3-Layer Filtration | Negative Ion Technology | Pre-filter, HEPA13 & Activated Carbon Filter | Removes PM 2.5 & PM 10 | Black",
-    "description": "【Negative Ion Technology】Emits Up To 50 Million Negative Ions That Eliminate 99.8% Of Viruses, Bacteria, PM2.5, PM10, And Dust—Offering Full Protection Against Allergens And Airborne Pollutants. 【3-Layer Filtration】Multi-Stage Filtration System Includes A Pre-Filter, HEPA13, And Activated Carbon Filter—Effectively Captures Microscopic Particles And Toxic Gases For Cleaner Cabin Air. 【3 Modes Of Purification】Switch Between Silent, Active, And Turbo Modes Depending On Real-Time AQI Levels—Silent For Normal, Active For Moderate, And Turbo For High Pollution. 【Easy Plug And Use】Designed Without An In-Built Battery To Avoid Fire Risk—Simply Plug Into The USB Port Of Your Car For Safe And Reliable Operation Even In High Temperatures. 【Ergonomic Design】Built With Premium Aluminum Alloy And A Tumbler-Style Base That Fits Securely In Standard Car Cup Holders—Combines Durability With Minimalist Aesthetics. 【Convenient And Compatible】Top-Mounted Mode Button Enables Quick Switching Between Purification Modes—Plug-And-Play Operation Ensures Instant Air Quality Improvement. 【Relief From Seasonal Allergies】Ideal For Individuals With Allergies Or Respiratory Sensitivity—Removes Pollens, Dust, Pet Dander, And Other Airborne Irritants Inside The Car Cabin..",
-    "price": 3290,
-    "original_price": 6990,
-    "originalPrice": 6990,
-    "discount_percentage": 53,
-    "discountPercentage": 53,
-    "availability": "In Stock",
-    "Error-Flag": 1,
-    "Error-Reason": "",
-    "Error-Fields": [
-      "Amazon marketplace domain",
-      "Reference Media for similar products ",
-      "color",
-      "generic_name"
-    ],
-    "currency": "INR",
-    "symbol": "₹",
-    "brand": "Qubo",
-    "category": "General",
-    "subcategory": "Air Purifier",
-    "main_image": "https://m.media-amazon.com/images/I/41O1OX4huaL.jpg",
-    "all_images": [
-      "https://m.media-amazon.com/images/I/41O1OX4huaL.jpg",
-      "https://m.media-amazon.com/images/I/61BuiDPoSFL.jpg",
-      "https://m.media-amazon.com/images/I/618LTVNDJ-L.jpg",
-      "https://m.media-amazon.com/images/I/61XhP8dyuLL.jpg",
-      "https://m.media-amazon.com/images/I/61dgluVX49L.jpg",
-      "https://m.media-amazon.com/images/I/51kYAekY2oL.jpg",
-      "https://m.media-amazon.com/images/I/31hPGIVvshL.jpg",
-      "https://m.media-amazon.com/images/I/41+i5SZsO2L.jpg",
-      "https://m.media-amazon.com/images/I/41rKV574mpL.jpg",
-      "https://m.media-amazon.com/images/I/419KSFfKQzL.jpg"
-    ],
-    "customer_rating": "3.5 out of 5 stars",
-    "review_count": 139,
-    "source_link": "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
-    "referenceMedia": [
-      "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd"
-    ],
-    "regional_availability": 0,
-    "regional_variants": {},
-    "amazon_short": "https://amzn.to/48KIWaZ",
-    "amazon_long": "https://www.amazon.in/Qubo-Filtration-Technology-Pre-filter-Activated/dp/B0DHGFCG6P?crid=TCT3DAWVIGYK&dib=eyJ2IjoiMSJ9.oiXJFm1eOltK900oi2ZigB3aWCdr331LGmvEyhCNomnz6C0odZ1TWNs4S8l-Ep4U1ESGLbXmUhH-1USLO4_B-Aga1-TuqLxi2h3SkrDAgBPsWb2sH57kLFVFrVPV4uXJ3RXEiBMC78DWAwjiRR5lrQ.Vl_vHwdJJoh1HF4latUHpmel8tFLZWwNelNKYS42oiw&dib_tag=se&keywords=qubo+car+air+purifier+pro&nsdOptOutParam=true&qid=1766086868&refinements=p_n_availability%3A1318485031%2Cp_123%3A369904&rnid=91049095031&sprefix=qubo+car+air+purifier%2Caps%2C204&sr=8-3&linkCode=ll1&tag=vibedrips-21&linkId=dcf86334a1ce3e4fd80008978ce65b23&language=en_IN&ref_=as_li_ss_tl",
-    "affiliate_link": "https://amzn.to/48KIWaZ",
-    "timestamp": "2026-01-03T14:46:29.000Z",
-    "featured": false,
-    "trending": false,
-    "productDetails": [
-      {
-        "key": "weight",
-        "label": "Weight",
-        "value": "396 g",
-        "priority": 1
-      },
-      {
-        "key": "dimensions",
-        "label": "Dimensions",
-        "value": "6.3 x 6.3 x 18.7 Centimeters",
-        "priority": 1
-      },
-      {
-        "key": "origin",
-        "label": "Made in",
-        "value": "China",
-        "priority": 2
-      }
-    ],
-    "additionalInfo": {
-      "Product Specs": [
-        {
-          "key": "Discount",
-          "label": "Discount",
-          "category": "Product Specs",
-          "value": "53"
-        },
-        {
-          "key": "numberOfPieces",
-          "label": "Number Of Pieces",
-          "category": "Product Specs",
-          "value": "1 Count"
-        },
-        {
-          "key": "unitCount",
-          "label": "Unit Count",
-          "category": "Product Specs",
-          "value": "1 Count"
-        },
-        {
-          "key": "includedComponents",
-          "label": "Included Components",
-          "category": "Product Specs",
-          "value": "Car Air purifier with Filters 1N, 0.5 meter USB Cable 1N, QR Card (Warranty & Digital User Manual)"
-        }
-      ],
-      "Books": [
-        {
-          "key": "publisher",
-          "label": "Publisher",
-          "category": "Books",
-          "value": "Hero Electronix Pvt. Ltd"
-        }
-      ],
-      "Manufacturing": [
-        {
-          "key": "manufacturer",
-          "label": "Manufacturer",
-          "category": "Manufacturing",
-          "value": "Hero Electronix Pvt. Ltd"
-        },
-        {
-          "key": "manufacturerContact",
-          "label": "Manufacturer Contact",
-          "category": "Manufacturing",
-          "value": "Hero Electronix Pvt. Ltd., Toll-free helpline number: 9319095757"
-        },
-        {
-          "key": "packer",
-          "label": "Packer",
-          "category": "Manufacturing",
-          "value": "Hero Electronix Pvt. Ltd., Toll-free helpline number: 9319095757"
-        },
-        {
-          "key": "importer",
-          "label": "Importer",
-          "category": "Manufacturing",
-          "value": "Hero Electronix Private Limited Plot No 4, Khasra No. 382,Village Sultanpur, MG Road, New Delhi -110030"
-        }
-      ],
-      "Technical": [
-        {
-          "key": "item_model_number",
-          "label": "Item Model Number",
-          "category": "Technical",
-          "value": "HPA02"
-        }
-      ],
-      "Other": [
-        {
-          "key": "net_quantity",
-          "label": "Net Quantity",
-          "category": "Other",
-          "value": "1 Count"
-        }
-      ]
-    },
-    "drop_signals": {
-      "has_reference_media": false,
-      "media_count": 1,
-      "regional_availability": false,
-      "available_regions": [],
-      "influencer_presence": false,
-      "is_global": false,
-      "is_high_visibility": false,
-      "is_social_proof": false,
-      "is_this_month": true,
-      "drop_categories": [
-        "hot-this-month"
-      ]
+      "is_new_release": false,
+      "product_age_days": 369,
+      "drop_categories": []
     }
   },
   {
@@ -412,7 +257,10 @@
     "amazon_short": "https://amzn.to/4jf44JZ",
     "amazon_long": "https://www.amazon.in/uBreathe-Purifier-Plant-based-Filtration-pollutants/dp/B0F1MR9W8R?crid=826JKP9KWA5J&dib=eyJ2IjoiMSJ9.mWwCe4d9zdQ6o-K0WTMhqwiSOqXRaGyHzWBIXFr5pOrGjHj071QN20LucGBJIEps.af-GL5NoRKrUebUJ7TwAKILQOQ7pD0ZPcvtPL3kXFjQ&dib_tag=se&keywords=ubreathe+life+air+purifier&qid=1766089908&refinements=p_n_availability%3A1318485031%2Cp_72%3A1318476031%2Cp_123%3A1449711&rnid=91049095031&sprefix=ubreathe+life+air+purifier%2Caps%2C175&sr=8-1&linkCode=ll1&tag=vibedrips-21&linkId=0b38cb58a305e8486f936f398f371bb0&language=en_IN&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/4jf44JZ",
-    "timestamp": "2026-01-03T14:46:29.000Z",
+    "release_date": "2024-01-01T00:00:00.000Z",
+    "influencer": null,
+    "manual_collections": [],
+    "season": null,
     "featured": false,
     "trending": false,
     "productDetails": [
@@ -436,6 +284,32 @@
       }
     ],
     "additionalInfo": {
+      "Other": [
+        {
+          "key": "Timestamp",
+          "label": "Timestamp",
+          "category": "Other",
+          "value": "1/3/2026 14:46:29"
+        },
+        {
+          "key": "floor_area",
+          "label": "Floor Area",
+          "category": "Other",
+          "value": "400 Square Feet"
+        },
+        {
+          "key": "controller_type",
+          "label": "Controller Type",
+          "category": "Other",
+          "value": "Control Panel, IoT Enabled, Connect with Wi-Fi"
+        },
+        {
+          "key": "manufacture_year",
+          "label": "Manufacture Year",
+          "category": "Other",
+          "value": "2024"
+        }
+      ],
       "Product Specs": [
         {
           "key": "Discount",
@@ -491,25 +365,173 @@
           "category": "Technical",
           "value": "37 Decibels"
         }
-      ],
+      ]
+    },
+    "drop_signals": {
+      "has_reference_media": false,
+      "media_count": 1,
+      "regional_availability": false,
+      "available_regions": [],
+      "influencer_presence": false,
+      "is_global": false,
+      "is_high_visibility": false,
+      "is_social_proof": false,
+      "is_new_release": false,
+      "product_age_days": 735,
+      "drop_categories": []
+    }
+  },
+  {
+    "asin": "B0CG1N11DV",
+    "name": "LEVOIT Core Mini Air Purifier For Coverage Area 183 Sq Ft, H13 Truehepa Filter, Remove 99.97% Dust, Smoke, & Pollen, With Fragrance Sponge, (2 Years Warranty), White",
+    "description": "TOP-RATED AIR PURIFIER BRAND: LEVOIT is the #1 selling air purifier brand in the United States, recognized globally for its commitment to improving indoor air quality and enhancing the well-being of families through advanced filtration technology. WORRY-FREE AIR QUALITY: Effectively addresses common air quality issues like pollen, dust, smoke smells, and pet dander, all while being lightweight at just 2.2 lbs for easy portability. UNIQUE AROMATHERAPY FEATURE: Enhances your space by allowing you to add essential oils to the aroma pad, providing a refreshing scent while promoting relaxation. PERSONAL HEPA AIR PURIFIER: Utilizes 360° VortexAir 3.0 technology and a 3-stage filtration system, capable of purifying spaces up to 17㎡ in just 30 minutes. EASY TO USE: Features a simple control system with only two buttons to cycle through three fan speeds and check the reset filter indicator, with an automatic screen timeout for convenience. QUIET OPERATION: Designed for serene environments, this air purifier operates at noise levels as low as 25dB, allowing you to sleep soundly without disturbance. POWER SAVING: Energy-efficient with a power rating of just 7W, the Core Mini is Energy Star certified, making it a cost-effective choice for continuous air purification.. Validate before displaying - Choose an input from This is definitely a great air purifier to have in the bedroom or living room. The performance is impressive—the machine inside feels solid, powerful, and effective in maintaining clean air. It runs smoothly and quietly, making it ideal for everyday indoor use. The only thing missing at this price point is an AQI (Air Quality Index) indicator. Having a real-time AQI display at this price point would have made the product even more premium and informative for users. Levoit’s customer service has been very cordial and responsive showing a good brand value. Overall, it is highly recommended to go with a Levoit Air Purifier without any doubt if you are looking for a powerful and trustworthy air purification solution.,If you're on the fence about getting an air purifier, just get this one “LEVOIT Core Air Purifier “. It’s quiet, powerful, and genuinely works. The difference in air quality is noticeable within hours, especially for allergy sufferers like me. My Situation: I live in a 200sq ft . I also suffer from seasonal allergies and mild asthma. Between pollen from open windows, and general city dust, I was constantly sneezing, congested, and needing to dust every other day. I needed a solution for my main living area/bedroom. After extensive research, I picked this model because of its True HEPA H13 filter (captures 99.97% of particles down to 0.3 microns), its CADR rating suited for my room size, and the inclusion of a dedicated activated carbon filter for odors. I was skeptical that an air purifier could make such a dramatic difference. I am now a total believer. This unit has significantly improved my daily comfort, my sleep quality, and my overall health. It feels like an investment in our well-being. Who is this for? Allergy sufferers, pet owners, city dwellers, people sensitive to smells, or anyone who just wants to breathe cleaner air in their personal space. Highly, highly recommended. It does exactly what it promises, efficiently and quietly. Worth every penny. ",
+    "price": 5988,
+    "original_price": 10900,
+    "originalPrice": 10900,
+    "discount_percentage": 45,
+    "discountPercentage": 45,
+    "availability": "In Stock",
+    "Error-Flag": 1,
+    "Error-Reason": "",
+    "Error-Fields": [
+      "Amazon marketplace domain",
+      "Reference Media for similar products ",
+      "publisher",
+      "manufacturer",
+      "packer",
+      "color",
+      "includedComponents",
+      "additionalFeatures",
+      "particle_retention_size",
+      "contaminant_filtration_capability",
+      "generic_name",
+      "special_feature",
+      "included_components",
+      "colour",
+      "filter_class"
+    ],
+    "currency": "INR",
+    "symbol": "₹",
+    "brand": "LEVOIT",
+    "category": "Beauty & Personal Care",
+    "subcategory": "Air Purifier",
+    "main_image": "https://m.media-amazon.com/images/I/61qe7hzT8SL.jpg",
+    "all_images": [
+      "https://m.media-amazon.com/images/I/61qe7hzT8SL.jpg",
+      "https://m.media-amazon.com/images/I/617RwafDy2L.jpg",
+      "https://m.media-amazon.com/images/I/71curoNvTML.jpg",
+      "https://m.media-amazon.com/images/I/71OGJ2kyoUL.jpg",
+      "https://m.media-amazon.com/images/I/71Yn10exFPL.jpg",
+      "https://m.media-amazon.com/images/I/81P7jkNxA6L.jpg",
+      "https://m.media-amazon.com/images/I/41BpnEUag-L.jpg",
+      "https://m.media-amazon.com/images/I/41psgE7+oiL.jpg",
+      "https://m.media-amazon.com/images/I/51QX3j9NchL.jpg",
+      "https://m.media-amazon.com/images/I/51PZZ9FLoVL.jpg"
+    ],
+    "customer_rating": "4.4 out of 5 stars",
+    "review_count": 88860,
+    "source_link": "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
+    "referenceMedia": [
+      "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd"
+    ],
+    "regional_availability": 0,
+    "regional_variants": {},
+    "amazon_short": "https://amzn.to/48PBAD1",
+    "amazon_long": "https://www.amazon.in/LEVOIT-Core-Mini-Fragrance-Frenshener/dp/B0CG1N11DV?pd_rd_w=4zOPW&content-id=amzn1.sym.7ccbe032-5929-4c88-ab39-4923842061df&pf_rd_p=7ccbe032-5929-4c88-ab39-4923842061df&pf_rd_r=H2R87GF1T082JTXFJA7G&pd_rd_wg=AkPYP&pd_rd_r=fc82ac2a-46d8-4e75-a525-54cfaa260119&pd_rd_i=B0CG1N11DV&th=1&linkCode=ll1&tag=vibedrips-21&linkId=bf10776160f3c9da9c75de03f5e1bd27&language=en_IN&ref_=as_li_ss_tl",
+    "affiliate_link": "https://amzn.to/48PBAD1",
+    "release_date": "2024-01-01T00:00:00.000Z",
+    "influencer": "Food Pharmer",
+    "manual_collections": [],
+    "season": "Summer",
+    "featured": false,
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "1 kg 60 g",
+        "priority": 1
+      },
+      {
+        "key": "dimensions",
+        "label": "Dimensions",
+        "value": "19.3D x 29W x 19.8H Centimeters",
+        "priority": 1
+      },
+      {
+        "key": "origin",
+        "label": "Made in",
+        "value": "China",
+        "priority": 2
+      }
+    ],
+    "additionalInfo": {
       "Other": [
+        {
+          "key": "Timestamp",
+          "label": "Timestamp",
+          "category": "Other",
+          "value": "1/3/2026 14:46:29"
+        },
         {
           "key": "floor_area",
           "label": "Floor Area",
           "category": "Other",
-          "value": "400 Square Feet"
+          "value": "370 Square Feet"
         },
         {
           "key": "controller_type",
           "label": "Controller Type",
           "category": "Other",
-          "value": "Control Panel, IoT Enabled, Connect with Wi-Fi"
+          "value": "Button Control"
+        },
+        {
+          "key": "upc",
+          "label": "Upc",
+          "category": "Other",
+          "value": "810123672011"
         },
         {
           "key": "manufacture_year",
           "label": "Manufacture Year",
           "category": "Other",
           "value": "2024"
+        }
+      ],
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "45"
+        }
+      ],
+      "Manufacturing": [
+        {
+          "key": "importer",
+          "label": "Importer",
+          "category": "Manufacturing",
+          "value": "Frootle India Pvt Ltd"
+        }
+      ],
+      "Technical": [
+        {
+          "key": "item_model_number",
+          "label": "Item Model Number",
+          "category": "Technical",
+          "value": "LAP-C161-WUK"
+        },
+        {
+          "key": "wattage",
+          "label": "Wattage",
+          "category": "Technical",
+          "value": "7 Watts"
+        },
+        {
+          "key": "noise_level",
+          "label": "Noise Level",
+          "category": "Technical",
+          "value": "25 Decibels"
         }
       ]
     },
@@ -522,10 +544,184 @@
       "is_global": false,
       "is_high_visibility": false,
       "is_social_proof": false,
-      "is_this_month": true,
-      "drop_categories": [
-        "hot-this-month"
+      "is_new_release": false,
+      "product_age_days": 735,
+      "drop_categories": []
+    }
+  },
+  {
+    "asin": "B0DF6NBJDW",
+    "name": "Dreo 11L Smart Humidifier Large Room 700 ft², 100H Cool Mist Air Humidifiers for Bedroom, Top-Fill Self-Cleaning Tank, 26dB, Auto Mode, Aroma Box, RGB Light, Remote & APP Control, Baby, Plant, Blue",
+    "description": "This humidifier has a sleek and modern design, with two lightweight sections divided by a silver band, all secured to a pedestal base with a twist lock and screw. • The flat lid has a 360-degree rotatable mist nozzle that is angled at 30 degrees. You can change the direction, but not the angle. • The lid features a protruding finger tab for easy removal. • Underneath the lid is a large water collection area with a centrally located mister. • It has drainage slots on one side that direct water into the main reservoir (which holds up to 11 liters or 2.96 gallons). • The top section houses the motor and a 5-ft polarized electrical cord, and it easily lifts off for cleaning. • The bottom section contains a simple water draw tube with an attached round water filter that is easy to replace. • Other than some plastic guides for water flow, the bottom reservoir is mostly empty. • The unit includes a rear aroma tray with removable absorbent material if you want to add fragrance. • Base dimensions: 10 inches wide × 8 inches deep • Height: 31 inches from floor to lid • Circumference: 23 inches • Max power usage: 32 watts • Water weight (full): ~24 lbs • Unit weight (empty): ~6 lbs • Handles? No, but it’s easy to move when it’s not full. I won’t go into deep technical details—you can download the user manual under “Product Guides and Documents” on the Amazon page. However, I will note: • Auto Mode: Whisper quiet • Highest setting (Level 3): Not bad in terms of noise, but audible. • App Integration: The Dreo app syncs first via Bluetooth, then WiFi only for Google and Alexa support. • Voice Control: You can control most features and scheduling through the app or with voice commands. • Alexa: Can tell you the humidity setting but not the current humidity level (this is an Alexa limitation, not a Dreo issue). • Google Assistant: Can provide both the humidity setting and current room humidity when asked: o Example: “Hey Google, what is the humidifier humidity level?” o If you named your device “humidifier,” Google will give you the correct response. • Important Note: This issue happens with other smart devices too. Alexa simply does not support reporting humidity levels, while Google does. One reviewer mentioned white dust buildup, which happens with humidifiers using hard water or well water. Solution? Use: ✅ Distilled water ✅ Refrigerator-filtered water ✅ Demineralized water I personally use my refrigerator's filtered water and have zero white dust issues. I placed my humidifier in the middle of my living room, set the humidity goal to 65%, and went to bed. • Starting humidity: 22% • Morning humidity: 52% o (It didn’t reach 65% because my house leaks too much air, which would cost thousands to fix.) I primarily bought this humidifier to: ✅ Improve humidity for my houseplants ✅ Stop itchy, dry skin It works perfectly for both. If I needed another humidifier, I would buy this exact model again. Dreo did an excellent job with the design, functionality, and smart features. Highly recommended. Hope this review helps someone! Edit: Three points: 1. The reservoir tank is one solid floor of plastic which cannot leak, however if you fill excessively beyond the outside marked max water line, as seen on the front, the overfill will leak from the top backside. 2. The Dreco app gives you full control over the unit except it doesn't provide a remaining water level gauge. That's because the remaining water level is only read visually from the front outside. 3. You can turn the unit ON or OFF by voice (Alexa/Google) or in combination with the app or by a schedule. The schedule could be made on Alexa or on Google home or in the Dreco app, it all works. 4. This unit doesn't provide any more white dust, than any other humidifier. White dust is simply excessive minerals, (total dissolve solids TDS) in the water. Again I use refrigerator filtered water which has total dissolved solids around 109 ppm. I liked the humidifier so much that I bought another identical one. My plants are happy and I don't scratch.",
+    "price": 65628,
+    "original_price": 75281,
+    "originalPrice": 75281,
+    "discount_percentage": 13,
+    "discountPercentage": 13,
+    "availability": "In Stock",
+    "Error-Flag": 1,
+    "Error-Reason": "",
+    "Error-Fields": [
+      "Amazon marketplace domain",
+      "Reference Media for similar products ",
+      "publisher",
+      "manufacturer",
+      "color",
+      "item_model_number",
+      "wattage",
+      "room_type",
+      "noise_level",
+      "controller_type",
+      "generic_name",
+      "colour"
+    ],
+    "currency": "INR",
+    "symbol": "₹",
+    "brand": "Dreo",
+    "category": "Furniture",
+    "subcategory": "Humidifier",
+    "main_image": "https://m.media-amazon.com/images/I/61pMsCc8y3L.jpg",
+    "all_images": [
+      "https://m.media-amazon.com/images/I/61pMsCc8y3L.jpg",
+      "https://m.media-amazon.com/images/I/71xlygL5IRL.jpg",
+      "https://m.media-amazon.com/images/I/71XOXPFC+oL.jpg",
+      "https://m.media-amazon.com/images/I/81r00KJk9cL.jpg",
+      "https://m.media-amazon.com/images/I/71BBW82EyHL.jpg",
+      "https://m.media-amazon.com/images/I/716VBAQ6HeL.jpg",
+      "https://m.media-amazon.com/images/I/71UTdETQa9L.jpg",
+      "https://m.media-amazon.com/images/I/61ISLbNOD+L.jpg",
+      "https://m.media-amazon.com/images/I/31dwadIfCLL.jpg",
+      "https://m.media-amazon.com/images/I/41GSfwyKfLL.jpg"
+    ],
+    "customer_rating": "4.3 out of 5 stars",
+    "review_count": 580,
+    "source_link": "https://youtu.be/jZfzeppym-I?si=iZEIvtUK9bKepQ2k",
+    "referenceMedia": [
+      "https://youtu.be/jZfzeppym-I?si=iZEIvtUK9bKepQ2k"
+    ],
+    "regional_availability": 0,
+    "regional_variants": {},
+    "amazon_short": "https://amzn.to/4p7Vb6m",
+    "amazon_long": "https://www.amazon.in/Dreo-Humidifier-Humidifiers-Self-Cleaning-White/dp/B0DF6NBJDW?crid=1CI9J21LNMENK&dib=eyJ2IjoiMSJ9.zwOzmNu2SIy4UxR8QeAt1aFUZJAFC9a4Oo_LmkZuI-xijvYPNCuoV9LBeWoUhalRz7DwrbNQEMBUD2_sDPSOSijyQIYvv06JZnhqiehpWh9vAWFepGp9FfGAWaBc0ifrL0zKhwPyL3NRgMgwoSlHCHgws2BarjHYW7CF0cxi_2i4q2InMYneONwbY6in3A5sMGXfllreuIYjF1WXECm2n_0DaA1WthqFgGebFeMAy6w.VB3aXrhHLmDeVJi7TuPWvnXo9B99XhcSxEfTHwPgcH8&dib_tag=se&keywords=humidifier%2Bfor%2Bhome%2Bdreo%2BHM735S&qid=1766402533&s=kitchen&sprefix=humidifier%2Bfor%2Bhome%2Bdreo%2Bhm735s%2Ckitchen%2C164&sr=1-4&th=1&linkCode=ll1&tag=vibedrips-21&linkId=d9d2f664e2abb3d291853e6830a21a58&language=en_IN&ref_=as_li_ss_tl",
+    "affiliate_link": "https://amzn.to/4p7Vb6m",
+    "release_date": "2024-01-01T00:00:00.000Z",
+    "influencer": null,
+    "manual_collections": [],
+    "season": "Summer",
+    "featured": false,
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "5.94 Pounds",
+        "priority": 1
+      },
+      {
+        "key": "dimensions",
+        "label": "Dimensions",
+        "value": "26D x 22.5W x 78.5H Centimeters",
+        "priority": 1
+      }
+    ],
+    "additionalInfo": {
+      "Other": [
+        {
+          "key": "Timestamp",
+          "label": "Timestamp",
+          "category": "Other",
+          "value": "1/3/2026 14:46:29"
+        },
+        {
+          "key": "floor_area",
+          "label": "Floor Area",
+          "category": "Other",
+          "value": "700 Square Feet"
+        },
+        {
+          "key": "shape",
+          "label": "Shape",
+          "category": "Other",
+          "value": "Square"
+        },
+        {
+          "key": "upc",
+          "label": "Upc",
+          "category": "Other",
+          "value": "810142852067"
+        },
+        {
+          "key": "manufacture_year",
+          "label": "Manufacture Year",
+          "category": "Other",
+          "value": "2024"
+        },
+        {
+          "key": "operation_mode",
+          "label": "Operation Mode",
+          "category": "Other",
+          "value": "Ultrasonic"
+        }
+      ],
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "13"
+        },
+        {
+          "key": "numberOfPieces",
+          "label": "Number Of Pieces",
+          "category": "Product Specs",
+          "value": "1"
+        },
+        {
+          "key": "includedComponents",
+          "label": "Included Components",
+          "category": "Product Specs",
+          "value": "11L Humidifier x1, Aroma Pad, Cleaning Brush, Screw x 1, User Manual"
+        },
+        {
+          "key": "additionalFeatures",
+          "label": "Additional Features",
+          "category": "Product Specs",
+          "value": "Aroma Diffuser, Digital Display, Easy Top-Fill, Night Light, Removable Tank, Smart Control"
+        },
+        {
+          "key": "special_feature",
+          "label": "Special Feature",
+          "category": "Product Specs",
+          "value": "Aroma Diffuser, Digital Display, Easy Top-Fill, Night Light, Removable Tank, Smart Control"
+        }
+      ],
+      "Technical": [
+        {
+          "key": "model_name",
+          "label": "Model Name",
+          "category": "Technical",
+          "value": "HM735S"
+        },
+        {
+          "key": "voltage",
+          "label": "Voltage",
+          "category": "Technical",
+          "value": "120 Volts"
+        }
       ]
+    },
+    "drop_signals": {
+      "has_reference_media": false,
+      "media_count": 1,
+      "regional_availability": false,
+      "available_regions": [],
+      "influencer_presence": false,
+      "is_global": false,
+      "is_high_visibility": false,
+      "is_social_proof": false,
+      "is_new_release": false,
+      "product_age_days": 735,
+      "drop_categories": []
     }
   },
   {
@@ -575,7 +771,10 @@
     "amazon_short": "https://amzn.to/3KHxW53",
     "amazon_long": "https://www.amazon.in/UBreathe-Purifying-Filtration-Removing-Pollutants/dp/B0CQ2MVRXR?pd_rd_w=9xdiR&content-id=amzn1.sym.38ab170c-68e6-4e35-87b8-c345099a6660&pf_rd_p=38ab170c-68e6-4e35-87b8-c345099a6660&pf_rd_r=R6GTDES5PX0XJQYMTYDG&pd_rd_wg=lfwcJ&pd_rd_r=f51a545f-bfe9-4cb9-8c09-80a05c9d1d03&pd_rd_i=B0CQ2MVRXR&psc=1&linkCode=ll1&tag=vibedrips-21&linkId=66e17de4ece247747066671e2c2816ca&language=en_IN&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/3KHxW53",
-    "timestamp": "2026-01-03T14:46:29.000Z",
+    "release_date": "2023-01-01T00:00:00.000Z",
+    "influencer": null,
+    "manual_collections": [],
+    "season": "Summer",
     "featured": false,
     "trending": false,
     "productDetails": [
@@ -605,6 +804,50 @@
       }
     ],
     "additionalInfo": {
+      "Other": [
+        {
+          "key": "Timestamp",
+          "label": "Timestamp",
+          "category": "Other",
+          "value": "1/3/2026 14:46:29"
+        },
+        {
+          "key": "floor_area",
+          "label": "Floor Area",
+          "category": "Other",
+          "value": "80 Square Feet"
+        },
+        {
+          "key": "controller_type",
+          "label": "Controller Type",
+          "category": "Other",
+          "value": "Button Control"
+        },
+        {
+          "key": "manufacture_year",
+          "label": "Manufacture Year",
+          "category": "Other",
+          "value": "2023"
+        },
+        {
+          "key": "net_quantity",
+          "label": "Net Quantity",
+          "category": "Other",
+          "value": "1.00 Count"
+        },
+        {
+          "key": "specification_met",
+          "label": "Specification Met",
+          "category": "Other",
+          "value": "CE Certified"
+        },
+        {
+          "key": "filter_class",
+          "label": "Filter Class",
+          "category": "Other",
+          "value": "AirPurifierFilter"
+        }
+      ],
       "Product Specs": [
         {
           "key": "Discount",
@@ -678,44 +921,6 @@
           "category": "Technical",
           "value": "12 Decibels"
         }
-      ],
-      "Other": [
-        {
-          "key": "floor_area",
-          "label": "Floor Area",
-          "category": "Other",
-          "value": "80 Square Feet"
-        },
-        {
-          "key": "controller_type",
-          "label": "Controller Type",
-          "category": "Other",
-          "value": "Button Control"
-        },
-        {
-          "key": "manufacture_year",
-          "label": "Manufacture Year",
-          "category": "Other",
-          "value": "2023"
-        },
-        {
-          "key": "net_quantity",
-          "label": "Net Quantity",
-          "category": "Other",
-          "value": "1.00 Count"
-        },
-        {
-          "key": "specification_met",
-          "label": "Specification Met",
-          "category": "Other",
-          "value": "CE Certified"
-        },
-        {
-          "key": "filter_class",
-          "label": "Filter Class",
-          "category": "Other",
-          "value": "AirPurifierFilter"
-        }
       ]
     },
     "drop_signals": {
@@ -727,337 +932,9 @@
       "is_global": false,
       "is_high_visibility": false,
       "is_social_proof": false,
-      "is_this_month": true,
-      "drop_categories": [
-        "hot-this-month"
-      ]
-    }
-  },
-  {
-    "asin": "B0CG1N11DV",
-    "name": "LEVOIT Core Mini Air Purifier For Coverage Area 183 Sq Ft, H13 Truehepa Filter, Remove 99.97% Dust, Smoke, & Pollen, With Fragrance Sponge, (2 Years Warranty), White",
-    "description": "TOP-RATED AIR PURIFIER BRAND: LEVOIT is the #1 selling air purifier brand in the United States, recognized globally for its commitment to improving indoor air quality and enhancing the well-being of families through advanced filtration technology. WORRY-FREE AIR QUALITY: Effectively addresses common air quality issues like pollen, dust, smoke smells, and pet dander, all while being lightweight at just 2.2 lbs for easy portability. UNIQUE AROMATHERAPY FEATURE: Enhances your space by allowing you to add essential oils to the aroma pad, providing a refreshing scent while promoting relaxation. PERSONAL HEPA AIR PURIFIER: Utilizes 360° VortexAir 3.0 technology and a 3-stage filtration system, capable of purifying spaces up to 17㎡ in just 30 minutes. EASY TO USE: Features a simple control system with only two buttons to cycle through three fan speeds and check the reset filter indicator, with an automatic screen timeout for convenience. QUIET OPERATION: Designed for serene environments, this air purifier operates at noise levels as low as 25dB, allowing you to sleep soundly without disturbance. POWER SAVING: Energy-efficient with a power rating of just 7W, the Core Mini is Energy Star certified, making it a cost-effective choice for continuous air purification.. Validate before displaying - Choose an input from This is definitely a great air purifier to have in the bedroom or living room. The performance is impressive—the machine inside feels solid, powerful, and effective in maintaining clean air. It runs smoothly and quietly, making it ideal for everyday indoor use. The only thing missing at this price point is an AQI (Air Quality Index) indicator. Having a real-time AQI display at this price point would have made the product even more premium and informative for users. Levoit’s customer service has been very cordial and responsive showing a good brand value. Overall, it is highly recommended to go with a Levoit Air Purifier without any doubt if you are looking for a powerful and trustworthy air purification solution.,If you're on the fence about getting an air purifier, just get this one “LEVOIT Core Air Purifier “. It’s quiet, powerful, and genuinely works. The difference in air quality is noticeable within hours, especially for allergy sufferers like me. My Situation: I live in a 200sq ft . I also suffer from seasonal allergies and mild asthma. Between pollen from open windows, and general city dust, I was constantly sneezing, congested, and needing to dust every other day. I needed a solution for my main living area/bedroom. After extensive research, I picked this model because of its True HEPA H13 filter (captures 99.97% of particles down to 0.3 microns), its CADR rating suited for my room size, and the inclusion of a dedicated activated carbon filter for odors. I was skeptical that an air purifier could make such a dramatic difference. I am now a total believer. This unit has significantly improved my daily comfort, my sleep quality, and my overall health. It feels like an investment in our well-being. Who is this for? Allergy sufferers, pet owners, city dwellers, people sensitive to smells, or anyone who just wants to breathe cleaner air in their personal space. Highly, highly recommended. It does exactly what it promises, efficiently and quietly. Worth every penny. ",
-    "price": 5988,
-    "original_price": 10900,
-    "originalPrice": 10900,
-    "discount_percentage": 45,
-    "discountPercentage": 45,
-    "availability": "In Stock",
-    "Error-Flag": 1,
-    "Error-Reason": "",
-    "Error-Fields": [
-      "Amazon marketplace domain",
-      "Reference Media for similar products ",
-      "publisher",
-      "manufacturer",
-      "packer",
-      "color",
-      "includedComponents",
-      "additionalFeatures",
-      "particle_retention_size",
-      "contaminant_filtration_capability",
-      "generic_name",
-      "special_feature",
-      "included_components",
-      "colour",
-      "filter_class"
-    ],
-    "currency": "INR",
-    "symbol": "₹",
-    "brand": "LEVOIT",
-    "category": "Beauty & Personal Care",
-    "subcategory": "Air Purifier",
-    "main_image": "https://m.media-amazon.com/images/I/61qe7hzT8SL.jpg",
-    "all_images": [
-      "https://m.media-amazon.com/images/I/61qe7hzT8SL.jpg",
-      "https://m.media-amazon.com/images/I/617RwafDy2L.jpg",
-      "https://m.media-amazon.com/images/I/71curoNvTML.jpg",
-      "https://m.media-amazon.com/images/I/71OGJ2kyoUL.jpg",
-      "https://m.media-amazon.com/images/I/71Yn10exFPL.jpg",
-      "https://m.media-amazon.com/images/I/81P7jkNxA6L.jpg",
-      "https://m.media-amazon.com/images/I/41BpnEUag-L.jpg",
-      "https://m.media-amazon.com/images/I/41psgE7+oiL.jpg",
-      "https://m.media-amazon.com/images/I/51QX3j9NchL.jpg",
-      "https://m.media-amazon.com/images/I/51PZZ9FLoVL.jpg"
-    ],
-    "customer_rating": "4.4 out of 5 stars",
-    "review_count": 88860,
-    "source_link": "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
-    "referenceMedia": [
-      "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd"
-    ],
-    "regional_availability": 0,
-    "regional_variants": {},
-    "amazon_short": "https://amzn.to/48PBAD1",
-    "amazon_long": "https://www.amazon.in/LEVOIT-Core-Mini-Fragrance-Frenshener/dp/B0CG1N11DV?pd_rd_w=4zOPW&content-id=amzn1.sym.7ccbe032-5929-4c88-ab39-4923842061df&pf_rd_p=7ccbe032-5929-4c88-ab39-4923842061df&pf_rd_r=H2R87GF1T082JTXFJA7G&pd_rd_wg=AkPYP&pd_rd_r=fc82ac2a-46d8-4e75-a525-54cfaa260119&pd_rd_i=B0CG1N11DV&th=1&linkCode=ll1&tag=vibedrips-21&linkId=bf10776160f3c9da9c75de03f5e1bd27&language=en_IN&ref_=as_li_ss_tl",
-    "affiliate_link": "https://amzn.to/48PBAD1",
-    "timestamp": "2026-01-03T14:46:29.000Z",
-    "featured": false,
-    "trending": false,
-    "productDetails": [
-      {
-        "key": "weight",
-        "label": "Weight",
-        "value": "1 kg 60 g",
-        "priority": 1
-      },
-      {
-        "key": "dimensions",
-        "label": "Dimensions",
-        "value": "19.3D x 29W x 19.8H Centimeters",
-        "priority": 1
-      },
-      {
-        "key": "origin",
-        "label": "Made in",
-        "value": "China",
-        "priority": 2
-      }
-    ],
-    "additionalInfo": {
-      "Product Specs": [
-        {
-          "key": "Discount",
-          "label": "Discount",
-          "category": "Product Specs",
-          "value": "45"
-        }
-      ],
-      "Manufacturing": [
-        {
-          "key": "importer",
-          "label": "Importer",
-          "category": "Manufacturing",
-          "value": "Frootle India Pvt Ltd"
-        }
-      ],
-      "Technical": [
-        {
-          "key": "item_model_number",
-          "label": "Item Model Number",
-          "category": "Technical",
-          "value": "LAP-C161-WUK"
-        },
-        {
-          "key": "wattage",
-          "label": "Wattage",
-          "category": "Technical",
-          "value": "7 Watts"
-        },
-        {
-          "key": "noise_level",
-          "label": "Noise Level",
-          "category": "Technical",
-          "value": "25 Decibels"
-        }
-      ],
-      "Other": [
-        {
-          "key": "floor_area",
-          "label": "Floor Area",
-          "category": "Other",
-          "value": "370 Square Feet"
-        },
-        {
-          "key": "controller_type",
-          "label": "Controller Type",
-          "category": "Other",
-          "value": "Button Control"
-        },
-        {
-          "key": "upc",
-          "label": "Upc",
-          "category": "Other",
-          "value": "810123672011"
-        },
-        {
-          "key": "manufacture_year",
-          "label": "Manufacture Year",
-          "category": "Other",
-          "value": "2024"
-        }
-      ]
-    },
-    "drop_signals": {
-      "has_reference_media": false,
-      "media_count": 1,
-      "regional_availability": false,
-      "available_regions": [],
-      "influencer_presence": false,
-      "is_global": false,
-      "is_high_visibility": false,
-      "is_social_proof": false,
-      "is_this_month": true,
-      "drop_categories": [
-        "hot-this-month"
-      ]
-    }
-  },
-  {
-    "asin": "B0DF6NBJDW",
-    "name": "Dreo 11L Smart Humidifier Large Room 700 ft², 100H Cool Mist Air Humidifiers for Bedroom, Top-Fill Self-Cleaning Tank, 26dB, Auto Mode, Aroma Box, RGB Light, Remote & APP Control, Baby, Plant, Blue",
-    "description": "This humidifier has a sleek and modern design, with two lightweight sections divided by a silver band, all secured to a pedestal base with a twist lock and screw. • The flat lid has a 360-degree rotatable mist nozzle that is angled at 30 degrees. You can change the direction, but not the angle. • The lid features a protruding finger tab for easy removal. • Underneath the lid is a large water collection area with a centrally located mister. • It has drainage slots on one side that direct water into the main reservoir (which holds up to 11 liters or 2.96 gallons). • The top section houses the motor and a 5-ft polarized electrical cord, and it easily lifts off for cleaning. • The bottom section contains a simple water draw tube with an attached round water filter that is easy to replace. • Other than some plastic guides for water flow, the bottom reservoir is mostly empty. • The unit includes a rear aroma tray with removable absorbent material if you want to add fragrance. • Base dimensions: 10 inches wide × 8 inches deep • Height: 31 inches from floor to lid • Circumference: 23 inches • Max power usage: 32 watts • Water weight (full): ~24 lbs • Unit weight (empty): ~6 lbs • Handles? No, but it’s easy to move when it’s not full. I won’t go into deep technical details—you can download the user manual under “Product Guides and Documents” on the Amazon page. However, I will note: • Auto Mode: Whisper quiet • Highest setting (Level 3): Not bad in terms of noise, but audible. • App Integration: The Dreo app syncs first via Bluetooth, then WiFi only for Google and Alexa support. • Voice Control: You can control most features and scheduling through the app or with voice commands. • Alexa: Can tell you the humidity setting but not the current humidity level (this is an Alexa limitation, not a Dreo issue). • Google Assistant: Can provide both the humidity setting and current room humidity when asked: o Example: “Hey Google, what is the humidifier humidity level?” o If you named your device “humidifier,” Google will give you the correct response. • Important Note: This issue happens with other smart devices too. Alexa simply does not support reporting humidity levels, while Google does. One reviewer mentioned white dust buildup, which happens with humidifiers using hard water or well water. Solution? Use: ✅ Distilled water ✅ Refrigerator-filtered water ✅ Demineralized water I personally use my refrigerator's filtered water and have zero white dust issues. I placed my humidifier in the middle of my living room, set the humidity goal to 65%, and went to bed. • Starting humidity: 22% • Morning humidity: 52% o (It didn’t reach 65% because my house leaks too much air, which would cost thousands to fix.) I primarily bought this humidifier to: ✅ Improve humidity for my houseplants ✅ Stop itchy, dry skin It works perfectly for both. If I needed another humidifier, I would buy this exact model again. Dreo did an excellent job with the design, functionality, and smart features. Highly recommended. Hope this review helps someone! Edit: Three points: 1. The reservoir tank is one solid floor of plastic which cannot leak, however if you fill excessively beyond the outside marked max water line, as seen on the front, the overfill will leak from the top backside. 2. The Dreco app gives you full control over the unit except it doesn't provide a remaining water level gauge. That's because the remaining water level is only read visually from the front outside. 3. You can turn the unit ON or OFF by voice (Alexa/Google) or in combination with the app or by a schedule. The schedule could be made on Alexa or on Google home or in the Dreco app, it all works. 4. This unit doesn't provide any more white dust, than any other humidifier. White dust is simply excessive minerals, (total dissolve solids TDS) in the water. Again I use refrigerator filtered water which has total dissolved solids around 109 ppm. I liked the humidifier so much that I bought another identical one. My plants are happy and I don't scratch.",
-    "price": 65628,
-    "original_price": 75281,
-    "originalPrice": 75281,
-    "discount_percentage": 13,
-    "discountPercentage": 13,
-    "availability": "In Stock",
-    "Error-Flag": 1,
-    "Error-Reason": "",
-    "Error-Fields": [
-      "Amazon marketplace domain",
-      "Reference Media for similar products ",
-      "publisher",
-      "manufacturer",
-      "color",
-      "item_model_number",
-      "wattage",
-      "room_type",
-      "noise_level",
-      "controller_type",
-      "generic_name",
-      "colour"
-    ],
-    "currency": "INR",
-    "symbol": "₹",
-    "brand": "Dreo",
-    "category": "Furniture",
-    "subcategory": "Humidifier",
-    "main_image": "https://m.media-amazon.com/images/I/61pMsCc8y3L.jpg",
-    "all_images": [
-      "https://m.media-amazon.com/images/I/61pMsCc8y3L.jpg",
-      "https://m.media-amazon.com/images/I/71xlygL5IRL.jpg",
-      "https://m.media-amazon.com/images/I/71XOXPFC+oL.jpg",
-      "https://m.media-amazon.com/images/I/81r00KJk9cL.jpg",
-      "https://m.media-amazon.com/images/I/71BBW82EyHL.jpg",
-      "https://m.media-amazon.com/images/I/716VBAQ6HeL.jpg",
-      "https://m.media-amazon.com/images/I/71UTdETQa9L.jpg",
-      "https://m.media-amazon.com/images/I/61ISLbNOD+L.jpg",
-      "https://m.media-amazon.com/images/I/31dwadIfCLL.jpg",
-      "https://m.media-amazon.com/images/I/41GSfwyKfLL.jpg"
-    ],
-    "customer_rating": "4.3 out of 5 stars",
-    "review_count": 580,
-    "source_link": "https://youtu.be/jZfzeppym-I?si=iZEIvtUK9bKepQ2k",
-    "referenceMedia": [
-      "https://youtu.be/jZfzeppym-I?si=iZEIvtUK9bKepQ2k"
-    ],
-    "regional_availability": 0,
-    "regional_variants": {},
-    "amazon_short": "https://amzn.to/4p7Vb6m",
-    "amazon_long": "https://www.amazon.in/Dreo-Humidifier-Humidifiers-Self-Cleaning-White/dp/B0DF6NBJDW?crid=1CI9J21LNMENK&dib=eyJ2IjoiMSJ9.zwOzmNu2SIy4UxR8QeAt1aFUZJAFC9a4Oo_LmkZuI-xijvYPNCuoV9LBeWoUhalRz7DwrbNQEMBUD2_sDPSOSijyQIYvv06JZnhqiehpWh9vAWFepGp9FfGAWaBc0ifrL0zKhwPyL3NRgMgwoSlHCHgws2BarjHYW7CF0cxi_2i4q2InMYneONwbY6in3A5sMGXfllreuIYjF1WXECm2n_0DaA1WthqFgGebFeMAy6w.VB3aXrhHLmDeVJi7TuPWvnXo9B99XhcSxEfTHwPgcH8&dib_tag=se&keywords=humidifier%2Bfor%2Bhome%2Bdreo%2BHM735S&qid=1766402533&s=kitchen&sprefix=humidifier%2Bfor%2Bhome%2Bdreo%2Bhm735s%2Ckitchen%2C164&sr=1-4&th=1&linkCode=ll1&tag=vibedrips-21&linkId=d9d2f664e2abb3d291853e6830a21a58&language=en_IN&ref_=as_li_ss_tl",
-    "affiliate_link": "https://amzn.to/4p7Vb6m",
-    "timestamp": "2026-01-03T14:46:29.000Z",
-    "featured": false,
-    "trending": false,
-    "productDetails": [
-      {
-        "key": "weight",
-        "label": "Weight",
-        "value": "5.94 Pounds",
-        "priority": 1
-      },
-      {
-        "key": "dimensions",
-        "label": "Dimensions",
-        "value": "26D x 22.5W x 78.5H Centimeters",
-        "priority": 1
-      }
-    ],
-    "additionalInfo": {
-      "Product Specs": [
-        {
-          "key": "Discount",
-          "label": "Discount",
-          "category": "Product Specs",
-          "value": "13"
-        },
-        {
-          "key": "numberOfPieces",
-          "label": "Number Of Pieces",
-          "category": "Product Specs",
-          "value": "1"
-        },
-        {
-          "key": "includedComponents",
-          "label": "Included Components",
-          "category": "Product Specs",
-          "value": "11L Humidifier x1, Aroma Pad, Cleaning Brush, Screw x 1, User Manual"
-        },
-        {
-          "key": "additionalFeatures",
-          "label": "Additional Features",
-          "category": "Product Specs",
-          "value": "Aroma Diffuser, Digital Display, Easy Top-Fill, Night Light, Removable Tank, Smart Control"
-        },
-        {
-          "key": "special_feature",
-          "label": "Special Feature",
-          "category": "Product Specs",
-          "value": "Aroma Diffuser, Digital Display, Easy Top-Fill, Night Light, Removable Tank, Smart Control"
-        }
-      ],
-      "Technical": [
-        {
-          "key": "model_name",
-          "label": "Model Name",
-          "category": "Technical",
-          "value": "HM735S"
-        },
-        {
-          "key": "voltage",
-          "label": "Voltage",
-          "category": "Technical",
-          "value": "120 Volts"
-        }
-      ],
-      "Other": [
-        {
-          "key": "floor_area",
-          "label": "Floor Area",
-          "category": "Other",
-          "value": "700 Square Feet"
-        },
-        {
-          "key": "shape",
-          "label": "Shape",
-          "category": "Other",
-          "value": "Square"
-        },
-        {
-          "key": "upc",
-          "label": "Upc",
-          "category": "Other",
-          "value": "810142852067"
-        },
-        {
-          "key": "manufacture_year",
-          "label": "Manufacture Year",
-          "category": "Other",
-          "value": "2024"
-        },
-        {
-          "key": "operation_mode",
-          "label": "Operation Mode",
-          "category": "Other",
-          "value": "Ultrasonic"
-        }
-      ]
-    },
-    "drop_signals": {
-      "has_reference_media": false,
-      "media_count": 1,
-      "regional_availability": false,
-      "available_regions": [],
-      "influencer_presence": false,
-      "is_global": false,
-      "is_high_visibility": false,
-      "is_social_proof": false,
-      "is_this_month": true,
-      "drop_categories": [
-        "hot-this-month"
-      ]
+      "is_new_release": false,
+      "product_age_days": 1100,
+      "drop_categories": []
     }
   },
   {
@@ -1110,7 +987,10 @@
     "amazon_short": "https://amzn.to/4pdv5iw",
     "amazon_long": "https://www.amazon.in/OxyPure-ZERO-Smart-Air-Purifier/dp/B0BCC8KZHK?crid=1DBDX66EZWAI&dib=eyJ2IjoiMSJ9.rjAYrxaBAKvKSZN74dFmh6kLpFreR-UE09WLHMbu13zVtYm-0-PpCdU21JcwvFK1x_tD5AddgVTHTsgQ-UW_gVGz6ydK-YeC9qM6rJlM4njLJFaPIciRs32VwKHphamIvZT7YGu-Ntuq4qbXzQ7NH8mbpgiJrKnQer-l5wzSfLfLarHyCeylurSjFRWlI0fPdQKS6-J_JhbWbGfu0v8hpZRp0GtP2Re5kk6rt0OGvSw.r5dwBPXYniVJ_j06oEGa30J5K_Nq9z6TWvXePj3brIo&dib_tag=se&keywords=air+purifier&qid=1766082427&refinements=p_72%3A1318476031&rnid=1318475031&sprefix=Air+pur%2Caps%2C228&sr=8-4&linkCode=ll1&tag=vibedrips-21&linkId=539511099fc2081f4b299b3f3ba7f577&language=en_IN&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/4pdv5iw",
-    "timestamp": "2026-01-03T14:46:29.000Z",
+    "release_date": "2022-01-01T00:00:00.000Z",
+    "influencer": null,
+    "manual_collections": [],
+    "season": "Summer",
     "featured": false,
     "trending": false,
     "productDetails": [
@@ -1134,6 +1014,62 @@
       }
     ],
     "additionalInfo": {
+      "Other": [
+        {
+          "key": "Timestamp",
+          "label": "Timestamp",
+          "category": "Other",
+          "value": "1/3/2026 14:46:29"
+        },
+        {
+          "key": "floor_area",
+          "label": "Floor Area",
+          "category": "Other",
+          "value": "2002 Square Feet"
+        },
+        {
+          "key": "controller_type",
+          "label": "Controller Type",
+          "category": "Other",
+          "value": "Button Control"
+        },
+        {
+          "key": "contaminant_filtration_capability",
+          "label": "Contaminant Filtration Capability",
+          "category": "Other",
+          "value": "True"
+        },
+        {
+          "key": "upc",
+          "label": "Upc",
+          "category": "Other",
+          "value": "652185472532"
+        },
+        {
+          "key": "manufacture_year",
+          "label": "Manufacture Year",
+          "category": "Other",
+          "value": "2022"
+        },
+        {
+          "key": "net_quantity",
+          "label": "Net Quantity",
+          "category": "Other",
+          "value": "1 Count"
+        },
+        {
+          "key": "specification_met",
+          "label": "Specification Met",
+          "category": "Other",
+          "value": "CARB Certified, CE Certified, EPA Certified, ETL Certified, Energy Star Certified"
+        },
+        {
+          "key": "filter_class",
+          "label": "Filter Class",
+          "category": "Other",
+          "value": "ElectrostaticFilter"
+        }
+      ],
       "Product Specs": [
         {
           "key": "Discount",
@@ -1191,56 +1127,6 @@
           "category": "Technical",
           "value": "21.4 Decibels"
         }
-      ],
-      "Other": [
-        {
-          "key": "floor_area",
-          "label": "Floor Area",
-          "category": "Other",
-          "value": "2002 Square Feet"
-        },
-        {
-          "key": "controller_type",
-          "label": "Controller Type",
-          "category": "Other",
-          "value": "Button Control"
-        },
-        {
-          "key": "contaminant_filtration_capability",
-          "label": "Contaminant Filtration Capability",
-          "category": "Other",
-          "value": "True"
-        },
-        {
-          "key": "upc",
-          "label": "Upc",
-          "category": "Other",
-          "value": "652185472532"
-        },
-        {
-          "key": "manufacture_year",
-          "label": "Manufacture Year",
-          "category": "Other",
-          "value": "2022"
-        },
-        {
-          "key": "net_quantity",
-          "label": "Net Quantity",
-          "category": "Other",
-          "value": "1 Count"
-        },
-        {
-          "key": "specification_met",
-          "label": "Specification Met",
-          "category": "Other",
-          "value": "CARB Certified, CE Certified, EPA Certified, ETL Certified, Energy Star Certified"
-        },
-        {
-          "key": "filter_class",
-          "label": "Filter Class",
-          "category": "Other",
-          "value": "ElectrostaticFilter"
-        }
       ]
     },
     "drop_signals": {
@@ -1252,10 +1138,10 @@
       "is_global": false,
       "is_high_visibility": false,
       "is_social_proof": true,
-      "is_this_month": true,
+      "is_new_release": false,
+      "product_age_days": 1465,
       "drop_categories": [
-        "creator-picks",
-        "hot-this-month"
+        "creator-picks"
       ]
     }
   },
@@ -1307,7 +1193,10 @@
     "amazon_short": "https://amzn.to/4qf6cUh",
     "amazon_long": "https://www.amazon.in/Purifier-Personal-Accessory-Activated-Customised/dp/B0BDX9ZN46?pd_rd_w=9xdiR&content-id=amzn1.sym.38ab170c-68e6-4e35-87b8-c345099a6660&pf_rd_p=38ab170c-68e6-4e35-87b8-c345099a6660&pf_rd_r=R6GTDES5PX0XJQYMTYDG&pd_rd_wg=lfwcJ&pd_rd_r=f51a545f-bfe9-4cb9-8c09-80a05c9d1d03&pd_rd_i=B0BDX9ZN46&psc=1&linkCode=ll1&tag=vibedrips-21&linkId=5c916aa6efa9e9311d8d80b336bcea25&language=en_IN&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/4qf6cUh",
-    "timestamp": "2026-01-03T14:46:29.000Z",
+    "release_date": "2022-01-01T00:00:00.000Z",
+    "influencer": "Food Pharmer",
+    "manual_collections": [],
+    "season": "Winter",
     "featured": false,
     "trending": false,
     "productDetails": [
@@ -1337,6 +1226,44 @@
       }
     ],
     "additionalInfo": {
+      "Other": [
+        {
+          "key": "Timestamp",
+          "label": "Timestamp",
+          "category": "Other",
+          "value": "1/3/2026 14:46:29"
+        },
+        {
+          "key": "floor_area",
+          "label": "Floor Area",
+          "category": "Other",
+          "value": "80 Square Feet"
+        },
+        {
+          "key": "manufacture_year",
+          "label": "Manufacture Year",
+          "category": "Other",
+          "value": "2022"
+        },
+        {
+          "key": "net_quantity",
+          "label": "Net Quantity",
+          "category": "Other",
+          "value": "1.00 Count"
+        },
+        {
+          "key": "specification_met",
+          "label": "Specification Met",
+          "category": "Other",
+          "value": "Certified HEPA"
+        },
+        {
+          "key": "filter_class",
+          "label": "Filter Class",
+          "category": "Other",
+          "value": "Charcoal, Bio, BreathingRoots"
+        }
+      ],
       "Product Specs": [
         {
           "key": "Discount",
@@ -1404,38 +1331,6 @@
           "category": "Technical",
           "value": "12 Decibels"
         }
-      ],
-      "Other": [
-        {
-          "key": "floor_area",
-          "label": "Floor Area",
-          "category": "Other",
-          "value": "80 Square Feet"
-        },
-        {
-          "key": "manufacture_year",
-          "label": "Manufacture Year",
-          "category": "Other",
-          "value": "2022"
-        },
-        {
-          "key": "net_quantity",
-          "label": "Net Quantity",
-          "category": "Other",
-          "value": "1.00 Count"
-        },
-        {
-          "key": "specification_met",
-          "label": "Specification Met",
-          "category": "Other",
-          "value": "Certified HEPA"
-        },
-        {
-          "key": "filter_class",
-          "label": "Filter Class",
-          "category": "Other",
-          "value": "Charcoal, Bio, BreathingRoots"
-        }
       ]
     },
     "drop_signals": {
@@ -1447,344 +1342,9 @@
       "is_global": false,
       "is_high_visibility": false,
       "is_social_proof": false,
-      "is_this_month": true,
-      "drop_categories": [
-        "hot-this-month"
-      ]
-    }
-  },
-  {
-    "asin": "B076HP91MN",
-    "name": "Honeywell Air Touch HCMF25M0012 Compound Filter with HEPA and Activated Carbon (Black)",
-    "description": "I ordered this Honeywell air purifier from Amazon, it arrived on December 11, 2025, and from the very first time I plugged it in, it was completely useless. The display immediately flashes AQ1 at 500 (the maximum reading) and stays locked there no matter what—clean room, open window, fan on high, nothing changes it. It just mindlessly blows room-temperature air around like a cheap desk fan and then randomly shuts itself off after a few minutes. This thing doesn’t purify air; it’s a $200+ plastic brick that pretends to. I immediately contacted Amazon for a replacement—basic expectation when you receive a defective product, right? Wrong. The agent told me there are “no replacements available” (shocker), but I could get a full refund once the item is returned. Fine. They scheduled a pickup for December 16th. Guess what? Nobody showed up. No driver, no notification, nothing. I log into the Amazon app and it now says “Delivery Rejected” (for a pickup!). Zero explanation, zero update, zero way to reschedule without starting the entire return process over. Trying to reach Amazon customer service after that is a joke. Days later, I still have a broken, expensive piece of junk sitting in my living room and Amazon is happily holding onto my money. This isn’t incompetence; this feels deliberate. Deliver obviously faulty units, charge full price, then throw up every possible roadblock to returns and refunds so customers eventually give up. Honeywell clearly doesn’t test or care about quality, and Amazon is enabling it with the worst post-sale support I’ve ever experienced. Save your money, your time, and your sanity—do NOT buy this Honeywell air purifier. And honestly, think twice before trusting Amazon with anything expensive anymore. Worst purchasing experience of my life. Zero stars if I could.. I am extremely disappointed with this Honeywell air purifier. The product I received is defective from day one. The AQI sensor is not working properly, and the readings are completely inaccurate. For a product that is supposed to ensure clean air and health, this is unacceptable. It is shocking that a reputed brand like Honeywell would allow such a faulty item to be shipped. This feels like fraud with customers—sending defective products without proper quality checks. I trusted the brand and ended up wasting my money and time. Amazon and Honeywell must look into this seriously. I request a replacement or full refund immediately. No customer should suffer because of defective products being passed off as new. Highly disappointed. Not recommended at all.",
-    "price": 2299,
-    "original_price": 2990,
-    "originalPrice": 2990,
-    "discount_percentage": 23,
-    "discountPercentage": 23,
-    "availability": "In Stock",
-    "Error-Flag": 1,
-    "Error-Reason": "",
-    "Error-Fields": [
-      "Amazon marketplace domain",
-      "Reference Media for similar products ",
-      "includedComponents",
-      "item_model_number",
-      "generic_name",
-      "included_components"
-    ],
-    "currency": "INR",
-    "symbol": "₹",
-    "brand": "Honeywell",
-    "category": "General",
-    "subcategory": "Air Purifier",
-    "main_image": "https://m.media-amazon.com/images/I/91atWaiXuyL.jpg",
-    "all_images": [
-      "https://m.media-amazon.com/images/I/91atWaiXuyL.jpg",
-      "https://m.media-amazon.com/images/I/81SwkFD5FiL.jpg",
-      "https://m.media-amazon.com/images/I/A1+dr-WbThL.jpg",
-      "https://m.media-amazon.com/images/I/81Uk0fDpwWL.jpg",
-      "https://m.media-amazon.com/images/I/61R+ABhdbNL.jpg",
-      "https://m.media-amazon.com/images/I/71HAQ-FOLuL.jpg",
-      "https://m.media-amazon.com/images/I/81Q6coG5nqL.jpg",
-      "https://m.media-amazon.com/images/I/51+FpK3PVAL.jpg",
-      "https://m.media-amazon.com/images/I/61vZ+uHyupL.jpg",
-      "https://m.media-amazon.com/images/I/71ZhggCnp5L.jpg"
-    ],
-    "customer_rating": "3.7 out of 5 stars",
-    "review_count": 10968,
-    "source_link": "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
-    "referenceMedia": [
-      "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd"
-    ],
-    "regional_availability": 0,
-    "regional_variants": {},
-    "amazon_short": "https://amzn.to/4904RK9",
-    "amazon_long": "https://www.amazon.in/Honeywell-V4-Purifier-Activated-Anti-Bacterial/dp/B076HP91MN?dib=eyJ2IjoiMSJ9.DMNpznGUul9T6izLGaRrS_7SLa_2uJzE5u1xQFYfsXdTIr_r7QH5FgkpY-h7s0GdqUL7CpLXQBzc09WvpnubiTWq752GRhdC6bW6H8D1OwzJDS-y80ZPaAh7TG-WGptzUn2dDDO2IB5lGr7QTxBjht1Kz10h7u4tu_sCyiD-qtdJ4ueJw-9jl4MSDpIov8_kblOY9go2imuY8xscV_XRkSgabiKvaKbS4Jrod35pa-k.fDxOIBLElqu6AKefZYY0JG1xnu8gFQjJrLiAMuRHwvM&dib_tag=se&keywords=dyson%2Bgen1%2Btp%2B10%2Bcool%2Bair%2Bpurifier&qid=1766091295&sr=8-1-spons&aref=Py6BCgwo24&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&th=1&linkCode=ll1&tag=vibedrips-21&linkId=fa3cb3cfddb63901df0018c7a72e87d7&language=en_IN&ref_=as_li_ss_tl",
-    "affiliate_link": "https://amzn.to/4904RK9",
-    "timestamp": "2026-01-03T14:46:29.000Z",
-    "featured": false,
-    "trending": false,
-    "productDetails": [
-      {
-        "key": "weight",
-        "label": "Weight",
-        "value": "300 g",
-        "priority": 1
-      },
-      {
-        "key": "dimensions",
-        "label": "Dimensions",
-        "value": "30 x 3.5 x 34 Centimeters",
-        "priority": 1
-      }
-    ],
-    "additionalInfo": {
-      "Product Specs": [
-        {
-          "key": "Discount",
-          "label": "Discount",
-          "category": "Product Specs",
-          "value": "23"
-        },
-        {
-          "key": "numberOfPieces",
-          "label": "Number Of Pieces",
-          "category": "Product Specs",
-          "value": "1 Count"
-        },
-        {
-          "key": "unitCount",
-          "label": "Unit Count",
-          "category": "Product Specs",
-          "value": "1 Count"
-        }
-      ],
-      "Books": [
-        {
-          "key": "publisher",
-          "label": "Publisher",
-          "category": "Books",
-          "value": "Secure Connection Limited"
-        }
-      ],
-      "Manufacturing": [
-        {
-          "key": "manufacturer",
-          "label": "Manufacturer",
-          "category": "Manufacturing",
-          "value": "Secure Connection Limited"
-        },
-        {
-          "key": "packer",
-          "label": "Packer",
-          "category": "Manufacturing",
-          "value": "Honeywell Environmental &amp; Combustion Controls Tain Jin Co Ltd 158 NanHai Road,Teda 300457 TAIN JIN China +61 2266287203"
-        },
-        {
-          "key": "importer",
-          "label": "Importer",
-          "category": "Manufacturing",
-          "value": "Honeywell International (I) Pvt. Ltd Nagpal Business Tower Ground Floor, A/91 Okhla Industrial Phase II New Delhi -110020 India"
-        },
-        {
-          "key": "imported_by",
-          "label": "Imported By",
-          "category": "Manufacturing",
-          "value": "Honeywell International (I) Pvt. Ltd Nagpal Business Tower Ground Floor, A/91 Okhla Industrial Phase II New Delhi -110020 India"
-        }
-      ],
-      "Other": [
-        {
-          "key": "net_quantity",
-          "label": "Net Quantity",
-          "category": "Other",
-          "value": "1 Count"
-        }
-      ]
-    },
-    "drop_signals": {
-      "has_reference_media": false,
-      "media_count": 1,
-      "regional_availability": false,
-      "available_regions": [],
-      "influencer_presence": false,
-      "is_global": false,
-      "is_high_visibility": false,
-      "is_social_proof": false,
-      "is_this_month": true,
-      "drop_categories": [
-        "hot-this-month"
-      ]
-    }
-  },
-  {
-    "asin": "9388550072",
-    "name": "Ikigai (Hindi) [PB]: Héctor García, Francesc Miralles",
-    "description": "📖 Just started reading Ikigai: The Japanese Secret to a Long and Happy Life — and I’m already intrigued by its depth and simplicity. In the middle of deadlines, targets, and daily routines, this book is a gentle reminder to pause and reflect on one essential question: What is my reason for being? Ikigai isn’t just a concept — it’s a way of living with purpose, passion, and balance. Looking forward to discovering insights that can help both personally and professionally — especially in navigating work-life balance, mindful living, and meaningful contribution. Excited for the journey ahead 📘🌿. Validate before displaying - Choose an input from 📖 Just started reading Ikigai: The Japanese Secret to a Long and Happy Life — and I’m already intrigued by its depth and simplicity. In the middle of deadlines, targets, and daily routines, this book is a gentle reminder to pause and reflect on one essential question: What is my reason for being? Ikigai isn’t just a concept — it’s a way of living with purpose, passion, and balance. Looking forward to discovering insights that can help both personally and professionally — especially in navigating work-life balance, mindful living, and meaningful contribution. Excited for the journey ahead 📘🌿,Ikigai is one of those best books that makes you pause and think about how you’re really living your life. I picked it up at a time when everything around me felt dart, and this book honestly helped me slow down. It’s based on a simple but powerful Japanese concept - ikigai, which roughly means “a reason for being.” The authors travel to Okinawa, Japan, known for having some of the world’s oldest and happiest people, and they explore what keeps them so active and content even in their 90s and 100s. The stories of these people — gardening daily, cooking for neighbors, laughing with friends — sound so ordinary, yet that’s exactly what makes the book special. It shows how joy hides in small, consistent things. What I liked most is that it doesn’t try to preach. It mixes science, philosophy, and real human stories in a simple way. A few chapters felt a bit repetitive, but overall the message stayed with me: don’t chase happiness, build it slowly through purpose and routine. Since reading Ikigai, I’ve started taking short evening walks and spending time doing things I actually enjoy — not just the ones that look productive. It’s amazing how much lighter life feels when you follow your own rhythm.",
-    "price": 239,
-    "original_price": 280,
-    "originalPrice": 280,
-    "discount_percentage": 15,
-    "discountPercentage": 15,
-    "availability": "In Stock",
-    "Error-Flag": 1,
-    "Error-Reason": "",
-    "Error-Fields": [
-      "Amazon marketplace domain",
-      "Reference Media for similar products ",
-      "language",
-      "generic_name"
-    ],
-    "currency": "INR",
-    "symbol": "₹",
-    "brand": "MyMirror Publishing House",
-    "category": "Books",
-    "subcategory": "Book",
-    "main_image": "https://m.media-amazon.com/images/I/61Td+yd3qaL.jpg",
-    "all_images": [
-      "https://m.media-amazon.com/images/I/61Td+yd3qaL.jpg",
-      "https://m.media-amazon.com/images/I/61ejP+-veEL.jpg",
-      "https://m.media-amazon.com/images/I/61DIw4n+k5L.jpg",
-      "https://m.media-amazon.com/images/I/618KedLDcSL.jpg",
-      "https://m.media-amazon.com/images/I/419cb4PmrQL.jpg",
-      "https://m.media-amazon.com/images/I/41zq7OFBVfL.jpg",
-      "https://m.media-amazon.com/images/I/51PIGnEkj3L.jpg",
-      "https://m.media-amazon.com/images/I/31l0MXnpOaL.jpg",
-      "https://m.media-amazon.com/images/I/41BaqqkQY7L.jpg"
-    ],
-    "customer_rating": "4.5 out of 5 stars",
-    "review_count": 2868,
-    "source_link": "https://youtube.com/shorts/iDrWd2I_ZA8?si=ETOPQ2lu22RvWZ0o",
-    "referenceMedia": [
-      "https://youtube.com/shorts/iDrWd2I_ZA8?si=ETOPQ2lu22RvWZ0o"
-    ],
-    "regional_availability": 1,
-    "regional_variants": {
-      "AUD": "1529902401"
-    },
-    "amazon_short": "https://amzn.to/48HAvgG",
-    "amazon_long": "https://www.amazon.in/Ikigai-staying-growing-%E0%A4%A6%E0%A5%80%E0%A4%B0%E0%A5%8D%E0%A4%98%E0%A4%BE%E0%A4%AF%E0%A5%81-%E0%A4%A4%E0%A4%82%E0%A4%A6%E0%A5%81%E0%A4%B0%E0%A5%81%E0%A4%B8%E0%A5%8D%E0%A4%A4/dp/9388550072?_encoding=UTF8&dib_tag=se&dib=eyJ2IjoiMSJ9.3KJIJBF6bQK6ha2nTj8UYdN1GhR-u2lh5-175F3wW5Bm8X8ARdtQb8fbpl1HzChIGSryRAmiwMxf8Kqmijaa4bM2Tn4sj0utsSm2jeS2_UtJQ8Oqm3LHzR5VClClt7lXzJXj5nFoqjT_fFW6eaM17zSOrFWY_K54nb3f5Ysec5yKOL4SoUrVK_j0nBOyVKNU2eBdHbfXLIiOSnFVKMFo_nFMdRXpfEy6XmZtnC4Gfis.iQxkB522DkuleLdWbP1F9EEyceL9txhrjwtgtFDBlVQ&qid=1765904055&sr=8-5&linkCode=ll1&tag=vibedrips-21&linkId=11b1cddfdb70c0e8a94d36e1594397e8&language=en_IN&ref_=as_li_ss_tl",
-    "affiliate_link": "https://amzn.to/48HAvgG",
-    "timestamp": "2025-12-16T22:34:42.000Z",
-    "featured": false,
-    "trending": false,
-    "productDetails": [
-      {
-        "key": "weight",
-        "label": "Weight",
-        "value": "230 g",
-        "priority": 1
-      },
-      {
-        "key": "dimensions",
-        "label": "Dimensions",
-        "value": "20.3 x 25.4 x 4.7 cm",
-        "priority": 1
-      },
-      {
-        "key": "material",
-        "label": "Material",
-        "value": "Paper",
-        "priority": 1
-      },
-      {
-        "key": "origin",
-        "label": "Made in",
-        "value": "India",
-        "priority": 2
-      }
-    ],
-    "additionalInfo": {
-      "Product Specs": [
-        {
-          "key": "Discount",
-          "label": "Discount",
-          "category": "Product Specs",
-          "value": "15"
-        },
-        {
-          "key": "minimumAge",
-          "label": "Minimum Age",
-          "category": "Product Specs",
-          "value": "16 years and up"
-        },
-        {
-          "key": "numberOfPieces",
-          "label": "Number Of Pieces",
-          "category": "Product Specs",
-          "value": "1 Count"
-        },
-        {
-          "key": "unitCount",
-          "label": "Unit Count",
-          "category": "Product Specs",
-          "value": "1 Count"
-        }
-      ],
-      "Books": [
-        {
-          "key": "paperback",
-          "label": "Paperback",
-          "category": "Books",
-          "value": "208 pages"
-        },
-        {
-          "key": "publisher",
-          "label": "Publisher",
-          "category": "Books",
-          "value": "MyMirror Publishing House Pvt. Ltd.; First Edition (31 December 2019); MyMirror"
-        },
-        {
-          "key": "isbn_10",
-          "label": "Isbn 10",
-          "category": "Books",
-          "value": "819388132X"
-        },
-        {
-          "key": "isbn_13",
-          "label": "Isbn 13",
-          "category": "Books",
-          "value": "978-8193881323"
-        },
-        {
-          "key": "reading_age",
-          "label": "Reading Age",
-          "category": "Books",
-          "value": "Customer suggested age: 16 years and up"
-        }
-      ],
-      "Manufacturing": [
-        {
-          "key": "manufacturer",
-          "label": "Manufacturer",
-          "category": "Manufacturing",
-          "value": "MyMirror Publishing House Pvt. Ltd."
-        },
-        {
-          "key": "manufacturerContact",
-          "label": "Manufacturer Contact",
-          "category": "Manufacturing",
-          "value": "MyMirror Publishing House Pvt. Ltd. 36 Vedantgad Tulshibagwale Colony Pune 09"
-        },
-        {
-          "key": "packer",
-          "label": "Packer",
-          "category": "Manufacturing",
-          "value": "MyMirror Publishing House Pvt. Ltd. 36 Vedantgad Tulshibagwale Colony Pune 09"
-        },
-        {
-          "key": "importer",
-          "label": "Importer",
-          "category": "Manufacturing",
-          "value": "MyMirror Publishing House Pvt. Ltd. 36 Vedantgad Tulshibagwale Colony Pune 09"
-        }
-      ],
-      "Other": [
-        {
-          "key": "net_quantity",
-          "label": "Net Quantity",
-          "category": "Other",
-          "value": "1 Count"
-        }
-      ]
-    },
-    "drop_signals": {
-      "has_reference_media": false,
-      "media_count": 1,
-      "regional_availability": true,
-      "available_regions": [
-        "AUD"
-      ],
-      "influencer_presence": true,
-      "is_global": false,
-      "is_high_visibility": false,
-      "is_social_proof": true,
-      "is_this_month": true,
-      "drop_categories": [
-        "creator-picks",
-        "hot-this-month"
-      ]
+      "is_new_release": false,
+      "product_age_days": 1465,
+      "drop_categories": []
     }
   },
   {
@@ -1836,7 +1396,10 @@
     "amazon_short": "https://amzn.to/4s1oEkS",
     "amazon_long": "https://www.amazon.in/Ikigai-Francesc-Miralles-H%C3%A9ctor-Garc%C3%ADa/dp/9388550315?_encoding=UTF8&dib_tag=se&dib=eyJ2IjoiMSJ9.3KJIJBF6bQK6ha2nTj8UYdN1GhR-u2lh5-175F3wW5Bm8X8ARdtQb8fbpl1HzChIGSryRAmiwMxf8Kqmijaa4bM2Tn4sj0utsSm2jeS2_UtJQ8Oqm3LHzR5VClClt7lXzJXj5nFoqjT_fFW6eaM17zSOrFWY_K54nb3f5Ysec5yKOL4SoUrVK_j0nBOyVKNU2eBdHbfXLIiOSnFVKMFo_nFMdRXpfEy6XmZtnC4Gfis.iQxkB522DkuleLdWbP1F9EEyceL9txhrjwtgtFDBlVQ&qid=1765904055&sr=8-5&linkCode=ll1&tag=vibedrips-21&linkId=e61a4fcb9edde09b7da5247fa817c60f&language=en_IN&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/4s1oEkS",
-    "timestamp": "2025-12-16T22:26:04.000Z",
+    "release_date": null,
+    "influencer": null,
+    "manual_collections": [],
+    "season": null,
     "featured": false,
     "trending": false,
     "productDetails": [
@@ -1866,6 +1429,20 @@
       }
     ],
     "additionalInfo": {
+      "Other": [
+        {
+          "key": "Timestamp",
+          "label": "Timestamp",
+          "category": "Other",
+          "value": "12/16/2025 22:26:04"
+        },
+        {
+          "key": "net_quantity",
+          "label": "Net Quantity",
+          "category": "Other",
+          "value": "1 Count"
+        }
+      ],
       "Product Specs": [
         {
           "key": "Discount",
@@ -1949,13 +1526,374 @@
           "category": "Manufacturing",
           "value": "MyMirror Publishing House Pvt. Ltd.36 Vedantgad, Tulshibagwale Colony Rd, Sahakarnagar No - 2, Pune, Maharashtra 411009"
         }
+      ]
+    },
+    "drop_signals": {
+      "has_reference_media": false,
+      "media_count": 1,
+      "regional_availability": true,
+      "available_regions": [
+        "AUD"
       ],
+      "influencer_presence": true,
+      "is_global": false,
+      "is_high_visibility": false,
+      "is_social_proof": true,
+      "is_new_release": false,
+      "product_age_days": null,
+      "drop_categories": [
+        "creator-picks"
+      ]
+    }
+  },
+  {
+    "asin": "B0DHGFCG6P",
+    "name": "Qubo Car Air Purifier Pro from Hero Group | 3-Layer Filtration | Negative Ion Technology | Pre-filter, HEPA13 & Activated Carbon Filter | Removes PM 2.5 & PM 10 | Black",
+    "description": "【Negative Ion Technology】Emits Up To 50 Million Negative Ions That Eliminate 99.8% Of Viruses, Bacteria, PM2.5, PM10, And Dust—Offering Full Protection Against Allergens And Airborne Pollutants. 【3-Layer Filtration】Multi-Stage Filtration System Includes A Pre-Filter, HEPA13, And Activated Carbon Filter—Effectively Captures Microscopic Particles And Toxic Gases For Cleaner Cabin Air. 【3 Modes Of Purification】Switch Between Silent, Active, And Turbo Modes Depending On Real-Time AQI Levels—Silent For Normal, Active For Moderate, And Turbo For High Pollution. 【Easy Plug And Use】Designed Without An In-Built Battery To Avoid Fire Risk—Simply Plug Into The USB Port Of Your Car For Safe And Reliable Operation Even In High Temperatures. 【Ergonomic Design】Built With Premium Aluminum Alloy And A Tumbler-Style Base That Fits Securely In Standard Car Cup Holders—Combines Durability With Minimalist Aesthetics. 【Convenient And Compatible】Top-Mounted Mode Button Enables Quick Switching Between Purification Modes—Plug-And-Play Operation Ensures Instant Air Quality Improvement. 【Relief From Seasonal Allergies】Ideal For Individuals With Allergies Or Respiratory Sensitivity—Removes Pollens, Dust, Pet Dander, And Other Airborne Irritants Inside The Car Cabin..",
+    "price": 3290,
+    "original_price": 6990,
+    "originalPrice": 6990,
+    "discount_percentage": 53,
+    "discountPercentage": 53,
+    "availability": "In Stock",
+    "Error-Flag": 1,
+    "Error-Reason": "",
+    "Error-Fields": [
+      "Amazon marketplace domain",
+      "Reference Media for similar products ",
+      "color",
+      "generic_name"
+    ],
+    "currency": "INR",
+    "symbol": "₹",
+    "brand": "Qubo",
+    "category": "General",
+    "subcategory": "Air Purifier",
+    "main_image": "https://m.media-amazon.com/images/I/41O1OX4huaL.jpg",
+    "all_images": [
+      "https://m.media-amazon.com/images/I/41O1OX4huaL.jpg",
+      "https://m.media-amazon.com/images/I/61BuiDPoSFL.jpg",
+      "https://m.media-amazon.com/images/I/618LTVNDJ-L.jpg",
+      "https://m.media-amazon.com/images/I/61XhP8dyuLL.jpg",
+      "https://m.media-amazon.com/images/I/61dgluVX49L.jpg",
+      "https://m.media-amazon.com/images/I/51kYAekY2oL.jpg",
+      "https://m.media-amazon.com/images/I/31hPGIVvshL.jpg",
+      "https://m.media-amazon.com/images/I/41+i5SZsO2L.jpg",
+      "https://m.media-amazon.com/images/I/41rKV574mpL.jpg",
+      "https://m.media-amazon.com/images/I/419KSFfKQzL.jpg"
+    ],
+    "customer_rating": "3.5 out of 5 stars",
+    "review_count": 139,
+    "source_link": "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
+    "referenceMedia": [
+      "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd"
+    ],
+    "regional_availability": 0,
+    "regional_variants": {},
+    "amazon_short": "https://amzn.to/48KIWaZ",
+    "amazon_long": "https://www.amazon.in/Qubo-Filtration-Technology-Pre-filter-Activated/dp/B0DHGFCG6P?crid=TCT3DAWVIGYK&dib=eyJ2IjoiMSJ9.oiXJFm1eOltK900oi2ZigB3aWCdr331LGmvEyhCNomnz6C0odZ1TWNs4S8l-Ep4U1ESGLbXmUhH-1USLO4_B-Aga1-TuqLxi2h3SkrDAgBPsWb2sH57kLFVFrVPV4uXJ3RXEiBMC78DWAwjiRR5lrQ.Vl_vHwdJJoh1HF4latUHpmel8tFLZWwNelNKYS42oiw&dib_tag=se&keywords=qubo+car+air+purifier+pro&nsdOptOutParam=true&qid=1766086868&refinements=p_n_availability%3A1318485031%2Cp_123%3A369904&rnid=91049095031&sprefix=qubo+car+air+purifier%2Caps%2C204&sr=8-3&linkCode=ll1&tag=vibedrips-21&linkId=dcf86334a1ce3e4fd80008978ce65b23&language=en_IN&ref_=as_li_ss_tl",
+    "affiliate_link": "https://amzn.to/48KIWaZ",
+    "release_date": null,
+    "influencer": "Food Pharmer",
+    "manual_collections": [],
+    "season": null,
+    "featured": false,
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "396 g",
+        "priority": 1
+      },
+      {
+        "key": "dimensions",
+        "label": "Dimensions",
+        "value": "6.3 x 6.3 x 18.7 Centimeters",
+        "priority": 1
+      },
+      {
+        "key": "origin",
+        "label": "Made in",
+        "value": "China",
+        "priority": 2
+      }
+    ],
+    "additionalInfo": {
       "Other": [
+        {
+          "key": "Timestamp",
+          "label": "Timestamp",
+          "category": "Other",
+          "value": "1/3/2026 14:46:29"
+        },
         {
           "key": "net_quantity",
           "label": "Net Quantity",
           "category": "Other",
           "value": "1 Count"
+        }
+      ],
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "53"
+        },
+        {
+          "key": "numberOfPieces",
+          "label": "Number Of Pieces",
+          "category": "Product Specs",
+          "value": "1 Count"
+        },
+        {
+          "key": "unitCount",
+          "label": "Unit Count",
+          "category": "Product Specs",
+          "value": "1 Count"
+        },
+        {
+          "key": "includedComponents",
+          "label": "Included Components",
+          "category": "Product Specs",
+          "value": "Car Air purifier with Filters 1N, 0.5 meter USB Cable 1N, QR Card (Warranty & Digital User Manual)"
+        }
+      ],
+      "Books": [
+        {
+          "key": "publisher",
+          "label": "Publisher",
+          "category": "Books",
+          "value": "Hero Electronix Pvt. Ltd"
+        }
+      ],
+      "Manufacturing": [
+        {
+          "key": "manufacturer",
+          "label": "Manufacturer",
+          "category": "Manufacturing",
+          "value": "Hero Electronix Pvt. Ltd"
+        },
+        {
+          "key": "manufacturerContact",
+          "label": "Manufacturer Contact",
+          "category": "Manufacturing",
+          "value": "Hero Electronix Pvt. Ltd., Toll-free helpline number: 9319095757"
+        },
+        {
+          "key": "packer",
+          "label": "Packer",
+          "category": "Manufacturing",
+          "value": "Hero Electronix Pvt. Ltd., Toll-free helpline number: 9319095757"
+        },
+        {
+          "key": "importer",
+          "label": "Importer",
+          "category": "Manufacturing",
+          "value": "Hero Electronix Private Limited Plot No 4, Khasra No. 382,Village Sultanpur, MG Road, New Delhi -110030"
+        }
+      ],
+      "Technical": [
+        {
+          "key": "item_model_number",
+          "label": "Item Model Number",
+          "category": "Technical",
+          "value": "HPA02"
+        }
+      ]
+    },
+    "drop_signals": {
+      "has_reference_media": false,
+      "media_count": 1,
+      "regional_availability": false,
+      "available_regions": [],
+      "influencer_presence": false,
+      "is_global": false,
+      "is_high_visibility": false,
+      "is_social_proof": false,
+      "is_new_release": false,
+      "product_age_days": null,
+      "drop_categories": []
+    }
+  },
+  {
+    "asin": "9388550072",
+    "name": "Ikigai (Hindi) [PB]: Héctor García, Francesc Miralles",
+    "description": "📖 Just started reading Ikigai: The Japanese Secret to a Long and Happy Life — and I’m already intrigued by its depth and simplicity. In the middle of deadlines, targets, and daily routines, this book is a gentle reminder to pause and reflect on one essential question: What is my reason for being? Ikigai isn’t just a concept — it’s a way of living with purpose, passion, and balance. Looking forward to discovering insights that can help both personally and professionally — especially in navigating work-life balance, mindful living, and meaningful contribution. Excited for the journey ahead 📘🌿. Validate before displaying - Choose an input from 📖 Just started reading Ikigai: The Japanese Secret to a Long and Happy Life — and I’m already intrigued by its depth and simplicity. In the middle of deadlines, targets, and daily routines, this book is a gentle reminder to pause and reflect on one essential question: What is my reason for being? Ikigai isn’t just a concept — it’s a way of living with purpose, passion, and balance. Looking forward to discovering insights that can help both personally and professionally — especially in navigating work-life balance, mindful living, and meaningful contribution. Excited for the journey ahead 📘🌿,Ikigai is one of those best books that makes you pause and think about how you’re really living your life. I picked it up at a time when everything around me felt dart, and this book honestly helped me slow down. It’s based on a simple but powerful Japanese concept - ikigai, which roughly means “a reason for being.” The authors travel to Okinawa, Japan, known for having some of the world’s oldest and happiest people, and they explore what keeps them so active and content even in their 90s and 100s. The stories of these people — gardening daily, cooking for neighbors, laughing with friends — sound so ordinary, yet that’s exactly what makes the book special. It shows how joy hides in small, consistent things. What I liked most is that it doesn’t try to preach. It mixes science, philosophy, and real human stories in a simple way. A few chapters felt a bit repetitive, but overall the message stayed with me: don’t chase happiness, build it slowly through purpose and routine. Since reading Ikigai, I’ve started taking short evening walks and spending time doing things I actually enjoy — not just the ones that look productive. It’s amazing how much lighter life feels when you follow your own rhythm.",
+    "price": 239,
+    "original_price": 280,
+    "originalPrice": 280,
+    "discount_percentage": 15,
+    "discountPercentage": 15,
+    "availability": "In Stock",
+    "Error-Flag": 1,
+    "Error-Reason": "",
+    "Error-Fields": [
+      "Amazon marketplace domain",
+      "Reference Media for similar products ",
+      "language",
+      "generic_name"
+    ],
+    "currency": "INR",
+    "symbol": "₹",
+    "brand": "MyMirror Publishing House",
+    "category": "Books",
+    "subcategory": "Book",
+    "main_image": "https://m.media-amazon.com/images/I/61Td+yd3qaL.jpg",
+    "all_images": [
+      "https://m.media-amazon.com/images/I/61Td+yd3qaL.jpg",
+      "https://m.media-amazon.com/images/I/61ejP+-veEL.jpg",
+      "https://m.media-amazon.com/images/I/61DIw4n+k5L.jpg",
+      "https://m.media-amazon.com/images/I/618KedLDcSL.jpg",
+      "https://m.media-amazon.com/images/I/419cb4PmrQL.jpg",
+      "https://m.media-amazon.com/images/I/41zq7OFBVfL.jpg",
+      "https://m.media-amazon.com/images/I/51PIGnEkj3L.jpg",
+      "https://m.media-amazon.com/images/I/31l0MXnpOaL.jpg",
+      "https://m.media-amazon.com/images/I/41BaqqkQY7L.jpg"
+    ],
+    "customer_rating": "4.5 out of 5 stars",
+    "review_count": 2868,
+    "source_link": "https://youtube.com/shorts/iDrWd2I_ZA8?si=ETOPQ2lu22RvWZ0o",
+    "referenceMedia": [
+      "https://youtube.com/shorts/iDrWd2I_ZA8?si=ETOPQ2lu22RvWZ0o"
+    ],
+    "regional_availability": 1,
+    "regional_variants": {
+      "AUD": "1529902401"
+    },
+    "amazon_short": "https://amzn.to/48HAvgG",
+    "amazon_long": "https://www.amazon.in/Ikigai-staying-growing-%E0%A4%A6%E0%A5%80%E0%A4%B0%E0%A5%8D%E0%A4%98%E0%A4%BE%E0%A4%AF%E0%A5%81-%E0%A4%A4%E0%A4%82%E0%A4%A6%E0%A5%81%E0%A4%B0%E0%A5%81%E0%A4%B8%E0%A5%8D%E0%A4%A4/dp/9388550072?_encoding=UTF8&dib_tag=se&dib=eyJ2IjoiMSJ9.3KJIJBF6bQK6ha2nTj8UYdN1GhR-u2lh5-175F3wW5Bm8X8ARdtQb8fbpl1HzChIGSryRAmiwMxf8Kqmijaa4bM2Tn4sj0utsSm2jeS2_UtJQ8Oqm3LHzR5VClClt7lXzJXj5nFoqjT_fFW6eaM17zSOrFWY_K54nb3f5Ysec5yKOL4SoUrVK_j0nBOyVKNU2eBdHbfXLIiOSnFVKMFo_nFMdRXpfEy6XmZtnC4Gfis.iQxkB522DkuleLdWbP1F9EEyceL9txhrjwtgtFDBlVQ&qid=1765904055&sr=8-5&linkCode=ll1&tag=vibedrips-21&linkId=11b1cddfdb70c0e8a94d36e1594397e8&language=en_IN&ref_=as_li_ss_tl",
+    "affiliate_link": "https://amzn.to/48HAvgG",
+    "release_date": null,
+    "influencer": null,
+    "manual_collections": [],
+    "season": "Summer",
+    "featured": false,
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "230 g",
+        "priority": 1
+      },
+      {
+        "key": "dimensions",
+        "label": "Dimensions",
+        "value": "20.3 x 25.4 x 4.7 cm",
+        "priority": 1
+      },
+      {
+        "key": "material",
+        "label": "Material",
+        "value": "Paper",
+        "priority": 1
+      },
+      {
+        "key": "origin",
+        "label": "Made in",
+        "value": "India",
+        "priority": 2
+      }
+    ],
+    "additionalInfo": {
+      "Other": [
+        {
+          "key": "Timestamp",
+          "label": "Timestamp",
+          "category": "Other",
+          "value": "12/16/2025 22:34:42"
+        },
+        {
+          "key": "net_quantity",
+          "label": "Net Quantity",
+          "category": "Other",
+          "value": "1 Count"
+        }
+      ],
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "15"
+        },
+        {
+          "key": "minimumAge",
+          "label": "Minimum Age",
+          "category": "Product Specs",
+          "value": "16 years and up"
+        },
+        {
+          "key": "numberOfPieces",
+          "label": "Number Of Pieces",
+          "category": "Product Specs",
+          "value": "1 Count"
+        },
+        {
+          "key": "unitCount",
+          "label": "Unit Count",
+          "category": "Product Specs",
+          "value": "1 Count"
+        }
+      ],
+      "Books": [
+        {
+          "key": "paperback",
+          "label": "Paperback",
+          "category": "Books",
+          "value": "208 pages"
+        },
+        {
+          "key": "publisher",
+          "label": "Publisher",
+          "category": "Books",
+          "value": "MyMirror Publishing House Pvt. Ltd.; First Edition (31 December 2019); MyMirror"
+        },
+        {
+          "key": "isbn_10",
+          "label": "Isbn 10",
+          "category": "Books",
+          "value": "819388132X"
+        },
+        {
+          "key": "isbn_13",
+          "label": "Isbn 13",
+          "category": "Books",
+          "value": "978-8193881323"
+        },
+        {
+          "key": "reading_age",
+          "label": "Reading Age",
+          "category": "Books",
+          "value": "Customer suggested age: 16 years and up"
+        }
+      ],
+      "Manufacturing": [
+        {
+          "key": "manufacturer",
+          "label": "Manufacturer",
+          "category": "Manufacturing",
+          "value": "MyMirror Publishing House Pvt. Ltd."
+        },
+        {
+          "key": "manufacturerContact",
+          "label": "Manufacturer Contact",
+          "category": "Manufacturing",
+          "value": "MyMirror Publishing House Pvt. Ltd. 36 Vedantgad Tulshibagwale Colony Pune 09"
+        },
+        {
+          "key": "packer",
+          "label": "Packer",
+          "category": "Manufacturing",
+          "value": "MyMirror Publishing House Pvt. Ltd. 36 Vedantgad Tulshibagwale Colony Pune 09"
+        },
+        {
+          "key": "importer",
+          "label": "Importer",
+          "category": "Manufacturing",
+          "value": "MyMirror Publishing House Pvt. Ltd. 36 Vedantgad Tulshibagwale Colony Pune 09"
         }
       ]
     },
@@ -1970,10 +1908,340 @@
       "is_global": false,
       "is_high_visibility": false,
       "is_social_proof": true,
-      "is_this_month": true,
+      "is_new_release": false,
+      "product_age_days": null,
       "drop_categories": [
-        "creator-picks",
-        "hot-this-month"
+        "creator-picks"
+      ]
+    }
+  },
+  {
+    "asin": "B076HP91MN",
+    "name": "Honeywell Air Touch HCMF25M0012 Compound Filter with HEPA and Activated Carbon (Black)",
+    "description": "I ordered this Honeywell air purifier from Amazon, it arrived on December 11, 2025, and from the very first time I plugged it in, it was completely useless. The display immediately flashes AQ1 at 500 (the maximum reading) and stays locked there no matter what—clean room, open window, fan on high, nothing changes it. It just mindlessly blows room-temperature air around like a cheap desk fan and then randomly shuts itself off after a few minutes. This thing doesn’t purify air; it’s a $200+ plastic brick that pretends to. I immediately contacted Amazon for a replacement—basic expectation when you receive a defective product, right? Wrong. The agent told me there are “no replacements available” (shocker), but I could get a full refund once the item is returned. Fine. They scheduled a pickup for December 16th. Guess what? Nobody showed up. No driver, no notification, nothing. I log into the Amazon app and it now says “Delivery Rejected” (for a pickup!). Zero explanation, zero update, zero way to reschedule without starting the entire return process over. Trying to reach Amazon customer service after that is a joke. Days later, I still have a broken, expensive piece of junk sitting in my living room and Amazon is happily holding onto my money. This isn’t incompetence; this feels deliberate. Deliver obviously faulty units, charge full price, then throw up every possible roadblock to returns and refunds so customers eventually give up. Honeywell clearly doesn’t test or care about quality, and Amazon is enabling it with the worst post-sale support I’ve ever experienced. Save your money, your time, and your sanity—do NOT buy this Honeywell air purifier. And honestly, think twice before trusting Amazon with anything expensive anymore. Worst purchasing experience of my life. Zero stars if I could.. I am extremely disappointed with this Honeywell air purifier. The product I received is defective from day one. The AQI sensor is not working properly, and the readings are completely inaccurate. For a product that is supposed to ensure clean air and health, this is unacceptable. It is shocking that a reputed brand like Honeywell would allow such a faulty item to be shipped. This feels like fraud with customers—sending defective products without proper quality checks. I trusted the brand and ended up wasting my money and time. Amazon and Honeywell must look into this seriously. I request a replacement or full refund immediately. No customer should suffer because of defective products being passed off as new. Highly disappointed. Not recommended at all.",
+    "price": 2299,
+    "original_price": 2990,
+    "originalPrice": 2990,
+    "discount_percentage": 23,
+    "discountPercentage": 23,
+    "availability": "In Stock",
+    "Error-Flag": 1,
+    "Error-Reason": "",
+    "Error-Fields": [
+      "Amazon marketplace domain",
+      "Reference Media for similar products ",
+      "includedComponents",
+      "item_model_number",
+      "generic_name",
+      "included_components"
+    ],
+    "currency": "INR",
+    "symbol": "₹",
+    "brand": "Honeywell",
+    "category": "General",
+    "subcategory": "Air Purifier",
+    "main_image": "https://m.media-amazon.com/images/I/91atWaiXuyL.jpg",
+    "all_images": [
+      "https://m.media-amazon.com/images/I/91atWaiXuyL.jpg",
+      "https://m.media-amazon.com/images/I/81SwkFD5FiL.jpg",
+      "https://m.media-amazon.com/images/I/A1+dr-WbThL.jpg",
+      "https://m.media-amazon.com/images/I/81Uk0fDpwWL.jpg",
+      "https://m.media-amazon.com/images/I/61R+ABhdbNL.jpg",
+      "https://m.media-amazon.com/images/I/71HAQ-FOLuL.jpg",
+      "https://m.media-amazon.com/images/I/81Q6coG5nqL.jpg",
+      "https://m.media-amazon.com/images/I/51+FpK3PVAL.jpg",
+      "https://m.media-amazon.com/images/I/61vZ+uHyupL.jpg",
+      "https://m.media-amazon.com/images/I/71ZhggCnp5L.jpg"
+    ],
+    "customer_rating": "3.7 out of 5 stars",
+    "review_count": 10968,
+    "source_link": "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
+    "referenceMedia": [
+      "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd"
+    ],
+    "regional_availability": 0,
+    "regional_variants": {},
+    "amazon_short": "https://amzn.to/4904RK9",
+    "amazon_long": "https://www.amazon.in/Honeywell-V4-Purifier-Activated-Anti-Bacterial/dp/B076HP91MN?dib=eyJ2IjoiMSJ9.DMNpznGUul9T6izLGaRrS_7SLa_2uJzE5u1xQFYfsXdTIr_r7QH5FgkpY-h7s0GdqUL7CpLXQBzc09WvpnubiTWq752GRhdC6bW6H8D1OwzJDS-y80ZPaAh7TG-WGptzUn2dDDO2IB5lGr7QTxBjht1Kz10h7u4tu_sCyiD-qtdJ4ueJw-9jl4MSDpIov8_kblOY9go2imuY8xscV_XRkSgabiKvaKbS4Jrod35pa-k.fDxOIBLElqu6AKefZYY0JG1xnu8gFQjJrLiAMuRHwvM&dib_tag=se&keywords=dyson%2Bgen1%2Btp%2B10%2Bcool%2Bair%2Bpurifier&qid=1766091295&sr=8-1-spons&aref=Py6BCgwo24&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&th=1&linkCode=ll1&tag=vibedrips-21&linkId=fa3cb3cfddb63901df0018c7a72e87d7&language=en_IN&ref_=as_li_ss_tl",
+    "affiliate_link": "https://amzn.to/4904RK9",
+    "release_date": null,
+    "influencer": "Food Pharmer",
+    "manual_collections": [],
+    "season": null,
+    "featured": false,
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "300 g",
+        "priority": 1
+      },
+      {
+        "key": "dimensions",
+        "label": "Dimensions",
+        "value": "30 x 3.5 x 34 Centimeters",
+        "priority": 1
+      }
+    ],
+    "additionalInfo": {
+      "Other": [
+        {
+          "key": "Timestamp",
+          "label": "Timestamp",
+          "category": "Other",
+          "value": "1/3/2026 14:46:29"
+        },
+        {
+          "key": "net_quantity",
+          "label": "Net Quantity",
+          "category": "Other",
+          "value": "1 Count"
+        }
+      ],
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "23"
+        },
+        {
+          "key": "numberOfPieces",
+          "label": "Number Of Pieces",
+          "category": "Product Specs",
+          "value": "1 Count"
+        },
+        {
+          "key": "unitCount",
+          "label": "Unit Count",
+          "category": "Product Specs",
+          "value": "1 Count"
+        }
+      ],
+      "Books": [
+        {
+          "key": "publisher",
+          "label": "Publisher",
+          "category": "Books",
+          "value": "Secure Connection Limited"
+        }
+      ],
+      "Manufacturing": [
+        {
+          "key": "manufacturer",
+          "label": "Manufacturer",
+          "category": "Manufacturing",
+          "value": "Secure Connection Limited"
+        },
+        {
+          "key": "packer",
+          "label": "Packer",
+          "category": "Manufacturing",
+          "value": "Honeywell Environmental &amp; Combustion Controls Tain Jin Co Ltd 158 NanHai Road,Teda 300457 TAIN JIN China +61 2266287203"
+        },
+        {
+          "key": "importer",
+          "label": "Importer",
+          "category": "Manufacturing",
+          "value": "Honeywell International (I) Pvt. Ltd Nagpal Business Tower Ground Floor, A/91 Okhla Industrial Phase II New Delhi -110020 India"
+        },
+        {
+          "key": "imported_by",
+          "label": "Imported By",
+          "category": "Manufacturing",
+          "value": "Honeywell International (I) Pvt. Ltd Nagpal Business Tower Ground Floor, A/91 Okhla Industrial Phase II New Delhi -110020 India"
+        }
+      ]
+    },
+    "drop_signals": {
+      "has_reference_media": false,
+      "media_count": 1,
+      "regional_availability": false,
+      "available_regions": [],
+      "influencer_presence": false,
+      "is_global": false,
+      "is_high_visibility": false,
+      "is_social_proof": false,
+      "is_new_release": false,
+      "product_age_days": null,
+      "drop_categories": []
+    }
+  },
+  {
+    "asin": "9355995008",
+    "name": "Ikigai [hardcover]: Japanese Art of staying Young.. While growing Old",
+    "description": "What is Ikigai? Ikigai is the art of living life in a way that a person is always inspired to remain focused on their goal. The meaning of Ikigai is to make your life meaningful. The people who use the principles of Ikigai always wake up in the morning with a sense of meaning. This is the reason why, despite having been destroyed in the second world war, Japan did not only develop, but also became a nation of longevity. How was all this possible? This was only possible by adopting the principles of Ikigai. This book will not only provide you with theoretical ideas, but also how to lead the Ikigai life with practical examples. It is then that you will know what this Japanese way of living actually is. How the people of that country achieve their goals. How they scale great heights in society and achieve a high social standing. What do they eat that they are able to live a long and fruitful life. This book will help you live a successful life,a meaningful long life and achieve new heights of success every day, and you will enjoy it.. Validate before displaying - Choose an input from What is Ikigai? Ikigai is the art of living life in a way that a person is always inspired to remain focused on their goal. The meaning of Ikigai is to make your life meaningful. The people who use the principles of Ikigai always wake up in the morning with a sense of meaning. This is the reason why, despite having been destroyed in the second world war, Japan did not only develop, but also became a nation of longevity. How was all this possible? This was only possible by adopting the principles of Ikigai. This book will not only provide you with theoretical ideas, but also how to lead the Ikigai life with practical examples. It is then that you will know what this Japanese way of living actually is. How the people of that country achieve their goals. How they scale great heights in society and achieve a high social standing. What do they eat that they are able to live a long and fruitful life. This book will help you live a successful life,a meaningful long life and achieve new heights of success every day, and you will enjoy it.,As someone on a journey to discover their true purpose and live a fulfilling life, \"Ikigai: The Japanese Secret to a Long and Happy Life\" has been a beacon of wisdom. From its profound exploration of the concept of ikigai to practical tips on how to incorporate it into daily life, this book is a must-read for anyone seeking clarity and direction. The authors seamlessly blend Eastern philosophy with Western research, offering a holistic approach to finding meaning in life. The anecdotes and case studies provide relatable examples that resonate deeply, making the concepts tangible and applicable. What sets this book apart is its emphasis on the intersection of passion, mission, vocation, and profession – the essence of ikigai. It not only inspires but also equips readers with actionable steps to uncover their own ikigai and live authentically. Overall, \"Ikigai\" is a profound, thought-provoking read that empowers readers to embark on a journey of self-discovery and live with purpose. Highly recommended for anyone seeking a more meaningful and fulfilling life.",
+    "price": 218,
+    "original_price": 300,
+    "originalPrice": 300,
+    "discount_percentage": 27,
+    "discountPercentage": 27,
+    "availability": "In Stock",
+    "Error-Flag": 1,
+    "Error-Reason": "",
+    "Error-Fields": [
+      "Amazon marketplace domain",
+      "Reference Media for similar products "
+    ],
+    "currency": "INR",
+    "symbol": "₹",
+    "brand": "Diamond Books",
+    "category": "Books",
+    "subcategory": "Book",
+    "main_image": "https://m.media-amazon.com/images/I/61VGUxkTJOL.jpg",
+    "all_images": [
+      "https://m.media-amazon.com/images/I/61VGUxkTJOL.jpg",
+      "https://m.media-amazon.com/images/I/51uqARjjBaL.jpg",
+      "https://m.media-amazon.com/images/I/41a3PD-XT3L.jpg",
+      "https://m.media-amazon.com/images/I/517jAKL3B3L.jpg",
+      "https://m.media-amazon.com/images/I/71fpqz6h3iL.jpg",
+      "https://m.media-amazon.com/images/I/71F-UTAYaVL.jpg",
+      "https://m.media-amazon.com/images/I/61NCrl1aXbL.jpg",
+      "https://m.media-amazon.com/images/I/717zFoBzuQL.jpg"
+    ],
+    "customer_rating": "4.1 out of 5 stars",
+    "review_count": 1742,
+    "source_link": "https://youtube.com/shorts/iDrWd2I_ZA8?si=ETOPQ2lu22RvWZ0o",
+    "referenceMedia": [
+      "https://youtube.com/shorts/iDrWd2I_ZA8?si=ETOPQ2lu22RvWZ0o"
+    ],
+    "regional_availability": 1,
+    "regional_variants": {
+      "AUD": "1529902401"
+    },
+    "amazon_short": "https://amzn.to/48Q68EV",
+    "amazon_long": "https://www.amazon.in/Ikigai-Japanese-staying-Young-growing/dp/9355995008?_encoding=UTF8&dib_tag=se&dib=eyJ2IjoiMSJ9.YSxTx1XGPwRl7jBWZBLk_V6ur4uN-ndEzVLZukqdaqb4nDFrculrNk8V5nnDgZSbGSryRAmiwMxf8Kqmijaa4THRh2-DaU4GndGApEea5W56dX7qdC4YSE5aC_DtNOsuSFOVateHf1DRsxvjRkCOEXXGQxuDrfP739gXu7tNChSfg_Ga079LQK1wjnc_XqhaThVMK1Yi5bMnoOzhiiJANn3gQWSprhzCSnfD-_Ru4-o.bOMxlFOr7WanR8nKLUQWOHQKzmua00lJ1x6LWP0LiAM&qid=1765903495&sr=8-3&linkCode=ll1&tag=vibedrips-21&linkId=600e5d1b6f544671217a4b306e1abdaf&language=en_IN&ref_=as_li_ss_tl",
+    "affiliate_link": "https://amzn.to/48Q68EV",
+    "release_date": null,
+    "influencer": null,
+    "manual_collections": [],
+    "season": null,
+    "featured": false,
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "300 g",
+        "priority": 1
+      },
+      {
+        "key": "dimensions",
+        "label": "Dimensions",
+        "value": "20.3 x 25.4 x 4.7 cm",
+        "priority": 1
+      },
+      {
+        "key": "material",
+        "label": "Material",
+        "value": "Paper",
+        "priority": 1
+      },
+      {
+        "key": "origin",
+        "label": "Made in",
+        "value": "India",
+        "priority": 2
+      }
+    ],
+    "additionalInfo": {
+      "Other": [
+        {
+          "key": "Timestamp",
+          "label": "Timestamp",
+          "category": "Other",
+          "value": "12/16/2025 22:22:32"
+        },
+        {
+          "key": "generic_name",
+          "label": "Generic Name",
+          "category": "Other",
+          "value": "Books"
+        }
+      ],
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "27"
+        },
+        {
+          "key": "minimumAge",
+          "label": "Minimum Age",
+          "category": "Product Specs",
+          "value": "14 years and up"
+        }
+      ],
+      "Books": [
+        {
+          "key": "language",
+          "label": "Language",
+          "category": "Books",
+          "value": "English"
+        },
+        {
+          "key": "hardcover",
+          "label": "Hardcover",
+          "category": "Books",
+          "value": "112 pages"
+        },
+        {
+          "key": "publisher",
+          "label": "Publisher",
+          "category": "Books",
+          "value": "Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020; First Edition (30 July 2022); Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020"
+        },
+        {
+          "key": "isbn_10",
+          "label": "Isbn 10",
+          "category": "Books",
+          "value": "9355995008"
+        },
+        {
+          "key": "isbn_13",
+          "label": "Isbn 13",
+          "category": "Books",
+          "value": "978-9355995001"
+        },
+        {
+          "key": "reading_age",
+          "label": "Reading Age",
+          "category": "Books",
+          "value": "14 years and up"
+        }
+      ],
+      "Manufacturing": [
+        {
+          "key": "manufacturer",
+          "label": "Manufacturer",
+          "category": "Manufacturing",
+          "value": "Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020"
+        },
+        {
+          "key": "packer",
+          "label": "Packer",
+          "category": "Manufacturing",
+          "value": "Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020"
+        }
+      ]
+    },
+    "drop_signals": {
+      "has_reference_media": false,
+      "media_count": 1,
+      "regional_availability": true,
+      "available_regions": [
+        "AUD"
+      ],
+      "influencer_presence": true,
+      "is_global": false,
+      "is_high_visibility": false,
+      "is_social_proof": true,
+      "is_new_release": false,
+      "product_age_days": null,
+      "drop_categories": [
+        "creator-picks"
       ]
     }
   },
@@ -2024,7 +2292,10 @@
     "amazon_short": "https://amzn.to/3YhVUXP",
     "amazon_long": "https://www.amazon.in/Ikigai-Japanese-staying-Young-growing/dp/9355991479?_encoding=UTF8&dib_tag=se&dib=eyJ2IjoiMSJ9.YSxTx1XGPwRl7jBWZBLk_V6ur4uN-ndEzVLZukqdaqb4nDFrculrNk8V5nnDgZSbGSryRAmiwMxf8Kqmijaa4THRh2-DaU4GndGApEea5W56dX7qdC4YSE5aC_DtNOsuSFOVateHf1DRsxvjRkCOEXXGQxuDrfP739gXu7tNChSfg_Ga079LQK1wjnc_XqhaThVMK1Yi5bMnoOzhiiJANn3gQWSprhzCSnfD-_Ru4-o.bOMxlFOr7WanR8nKLUQWOHQKzmua00lJ1x6LWP0LiAM&qid=1765903495&sr=8-3&linkCode=ll1&tag=vibedrips-21&linkId=629df63cde44d8b9923ec5460176d880&language=en_IN&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/3YhVUXP",
-    "timestamp": "2025-12-16T22:23:54.000Z",
+    "release_date": null,
+    "influencer": null,
+    "manual_collections": [],
+    "season": null,
     "featured": false,
     "trending": false,
     "productDetails": [
@@ -2054,6 +2325,14 @@
       }
     ],
     "additionalInfo": {
+      "Other": [
+        {
+          "key": "Timestamp",
+          "label": "Timestamp",
+          "category": "Other",
+          "value": "12/16/2025 22:23:54"
+        }
+      ],
       "Product Specs": [
         {
           "key": "Discount",
@@ -2132,178 +2411,10 @@
       "is_global": false,
       "is_high_visibility": false,
       "is_social_proof": true,
-      "is_this_month": true,
+      "is_new_release": false,
+      "product_age_days": null,
       "drop_categories": [
-        "creator-picks",
-        "hot-this-month"
-      ]
-    }
-  },
-  {
-    "asin": "9355995008",
-    "name": "Ikigai [hardcover]: Japanese Art of staying Young.. While growing Old",
-    "description": "What is Ikigai? Ikigai is the art of living life in a way that a person is always inspired to remain focused on their goal. The meaning of Ikigai is to make your life meaningful. The people who use the principles of Ikigai always wake up in the morning with a sense of meaning. This is the reason why, despite having been destroyed in the second world war, Japan did not only develop, but also became a nation of longevity. How was all this possible? This was only possible by adopting the principles of Ikigai. This book will not only provide you with theoretical ideas, but also how to lead the Ikigai life with practical examples. It is then that you will know what this Japanese way of living actually is. How the people of that country achieve their goals. How they scale great heights in society and achieve a high social standing. What do they eat that they are able to live a long and fruitful life. This book will help you live a successful life,a meaningful long life and achieve new heights of success every day, and you will enjoy it.. Validate before displaying - Choose an input from What is Ikigai? Ikigai is the art of living life in a way that a person is always inspired to remain focused on their goal. The meaning of Ikigai is to make your life meaningful. The people who use the principles of Ikigai always wake up in the morning with a sense of meaning. This is the reason why, despite having been destroyed in the second world war, Japan did not only develop, but also became a nation of longevity. How was all this possible? This was only possible by adopting the principles of Ikigai. This book will not only provide you with theoretical ideas, but also how to lead the Ikigai life with practical examples. It is then that you will know what this Japanese way of living actually is. How the people of that country achieve their goals. How they scale great heights in society and achieve a high social standing. What do they eat that they are able to live a long and fruitful life. This book will help you live a successful life,a meaningful long life and achieve new heights of success every day, and you will enjoy it.,As someone on a journey to discover their true purpose and live a fulfilling life, \"Ikigai: The Japanese Secret to a Long and Happy Life\" has been a beacon of wisdom. From its profound exploration of the concept of ikigai to practical tips on how to incorporate it into daily life, this book is a must-read for anyone seeking clarity and direction. The authors seamlessly blend Eastern philosophy with Western research, offering a holistic approach to finding meaning in life. The anecdotes and case studies provide relatable examples that resonate deeply, making the concepts tangible and applicable. What sets this book apart is its emphasis on the intersection of passion, mission, vocation, and profession – the essence of ikigai. It not only inspires but also equips readers with actionable steps to uncover their own ikigai and live authentically. Overall, \"Ikigai\" is a profound, thought-provoking read that empowers readers to embark on a journey of self-discovery and live with purpose. Highly recommended for anyone seeking a more meaningful and fulfilling life.",
-    "price": 218,
-    "original_price": 300,
-    "originalPrice": 300,
-    "discount_percentage": 27,
-    "discountPercentage": 27,
-    "availability": "In Stock",
-    "Error-Flag": 1,
-    "Error-Reason": "",
-    "Error-Fields": [
-      "Amazon marketplace domain",
-      "Reference Media for similar products "
-    ],
-    "currency": "INR",
-    "symbol": "₹",
-    "brand": "Diamond Books",
-    "category": "Books",
-    "subcategory": "Book",
-    "main_image": "https://m.media-amazon.com/images/I/61VGUxkTJOL.jpg",
-    "all_images": [
-      "https://m.media-amazon.com/images/I/61VGUxkTJOL.jpg",
-      "https://m.media-amazon.com/images/I/51uqARjjBaL.jpg",
-      "https://m.media-amazon.com/images/I/41a3PD-XT3L.jpg",
-      "https://m.media-amazon.com/images/I/517jAKL3B3L.jpg",
-      "https://m.media-amazon.com/images/I/71fpqz6h3iL.jpg",
-      "https://m.media-amazon.com/images/I/71F-UTAYaVL.jpg",
-      "https://m.media-amazon.com/images/I/61NCrl1aXbL.jpg",
-      "https://m.media-amazon.com/images/I/717zFoBzuQL.jpg"
-    ],
-    "customer_rating": "4.1 out of 5 stars",
-    "review_count": 1742,
-    "source_link": "https://youtube.com/shorts/iDrWd2I_ZA8?si=ETOPQ2lu22RvWZ0o",
-    "referenceMedia": [
-      "https://youtube.com/shorts/iDrWd2I_ZA8?si=ETOPQ2lu22RvWZ0o"
-    ],
-    "regional_availability": 1,
-    "regional_variants": {
-      "AUD": "1529902401"
-    },
-    "amazon_short": "https://amzn.to/48Q68EV",
-    "amazon_long": "https://www.amazon.in/Ikigai-Japanese-staying-Young-growing/dp/9355995008?_encoding=UTF8&dib_tag=se&dib=eyJ2IjoiMSJ9.YSxTx1XGPwRl7jBWZBLk_V6ur4uN-ndEzVLZukqdaqb4nDFrculrNk8V5nnDgZSbGSryRAmiwMxf8Kqmijaa4THRh2-DaU4GndGApEea5W56dX7qdC4YSE5aC_DtNOsuSFOVateHf1DRsxvjRkCOEXXGQxuDrfP739gXu7tNChSfg_Ga079LQK1wjnc_XqhaThVMK1Yi5bMnoOzhiiJANn3gQWSprhzCSnfD-_Ru4-o.bOMxlFOr7WanR8nKLUQWOHQKzmua00lJ1x6LWP0LiAM&qid=1765903495&sr=8-3&linkCode=ll1&tag=vibedrips-21&linkId=600e5d1b6f544671217a4b306e1abdaf&language=en_IN&ref_=as_li_ss_tl",
-    "affiliate_link": "https://amzn.to/48Q68EV",
-    "timestamp": "2025-12-16T22:22:32.000Z",
-    "featured": false,
-    "trending": false,
-    "productDetails": [
-      {
-        "key": "weight",
-        "label": "Weight",
-        "value": "300 g",
-        "priority": 1
-      },
-      {
-        "key": "dimensions",
-        "label": "Dimensions",
-        "value": "20.3 x 25.4 x 4.7 cm",
-        "priority": 1
-      },
-      {
-        "key": "material",
-        "label": "Material",
-        "value": "Paper",
-        "priority": 1
-      },
-      {
-        "key": "origin",
-        "label": "Made in",
-        "value": "India",
-        "priority": 2
-      }
-    ],
-    "additionalInfo": {
-      "Product Specs": [
-        {
-          "key": "Discount",
-          "label": "Discount",
-          "category": "Product Specs",
-          "value": "27"
-        },
-        {
-          "key": "minimumAge",
-          "label": "Minimum Age",
-          "category": "Product Specs",
-          "value": "14 years and up"
-        }
-      ],
-      "Books": [
-        {
-          "key": "language",
-          "label": "Language",
-          "category": "Books",
-          "value": "English"
-        },
-        {
-          "key": "hardcover",
-          "label": "Hardcover",
-          "category": "Books",
-          "value": "112 pages"
-        },
-        {
-          "key": "publisher",
-          "label": "Publisher",
-          "category": "Books",
-          "value": "Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020; First Edition (30 July 2022); Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020"
-        },
-        {
-          "key": "isbn_10",
-          "label": "Isbn 10",
-          "category": "Books",
-          "value": "9355995008"
-        },
-        {
-          "key": "isbn_13",
-          "label": "Isbn 13",
-          "category": "Books",
-          "value": "978-9355995001"
-        },
-        {
-          "key": "reading_age",
-          "label": "Reading Age",
-          "category": "Books",
-          "value": "14 years and up"
-        }
-      ],
-      "Manufacturing": [
-        {
-          "key": "manufacturer",
-          "label": "Manufacturer",
-          "category": "Manufacturing",
-          "value": "Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020"
-        },
-        {
-          "key": "packer",
-          "label": "Packer",
-          "category": "Manufacturing",
-          "value": "Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020"
-        }
-      ],
-      "Other": [
-        {
-          "key": "generic_name",
-          "label": "Generic Name",
-          "category": "Other",
-          "value": "Books"
-        }
-      ]
-    },
-    "drop_signals": {
-      "has_reference_media": false,
-      "media_count": 1,
-      "regional_availability": true,
-      "available_regions": [
-        "AUD"
-      ],
-      "influencer_presence": true,
-      "is_global": false,
-      "is_high_visibility": false,
-      "is_social_proof": true,
-      "is_this_month": true,
-      "drop_categories": [
-        "creator-picks",
-        "hot-this-month"
+        "creator-picks"
       ]
     }
   }
