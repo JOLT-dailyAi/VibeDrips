@@ -455,7 +455,7 @@ function showProductModal(productId) {
             <div class="simple-modal-content">
                 <div class="simple-modal-header">
                     <h2>${escapeHtml(product.name || product.productTitle || product.Title)}</h2>
-                    <button onclick="closeDynamicModal(event)">&times;</button>
+                    <button onclick="closeDynamicModal(event)">❌</button>
                 </div>
                 <div class="simple-modal-body">
                     ${product.brand || product.Brand ? `
@@ -521,7 +521,7 @@ function showProductModal(productId) {
                     ${description ? `
                         <div class="modal-section">
                             <div class="section-header">
-                                <span>📝 Description</span>
+                                <span>📝 Description/Reviews:</span>
                             </div>
                             <div class="section-content expanded">
                                 <div class="description-text" id="descriptionText" data-full="${escapeHtml(description)}">
@@ -607,12 +607,12 @@ window.toggleDescription = function() {
     
     if (!descText || !btnText) return;
     
-    const fullDesc = descText.dataset.full || '';
+    const fullDesc = (descText.dataset.full || '').trim();
     const isExpanded = descText.dataset.expanded === 'true';
     
     if (isExpanded) {
         // Collapse - show first 200 chars
-        descText.textContent = fullDesc.substring(0, 200) + '...';
+        descText.textContent = fullDesc.substring(0, 200).trim() + '...';
         descText.dataset.expanded = 'false';
         btnText.textContent = 'Read More ▼';
     } else {
