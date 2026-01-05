@@ -82,32 +82,33 @@
     padding-right: 16px;
 }
 
-.simple-modal-header button,
-.simple-modal-header .modal-close-button {
-    background: white;
-    border: 2px solid rgba(0, 0, 0, 0.1);
-    width: 32px;
-    height: 32px;
-    min-width: 32px;
-    min-height: 32px;
-    font-size: 18px;
-    color: #333;
-    cursor: pointer;
-    padding: 0;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    flex-shrink: 0;
-    line-height: 1;
+/* ✅ INCREASED SPECIFICITY - Close button styles */
+.simple-modal-header button.modal-close-button,
+.simple-modal-content .simple-modal-header button.modal-close-button {
+    background: white !important;
+    border: 2px solid rgba(0, 0, 0, 0.1) !important;
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
+    font-size: 18px !important;
+    color: #333 !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.2s !important;
+    flex-shrink: 0 !important;
+    line-height: 1 !important;
 }
 
-.simple-modal-header button:hover,
-.simple-modal-header .modal-close-button:hover {
-    background: rgba(0, 0, 0, 0.05);
-    border-color: rgba(0, 0, 0, 0.2);
-    transform: rotate(90deg);
+.simple-modal-header button.modal-close-button:hover,
+.simple-modal-content .simple-modal-header button.modal-close-button:hover {
+    background: rgba(0, 0, 0, 0.05) !important;
+    border-color: rgba(0, 0, 0, 0.2) !important;
+    transform: rotate(90deg) !important;
 }
 
 /* Modal Body */
@@ -427,17 +428,17 @@ body.dark-theme .simple-modal-header h2 {
     color: white;
 }
 
-body.dark-theme .simple-modal-header button,
-body.dark-theme .simple-modal-header .modal-close-button {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
-    color: white;
+body.dark-theme .simple-modal-header button.modal-close-button,
+body.dark-theme .simple-modal-content .simple-modal-header button.modal-close-button {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
 }
 
-body.dark-theme .simple-modal-header button:hover,
-body.dark-theme .simple-modal-header .modal-close-button:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.3);
+body.dark-theme .simple-modal-header button.modal-close-button:hover,
+body.dark-theme .simple-modal-content .simple-modal-header button.modal-close-button:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
 }
 
 body.dark-theme .modal-brand {
@@ -549,17 +550,17 @@ body.glass-theme .simple-modal-header h2 {
     color: white;
 }
 
-body.glass-theme .simple-modal-header button,
-body.glass-theme .simple-modal-header .modal-close-button {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.3);
-    color: white;
+body.glass-theme .simple-modal-header button.modal-close-button,
+body.glass-theme .simple-modal-content .simple-modal-header button.modal-close-button {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+    color: white !important;
 }
 
-body.glass-theme .simple-modal-header button:hover,
-body.glass-theme .simple-modal-header .modal-close-button:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.5);
+body.glass-theme .simple-modal-header button.modal-close-button:hover,
+body.glass-theme .simple-modal-content .simple-modal-header button.modal-close-button:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
 }
 
 body.glass-theme .modal-brand {
