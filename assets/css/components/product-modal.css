@@ -288,7 +288,8 @@
     overflow: hidden;
 }
 
-.section-header {
+/* ✅ SCOPED: Only apply to section headers INSIDE modals */
+.simple-modal-content .section-header {
     padding: 14px 18px;
     background: #f7f9fc;
     font-size: 16px;
@@ -299,13 +300,13 @@
     align-items: center;
 }
 
-.section-header.collapsible {
+.simple-modal-content .section-header.collapsible {
     cursor: pointer;
     user-select: none;
     transition: background 0.2s;
 }
 
-.section-header.collapsible:hover {
+.simple-modal-content .section-header.collapsible:hover {
     background: #eef1f7;
 }
 
@@ -426,13 +427,15 @@ body.dark-theme .simple-modal-header h2 {
     color: white;
 }
 
-body.dark-theme .simple-modal-header button {
+body.dark-theme .simple-modal-header button,
+body.dark-theme .simple-modal-header .modal-close-button {
     background: rgba(255, 255, 255, 0.1);
     border-color: rgba(255, 255, 255, 0.2);
     color: white;
 }
 
-body.dark-theme .simple-modal-header button:hover {
+body.dark-theme .simple-modal-header button:hover,
+body.dark-theme .simple-modal-header .modal-close-button:hover {
     background: rgba(255, 255, 255, 0.2);
     border-color: rgba(255, 255, 255, 0.3);
 }
@@ -466,12 +469,12 @@ body.dark-theme .modal-section {
     border-color: rgba(255, 255, 255, 0.1);
 }
 
-body.dark-theme .section-header {
+body.dark-theme .simple-modal-content .section-header {
     background: #242424;
     color: white;
 }
 
-body.dark-theme .section-header.collapsible:hover {
+body.dark-theme .simple-modal-content .section-header.collapsible:hover {
     background: #2a2a2a;
 }
 
@@ -546,13 +549,15 @@ body.glass-theme .simple-modal-header h2 {
     color: white;
 }
 
-body.glass-theme .simple-modal-header button {
+body.glass-theme .simple-modal-header button,
+body.glass-theme .simple-modal-header .modal-close-button {
     background: rgba(255, 255, 255, 0.1);
     border-color: rgba(255, 255, 255, 0.3);
     color: white;
 }
 
-body.glass-theme .simple-modal-header button:hover {
+body.glass-theme .simple-modal-header button:hover,
+body.glass-theme .simple-modal-header .modal-close-button:hover {
     background: rgba(255, 255, 255, 0.2);
     border-color: rgba(255, 255, 255, 0.5);
 }
@@ -587,12 +592,12 @@ body.glass-theme .modal-section {
     border-color: rgba(255, 255, 255, 0.2);
 }
 
-body.glass-theme .section-header {
+body.glass-theme .simple-modal-content .section-header {
     background: rgba(255, 255, 255, 0.1);
     color: white;
 }
 
-body.glass-theme .section-header.collapsible:hover {
+body.glass-theme .simple-modal-content .section-header.collapsible:hover {
     background: rgba(255, 255, 255, 0.15);
 }
 
@@ -746,7 +751,7 @@ body.glass-theme .gallery-zoom-hint {
         font-size: 18px;
     }
 
-    .section-header {
+    .simple-modal-content .section-header {
         padding: 12px 14px;
         font-size: 15px;
     }
