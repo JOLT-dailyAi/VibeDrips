@@ -1,5 +1,45 @@
 /* layout/grid.css - Grid layouts for products and stats */
 
+/* Products Section Header */
+.section-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+#section-title {
+    font-size: 32px;
+    font-weight: 700;
+    color: #333;
+    margin: 0 0 10px 0;
+    text-align: center;
+}
+
+#section-subtitle {
+    font-size: 16px;
+    color: #666;
+    margin: 0;
+    text-align: center;
+}
+
+/* Dark Theme - Section Headers */
+body.dark-theme #section-title {
+    color: white;
+}
+
+body.dark-theme #section-subtitle {
+    color: #aaa;
+}
+
+/* Glass Theme - Section Headers */
+body.glass-theme #section-title {
+    color: white;
+}
+
+body.glass-theme #section-subtitle {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Products Grid */
 .products-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -7,6 +47,7 @@
     margin-top: 20px;
 }
 
+/* Stats Bar */
 .stats-bar {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -56,26 +97,37 @@ body.glass-theme .stat-label {
     color: rgba(255, 255, 255, 0.9);
 }
 
+/* Responsive Breakpoints */
+
 /* ✅ FIXED: Very small screens only - 1 column */
 @media (max-width: 399px) {
     .products-grid {
         grid-template-columns: 1fr;
         gap: 20px;
     }
-
+    
     .stats-bar {
         grid-template-columns: 1fr 1fr;
         gap: 10px;
         padding: 5px;
     }
-
+    
     .stat-item {
         padding: 10px;
         font-size: 14px;
     }
-
+    
     .stat-number {
         font-size: 18px;
+    }
+    
+    /* Section headers - mobile */
+    #section-title {
+        font-size: 24px;
+    }
+    
+    #section-subtitle {
+        font-size: 14px;
     }
 }
 
@@ -85,20 +137,29 @@ body.glass-theme .stat-label {
         grid-template-columns: repeat(2, 1fr);
         gap: 10px; /* ✅ Match stat items gap */
     }
-
+    
     .stats-bar {
         grid-template-columns: 1fr 1fr;
         gap: 10px; /* Same as products grid */
         padding: 5px;
     }
-
+    
     .stat-item {
         padding: 10px;
         font-size: 14px;
     }
-
+    
     .stat-number {
         font-size: 18px;
+    }
+    
+    /* Section headers - mobile portrait */
+    #section-title {
+        font-size: 26px;
+    }
+    
+    #section-subtitle {
+        font-size: 14px;
     }
 }
 
@@ -108,18 +169,18 @@ body.glass-theme .stat-label {
         grid-template-columns: repeat(2, 1fr);
         gap: 20px;
     }
-
+    
     .stats-bar {
         grid-template-columns: 1fr 1fr;
         gap: 10px;
         padding: 5px;
     }
-
+    
     .stat-item {
         padding: 10px;
         font-size: 14px;
     }
-
+    
     .stat-number {
         font-size: 18px;
     }
@@ -131,11 +192,11 @@ body.glass-theme .stat-label {
         gap: 8px;
         padding: 5px;
     }
-
+    
     .stat-item {
         padding: 8px;
     }
-
+    
     .stat-number {
         font-size: 16px;
     }
@@ -145,6 +206,11 @@ body.glass-theme .stat-label {
 @media (min-width: 768px) and (max-width: 900px) {
     .products-grid {
         grid-template-columns: repeat(2, 1fr);
+    }
+    
+    /* Section headers - tablet */
+    #section-title {
+        font-size: 28px;
     }
 }
 
