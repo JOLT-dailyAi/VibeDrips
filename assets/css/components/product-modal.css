@@ -1,248 +1,503 @@
-/* components/product-modal.css - Product details modal */
+/* product-modal.css - Enhanced product modal styles */
 
-/* Product Modal - With Dark Overlay */
+/* Base Modal Styles */
 .simple-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7); /* Dark overlay - same as install modal */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  overflow-y: auto;
 }
 
 .simple-modal.hidden {
-    display: none;
+  display: none;
 }
 
-.dynamic-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    background: rgba(0, 0, 0, 0.7); /* Dark overlay */
-}
-
-/* Modal Overlay - Clickable background */
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    z-index: 999;
-    cursor: pointer;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  z-index: 1;
 }
 
-/* Modal Content - Centered, above overlay */
 .simple-modal-content {
-    background: white;
-    border-radius: 16px;
-    width: 90%;
-    max-width: 1200px;
-    height: auto;
-    min-height: 60vh;
-    max-height: 80vh;
-    overflow-y: auto;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    margin: 20px;
-    padding: 0;
-    z-index: 1001;
-    position: relative;
+  position: relative;
+  background: white;
+  border-radius: 16px;
+  max-width: 700px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  z-index: 2;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  margin: 20px;
 }
 
-/* Modal Header */
+/* Header */
 .simple-modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 28px 24px;
-    border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px 24px 12px;
+  border-bottom: 1px solid #e0e0e0;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+  border-radius: 16px 16px 0 0;
 }
 
-.simple-modal-header h2 {
-    font-size: 20px;
-    color: #333;
-    margin: 0;
-    font-weight: 600;
+.product-title-modal {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0;
+  color: #1a1a1a;
+  flex: 1;
+  padding-right: 16px;
 }
 
-.simple-modal-header button {
-    background: white;
-    border: 2px solid rgba(0, 0, 0, 0.1);
-    width: 32px;
-    height: 32px;
-    min-width: 32px;
-    min-height: 32px;
-    font-size: 18px;
-    color: #333;
-    cursor: pointer;
-    padding: 0;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
+.modal-close-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 4px 8px;
+  line-height: 1;
+  transition: transform 0.2s;
+  flex-shrink: 0;
 }
 
-.simple-modal-header button:hover {
-    background: rgba(0, 0, 0, 0.05);
-    border-color: rgba(0, 0, 0, 0.2);
+.modal-close-button:hover {
+  transform: scale(1.2);
+}
+
+/* Brand Tag */
+.brand-tag {
+  font-size: 14px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+  padding: 0 24px 16px;
+  display: block;
 }
 
 /* Modal Body */
 .simple-modal-body {
-    padding: 28px 24px;
-    text-align: center;
+  padding: 0 24px 24px;
 }
 
-.simple-modal-body img {
-    border-radius: 15px;
-    margin-bottom: 20px;
+/* Image Gallery */
+.product-gallery {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
+  min-height: 300px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.simple-modal-body p {
-    margin-bottom: 15px;
-    text-align: left;
-    line-height: 1.6;
-    color: #444;
-    font-size: 15px;
+.gallery-main-image {
+  width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+  display: block;
 }
 
-.simple-modal-body p strong {
-    color: #667EEA;
-    font-weight: 600;
+/* Gallery Navigation Arrows */
+.gallery-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: background 0.2s, transform 0.2s;
+  user-select: none;
 }
 
-.simple-modal-body .amazon-button {
-    margin-top: 24px;
-    width: 100%;
-    padding: 14px;
-    border: none;
-    border-radius: 8px;
-    background: #667eea;
-    color: white;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
+.gallery-nav:hover {
+  background: rgba(0, 0, 0, 0.8);
+  transform: translateY(-50%) scale(1.1);
 }
 
-.simple-modal-body .amazon-button:hover {
-    background: #764ba2;
-    transform: scale(1.02);
+.gallery-nav:active {
+  transform: translateY(-50%) scale(0.95);
 }
 
-/* Dark Theme */
-body.dark-theme .simple-modal-content {
-    background: #1a1a1a;
+.gallery-prev {
+  left: 12px;
 }
 
-body.dark-theme .simple-modal-header {
-    border-bottom-color: rgba(255, 255, 255, 0.1);
+.gallery-next {
+  right: 12px;
 }
 
-body.dark-theme .simple-modal-header h2 {
-    color: white;
+.gallery-nav:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
-body.dark-theme .simple-modal-header button {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
-    color: white;
+/* Thumbnail Indicators */
+.gallery-thumbnails {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 12px;
+  margin-bottom: 20px;
 }
 
-body.dark-theme .simple-modal-header button:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.3);
+.thumb-indicator {
+  font-size: 20px;
+  cursor: pointer;
+  color: #ccc;
+  transition: color 0.2s, transform 0.1s;
+  user-select: none;
 }
 
-body.dark-theme .simple-modal-body p {
-    color: rgba(255, 255, 255, 0.9);
+.thumb-indicator.active {
+  color: #333;
+  font-weight: bold;
 }
 
-body.dark-theme .simple-modal-body p strong {
-    color: white;
+.thumb-indicator:hover {
+  color: #666;
+  transform: scale(1.2);
 }
 
-/* Glass Theme - Matches Install Modal Exactly */
-body.glass-theme .simple-modal-content {
-    background: rgba(255, 255, 255, var(--glass-refraction));
-    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow:
-        0 8px 32px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5);
-    color: white;
+/* Modal Metadata */
+.modal-metadata {
+  margin: 20px 0;
+  padding: 16px;
+  background: #f5f5f5;
+  border-radius: 8px;
 }
 
-body.glass-theme .simple-modal-header {
-    border-bottom-color: rgba(255, 255, 255, 0.2);
+.modal-category {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
 }
 
-body.glass-theme .simple-modal-header h2 {
-    color: white;
+.modal-price-rating {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-body.glass-theme .simple-modal-header button {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.3);
-    color: white;
+.modal-price {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a8917;
 }
 
-body.glass-theme .simple-modal-header button:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.5);
+.modal-rating {
+  font-size: 16px;
+  color: #555;
 }
 
-body.glass-theme .simple-modal-body p {
-    color: rgba(255, 255, 255, 0.95);
+/* Info Sections (Collapsible) */
+.info-section {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin: 16px 0;
+  padding: 0;
+  overflow: hidden;
+  background: #fff;
 }
 
-body.glass-theme .simple-modal-body p strong {
-    color: white;
-    font-weight: 700;
+.info-section summary {
+  padding: 14px 16px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  list-style: none;
+  user-select: none;
+  background: #f9f9f9;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
 }
 
-/* Responsive */
+.info-section summary:hover {
+  background: #f0f0f0;
+}
+
+.info-section summary::-webkit-details-marker {
+  display: none;
+}
+
+.info-section summary::marker {
+  display: none;
+}
+
+.info-section[open] summary {
+  border-bottom: 1px solid #e0e0e0;
+  background: #fff;
+}
+
+.details-content {
+  padding: 16px;
+  background: #fff;
+}
+
+/* Detail Row */
+.detail-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+  align-items: flex-start;
+}
+
+.detail-row:last-child {
+  margin-bottom: 0;
+}
+
+.detail-icon {
+  flex-shrink: 0;
+  font-size: 16px;
+  min-width: 20px;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: #333;
+  min-width: 140px;
+  flex-shrink: 0;
+}
+
+.field-value {
+  color: #555;
+  word-break: break-word;
+  flex: 1;
+}
+
+/* Field Value Truncation (80-char limit) */
+.field-value-truncated,
+.field-value-full {
+  display: inline;
+}
+
+.field-toggle {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 0;
+  margin-left: 4px;
+  text-decoration: underline;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.field-toggle:hover {
+  color: #0056b3;
+}
+
+.field-toggle .toggle-text {
+  user-select: none;
+}
+
+/* Description Section */
+.product-description {
+  margin: 20px 0;
+  line-height: 1.6;
+  color: #333;
+}
+
+.description-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #1a1a1a;
+}
+
+.desc-text,
+.desc-full {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  margin: 0 0 8px 0;
+}
+
+.desc-toggle {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 8px 0;
+  text-decoration: underline;
+  font-weight: 500;
+  transition: color 0.2s;
+  display: inline-block;
+}
+
+.desc-toggle:hover {
+  color: #0056b3;
+}
+
+.desc-toggle .toggle-text {
+  user-select: none;
+}
+
+/* Modal Actions */
+.modal-actions {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+  text-align: center;
+}
+
+.amazon-button {
+  display: inline-block;
+  background: #ffd814;
+  color: #0f1111;
+  padding: 12px 32px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.1s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.amazon-button:hover {
+  background: #f7ca00;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.amazon-button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
 @media (max-width: 768px) {
-    .simple-modal-content {
-        width: 95%;
-        min-height: 70vh;
-        margin: 10px;
-    }
+  .product-title-modal {
+    font-size: 20px;
+  }
 
-    .simple-modal-header {
-        padding: 24px 20px;
-    }
+  .brand-tag {
+    font-size: 12px;
+    padding-bottom: 12px;
+  }
 
-    .simple-modal-body {
-        padding: 24px 20px;
-    }
+  .product-gallery {
+    min-height: 250px;
+  }
+
+  .gallery-main-image {
+    max-height: 300px;
+  }
+
+  .gallery-nav {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+
+  .gallery-prev {
+    left: 8px;
+  }
+
+  .gallery-next {
+    right: 8px;
+  }
+
+  .thumb-indicator {
+    font-size: 18px;
+  }
+
+  .modal-price-rating {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .modal-price {
+    font-size: 20px;
+  }
+
+  .modal-rating {
+    font-size: 14px;
+  }
+
+  .detail-label {
+    min-width: 100px;
+    font-size: 13px;
+  }
+
+  .field-value {
+    font-size: 13px;
+  }
+
+  .info-section summary {
+    font-size: 15px;
+    padding: 12px 14px;
+  }
+
+  .description-title {
+    font-size: 16px;
+  }
+
+  .desc-text,
+  .desc-full {
+    font-size: 14px;
+  }
+
+  .amazon-button {
+    width: 100%;
+    padding: 14px 24px;
+  }
+
+  .simple-modal-content {
+    max-width: 100%;
+    width: 95%;
+    margin: 10px;
+  }
 }
 
-@media (max-width: 480px) {
-    .simple-modal-content {
-        width: 98%;
-        min-height: 80vh;
-        margin: 5px;
-    }
+@media (min-width: 769px) and (max-width: 1024px) {
+  .product-title-modal {
+    font-size: 22px;
+  }
 
-    .simple-modal-header {
-        padding: 20px;
-    }
+  .gallery-main-image {
+    max-height: 350px;
+  }
 
-    .simple-modal-body {
-        padding: 20px;
-    }
+  .detail-label {
+    min-width: 120px;
+  }
 }
