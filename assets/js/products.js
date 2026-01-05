@@ -450,12 +450,12 @@ function showProductModal(productId) {
     window.currentImageIndex = 0;
 
     const modalContent = `
-                    <div class="simple-modal dynamic-modal">
+        <div class="simple-modal dynamic-modal">
             <div class="modal-overlay" onclick="closeDynamicModal(event)"></div>
             <div class="simple-modal-content">
                 <div class="simple-modal-header">
                     <h2>${escapeHtml(product.name || product.productTitle || product.Title)}</h2>
-                    <button onclick="closeDynamicModal(event)">❌</button>
+                    <button class="modal-close-button" onclick="closeDynamicModal(event)">❌</button>
                 </div>
                 <div class="simple-modal-body">
                     ${product.brand || product.Brand ? `
