@@ -309,6 +309,28 @@ function openAmazonLink(link, productId) {
 }
 
 /**
+ * Initialize MediaLightbox for image gallery
+ */
+function initLightbox() {
+    if (!window.lightboxInstance) {
+        window.lightboxInstance = new MediaLightbox({
+            enableSwipe: true,
+            enableKeyboard: true,
+            showCounter: true,
+            showDots: true
+        });
+    }
+}
+
+/**
+ * Open lightbox with product images
+ */
+function openProductLightbox(images, startIndex = 0) {
+    initLightbox();
+    window.lightboxInstance.open(images, startIndex);
+}
+
+/**
  * Show detailed product modal - ENHANCED LAYOUT
  */
 function showProductModal(productId) {
@@ -321,6 +343,9 @@ function showProductModal(productId) {
     // Get all images
     const allImages = [product.main_image || product.MainImage, ...(product.all_images || product.AllImages || [])].filter(Boolean);
     const imageCount = allImages.length;
+    
+    // Store images globally for lightbox access
+    window.currentProductImages = allImages;
     
     // Core fields mapping with fallbacks
     const coreFields = {
@@ -362,7 +387,10 @@ function showProductModal(productId) {
         'description', 'Description', 'timestamp', 'date_first_available',
         'Timestamp', 'Product Source Link', 'Amazon marketplace domain', 'Influencer',
         'Reference Media for similar products', 'Discount', 'discountPercentage',
-        'availability', 'featured', 'trending'
+        'availability', 'featured', 'trending',
+        // Metadata fields to exclude
+        'Error-Flag', 'Error-Reason', 'currency', 'regional_availability', 'regional_variants',
+        'referenceMedia', 'affiliate_link', 'product_type'
     ]);
     
     // Add core fields to exclusion
@@ -415,18 +443,19 @@ function showProductModal(productId) {
     
     // Description with expand/collapse
     const description = product.description || product.Description || '';
-    const descriptionPreview = description.length > 200 ? description.substring(0, 200) + '...' : description;
+    const descriptionPreview = description.length > 200 ? description.substring(0, 200) : description;
+    const showReadMore = description.length > 200;
     
     // Current gallery image index
     window.currentImageIndex = 0;
 
     const modalContent = `
-        <div class="simple-modal dynamic-modal">
+                    <div class="simple-modal dynamic-modal">
             <div class="modal-overlay" onclick="closeDynamicModal(event)"></div>
             <div class="simple-modal-content">
                 <div class="simple-modal-header">
                     <h2>${escapeHtml(product.name || product.productTitle || product.Title)}</h2>
-                    <button onclick="closeDynamicModal(event)">✕</button>
+                    <button onclick="closeDynamicModal(event)">&times;</button>
                 </div>
                 <div class="simple-modal-body">
                     ${product.brand || product.Brand ? `
@@ -438,11 +467,20 @@ function showProductModal(productId) {
                     
                     ${imageCount > 0 ? `
                         <div class="modal-gallery">
-                            <img id="modalGalleryImage" src="${allImages[0]}" alt="${escapeHtml(product.name || '')}" />
+                            <div class="gallery-main-image" onclick="openProductLightbox(window.currentProductImages, 0)">
+                                <img id="modalGalleryImage" src="${allImages[0]}" alt="${escapeHtml(product.name || '')}" />
+                                <div class="gallery-zoom-hint">🔍 Click to zoom</div>
+                            </div>
                             ${imageCount > 1 ? `
-                                <button class="gallery-nav gallery-prev" onclick="navigateGallery(-1)">❮</button>
-                                <button class="gallery-nav gallery-next" onclick="navigateGallery(1)">❯</button>
-                                <div class="gallery-indicator">${1} / ${imageCount}</div>
+                                <div class="gallery-thumbnails">
+                                    ${allImages.map((img, idx) => `
+                                        <div class="gallery-thumbnail ${idx === 0 ? 'active' : ''}" 
+                                             onclick="updateMainImage(${idx})"
+                                             data-index="${idx}">
+                                            <img src="${img}" alt="Thumbnail ${idx + 1}" />
+                                        </div>
+                                    `).join('')}
+                                </div>
                             ` : ''}
                         </div>
                     ` : ''}
@@ -486,10 +524,10 @@ function showProductModal(productId) {
                                 <span>📝 Description</span>
                             </div>
                             <div class="section-content expanded">
-                                <div class="description-text" id="descriptionText">
-                                    ${description.length > 200 ? escapeHtml(descriptionPreview) : escapeHtml(description)}
+                                <div class="description-text" id="descriptionText" data-full="${escapeHtml(description)}">
+                                    ${escapeHtml(descriptionPreview)}${showReadMore ? '...' : ''}
                                 </div>
-                                ${description.length > 200 ? `
+                                ${showReadMore ? `
                                     <button class="read-more-btn" onclick="toggleDescription()">
                                         <span id="readMoreText">Read More ▼</span>
                                     </button>
@@ -509,28 +547,39 @@ function showProductModal(productId) {
     
     document.body.insertAdjacentHTML('beforeend', modalContent);
     
-    // Store images for gallery navigation
-    window.modalImages = allImages;
+    // Initialize lightbox
+    initLightbox();
 }
 
 /**
- * Navigate product image gallery
+ * Update main gallery image when thumbnail is clicked
+ */
+window.updateMainImage = function(index) {
+    const mainImg = document.getElementById('modalGalleryImage');
+    const thumbnails = document.querySelectorAll('.gallery-thumbnail');
+    const images = window.currentProductImages || [];
+    
+    if (mainImg && images[index]) {
+        mainImg.src = images[index];
+        
+        // Update active thumbnail
+        thumbnails.forEach((thumb, idx) => {
+            thumb.classList.toggle('active', idx === index);
+        });
+    }
+};
+
+/**
+ * Navigate product image gallery (DEPRECATED - keeping for backward compatibility)
  */
 window.navigateGallery = function(direction) {
-    const images = window.modalImages || [];
+    const images = window.currentProductImages || [];
     if (images.length <= 1) return;
     
+    window.currentImageIndex = window.currentImageIndex || 0;
     window.currentImageIndex = (window.currentImageIndex + direction + images.length) % images.length;
     
-    const imgElement = document.getElementById('modalGalleryImage');
-    const indicator = document.querySelector('.gallery-indicator');
-    
-    if (imgElement) {
-        imgElement.src = images[window.currentImageIndex];
-    }
-    if (indicator) {
-        indicator.textContent = `${window.currentImageIndex + 1} / ${images.length}`;
-    }
+    updateMainImage(window.currentImageIndex);
 };
 
 /**
@@ -555,20 +604,19 @@ window.toggleSection = function(header) {
 window.toggleDescription = function() {
     const descText = document.getElementById('descriptionText');
     const btnText = document.getElementById('readMoreText');
-    const product = VibeDrips.allProducts.find(p => true); // Get current product from modal
     
     if (!descText || !btnText) return;
     
+    const fullDesc = descText.dataset.full || '';
     const isExpanded = descText.dataset.expanded === 'true';
     
     if (isExpanded) {
-        const description = descText.dataset.full || '';
-        descText.textContent = description.substring(0, 200) + '...';
+        // Collapse - show first 200 chars
+        descText.textContent = fullDesc.substring(0, 200) + '...';
         descText.dataset.expanded = 'false';
         btnText.textContent = 'Read More ▼';
     } else {
-        const fullDesc = descText.textContent.replace('...', '') + (descText.dataset.remaining || '');
-        descText.dataset.full = fullDesc;
+        // Expand - show full text
         descText.textContent = fullDesc;
         descText.dataset.expanded = 'true';
         btnText.textContent = 'Show Less ▲';
@@ -585,7 +633,7 @@ function closeDynamicModal(event) {
         if (event.target.classList.contains('modal-overlay') || event.target.closest('button')) {
             modal.remove();
             window.currentImageIndex = 0;
-            window.modalImages = null;
+            window.currentProductImages = null;
         }
     }
 }
