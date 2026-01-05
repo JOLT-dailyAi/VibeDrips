@@ -225,3 +225,445 @@ body.glass-theme .simple-modal-body p strong {
         padding: 20px;
     }
 }
+
+
+/* ============================================================================
+   PRODUCT MODAL ENHANCEMENTS
+   Added: January 2026
+   ============================================================================ */
+
+/* Brand Tag (below title) */
+.brand-tag {
+  font-size: 14px;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  display: inline-block;
+}
+
+/* Enhanced Product Title */
+.product-title-modal {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0;
+  color: #1a1a1a;
+}
+
+/* Image Gallery Container */
+.product-gallery {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
+  min-height: 300px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.gallery-main-image {
+  width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+  display: block;
+}
+
+/* Gallery Navigation Arrows */
+.gallery-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: background 0.2s, transform 0.2s;
+  user-select: none;
+}
+
+.gallery-nav:hover {
+  background: rgba(0, 0, 0, 0.8);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.gallery-nav:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.gallery-prev {
+  left: 12px;
+}
+
+.gallery-next {
+  right: 12px;
+}
+
+.gallery-nav:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Thumbnail Indicators */
+.gallery-thumbnails {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 12px;
+  margin-bottom: 20px;
+}
+
+.thumb-indicator {
+  font-size: 20px;
+  cursor: pointer;
+  color: #ccc;
+  transition: color 0.2s, transform 0.1s;
+  user-select: none;
+}
+
+.thumb-indicator.active {
+  color: #333;
+  font-weight: bold;
+}
+
+.thumb-indicator:hover {
+  color: #666;
+  transform: scale(1.2);
+}
+
+/* Modal Metadata (Category, Price, Rating) */
+.modal-metadata {
+  margin: 20px 0;
+  padding: 16px;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+.modal-category {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.modal-price-rating {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.modal-price {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a8917;
+}
+
+.modal-rating {
+  font-size: 16px;
+  color: #555;
+}
+
+/* Info Sections (Collapsible) */
+.info-section {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin: 16px 0;
+  padding: 0;
+  overflow: hidden;
+  background: #fff;
+}
+
+.info-section summary {
+  padding: 14px 16px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  list-style: none;
+  user-select: none;
+  background: #f9f9f9;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.info-section summary:hover {
+  background: #f0f0f0;
+}
+
+.info-section summary::-webkit-details-marker {
+  display: none;
+}
+
+.info-section summary::marker {
+  display: none;
+}
+
+.info-section[open] summary {
+  border-bottom: 1px solid #e0e0e0;
+  background: #fff;
+}
+
+.details-content {
+  padding: 16px;
+  background: #fff;
+}
+
+/* Detail Row (Individual Field) */
+.detail-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+  align-items: flex-start;
+}
+
+.detail-row:last-child {
+  margin-bottom: 0;
+}
+
+.detail-icon {
+  flex-shrink: 0;
+  font-size: 16px;
+  min-width: 20px;
+}
+
+.detail-label {
+  font-weight: 600;
+  color: #333;
+  min-width: 140px;
+  flex-shrink: 0;
+}
+
+.field-value {
+  color: #555;
+  word-break: break-word;
+  flex: 1;
+}
+
+/* Field Value Truncation (80-char limit) */
+.field-value-truncated,
+.field-value-full {
+  display: inline;
+}
+
+.field-toggle {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 0;
+  margin-left: 4px;
+  text-decoration: underline;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.field-toggle:hover {
+  color: #0056b3;
+}
+
+.field-toggle .toggle-text {
+  user-select: none;
+}
+
+/* Description Section */
+.product-description {
+  margin: 20px 0;
+  line-height: 1.6;
+  color: #333;
+}
+
+.description-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #1a1a1a;
+}
+
+.desc-text,
+.desc-full {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  margin: 0 0 8px 0;
+}
+
+.desc-toggle {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 8px 0;
+  text-decoration: underline;
+  font-weight: 500;
+  transition: color 0.2s;
+  display: inline-block;
+}
+
+.desc-toggle:hover {
+  color: #0056b3;
+}
+
+.desc-toggle .toggle-text {
+  user-select: none;
+}
+
+/* Modal Actions (Buy Button) */
+.modal-actions {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #e0e0e0;
+  text-align: center;
+}
+
+.amazon-button {
+  display: inline-block;
+  background: #ffd814;
+  color: #0f1111;
+  padding: 12px 32px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.1s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.amazon-button:hover {
+  background: #f7ca00;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.amazon-button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN (Mobile)
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  /* Title and Brand */
+  .product-title-modal {
+    font-size: 20px;
+  }
+
+  .brand-tag {
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+
+  /* Gallery */
+  .product-gallery {
+    min-height: 250px;
+  }
+
+  .gallery-main-image {
+    max-height: 300px;
+  }
+
+  .gallery-nav {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+
+  .gallery-prev {
+    left: 8px;
+  }
+
+  .gallery-next {
+    right: 8px;
+  }
+
+  .thumb-indicator {
+    font-size: 18px;
+  }
+
+  /* Metadata */
+  .modal-price-rating {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .modal-price {
+    font-size: 20px;
+  }
+
+  .modal-rating {
+    font-size: 14px;
+  }
+
+  /* Detail Rows */
+  .detail-label {
+    min-width: 100px;
+    font-size: 13px;
+  }
+
+  .field-value {
+    font-size: 13px;
+  }
+
+  /* Core Details - Collapsed on Mobile */
+  .core-details {
+    /* Optionally collapse by default on mobile - remove 'open' via JS */
+  }
+
+  /* Info Section Summary */
+  .info-section summary {
+    font-size: 15px;
+    padding: 12px 14px;
+  }
+
+  /* Description */
+  .description-title {
+    font-size: 16px;
+  }
+
+  .desc-text,
+  .desc-full {
+    font-size: 14px;
+  }
+
+  /* Button */
+  .amazon-button {
+    width: 100%;
+    padding: 14px 24px;
+  }
+}
+
+/* ============================================================================
+   TABLET BREAKPOINT
+   ============================================================================ */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .product-title-modal {
+    font-size: 22px;
+  }
+
+  .gallery-main-image {
+    max-height: 350px;
+  }
+
+  .detail-label {
+    min-width: 120px;
+  }
+}
+
