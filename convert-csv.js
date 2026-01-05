@@ -43,11 +43,13 @@ const CURRENCY_PATTERNS = {
 // ============================================
 // DYNAMIC FIELD CLASSIFICATION SYSTEM
 // ============================================
-
 const FIELD_CONFIG = {
   // Meta-data fields that should NEVER display
   METADATA_PATTERNS: [
-    'Timestamp', 'timestamp',
+    // ❌ REMOVED: 'Timestamp', 'timestamp'
+    'Influencer', 'influencer',
+    'ManualCollections', 'manual_collections',
+    'SeasonOverride', 'season_override',
     'Product Source Link', 'source_link',
     'Amazon SiteStripe (Short)', 'amazon_short',
     'Amazon SiteStripe (Long)', 'amazon_long',
@@ -61,22 +63,23 @@ const FIELD_CONFIG = {
     /_id$/i,
     /^id$/i
   ],
-  
+
   // Core display fields (handled by modal header/pricing section)
   CORE_FIELDS: [
     'productTitle', 'Title', 'name',
     'brand',
     'Currency', 'symbol', 'currency',
-    'price', 'originalPrice', 'discountPercentage', 'display_price', 'original_price', 'discount_percentage',
+    'price', 'originalPrice', 'discountPercentage',
+    'display_price', 'original_price', 'discount_percentage',
     'availability',
     'MainImage', 'AllImages', 'all_images', 'main_image',
     'customerRating', 'Rating', 'customer_rating',
     'reviewCount', 'ReviewCount', 'review_count',
     'Description', 'description',
-    'Category', 'categoryHierarchy', 'category', 'subcategory', 'itemTypeName',
-    'productType', 'product_type'
+    'Category', 'categoryHierarchy', 'category', 'subcategory',
+    'itemTypeName', 'productType', 'product_type'
   ],
-  
+
   // Product Details (Priority display - NO EMOJIS)
   PRODUCT_DETAILS_KEYWORDS: {
     weight: { label: 'Weight', priority: 1, patterns: [/weight/i] },
@@ -85,7 +88,7 @@ const FIELD_CONFIG = {
     material: { label: 'Material', priority: 1, patterns: [/material/i, /fabric/i] },
     origin: { label: 'Made in', priority: 2, patterns: [/country.*origin/i, /made.*in/i, /origin/i] }
   },
-  
+
   // Additional Info categories (NO EMOJIS)
   ADDITIONAL_INFO_CATEGORIES: {
     'Manufacturing': {
@@ -104,7 +107,7 @@ const FIELD_CONFIG = {
       patterns: [/care/i, /wash/i, /clean/i, /maintenance/i, /instruction/i]
     }
   },
-  
+
   // Field aliases (map multiple CSV columns to canonical field)
   FIELD_ALIASES: {
     'weight': ['weight', 'itemweight', 'productweight', 'netweight'],
@@ -116,13 +119,28 @@ const FIELD_CONFIG = {
 };
 
 // ============================================
+// SEASONS & COLLECTIONS CONFIG
+// ============================================
+const SEASONS_CONFIG = {
+  VALID_OPTIONS: ['', 'Winter', 'Summer', 'Monsoon', 'Autumn', 'None'],
+  
+  PATTERNS: {
+    'Winter': /winter|cold|snow|warm|jacket|sweater|hoodie|thermal/i,
+    'Summer': /summer|cool|hot|heat|light|breathable|shorts|tank/i,
+    'Monsoon': /monsoon|rain|waterproof|umbrella|raincoat/i,
+    'Autumn': /autumn|fall/i
+  }
+};
+
+// ============================================
 // DROPS SYSTEM (Emojis for badges/tags only)
 // ============================================
-
 const DROPS_CONFIG = {
   THRESHOLDS: {
     HIGH_VISIBILITY_MEDIA_COUNT: 2,
     MULTI_REGION_THRESHOLD: 2,
+    NEW_RELEASE_DAYS: 60,
+    ARCHIVE_THRESHOLD_DAYS: 60,
     INFLUENCER_KEYWORDS: [
       'instagram.com/reel',
       'youtube.com/shorts',
@@ -131,7 +149,7 @@ const DROPS_CONFIG = {
       'influencer'
     ]
   },
-  
+
   CATEGORIES: {
     'creator-picks': {
       label: 'Creator Picks',
@@ -151,10 +169,10 @@ const DROPS_CONFIG = {
       subtitle: 'Trending on social platforms',
       priority: 3
     },
-    'hot-this-month': {
-      label: 'Hot This Month',
-      emoji: '🔥',
-      subtitle: 'Latest drops',
+    'new-releases': {
+      label: 'New Releases',
+      emoji: '🆕',
+      subtitle: 'Recently launched products',
       priority: 4
     }
   }
@@ -163,7 +181,6 @@ const DROPS_CONFIG = {
 // ============================================
 // HELPER FUNCTIONS
 // ============================================
-
 function isMetadataField(fieldName) {
   return FIELD_CONFIG.METADATA_PATTERNS.some(pattern => {
     if (pattern instanceof RegExp) {
@@ -174,7 +191,7 @@ function isMetadataField(fieldName) {
 }
 
 function isCoreField(fieldName) {
-  return FIELD_CONFIG.CORE_FIELDS.some(core => 
+  return FIELD_CONFIG.CORE_FIELDS.some(core =>
     fieldName === core || fieldName.toLowerCase() === core.toLowerCase()
   );
 }
@@ -192,7 +209,6 @@ function isEmptyValue(value) {
 
 function resolveFieldAlias(fieldName) {
   const lowerField = fieldName.toLowerCase().replace(/[_\s-]/g, '');
-  
   for (const [canonical, aliases] of Object.entries(FIELD_CONFIG.FIELD_ALIASES)) {
     if (aliases.some(alias => lowerField.includes(alias.toLowerCase().replace(/[_\s-]/g, '')))) {
       return canonical;
@@ -203,7 +219,7 @@ function resolveFieldAlias(fieldName) {
 
 function normalizeValueForComparison(value) {
   if (typeof value !== 'string') return String(value).toLowerCase().trim();
-  
+
   return value
     .toLowerCase()
     .trim()
@@ -212,36 +228,34 @@ function normalizeValueForComparison(value) {
     .replace(/(\d+\.?\d*)\s*(kg|g|lb|oz|cm|mm|inch|in)/gi, (match, num, unit) => {
       const number = parseFloat(num);
       const lowerUnit = unit.toLowerCase();
-      
       if (['kg', 'kilogram'].includes(lowerUnit)) return `${number * 1000}g`;
       if (['lb', 'pound'].includes(lowerUnit)) return `${number * 453.592}g`;
       if (['oz', 'ounce'].includes(lowerUnit)) return `${number * 28.3495}g`;
       if (['mm', 'millimeter'].includes(lowerUnit)) return `${number / 10}cm`;
       if (['inch', 'in'].includes(lowerUnit)) return `${number * 2.54}cm`;
-      
       return `${number}${lowerUnit}`;
     });
 }
 
 function isValueInCoreFields(value, coreProductData) {
   if (!value || isEmptyValue(value)) return false;
-  
+
   const normalizedValue = normalizeValueForComparison(value);
   const title = normalizeValueForComparison(coreProductData.name || '');
   const description = normalizeValueForComparison(coreProductData.description || '');
-  
+
   if (normalizedValue.length > 3) {
     return title.includes(normalizedValue) || description.includes(normalizedValue);
   }
-  
+
   return false;
 }
 
 function detectProductDetail(fieldName, value) {
   if (isEmptyValue(value)) return null;
-  
+
   const canonicalField = resolveFieldAlias(fieldName);
-  
+
   for (const [key, config] of Object.entries(FIELD_CONFIG.PRODUCT_DETAILS_KEYWORDS)) {
     if (canonicalField === key || config.patterns.some(pattern => pattern.test(fieldName))) {
       return {
@@ -252,6 +266,7 @@ function detectProductDetail(fieldName, value) {
       };
     }
   }
+
   return null;
 }
 
@@ -275,57 +290,149 @@ function humanizeFieldName(fieldName) {
     .trim();
 }
 
+// ============================================
+// NEW FUNCTIONS: DATE, SEASON, COLLECTIONS
+// ============================================
+
+function getProductReleaseDate(data) {
+  // 1. Priority: date_first_available (most accurate)
+  if (data.date_first_available && data.date_first_available.trim()) {
+    try {
+      const date = new Date(data.date_first_available);
+      if (!isNaN(date.getTime())) return date;
+    } catch (e) {
+      console.warn(`⚠️ Invalid date_first_available: ${data.date_first_available}`);
+    }
+  }
+  
+  // 2. Priority: publication_date (for books)
+  if (data.publication_date && data.publication_date.trim()) {
+    try {
+      const date = new Date(data.publication_date);
+      if (!isNaN(date.getTime())) return date;
+    } catch (e) {
+      console.warn(`⚠️ Invalid publication_date: ${data.publication_date}`);
+    }
+  }
+  
+  // 3. Priority: manufacture_year
+  if (data.manufacture_year && data.manufacture_year.trim()) {
+    const year = parseInt(data.manufacture_year);
+    if (year >= 2000 && year <= 2030) {
+      return new Date(`${year}-01-01`);
+    }
+  }
+  
+  // 4. Search for any column with "year" in name
+  for (const [key, value] of Object.entries(data)) {
+    if (key.toLowerCase().includes('year') && value && value.trim()) {
+      const year = parseInt(value);
+      if (year >= 2000 && year <= 2030) {
+        return new Date(`${year}-01-01`);
+      }
+    }
+  }
+  
+  // 5. No valid date found
+  return null;
+}
+
+function detectSeasonFromText(text, seasonOverride) {
+  // If override provided, use it
+  if (seasonOverride && seasonOverride.trim() !== '') {
+    const override = seasonOverride.trim();
+    if (override === 'None') return null;
+    if (SEASONS_CONFIG.VALID_OPTIONS.includes(override)) {
+      return override;
+    }
+    console.warn(`⚠️ Invalid SeasonOverride: "${override}". Using auto-detect.`);
+  }
+  
+  // Auto-detect from text
+  if (!text) return null;
+  
+  const lowerText = text.toLowerCase();
+  
+  for (const [season, pattern] of Object.entries(SEASONS_CONFIG.PATTERNS)) {
+    if (pattern.test(lowerText)) {
+      return season;
+    }
+  }
+  
+  return null;
+}
+
+function extractInfluencerAndCollections(data) {
+  const influencer = data.Influencer?.trim() || null;
+  
+  const manualCollections = [];
+  if (data.ManualCollections && data.ManualCollections.trim()) {
+    // Split by | or comma
+    const collections = data.ManualCollections.split(/[|,]/).map(c => c.trim()).filter(Boolean);
+    manualCollections.push(...collections);
+  }
+  
+  const seasonOverride = data.SeasonOverride?.trim() || '';
+  
+  return { influencer, manualCollections, seasonOverride };
+}
+
+// ============================================
+// PRODUCT DATA STRUCTURING
+// ============================================
+
 function structureProductData(rawData, coreProductData) {
   const productDetails = [];
   const additionalInfo = [];
   const seenLabels = new Set();
   const seenValues = new Map();
   const errorFields = [];
-  
+
   Object.keys(rawData).forEach(fieldName => {
     const value = rawData[fieldName];
-    
+
     if (isMetadataField(fieldName)) return;
     if (isCoreField(fieldName)) return;
     if (isEmptyValue(value)) return;
-    
+
     const canonicalField = resolveFieldAlias(fieldName);
     const normalizedValue = normalizeValueForComparison(value);
-    
+
     // Check for value already in title/description
     if (isValueInCoreFields(value, coreProductData)) {
       errorFields.push(fieldName);
       console.warn(`⚠️ Redundant field "${fieldName}": value already in title/description`);
       return;
     }
-    
+
     // Check for metadata leaked into wrong field
-    const metadataKeywords = ['http', 'www', 'amazon', 'asin', 'timestamp'];
+    const metadataKeywords = ['http', 'www', 'amazon', 'asin'];
     if (metadataKeywords.some(kw => normalizedValue.includes(kw))) {
       errorFields.push(fieldName);
       console.warn(`⚠️ Metadata leaked into field "${fieldName}": ${value}`);
       return;
     }
-    
+
     const productDetail = detectProductDetail(fieldName, value);
+
     if (productDetail) {
       const canonicalKey = canonicalField.toLowerCase();
-      
+
       // Value-based deduplication with conflict detection
       if (seenValues.has(canonicalKey)) {
         const existing = seenValues.get(canonicalKey);
         const existingNormalized = normalizeValueForComparison(existing.value);
-        
+
         if (existingNormalized !== normalizedValue) {
           errorFields.push(fieldName);
           console.warn(`⚠️ CONFLICT in ${canonicalField}:`);
-          console.warn(`   ${existing.source}: "${existing.value}"`);
-          console.warn(`   ${fieldName}: "${value}"`);
-          console.warn(`   → Keeping first value`);
+          console.warn(`  ${existing.source}: "${existing.value}"`);
+          console.warn(`  ${fieldName}: "${value}"`);
+          console.warn(`  → Keeping first value`);
         }
         return;
       }
-      
+
       const labelKey = productDetail.label.toLowerCase();
       if (!seenLabels.has(labelKey)) {
         productDetails.push(productDetail);
@@ -334,40 +441,35 @@ function structureProductData(rawData, coreProductData) {
       }
       return;
     }
-    
+
     // Additional Info
     const { category } = detectAdditionalInfoCategory(fieldName);
     const label = humanizeFieldName(fieldName);
     const labelKey = label.toLowerCase();
     const canonicalKey = canonicalField.toLowerCase();
-    
+
     if (seenValues.has(canonicalKey)) {
       const existing = seenValues.get(canonicalKey);
       const existingNormalized = normalizeValueForComparison(existing.value);
-      
+
       if (existingNormalized !== normalizedValue) {
         errorFields.push(fieldName);
         console.warn(`⚠️ CONFLICT in ${canonicalField}:`);
-        console.warn(`   ${existing.source}: "${existing.value}"`);
-        console.warn(`   ${fieldName}: "${value}"`);
+        console.warn(`  ${existing.source}: "${existing.value}"`);
+        console.warn(`  ${fieldName}: "${value}"`);
       }
       return;
     }
-    
+
     if (!seenLabels.has(labelKey)) {
-      additionalInfo.push({
-        key: fieldName,
-        label,
-        category,
-        value
-      });
+      additionalInfo.push({ key: fieldName, label, category, value });
       seenLabels.add(labelKey);
       seenValues.set(canonicalKey, { value, source: fieldName });
     }
   });
-  
+
   productDetails.sort((a, b) => a.priority - b.priority);
-  
+
   const groupedAdditionalInfo = {};
   additionalInfo.forEach(item => {
     if (!groupedAdditionalInfo[item.category]) {
@@ -375,22 +477,22 @@ function structureProductData(rawData, coreProductData) {
     }
     groupedAdditionalInfo[item.category].push(item);
   });
-  
+
   const structured = {
     ...coreProductData,
     productDetails,
     additionalInfo: groupedAdditionalInfo
   };
-  
+
   // Merge error fields from pricing validation and field processing
   const existingErrorFields = coreProductData['Error-Fields'] || [];
   const allErrorFields = [...new Set([...existingErrorFields, ...errorFields])];
-  
+
   if (allErrorFields.length > 0) {
     structured['Error-Flag'] = 1;
     structured['Error-Fields'] = allErrorFields;
   }
-  
+
   return structured;
 }
 
@@ -402,11 +504,11 @@ function detectInfluencerPresence(data, sourceLink, referenceMedia) {
   if (data.Influencer && data.Influencer.trim() !== '') {
     return true;
   }
-  
+
   const allLinks = [sourceLink, ...(referenceMedia || [])].filter(Boolean);
-  
+
   return allLinks.some(link => {
-    return DROPS_CONFIG.THRESHOLDS.INFLUENCER_KEYWORDS.some(keyword => 
+    return DROPS_CONFIG.THRESHOLDS.INFLUENCER_KEYWORDS.some(keyword =>
       link.toLowerCase().includes(keyword.toLowerCase())
     );
   });
@@ -414,46 +516,55 @@ function detectInfluencerPresence(data, sourceLink, referenceMedia) {
 
 function computeDropCategories(signals) {
   const categories = [];
-  
+
   if (signals.is_social_proof || signals.is_high_visibility) {
     categories.push('creator-picks');
   }
-  
+
   if (signals.is_global) {
     categories.push('global-drops');
   }
-  
+
   if (signals.is_high_visibility && signals.is_social_proof) {
     categories.push('viral-reels');
   }
-  
-  if (signals.is_this_month) {
-    categories.push('hot-this-month');
+
+  if (signals.is_new_release) {
+    categories.push('new-releases');
   }
-  
+
   return categories;
 }
 
-function computeDropSignals(data, referenceMedia, regionalVariants) {
-  const sourceLink = data['Product Source Link'] || '';
-  
+function computeDropSignals(data, referenceMedia, regionalVariants, releaseDate) {
+  const sourceLink = data.sourceLink || data['Product Source Link'] || '';
   const has_reference_media = referenceMedia && referenceMedia.length > 1;
   const media_count = referenceMedia ? referenceMedia.length : (sourceLink ? 1 : 0);
-  
+
   const available_regions = regionalVariants ? Object.keys(regionalVariants) : [];
   const regional_availability = available_regions.length > 0;
-  
+
   const influencer_presence = detectInfluencerPresence(data, sourceLink, referenceMedia);
-  
+
   const is_global = regional_availability && available_regions.length >= DROPS_CONFIG.THRESHOLDS.MULTI_REGION_THRESHOLD;
   const is_high_visibility = media_count >= DROPS_CONFIG.THRESHOLDS.HIGH_VISIBILITY_MEDIA_COUNT;
   const is_social_proof = influencer_presence;
-  
-  const timestamp = data.Timestamp ? new Date(data.Timestamp) : new Date();
-  const currentMonth = new Date().getMonth();
-  const currentYear = new Date().getFullYear();
-  const is_this_month = timestamp.getMonth() === currentMonth && timestamp.getFullYear() === currentYear;
-  
+
+  // Calculate if product is a new release (based on release_date)
+  let is_new_release = false;
+  let product_age_days = null;
+
+  if (releaseDate) {
+    try {
+      const productDate = new Date(releaseDate);
+      const now = new Date();
+      product_age_days = Math.floor((now - productDate) / (1000 * 60 * 60 * 24));
+      is_new_release = product_age_days <= DROPS_CONFIG.THRESHOLDS.NEW_RELEASE_DAYS;
+    } catch (e) {
+      console.warn(`⚠️ Invalid release_date for drop signals: ${releaseDate}`);
+    }
+  }
+
   return {
     has_reference_media,
     media_count,
@@ -463,12 +574,13 @@ function computeDropSignals(data, referenceMedia, regionalVariants) {
     is_global,
     is_high_visibility,
     is_social_proof,
-    is_this_month,
+    is_new_release,
+    product_age_days,
     drop_categories: computeDropCategories({
       is_global,
       is_high_visibility,
       is_social_proof,
-      is_this_month,
+      is_new_release,
       influencer_presence
     })
   };
@@ -536,6 +648,7 @@ function validateField(fieldName, rules, data, allNormalized = {}) {
       errorReason = `VALUE_TOO_LOW: ${fieldName}`;
       errorFields.push(fieldName);
     }
+
     if (rules.max !== undefined && value > rules.max) {
       value = rules.max;
       errorFlag = 1;
@@ -563,7 +676,7 @@ function validatePricing(data) {
     if (['price', 'originalPrice', 'discountPercentage', 'availability'].includes(fieldName)) {
       const result = validateField(fieldName, rules, data, normalized);
       normalized[fieldName] = result.value;
-      
+
       if (result.errorFlag) {
         errorFlags.push(fieldName);
         errorReasons.push(result.errorReason);
@@ -574,14 +687,13 @@ function validatePricing(data) {
 
   if (validationConfig.fields.availability.cascade) {
     const cascadeUpdates = validationConfig.fields.availability.cascade(
-      normalized.availability, 
+      normalized.availability,
       normalized
     );
     Object.assign(normalized, cascadeUpdates);
   }
 
-  if ((!normalized.price || normalized.price === 0) && 
-      (!normalized.originalPrice || normalized.originalPrice === 0)) {
+  if ((!normalized.price || normalized.price === 0) && (!normalized.originalPrice || normalized.originalPrice === 0)) {
     normalized.price = 0;
     normalized.originalPrice = 0;
     normalized.discountPercentage = 0;
@@ -605,47 +717,50 @@ function validatePricing(data) {
 
 function detectCurrencyFromPrice(priceString) {
   if (!priceString) return null;
+
   for (const [symbol, currency] of Object.entries(CURRENCY_PATTERNS)) {
     if (priceString.includes(symbol)) return currency;
   }
+
   return null;
 }
 
 function detectCurrencyFromField(currencyField) {
   if (!currencyField || !currencyField.trim()) return null;
+
   const trimmed = currencyField.trim();
-  
+
   if (CURRENCY_MAP[trimmed.toUpperCase()]) {
     return trimmed.toUpperCase();
   }
-  
+
   if (CURRENCY_PATTERNS[trimmed]) {
     return CURRENCY_PATTERNS[trimmed];
   }
-  
+
   for (const [symbol, currency] of Object.entries(CURRENCY_PATTERNS)) {
     if (trimmed.includes(symbol)) {
       return currency;
     }
   }
-  
+
   return null;
 }
 
 function extractMainCategory(categoryHierarchy) {
   if (!categoryHierarchy) return '';
-  
+
   const parts = categoryHierarchy.split('>').map(part => part.trim()).filter(Boolean);
-  
+
   if (parts.length === 1) {
     return parts[0].toLowerCase() !== 'general' ? parts[0] : '';
   }
-  
+
   const genericCategories = ['general', 'all', 'products', 'shop', 'store'];
   const nonGeneric = parts.filter(cat => !genericCategories.includes(cat.toLowerCase()));
-  
+
   if (nonGeneric.length > 0) return nonGeneric[0];
-  
+
   return parts[0] || '';
 }
 
@@ -655,13 +770,13 @@ function generateAsin(row) {
 
 function parseReferenceMedia(referenceMediaValue, productSourceLink) {
   const urls = [];
-  
+
   if (!referenceMediaValue || referenceMediaValue.trim() === '') {
     return productSourceLink ? [productSourceLink] : [];
   }
-  
+
   const trimmed = referenceMediaValue.trim();
-  
+
   if (trimmed.startsWith('[')) {
     try {
       const parsed = JSON.parse(trimmed);
@@ -676,33 +791,32 @@ function parseReferenceMedia(referenceMediaValue, productSourceLink) {
     if (trimmed.includes('|')) separator = '|';
     else if (trimmed.includes(';')) separator = ';';
     else if (trimmed.includes(',')) separator = ',';
-    
+
     urls.push(...trimmed.split(separator).map(url => url.trim()).filter(Boolean));
   }
-  
+
   if (productSourceLink && !urls.includes(productSourceLink)) {
     urls.unshift(productSourceLink);
   }
-  
+
   return [...new Set(urls)];
 }
 
 function detectRegionalVariants(products) {
   const regionalMap = {};
-  
+
   products.forEach(product => {
     product.referenceMedia.forEach(url => {
       if (!regionalMap[url]) regionalMap[url] = [];
       regionalMap[url].push(product);
     });
   });
-  
+
   Object.values(regionalMap).forEach(sharedProducts => {
     if (sharedProducts.length > 1) {
       sharedProducts.forEach(productA => {
         sharedProducts.forEach(productB => {
-          if (productA.asin !== productB.asin && 
-              productA.currency !== productB.currency) {
+          if (productA.asin !== productB.asin && productA.currency !== productB.currency) {
             if (!productA.regional_variants) {
               productA.regional_variants = {};
             }
@@ -718,7 +832,7 @@ function detectRegionalVariants(products) {
 function extractCoreFields(data, pricingValidation, currency, referenceMedia) {
   const categoryFromHierarchy = extractMainCategory(data.categoryHierarchy || '');
   const categoryFromField = data.Category?.trim() || '';
-  
+
   let finalCategory = '';
   if (categoryFromHierarchy && categoryFromHierarchy.toLowerCase() !== 'general') {
     finalCategory = categoryFromHierarchy;
@@ -727,29 +841,33 @@ function extractCoreFields(data, pricingValidation, currency, referenceMedia) {
   } else {
     finalCategory = categoryFromHierarchy || categoryFromField || 'General';
   }
-  
+
+  // Extract new fields (hidden from modal display)
+  const releaseDate = getProductReleaseDate(data);
+  const { influencer, manualCollections, seasonOverride } = extractInfluencerAndCollections(data);
+  const season = detectSeasonFromText(
+    (data.productTitle || '') + ' ' + (data.Description || ''),
+    seasonOverride
+  );
+
   return {
     asin: generateAsin(data),
     name: data.productTitle || data.Title || '',
     description: data.Description || '',
-    
     price: pricingValidation.price || 0,
     original_price: pricingValidation.originalPrice || 0,
     originalPrice: pricingValidation.originalPrice || 0,
     discount_percentage: pricingValidation.discountPercentage || 0,
     discountPercentage: pricingValidation.discountPercentage || 0,
     availability: pricingValidation.availability || 'In Stock',
-    
     'Error-Flag': pricingValidation.errorFlag,
     'Error-Reason': pricingValidation.errorReason || '',
     'Error-Fields': pricingValidation.errorFields || [],
-    
     currency: currency,
     symbol: currency === 'MISC' ? '🎁' : (CURRENCY_MAP[currency]?.symbol || currency),
     brand: data.brand || '',
     category: finalCategory,
     subcategory: data.itemTypeName || '',
-    
     main_image: data.MainImage || '',
     all_images: (() => {
       if (!data.AllImages) return [];
@@ -759,20 +877,21 @@ function extractCoreFields(data, pricingValidation, currency, referenceMedia) {
         return data.AllImages.split(',').map(url => url.trim());
       }
     })(),
-    
     customer_rating: data.customerRating || data.Rating || '',
     review_count: parseInt(data.reviewCount || data.ReviewCount) || 0,
-
     source_link: data['Product Source Link'] || '',
     referenceMedia: referenceMedia,
     regional_availability: 0,
     regional_variants: {},
-    
     amazon_short: data['Amazon SiteStripe (Short)'] || '',
     amazon_long: data['Amazon SiteStripe (Long)'] || '',
     affiliate_link: data['Amazon SiteStripe (Short)'] || '',
     
-    timestamp: data.Timestamp ? new Date(data.Timestamp).toISOString() : new Date().toISOString(),
+    // NEW FIELDS (Hidden from modal, used for organization/filtering only)
+    release_date: releaseDate ? releaseDate.toISOString() : null,
+    influencer: influencer,
+    manual_collections: manualCollections,
+    season: season,
     
     featured: false,
     trending: false
@@ -784,16 +903,16 @@ function deleteOldFiles() {
     fs.mkdirSync(dataDir, { recursive: true });
     return [];
   }
-  
+
   const files = fs.readdirSync(dataDir);
   const deletedFiles = [];
-  
+
   files.forEach(file => {
     const filePath = path.join(dataDir, file);
     if (file !== 'products.csv' && file !== 'last_updated.txt') {
       let attempts = 0;
       const maxAttempts = 3;
-      
+
       while (attempts < maxAttempts) {
         try {
           fs.unlinkSync(filePath);
@@ -808,7 +927,7 @@ function deleteOldFiles() {
       }
     }
   });
-  
+
   return deletedFiles;
 }
 
@@ -818,6 +937,7 @@ function deleteOldFiles() {
 
 function convertCsvToJson() {
   const currencyResults = {};
+
   const processingStats = {
     total: 0,
     processed: 0,
@@ -826,18 +946,21 @@ function convertCsvToJson() {
     fieldConflicts: 0,
     currenciesFound: new Set(),
     categoriesFound: new Set(),
-    brandsFound: new Set()
+    brandsFound: new Set(),
+    influencersFound: new Set(),
+    manualCollectionsFound: new Set(),
+    seasonsFound: new Set()
   };
-  
+
   const errorBreakdown = {};
-  
+
   console.log('🔄 Checking files before deletion...');
   const filesBeforeDeletion = fs.existsSync(dataDir) ? fs.readdirSync(dataDir) : [];
-  
+
   console.log('🔄 Deleting old files...');
   const deletedFiles = deleteOldFiles();
   console.log('✅ Old files deletion complete.');
-  
+
   let lastUpdatedContent = `VibeDrips Data Processing Summary
 Generated: ${new Date().toISOString()}
 
@@ -868,81 +991,99 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
   const filesAfterDeletion = fs.existsSync(dataDir) ? fs.readdirSync(dataDir) : [];
   const expectedFiles = ['last_updated.txt', 'products.csv'];
   const unexpectedFiles = filesAfterDeletion.filter(file => !expectedFiles.includes(file));
-  
+
   lastUpdatedContent += `\n\n📁 FILES PRESENT AFTER DELETION\n${filesAfterDeletion.map(file => `- ${file}`).join('\n') || '- None'}`;
-  
+
   if (unexpectedFiles.length > 0) {
     lastUpdatedContent += `\n⚠️ Deletion failed for unexpected files:\n${unexpectedFiles.map(file => `- ${file}`).join('\n')}`;
   }
-  
+
   fs.writeFileSync(path.join(dataDir, 'last_updated.txt'), lastUpdatedContent);
-  
+
   console.log('🔄 Processing CSV from input...');
-  
+
   process.stdin
     .pipe(csv())
     .on('data', (data) => {
       processingStats.total++;
+
       try {
         console.log(`\n--- Row ${processingStats.total} ---`);
-        
+
         let currency = null;
+
         if (data.Currency && data.Currency.trim()) {
           currency = detectCurrencyFromField(data.Currency);
         }
+
         if (!currency && data.price) {
           currency = detectCurrencyFromPrice(data.price);
         }
+
         if (!currency) {
           currency = 'MISC';
         }
+
         console.log(`✅ Currency: ${currency}`);
-        
+
         processingStats.currenciesFound.add(currency);
         if (data.categoryHierarchy) processingStats.categoriesFound.add(extractMainCategory(data.categoryHierarchy));
         if (data.brand) processingStats.brandsFound.add(data.brand);
-        
+
+        // Track new fields
+        if (data.Influencer?.trim()) processingStats.influencersFound.add(data.Influencer.trim());
+        if (data.ManualCollections?.trim()) {
+          data.ManualCollections.split(/[|,]/).forEach(c => {
+            const trimmed = c.trim();
+            if (trimmed) processingStats.manualCollectionsFound.add(trimmed);
+          });
+        }
+
         const pricingValidation = validatePricing({
           price: data.price,
           originalPrice: data.originalPrice,
           discountPercentage: data.discountPercentage,
           availability: data.availability
         });
-        
+
         if (pricingValidation.errorFlag === 1) {
           processingStats.validationErrors++;
           console.log(`⚠️ Validation: ${pricingValidation.errorReason}`);
-          
+
           const reasons = pricingValidation.errorReason.split('; ');
           reasons.forEach(reason => {
             const errorType = reason.split(':')[0];
             errorBreakdown[errorType] = (errorBreakdown[errorType] || 0) + 1;
           });
         }
-        
+
         const referenceMedia = parseReferenceMedia(
           data.reference_media || data['Reference Media for similar products'],
           data['Product Source Link']
         );
-        
+
         const coreFields = extractCoreFields(data, pricingValidation, currency, referenceMedia);
-        
+
+        // Track season if detected
+        if (coreFields.season) processingStats.seasonsFound.add(coreFields.season);
+
         const product = structureProductData(data, coreFields);
-        
+
         if (product['Error-Fields'] && product['Error-Fields'].length > 0) {
           processingStats.fieldConflicts++;
         }
-        
+
+        // Store pre-compute data for drop signals (without timestamp)
         product._dropSignalsPreCompute = {
           sourceLink: data['Product Source Link'] || '',
-          influencer: data.Influencer || '',
-          timestamp: data.Timestamp
+          influencer: data.Influencer || ''
         };
-        
+
         if (!currencyResults[currency]) currencyResults[currency] = [];
         currencyResults[currency].push(product);
+
         processingStats.processed++;
-        
+
       } catch (error) {
         processingStats.errors++;
         console.error(`Error processing row ${processingStats.total}:`, error.message);
@@ -952,59 +1093,64 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
       console.log('📊 Processing Complete! Generating files...');
 
       const allProducts = Object.values(currencyResults).flat();
+
       console.log(`🔍 Detecting regional variants across ${allProducts.length} products...`);
       detectRegionalVariants(allProducts);
-      
       const regionalCount = allProducts.filter(p => p.regional_availability === 1).length;
       console.log(`✅ Found ${regionalCount} products with regional variants`);
-      
+
       console.log(`🎬 Computing drop signals...`);
       const dropStats = {
         'creator-picks': 0,
         'global-drops': 0,
         'viral-reels': 0,
-        'hot-this-month': 0
+        'new-releases': 0
       };
-      
+
       allProducts.forEach(product => {
         const dropSignals = computeDropSignals(
           product._dropSignalsPreCompute || {},
           product.referenceMedia,
-          product.regional_variants
+          product.regional_variants,
+          product.release_date  // Pass release_date for time-based drops
         );
-        
+
         product.drop_signals = dropSignals;
-        
+
         dropSignals.drop_categories.forEach(cat => {
           dropStats[cat] = (dropStats[cat] || 0) + 1;
         });
-        
+
         delete product._dropSignalsPreCompute;
       });
-      
+
       console.log(`✅ Drop signals computed:`);
       Object.entries(dropStats).forEach(([cat, count]) => {
-        console.log(`   ${DROPS_CONFIG.CATEGORIES[cat].emoji} ${DROPS_CONFIG.CATEGORIES[cat].label}: ${count} products`);
+        console.log(`  ${DROPS_CONFIG.CATEGORIES[cat].emoji} ${DROPS_CONFIG.CATEGORIES[cat].label}: ${count} products`);
       });
-      
+
       Object.keys(currencyResults).forEach(currency => {
-        currencyResults[currency].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        currencyResults[currency].sort((a, b) => {
+          const dateA = a.release_date ? new Date(a.release_date) : new Date(0);
+          const dateB = b.release_date ? new Date(b.release_date) : new Date(0);
+          return dateB - dateA;  // Sort by release date (newest first)
+        });
       });
-      
+
       const currencyManifest = {
         available_currencies: [],
         last_updated: new Date().toISOString(),
         total_products: processingStats.processed,
         default_currency: 'INR'
       };
-      
+
       Object.keys(currencyResults).forEach(currency => {
         const products = currencyResults[currency];
         const filename = `products-${currency}.json`;
         const filepath = path.join(dataDir, filename);
-        
+
         fs.writeFileSync(filepath, JSON.stringify(products, null, 2));
-        
+
         const currencyInfo = {
           code: currency,
           name: currency === 'MISC' ? 'Mixed Currency Products' : (CURRENCY_MAP[currency]?.name || currency),
@@ -1019,26 +1165,26 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
             max: Math.max(...products.map(p => p.price))
           } : { min: 0, max: 0 }
         };
-        
+
         currencyManifest.available_currencies.push(currencyInfo);
         console.log(`💰 ${currency}: ${products.length} products → ${filename}`);
       });
-      
+
       currencyManifest.available_currencies.sort((a, b) => b.product_count - a.product_count);
-      
+
       const manifestPath = path.join(dataDir, 'currencies.json');
       fs.writeFileSync(manifestPath, JSON.stringify(currencyManifest, null, 2));
-      
+
       const dropsManifest = {
         categories: DROPS_CONFIG.CATEGORIES,
         stats: dropStats,
         last_updated: new Date().toISOString()
       };
-      
+
       const dropsManifestPath = path.join(dataDir, 'drops.json');
       fs.writeFileSync(dropsManifestPath, JSON.stringify(dropsManifest, null, 2));
       console.log(`🎬 Drops manifest created: drops.json`);
-      
+
       const finalFiles = fs.existsSync(dataDir) ? fs.readdirSync(dataDir) : [];
       const generatedFiles = new Set([
         'last_updated.txt',
@@ -1047,8 +1193,9 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
         'currencies.json',
         'drops.json'
       ]);
+
       const remnantFiles = finalFiles.filter(file => !generatedFiles.has(file));
-      
+
       const summary = `VibeDrips Data Processing Summary
 Generated: ${new Date().toISOString()}
 
@@ -1061,11 +1208,10 @@ Generated: ${new Date().toISOString()}
 ⚠️ VALIDATION
 - Records Flagged: ${processingStats.validationErrors}
 - Field Conflicts: ${processingStats.fieldConflicts}
-${Object.entries(errorBreakdown).length > 0 ? 
-  '- Error Breakdown:\n' + Object.entries(errorBreakdown)
-    .sort(([,a], [,b]) => b - a)
-    .map(([type, count]) => `  • ${type}: ${count}`)
-    .join('\n') : ''}
+${Object.entries(errorBreakdown).length > 0 ? '- Error Breakdown:\n' + Object.entries(errorBreakdown)
+  .sort(([,a], [,b]) => b - a)
+  .map(([type, count]) => `  • ${type}: ${count}`)
+  .join('\n') : ''}
 
 💰 CURRENCIES
 - Currencies Found: ${processingStats.currenciesFound.size}
@@ -1079,8 +1225,20 @@ ${Object.entries(errorBreakdown).length > 0 ?
 - Brands Found: ${processingStats.brandsFound.size}
 - Top Brands: ${Array.from(processingStats.brandsFound).slice(0, 5).join(', ') || 'None'}
 
+🎬 CREATORS
+- Influencers Found: ${processingStats.influencersFound.size}
+- Featured Creators: ${Array.from(processingStats.influencersFound).slice(0, 10).join(', ') || 'None'}
+
+💎 COLLECTIONS
+- Manual Collections: ${processingStats.manualCollectionsFound.size}
+- Available: ${Array.from(processingStats.manualCollectionsFound).join(', ') || 'None'}
+
+🌿 SEASONS
+- Seasons Detected: ${processingStats.seasonsFound.size}
+- Active: ${Array.from(processingStats.seasonsFound).join(', ') || 'None'}
+
 🎬 DROPS
-${Object.entries(dropStats).map(([cat, count]) => 
+${Object.entries(dropStats).map(([cat, count]) =>
   `- ${DROPS_CONFIG.CATEGORIES[cat].emoji} ${DROPS_CONFIG.CATEGORIES[cat].label}: ${count} products`
 ).join('\n')}
 
@@ -1100,20 +1258,23 @@ ${finalFiles.map(file => `- ${file}`).join('\n') || '- None'}
 ${remnantFiles.length > 0 ? `\n⚠️ Remnant files detected:\n${remnantFiles.map(file => `- ${file}`).join('\n')}` : ''}`;
 
       fs.writeFileSync(path.join(dataDir, 'last_updated.txt'), summary);
-      
+
       console.log('\n✅ SUCCESS! Multi-currency data processing complete.');
       console.log(`📁 Generated ${Object.keys(currencyResults).length} currency files`);
       console.log(`📊 Processed ${processingStats.processed} products from ${processingStats.total} rows`);
       console.log(`💰 Currencies: ${Array.from(processingStats.currenciesFound).join(', ')}`);
-      
+      console.log(`🎬 Influencers: ${processingStats.influencersFound.size}`);
+      console.log(`💎 Collections: ${processingStats.manualCollectionsFound.size}`);
+      console.log(`🌿 Seasons: ${Array.from(processingStats.seasonsFound).join(', ')}`);
+
       if (processingStats.validationErrors > 0) {
-        console.log(`⚠️  ${processingStats.validationErrors} products flagged for review (Error-Flag=1)`);
+        console.log(`⚠️ ${processingStats.validationErrors} products flagged for review (Error-Flag=1)`);
       }
-      
+
       if (processingStats.fieldConflicts > 0) {
-        console.log(`⚠️  ${processingStats.fieldConflicts} products with field conflicts (check Error-Fields)`);
+        console.log(`⚠️ ${processingStats.fieldConflicts} products with field conflicts (check Error-Fields)`);
       }
-      
+
       if (processingStats.errors > 0) {
         console.log(`⚠️ ${processingStats.errors} rows had processing errors`);
       }
@@ -1124,8 +1285,8 @@ ${remnantFiles.length > 0 ? `\n⚠️ Remnant files detected:\n${remnantFiles.ma
     });
 }
 
-console.log('🚀 VibeDrips Multi-Currency Product Processor v4.0');
+console.log('🚀 VibeDrips Multi-Currency Product Processor v5.0');
 console.log('================================================');
-console.log('✨ With Dynamic Fields, Drops, & Error Tracking');
+console.log('✨ With Dates, Seasons, Collections & Creators');
 console.log('');
 convertCsvToJson();
