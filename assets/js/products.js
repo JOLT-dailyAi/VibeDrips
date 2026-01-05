@@ -229,7 +229,7 @@ function renderProducts() {
     
     VibeDrips.filteredProducts.forEach(product => {
         const productCard = createProductCard(product);
-        container.appendChild(productCard);  // ← Append directly to container
+        container.appendChild(productCard);
     });
 
     updateStats();
@@ -309,49 +309,283 @@ function openAmazonLink(link, productId) {
 }
 
 /**
- * Show detailed product modal
+ * Show detailed product modal - ENHANCED LAYOUT
  */
 function showProductModal(productId) {
-    const product = VibeDrips.allProducts.find(p => p.id === productId);
+    const product = VibeDrips.allProducts.find(p => (p.asin || p.id) === productId);
     if (!product) {
         console.error('Product not found:', productId);
         return;
     }
 
-    // Create dynamic modal with separate overlay and content
+    // Get all images
+    const allImages = [product.main_image || product.MainImage, ...(product.all_images || product.AllImages || [])].filter(Boolean);
+    const imageCount = allImages.length;
+    
+    // Core fields mapping with fallbacks
+    const coreFields = {
+        weight: product.item_weight || product.weight,
+        dimensions: product.product_dimensions || product.dimensions || product.item_dimensions_l_x_w_x_h || product.item_dimensions_lxwxh,
+        color: product.color || product.colour || product.Colour,
+        material: product.material || product.Material,
+        origin: product.country_of_origin || product.countryOfOrigin
+    };
+    
+    // Icon mapping
+    const fieldIcons = {
+        weight: '⚖️',
+        dimensions: '📏',
+        color: '🎨',
+        material: '🧱',
+        origin: '🌍',
+        model_name: '🔢',
+        item_model_number: '🔢',
+        voltage: '⚡',
+        wattage: '💡',
+        manufacturer: '🏭',
+        isbn_10: '📚',
+        isbn_13: '📚',
+        connectivity_technology: '📡',
+        battery_cell_composition: '🔋',
+        wireless_communication_technology: '📡',
+        operation_mode: '⚙️'
+    };
+    
+    // Base fields to exclude from additional info
+    const baseFields = new Set([
+        'id', 'asin', 'ASIN', 'name', 'productTitle', 'Title', 'brand', 'Brand',
+        'main_image', 'MainImage', 'all_images', 'AllImages', 'allImages',
+        'category', 'Category', 'categoryHierarchy', 'itemTypeName', 'subcategory',
+        'price', 'Price', 'originalPrice', 'OriginalPrice', 'symbol', 'Currency',
+        'customer_rating', 'Rating', 'customerRating', 'review_count', 'reviewCount', 'ReviewCount',
+        'amazon_short', 'amazon_long', 'source_link', 'Amazon SiteStripe (Short)', 'Amazon SiteStripe (Long)',
+        'description', 'Description', 'timestamp', 'date_first_available',
+        'Timestamp', 'Product Source Link', 'Amazon marketplace domain', 'Influencer',
+        'Reference Media for similar products', 'Discount', 'discountPercentage',
+        'availability', 'featured', 'trending'
+    ]);
+    
+    // Add core fields to exclusion
+    Object.keys(coreFields).forEach(key => baseFields.add(key));
+    
+    // Build core details HTML
+    let coreDetailsHTML = '';
+    let hasCoreFields = false;
+    Object.entries(coreFields).forEach(([key, value]) => {
+        if (value && value.toString().trim()) {
+            hasCoreFields = true;
+            const icon = fieldIcons[key] || '📋';
+            const label = key.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+            coreDetailsHTML += `
+                <div class="detail-item">
+                    <span class="detail-icon">${icon}</span>
+                    <span class="detail-label">${label}:</span>
+                    <span class="detail-value">${escapeHtml(value)}</span>
+                </div>
+            `;
+        }
+    });
+    
+    // Build additional info HTML
+    let additionalInfoHTML = '';
+    let hasAdditionalInfo = false;
+    Object.entries(product).forEach(([key, value]) => {
+        if (!baseFields.has(key) && value && value.toString().trim()) {
+            hasAdditionalInfo = true;
+            const icon = fieldIcons[key] || '📋';
+            const label = key.split(/[_\s]/).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+            additionalInfoHTML += `
+                <div class="detail-item">
+                    <span class="detail-icon">${icon}</span>
+                    <span class="detail-label">${label}:</span>
+                    <span class="detail-value">${escapeHtml(value)}</span>
+                </div>
+            `;
+        }
+    });
+    
+    // Format price
+    const currency = product.symbol || product.Currency || '₹';
+    const price = product.price || product.Price || 0;
+    const priceFormatted = typeof price === 'number' ? `${currency}${price.toLocaleString('en-IN')}` : price;
+    
+    // Format rating
+    const rating = parseFloat(product.customer_rating || product.customerRating || product.Rating) || 0;
+    const reviewCount = product.review_count || product.reviewCount || product.ReviewCount || 0;
+    
+    // Description with expand/collapse
+    const description = product.description || product.Description || '';
+    const descriptionPreview = description.length > 200 ? description.substring(0, 200) + '...' : description;
+    
+    // Current gallery image index
+    window.currentImageIndex = 0;
+
     const modalContent = `
         <div class="simple-modal dynamic-modal">
             <div class="modal-overlay" onclick="closeDynamicModal(event)"></div>
             <div class="simple-modal-content">
                 <div class="simple-modal-header">
-                    <h2>${escapeHtml(product.name)}</h2>
-                    <button onclick="closeDynamicModal(event)">X</button>
+                    <h2>${escapeHtml(product.name || product.productTitle || product.Title)}</h2>
+                    <button onclick="closeDynamicModal(event)">✕</button>
                 </div>
                 <div class="simple-modal-body">
-                    <img src="${product.main_image}" alt="${escapeHtml(product.name)}" style="max-width: 200px;">
-                    <p><strong>Price:</strong> ₹${product.price}</p>
-                    <p><strong>Brand:</strong> ${escapeHtml(product.brand)}</p>
-                    <p><strong>Category:</strong> ${escapeHtml(product.category)}</p>
-                    <p><strong>Description:</strong> ${escapeHtml(product.description)}</p>
-                    <button onclick="openAmazonLink('${escapeHtml(product.amazon_short || product.amazon_long || product.source_link || '#')}', '${product.id}')" 
-                            class="amazon-button">🛒 Buy on Amazon</button>
+                    ${product.brand || product.Brand ? `
+                        <div class="modal-brand">
+                            <span class="brand-icon">🏷️</span>
+                            <span class="brand-name">${escapeHtml(product.brand || product.Brand)}</span>
+                        </div>
+                    ` : ''}
+                    
+                    ${imageCount > 0 ? `
+                        <div class="modal-gallery">
+                            <img id="modalGalleryImage" src="${allImages[0]}" alt="${escapeHtml(product.name || '')}" />
+                            ${imageCount > 1 ? `
+                                <button class="gallery-nav gallery-prev" onclick="navigateGallery(-1)">❮</button>
+                                <button class="gallery-nav gallery-next" onclick="navigateGallery(1)">❯</button>
+                                <div class="gallery-indicator">${1} / ${imageCount}</div>
+                            ` : ''}
+                        </div>
+                    ` : ''}
+                    
+                    <div class="modal-category">📦 ${escapeHtml(product.subcategory || product.category || product.itemTypeName || 'General')}</div>
+                    
+                    <div class="modal-price-rating">
+                        <span class="modal-price">💰 ${priceFormatted}</span>
+                        ${rating > 0 ? `
+                            <span class="modal-rating">⭐ ${rating.toFixed(1)} ${reviewCount > 0 ? `(${reviewCount.toLocaleString()} reviews)` : ''}</span>
+                        ` : ''}
+                    </div>
+                    
+                    ${hasCoreFields ? `
+                        <div class="modal-section">
+                            <div class="section-header collapsible" onclick="toggleSection(this)">
+                                <span>📋 Product Details</span>
+                                <span class="toggle-icon">▼</span>
+                            </div>
+                            <div class="section-content expanded">
+                                ${coreDetailsHTML}
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    ${hasAdditionalInfo ? `
+                        <div class="modal-section">
+                            <div class="section-header collapsible" onclick="toggleSection(this)">
+                                <span>ℹ️ Additional Info</span>
+                                <span class="toggle-icon">▶</span>
+                            </div>
+                            <div class="section-content">
+                                ${additionalInfoHTML}
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    ${description ? `
+                        <div class="modal-section">
+                            <div class="section-header">
+                                <span>📝 Description</span>
+                            </div>
+                            <div class="section-content expanded">
+                                <div class="description-text" id="descriptionText">
+                                    ${description.length > 200 ? escapeHtml(descriptionPreview) : escapeHtml(description)}
+                                </div>
+                                ${description.length > 200 ? `
+                                    <button class="read-more-btn" onclick="toggleDescription()">
+                                        <span id="readMoreText">Read More ▼</span>
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    ` : ''}
+                    
+                    <button onclick="openAmazonLink('${escapeHtml(product.amazon_short || product.amazon_long || product.source_link || '#')}', '${productId}')" 
+                            class="amazon-button modal-amazon-button">
+                        🛒 Buy on Amazon
+                    </button>
                 </div>
             </div>
         </div>
     `;
     
     document.body.insertAdjacentHTML('beforeend', modalContent);
+    
+    // Store images for gallery navigation
+    window.modalImages = allImages;
 }
+
+/**
+ * Navigate product image gallery
+ */
+window.navigateGallery = function(direction) {
+    const images = window.modalImages || [];
+    if (images.length <= 1) return;
+    
+    window.currentImageIndex = (window.currentImageIndex + direction + images.length) % images.length;
+    
+    const imgElement = document.getElementById('modalGalleryImage');
+    const indicator = document.querySelector('.gallery-indicator');
+    
+    if (imgElement) {
+        imgElement.src = images[window.currentImageIndex];
+    }
+    if (indicator) {
+        indicator.textContent = `${window.currentImageIndex + 1} / ${images.length}`;
+    }
+};
+
+/**
+ * Toggle collapsible sections
+ */
+window.toggleSection = function(header) {
+    const content = header.nextElementSibling;
+    const icon = header.querySelector('.toggle-icon');
+    
+    if (content.classList.contains('expanded')) {
+        content.classList.remove('expanded');
+        icon.textContent = '▶';
+    } else {
+        content.classList.add('expanded');
+        icon.textContent = '▼';
+    }
+};
+
+/**
+ * Toggle description expand/collapse
+ */
+window.toggleDescription = function() {
+    const descText = document.getElementById('descriptionText');
+    const btnText = document.getElementById('readMoreText');
+    const product = VibeDrips.allProducts.find(p => true); // Get current product from modal
+    
+    if (!descText || !btnText) return;
+    
+    const isExpanded = descText.dataset.expanded === 'true';
+    
+    if (isExpanded) {
+        const description = descText.dataset.full || '';
+        descText.textContent = description.substring(0, 200) + '...';
+        descText.dataset.expanded = 'false';
+        btnText.textContent = 'Read More ▼';
+    } else {
+        const fullDesc = descText.textContent.replace('...', '') + (descText.dataset.remaining || '');
+        descText.dataset.full = fullDesc;
+        descText.textContent = fullDesc;
+        descText.dataset.expanded = 'true';
+        btnText.textContent = 'Show Less ▲';
+    }
+};
 
 /**
  * Close dynamic modal (specific to modals created by showProductModal)
  */
 function closeDynamicModal(event) {
-    event.stopPropagation(); // Prevent event from bubbling further if needed
+    event.stopPropagation();
     const modal = event.target.closest('.dynamic-modal');
     if (modal) {
         if (event.target.classList.contains('modal-overlay') || event.target.closest('button')) {
             modal.remove();
+            window.currentImageIndex = 0;
+            window.modalImages = null;
         }
     }
 }
@@ -394,6 +628,5 @@ window.filterProducts = filterProducts;
 window.sortProducts = sortProducts;
 window.openAmazonLink = openAmazonLink;
 window.showProductModal = showProductModal;
-// Do not export closeDynamicModal to avoid conflict with closeSimpleModal
 
 console.log('Products.js loaded successfully');
