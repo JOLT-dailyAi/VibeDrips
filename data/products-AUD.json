@@ -9,8 +9,15 @@
     "discount_percentage": 15,
     "discountPercentage": 15,
     "availability": "In Stock",
-    "Error-Flag": 0,
+    "Error-Flag": 1,
     "Error-Reason": "",
+    "Error-Fields": [
+      "Amazon marketplace domain",
+      "Reference Media for similar products ",
+      "item_model_number",
+      "generic_name",
+      "model_number"
+    ],
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Winix",
@@ -29,17 +36,6 @@
       "https://m.media-amazon.com/images/I/41rn1P4hgjL.jpg",
       "https://m.media-amazon.com/images/I/41NtVqxJRuL.jpg"
     ],
-    "color": "White",
-    "material": "",
-    "dimensions": "28.7 x 28.7 x 41.6 cm; 4.12 kg",
-    "weight": "4.12 kg",
-    "theme": "",
-    "character": "",
-    "minimum_age": "",
-    "number_of_pieces": "",
-    "unit_count": "",
-    "included_components": "",
-    "additional_features": "",
     "customer_rating": "4.3",
     "review_count": 61,
     "source_link": " https://youtu.be/p712twUbKGA?si=8_4gWDhsXKd3CiGE",
@@ -52,14 +48,80 @@
     "amazon_long": "https://www.amazon.com.au/Winix-Compact-360-5-Stage-Purifier/dp/B0FVXJ52W6?crid=3SEE7AW4CTF3L&dib=eyJ2IjoiMSJ9.yjPUZwIiQAwGIy6h3ZERzP3vcaJXxXKxgtt3l8HubDTOjsuHkqRN8SciutwmHQwwMILl22ht4Ih_Fz_1OwVjnrRdMIUmtwrCJNiqOEc8-Lct893igYyATCFTqfvQnccTyrSng-bobCrdG_SO1DsZcwetE7qOq2mJtvGVzXwNfHIGsjaYz3VajEcu_bObXVBx77zYxVaqXkxjmJ5nCJpeh3JCXJZ66k_ddrjspK0Shr7p46mq9guKbZI1KKDi1Og5xRLLAXbYmg60F3c3h_3HuyST_2CSKbJjfPkvofARSZM.0rGjNVV4bXLN5DKU8853Q78B6ZA5MLnsY3MoW4UNhLg&dib_tag=se&keywords=winix+a230+air+purifier&qid=1767420555&refinements=p_123%3A322708&rnid=23341319051&sprefix=Winix+A230%2Caps%2C304&sr=8-7&linkCode=ll1&tag=vibedrips21-22&linkId=2a2f064cefc865213c085c46fe0d4387&language=en_AU&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/4pfw29L",
     "timestamp": "2026-01-03T14:37:23.000Z",
-    "manufacturer": "",
-    "manufacturer_contact": "",
-    "packer": "",
-    "importer": "",
-    "country_of_origin": "",
-    "product_type": "",
     "featured": false,
-    "trending": false
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "4.12 kg",
+        "priority": 1
+      },
+      {
+        "key": "dimensions",
+        "label": "Dimensions",
+        "value": "28.7 x 28.7 x 41.6 cm; 4.12 kg",
+        "priority": 1
+      },
+      {
+        "key": "color",
+        "label": "Color",
+        "value": "White",
+        "priority": 1
+      }
+    ],
+    "additionalInfo": {
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "15"
+        }
+      ],
+      "Technical": [
+        {
+          "key": "wattage",
+          "label": "Wattage",
+          "category": "Technical",
+          "value": "49 watts"
+        },
+        {
+          "key": "powerwattage",
+          "label": "Powerwattage",
+          "category": "Technical",
+          "value": "49 watts"
+        }
+      ],
+      "Other": [
+        {
+          "key": "manufacture_year",
+          "label": "Manufacture Year",
+          "category": "Other",
+          "value": "2025"
+        },
+        {
+          "key": "date_first_available",
+          "label": "Date First Available",
+          "category": "Other",
+          "value": "7 October 2025"
+        }
+      ]
+    },
+    "drop_signals": {
+      "has_reference_media": false,
+      "media_count": 1,
+      "regional_availability": false,
+      "available_regions": [],
+      "influencer_presence": false,
+      "is_global": false,
+      "is_high_visibility": false,
+      "is_social_proof": false,
+      "is_this_month": true,
+      "drop_categories": [
+        "hot-this-month"
+      ]
+    }
   },
   {
     "asin": "B094DRK41G",
@@ -71,8 +133,14 @@
     "discount_percentage": 0,
     "discountPercentage": 0,
     "availability": "In Stock",
-    "Error-Flag": 0,
+    "Error-Flag": 1,
     "Error-Reason": "",
+    "Error-Fields": [
+      "Amazon marketplace domain",
+      "Reference Media for similar products ",
+      "includedComponents",
+      "generic_name"
+    ],
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Winix",
@@ -91,17 +159,6 @@
       "https://m.media-amazon.com/images/I/41Dp79t5RvL.jpg",
       "https://m.media-amazon.com/images/I/41CuYVbb5vL.jpg"
     ],
-    "color": "White,black",
-    "material": "",
-    "dimensions": "",
-    "weight": "3.1 Kilograms",
-    "theme": "",
-    "character": "",
-    "minimum_age": "",
-    "number_of_pieces": "1",
-    "unit_count": "",
-    "included_components": "air purifier, an All-in-One Pre-installed WINIX Filter O, with a lifespan of 1 year, and the instructions user manual.",
-    "additional_features": "",
     "customer_rating": "4.3 out of 5 stars",
     "review_count": 61,
     "source_link": " https://youtu.be/p712twUbKGA?si=8_4gWDhsXKd3CiGE",
@@ -114,14 +171,72 @@
     "amazon_long": "https://www.amazon.com.au/Compact-Purifier-Filtration-Captures-Suitable/dp/B094DRK41G?crid=ELQVWDXWQHCQ&dib=eyJ2IjoiMSJ9.L6EeAo92rin7UrwhDrHrODZMqe6EBCBLrUNUWbTNFp16MSXHqEkdZD7LXIZjFzl77ISQJiT0EM-2BtqpoJVdF_wXq5dn0YSOzCQmwCGqH0YGMf95ZtH8IaB04uVPQ8nU.xIE1Z8NW2f--4_KVa8FKbS1rEvkJWZ_BxwNM097DRZ8&dib_tag=se&keywords=LEVOIT+Core+Mini+Air+Purifier+For+Coverage+Area+183+Sq+Ft%2C+H13+Truehepa+Filter%2C+Remove+99.97%25+Dust%2C+Smoke%2C+%26+Pollen%2C+With+Fragrance+Sponge%2C+%282+Years+Warranty%29%2C+White&qid=1767420471&refinements=p_123%3A322708&rnid=6963563051&sprefix=levoit+core+mini+air+purifier+for+coverage+area+183+sq+ft+h13+truehepa+filter+remove+99.97+dust+smoke+%26+pollen+with+fragrance+sponge+2+years+warranty+white%2Caps%2C284&sr=8-4&linkCode=ll1&tag=vibedrips21-22&linkId=561b359428d66168fb817a410a30457e&language=en_AU&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/4pl6OXy",
     "timestamp": "2026-01-03T14:36:25.000Z",
-    "manufacturer": "",
-    "manufacturer_contact": "",
-    "packer": "",
-    "importer": "",
-    "country_of_origin": "",
-    "product_type": "",
     "featured": false,
-    "trending": false
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "3.1 Kilograms",
+        "priority": 1
+      },
+      {
+        "key": "color",
+        "label": "Color",
+        "value": "White,black",
+        "priority": 1
+      }
+    ],
+    "additionalInfo": {
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "0"
+        },
+        {
+          "key": "numberOfPieces",
+          "label": "Number Of Pieces",
+          "category": "Product Specs",
+          "value": "1"
+        }
+      ],
+      "Other": [
+        {
+          "key": "batteries_required",
+          "label": "Batteries Required",
+          "category": "Other",
+          "value": "No"
+        },
+        {
+          "key": "date_first_available",
+          "label": "Date First Available",
+          "category": "Other",
+          "value": "5 October 2022"
+        },
+        {
+          "key": "specifications",
+          "label": "Specifications",
+          "category": "Other",
+          "value": "AHAM Certified, Allergy UK, CE Certified, ECARF, RoHS Certified"
+        }
+      ]
+    },
+    "drop_signals": {
+      "has_reference_media": false,
+      "media_count": 1,
+      "regional_availability": false,
+      "available_regions": [],
+      "influencer_presence": false,
+      "is_global": false,
+      "is_high_visibility": false,
+      "is_social_proof": false,
+      "is_this_month": true,
+      "drop_categories": [
+        "hot-this-month"
+      ]
+    }
   },
   {
     "asin": "B07PNJQMK6",
@@ -133,8 +248,14 @@
     "discount_percentage": 14,
     "discountPercentage": 14,
     "availability": "In Stock",
-    "Error-Flag": 0,
+    "Error-Flag": 1,
     "Error-Reason": "",
+    "Error-Fields": [
+      "Amazon marketplace domain",
+      "Reference Media for similar products ",
+      "color",
+      "generic_name"
+    ],
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Winix",
@@ -153,17 +274,6 @@
       "https://m.media-amazon.com/images/I/61YhjEJ4UVL.jpg",
       "https://m.media-amazon.com/images/I/41vd1YMUevL.jpg"
     ],
-    "color": "White",
-    "material": "",
-    "dimensions": "",
-    "weight": "7.5 Kilograms",
-    "theme": "",
-    "character": "",
-    "minimum_age": "",
-    "number_of_pieces": "1",
-    "unit_count": "",
-    "included_components": "1 x Air Purifier, 1 x Deodorization Activated Carbon Filter, 1 x Pre-Filter, 1 x True HEPA Filter, 1 x User Manual",
-    "additional_features": "",
     "customer_rating": "4.6 out of 5 stars",
     "review_count": 27230,
     "source_link": " https://youtu.be/p712twUbKGA?si=8_4gWDhsXKd3CiGE",
@@ -176,14 +286,92 @@
     "amazon_long": "https://www.amazon.com.au/Winix-Australia-4-Stage-Hospital-Purifier/dp/B07PNJQMK6?crid=ELQVWDXWQHCQ&dib=eyJ2IjoiMSJ9.L6EeAo92rin7UrwhDrHrODZMqe6EBCBLrUNUWbTNFp2uVFSOhAgC_eyuAsvR8NOlcTbVThxkLLRpDyb7dOyDPw.4ooEt3zaE9eNXiIk-80aYgyLTJW19qOo7EEaI9Uabr8&dib_tag=se&keywords=LEVOIT%2BCore%2BMini%2BAir%2BPurifier%2BFor%2BCoverage%2BArea%2B183%2BSq%2BFt%2C%2BH13%2BTruehepa%2BFilter%2C%2BRemove%2B99.97%25%2BDust%2C%2BSmoke%2C%2B%26%2BPollen%2C%2BWith%2BFragrance%2BSponge%2C%2B%282%2BYears%2BWarranty%29%2C%2BWhite&qid=1767419802&refinements=p_n_prime_domestic%3A6845356051%2Cp_123%3A322708&sprefix=levoit%2Bcore%2Bmini%2Bair%2Bpurifier%2Bfor%2Bcoverage%2Barea%2B183%2Bsq%2Bft%2Bh13%2Btruehepa%2Bfilter%2Bremove%2B99.97%2Bdust%2Bsmoke%2B%26%2Bpollen%2Bwith%2Bfragrance%2Bsponge%2B2%2Byears%2Bwarranty%2Bwhite%2Caps%2C284&sr=8-5&th=1&linkCode=ll1&tag=vibedrips21-22&linkId=9960c752e67567452bdd8d8acd27c7d8&language=en_AU&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/4sjJxIx",
     "timestamp": "2026-01-03T11:37:18.000Z",
-    "manufacturer": "",
-    "manufacturer_contact": "",
-    "packer": "",
-    "importer": "",
-    "country_of_origin": "",
-    "product_type": "",
     "featured": false,
-    "trending": false
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "7.5 Kilograms",
+        "priority": 1
+      }
+    ],
+    "additionalInfo": {
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "14"
+        },
+        {
+          "key": "numberOfPieces",
+          "label": "Number Of Pieces",
+          "category": "Product Specs",
+          "value": "1"
+        },
+        {
+          "key": "includedComponents",
+          "label": "Included Components",
+          "category": "Product Specs",
+          "value": "1 x Air Purifier, 1 x Deodorization Activated Carbon Filter, 1 x Pre-Filter, 1 x True HEPA Filter, 1 x User Manual"
+        }
+      ],
+      "Other": [
+        {
+          "key": "batteries_required",
+          "label": "Batteries Required",
+          "category": "Other",
+          "value": "No"
+        },
+        {
+          "key": "date_first_available",
+          "label": "Date First Available",
+          "category": "Other",
+          "value": "13 March 2019"
+        },
+        {
+          "key": "specifications",
+          "label": "Specifications",
+          "category": "Other",
+          "value": "Certified HEPA"
+        },
+        {
+          "key": "assembly_required",
+          "label": "Assembly Required",
+          "category": "Other",
+          "value": "No"
+        },
+        {
+          "key": "type_of_guarantee",
+          "label": "Type Of Guarantee",
+          "category": "Other",
+          "value": "Exclusive Australian 2 Year Full Warranty"
+        }
+      ],
+      "Care Instructions": [
+        {
+          "key": "care_instructions",
+          "label": "Care Instructions",
+          "category": "Care Instructions",
+          "value": "Refer to the Official User’s Manual for all operation and safety warnings, WHERE TO USE: Allow 30 - 45 cm of space between TVs, radios, and other electronic products electromagnetic interference from certain electronics may cause product malfunction. Place indoors away from direct sun light direct exposure may cause product malfunction or failure. Only place on hard, flat surfaces flimsy or slanted surfaces may result in abnormal noise and vibrations."
+        }
+      ]
+    },
+    "drop_signals": {
+      "has_reference_media": false,
+      "media_count": 1,
+      "regional_availability": false,
+      "available_regions": [],
+      "influencer_presence": false,
+      "is_global": false,
+      "is_high_visibility": false,
+      "is_social_proof": false,
+      "is_this_month": true,
+      "drop_categories": [
+        "hot-this-month"
+      ]
+    }
   },
   {
     "asin": "B0DT4F8T4L",
@@ -195,8 +383,15 @@
     "discount_percentage": 0,
     "discountPercentage": 0,
     "availability": "In Stock",
-    "Error-Flag": 0,
+    "Error-Flag": 1,
     "Error-Reason": "",
+    "Error-Fields": [
+      "Amazon marketplace domain",
+      "Reference Media for similar products ",
+      "item_model_number",
+      "generic_name",
+      "model_number"
+    ],
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Winix",
@@ -215,17 +410,6 @@
       "https://m.media-amazon.com/images/I/41D4jOIkaoL.jpg",
       "https://m.media-amazon.com/images/I/513knG0NnSL.jpg"
     ],
-    "color": "Black",
-    "material": "",
-    "dimensions": "21.08 x 34.54 x 57.66 cm; 6.03 kg",
-    "weight": "6.03 kg",
-    "theme": "",
-    "character": "",
-    "minimum_age": "",
-    "number_of_pieces": "",
-    "unit_count": "",
-    "included_components": "",
-    "additional_features": "PlasmaWave Technology and Intelligent Sensors",
     "customer_rating": "4.3 out of 5 stars",
     "review_count": 1280,
     "source_link": " https://youtu.be/p712twUbKGA?si=8_4gWDhsXKd3CiGE",
@@ -238,14 +422,104 @@
     "amazon_long": "https://www.amazon.com.au/Winix-Smart-Zero-4-Stage-Purifier/dp/B0DT4F8T4L?crid=ELQVWDXWQHCQ&dib=eyJ2IjoiMSJ9.L6EeAo92rin7UrwhDrHrODZMqe6EBCBLrUNUWbTNFp2uVFSOhAgC_eyuAsvR8NOlcTbVThxkLLRpDyb7dOyDPw.4ooEt3zaE9eNXiIk-80aYgyLTJW19qOo7EEaI9Uabr8&dib_tag=se&keywords=LEVOIT%2BCore%2BMini%2BAir%2BPurifier%2BFor%2BCoverage%2BArea%2B183%2BSq%2BFt%2C%2BH13%2BTruehepa%2BFilter%2C%2BRemove%2B99.97%25%2BDust%2C%2BSmoke%2C%2B%26%2BPollen%2C%2BWith%2BFragrance%2BSponge%2C%2B%282%2BYears%2BWarranty%29%2C%2BWhite&qid=1767419802&refinements=p_n_prime_domestic%3A6845356051%2Cp_123%3A322708&sprefix=levoit%2Bcore%2Bmini%2Bair%2Bpurifier%2Bfor%2Bcoverage%2Barea%2B183%2Bsq%2Bft%2Bh13%2Btruehepa%2Bfilter%2Bremove%2B99.97%2Bdust%2Bsmoke%2B%26%2Bpollen%2Bwith%2Bfragrance%2Bsponge%2B2%2Byears%2Bwarranty%2Bwhite%2Caps%2C284&sr=8-3&th=1&linkCode=ll1&tag=vibedrips21-22&linkId=a9007baf41faa16d9559d9103cbd03e2&language=en_AU&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/4q7G8Lg",
     "timestamp": "2026-01-03T11:36:34.000Z",
-    "manufacturer": "",
-    "manufacturer_contact": "",
-    "packer": "",
-    "importer": "",
-    "country_of_origin": "",
-    "product_type": "",
     "featured": false,
-    "trending": false
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "6.03 kg",
+        "priority": 1
+      },
+      {
+        "key": "dimensions",
+        "label": "Dimensions",
+        "value": "21.08 x 34.54 x 57.66 cm; 6.03 kg",
+        "priority": 1
+      },
+      {
+        "key": "color",
+        "label": "Color",
+        "value": "Black",
+        "priority": 1
+      }
+    ],
+    "additionalInfo": {
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "0"
+        },
+        {
+          "key": "additionalFeatures",
+          "label": "Additional Features",
+          "category": "Product Specs",
+          "value": "PlasmaWave Technology and Intelligent Sensors"
+        },
+        {
+          "key": "special_feature",
+          "label": "Special Feature",
+          "category": "Product Specs",
+          "value": "PlasmaWave Technology and Intelligent Sensors"
+        },
+        {
+          "key": "special_features",
+          "label": "Special Features",
+          "category": "Product Specs",
+          "value": "PlasmaWave Technology and Intelligent Sensors"
+        }
+      ],
+      "Technical": [
+        {
+          "key": "wattage",
+          "label": "Wattage",
+          "category": "Technical",
+          "value": "50 watts"
+        },
+        {
+          "key": "noise_level",
+          "label": "Noise Level",
+          "category": "Technical",
+          "value": "27 Decibels"
+        },
+        {
+          "key": "powerwattage",
+          "label": "Powerwattage",
+          "category": "Technical",
+          "value": "50 watts"
+        }
+      ],
+      "Other": [
+        {
+          "key": "date_first_available",
+          "label": "Date First Available",
+          "category": "Other",
+          "value": "15 January 2025"
+        },
+        {
+          "key": "auto_shut_off",
+          "label": "Auto Shut Off",
+          "category": "Other",
+          "value": "Yes"
+        }
+      ]
+    },
+    "drop_signals": {
+      "has_reference_media": false,
+      "media_count": 1,
+      "regional_availability": false,
+      "available_regions": [],
+      "influencer_presence": false,
+      "is_global": false,
+      "is_high_visibility": false,
+      "is_social_proof": false,
+      "is_this_month": true,
+      "drop_categories": [
+        "hot-this-month"
+      ]
+    }
   },
   {
     "asin": "B08NYTLNQ9",
@@ -257,8 +531,14 @@
     "discount_percentage": 44,
     "discountPercentage": 44,
     "availability": "In Stock",
-    "Error-Flag": 0,
+    "Error-Flag": 1,
     "Error-Reason": "",
+    "Error-Fields": [
+      "Amazon marketplace domain",
+      "Reference Media for similar products ",
+      "color",
+      "colour"
+    ],
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Breville",
@@ -276,17 +556,6 @@
       "https://m.media-amazon.com/images/I/41VV-LT1xIL.jpg",
       "https://m.media-amazon.com/images/I/21vRnOCRljL.jpg"
     ],
-    "color": "White",
-    "material": "Plastic",
-    "dimensions": "36.7 x 24.5 x 24.4 cm; 1.64 kg",
-    "weight": "1.64 kg",
-    "theme": "",
-    "character": "",
-    "minimum_age": "",
-    "number_of_pieces": "",
-    "unit_count": "",
-    "included_components": "",
-    "additional_features": "",
     "customer_rating": "4.5 out of 5 stars",
     "review_count": 105,
     "source_link": " https://youtu.be/p712twUbKGA?si=8_4gWDhsXKd3CiGE",
@@ -299,14 +568,74 @@
     "amazon_long": "https://www.amazon.com.au/Breville-Connect-Purifier-Wi-Fi-LAP158WHT2IAN1/dp/B08NYTLNQ9?crid=ELQVWDXWQHCQ&dib=eyJ2IjoiMSJ9.FHXLsM-DLpqlKvvci8N-591N18N1mBip80ehzAIu27h0luxf7lXG_WloQ6QAQ4_MMgI3USbhuHkHfEHVVvH_ww-DDW4gL8_LLN5u3Oyco_F7COYggKDqt-3UgrFT0IjkkncHvOBdqtynodECvdJtLDxZ8sfAdUGI8gSjCt98EqQ.3faedlDnO1zCR7W86hZxKFXN69_uhD61FDyPhIzWEKw&dib_tag=se&keywords=LEVOIT%2BCore%2BMini%2BAir%2BPurifier%2BFor%2BCoverage%2BArea%2B183%2BSq%2BFt%2C%2BH13%2BTruehepa%2BFilter%2C%2BRemove%2B99.97%25%2BDust%2C%2BSmoke%2C%2B%26%2BPollen%2C%2BWith%2BFragrance%2BSponge%2C%2B%282%2BYears%2BWarranty%29%2C%2BWhite&qid=1767418066&refinements=p_123%3A394078%2Cp_n_prime_domestic%3A6845356051&rnid=6963563051&sprefix=levoit%2Bcore%2Bmini%2Bair%2Bpurifier%2Bfor%2Bcoverage%2Barea%2B183%2Bsq%2Bft%2Bh13%2Btruehepa%2Bfilter%2Bremove%2B99.97%2Bdust%2Bsmoke%2B%26%2Bpollen%2Bwith%2Bfragrance%2Bsponge%2B2%2Byears%2Bwarranty%2Bwhite%2Caps%2C284&sr=8-4&th=1&linkCode=ll1&tag=vibedrips21-22&linkId=e7da94870738285708023c039c0fe364&language=en_AU&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/3Ymok2Q",
     "timestamp": "2026-01-03T11:24:21.000Z",
-    "manufacturer": "",
-    "manufacturer_contact": "",
-    "packer": "",
-    "importer": "",
-    "country_of_origin": "",
-    "product_type": "",
     "featured": false,
-    "trending": false
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "1.64 kg",
+        "priority": 1
+      },
+      {
+        "key": "dimensions",
+        "label": "Dimensions",
+        "value": "36.7 x 24.5 x 24.4 cm; 1.64 kg",
+        "priority": 1
+      },
+      {
+        "key": "material",
+        "label": "Material",
+        "value": "Plastic",
+        "priority": 1
+      }
+    ],
+    "additionalInfo": {
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "44"
+        }
+      ],
+      "Technical": [
+        {
+          "key": "item_model_number",
+          "label": "Item Model Number",
+          "category": "Technical",
+          "value": "LAP158WHT2IAN1"
+        }
+      ],
+      "Other": [
+        {
+          "key": "generic_name",
+          "label": "Generic Name",
+          "category": "Other",
+          "value": "Appliances"
+        },
+        {
+          "key": "date_first_available",
+          "label": "Date First Available",
+          "category": "Other",
+          "value": "21 November 2020"
+        }
+      ]
+    },
+    "drop_signals": {
+      "has_reference_media": false,
+      "media_count": 1,
+      "regional_availability": false,
+      "available_regions": [],
+      "influencer_presence": false,
+      "is_global": false,
+      "is_high_visibility": false,
+      "is_social_proof": false,
+      "is_this_month": true,
+      "drop_categories": [
+        "hot-this-month"
+      ]
+    }
   },
   {
     "asin": "B0BGRHMQ7C",
@@ -318,8 +647,12 @@
     "discount_percentage": 40,
     "discountPercentage": 40,
     "availability": "In Stock",
-    "Error-Flag": 0,
+    "Error-Flag": 1,
     "Error-Reason": "",
+    "Error-Fields": [
+      "Amazon marketplace domain",
+      "Reference Media for similar products "
+    ],
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Breville",
@@ -338,17 +671,6 @@
       "https://m.media-amazon.com/images/I/61Oyw03T+TL.jpg",
       "https://m.media-amazon.com/images/I/61GtnxlIwFL.jpg"
     ],
-    "color": "White",
-    "material": "",
-    "dimensions": "24 x 34 x 57 cm; 8.5 kg",
-    "weight": "8.5 kg",
-    "theme": "",
-    "character": "",
-    "minimum_age": "",
-    "number_of_pieces": "",
-    "unit_count": "",
-    "included_components": "",
-    "additional_features": "",
     "customer_rating": "5.0 out of 5 stars",
     "review_count": 10,
     "source_link": " https://youtu.be/p712twUbKGA?si=8_4gWDhsXKd3CiGE",
@@ -361,14 +683,68 @@
     "amazon_long": "https://www.amazon.com.au/Breville-Smart-Protect-Compact-Purifier/dp/B0BGRHMQ7C?crid=ELQVWDXWQHCQ&dib=eyJ2IjoiMSJ9.FHXLsM-DLpqlKvvci8N-591N18N1mBip80ehzAIu27h0luxf7lXG_WloQ6QAQ4_MMgI3USbhuHkHfEHVVvH_ww-DDW4gL8_LLN5u3Oyco_F7COYggKDqt-3UgrFT0IjkkncHvOBdqtynodECvdJtLDxZ8sfAdUGI8gSjCt98EqQ.3faedlDnO1zCR7W86hZxKFXN69_uhD61FDyPhIzWEKw&dib_tag=se&keywords=LEVOIT+Core+Mini+Air+Purifier+For+Coverage+Area+183+Sq+Ft%2C+H13+Truehepa+Filter%2C+Remove+99.97%25+Dust%2C+Smoke%2C+%26+Pollen%2C+With+Fragrance+Sponge%2C+%282+Years+Warranty%29%2C+White&qid=1767418066&refinements=p_123%3A394078%2Cp_n_prime_domestic%3A6845356051&rnid=6963563051&sprefix=levoit+core+mini+air+purifier+for+coverage+area+183+sq+ft+h13+truehepa+filter+remove+99.97+dust+smoke+%26+pollen+with+fragrance+sponge+2+years+warranty+white%2Caps%2C284&sr=8-3&linkCode=ll1&tag=vibedrips21-22&linkId=c4c89645ba3b1a2485919c59506945f0&language=en_AU&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/3YROScj",
     "timestamp": "2026-01-03T11:23:10.000Z",
-    "manufacturer": "",
-    "manufacturer_contact": "",
-    "packer": "",
-    "importer": "",
-    "country_of_origin": "",
-    "product_type": "",
     "featured": false,
-    "trending": false
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "8.5 kg",
+        "priority": 1
+      },
+      {
+        "key": "dimensions",
+        "label": "Dimensions",
+        "value": "24 x 34 x 57 cm; 8.5 kg",
+        "priority": 1
+      },
+      {
+        "key": "color",
+        "label": "Color",
+        "value": "White",
+        "priority": 1
+      }
+    ],
+    "additionalInfo": {
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "40"
+        }
+      ],
+      "Technical": [
+        {
+          "key": "item_model_number",
+          "label": "Item Model Number",
+          "category": "Technical",
+          "value": "LAP208WHT2IAN1"
+        }
+      ],
+      "Other": [
+        {
+          "key": "date_first_available",
+          "label": "Date First Available",
+          "category": "Other",
+          "value": "29 September 2022"
+        }
+      ]
+    },
+    "drop_signals": {
+      "has_reference_media": false,
+      "media_count": 1,
+      "regional_availability": false,
+      "available_regions": [],
+      "influencer_presence": false,
+      "is_global": false,
+      "is_high_visibility": false,
+      "is_social_proof": false,
+      "is_this_month": true,
+      "drop_categories": [
+        "hot-this-month"
+      ]
+    }
   },
   {
     "asin": "B0F2MLPWTG",
@@ -380,8 +756,12 @@
     "discount_percentage": 23,
     "discountPercentage": 23,
     "availability": "In Stock",
-    "Error-Flag": 0,
+    "Error-Flag": 1,
     "Error-Reason": "",
+    "Error-Fields": [
+      "Amazon marketplace domain",
+      "Reference Media for similar products "
+    ],
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Levoit",
@@ -400,17 +780,6 @@
       "https://m.media-amazon.com/images/I/6126sDdgk3L.jpg",
       "https://m.media-amazon.com/images/I/71n5rsh1PUL.jpg"
     ],
-    "color": "white",
-    "material": "",
-    "dimensions": "22 x 22 x 36 cm; 2.72 kg",
-    "weight": "2.72 kg",
-    "theme": "",
-    "character": "",
-    "minimum_age": "",
-    "number_of_pieces": "",
-    "unit_count": "",
-    "included_components": "",
-    "additional_features": "Plasma Pro Technology, HEPASmart Technology, Real-time Air Quality Monitoring, Smart App Integration",
     "customer_rating": "4.7 out of 5 stars",
     "review_count": 6135,
     "source_link": " https://youtu.be/p712twUbKGA?si=8_4gWDhsXKd3CiGE",
@@ -423,14 +792,116 @@
     "amazon_long": "https://www.amazon.com.au/Purifier-Bedroom-Quality-Allergies-Core300S/dp/B0F2MLPWTG?crid=ELQVWDXWQHCQ&dib=eyJ2IjoiMSJ9.FOAH8neW_BkiQyheRWadP_Vzl3UKAcMdELFu6isypav_CGNPFW5YobAbwbtKkznVOzXLaiJl8GIfXrvtsfg1PPKpwvr8q-z5FFiws6k_G2HdECSKc4wMSGlqfPImlyAzK23ofQ7xuPeLujS41XmxJRnkQXt-zd5TPVFKWRd8rNIePZYpdypIwwl_2Xm9ciS-8CWs3IqwaWPdc0KVXUfKpQL9cY53ogEMSflkbVoAbRHikVaWa91VQ7Otjk5dmplty-CWIofnzg0Nfn8QpR3mn6k0BQd4gqRZu4JKuC_EHPI.3ob2vEV8RqxLQoKvTGojLCMzVDFh1zQEXwQ7KkRQp1U&dib_tag=se&keywords=LEVOIT%2BCore%2BMini%2BAir%2BPurifier%2BFor%2BCoverage%2BArea%2B183%2BSq%2BFt%2C%2BH13%2BTruehepa%2BFilter%2C%2BRemove%2B99.97%25%2BDust%2C%2BSmoke%2C%2B%26%2BPollen%2C%2BWith%2BFragrance%2BSponge%2C%2B%282%2BYears%2BWarranty%29%2C%2BWhite&qid=1767415465&sprefix=levoit%2Bcore%2Bmini%2Bair%2Bpurifier%2Bfor%2Bcoverage%2Barea%2B183%2Bsq%2Bft%2Bh13%2Btruehepa%2Bfilter%2Bremove%2B99.97%2Bdust%2Bsmoke%2B%26%2Bpollen%2Bwith%2Bfragrance%2Bsponge%2B2%2Byears%2Bwarranty%2Bwhite%2Caps%2C284&sr=8-5&th=1&linkCode=ll1&tag=vibedrips21-22&linkId=c7e8c72112fd62ab075a59a6e449d543&language=en_AU&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/493nRIX",
     "timestamp": "2026-01-03T10:41:13.000Z",
-    "manufacturer": "",
-    "manufacturer_contact": "",
-    "packer": "",
-    "importer": "",
-    "country_of_origin": "",
-    "product_type": "",
     "featured": false,
-    "trending": false
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "2.72 kg",
+        "priority": 1
+      },
+      {
+        "key": "dimensions",
+        "label": "Dimensions",
+        "value": "22 x 22 x 36 cm; 2.72 kg",
+        "priority": 1
+      },
+      {
+        "key": "color",
+        "label": "Color",
+        "value": "white",
+        "priority": 1
+      }
+    ],
+    "additionalInfo": {
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "23"
+        },
+        {
+          "key": "additionalFeatures",
+          "label": "Additional Features",
+          "category": "Product Specs",
+          "value": "Plasma Pro Technology, HEPASmart Technology, Real-time Air Quality Monitoring, Smart App Integration"
+        },
+        {
+          "key": "special_feature",
+          "label": "Special Feature",
+          "category": "Product Specs",
+          "value": "Plasma Pro Technology, HEPASmart Technology, Real-time Air Quality Monitoring, Smart App Integration"
+        },
+        {
+          "key": "special_features",
+          "label": "Special Features",
+          "category": "Product Specs",
+          "value": "Plasma Pro Technology, HEPASmart Technology, Real-time Air Quality Monitoring, Smart App Integration"
+        }
+      ],
+      "Technical": [
+        {
+          "key": "wattage",
+          "label": "Wattage",
+          "category": "Technical",
+          "value": "39 watts"
+        },
+        {
+          "key": "noise_level",
+          "label": "Noise Level",
+          "category": "Technical",
+          "value": "24 Decibels"
+        },
+        {
+          "key": "model_number",
+          "label": "Model Number",
+          "category": "Technical",
+          "value": "LAP-C302S-WGC"
+        },
+        {
+          "key": "powerwattage",
+          "label": "Powerwattage",
+          "category": "Technical",
+          "value": "39 watts"
+        }
+      ],
+      "Other": [
+        {
+          "key": "generic_name",
+          "label": "Generic Name",
+          "category": "Other",
+          "value": "Appliances"
+        },
+        {
+          "key": "date_first_available",
+          "label": "Date First Available",
+          "category": "Other",
+          "value": "15 October 2025"
+        },
+        {
+          "key": "auto_shut_off",
+          "label": "Auto Shut Off",
+          "category": "Other",
+          "value": "Yes"
+        }
+      ]
+    },
+    "drop_signals": {
+      "has_reference_media": false,
+      "media_count": 1,
+      "regional_availability": false,
+      "available_regions": [],
+      "influencer_presence": false,
+      "is_global": false,
+      "is_high_visibility": false,
+      "is_social_proof": false,
+      "is_this_month": true,
+      "drop_categories": [
+        "hot-this-month"
+      ]
+    }
   },
   {
     "asin": "B0F9FJS3VW",
@@ -442,8 +913,16 @@
     "discount_percentage": 22,
     "discountPercentage": 22,
     "availability": "In Stock",
-    "Error-Flag": 0,
+    "Error-Flag": 1,
     "Error-Reason": "",
+    "Error-Fields": [
+      "Amazon marketplace domain",
+      "Reference Media for similar products ",
+      "color",
+      "generic_name",
+      "product_dimensions",
+      "colour"
+    ],
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Levoit",
@@ -462,17 +941,6 @@
       "https://m.media-amazon.com/images/I/71bs4uBfF8L.jpg",
       "https://m.media-amazon.com/images/I/41pt52tkoyL.jpg"
     ],
-    "color": "White",
-    "material": "",
-    "dimensions": "16 x 16 x 26 cm",
-    "weight": "1.04 kg",
-    "theme": "",
-    "character": "",
-    "minimum_age": "",
-    "number_of_pieces": "",
-    "unit_count": "",
-    "included_components": "",
-    "additional_features": "Manual",
     "customer_rating": "4.6 out of 5 stars",
     "review_count": 30656,
     "source_link": " https://youtu.be/p712twUbKGA?si=8_4gWDhsXKd3CiGE",
@@ -485,14 +953,92 @@
     "amazon_long": "https://www.amazon.com.au/Purifiers-Bedroom-Allergies-Ultra-quiet-Portable/dp/B0F9FJS3VW?crid=ELQVWDXWQHCQ&dib=eyJ2IjoiMSJ9.FOAH8neW_BkiQyheRWadP_Vzl3UKAcMdELFu6isypav_CGNPFW5YobAbwbtKkznVOzXLaiJl8GIfXrvtsfg1PPKpwvr8q-z5FFiws6k_G2HdECSKc4wMSGlqfPImlyAzK23ofQ7xuPeLujS41XmxJRnkQXt-zd5TPVFKWRd8rNIePZYpdypIwwl_2Xm9ciS-8CWs3IqwaWPdc0KVXUfKpQL9cY53ogEMSflkbVoAbRHikVaWa91VQ7Otjk5dmplty-CWIofnzg0Nfn8QpR3mn6k0BQd4gqRZu4JKuC_EHPI.3ob2vEV8RqxLQoKvTGojLCMzVDFh1zQEXwQ7KkRQp1U&dib_tag=se&keywords=LEVOIT%2BCore%2BMini%2BAir%2BPurifier%2BFor%2BCoverage%2BArea%2B183%2BSq%2BFt%2C%2BH13%2BTruehepa%2BFilter%2C%2BRemove%2B99.97%25%2BDust%2C%2BSmoke%2C%2B%26%2BPollen%2C%2BWith%2BFragrance%2BSponge%2C%2B%282%2BYears%2BWarranty%29%2C%2BWhite&qid=1767415465&sprefix=levoit%2Bcore%2Bmini%2Bair%2Bpurifier%2Bfor%2Bcoverage%2Barea%2B183%2Bsq%2Bft%2Bh13%2Btruehepa%2Bfilter%2Bremove%2B99.97%2Bdust%2Bsmoke%2B%26%2Bpollen%2Bwith%2Bfragrance%2Bsponge%2B2%2Byears%2Bwarranty%2Bwhite%2Caps%2C284&sr=8-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&th=1&linkCode=ll1&tag=vibedrips21-22&linkId=beb325622ccdebbad661d944f7c6f40f&language=en_AU&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/3MYIkWR",
     "timestamp": "2026-01-03T10:40:34.000Z",
-    "manufacturer": "",
-    "manufacturer_contact": "",
-    "packer": "",
-    "importer": "",
-    "country_of_origin": "",
-    "product_type": "",
     "featured": false,
-    "trending": false
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "1.04 kg",
+        "priority": 1
+      },
+      {
+        "key": "dimensions",
+        "label": "Dimensions",
+        "value": "16 x 16 x 26 cm",
+        "priority": 1
+      }
+    ],
+    "additionalInfo": {
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "22"
+        },
+        {
+          "key": "additionalFeatures",
+          "label": "Additional Features",
+          "category": "Product Specs",
+          "value": "Manual"
+        },
+        {
+          "key": "special_feature",
+          "label": "Special Feature",
+          "category": "Product Specs",
+          "value": "Manual"
+        },
+        {
+          "key": "special_features",
+          "label": "Special Features",
+          "category": "Product Specs",
+          "value": "Manual"
+        }
+      ],
+      "Technical": [
+        {
+          "key": "item_model_number",
+          "label": "Item Model Number",
+          "category": "Technical",
+          "value": "LAP-C171-QAE"
+        },
+        {
+          "key": "noise_level",
+          "label": "Noise Level",
+          "category": "Technical",
+          "value": "28 Decibels"
+        }
+      ],
+      "Other": [
+        {
+          "key": "date_first_available",
+          "label": "Date First Available",
+          "category": "Other",
+          "value": "23 September 2025"
+        },
+        {
+          "key": "auto_shut_off",
+          "label": "Auto Shut Off",
+          "category": "Other",
+          "value": "No"
+        }
+      ]
+    },
+    "drop_signals": {
+      "has_reference_media": false,
+      "media_count": 1,
+      "regional_availability": false,
+      "available_regions": [],
+      "influencer_presence": false,
+      "is_global": false,
+      "is_high_visibility": false,
+      "is_social_proof": false,
+      "is_this_month": true,
+      "drop_categories": [
+        "hot-this-month"
+      ]
+    }
   },
   {
     "asin": "1529902401",
@@ -506,6 +1052,12 @@
     "availability": "In Stock",
     "Error-Flag": 1,
     "Error-Reason": "DISCOUNT_MISMATCH: Scraped 26% vs expected 23%",
+    "Error-Fields": [
+      "discountPercentage",
+      "Amazon marketplace domain",
+      "Reference Media for similar products ",
+      "generic_name"
+    ],
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Cornerstone Press",
@@ -524,17 +1076,6 @@
       "https://m.media-amazon.com/images/I/41ZL7MS03sL.jpg",
       "https://m.media-amazon.com/images/I/41Trsw8gxNL.jpg"
     ],
-    "color": "",
-    "material": "Paper",
-    "dimensions": "13.5 x 1.5 x 22 cm",
-    "weight": "300 g",
-    "theme": "",
-    "character": "",
-    "minimum_age": "",
-    "number_of_pieces": "",
-    "unit_count": "",
-    "included_components": "",
-    "additional_features": "",
     "customer_rating": "4.5 out of 5 stars",
     "review_count": 65479,
     "source_link": "https://youtube.com/shorts/iDrWd2I_ZA8?si=ETOPQ2lu22RvWZ0o",
@@ -549,14 +1090,109 @@
     "amazon_long": "https://www.amazon.com.au/Ikigai-Simple-Secrets-Long-Happy/dp/1529902401?_encoding=UTF8&dib_tag=se&dib=eyJ2IjoiMSJ9.fnTYwXmHd1cvomaHCc5XqKXrTuwIsooh5W_7EuD2WB4ZaDgK2e1r7bEBhJ00YEyANnfIq1jlgqnQbTAIVQ2QWj7YK6EkQqeJJVLmph5gP1wCMMztkrx6nNP4knowlpE54_uS45CQhKerxiLbHZsevQaDB_FQacJQOIsRSicsM05jsj6kPiq6SyxEJoaBqXp1mDE5F0cGAAHQKqVBXWNZB3IJZYHD88rq7im4u7qCJ5usqOose5yqbCR1zazRC-Y79Lph1VkHK6aHzc-QHDlyrBNScZUqd4emqkwQw0C_u08.3ras5C8GtGooH1pt5vWOIL9GRCsurW06RTm_cxboGJw&qid=1767246466&sr=8-5&linkCode=ll1&tag=vibedrips21-22&linkId=a31a2a031631ed4b19fee9cbb44b810c&language=en_AU&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/49mRnZa",
     "timestamp": "2026-01-01T14:24:13.000Z",
-    "manufacturer": "Cornerstone Press",
-    "manufacturer_contact": "",
-    "packer": "",
-    "importer": "",
-    "country_of_origin": "",
-    "product_type": "",
     "featured": false,
-    "trending": false
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "300 g",
+        "priority": 1
+      },
+      {
+        "key": "dimensions",
+        "label": "Dimensions",
+        "value": "13.5 x 1.5 x 22 cm",
+        "priority": 1
+      },
+      {
+        "key": "material",
+        "label": "Material",
+        "value": "Paper",
+        "priority": 1
+      }
+    ],
+    "additionalInfo": {
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "26"
+        }
+      ],
+      "Books": [
+        {
+          "key": "language",
+          "label": "Language",
+          "category": "Books",
+          "value": "English"
+        },
+        {
+          "key": "paperback",
+          "label": "Paperback",
+          "category": "Books",
+          "value": "208 pages"
+        },
+        {
+          "key": "publisher",
+          "label": "Publisher",
+          "category": "Books",
+          "value": "Cornerstone Press"
+        },
+        {
+          "key": "isbn_10",
+          "label": "Isbn 10",
+          "category": "Books",
+          "value": "1529902401"
+        },
+        {
+          "key": "isbn_13",
+          "label": "Isbn 13",
+          "category": "Books",
+          "value": "978-1529902402"
+        }
+      ],
+      "Manufacturing": [
+        {
+          "key": "manufacturer",
+          "label": "Manufacturer",
+          "category": "Manufacturing",
+          "value": "Cornerstone Press"
+        }
+      ],
+      "Other": [
+        {
+          "key": "publication_date",
+          "label": "Publication Date",
+          "category": "Other",
+          "value": "1 August 2023"
+        },
+        {
+          "key": "print_length",
+          "label": "Print Length",
+          "category": "Other",
+          "value": "208 pages"
+        }
+      ]
+    },
+    "drop_signals": {
+      "has_reference_media": false,
+      "media_count": 1,
+      "regional_availability": true,
+      "available_regions": [
+        "INR"
+      ],
+      "influencer_presence": true,
+      "is_global": false,
+      "is_high_visibility": false,
+      "is_social_proof": true,
+      "is_this_month": true,
+      "drop_categories": [
+        "creator-picks",
+        "hot-this-month"
+      ]
+    }
   },
   {
     "asin": "178633089X",
@@ -570,6 +1206,12 @@
     "availability": "In Stock",
     "Error-Flag": 1,
     "Error-Reason": "DISCOUNT_MISMATCH: Scraped 43% vs expected 41%",
+    "Error-Fields": [
+      "discountPercentage",
+      "Amazon marketplace domain",
+      "Reference Media for similar products ",
+      "generic_name"
+    ],
     "currency": "AUD",
     "symbol": "A$",
     "brand": "HUTCHINSON PUBLISHING - TRADE",
@@ -588,17 +1230,6 @@
       "https://m.media-amazon.com/images/I/31Cvatb1r0L.jpg",
       "https://m.media-amazon.com/images/I/A1XtELkSLlL.jpg"
     ],
-    "color": "",
-    "material": "Paper",
-    "dimensions": "13.4 x 2.2 x 18.4 cm",
-    "weight": "271 g",
-    "theme": "",
-    "character": "",
-    "minimum_age": "",
-    "number_of_pieces": "",
-    "unit_count": "",
-    "included_components": "",
-    "additional_features": "",
     "customer_rating": "4.5 out of 5 stars",
     "review_count": 65479,
     "source_link": "https://youtube.com/shorts/iDrWd2I_ZA8?si=ETOPQ2lu22RvWZ0o",
@@ -613,13 +1244,114 @@
     "amazon_long": "https://www.amazon.com.au/Ikigai-Japanese-secret-long-happy/dp/178633089X?_encoding=UTF8&dib_tag=se&dib=eyJ2IjoiMSJ9.fnTYwXmHd1cvomaHCc5XqKXrTuwIsooh5W_7EuD2WB4ZaDgK2e1r7bEBhJ00YEyANnfIq1jlgqnQbTAIVQ2QWj7YK6EkQqeJJVLmph5gP1wCMMztkrx6nNP4knowlpE54_uS45CQhKerxiLbHZsevQaDB_FQacJQOIsRSicsM05jsj6kPiq6SyxEJoaBqXp1mDE5F0cGAAHQKqVBXWNZB3IJZYHD88rq7im4u7qCJ5usqOose5yqbCR1zazRC-Y79Lph1VkHK6aHzc-QHDlyrBNScZUqd4emqkwQw0C_u08.3ras5C8GtGooH1pt5vWOIL9GRCsurW06RTm_cxboGJw&qid=1767246466&sr=8-5&linkCode=ll1&tag=vibedrips21-22&linkId=26ece1d59414947e2b91c636860f7c67&language=en_AU&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/44RpxTq",
     "timestamp": "2026-01-01T14:13:46.000Z",
-    "manufacturer": "HUTCHINSON PUBLISHING - TRADE",
-    "manufacturer_contact": "",
-    "packer": "",
-    "importer": "",
-    "country_of_origin": "",
-    "product_type": "",
     "featured": false,
-    "trending": false
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "271 g",
+        "priority": 1
+      },
+      {
+        "key": "dimensions",
+        "label": "Dimensions",
+        "value": "13.4 x 2.2 x 18.4 cm",
+        "priority": 1
+      },
+      {
+        "key": "material",
+        "label": "Material",
+        "value": "Paper",
+        "priority": 1
+      }
+    ],
+    "additionalInfo": {
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "43"
+        }
+      ],
+      "Books": [
+        {
+          "key": "language",
+          "label": "Language",
+          "category": "Books",
+          "value": "English"
+        },
+        {
+          "key": "hardcover",
+          "label": "Hardcover",
+          "category": "Books",
+          "value": "208 pages"
+        },
+        {
+          "key": "publisher",
+          "label": "Publisher",
+          "category": "Books",
+          "value": "HUTCHINSON PUBLISHING - TRADE"
+        },
+        {
+          "key": "isbn_10",
+          "label": "Isbn 10",
+          "category": "Books",
+          "value": "178633089X"
+        },
+        {
+          "key": "isbn_13",
+          "label": "Isbn 13",
+          "category": "Books",
+          "value": "978-1786330895"
+        },
+        {
+          "key": "edition",
+          "label": "Edition",
+          "category": "Books",
+          "value": "First Edition"
+        }
+      ],
+      "Manufacturing": [
+        {
+          "key": "manufacturer",
+          "label": "Manufacturer",
+          "category": "Manufacturing",
+          "value": "HUTCHINSON PUBLISHING - TRADE"
+        }
+      ],
+      "Other": [
+        {
+          "key": "publication_date",
+          "label": "Publication Date",
+          "category": "Other",
+          "value": "18 September 2017"
+        },
+        {
+          "key": "print_length",
+          "label": "Print Length",
+          "category": "Other",
+          "value": "208 pages"
+        }
+      ]
+    },
+    "drop_signals": {
+      "has_reference_media": false,
+      "media_count": 1,
+      "regional_availability": true,
+      "available_regions": [
+        "INR"
+      ],
+      "influencer_presence": true,
+      "is_global": false,
+      "is_high_visibility": false,
+      "is_social_proof": true,
+      "is_this_month": true,
+      "drop_categories": [
+        "creator-picks",
+        "hot-this-month"
+      ]
+    }
   }
 ]

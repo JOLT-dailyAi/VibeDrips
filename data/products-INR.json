@@ -9,8 +9,18 @@
     "discount_percentage": 19,
     "discountPercentage": 19,
     "availability": "In Stock",
-    "Error-Flag": 0,
+    "Error-Flag": 1,
     "Error-Reason": "",
+    "Error-Fields": [
+      "Amazon marketplace domain",
+      "Reference Media for similar products ",
+      "countryOfOrigin",
+      "item_model_number",
+      "particle_retention_size",
+      "contaminant_filtration_capability",
+      "generic_name",
+      "country_of_origin"
+    ],
     "currency": "INR",
     "symbol": "₹",
     "brand": "Praan",
@@ -29,17 +39,6 @@
       "https://m.media-amazon.com/images/I/51V5XcqaG9L.jpg",
       "https://m.media-amazon.com/images/I/41I4k4rpVkL.jpg"
     ],
-    "color": "Space Gray",
-    "material": "",
-    "dimensions": "68.4D x 15W x 22H Centimeters",
-    "weight": "15 kg",
-    "theme": "",
-    "character": "",
-    "minimum_age": "",
-    "number_of_pieces": "1 Count",
-    "unit_count": "1 Count",
-    "included_components": "1 Air Purifier, 1 Stand",
-    "additional_features": "AI-powered, Medical-grade, Clinically certified, Real-time air quality tracking, App control",
     "customer_rating": "5.0 out of 5 stars",
     "review_count": 4,
     "source_link": "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
@@ -52,14 +51,156 @@
     "amazon_long": "https://www.amazon.in/HIVE-Advanced-Allergens-Real-Time-App-Controlled/dp/B0FJ5R8JN7?crid=7PDUGGXYJ7AK&dib=eyJ2IjoiMSJ9.WzRWHAE7n_7gxOy9QRfWvx-VyFC946kSJf0c_QU2uGuWvay12Uw0_iYycb090CsJUyeVG0MPp0JKj_3eXNidZ4PHVbxcJN7pGVJlI1x_AaC-XdY64szSbPqNbTqaWdSkSsh_8s7XSgJNy9Vh_O9KhiRatjo61Gnmdgy80AB8fJMv4ZfQkC-ZPBc8cec2w9ZIHr0NJKLf5rqXwsuoe_14uzMRUMwLE2goAdbYwDK-g7I.BxaeT_g-MzLJZXfcHpljaME2JJvRdM2edVopZsvgf4I&dib_tag=se&keywords=praan+hive+air+purifier&qid=1766085330&sprefix=praan+hive+air+purifier%2Caps%2C197&sr=8-3&linkCode=ll1&tag=vibedrips-21&linkId=f28292f686a16c4f44b809a95118c388&language=en_IN&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/4q46SfP",
     "timestamp": "2026-01-03T14:46:29.000Z",
-    "manufacturer": "Praan Climate Technologies Private Limited, Praan Climate Technologies Private Limited Ground Floor, Plot No. 2A, CTS 653/6, Ujagar Infotech Park, Opp. Deonar Bus Depot, Chembur, Mumbai - 400088",
-    "manufacturer_contact": "Praan Climate Technologies Private Limited, Praan Climate Technologies Private Limited Ground Floor, Plot No. 2A, CTS 653/6, Ujagar Infotech Park, Opp. Deonar Bus Depot, Chembur, Mumbai - 400088",
-    "packer": "Praan Climate Technologies Private Limited Ground Floor, Plot No. 2A, CTS 653/6, Ujagar Infotech Park, Opp. Deonar Bus Depot, Chembur, Mumbai - 400088",
-    "importer": "",
-    "country_of_origin": "India",
-    "product_type": "",
     "featured": false,
-    "trending": false
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "15 kg",
+        "priority": 1
+      },
+      {
+        "key": "dimensions",
+        "label": "Dimensions",
+        "value": "68.4D x 15W x 22H Centimeters",
+        "priority": 1
+      },
+      {
+        "key": "color",
+        "label": "Color",
+        "value": "Space Gray",
+        "priority": 1
+      }
+    ],
+    "additionalInfo": {
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "19"
+        },
+        {
+          "key": "numberOfPieces",
+          "label": "Number Of Pieces",
+          "category": "Product Specs",
+          "value": "1 Count"
+        },
+        {
+          "key": "unitCount",
+          "label": "Unit Count",
+          "category": "Product Specs",
+          "value": "1 Count"
+        },
+        {
+          "key": "includedComponents",
+          "label": "Included Components",
+          "category": "Product Specs",
+          "value": "1 Air Purifier, 1 Stand"
+        },
+        {
+          "key": "additionalFeatures",
+          "label": "Additional Features",
+          "category": "Product Specs",
+          "value": "AI-powered, Medical-grade, Clinically certified, Real-time air quality tracking, App control"
+        },
+        {
+          "key": "special_feature",
+          "label": "Special Feature",
+          "category": "Product Specs",
+          "value": "AI-powered, Medical-grade, Clinically certified, Real-time air quality tracking, App control"
+        }
+      ],
+      "Books": [
+        {
+          "key": "publisher",
+          "label": "Publisher",
+          "category": "Books",
+          "value": "Praan Climate Technologies Private Limited, Praan Climate Technologies Private Limited Ground Floor, Plot No. 2A, CTS 653/6, Ujagar Infotech Park, Opp. Deonar Bus Depot, Chembur, Mumbai - 400088"
+        }
+      ],
+      "Manufacturing": [
+        {
+          "key": "manufacturer",
+          "label": "Manufacturer",
+          "category": "Manufacturing",
+          "value": "Praan Climate Technologies Private Limited, Praan Climate Technologies Private Limited Ground Floor, Plot No. 2A, CTS 653/6, Ujagar Infotech Park, Opp. Deonar Bus Depot, Chembur, Mumbai - 400088"
+        },
+        {
+          "key": "manufacturerContact",
+          "label": "Manufacturer Contact",
+          "category": "Manufacturing",
+          "value": "Praan Climate Technologies Private Limited, Praan Climate Technologies Private Limited Ground Floor, Plot No. 2A, CTS 653/6, Ujagar Infotech Park, Opp. Deonar Bus Depot, Chembur, Mumbai - 400088"
+        },
+        {
+          "key": "packer",
+          "label": "Packer",
+          "category": "Manufacturing",
+          "value": "Praan Climate Technologies Private Limited Ground Floor, Plot No. 2A, CTS 653/6, Ujagar Infotech Park, Opp. Deonar Bus Depot, Chembur, Mumbai - 400088"
+        }
+      ],
+      "Technical": [
+        {
+          "key": "wattage",
+          "label": "Wattage",
+          "category": "Technical",
+          "value": "55 Watts"
+        },
+        {
+          "key": "noise_level",
+          "label": "Noise Level",
+          "category": "Technical",
+          "value": "50 Decibels"
+        }
+      ],
+      "Other": [
+        {
+          "key": "controller_type",
+          "label": "Controller Type",
+          "category": "Other",
+          "value": "Android, iOS, iPadOS"
+        },
+        {
+          "key": "manufacture_year",
+          "label": "Manufacture Year",
+          "category": "Other",
+          "value": "2025"
+        },
+        {
+          "key": "net_quantity",
+          "label": "Net Quantity",
+          "category": "Other",
+          "value": "1 Count"
+        },
+        {
+          "key": "specification_met",
+          "label": "Specification Met",
+          "category": "Other",
+          "value": "FCC Certified"
+        },
+        {
+          "key": "filter_class",
+          "label": "Filter Class",
+          "category": "Other",
+          "value": "HEPA H14 Filter + Activated Carbon Filter"
+        }
+      ]
+    },
+    "drop_signals": {
+      "has_reference_media": false,
+      "media_count": 1,
+      "regional_availability": false,
+      "available_regions": [],
+      "influencer_presence": false,
+      "is_global": false,
+      "is_high_visibility": false,
+      "is_social_proof": false,
+      "is_this_month": true,
+      "drop_categories": [
+        "hot-this-month"
+      ]
+    }
   },
   {
     "asin": "B0DHGFCG6P",
@@ -71,8 +212,14 @@
     "discount_percentage": 53,
     "discountPercentage": 53,
     "availability": "In Stock",
-    "Error-Flag": 0,
+    "Error-Flag": 1,
     "Error-Reason": "",
+    "Error-Fields": [
+      "Amazon marketplace domain",
+      "Reference Media for similar products ",
+      "color",
+      "generic_name"
+    ],
     "currency": "INR",
     "symbol": "₹",
     "brand": "Qubo",
@@ -91,17 +238,6 @@
       "https://m.media-amazon.com/images/I/41rKV574mpL.jpg",
       "https://m.media-amazon.com/images/I/419KSFfKQzL.jpg"
     ],
-    "color": "Black",
-    "material": "",
-    "dimensions": "6.3 x 6.3 x 18.7 Centimeters",
-    "weight": "396 g",
-    "theme": "",
-    "character": "",
-    "minimum_age": "",
-    "number_of_pieces": "1 Count",
-    "unit_count": "1 Count",
-    "included_components": "Car Air purifier with Filters 1N, 0.5 meter USB Cable 1N, QR Card (Warranty & Digital User Manual)",
-    "additional_features": "",
     "customer_rating": "3.5 out of 5 stars",
     "review_count": 139,
     "source_link": "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
@@ -114,14 +250,120 @@
     "amazon_long": "https://www.amazon.in/Qubo-Filtration-Technology-Pre-filter-Activated/dp/B0DHGFCG6P?crid=TCT3DAWVIGYK&dib=eyJ2IjoiMSJ9.oiXJFm1eOltK900oi2ZigB3aWCdr331LGmvEyhCNomnz6C0odZ1TWNs4S8l-Ep4U1ESGLbXmUhH-1USLO4_B-Aga1-TuqLxi2h3SkrDAgBPsWb2sH57kLFVFrVPV4uXJ3RXEiBMC78DWAwjiRR5lrQ.Vl_vHwdJJoh1HF4latUHpmel8tFLZWwNelNKYS42oiw&dib_tag=se&keywords=qubo+car+air+purifier+pro&nsdOptOutParam=true&qid=1766086868&refinements=p_n_availability%3A1318485031%2Cp_123%3A369904&rnid=91049095031&sprefix=qubo+car+air+purifier%2Caps%2C204&sr=8-3&linkCode=ll1&tag=vibedrips-21&linkId=dcf86334a1ce3e4fd80008978ce65b23&language=en_IN&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/48KIWaZ",
     "timestamp": "2026-01-03T14:46:29.000Z",
-    "manufacturer": "Hero Electronix Pvt. Ltd",
-    "manufacturer_contact": "Hero Electronix Pvt. Ltd., Toll-free helpline number: 9319095757",
-    "packer": "Hero Electronix Pvt. Ltd., Toll-free helpline number: 9319095757",
-    "importer": "Hero Electronix Private Limited Plot No 4, Khasra No. 382,Village Sultanpur, MG Road, New Delhi -110030",
-    "country_of_origin": "China",
-    "product_type": "",
     "featured": false,
-    "trending": false
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "396 g",
+        "priority": 1
+      },
+      {
+        "key": "dimensions",
+        "label": "Dimensions",
+        "value": "6.3 x 6.3 x 18.7 Centimeters",
+        "priority": 1
+      },
+      {
+        "key": "origin",
+        "label": "Made in",
+        "value": "China",
+        "priority": 2
+      }
+    ],
+    "additionalInfo": {
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "53"
+        },
+        {
+          "key": "numberOfPieces",
+          "label": "Number Of Pieces",
+          "category": "Product Specs",
+          "value": "1 Count"
+        },
+        {
+          "key": "unitCount",
+          "label": "Unit Count",
+          "category": "Product Specs",
+          "value": "1 Count"
+        },
+        {
+          "key": "includedComponents",
+          "label": "Included Components",
+          "category": "Product Specs",
+          "value": "Car Air purifier with Filters 1N, 0.5 meter USB Cable 1N, QR Card (Warranty & Digital User Manual)"
+        }
+      ],
+      "Books": [
+        {
+          "key": "publisher",
+          "label": "Publisher",
+          "category": "Books",
+          "value": "Hero Electronix Pvt. Ltd"
+        }
+      ],
+      "Manufacturing": [
+        {
+          "key": "manufacturer",
+          "label": "Manufacturer",
+          "category": "Manufacturing",
+          "value": "Hero Electronix Pvt. Ltd"
+        },
+        {
+          "key": "manufacturerContact",
+          "label": "Manufacturer Contact",
+          "category": "Manufacturing",
+          "value": "Hero Electronix Pvt. Ltd., Toll-free helpline number: 9319095757"
+        },
+        {
+          "key": "packer",
+          "label": "Packer",
+          "category": "Manufacturing",
+          "value": "Hero Electronix Pvt. Ltd., Toll-free helpline number: 9319095757"
+        },
+        {
+          "key": "importer",
+          "label": "Importer",
+          "category": "Manufacturing",
+          "value": "Hero Electronix Private Limited Plot No 4, Khasra No. 382,Village Sultanpur, MG Road, New Delhi -110030"
+        }
+      ],
+      "Technical": [
+        {
+          "key": "item_model_number",
+          "label": "Item Model Number",
+          "category": "Technical",
+          "value": "HPA02"
+        }
+      ],
+      "Other": [
+        {
+          "key": "net_quantity",
+          "label": "Net Quantity",
+          "category": "Other",
+          "value": "1 Count"
+        }
+      ]
+    },
+    "drop_signals": {
+      "has_reference_media": false,
+      "media_count": 1,
+      "regional_availability": false,
+      "available_regions": [],
+      "influencer_presence": false,
+      "is_global": false,
+      "is_high_visibility": false,
+      "is_social_proof": false,
+      "is_this_month": true,
+      "drop_categories": [
+        "hot-this-month"
+      ]
+    }
   },
   {
     "asin": "B0F1MR9W8R",
@@ -133,8 +375,15 @@
     "discount_percentage": 0,
     "discountPercentage": 0,
     "availability": "In Stock",
-    "Error-Flag": 0,
+    "Error-Flag": 1,
     "Error-Reason": "",
+    "Error-Fields": [
+      "Amazon marketplace domain",
+      "Reference Media for similar products ",
+      "countryOfOrigin",
+      "generic_name",
+      "country_of_origin"
+    ],
     "currency": "INR",
     "symbol": "₹",
     "brand": "UBreathe",
@@ -152,17 +401,6 @@
       "https://m.media-amazon.com/images/I/411u0wzt33L.jpg",
       "https://m.media-amazon.com/images/I/516lfJdEuSL.jpg"
     ],
-    "color": "Moonlight",
-    "material": "",
-    "dimensions": "35D x 35W x 75H Centimeters",
-    "weight": "10 kg",
-    "theme": "",
-    "character": "",
-    "minimum_age": "",
-    "number_of_pieces": "",
-    "unit_count": "",
-    "included_components": "Advanced Bio Filtration + UV Disinfection, IoT Integrated with Companion app, Plant is NOT INCLUDED, Real time AQI monitoring, Silent operation",
-    "additional_features": "",
     "customer_rating": "5.0 out of 5 stars",
     "review_count": 1,
     "source_link": "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
@@ -175,14 +413,120 @@
     "amazon_long": "https://www.amazon.in/uBreathe-Purifier-Plant-based-Filtration-pollutants/dp/B0F1MR9W8R?crid=826JKP9KWA5J&dib=eyJ2IjoiMSJ9.mWwCe4d9zdQ6o-K0WTMhqwiSOqXRaGyHzWBIXFr5pOrGjHj071QN20LucGBJIEps.af-GL5NoRKrUebUJ7TwAKILQOQ7pD0ZPcvtPL3kXFjQ&dib_tag=se&keywords=ubreathe+life+air+purifier&qid=1766089908&refinements=p_n_availability%3A1318485031%2Cp_72%3A1318476031%2Cp_123%3A1449711&rnid=91049095031&sprefix=ubreathe+life+air+purifier%2Caps%2C175&sr=8-1&linkCode=ll1&tag=vibedrips-21&linkId=0b38cb58a305e8486f936f398f371bb0&language=en_IN&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/4jf44JZ",
     "timestamp": "2026-01-03T14:46:29.000Z",
-    "manufacturer": "Urban Air Labs Pvt Ltd",
-    "manufacturer_contact": "",
-    "packer": "contact@urbanairlabs.com",
-    "importer": "",
-    "country_of_origin": "India",
-    "product_type": "",
     "featured": false,
-    "trending": false
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "10 kg",
+        "priority": 1
+      },
+      {
+        "key": "dimensions",
+        "label": "Dimensions",
+        "value": "35D x 35W x 75H Centimeters",
+        "priority": 1
+      },
+      {
+        "key": "color",
+        "label": "Color",
+        "value": "Moonlight",
+        "priority": 1
+      }
+    ],
+    "additionalInfo": {
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "38"
+        },
+        {
+          "key": "includedComponents",
+          "label": "Included Components",
+          "category": "Product Specs",
+          "value": "Advanced Bio Filtration + UV Disinfection, IoT Integrated with Companion app, Plant is NOT INCLUDED, Real time AQI monitoring, Silent operation"
+        }
+      ],
+      "Books": [
+        {
+          "key": "publisher",
+          "label": "Publisher",
+          "category": "Books",
+          "value": "Urban Air Labs Pvt Ltd"
+        }
+      ],
+      "Manufacturing": [
+        {
+          "key": "manufacturer",
+          "label": "Manufacturer",
+          "category": "Manufacturing",
+          "value": "Urban Air Labs Pvt Ltd"
+        },
+        {
+          "key": "packer",
+          "label": "Packer",
+          "category": "Manufacturing",
+          "value": "contact@urbanairlabs.com"
+        }
+      ],
+      "Technical": [
+        {
+          "key": "item_model_number",
+          "label": "Item Model Number",
+          "category": "Technical",
+          "value": "Life2"
+        },
+        {
+          "key": "wattage",
+          "label": "Wattage",
+          "category": "Technical",
+          "value": "55 Watts"
+        },
+        {
+          "key": "noise_level",
+          "label": "Noise Level",
+          "category": "Technical",
+          "value": "37 Decibels"
+        }
+      ],
+      "Other": [
+        {
+          "key": "floor_area",
+          "label": "Floor Area",
+          "category": "Other",
+          "value": "400 Square Feet"
+        },
+        {
+          "key": "controller_type",
+          "label": "Controller Type",
+          "category": "Other",
+          "value": "Control Panel, IoT Enabled, Connect with Wi-Fi"
+        },
+        {
+          "key": "manufacture_year",
+          "label": "Manufacture Year",
+          "category": "Other",
+          "value": "2024"
+        }
+      ]
+    },
+    "drop_signals": {
+      "has_reference_media": false,
+      "media_count": 1,
+      "regional_availability": false,
+      "available_regions": [],
+      "influencer_presence": false,
+      "is_global": false,
+      "is_high_visibility": false,
+      "is_social_proof": false,
+      "is_this_month": true,
+      "drop_categories": [
+        "hot-this-month"
+      ]
+    }
   },
   {
     "asin": "B0CQ2MVRXR",
@@ -194,8 +538,14 @@
     "discount_percentage": 45,
     "discountPercentage": 45,
     "availability": "In Stock",
-    "Error-Flag": 0,
+    "Error-Flag": 1,
     "Error-Reason": "",
+    "Error-Fields": [
+      "Amazon marketplace domain",
+      "Reference Media for similar products ",
+      "particle_retention_size",
+      "generic_name"
+    ],
     "currency": "INR",
     "symbol": "₹",
     "brand": "UBreathe",
@@ -214,17 +564,6 @@
       "https://m.media-amazon.com/images/I/31XH7PNoJpL.jpg",
       "https://m.media-amazon.com/images/I/31IQFWV2IaL.jpg"
     ],
-    "color": "Snow grey",
-    "material": "",
-    "dimensions": "15D x 15W x 30H Centimeters",
-    "weight": "1 kg",
-    "theme": "",
-    "character": "",
-    "minimum_age": "",
-    "number_of_pieces": "1",
-    "unit_count": "1 Count",
-    "included_components": "Lid",
-    "additional_features": "Breathing Roots Technology, Built-in Self-watering System, Air Purifier with Decorative Planter",
     "customer_rating": "3.8 out of 5 stars",
     "review_count": 34,
     "source_link": "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
@@ -237,14 +576,162 @@
     "amazon_long": "https://www.amazon.in/UBreathe-Purifying-Filtration-Removing-Pollutants/dp/B0CQ2MVRXR?pd_rd_w=9xdiR&content-id=amzn1.sym.38ab170c-68e6-4e35-87b8-c345099a6660&pf_rd_p=38ab170c-68e6-4e35-87b8-c345099a6660&pf_rd_r=R6GTDES5PX0XJQYMTYDG&pd_rd_wg=lfwcJ&pd_rd_r=f51a545f-bfe9-4cb9-8c09-80a05c9d1d03&pd_rd_i=B0CQ2MVRXR&psc=1&linkCode=ll1&tag=vibedrips-21&linkId=66e17de4ece247747066671e2c2816ca&language=en_IN&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/3KHxW53",
     "timestamp": "2026-01-03T14:46:29.000Z",
-    "manufacturer": "Urban Air Labs",
-    "manufacturer_contact": "",
-    "packer": "",
-    "importer": "",
-    "country_of_origin": "India",
-    "product_type": "",
     "featured": false,
-    "trending": false
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "1 kg",
+        "priority": 1
+      },
+      {
+        "key": "dimensions",
+        "label": "Dimensions",
+        "value": "15D x 15W x 30H Centimeters",
+        "priority": 1
+      },
+      {
+        "key": "color",
+        "label": "Color",
+        "value": "Snow grey",
+        "priority": 1
+      },
+      {
+        "key": "origin",
+        "label": "Made in",
+        "value": "India",
+        "priority": 2
+      }
+    ],
+    "additionalInfo": {
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "45"
+        },
+        {
+          "key": "numberOfPieces",
+          "label": "Number Of Pieces",
+          "category": "Product Specs",
+          "value": "1"
+        },
+        {
+          "key": "unitCount",
+          "label": "Unit Count",
+          "category": "Product Specs",
+          "value": "1 Count"
+        },
+        {
+          "key": "includedComponents",
+          "label": "Included Components",
+          "category": "Product Specs",
+          "value": "Lid"
+        },
+        {
+          "key": "additionalFeatures",
+          "label": "Additional Features",
+          "category": "Product Specs",
+          "value": "Breathing Roots Technology, Built-in Self-watering System, Air Purifier with Decorative Planter"
+        },
+        {
+          "key": "special_feature",
+          "label": "Special Feature",
+          "category": "Product Specs",
+          "value": "Breathing Roots Technology, Built-in Self-watering System, Air Purifier with Decorative Planter"
+        }
+      ],
+      "Books": [
+        {
+          "key": "publisher",
+          "label": "Publisher",
+          "category": "Books",
+          "value": "Urban Air Labs"
+        }
+      ],
+      "Manufacturing": [
+        {
+          "key": "manufacturer",
+          "label": "Manufacturer",
+          "category": "Manufacturing",
+          "value": "Urban Air Labs"
+        }
+      ],
+      "Technical": [
+        {
+          "key": "item_model_number",
+          "label": "Item Model Number",
+          "category": "Technical",
+          "value": "UB mini-lite"
+        },
+        {
+          "key": "wattage",
+          "label": "Wattage",
+          "category": "Technical",
+          "value": "8 Watts"
+        },
+        {
+          "key": "noise_level",
+          "label": "Noise Level",
+          "category": "Technical",
+          "value": "12 Decibels"
+        }
+      ],
+      "Other": [
+        {
+          "key": "floor_area",
+          "label": "Floor Area",
+          "category": "Other",
+          "value": "80 Square Feet"
+        },
+        {
+          "key": "controller_type",
+          "label": "Controller Type",
+          "category": "Other",
+          "value": "Button Control"
+        },
+        {
+          "key": "manufacture_year",
+          "label": "Manufacture Year",
+          "category": "Other",
+          "value": "2023"
+        },
+        {
+          "key": "net_quantity",
+          "label": "Net Quantity",
+          "category": "Other",
+          "value": "1.00 Count"
+        },
+        {
+          "key": "specification_met",
+          "label": "Specification Met",
+          "category": "Other",
+          "value": "CE Certified"
+        },
+        {
+          "key": "filter_class",
+          "label": "Filter Class",
+          "category": "Other",
+          "value": "AirPurifierFilter"
+        }
+      ]
+    },
+    "drop_signals": {
+      "has_reference_media": false,
+      "media_count": 1,
+      "regional_availability": false,
+      "available_regions": [],
+      "influencer_presence": false,
+      "is_global": false,
+      "is_high_visibility": false,
+      "is_social_proof": false,
+      "is_this_month": true,
+      "drop_categories": [
+        "hot-this-month"
+      ]
+    }
   },
   {
     "asin": "B0CG1N11DV",
@@ -256,8 +743,25 @@
     "discount_percentage": 45,
     "discountPercentage": 45,
     "availability": "In Stock",
-    "Error-Flag": 0,
+    "Error-Flag": 1,
     "Error-Reason": "",
+    "Error-Fields": [
+      "Amazon marketplace domain",
+      "Reference Media for similar products ",
+      "publisher",
+      "manufacturer",
+      "packer",
+      "color",
+      "includedComponents",
+      "additionalFeatures",
+      "particle_retention_size",
+      "contaminant_filtration_capability",
+      "generic_name",
+      "special_feature",
+      "included_components",
+      "colour",
+      "filter_class"
+    ],
     "currency": "INR",
     "symbol": "₹",
     "brand": "LEVOIT",
@@ -276,17 +780,6 @@
       "https://m.media-amazon.com/images/I/51QX3j9NchL.jpg",
       "https://m.media-amazon.com/images/I/51PZZ9FLoVL.jpg"
     ],
-    "color": "White",
-    "material": "",
-    "dimensions": "19.3D x 29W x 19.8H Centimeters",
-    "weight": "1 kg 60 g",
-    "theme": "",
-    "character": "",
-    "minimum_age": "",
-    "number_of_pieces": "",
-    "unit_count": "",
-    "included_components": "Air Purifier",
-    "additional_features": "Unique Aromatherapy Feature",
     "customer_rating": "4.4 out of 5 stars",
     "review_count": 88860,
     "source_link": "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
@@ -299,14 +792,106 @@
     "amazon_long": "https://www.amazon.in/LEVOIT-Core-Mini-Fragrance-Frenshener/dp/B0CG1N11DV?pd_rd_w=4zOPW&content-id=amzn1.sym.7ccbe032-5929-4c88-ab39-4923842061df&pf_rd_p=7ccbe032-5929-4c88-ab39-4923842061df&pf_rd_r=H2R87GF1T082JTXFJA7G&pd_rd_wg=AkPYP&pd_rd_r=fc82ac2a-46d8-4e75-a525-54cfaa260119&pd_rd_i=B0CG1N11DV&th=1&linkCode=ll1&tag=vibedrips-21&linkId=bf10776160f3c9da9c75de03f5e1bd27&language=en_IN&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/48PBAD1",
     "timestamp": "2026-01-03T14:46:29.000Z",
-    "manufacturer": "LEVOIT",
-    "manufacturer_contact": "",
-    "packer": "Levoit",
-    "importer": "Frootle India Pvt Ltd",
-    "country_of_origin": "China",
-    "product_type": "",
     "featured": false,
-    "trending": false
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "1 kg 60 g",
+        "priority": 1
+      },
+      {
+        "key": "dimensions",
+        "label": "Dimensions",
+        "value": "19.3D x 29W x 19.8H Centimeters",
+        "priority": 1
+      },
+      {
+        "key": "origin",
+        "label": "Made in",
+        "value": "China",
+        "priority": 2
+      }
+    ],
+    "additionalInfo": {
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "45"
+        }
+      ],
+      "Manufacturing": [
+        {
+          "key": "importer",
+          "label": "Importer",
+          "category": "Manufacturing",
+          "value": "Frootle India Pvt Ltd"
+        }
+      ],
+      "Technical": [
+        {
+          "key": "item_model_number",
+          "label": "Item Model Number",
+          "category": "Technical",
+          "value": "LAP-C161-WUK"
+        },
+        {
+          "key": "wattage",
+          "label": "Wattage",
+          "category": "Technical",
+          "value": "7 Watts"
+        },
+        {
+          "key": "noise_level",
+          "label": "Noise Level",
+          "category": "Technical",
+          "value": "25 Decibels"
+        }
+      ],
+      "Other": [
+        {
+          "key": "floor_area",
+          "label": "Floor Area",
+          "category": "Other",
+          "value": "370 Square Feet"
+        },
+        {
+          "key": "controller_type",
+          "label": "Controller Type",
+          "category": "Other",
+          "value": "Button Control"
+        },
+        {
+          "key": "upc",
+          "label": "Upc",
+          "category": "Other",
+          "value": "810123672011"
+        },
+        {
+          "key": "manufacture_year",
+          "label": "Manufacture Year",
+          "category": "Other",
+          "value": "2024"
+        }
+      ]
+    },
+    "drop_signals": {
+      "has_reference_media": false,
+      "media_count": 1,
+      "regional_availability": false,
+      "available_regions": [],
+      "influencer_presence": false,
+      "is_global": false,
+      "is_high_visibility": false,
+      "is_social_proof": false,
+      "is_this_month": true,
+      "drop_categories": [
+        "hot-this-month"
+      ]
+    }
   },
   {
     "asin": "B0DF6NBJDW",
@@ -318,8 +903,22 @@
     "discount_percentage": 13,
     "discountPercentage": 13,
     "availability": "In Stock",
-    "Error-Flag": 0,
+    "Error-Flag": 1,
     "Error-Reason": "",
+    "Error-Fields": [
+      "Amazon marketplace domain",
+      "Reference Media for similar products ",
+      "publisher",
+      "manufacturer",
+      "color",
+      "item_model_number",
+      "wattage",
+      "room_type",
+      "noise_level",
+      "controller_type",
+      "generic_name",
+      "colour"
+    ],
     "currency": "INR",
     "symbol": "₹",
     "brand": "Dreo",
@@ -338,17 +937,6 @@
       "https://m.media-amazon.com/images/I/31dwadIfCLL.jpg",
       "https://m.media-amazon.com/images/I/41GSfwyKfLL.jpg"
     ],
-    "color": "Blue",
-    "material": "",
-    "dimensions": "26D x 22.5W x 78.5H Centimeters",
-    "weight": "5.94 Pounds",
-    "theme": "",
-    "character": "",
-    "minimum_age": "",
-    "number_of_pieces": "1",
-    "unit_count": "",
-    "included_components": "11L Humidifier x1, Aroma Pad, Cleaning Brush, Screw x 1, User Manual",
-    "additional_features": "Aroma Diffuser, Digital Display, Easy Top-Fill, Night Light, Removable Tank, Smart Control",
     "customer_rating": "4.3 out of 5 stars",
     "review_count": 580,
     "source_link": "https://youtu.be/jZfzeppym-I?si=iZEIvtUK9bKepQ2k",
@@ -361,14 +949,116 @@
     "amazon_long": "https://www.amazon.in/Dreo-Humidifier-Humidifiers-Self-Cleaning-White/dp/B0DF6NBJDW?crid=1CI9J21LNMENK&dib=eyJ2IjoiMSJ9.zwOzmNu2SIy4UxR8QeAt1aFUZJAFC9a4Oo_LmkZuI-xijvYPNCuoV9LBeWoUhalRz7DwrbNQEMBUD2_sDPSOSijyQIYvv06JZnhqiehpWh9vAWFepGp9FfGAWaBc0ifrL0zKhwPyL3NRgMgwoSlHCHgws2BarjHYW7CF0cxi_2i4q2InMYneONwbY6in3A5sMGXfllreuIYjF1WXECm2n_0DaA1WthqFgGebFeMAy6w.VB3aXrhHLmDeVJi7TuPWvnXo9B99XhcSxEfTHwPgcH8&dib_tag=se&keywords=humidifier%2Bfor%2Bhome%2Bdreo%2BHM735S&qid=1766402533&s=kitchen&sprefix=humidifier%2Bfor%2Bhome%2Bdreo%2Bhm735s%2Ckitchen%2C164&sr=1-4&th=1&linkCode=ll1&tag=vibedrips-21&linkId=d9d2f664e2abb3d291853e6830a21a58&language=en_IN&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/4p7Vb6m",
     "timestamp": "2026-01-03T14:46:29.000Z",
-    "manufacturer": "Dreo",
-    "manufacturer_contact": "",
-    "packer": "",
-    "importer": "",
-    "country_of_origin": "",
-    "product_type": "",
     "featured": false,
-    "trending": false
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "5.94 Pounds",
+        "priority": 1
+      },
+      {
+        "key": "dimensions",
+        "label": "Dimensions",
+        "value": "26D x 22.5W x 78.5H Centimeters",
+        "priority": 1
+      }
+    ],
+    "additionalInfo": {
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "13"
+        },
+        {
+          "key": "numberOfPieces",
+          "label": "Number Of Pieces",
+          "category": "Product Specs",
+          "value": "1"
+        },
+        {
+          "key": "includedComponents",
+          "label": "Included Components",
+          "category": "Product Specs",
+          "value": "11L Humidifier x1, Aroma Pad, Cleaning Brush, Screw x 1, User Manual"
+        },
+        {
+          "key": "additionalFeatures",
+          "label": "Additional Features",
+          "category": "Product Specs",
+          "value": "Aroma Diffuser, Digital Display, Easy Top-Fill, Night Light, Removable Tank, Smart Control"
+        },
+        {
+          "key": "special_feature",
+          "label": "Special Feature",
+          "category": "Product Specs",
+          "value": "Aroma Diffuser, Digital Display, Easy Top-Fill, Night Light, Removable Tank, Smart Control"
+        }
+      ],
+      "Technical": [
+        {
+          "key": "model_name",
+          "label": "Model Name",
+          "category": "Technical",
+          "value": "HM735S"
+        },
+        {
+          "key": "voltage",
+          "label": "Voltage",
+          "category": "Technical",
+          "value": "120 Volts"
+        }
+      ],
+      "Other": [
+        {
+          "key": "floor_area",
+          "label": "Floor Area",
+          "category": "Other",
+          "value": "700 Square Feet"
+        },
+        {
+          "key": "shape",
+          "label": "Shape",
+          "category": "Other",
+          "value": "Square"
+        },
+        {
+          "key": "upc",
+          "label": "Upc",
+          "category": "Other",
+          "value": "810142852067"
+        },
+        {
+          "key": "manufacture_year",
+          "label": "Manufacture Year",
+          "category": "Other",
+          "value": "2024"
+        },
+        {
+          "key": "operation_mode",
+          "label": "Operation Mode",
+          "category": "Other",
+          "value": "Ultrasonic"
+        }
+      ]
+    },
+    "drop_signals": {
+      "has_reference_media": false,
+      "media_count": 1,
+      "regional_availability": false,
+      "available_regions": [],
+      "influencer_presence": false,
+      "is_global": false,
+      "is_high_visibility": false,
+      "is_social_proof": false,
+      "is_this_month": true,
+      "drop_categories": [
+        "hot-this-month"
+      ]
+    }
   },
   {
     "asin": "B0BCC8KZHK",
@@ -382,6 +1072,15 @@
     "availability": "In Stock",
     "Error-Flag": 1,
     "Error-Reason": "INVALID_ORIGINAL: originalPrice < price, normalized to price",
+    "Error-Fields": [
+      "originalPrice",
+      "Amazon marketplace domain",
+      "Reference Media for similar products ",
+      "publisher",
+      "manufacturer",
+      "particle_retention_size",
+      "generic_name"
+    ],
     "currency": "INR",
     "symbol": "₹",
     "brand": "Nuwave",
@@ -400,17 +1099,6 @@
       "https://m.media-amazon.com/images/I/41Nng-2d1IL.jpg",
       "https://m.media-amazon.com/images/I/41p9QPuNSaL.jpg"
     ],
-    "color": "White",
-    "material": "",
-    "dimensions": "30.5D x 35.6W x 58.4H Centimeters",
-    "weight": "9 kg 980 g",
-    "theme": "",
-    "character": "",
-    "minimum_age": "",
-    "number_of_pieces": "1 Count",
-    "unit_count": "1 Count",
-    "included_components": "1 x Nuwave ZERO Smart Air Purifiers, 2 Stainless-steel Pre-filters (Pre-installed); 2 Ozone Emission Removal Filters (Pre-installed); 2 Bio-Guard Filters (Pre-installed), 1 Bio-Guard 360 Filter (Pre-installed), 1 x User Manual",
-    "additional_features": "4 Stage Filtration;, 6 Fan Speeds;, Adjustable 30°, 60°, 90° Vents;, Auto/Eco Mode;, Sleep Mode &amp; Timer;, Turbo Mode;, Ultimate Clean Mode;, ZERO Waste &amp; ZERO Filter Replacements;",
     "customer_rating": "4.6 out of 5 stars",
     "review_count": 727,
     "source_link": "https://youtube.com/shorts/Ndo7UTmyKFY?si=sTnWqVQpNDUIHGyh",
@@ -423,14 +1111,153 @@
     "amazon_long": "https://www.amazon.in/OxyPure-ZERO-Smart-Air-Purifier/dp/B0BCC8KZHK?crid=1DBDX66EZWAI&dib=eyJ2IjoiMSJ9.rjAYrxaBAKvKSZN74dFmh6kLpFreR-UE09WLHMbu13zVtYm-0-PpCdU21JcwvFK1x_tD5AddgVTHTsgQ-UW_gVGz6ydK-YeC9qM6rJlM4njLJFaPIciRs32VwKHphamIvZT7YGu-Ntuq4qbXzQ7NH8mbpgiJrKnQer-l5wzSfLfLarHyCeylurSjFRWlI0fPdQKS6-J_JhbWbGfu0v8hpZRp0GtP2Re5kk6rt0OGvSw.r5dwBPXYniVJ_j06oEGa30J5K_Nq9z6TWvXePj3brIo&dib_tag=se&keywords=air+purifier&qid=1766082427&refinements=p_72%3A1318476031&rnid=1318475031&sprefix=Air+pur%2Caps%2C228&sr=8-4&linkCode=ll1&tag=vibedrips-21&linkId=539511099fc2081f4b299b3f3ba7f577&language=en_IN&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/4pdv5iw",
     "timestamp": "2026-01-03T14:46:29.000Z",
-    "manufacturer": "NuWave",
-    "manufacturer_contact": "",
-    "packer": "",
-    "importer": "",
-    "country_of_origin": "",
-    "product_type": "",
     "featured": false,
-    "trending": false
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "9 kg 980 g",
+        "priority": 1
+      },
+      {
+        "key": "dimensions",
+        "label": "Dimensions",
+        "value": "30.5D x 35.6W x 58.4H Centimeters",
+        "priority": 1
+      },
+      {
+        "key": "color",
+        "label": "Color",
+        "value": "White",
+        "priority": 1
+      }
+    ],
+    "additionalInfo": {
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "16"
+        },
+        {
+          "key": "numberOfPieces",
+          "label": "Number Of Pieces",
+          "category": "Product Specs",
+          "value": "1 Count"
+        },
+        {
+          "key": "unitCount",
+          "label": "Unit Count",
+          "category": "Product Specs",
+          "value": "1 Count"
+        },
+        {
+          "key": "includedComponents",
+          "label": "Included Components",
+          "category": "Product Specs",
+          "value": "1 x Nuwave ZERO Smart Air Purifiers, 2 Stainless-steel Pre-filters (Pre-installed); 2 Ozone Emission Removal Filters (Pre-installed); 2 Bio-Guard Filters (Pre-installed), 1 Bio-Guard 360 Filter (Pre-installed), 1 x User Manual"
+        },
+        {
+          "key": "additionalFeatures",
+          "label": "Additional Features",
+          "category": "Product Specs",
+          "value": "4 Stage Filtration;, 6 Fan Speeds;, Adjustable 30°, 60°, 90° Vents;, Auto/Eco Mode;, Sleep Mode &amp; Timer;, Turbo Mode;, Ultimate Clean Mode;, ZERO Waste &amp; ZERO Filter Replacements;"
+        },
+        {
+          "key": "special_feature",
+          "label": "Special Feature",
+          "category": "Product Specs",
+          "value": "4 Stage Filtration;, 6 Fan Speeds;, Adjustable 30°, 60°, 90° Vents;, Auto/Eco Mode;, Sleep Mode &amp; Timer;, Turbo Mode;, Ultimate Clean Mode;, ZERO Waste &amp; ZERO Filter Replacements;"
+        }
+      ],
+      "Technical": [
+        {
+          "key": "item_model_number",
+          "label": "Item Model Number",
+          "category": "Technical",
+          "value": "47251"
+        },
+        {
+          "key": "wattage",
+          "label": "Wattage",
+          "category": "Technical",
+          "value": "60 Watts"
+        },
+        {
+          "key": "noise_level",
+          "label": "Noise Level",
+          "category": "Technical",
+          "value": "21.4 Decibels"
+        }
+      ],
+      "Other": [
+        {
+          "key": "floor_area",
+          "label": "Floor Area",
+          "category": "Other",
+          "value": "2002 Square Feet"
+        },
+        {
+          "key": "controller_type",
+          "label": "Controller Type",
+          "category": "Other",
+          "value": "Button Control"
+        },
+        {
+          "key": "contaminant_filtration_capability",
+          "label": "Contaminant Filtration Capability",
+          "category": "Other",
+          "value": "True"
+        },
+        {
+          "key": "upc",
+          "label": "Upc",
+          "category": "Other",
+          "value": "652185472532"
+        },
+        {
+          "key": "manufacture_year",
+          "label": "Manufacture Year",
+          "category": "Other",
+          "value": "2022"
+        },
+        {
+          "key": "net_quantity",
+          "label": "Net Quantity",
+          "category": "Other",
+          "value": "1 Count"
+        },
+        {
+          "key": "specification_met",
+          "label": "Specification Met",
+          "category": "Other",
+          "value": "CARB Certified, CE Certified, EPA Certified, ETL Certified, Energy Star Certified"
+        },
+        {
+          "key": "filter_class",
+          "label": "Filter Class",
+          "category": "Other",
+          "value": "ElectrostaticFilter"
+        }
+      ]
+    },
+    "drop_signals": {
+      "has_reference_media": false,
+      "media_count": 1,
+      "regional_availability": false,
+      "available_regions": [],
+      "influencer_presence": true,
+      "is_global": false,
+      "is_high_visibility": false,
+      "is_social_proof": true,
+      "is_this_month": true,
+      "drop_categories": [
+        "creator-picks",
+        "hot-this-month"
+      ]
+    }
   },
   {
     "asin": "B0BDX9ZN46",
@@ -442,8 +1269,15 @@
     "discount_percentage": 23,
     "discountPercentage": 23,
     "availability": "In Stock",
-    "Error-Flag": 0,
+    "Error-Flag": 1,
     "Error-Reason": "",
+    "Error-Fields": [
+      "Amazon marketplace domain",
+      "Reference Media for similar products ",
+      "controller_type",
+      "particle_retention_size",
+      "generic_name"
+    ],
     "currency": "INR",
     "symbol": "₹",
     "brand": "UBreathe",
@@ -462,17 +1296,6 @@
       "https://m.media-amazon.com/images/I/41m64Ph+ElL.jpg",
       "https://m.media-amazon.com/images/I/41PpIIiKJdL.jpg"
     ],
-    "color": "Wood Finish",
-    "material": "",
-    "dimensions": "16D x 16W x 19H Centimeters",
-    "weight": "1 kg 200 g",
-    "theme": "",
-    "character": "",
-    "minimum_age": "",
-    "number_of_pieces": "1",
-    "unit_count": "1 Count",
-    "included_components": "Adapter, Plant Pot, Plant Selection Guide, Purifier Unit, User Manual Guide",
-    "additional_features": "",
     "customer_rating": "4.2 out of 5 stars",
     "review_count": 20,
     "source_link": "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
@@ -485,14 +1308,150 @@
     "amazon_long": "https://www.amazon.in/Purifier-Personal-Accessory-Activated-Customised/dp/B0BDX9ZN46?pd_rd_w=9xdiR&content-id=amzn1.sym.38ab170c-68e6-4e35-87b8-c345099a6660&pf_rd_p=38ab170c-68e6-4e35-87b8-c345099a6660&pf_rd_r=R6GTDES5PX0XJQYMTYDG&pd_rd_wg=lfwcJ&pd_rd_r=f51a545f-bfe9-4cb9-8c09-80a05c9d1d03&pd_rd_i=B0BDX9ZN46&psc=1&linkCode=ll1&tag=vibedrips-21&linkId=5c916aa6efa9e9311d8d80b336bcea25&language=en_IN&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/4qf6cUh",
     "timestamp": "2026-01-03T14:46:29.000Z",
-    "manufacturer": "Urban Air Labs Pvt Ltd",
-    "manufacturer_contact": "",
-    "packer": "Urban Air Labs Pvt. Ltd.",
-    "importer": "",
-    "country_of_origin": "India",
-    "product_type": "",
     "featured": false,
-    "trending": false
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "1 kg 200 g",
+        "priority": 1
+      },
+      {
+        "key": "dimensions",
+        "label": "Dimensions",
+        "value": "16D x 16W x 19H Centimeters",
+        "priority": 1
+      },
+      {
+        "key": "color",
+        "label": "Color",
+        "value": "Wood Finish",
+        "priority": 1
+      },
+      {
+        "key": "origin",
+        "label": "Made in",
+        "value": "India",
+        "priority": 2
+      }
+    ],
+    "additionalInfo": {
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "23"
+        },
+        {
+          "key": "numberOfPieces",
+          "label": "Number Of Pieces",
+          "category": "Product Specs",
+          "value": "1"
+        },
+        {
+          "key": "unitCount",
+          "label": "Unit Count",
+          "category": "Product Specs",
+          "value": "1 Count"
+        },
+        {
+          "key": "includedComponents",
+          "label": "Included Components",
+          "category": "Product Specs",
+          "value": "Adapter, Plant Pot, Plant Selection Guide, Purifier Unit, User Manual Guide"
+        }
+      ],
+      "Books": [
+        {
+          "key": "publisher",
+          "label": "Publisher",
+          "category": "Books",
+          "value": "Urban Air Labs Pvt Ltd"
+        }
+      ],
+      "Manufacturing": [
+        {
+          "key": "manufacturer",
+          "label": "Manufacturer",
+          "category": "Manufacturing",
+          "value": "Urban Air Labs Pvt Ltd"
+        },
+        {
+          "key": "packer",
+          "label": "Packer",
+          "category": "Manufacturing",
+          "value": "Urban Air Labs Pvt. Ltd."
+        }
+      ],
+      "Technical": [
+        {
+          "key": "item_model_number",
+          "label": "Item Model Number",
+          "category": "Technical",
+          "value": "Wood Finish"
+        },
+        {
+          "key": "wattage",
+          "label": "Wattage",
+          "category": "Technical",
+          "value": "8 Watts"
+        },
+        {
+          "key": "noise_level",
+          "label": "Noise Level",
+          "category": "Technical",
+          "value": "12 Decibels"
+        }
+      ],
+      "Other": [
+        {
+          "key": "floor_area",
+          "label": "Floor Area",
+          "category": "Other",
+          "value": "80 Square Feet"
+        },
+        {
+          "key": "manufacture_year",
+          "label": "Manufacture Year",
+          "category": "Other",
+          "value": "2022"
+        },
+        {
+          "key": "net_quantity",
+          "label": "Net Quantity",
+          "category": "Other",
+          "value": "1.00 Count"
+        },
+        {
+          "key": "specification_met",
+          "label": "Specification Met",
+          "category": "Other",
+          "value": "Certified HEPA"
+        },
+        {
+          "key": "filter_class",
+          "label": "Filter Class",
+          "category": "Other",
+          "value": "Charcoal, Bio, BreathingRoots"
+        }
+      ]
+    },
+    "drop_signals": {
+      "has_reference_media": false,
+      "media_count": 1,
+      "regional_availability": false,
+      "available_regions": [],
+      "influencer_presence": false,
+      "is_global": false,
+      "is_high_visibility": false,
+      "is_social_proof": false,
+      "is_this_month": true,
+      "drop_categories": [
+        "hot-this-month"
+      ]
+    }
   },
   {
     "asin": "B076HP91MN",
@@ -504,8 +1463,16 @@
     "discount_percentage": 23,
     "discountPercentage": 23,
     "availability": "In Stock",
-    "Error-Flag": 0,
+    "Error-Flag": 1,
     "Error-Reason": "",
+    "Error-Fields": [
+      "Amazon marketplace domain",
+      "Reference Media for similar products ",
+      "includedComponents",
+      "item_model_number",
+      "generic_name",
+      "included_components"
+    ],
     "currency": "INR",
     "symbol": "₹",
     "brand": "Honeywell",
@@ -524,17 +1491,6 @@
       "https://m.media-amazon.com/images/I/61vZ+uHyupL.jpg",
       "https://m.media-amazon.com/images/I/71ZhggCnp5L.jpg"
     ],
-    "color": "",
-    "material": "",
-    "dimensions": "30 x 3.5 x 34 Centimeters",
-    "weight": "300 g",
-    "theme": "",
-    "character": "",
-    "minimum_age": "",
-    "number_of_pieces": "1 Count",
-    "unit_count": "1 Count",
-    "included_components": "Compound Filter",
-    "additional_features": "",
     "customer_rating": "3.7 out of 5 stars",
     "review_count": 10968,
     "source_link": "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
@@ -547,14 +1503,100 @@
     "amazon_long": "https://www.amazon.in/Honeywell-V4-Purifier-Activated-Anti-Bacterial/dp/B076HP91MN?dib=eyJ2IjoiMSJ9.DMNpznGUul9T6izLGaRrS_7SLa_2uJzE5u1xQFYfsXdTIr_r7QH5FgkpY-h7s0GdqUL7CpLXQBzc09WvpnubiTWq752GRhdC6bW6H8D1OwzJDS-y80ZPaAh7TG-WGptzUn2dDDO2IB5lGr7QTxBjht1Kz10h7u4tu_sCyiD-qtdJ4ueJw-9jl4MSDpIov8_kblOY9go2imuY8xscV_XRkSgabiKvaKbS4Jrod35pa-k.fDxOIBLElqu6AKefZYY0JG1xnu8gFQjJrLiAMuRHwvM&dib_tag=se&keywords=dyson%2Bgen1%2Btp%2B10%2Bcool%2Bair%2Bpurifier&qid=1766091295&sr=8-1-spons&aref=Py6BCgwo24&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&th=1&linkCode=ll1&tag=vibedrips-21&linkId=fa3cb3cfddb63901df0018c7a72e87d7&language=en_IN&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/4904RK9",
     "timestamp": "2026-01-03T14:46:29.000Z",
-    "manufacturer": "Secure Connection Limited",
-    "manufacturer_contact": "",
-    "packer": "Honeywell Environmental &amp; Combustion Controls Tain Jin Co Ltd 158 NanHai Road,Teda 300457 TAIN JIN China +61 2266287203",
-    "importer": "Honeywell International (I) Pvt. Ltd Nagpal Business Tower Ground Floor, A/91 Okhla Industrial Phase II New Delhi -110020 India",
-    "country_of_origin": "",
-    "product_type": "",
     "featured": false,
-    "trending": false
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "300 g",
+        "priority": 1
+      },
+      {
+        "key": "dimensions",
+        "label": "Dimensions",
+        "value": "30 x 3.5 x 34 Centimeters",
+        "priority": 1
+      }
+    ],
+    "additionalInfo": {
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "23"
+        },
+        {
+          "key": "numberOfPieces",
+          "label": "Number Of Pieces",
+          "category": "Product Specs",
+          "value": "1 Count"
+        },
+        {
+          "key": "unitCount",
+          "label": "Unit Count",
+          "category": "Product Specs",
+          "value": "1 Count"
+        }
+      ],
+      "Books": [
+        {
+          "key": "publisher",
+          "label": "Publisher",
+          "category": "Books",
+          "value": "Secure Connection Limited"
+        }
+      ],
+      "Manufacturing": [
+        {
+          "key": "manufacturer",
+          "label": "Manufacturer",
+          "category": "Manufacturing",
+          "value": "Secure Connection Limited"
+        },
+        {
+          "key": "packer",
+          "label": "Packer",
+          "category": "Manufacturing",
+          "value": "Honeywell Environmental &amp; Combustion Controls Tain Jin Co Ltd 158 NanHai Road,Teda 300457 TAIN JIN China +61 2266287203"
+        },
+        {
+          "key": "importer",
+          "label": "Importer",
+          "category": "Manufacturing",
+          "value": "Honeywell International (I) Pvt. Ltd Nagpal Business Tower Ground Floor, A/91 Okhla Industrial Phase II New Delhi -110020 India"
+        },
+        {
+          "key": "imported_by",
+          "label": "Imported By",
+          "category": "Manufacturing",
+          "value": "Honeywell International (I) Pvt. Ltd Nagpal Business Tower Ground Floor, A/91 Okhla Industrial Phase II New Delhi -110020 India"
+        }
+      ],
+      "Other": [
+        {
+          "key": "net_quantity",
+          "label": "Net Quantity",
+          "category": "Other",
+          "value": "1 Count"
+        }
+      ]
+    },
+    "drop_signals": {
+      "has_reference_media": false,
+      "media_count": 1,
+      "regional_availability": false,
+      "available_regions": [],
+      "influencer_presence": false,
+      "is_global": false,
+      "is_high_visibility": false,
+      "is_social_proof": false,
+      "is_this_month": true,
+      "drop_categories": [
+        "hot-this-month"
+      ]
+    }
   },
   {
     "asin": "9388550072",
@@ -566,8 +1608,14 @@
     "discount_percentage": 15,
     "discountPercentage": 15,
     "availability": "In Stock",
-    "Error-Flag": 0,
+    "Error-Flag": 1,
     "Error-Reason": "",
+    "Error-Fields": [
+      "Amazon marketplace domain",
+      "Reference Media for similar products ",
+      "language",
+      "generic_name"
+    ],
     "currency": "INR",
     "symbol": "₹",
     "brand": "MyMirror Publishing House",
@@ -585,17 +1633,6 @@
       "https://m.media-amazon.com/images/I/31l0MXnpOaL.jpg",
       "https://m.media-amazon.com/images/I/41BaqqkQY7L.jpg"
     ],
-    "color": "",
-    "material": "Paper",
-    "dimensions": "20.3 x 25.4 x 4.7 cm",
-    "weight": "230 g",
-    "theme": "",
-    "character": "",
-    "minimum_age": "16 years and up",
-    "number_of_pieces": "1 Count",
-    "unit_count": "1 Count",
-    "included_components": "",
-    "additional_features": "",
     "customer_rating": "4.5 out of 5 stars",
     "review_count": 2868,
     "source_link": "https://youtube.com/shorts/iDrWd2I_ZA8?si=ETOPQ2lu22RvWZ0o",
@@ -610,14 +1647,145 @@
     "amazon_long": "https://www.amazon.in/Ikigai-staying-growing-%E0%A4%A6%E0%A5%80%E0%A4%B0%E0%A5%8D%E0%A4%98%E0%A4%BE%E0%A4%AF%E0%A5%81-%E0%A4%A4%E0%A4%82%E0%A4%A6%E0%A5%81%E0%A4%B0%E0%A5%81%E0%A4%B8%E0%A5%8D%E0%A4%A4/dp/9388550072?_encoding=UTF8&dib_tag=se&dib=eyJ2IjoiMSJ9.3KJIJBF6bQK6ha2nTj8UYdN1GhR-u2lh5-175F3wW5Bm8X8ARdtQb8fbpl1HzChIGSryRAmiwMxf8Kqmijaa4bM2Tn4sj0utsSm2jeS2_UtJQ8Oqm3LHzR5VClClt7lXzJXj5nFoqjT_fFW6eaM17zSOrFWY_K54nb3f5Ysec5yKOL4SoUrVK_j0nBOyVKNU2eBdHbfXLIiOSnFVKMFo_nFMdRXpfEy6XmZtnC4Gfis.iQxkB522DkuleLdWbP1F9EEyceL9txhrjwtgtFDBlVQ&qid=1765904055&sr=8-5&linkCode=ll1&tag=vibedrips-21&linkId=11b1cddfdb70c0e8a94d36e1594397e8&language=en_IN&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/48HAvgG",
     "timestamp": "2025-12-16T22:34:42.000Z",
-    "manufacturer": "MyMirror Publishing House Pvt. Ltd.",
-    "manufacturer_contact": "MyMirror Publishing House Pvt. Ltd. 36 Vedantgad Tulshibagwale Colony Pune 09",
-    "packer": "MyMirror Publishing House Pvt. Ltd. 36 Vedantgad Tulshibagwale Colony Pune 09",
-    "importer": "MyMirror Publishing House Pvt. Ltd. 36 Vedantgad Tulshibagwale Colony Pune 09",
-    "country_of_origin": "India",
-    "product_type": "",
     "featured": false,
-    "trending": false
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "230 g",
+        "priority": 1
+      },
+      {
+        "key": "dimensions",
+        "label": "Dimensions",
+        "value": "20.3 x 25.4 x 4.7 cm",
+        "priority": 1
+      },
+      {
+        "key": "material",
+        "label": "Material",
+        "value": "Paper",
+        "priority": 1
+      },
+      {
+        "key": "origin",
+        "label": "Made in",
+        "value": "India",
+        "priority": 2
+      }
+    ],
+    "additionalInfo": {
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "15"
+        },
+        {
+          "key": "minimumAge",
+          "label": "Minimum Age",
+          "category": "Product Specs",
+          "value": "16 years and up"
+        },
+        {
+          "key": "numberOfPieces",
+          "label": "Number Of Pieces",
+          "category": "Product Specs",
+          "value": "1 Count"
+        },
+        {
+          "key": "unitCount",
+          "label": "Unit Count",
+          "category": "Product Specs",
+          "value": "1 Count"
+        }
+      ],
+      "Books": [
+        {
+          "key": "paperback",
+          "label": "Paperback",
+          "category": "Books",
+          "value": "208 pages"
+        },
+        {
+          "key": "publisher",
+          "label": "Publisher",
+          "category": "Books",
+          "value": "MyMirror Publishing House Pvt. Ltd.; First Edition (31 December 2019); MyMirror"
+        },
+        {
+          "key": "isbn_10",
+          "label": "Isbn 10",
+          "category": "Books",
+          "value": "819388132X"
+        },
+        {
+          "key": "isbn_13",
+          "label": "Isbn 13",
+          "category": "Books",
+          "value": "978-8193881323"
+        },
+        {
+          "key": "reading_age",
+          "label": "Reading Age",
+          "category": "Books",
+          "value": "Customer suggested age: 16 years and up"
+        }
+      ],
+      "Manufacturing": [
+        {
+          "key": "manufacturer",
+          "label": "Manufacturer",
+          "category": "Manufacturing",
+          "value": "MyMirror Publishing House Pvt. Ltd."
+        },
+        {
+          "key": "manufacturerContact",
+          "label": "Manufacturer Contact",
+          "category": "Manufacturing",
+          "value": "MyMirror Publishing House Pvt. Ltd. 36 Vedantgad Tulshibagwale Colony Pune 09"
+        },
+        {
+          "key": "packer",
+          "label": "Packer",
+          "category": "Manufacturing",
+          "value": "MyMirror Publishing House Pvt. Ltd. 36 Vedantgad Tulshibagwale Colony Pune 09"
+        },
+        {
+          "key": "importer",
+          "label": "Importer",
+          "category": "Manufacturing",
+          "value": "MyMirror Publishing House Pvt. Ltd. 36 Vedantgad Tulshibagwale Colony Pune 09"
+        }
+      ],
+      "Other": [
+        {
+          "key": "net_quantity",
+          "label": "Net Quantity",
+          "category": "Other",
+          "value": "1 Count"
+        }
+      ]
+    },
+    "drop_signals": {
+      "has_reference_media": false,
+      "media_count": 1,
+      "regional_availability": true,
+      "available_regions": [
+        "AUD"
+      ],
+      "influencer_presence": true,
+      "is_global": false,
+      "is_high_visibility": false,
+      "is_social_proof": true,
+      "is_this_month": true,
+      "drop_categories": [
+        "creator-picks",
+        "hot-this-month"
+      ]
+    }
   },
   {
     "asin": "9388550315",
@@ -629,8 +1797,14 @@
     "discount_percentage": 33,
     "discountPercentage": 33,
     "availability": "In Stock",
-    "Error-Flag": 0,
+    "Error-Flag": 1,
     "Error-Reason": "",
+    "Error-Fields": [
+      "Amazon marketplace domain",
+      "Reference Media for similar products ",
+      "language",
+      "generic_name"
+    ],
     "currency": "INR",
     "symbol": "₹",
     "brand": "MyMirror Publishing House",
@@ -649,17 +1823,6 @@
       "https://m.media-amazon.com/images/I/31ip1HBhMrL.jpg",
       "https://m.media-amazon.com/images/I/41Pkz6-WmvL.jpg"
     ],
-    "color": "",
-    "material": "Paper",
-    "dimensions": "14 x 1.5 x 22 cm",
-    "weight": "210 g",
-    "theme": "",
-    "character": "",
-    "minimum_age": "16 years and up",
-    "number_of_pieces": "1 Count",
-    "unit_count": "1 Count",
-    "included_components": "",
-    "additional_features": "",
     "customer_rating": "4.5 out of 5 stars",
     "review_count": 2868,
     "source_link": "https://youtube.com/shorts/iDrWd2I_ZA8?si=ETOPQ2lu22RvWZ0o",
@@ -674,14 +1837,145 @@
     "amazon_long": "https://www.amazon.in/Ikigai-Francesc-Miralles-H%C3%A9ctor-Garc%C3%ADa/dp/9388550315?_encoding=UTF8&dib_tag=se&dib=eyJ2IjoiMSJ9.3KJIJBF6bQK6ha2nTj8UYdN1GhR-u2lh5-175F3wW5Bm8X8ARdtQb8fbpl1HzChIGSryRAmiwMxf8Kqmijaa4bM2Tn4sj0utsSm2jeS2_UtJQ8Oqm3LHzR5VClClt7lXzJXj5nFoqjT_fFW6eaM17zSOrFWY_K54nb3f5Ysec5yKOL4SoUrVK_j0nBOyVKNU2eBdHbfXLIiOSnFVKMFo_nFMdRXpfEy6XmZtnC4Gfis.iQxkB522DkuleLdWbP1F9EEyceL9txhrjwtgtFDBlVQ&qid=1765904055&sr=8-5&linkCode=ll1&tag=vibedrips-21&linkId=e61a4fcb9edde09b7da5247fa817c60f&language=en_IN&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/4s1oEkS",
     "timestamp": "2025-12-16T22:26:04.000Z",
-    "manufacturer": "MyMirror Publishing House Pvt. Ltd.",
-    "manufacturer_contact": "MyMirror Publishing House Pvt. Ltd. (19 May 2021); MyMirror Publishing House Pvt. Ltd.36 Vedantgad, Tulshibagwale Colony Rd, Sahakarnagar No - 2, Pune, Maharashtra 411009",
-    "packer": "MyMirror Publishing House Pvt. Ltd.36 Vedantgad, Tulshibagwale Colony Rd, Sahakarnagar No - 2, Pune, Maharashtra 411009",
-    "importer": "MyMirror Publishing House Pvt. Ltd.36 Vedantgad, Tulshibagwale Colony Rd, Sahakarnagar No - 2, Pune, Maharashtra 411009",
-    "country_of_origin": "India",
-    "product_type": "",
     "featured": false,
-    "trending": false
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "210 g",
+        "priority": 1
+      },
+      {
+        "key": "dimensions",
+        "label": "Dimensions",
+        "value": "14 x 1.5 x 22 cm",
+        "priority": 1
+      },
+      {
+        "key": "material",
+        "label": "Material",
+        "value": "Paper",
+        "priority": 1
+      },
+      {
+        "key": "origin",
+        "label": "Made in",
+        "value": "India",
+        "priority": 2
+      }
+    ],
+    "additionalInfo": {
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "33"
+        },
+        {
+          "key": "minimumAge",
+          "label": "Minimum Age",
+          "category": "Product Specs",
+          "value": "16 years and up"
+        },
+        {
+          "key": "numberOfPieces",
+          "label": "Number Of Pieces",
+          "category": "Product Specs",
+          "value": "1 Count"
+        },
+        {
+          "key": "unitCount",
+          "label": "Unit Count",
+          "category": "Product Specs",
+          "value": "1 Count"
+        }
+      ],
+      "Books": [
+        {
+          "key": "hardcover",
+          "label": "Hardcover",
+          "category": "Books",
+          "value": "192 pages"
+        },
+        {
+          "key": "publisher",
+          "label": "Publisher",
+          "category": "Books",
+          "value": "MyMirror Publishing House Pvt. Ltd. (19 May 2021); MyMirror Publishing House Pvt. Ltd.36 Vedantgad, Tulshibagwale Colony Rd, Sahakarnagar No - 2, Pune, Maharashtra 411009"
+        },
+        {
+          "key": "isbn_10",
+          "label": "Isbn 10",
+          "category": "Books",
+          "value": "9388550315"
+        },
+        {
+          "key": "isbn_13",
+          "label": "Isbn 13",
+          "category": "Books",
+          "value": "978-9388550314"
+        },
+        {
+          "key": "reading_age",
+          "label": "Reading Age",
+          "category": "Books",
+          "value": "Customer suggested age: 16 years and up"
+        }
+      ],
+      "Manufacturing": [
+        {
+          "key": "manufacturer",
+          "label": "Manufacturer",
+          "category": "Manufacturing",
+          "value": "MyMirror Publishing House Pvt. Ltd."
+        },
+        {
+          "key": "manufacturerContact",
+          "label": "Manufacturer Contact",
+          "category": "Manufacturing",
+          "value": "MyMirror Publishing House Pvt. Ltd. (19 May 2021); MyMirror Publishing House Pvt. Ltd.36 Vedantgad, Tulshibagwale Colony Rd, Sahakarnagar No - 2, Pune, Maharashtra 411009"
+        },
+        {
+          "key": "packer",
+          "label": "Packer",
+          "category": "Manufacturing",
+          "value": "MyMirror Publishing House Pvt. Ltd.36 Vedantgad, Tulshibagwale Colony Rd, Sahakarnagar No - 2, Pune, Maharashtra 411009"
+        },
+        {
+          "key": "importer",
+          "label": "Importer",
+          "category": "Manufacturing",
+          "value": "MyMirror Publishing House Pvt. Ltd.36 Vedantgad, Tulshibagwale Colony Rd, Sahakarnagar No - 2, Pune, Maharashtra 411009"
+        }
+      ],
+      "Other": [
+        {
+          "key": "net_quantity",
+          "label": "Net Quantity",
+          "category": "Other",
+          "value": "1 Count"
+        }
+      ]
+    },
+    "drop_signals": {
+      "has_reference_media": false,
+      "media_count": 1,
+      "regional_availability": true,
+      "available_regions": [
+        "AUD"
+      ],
+      "influencer_presence": true,
+      "is_global": false,
+      "is_high_visibility": false,
+      "is_social_proof": true,
+      "is_this_month": true,
+      "drop_categories": [
+        "creator-picks",
+        "hot-this-month"
+      ]
+    }
   },
   {
     "asin": "9355991479",
@@ -693,8 +1987,14 @@
     "discount_percentage": 25,
     "discountPercentage": 25,
     "availability": "In Stock",
-    "Error-Flag": 0,
+    "Error-Flag": 1,
     "Error-Reason": "",
+    "Error-Fields": [
+      "Amazon marketplace domain",
+      "Reference Media for similar products ",
+      "language",
+      "generic_name"
+    ],
     "currency": "INR",
     "symbol": "₹",
     "brand": "Diamond Books",
@@ -711,17 +2011,6 @@
       "https://m.media-amazon.com/images/I/71F-UTAYaVL.jpg",
       "https://m.media-amazon.com/images/I/61NCrl1aXbL.jpg"
     ],
-    "color": "",
-    "material": "Paper",
-    "dimensions": "21.59 x 13.97 x 1.27 cm",
-    "weight": "210 g",
-    "theme": "",
-    "character": "",
-    "minimum_age": "14 years and up",
-    "number_of_pieces": "",
-    "unit_count": "",
-    "included_components": "",
-    "additional_features": "",
     "customer_rating": "4.1 out of 5 stars",
     "review_count": 1742,
     "source_link": "https://youtube.com/shorts/iDrWd2I_ZA8?si=ETOPQ2lu22RvWZ0o",
@@ -736,14 +2025,119 @@
     "amazon_long": "https://www.amazon.in/Ikigai-Japanese-staying-Young-growing/dp/9355991479?_encoding=UTF8&dib_tag=se&dib=eyJ2IjoiMSJ9.YSxTx1XGPwRl7jBWZBLk_V6ur4uN-ndEzVLZukqdaqb4nDFrculrNk8V5nnDgZSbGSryRAmiwMxf8Kqmijaa4THRh2-DaU4GndGApEea5W56dX7qdC4YSE5aC_DtNOsuSFOVateHf1DRsxvjRkCOEXXGQxuDrfP739gXu7tNChSfg_Ga079LQK1wjnc_XqhaThVMK1Yi5bMnoOzhiiJANn3gQWSprhzCSnfD-_Ru4-o.bOMxlFOr7WanR8nKLUQWOHQKzmua00lJ1x6LWP0LiAM&qid=1765903495&sr=8-3&linkCode=ll1&tag=vibedrips-21&linkId=629df63cde44d8b9923ec5460176d880&language=en_IN&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/3YhVUXP",
     "timestamp": "2025-12-16T22:23:54.000Z",
-    "manufacturer": "Diamond Books",
-    "manufacturer_contact": "Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020",
-    "packer": "Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020",
-    "importer": "",
-    "country_of_origin": "India",
-    "product_type": "",
     "featured": false,
-    "trending": false
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "210 g",
+        "priority": 1
+      },
+      {
+        "key": "dimensions",
+        "label": "Dimensions",
+        "value": "21.59 x 13.97 x 1.27 cm",
+        "priority": 1
+      },
+      {
+        "key": "material",
+        "label": "Material",
+        "value": "Paper",
+        "priority": 1
+      },
+      {
+        "key": "origin",
+        "label": "Made in",
+        "value": "India",
+        "priority": 2
+      }
+    ],
+    "additionalInfo": {
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "25"
+        },
+        {
+          "key": "minimumAge",
+          "label": "Minimum Age",
+          "category": "Product Specs",
+          "value": "14 years and up"
+        }
+      ],
+      "Books": [
+        {
+          "key": "paperback",
+          "label": "Paperback",
+          "category": "Books",
+          "value": "112 pages"
+        },
+        {
+          "key": "publisher",
+          "label": "Publisher",
+          "category": "Books",
+          "value": "Diamond Books; First Edition (24 March 2022); Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020"
+        },
+        {
+          "key": "isbn_10",
+          "label": "Isbn 10",
+          "category": "Books",
+          "value": "9355991479"
+        },
+        {
+          "key": "isbn_13",
+          "label": "Isbn 13",
+          "category": "Books",
+          "value": "978-9355991478"
+        },
+        {
+          "key": "reading_age",
+          "label": "Reading Age",
+          "category": "Books",
+          "value": "14 years and up"
+        }
+      ],
+      "Manufacturing": [
+        {
+          "key": "manufacturer",
+          "label": "Manufacturer",
+          "category": "Manufacturing",
+          "value": "Diamond Books"
+        },
+        {
+          "key": "manufacturerContact",
+          "label": "Manufacturer Contact",
+          "category": "Manufacturing",
+          "value": "Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020"
+        },
+        {
+          "key": "packer",
+          "label": "Packer",
+          "category": "Manufacturing",
+          "value": "Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020"
+        }
+      ]
+    },
+    "drop_signals": {
+      "has_reference_media": false,
+      "media_count": 1,
+      "regional_availability": true,
+      "available_regions": [
+        "AUD"
+      ],
+      "influencer_presence": true,
+      "is_global": false,
+      "is_high_visibility": false,
+      "is_social_proof": true,
+      "is_this_month": true,
+      "drop_categories": [
+        "creator-picks",
+        "hot-this-month"
+      ]
+    }
   },
   {
     "asin": "9355995008",
@@ -755,8 +2149,12 @@
     "discount_percentage": 27,
     "discountPercentage": 27,
     "availability": "In Stock",
-    "Error-Flag": 0,
+    "Error-Flag": 1,
     "Error-Reason": "",
+    "Error-Fields": [
+      "Amazon marketplace domain",
+      "Reference Media for similar products "
+    ],
     "currency": "INR",
     "symbol": "₹",
     "brand": "Diamond Books",
@@ -773,17 +2171,6 @@
       "https://m.media-amazon.com/images/I/61NCrl1aXbL.jpg",
       "https://m.media-amazon.com/images/I/717zFoBzuQL.jpg"
     ],
-    "color": "",
-    "material": "Paper",
-    "dimensions": "20.3 x 25.4 x 4.7 cm",
-    "weight": "300 g",
-    "theme": "",
-    "character": "",
-    "minimum_age": "14 years and up",
-    "number_of_pieces": "",
-    "unit_count": "",
-    "included_components": "",
-    "additional_features": "",
     "customer_rating": "4.1 out of 5 stars",
     "review_count": 1742,
     "source_link": "https://youtube.com/shorts/iDrWd2I_ZA8?si=ETOPQ2lu22RvWZ0o",
@@ -798,13 +2185,126 @@
     "amazon_long": "https://www.amazon.in/Ikigai-Japanese-staying-Young-growing/dp/9355995008?_encoding=UTF8&dib_tag=se&dib=eyJ2IjoiMSJ9.YSxTx1XGPwRl7jBWZBLk_V6ur4uN-ndEzVLZukqdaqb4nDFrculrNk8V5nnDgZSbGSryRAmiwMxf8Kqmijaa4THRh2-DaU4GndGApEea5W56dX7qdC4YSE5aC_DtNOsuSFOVateHf1DRsxvjRkCOEXXGQxuDrfP739gXu7tNChSfg_Ga079LQK1wjnc_XqhaThVMK1Yi5bMnoOzhiiJANn3gQWSprhzCSnfD-_Ru4-o.bOMxlFOr7WanR8nKLUQWOHQKzmua00lJ1x6LWP0LiAM&qid=1765903495&sr=8-3&linkCode=ll1&tag=vibedrips-21&linkId=600e5d1b6f544671217a4b306e1abdaf&language=en_IN&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/48Q68EV",
     "timestamp": "2025-12-16T22:22:32.000Z",
-    "manufacturer": "Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020",
-    "manufacturer_contact": "",
-    "packer": "Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020",
-    "importer": "",
-    "country_of_origin": "India",
-    "product_type": "",
     "featured": false,
-    "trending": false
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "300 g",
+        "priority": 1
+      },
+      {
+        "key": "dimensions",
+        "label": "Dimensions",
+        "value": "20.3 x 25.4 x 4.7 cm",
+        "priority": 1
+      },
+      {
+        "key": "material",
+        "label": "Material",
+        "value": "Paper",
+        "priority": 1
+      },
+      {
+        "key": "origin",
+        "label": "Made in",
+        "value": "India",
+        "priority": 2
+      }
+    ],
+    "additionalInfo": {
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "27"
+        },
+        {
+          "key": "minimumAge",
+          "label": "Minimum Age",
+          "category": "Product Specs",
+          "value": "14 years and up"
+        }
+      ],
+      "Books": [
+        {
+          "key": "language",
+          "label": "Language",
+          "category": "Books",
+          "value": "English"
+        },
+        {
+          "key": "hardcover",
+          "label": "Hardcover",
+          "category": "Books",
+          "value": "112 pages"
+        },
+        {
+          "key": "publisher",
+          "label": "Publisher",
+          "category": "Books",
+          "value": "Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020; First Edition (30 July 2022); Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020"
+        },
+        {
+          "key": "isbn_10",
+          "label": "Isbn 10",
+          "category": "Books",
+          "value": "9355995008"
+        },
+        {
+          "key": "isbn_13",
+          "label": "Isbn 13",
+          "category": "Books",
+          "value": "978-9355995001"
+        },
+        {
+          "key": "reading_age",
+          "label": "Reading Age",
+          "category": "Books",
+          "value": "14 years and up"
+        }
+      ],
+      "Manufacturing": [
+        {
+          "key": "manufacturer",
+          "label": "Manufacturer",
+          "category": "Manufacturing",
+          "value": "Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020"
+        },
+        {
+          "key": "packer",
+          "label": "Packer",
+          "category": "Manufacturing",
+          "value": "Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020"
+        }
+      ],
+      "Other": [
+        {
+          "key": "generic_name",
+          "label": "Generic Name",
+          "category": "Other",
+          "value": "Books"
+        }
+      ]
+    },
+    "drop_signals": {
+      "has_reference_media": false,
+      "media_count": 1,
+      "regional_availability": true,
+      "available_regions": [
+        "AUD"
+      ],
+      "influencer_presence": true,
+      "is_global": false,
+      "is_high_visibility": false,
+      "is_social_proof": true,
+      "is_this_month": true,
+      "drop_categories": [
+        "creator-picks",
+        "hot-this-month"
+      ]
+    }
   }
 ]

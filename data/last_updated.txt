@@ -1,5 +1,5 @@
 VibeDrips Data Processing Summary
-Generated: 2026-01-05T06:21:45.286Z
+Generated: 2026-01-05T18:37:15.038Z
 
 📊 STATISTICS
 - Total Rows Processed: 23
@@ -9,7 +9,7 @@ Generated: 2026-01-05T06:21:45.286Z
 
 ⚠️ VALIDATION
 - Records Flagged: 3
-- Auto-corrected: 3
+- Field Conflicts: 23
 - Error Breakdown:
   • DISCOUNT_MISMATCH: 2
   • INVALID_ORIGINAL: 1
@@ -20,11 +20,17 @@ Generated: 2026-01-05T06:21:45.286Z
 
 📦 CATEGORIES
 - Categories Found: 4
-- Top Categories: Books, Furniture, General, Beauty & Personal Care
+- Top Categories: Books, Furniture, , Beauty & Personal Care
 
 🏷️ BRANDS
 - Brands Found: 14
 - Top Brands: HUTCHINSON PUBLISHING - TRADE, Cornerstone Press, MyMirror Publishing House, Levoit, Breville
+
+🎬 DROPS
+- 🎬 Creator Picks: 7 products
+- 🌍 Global Drops: 0 products
+- 📱 Viral Reels: 0 products
+- 🔥 Hot This Month: 23 products
 
 📁 FILES BEFORE DELETION
 - last_updated.txt
@@ -33,18 +39,15 @@ Generated: 2026-01-05T06:21:45.286Z
 📁 FILES DELETED
 - None
 
-📁 FILES PRESENT AFTER DELETION
-- last_updated.txt
-- products.csv
-
-
 📁 FILES GENERATED
 - products-AUD.json (10 products)
 - products-INR.json (13 products)
 - currencies.json (manifest)
+- drops.json (drops manifest)
 
 📁 FINAL FILES PRESENT
 - currencies.json
+- drops.json
 - last_updated.txt
 - products-AUD.json
 - products-INR.json
