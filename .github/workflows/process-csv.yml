@@ -4,10 +4,12 @@ name: Process CSV Data
 
 on:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 0 * * *'  # Daily at midnight UTC
   push:
     paths:
       - 'data/products.csv'
+      - 'convert-csv.js'
+      - 'validation-config.js'
   workflow_dispatch:
 
 permissions:
@@ -31,82 +33,254 @@ jobs:
           npm init -y
           npm install csv-parser
 
-      # NEW: Fix Git cached/ghost files
+      # Clean cached/ghost files from Git index
       - name: Remove cached ghost files
         run: |
           echo "🔍 Checking for cached/ghost files..."
-          # List all files in git index
           echo "📋 Files in Git index:"
           git ls-files data/
-          
-          # List actual files on filesystem
+
           echo "📋 Files on filesystem:"
           ls -la data/ || echo "Directory doesn't exist yet"
-          
-          # Remove ghost JSON files from git cache
+
           echo "🗑️ Removing cached JSON files..."
-          git rm --cached data/products-*.json || echo "No cached product files found"
-          git rm --cached data/currencies.json || echo "No cached currencies file found"
-          
-          # Verify removal
+          git rm --cached data/products-*.json 2>/dev/null || echo "No cached product files"
+          git rm --cached data/currencies.json 2>/dev/null || echo "No cached currencies file"
+          git rm --cached data/drops.json 2>/dev/null || echo "No cached drops file"
+          git rm --cached data/influencers.json 2>/dev/null || echo "No cached influencers file"
+          git rm --cached data/collections.json 2>/dev/null || echo "No cached collections file"
+          git rm --cached data/errors.json 2>/dev/null || echo "No cached errors file"
+
           echo "✅ Git index after cleanup:"
           git ls-files data/
 
+      # Clean physical files from filesystem
       - name: Clean old physical files
         run: |
-          # Clean any remaining physical files
+          echo "🧹 Cleaning old JSON files..."
           find data/ -name "products-*.json" -type f -delete 2>/dev/null || true
           rm -f data/currencies.json 2>/dev/null || true
-          echo "🧹 Physical file cleanup complete"
+          rm -f data/drops.json 2>/dev/null || true
+          rm -f data/influencers.json 2>/dev/null || true
+          rm -f data/collections.json 2>/dev/null || true
+          rm -f data/errors.json 2>/dev/null || true
+          echo "✅ Physical file cleanup complete"
 
-      # OPTIONAL: Auto-bump cache versions (timestamp-based)
+      # Auto-bump cache versions
       - name: Bump cache versions
         run: |
           echo "🔢 Auto-bumping version numbers..."
-          
+
           # Get current date for DATA_VERSION (YYYYMMDD)
           DATA_TS=$(date +%Y%m%d)
-          
+
           # Update product-loader.js DATA_VERSION
           if [ -f "assets/js/product-loader.js" ]; then
             sed -i "s/const DATA_VERSION = '[^']*'/const DATA_VERSION = '${DATA_TS}-auto'/" assets/js/product-loader.js
             echo "✅ Updated DATA_VERSION to ${DATA_TS}-auto"
           fi
-          
+
           # Get full timestamp for CACHE_VERSION (YYYYMMDDTHHMMSS)
           SW_TS=$(date +%Y%m%dT%H%M%S)
           NEW_VERSION="v${SW_TS}"
-          
+
           # Update CACHE_VERSION in sw.js
           if [ -f "sw.js" ]; then
             sed -i "s/const CACHE_VERSION = 'v[^']*'/const CACHE_VERSION = '${NEW_VERSION}'/" sw.js
             echo "✅ Updated CACHE_VERSION to ${NEW_VERSION}"
           fi
 
+      # Run CSV to JSON conversion
       - name: Convert CSV to JSON
         run: |
+          echo "🔄 Starting CSV conversion..."
           cat data/products.csv | node convert-csv.js
+          echo "✅ Conversion complete"
 
+      # Verify all manifest files were generated
+      - name: Verify manifest generation
+        run: |
+          echo "🔍 Verifying generated manifest files..."
+
+          MISSING_FILES=()
+          CRITICAL_MISSING=()
+
+          # Check drops.json (CRITICAL)
+          if [ -f "data/drops.json" ]; then
+            echo "✅ drops.json exists"
+            DROPS_COUNT=$(cat data/drops.json | jq '.drops_by_category | to_entries | length' 2>/dev/null || echo "N/A")
+            echo "   Categories: ${DROPS_COUNT}"
+          else
+            echo "❌ drops.json MISSING"
+            CRITICAL_MISSING+=("drops.json")
+          fi
+
+          # Check currencies.json (CRITICAL)
+          if [ -f "data/currencies.json" ]; then
+            echo "✅ currencies.json exists"
+            CURRENCY_COUNT=$(cat data/currencies.json | jq '.available_currencies | length' 2>/dev/null || echo "N/A")
+            echo "   Currencies: ${CURRENCY_COUNT}"
+          else
+            echo "❌ currencies.json MISSING"
+            CRITICAL_MISSING+=("currencies.json")
+          fi
+
+          # Check errors.json (CRITICAL for v7.0)
+          if [ -f "data/errors.json" ]; then
+            echo "✅ errors.json exists"
+            ERROR_COUNT=$(cat data/errors.json | jq '.flagged_products | length' 2>/dev/null || echo "N/A")
+            ERROR_RATE=$(cat data/errors.json | jq '.summary.error_rate' 2>/dev/null || echo "N/A")
+            echo "   Flagged products: ${ERROR_COUNT}"
+            echo "   Error rate: ${ERROR_RATE}%"
+          else
+            echo "❌ errors.json MISSING"
+            CRITICAL_MISSING+=("errors.json")
+          fi
+
+          # Check influencers.json (OPTIONAL)
+          if [ -f "data/influencers.json" ]; then
+            echo "✅ influencers.json exists"
+            INFLUENCER_COUNT=$(cat data/influencers.json | jq 'keys | length' 2>/dev/null || echo "N/A")
+            echo "   Influencers: ${INFLUENCER_COUNT}"
+          else
+            echo "⚠️  influencers.json MISSING (expected if no influencers in CSV)"
+            MISSING_FILES+=("influencers.json")
+          fi
+
+          # Check collections.json (OPTIONAL)
+          if [ -f "data/collections.json" ]; then
+            echo "✅ collections.json exists"
+            COLLECTION_COUNT=$(cat data/collections.json | jq 'keys | length' 2>/dev/null || echo "N/A")
+            echo "   Collections: ${COLLECTION_COUNT}"
+          else
+            echo "⚠️  collections.json MISSING (expected if no manual collections in CSV)"
+            MISSING_FILES+=("collections.json")
+          fi
+
+          # Fail if critical files are missing
+          if [ ${#CRITICAL_MISSING[@]} -eq 0 ]; then
+            echo ""
+            echo "✅ All critical manifest files present"
+          else
+            echo ""
+            echo "❌ ERROR: Critical manifest files missing: ${CRITICAL_MISSING[@]}"
+            exit 1
+          fi
+
+      # Quality checks on error rates
+      - name: Quality gate checks
+        run: |
+          echo "🔍 Running quality gate checks..."
+
+          if [ -f "data/errors.json" ]; then
+            ERROR_RATE=$(cat data/errors.json | jq '.summary.error_rate' 2>/dev/null || echo "0")
+            TOTAL_PRODUCTS=$(cat data/errors.json | jq '.summary.total_products' 2>/dev/null || echo "0")
+            FLAGGED=$(cat data/errors.json | jq '.flagged_products | length' 2>/dev/null || echo "0")
+
+            echo "📊 Quality Metrics:"
+            echo "   Total products: ${TOTAL_PRODUCTS}"
+            echo "   Flagged products: ${FLAGGED}"
+            echo "   Error rate: ${ERROR_RATE}%"
+
+            # Warning thresholds
+            if (( $(echo "$ERROR_RATE > 20" | bc -l 2>/dev/null || echo 0) )); then
+              echo "⚠️  WARNING: Error rate exceeds 20% threshold"
+            elif (( $(echo "$ERROR_RATE > 10" | bc -l 2>/dev/null || echo 0) )); then
+              echo "⚠️  NOTICE: Error rate above 10%, consider reviewing data quality"
+            else
+              echo "✅ Error rate within acceptable limits"
+            fi
+          else
+            echo "⚠️  Skipping quality checks - errors.json not found"
+          fi
+
+      # List all generated files with sizes
       - name: List generated files
         run: |
-          echo "📁 Generated files:"
-          ls -la data/
-          echo "📁 Git index files:"
+          echo "📁 Generated files in data/:"
+          ls -lh data/ | grep -E '\.(json|txt|csv)$'
+          echo ""
+          echo "📊 File sizes:"
+          du -h data/*.json 2>/dev/null || echo "No JSON files found"
+          echo ""
+          echo "📋 Files tracked in Git:"
           git ls-files data/
 
+      # Commit all processed data and manifests
       - name: Commit processed data
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          
-          # Add all generated files + version bumps
-          git add data/products-*.json data/currencies.json data/last_updated.txt
-          git add sw.js assets/js/product-loader.js 2>/dev/null || true
-          
+
+          echo "📝 Staging files for commit..."
+
+          # Add all currency-specific product files
+          git add data/products-*.json 2>/dev/null || echo "No product files to add"
+
+          # Add all manifest files (including new errors.json)
+          git add data/currencies.json 2>/dev/null || echo "No currencies.json"
+          git add data/drops.json 2>/dev/null || echo "No drops.json"
+          git add data/influencers.json 2>/dev/null || echo "No influencers.json"
+          git add data/collections.json 2>/dev/null || echo "No collections.json"
+          git add data/errors.json 2>/dev/null || echo "No errors.json"
+          git add data/last_updated.txt 2>/dev/null || echo "No last_updated.txt"
+
+          # Add version bump files
+          git add sw.js 2>/dev/null || echo "No sw.js"
+          git add assets/js/product-loader.js 2>/dev/null || echo "No product-loader.js"
+
+          echo "📋 Staged changes:"
+          git status --short
+
           # Check if there are changes to commit
           if git diff --staged --quiet; then
-            echo "No changes to commit"
+            echo "ℹ️  No changes to commit"
           else
-            git commit -m "🔄 Process CSV data + auto-bump versions - $(date)"
+            # Get error stats for commit message
+            ERROR_RATE="N/A"
+            FLAGGED_COUNT="0"
+            if [ -f "data/errors.json" ]; then
+              ERROR_RATE=$(cat data/errors.json | jq -r '.summary.error_rate' 2>/dev/null || echo "N/A")
+              FLAGGED_COUNT=$(cat data/errors.json | jq '.flagged_products | length' 2>/dev/null || echo "0")
+            fi
+
+            COMMIT_MSG="🔄 Process CSV data + auto-bump versions
+
+Generated files:
+- Currency products: $(ls data/products-*.json 2>/dev/null | wc -l) files
+- Manifests: currencies.json, drops.json, errors.json
+- Optional: influencers.json, collections.json
+
+Quality metrics:
+- Flagged products: ${FLAGGED_COUNT}
+- Error rate: ${ERROR_RATE}%
+
+Timestamp: $(date -u +"%Y-%m-%d %H:%M:%S UTC")"
+
+            git commit -m "$COMMIT_MSG"
+            echo "✅ Changes committed"
             git push
+            echo "✅ Changes pushed to repository"
           fi
+
+      # Post-process summary
+      - name: Summary
+        if: always()
+        run: |
+          echo ""
+          echo "=========================================="
+          echo "📊 PROCESSING SUMMARY"
+          echo "=========================================="
+          echo ""
+
+          if [ -f "data/last_updated.txt" ]; then
+            echo "📄 Processing Report:"
+            cat data/last_updated.txt
+          else
+            echo "⚠️  No processing report generated"
+          fi
+
+          echo ""
+          echo "=========================================="
+          echo "✅ Workflow Complete"
+          echo "=========================================="
