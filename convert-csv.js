@@ -587,6 +587,122 @@ function computeDropSignals(data, referenceMedia, regionalVariants, releaseDate)
 }
 
 // ============================================
+// NEW: INFLUENCERS & COLLECTIONS AGGREGATION
+// ============================================
+
+function generateInfluencersJSON(products) {
+  const influencers = {};
+  
+  products.forEach(product => {
+    if (!product.influencer) return;
+    
+    if (!influencers[product.influencer]) {
+      influencers[product.influencer] = {
+        name: product.influencer,
+        productCount: 0,
+        totalValue: 0,
+        categories: new Set(),
+        brands: new Set(),
+        currencies: new Set(),
+        products: []
+      };
+    }
+    
+    const inf = influencers[product.influencer];
+    inf.productCount++;
+    inf.totalValue += product.price || 0;
+    if (product.category) inf.categories.add(product.category);
+    if (product.brand) inf.brands.add(product.brand);
+    if (product.currency) inf.currencies.add(product.currency);
+    
+    inf.products.push({
+      asin: product.asin,
+      name: product.name,
+      price: product.price,
+      currency: product.currency,
+      main_image: product.main_image,
+      affiliate_link: product.affiliate_link,
+      referenceMedia: product.referenceMedia || [],
+      drop_categories: product.drop_signals?.drop_categories || []
+    });
+  });
+  
+  // Convert Sets to Arrays and sort products by price (desc)
+  Object.values(influencers).forEach(inf => {
+    inf.categories = Array.from(inf.categories);
+    inf.brands = Array.from(inf.brands);
+    inf.currencies = Array.from(inf.currencies);
+    inf.products.sort((a, b) => (b.price || 0) - (a.price || 0));
+  });
+  
+  return influencers;
+}
+
+function generateCollectionsJSON(products) {
+  const collections = {};
+  
+  products.forEach(product => {
+    if (!product.manual_collections || product.manual_collections.length === 0) return;
+    
+    product.manual_collections.forEach(collectionName => {
+      if (!collections[collectionName]) {
+        collections[collectionName] = {
+          name: collectionName,
+          productCount: 0,
+          totalValue: 0,
+          categories: new Set(),
+          brands: new Set(),
+          currencies: new Set(),
+          influencers: new Set(),
+          priceRange: { min: Infinity, max: 0 },
+          products: []
+        };
+      }
+      
+      const col = collections[collectionName];
+      col.productCount++;
+      col.totalValue += product.price || 0;
+      if (product.category) col.categories.add(product.category);
+      if (product.brand) col.brands.add(product.brand);
+      if (product.currency) col.currencies.add(product.currency);
+      if (product.influencer) col.influencers.add(product.influencer);
+      
+      if (product.price) {
+        col.priceRange.min = Math.min(col.priceRange.min, product.price);
+        col.priceRange.max = Math.max(col.priceRange.max, product.price);
+      }
+      
+      col.products.push({
+        asin: product.asin,
+        name: product.name,
+        price: product.price,
+        currency: product.currency,
+        main_image: product.main_image,
+        affiliate_link: product.affiliate_link,
+        influencer: product.influencer,
+        drop_categories: product.drop_signals?.drop_categories || []
+      });
+    });
+  });
+  
+  // Convert Sets to Arrays, fix price ranges, sort products
+  Object.values(collections).forEach(col => {
+    col.categories = Array.from(col.categories);
+    col.brands = Array.from(col.brands);
+    col.currencies = Array.from(col.currencies);
+    col.influencers = Array.from(col.influencers);
+    
+    // Fix price range if no products had prices
+    if (col.priceRange.min === Infinity) col.priceRange.min = 0;
+    
+    // Sort products by price (desc)
+    col.products.sort((a, b) => (b.price || 0) - (a.price || 0));
+  });
+  
+  return collections;
+}
+
+// ============================================
 // VALIDATION SYSTEM
 // ============================================
 
@@ -1185,13 +1301,33 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
       fs.writeFileSync(dropsManifestPath, JSON.stringify(dropsManifest, null, 2));
       console.log(`🎬 Drops manifest created: drops.json`);
 
+      // ============================================
+      // NEW: GENERATE INFLUENCERS.JSON
+      // ============================================
+      console.log(`\n👤 Generating influencers.json...`);
+      const influencersData = generateInfluencersJSON(allProducts);
+      const influencersPath = path.join(dataDir, 'influencers.json');
+      fs.writeFileSync(influencersPath, JSON.stringify(influencersData, null, 2));
+      console.log(`✅ Influencers manifest created: influencers.json (${Object.keys(influencersData).length} influencers)`);
+
+      // ============================================
+      // NEW: GENERATE COLLECTIONS.JSON
+      // ============================================
+      console.log(`\n💎 Generating collections.json...`);
+      const collectionsData = generateCollectionsJSON(allProducts);
+      const collectionsPath = path.join(dataDir, 'collections.json');
+      fs.writeFileSync(collectionsPath, JSON.stringify(collectionsData, null, 2));
+      console.log(`✅ Collections manifest created: collections.json (${Object.keys(collectionsData).length} collections)`);
+
       const finalFiles = fs.existsSync(dataDir) ? fs.readdirSync(dataDir) : [];
       const generatedFiles = new Set([
         'last_updated.txt',
         'products.csv',
         ...Object.keys(currencyResults).map(c => `products-${c}.json`),
         'currencies.json',
-        'drops.json'
+        'drops.json',
+        'influencers.json',
+        'collections.json'
       ]);
 
       const remnantFiles = finalFiles.filter(file => !generatedFiles.has(file));
@@ -1225,13 +1361,15 @@ ${Object.entries(errorBreakdown).length > 0 ? '- Error Breakdown:\n' + Object.en
 - Brands Found: ${processingStats.brandsFound.size}
 - Top Brands: ${Array.from(processingStats.brandsFound).slice(0, 5).join(', ') || 'None'}
 
-🎬 CREATORS
-- Influencers Found: ${processingStats.influencersFound.size}
-- Featured Creators: ${Array.from(processingStats.influencersFound).slice(0, 10).join(', ') || 'None'}
+👤 INFLUENCERS
+- Products with influencers: ${allProducts.filter(p => p.influencer).length}
+- Unique influencers: ${Object.keys(influencersData).length}
+- List: ${Object.keys(influencersData).join(', ') || 'None'}
 
 💎 COLLECTIONS
-- Manual Collections: ${processingStats.manualCollectionsFound.size}
-- Available: ${Array.from(processingStats.manualCollectionsFound).join(', ') || 'None'}
+- Products in collections: ${allProducts.filter(p => p.manual_collections && p.manual_collections.length > 0).length}
+- Unique collections: ${Object.keys(collectionsData).length}
+- List: ${Object.keys(collectionsData).join(', ') || 'None'}
 
 🌿 SEASONS
 - Seasons Detected: ${processingStats.seasonsFound.size}
@@ -1252,6 +1390,8 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
 ${Object.keys(currencyResults).map(currency => `- products-${currency}.json (${currencyResults[currency].length} products)`).join('\n')}
 - currencies.json (manifest)
 - drops.json (drops manifest)
+- influencers.json (${Object.keys(influencersData).length} influencers)
+- collections.json (${Object.keys(collectionsData).length} collections)
 
 📁 FINAL FILES PRESENT
 ${finalFiles.map(file => `- ${file}`).join('\n') || '- None'}
@@ -1263,8 +1403,8 @@ ${remnantFiles.length > 0 ? `\n⚠️ Remnant files detected:\n${remnantFiles.ma
       console.log(`📁 Generated ${Object.keys(currencyResults).length} currency files`);
       console.log(`📊 Processed ${processingStats.processed} products from ${processingStats.total} rows`);
       console.log(`💰 Currencies: ${Array.from(processingStats.currenciesFound).join(', ')}`);
-      console.log(`🎬 Influencers: ${processingStats.influencersFound.size}`);
-      console.log(`💎 Collections: ${processingStats.manualCollectionsFound.size}`);
+      console.log(`👤 Influencers: ${Object.keys(influencersData).length}`);
+      console.log(`💎 Collections: ${Object.keys(collectionsData).length}`);
       console.log(`🌿 Seasons: ${Array.from(processingStats.seasonsFound).join(', ')}`);
 
       if (processingStats.validationErrors > 0) {
@@ -1285,8 +1425,8 @@ ${remnantFiles.length > 0 ? `\n⚠️ Remnant files detected:\n${remnantFiles.ma
     });
 }
 
-console.log('🚀 VibeDrips Multi-Currency Product Processor v5.0');
+console.log('🚀 VibeDrips Multi-Currency Product Processor v6.0');
 console.log('================================================');
-console.log('✨ With Dates, Seasons, Collections & Creators');
+console.log('✨ With Influencers & Collections Aggregation');
 console.log('');
 convertCsvToJson();
