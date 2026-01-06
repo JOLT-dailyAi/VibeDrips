@@ -206,7 +206,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 369,
+      "product_age_days": 370,
       "drop_categories": []
     }
   },
@@ -377,7 +377,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 735,
+      "product_age_days": 736,
       "drop_categories": []
     }
   },
@@ -545,7 +545,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 735,
+      "product_age_days": 736,
       "drop_categories": []
     }
   },
@@ -720,7 +720,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 735,
+      "product_age_days": 736,
       "drop_categories": []
     }
   },
@@ -933,7 +933,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 1100,
+      "product_age_days": 1101,
       "drop_categories": []
     }
   },
@@ -1139,7 +1139,7 @@
       "is_high_visibility": false,
       "is_social_proof": true,
       "is_new_release": false,
-      "product_age_days": 1465,
+      "product_age_days": 1466,
       "drop_categories": [
         "creator-picks"
       ]
@@ -1343,7 +1343,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 1465,
+      "product_age_days": 1466,
       "drop_categories": []
     }
   },

@@ -1,0 +1,106 @@
+{
+  "categories": {
+    "creator-picks": {
+      "label": "Creator Picks",
+      "emoji": "🎬",
+      "subtitle": "Featured by content creators",
+      "priority": 1
+    },
+    "global-drops": {
+      "label": "Global Drops",
+      "emoji": "🌍",
+      "subtitle": "Available across regions",
+      "priority": 2
+    },
+    "viral-reels": {
+      "label": "Viral Reels",
+      "emoji": "📱",
+      "subtitle": "Trending on social platforms",
+      "priority": 3
+    },
+    "new-releases": {
+      "label": "New Releases",
+      "emoji": "🆕",
+      "subtitle": "Recently launched products",
+      "priority": 4
+    }
+  },
+  "last_updated": "2026-01-06T08:35:01.534Z",
+  "drops_by_category": {
+    "creator-picks": {
+      "label": "Creator Picks",
+      "emoji": "🎬",
+      "subtitle": "Featured by content creators",
+      "priority": 1,
+      "productCount": 7,
+      "products": [
+        {
+          "asin": "1529902401",
+          "currency": "AUD",
+          "influencer": null,
+          "release_date": "2023-08-01T00:00:00.000Z"
+        },
+        {
+          "asin": "B0BCC8KZHK",
+          "currency": "INR",
+          "influencer": null,
+          "release_date": "2022-01-01T00:00:00.000Z"
+        },
+        {
+          "asin": "178633089X",
+          "currency": "AUD",
+          "influencer": null,
+          "release_date": "2017-09-18T00:00:00.000Z"
+        },
+        {
+          "asin": "9388550315",
+          "currency": "INR",
+          "influencer": null,
+          "release_date": null
+        },
+        {
+          "asin": "9388550072",
+          "currency": "INR",
+          "influencer": null,
+          "release_date": null
+        },
+        {
+          "asin": "9355995008",
+          "currency": "INR",
+          "influencer": null,
+          "release_date": null
+        },
+        {
+          "asin": "9355991479",
+          "currency": "INR",
+          "influencer": null,
+          "release_date": null
+        }
+      ]
+    },
+    "global-drops": {
+      "label": "Global Drops",
+      "emoji": "🌍",
+      "subtitle": "Available across regions",
+      "priority": 2,
+      "productCount": 0,
+      "products": []
+    },
+    "viral-reels": {
+      "label": "Viral Reels",
+      "emoji": "📱",
+      "subtitle": "Trending on social platforms",
+      "priority": 3,
+      "productCount": 0,
+      "products": []
+    },
+    "new-releases": {
+      "label": "New Releases",
+      "emoji": "🆕",
+      "subtitle": "Recently launched products",
+      "priority": 4,
+      "productCount": 0,
+      "products": []
+    }
+  }
+}

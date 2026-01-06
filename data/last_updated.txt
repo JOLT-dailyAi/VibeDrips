@@ -1,5 +1,5 @@
 VibeDrips Data Processing Summary
-Generated: 2026-01-05T20:21:41.348Z
+Generated: 2026-01-06T08:35:01.536Z
 
 📊 STATISTICS
 - Total Rows Processed: 23
@@ -26,17 +26,26 @@ Generated: 2026-01-05T20:21:41.348Z
 - Brands Found: 14
 - Top Brands: HUTCHINSON PUBLISHING - TRADE, Cornerstone Press, MyMirror Publishing House, Levoit, Breville
 
-🎬 CREATORS
-- Influencers Found: 2
-- Featured Creators: HouseFresh, Food Pharmer
+👤 INFLUENCERS
+- Products with influencers: 13
+- Unique influencers: 2
+- List: HouseFresh, Food Pharmer
 
 💎 COLLECTIONS
-- Manual Collections: 0
-- Available: None
+- Products in collections: 0
+- Unique collections: 0
+- List: None
 
 🌿 SEASONS
 - Seasons Detected: 2
 - Active: Winter, Summer
+
+⚠️ ERRORS & VALIDATION
+- Products with errors: 23
+- Error rate: 100%
+- Critical errors: 0
+- Warnings: 1
+- Top error types: DISCOUNT_MISMATCH (2), INVALID_ORIGINAL (1)
 
 🎬 DROPS
 - 🎬 Creator Picks: 7 products
@@ -56,10 +65,16 @@ Generated: 2026-01-05T20:21:41.348Z
 - products-INR.json (13 products)
 - currencies.json (manifest)
 - drops.json (drops manifest)
+- influencers.json (2 influencers)
+- collections.json (0 collections)
+- errors.json (23 flagged products)
 
 📁 FINAL FILES PRESENT
+- collections.json
 - currencies.json
 - drops.json
+- errors.json
+- influencers.json
 - last_updated.txt
 - products-AUD.json
 - products-INR.json

@@ -160,7 +160,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 82,
+      "product_age_days": 83,
       "drop_categories": []
     }
   },
@@ -292,7 +292,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 90,
+      "product_age_days": 91,
       "drop_categories": []
     }
   },
@@ -437,7 +437,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 104,
+      "product_age_days": 105,
       "drop_categories": []
     }
   },
@@ -593,7 +593,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 355,
+      "product_age_days": 356,
       "drop_categories": []
     }
   },
@@ -754,7 +754,7 @@
       "is_high_visibility": false,
       "is_social_proof": true,
       "is_new_release": false,
-      "product_age_days": 888,
+      "product_age_days": 889,
       "drop_categories": [
         "creator-picks"
       ]
@@ -879,7 +879,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 1188,
+      "product_age_days": 1189,
       "drop_categories": []
     }
   },
@@ -996,7 +996,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 1194,
+      "product_age_days": 1195,
       "drop_categories": []
     }
   },
@@ -1120,7 +1120,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 1871,
+      "product_age_days": 1872,
       "drop_categories": []
     }
   },
@@ -1263,7 +1263,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 2490,
+      "product_age_days": 2491,
       "drop_categories": []
     }
   },
@@ -1430,7 +1430,7 @@
       "is_high_visibility": false,
       "is_social_proof": true,
       "is_new_release": false,
-      "product_age_days": 3031,
+      "product_age_days": 3032,
       "drop_categories": [
         "creator-picks"
       ]
