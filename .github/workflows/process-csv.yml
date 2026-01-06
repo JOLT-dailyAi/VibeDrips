@@ -4,7 +4,7 @@ name: Process CSV Data
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Daily at midnight UTC
+    - cron: '0 0 * * *'
   push:
     paths:
       - 'data/products.csv'
@@ -38,10 +38,8 @@ jobs:
           echo "Checking for cached/ghost files..."
           echo "Files in Git index:"
           git ls-files data/
-
           echo "Files on filesystem:"
           ls -la data/ || echo "Directory doesn't exist yet"
-
           echo "Removing cached JSON files..."
           git rm --cached data/products-*.json 2>/dev/null || echo "No cached product files"
           git rm --cached data/currencies.json 2>/dev/null || echo "No cached currencies file"
@@ -49,7 +47,6 @@ jobs:
           git rm --cached data/influencers.json 2>/dev/null || echo "No cached influencers file"
           git rm --cached data/collections.json 2>/dev/null || echo "No cached collections file"
           git rm --cached data/errors.json 2>/dev/null || echo "No cached errors file"
-
           echo "Git index after cleanup:"
           git ls-files data/
 
@@ -90,7 +87,6 @@ jobs:
           echo "Verifying generated manifest files..."
           MISSING_FILES=()
           CRITICAL_MISSING=()
-
           if [ -f "data/drops.json" ]; then
             echo "drops.json exists"
             DROPS_COUNT=$(cat data/drops.json | jq '.drops_by_category | to_entries | length' 2>/dev/null || echo "N/A")
@@ -99,7 +95,6 @@ jobs:
             echo "drops.json MISSING"
             CRITICAL_MISSING+=("drops.json")
           fi
-
           if [ -f "data/currencies.json" ]; then
             echo "currencies.json exists"
             CURRENCY_COUNT=$(cat data/currencies.json | jq '.available_currencies | length' 2>/dev/null || echo "N/A")
@@ -108,7 +103,6 @@ jobs:
             echo "currencies.json MISSING"
             CRITICAL_MISSING+=("currencies.json")
           fi
-
           if [ -f "data/errors.json" ]; then
             echo "errors.json exists"
             ERROR_COUNT=$(cat data/errors.json | jq '.flagged_products | length' 2>/dev/null || echo "N/A")
@@ -119,7 +113,6 @@ jobs:
             echo "errors.json MISSING"
             CRITICAL_MISSING+=("errors.json")
           fi
-
           if [ -f "data/influencers.json" ]; then
             echo "influencers.json exists"
             INFLUENCER_COUNT=$(cat data/influencers.json | jq 'keys | length' 2>/dev/null || echo "N/A")
@@ -128,7 +121,6 @@ jobs:
             echo "influencers.json MISSING (expected if no influencers in CSV)"
             MISSING_FILES+=("influencers.json")
           fi
-
           if [ -f "data/collections.json" ]; then
             echo "collections.json exists"
             COLLECTION_COUNT=$(cat data/collections.json | jq 'keys | length' 2>/dev/null || echo "N/A")
@@ -137,7 +129,6 @@ jobs:
             echo "collections.json MISSING (expected if no manual collections in CSV)"
             MISSING_FILES+=("collections.json")
           fi
-
           if [ ${#CRITICAL_MISSING[@]} -eq 0 ]; then
             echo ""
             echo "All critical manifest files present"
@@ -154,12 +145,10 @@ jobs:
             ERROR_RATE=$(cat data/errors.json | jq '.summary.error_rate' 2>/dev/null || echo "0")
             TOTAL_PRODUCTS=$(cat data/errors.json | jq '.summary.total_products' 2>/dev/null || echo "0")
             FLAGGED=$(cat data/errors.json | jq '.flagged_products | length' 2>/dev/null || echo "0")
-
             echo "Quality Metrics:"
             echo "   Total products: ${TOTAL_PRODUCTS}"
             echo "   Flagged products: ${FLAGGED}"
             echo "   Error rate: ${ERROR_RATE}%"
-
             if (( $(echo "$ERROR_RATE > 20" | bc -l 2>/dev/null || echo 0) )); then
               echo "WARNING: Error rate exceeds 20% threshold"
             elif (( $(echo "$ERROR_RATE > 10" | bc -l 2>/dev/null || echo 0) )); then
@@ -186,7 +175,6 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-
           echo "Staging files for commit..."
           git add data/products-*.json 2>/dev/null || echo "No product files to add"
           git add data/currencies.json 2>/dev/null || echo "No currencies.json"
@@ -197,10 +185,8 @@ jobs:
           git add data/last_updated.txt 2>/dev/null || echo "No last_updated.txt"
           git add sw.js 2>/dev/null || echo "No sw.js"
           git add assets/js/product-loader.js 2>/dev/null || echo "No product-loader.js"
-
           echo "Staged changes:"
           git status --short
-
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
@@ -210,10 +196,8 @@ jobs:
               ERROR_RATE=$(cat data/errors.json | jq -r '.summary.error_rate' 2>/dev/null || echo "N/A")
               FLAGGED_COUNT=$(cat data/errors.json | jq '.flagged_products | length' 2>/dev/null || echo "0")
             fi
-
             PRODUCT_COUNT=$(ls data/products-*.json 2>/dev/null | wc -l)
             TIMESTAMP=$(date -u +"%Y-%m-%d %H:%M:%S UTC")
-
             git commit -m "Process CSV data + auto-bump versions
 
 Generated files:
@@ -226,7 +210,6 @@ Quality metrics:
 - Error rate: ${ERROR_RATE}%
 
 Timestamp: ${TIMESTAMP}"
-
             echo "Changes committed"
             git push
             echo "Changes pushed to repository"
