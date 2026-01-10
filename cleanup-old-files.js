@@ -9,11 +9,8 @@ console.log('===============================================');
 
 // Files that should always be kept
 const KEEP_FILES = [
-    'products.csv',              // Source data
-    'last_updated.txt',          // Processing summary
-    'brand-blacklist.json',      // TSD-1 category artifacts
-    'category-blacklist.json',   // TSD-1 category artifacts
-    'category-whitelist.json'    // TSD-1 category artifacts
+    'products.csv',        // Source data
+    'last_updated.txt'     // Processing summary
 ];
 
 // Pattern for files that should be kept (current generation)
