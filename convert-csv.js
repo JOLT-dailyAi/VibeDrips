@@ -43,6 +43,7 @@ const CURRENCY_PATTERNS = {
 // ============================================
 // DYNAMIC FIELD CLASSIFICATION SYSTEM
 // ============================================
+
 const FIELD_CONFIG = {
   METADATA_PATTERNS: [
     'Influencer', 'influencer',
@@ -61,7 +62,6 @@ const FIELD_CONFIG = {
     /_id$/i,
     /^id$/i
   ],
-
   CORE_FIELDS: [
     'productTitle', 'Title', 'name',
     'brand',
@@ -74,9 +74,9 @@ const FIELD_CONFIG = {
     'reviewCount', 'ReviewCount', 'review_count',
     'Description', 'description',
     'Category', 'categoryHierarchy', 'category', 'subcategory',
-    'itemTypeName', 'productType', 'product_type'
+    'itemTypeName', 'productType', 'product_type',
+    'generic_name'
   ],
-
   PRODUCT_DETAILS_KEYWORDS: {
     weight: { label: 'Weight', priority: 1, patterns: [/weight/i] },
     dimensions: { label: 'Dimensions', priority: 1, patterns: [/dimension/i, /size/i] },
@@ -84,7 +84,6 @@ const FIELD_CONFIG = {
     material: { label: 'Material', priority: 1, patterns: [/material/i, /fabric/i] },
     origin: { label: 'Made in', priority: 2, patterns: [/country.*origin/i, /made.*in/i, /origin/i] }
   },
-
   ADDITIONAL_INFO_CATEGORIES: {
     'Manufacturing': {
       patterns: [/manufacturer/i, /packer/i, /importer/i, /imported.*by/i]
@@ -102,7 +101,6 @@ const FIELD_CONFIG = {
       patterns: [/care/i, /wash/i, /clean/i, /maintenance/i, /instruction/i]
     }
   },
-
   FIELD_ALIASES: {
     'weight': ['weight', 'itemweight', 'productweight', 'netweight'],
     'dimensions': ['dimensions', 'productdimensions', 'itemdimensionslxwxh', 'size'],
@@ -115,9 +113,9 @@ const FIELD_CONFIG = {
 // ============================================
 // SEASONS & COLLECTIONS CONFIG
 // ============================================
+
 const SEASONS_CONFIG = {
   VALID_OPTIONS: ['', 'Winter', 'Summer', 'Monsoon', 'Autumn', 'None'],
-  
   PATTERNS: {
     'Winter': /winter|cold|snow|warm|jacket|sweater|hoodie|thermal/i,
     'Summer': /summer|cool|hot|heat|light|breathable|shorts|tank/i,
@@ -129,6 +127,7 @@ const SEASONS_CONFIG = {
 // ============================================
 // DROPS SYSTEM
 // ============================================
+
 const DROPS_CONFIG = {
   THRESHOLDS: {
     HIGH_VISIBILITY_MEDIA_COUNT: 2,
@@ -143,7 +142,6 @@ const DROPS_CONFIG = {
       'influencer'
     ]
   },
-
   CATEGORIES: {
     'creator-picks': {
       label: 'Creator Picks',
@@ -173,8 +171,60 @@ const DROPS_CONFIG = {
 };
 
 // ============================================
+// CATEGORY EXTRACTION CONFIG (TSD-1)
+// ============================================
+
+// Semantic generic blacklist seed (non-frequency-based)
+const GENERIC_CATEGORY_SEED = [
+  'general',
+  'all products',
+  'all items',
+  'shop now',
+  'best sellers',
+  'top picks',
+  'new arrivals',
+  'hot deals',
+  'special offer',
+  'summer sale',
+  'winter sale',
+  'discount offer',
+  'combo pack',
+  'value pack',
+  'gift pack',
+  'assorted items',
+  'accessories',
+  'miscellaneous items',
+  'home products',
+  'kitchen products',
+  'fashion products',
+  'beauty products',
+  'electronics items',
+  'sports items'
+];
+
+// Marketing adjectives that should be stripped from candidate phrases
+const MARKETING_ADJECTIVES = [
+  'smart',
+  'pro',
+  'ultra',
+  'max',
+  'plus',
+  'mini',
+  'lite',
+  'advanced',
+  'premium',
+  'basic',
+  'new',
+  'latest',
+  'improved',
+  'wireless',
+  'cordless'
+];
+
+// ============================================
 // HELPER FUNCTIONS
 // ============================================
+
 function isMetadataField(fieldName) {
   return FIELD_CONFIG.METADATA_PATTERNS.some(pattern => {
     if (pattern instanceof RegExp) {
@@ -213,7 +263,6 @@ function resolveFieldAlias(fieldName) {
 
 function normalizeValueForComparison(value) {
   if (typeof value !== 'string') return String(value).toLowerCase().trim();
-
   return value
     .toLowerCase()
     .trim()
@@ -233,23 +282,18 @@ function normalizeValueForComparison(value) {
 
 function isValueInCoreFields(value, coreProductData) {
   if (!value || isEmptyValue(value)) return false;
-
   const normalizedValue = normalizeValueForComparison(value);
   const title = normalizeValueForComparison(coreProductData.name || '');
   const description = normalizeValueForComparison(coreProductData.description || '');
-
   if (normalizedValue.length > 3) {
     return title.includes(normalizedValue) || description.includes(normalizedValue);
   }
-
   return false;
 }
 
 function detectProductDetail(fieldName, value) {
   if (isEmptyValue(value)) return null;
-
   const canonicalField = resolveFieldAlias(fieldName);
-
   for (const [key, config] of Object.entries(FIELD_CONFIG.PRODUCT_DETAILS_KEYWORDS)) {
     if (canonicalField === key || config.patterns.some(pattern => pattern.test(fieldName))) {
       return {
@@ -260,7 +304,6 @@ function detectProductDetail(fieldName, value) {
       };
     }
   }
-
   return null;
 }
 
@@ -297,7 +340,7 @@ function getProductReleaseDate(data) {
       console.warn(`⚠️ Invalid date_first_available: ${data.date_first_available}`);
     }
   }
-  
+
   if (data.publication_date && data.publication_date.trim()) {
     try {
       const date = new Date(data.publication_date);
@@ -306,14 +349,14 @@ function getProductReleaseDate(data) {
       console.warn(`⚠️ Invalid publication_date: ${data.publication_date}`);
     }
   }
-  
+
   if (data.manufacture_year && data.manufacture_year.trim()) {
     const year = parseInt(data.manufacture_year);
     if (year >= 2000 && year <= 2030) {
       return new Date(`${year}-01-01`);
     }
   }
-  
+
   for (const [key, value] of Object.entries(data)) {
     if (key.toLowerCase().includes('year') && value && value.trim()) {
       const year = parseInt(value);
@@ -322,7 +365,7 @@ function getProductReleaseDate(data) {
       }
     }
   }
-  
+
   return null;
 }
 
@@ -335,31 +378,27 @@ function detectSeasonFromText(text, seasonOverride) {
     }
     console.warn(`⚠️ Invalid SeasonOverride: "${override}". Using auto-detect.`);
   }
-  
+
   if (!text) return null;
-  
   const lowerText = text.toLowerCase();
-  
   for (const [season, pattern] of Object.entries(SEASONS_CONFIG.PATTERNS)) {
     if (pattern.test(lowerText)) {
       return season;
     }
   }
-  
   return null;
 }
 
 function extractInfluencerAndCollections(data) {
   const influencer = data.Influencer?.trim() || null;
-  
   const manualCollections = [];
   if (data.ManualCollections && data.ManualCollections.trim()) {
-    const collections = data.ManualCollections.split(/[|,]/).map(c => c.trim()).filter(Boolean);
+    const collections = data.ManualCollections.split(/[|,]/)
+      .map(c => c.trim())
+      .filter(Boolean);
     manualCollections.push(...collections);
   }
-  
   const seasonOverride = data.SeasonOverride?.trim() || '';
-  
   return { influencer, manualCollections, seasonOverride };
 }
 
@@ -398,20 +437,17 @@ function structureProductData(rawData, coreProductData) {
     }
 
     const productDetail = detectProductDetail(fieldName, value);
-
     if (productDetail) {
       const canonicalKey = canonicalField.toLowerCase();
-
       if (seenValues.has(canonicalKey)) {
         const existing = seenValues.get(canonicalKey);
         const existingNormalized = normalizeValueForComparison(existing.value);
-
         if (existingNormalized !== normalizedValue) {
           errorFields.push(fieldName);
           console.warn(`⚠️ CONFLICT in ${canonicalField}:`);
           console.warn(`  ${existing.source}: "${existing.value}"`);
           console.warn(`  ${fieldName}: "${value}"`);
-          console.warn(`  → Keeping first value`);
+          console.warn('  → Keeping first value');
         }
         return;
       }
@@ -433,14 +469,13 @@ function structureProductData(rawData, coreProductData) {
     if (seenValues.has(canonicalKey)) {
       const existing = seenValues.get(canonicalKey);
       const existingNormalized = normalizeValueForComparison(existing.value);
-
       if (existingNormalized !== normalizedValue) {
         errorFields.push(fieldName);
         console.warn(`⚠️ CONFLICT in ${canonicalField}:`);
         console.warn(`  ${existing.source}: "${existing.value}"`);
         console.warn(`  ${fieldName}: "${value}"`);
+        return;
       }
-      return;
     }
 
     if (!seenLabels.has(labelKey)) {
@@ -487,7 +522,6 @@ function detectInfluencerPresence(data, sourceLink, referenceMedia) {
   }
 
   const allLinks = [sourceLink, ...(referenceMedia || [])].filter(Boolean);
-
   return allLinks.some(link => {
     return DROPS_CONFIG.THRESHOLDS.INFLUENCER_KEYWORDS.some(keyword =>
       link.toLowerCase().includes(keyword.toLowerCase())
@@ -521,14 +555,16 @@ function computeDropSignals(data, referenceMedia, regionalVariants, releaseDate)
   const sourceLink = data.sourceLink || data['Product Source Link'] || '';
   const has_reference_media = referenceMedia && referenceMedia.length > 1;
   const media_count = referenceMedia ? referenceMedia.length : (sourceLink ? 1 : 0);
-
   const available_regions = regionalVariants ? Object.keys(regionalVariants) : [];
   const regional_availability = available_regions.length > 0;
-
   const influencer_presence = detectInfluencerPresence(data, sourceLink, referenceMedia);
 
-  const is_global = regional_availability && available_regions.length >= DROPS_CONFIG.THRESHOLDS.MULTI_REGION_THRESHOLD;
-  const is_high_visibility = media_count >= DROPS_CONFIG.THRESHOLDS.HIGH_VISIBILITY_MEDIA_COUNT;
+  const is_global =
+    regional_availability && available_regions.length >= DROPS_CONFIG.THRESHOLDS.MULTI_REGION_THRESHOLD;
+
+  const is_high_visibility =
+    media_count >= DROPS_CONFIG.THRESHOLDS.HIGH_VISIBILITY_MEDIA_COUNT;
+
   const is_social_proof = influencer_presence;
 
   let is_new_release = false;
@@ -572,10 +608,10 @@ function computeDropSignals(data, referenceMedia, regionalVariants, releaseDate)
 
 function generateInfluencersJSON(products) {
   const influencers = {};
-  
+
   products.forEach(product => {
     if (!product.influencer) return;
-    
+
     if (!influencers[product.influencer]) {
       influencers[product.influencer] = {
         name: product.influencer,
@@ -587,37 +623,37 @@ function generateInfluencersJSON(products) {
         products: []
       };
     }
-    
+
     const inf = influencers[product.influencer];
     inf.productCount++;
     inf.totalValue += product.price || 0;
     if (product.category) inf.categories.add(product.category);
     if (product.brand) inf.brands.add(product.brand);
     if (product.currency) inf.currencies.add(product.currency);
-    
-    // ✅ ONLY store ASIN + currency + computed signals
+
+    // ONLY store ASIN + currency + computed signals
     inf.products.push({
       asin: product.asin,
       currency: product.currency,
       drop_categories: product.drop_signals?.drop_categories || []
     });
   });
-  
+
   Object.values(influencers).forEach(inf => {
     inf.categories = Array.from(inf.categories);
     inf.brands = Array.from(inf.brands);
     inf.currencies = Array.from(inf.currencies);
   });
-  
+
   return influencers;
 }
 
 function generateCollectionsJSON(products) {
   const collections = {};
-  
+
   products.forEach(product => {
     if (!product.manual_collections || product.manual_collections.length === 0) return;
-    
+
     product.manual_collections.forEach(collectionName => {
       if (!collections[collectionName]) {
         collections[collectionName] = {
@@ -632,7 +668,7 @@ function generateCollectionsJSON(products) {
           products: []
         };
       }
-      
+
       const col = collections[collectionName];
       col.productCount++;
       col.totalValue += product.price || 0;
@@ -640,36 +676,34 @@ function generateCollectionsJSON(products) {
       if (product.brand) col.brands.add(product.brand);
       if (product.currency) col.currencies.add(product.currency);
       if (product.influencer) col.influencers.add(product.influencer);
-      
       if (product.price) {
         col.priceRange.min = Math.min(col.priceRange.min, product.price);
         col.priceRange.max = Math.max(col.priceRange.max, product.price);
       }
-      
-      // ✅ ONLY store ASIN + currency + computed signals
+
+      // ONLY store ASIN + currency + computed signals
       col.products.push({
         asin: product.asin,
         currency: product.currency,
         drop_categories: product.drop_signals?.drop_categories || [],
-        influencer: product.influencer // Keep for filtering
+        influencer: product.influencer
       });
     });
   });
-  
+
   Object.values(collections).forEach(col => {
     col.categories = Array.from(col.categories);
     col.brands = Array.from(col.brands);
     col.currencies = Array.from(col.currencies);
     col.influencers = Array.from(col.influencers);
-    
     if (col.priceRange.min === Infinity) col.priceRange.min = 0;
   });
-  
+
   return collections;
 }
 
 // ============================================
-// NEW: DROPS JSON WITH PRODUCT REFERENCES
+// DROPS JSON WITH PRODUCT REFERENCES
 // ============================================
 
 function generateDropsJSON(products) {
@@ -677,10 +711,8 @@ function generateDropsJSON(products) {
     categories: DROPS_CONFIG.CATEGORIES,
     last_updated: new Date().toISOString()
   };
-  
-  // Group products by drop category
+
   const productsByCategory = {};
-  
   Object.keys(DROPS_CONFIG.CATEGORIES).forEach(catKey => {
     productsByCategory[catKey] = {
       ...DROPS_CONFIG.CATEGORIES[catKey],
@@ -688,15 +720,12 @@ function generateDropsJSON(products) {
       products: []
     };
   });
-  
+
   products.forEach(product => {
     const dropCats = product.drop_signals?.drop_categories || [];
-    
     dropCats.forEach(catKey => {
       if (productsByCategory[catKey]) {
         productsByCategory[catKey].productCount++;
-        
-        // ✅ ONLY store ASIN + currency + metadata
         productsByCategory[catKey].products.push({
           asin: product.asin,
           currency: product.currency,
@@ -706,8 +735,7 @@ function generateDropsJSON(products) {
       }
     });
   });
-  
-  // Sort products by release date (newest first)
+
   Object.values(productsByCategory).forEach(cat => {
     cat.products.sort((a, b) => {
       const dateA = a.release_date ? new Date(a.release_date) : new Date(0);
@@ -715,34 +743,29 @@ function generateDropsJSON(products) {
       return dateB - dateA;
     });
   });
-  
+
   drops.drops_by_category = productsByCategory;
-  
   return drops;
 }
 
 // ============================================
-// NEW: ERRORS JSON FOR ADMIN DASHBOARD
+// ERRORS JSON FOR ADMIN DASHBOARD
 // ============================================
 
 function generateErrorsJSON(products) {
   const flaggedProducts = products.filter(p => p['Error-Flag'] === 1);
-  
-  // Count error types
   const errorBreakdown = {};
   const errorsByField = {};
-  
+
   flaggedProducts.forEach(product => {
     const reasons = (product['Error-Reason'] || '').split('; ');
-    
     reasons.forEach(reason => {
       const errorType = reason.split(':')[0].trim();
       if (errorType) {
         errorBreakdown[errorType] = (errorBreakdown[errorType] || 0) + 1;
       }
     });
-    
-    // Track which fields have errors
+
     (product['Error-Fields'] || []).forEach(field => {
       if (!errorsByField[field]) {
         errorsByField[field] = 0;
@@ -750,8 +773,7 @@ function generateErrorsJSON(products) {
       errorsByField[field]++;
     });
   });
-  
-  // Determine severity based on error type
+
   const getSeverity = (errorReason) => {
     if (!errorReason) return 'info';
     if (errorReason.includes('MISSING_DATA')) return 'critical';
@@ -759,12 +781,12 @@ function generateErrorsJSON(products) {
     if (errorReason.includes('CONFLICT')) return 'warning';
     return 'info';
   };
-  
+
   return {
     summary: {
       total_products: products.length,
       products_with_errors: flaggedProducts.length,
-      error_rate: products.length > 0 ? 
+      error_rate: products.length > 0 ?
         parseFloat(((flaggedProducts.length / products.length) * 100).toFixed(2)) : 0,
       last_updated: new Date().toISOString()
     },
@@ -786,7 +808,6 @@ function generateErrorsJSON(products) {
       brand: p.brand,
       severity: getSeverity(p['Error-Reason'])
     })).sort((a, b) => {
-      // Sort by severity: critical > warning > info
       const severityOrder = { critical: 0, warning: 1, info: 2 };
       return severityOrder[a.severity] - severityOrder[b.severity];
     })
@@ -855,7 +876,6 @@ function validateField(fieldName, rules, data, allNormalized = {}) {
       errorReason = `VALUE_TOO_LOW: ${fieldName}`;
       errorFields.push(fieldName);
     }
-
     if (rules.max !== undefined && value > rules.max) {
       value = rules.max;
       errorFlag = 1;
@@ -883,7 +903,6 @@ function validatePricing(data) {
     if (['price', 'originalPrice', 'discountPercentage', 'availability'].includes(fieldName)) {
       const result = validateField(fieldName, rules, data, normalized);
       normalized[fieldName] = result.value;
-
       if (result.errorFlag) {
         errorFlags.push(fieldName);
         errorReasons.push(result.errorReason);
@@ -919,22 +938,19 @@ function validatePricing(data) {
 }
 
 // ============================================
-// CURRENCY & CATEGORY HELPERS
+// CURRENCY HELPERS
 // ============================================
 
 function detectCurrencyFromPrice(priceString) {
   if (!priceString) return null;
-
   for (const [symbol, currency] of Object.entries(CURRENCY_PATTERNS)) {
     if (priceString.includes(symbol)) return currency;
   }
-
   return null;
 }
 
 function detectCurrencyFromField(currencyField) {
   if (!currencyField || !currencyField.trim()) return null;
-
   const trimmed = currencyField.trim();
 
   if (CURRENCY_MAP[trimmed.toUpperCase()]) {
@@ -954,22 +970,375 @@ function detectCurrencyFromField(currencyField) {
   return null;
 }
 
-function extractMainCategory(categoryHierarchy) {
-  if (!categoryHierarchy) return '';
+// ============================================
+// TSD-1 CATEGORY EXTRACTION (TWO PASS)
+// ============================================
 
-  const parts = categoryHierarchy.split('>').map(part => part.trim()).filter(Boolean);
+// Basic text normalization for category pipeline
+function normalizeCategoryText(text) {
+  if (!text) return '';
+  return text
+    .toLowerCase()
+    .replace(/[_\-]+/g, ' ')
+    .replace(/[^a-z\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
 
-  if (parts.length === 1) {
-    return parts[0].toLowerCase() !== 'general' ? parts[0] : '';
+// Remove marketing adjectives from edges of phrase
+function stripMarketingAdjectives(phrase) {
+  if (!phrase) return '';
+  let words = phrase.split(' ').filter(Boolean);
+  if (words.length === 0) return '';
+
+  const adjectiveSet = new Set(MARKETING_ADJECTIVES.map(a => a.toLowerCase()));
+
+  // strip from start
+  while (words.length > 0 && adjectiveSet.has(words[0])) {
+    words.shift();
+  }
+  // strip from end
+  while (words.length > 0 && adjectiveSet.has(words[words.length - 1])) {
+    words.pop();
   }
 
-  const genericCategories = ['general', 'all', 'products', 'shop', 'store'];
-  const nonGeneric = parts.filter(cat => !genericCategories.includes(cat.toLowerCase()));
-
-  if (nonGeneric.length > 0) return nonGeneric[0];
-
-  return parts[0] || '';
+  return words.join(' ').trim();
 }
+
+// Split categoryHierarchy safely
+function splitHierarchy(hierarchy) {
+  if (!hierarchy) return [];
+  return hierarchy
+    .split('>')
+    .map(p => normalizeCategoryText(p))
+    .filter(Boolean);
+}
+
+// Extract raw candidate phrases from one row (no brand trimming yet)
+function extractRawCategoryCandidatesFromRow(row) {
+  const candidates = [];
+
+  // itemTypeName
+  if (row.itemTypeName) {
+    const norm = normalizeCategoryText(row.itemTypeName);
+    if (norm) candidates.push(norm);
+  }
+
+  // Title
+  const title = row.productTitle || row.Title || '';
+  if (title) {
+    const normTitle = normalizeCategoryText(title);
+    if (normTitle) {
+      // naive multi-word segmentation: keep full phrase
+      candidates.push(normTitle);
+    }
+  }
+
+  // generic_name
+  if (row.generic_name) {
+    const norm = normalizeCategoryText(row.generic_name);
+    if (norm) candidates.push(norm);
+  }
+
+  // categoryHierarchy segments (not trusted alone, but used as sources)
+  if (row.categoryHierarchy) {
+    splitHierarchy(row.categoryHierarchy).forEach(seg => {
+      candidates.push(seg);
+    });
+  }
+
+  return candidates;
+}
+
+// Extract normalized brand tokens from Brand/brand
+function extractBrandTokensFromRow(row) {
+  const brandField = row.brand || row.Brand || '';
+  const tokens = new Set();
+  if (!brandField || !brandField.trim()) return tokens;
+
+  const norm = normalizeCategoryText(brandField);
+  if (!norm) return tokens;
+
+  norm.split(' ').forEach(t => {
+    if (t) tokens.add(t);
+  });
+
+  return tokens;
+}
+
+// Pass 1: vocabulary learning over full CSV
+function runCategoryPass1() {
+  const productsCsvPath = path.join(dataDir, 'products.csv');
+  if (!fs.existsSync(productsCsvPath)) {
+    console.warn('⚠️ products.csv not found, skipping category learning pass.');
+    return {
+      brandTokensGlobal: new Set(),
+      phraseFrequency: {},
+      productCountByPhrase: {}
+    };
+  }
+
+  const rawCsv = fs.readFileSync(productsCsvPath, 'utf8');
+  const lines = rawCsv.split(/\r?\n/);
+  if (lines.length <= 1) {
+    return {
+      brandTokensGlobal: new Set(),
+      phraseFrequency: {},
+      productCountByPhrase: {}
+    };
+  }
+
+  const header = lines[0].split(',');
+  const rows = [];
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i];
+    if (!line.trim()) continue;
+    const cols = line.split(',');
+    const row = {};
+    header.forEach((h, idx) => {
+      row[h] = cols[idx] !== undefined ? cols[idx] : '';
+    });
+    rows.push(row);
+  }
+
+  const phraseFrequency = {};
+  const productCountByPhrase = {};
+  const brandTokensGlobal = new Set();
+
+  // First collect global brand tokens
+  rows.forEach(row => {
+    const tokens = extractBrandTokensFromRow(row);
+    tokens.forEach(t => brandTokensGlobal.add(t));
+  });
+
+  // Now process each row's phrases
+  rows.forEach((row, rowIndex) => {
+    const rawCandidates = extractRawCategoryCandidatesFromRow(row);
+    const brandTokensForRow = extractBrandTokensFromRow(row);
+    const rowSeenPhrases = new Set();
+
+    rawCandidates.forEach(rawPhrase => {
+      if (!rawPhrase) return;
+
+      // phrase-level brand trimming
+      let words = rawPhrase.split(' ').filter(Boolean);
+      if (words.length < 2) return; // single-word phrases discarded
+
+      // remove any word that is a brand token (global)
+      words = words.filter(w => !brandTokensGlobal.has(w));
+      if (words.length < 2) return;
+
+      let phrase = words.join(' ').trim();
+      phrase = stripMarketingAdjectives(phrase);
+      if (!phrase) return;
+
+      const wordCount = phrase.split(' ').filter(Boolean).length;
+      if (wordCount < 2) return;
+
+      // noise rejection: generic blacklist seed
+      const lowerPhrase = phrase.toLowerCase();
+      if (GENERIC_CATEGORY_SEED.includes(lowerPhrase)) {
+        return;
+      }
+
+      // track frequencies
+      phraseFrequency[phrase] = (phraseFrequency[phrase] || 0) + 1;
+
+      if (!rowSeenPhrases.has(phrase)) {
+        rowSeenPhrases.add(phrase);
+        productCountByPhrase[phrase] = (productCountByPhrase[phrase] || 0) + 1;
+      }
+    });
+  });
+
+  return {
+    brandTokensGlobal,
+    phraseFrequency,
+    productCountByPhrase
+  };
+}
+
+// Persist artifacts to data/
+function writeCategoryArtifacts(pass1Result) {
+  const { brandTokensGlobal, productCountByPhrase } = pass1Result;
+
+  // brand-blacklist.json: all global brand tokens
+  const brandBlacklist = Array.from(brandTokensGlobal).sort();
+  fs.writeFileSync(
+    path.join(dataDir, 'brand-blacklist.json'),
+    JSON.stringify(brandBlacklist, null, 2)
+  );
+
+  // category-blacklist.json: semantic seed terms only (non-frequency-based)
+  const categoryBlacklist = GENERIC_CATEGORY_SEED.slice().sort();
+  fs.writeFileSync(
+    path.join(dataDir, 'category-blacklist.json'),
+    JSON.stringify(categoryBlacklist, null, 2)
+  );
+
+  // category-whitelist.json: phrases that appear in ≥2 distinct products and are not generic
+  const whitelist = [];
+  Object.entries(productCountByPhrase).forEach(([phrase, productCount]) => {
+    if (productCount >= 2) {
+      const lower = phrase.toLowerCase();
+      if (!GENERIC_CATEGORY_SEED.includes(lower)) {
+        whitelist.push(phrase);
+      }
+    }
+  });
+
+  whitelist.sort((a, b) => a.localeCompare(b));
+  fs.writeFileSync(
+    path.join(dataDir, 'category-whitelist.json'),
+    JSON.stringify(whitelist, null, 2)
+  );
+
+  return {
+    brandBlacklist,
+    categoryBlacklist,
+    categoryWhitelist: whitelist
+  };
+}
+
+// Load artifacts for Pass 2
+function loadCategoryArtifacts() {
+  const brandPath = path.join(dataDir, 'brand-blacklist.json');
+  const catBlackPath = path.join(dataDir, 'category-blacklist.json');
+  const catWhitePath = path.join(dataDir, 'category-whitelist.json');
+
+  let brandTokens = [];
+  let categoryBlacklist = [];
+  let categoryWhitelist = [];
+
+  try {
+    if (fs.existsSync(brandPath)) {
+      brandTokens = JSON.parse(fs.readFileSync(brandPath, 'utf8'));
+    }
+  } catch (e) {
+    console.warn('⚠️ Failed to read brand-blacklist.json, falling back to empty list.');
+  }
+
+  try {
+    if (fs.existsSync(catBlackPath)) {
+      categoryBlacklist = JSON.parse(fs.readFileSync(catBlackPath, 'utf8'));
+    }
+  } catch (e) {
+    console.warn('⚠️ Failed to read category-blacklist.json, falling back to seed list.');
+    categoryBlacklist = GENERIC_CATEGORY_SEED.slice();
+  }
+
+  try {
+    if (fs.existsSync(catWhitePath)) {
+      categoryWhitelist = JSON.parse(fs.readFileSync(catWhitePath, 'utf8'));
+    }
+  } catch (e) {
+    console.warn('⚠️ Failed to read category-whitelist.json, using empty whitelist.');
+  }
+
+  const brandTokenSet = new Set(
+    brandTokens.map(t => normalizeCategoryText(t)).filter(Boolean)
+  );
+  const catBlackSet = new Set(
+    categoryBlacklist.map(t => normalizeCategoryText(t)).filter(Boolean)
+  );
+  const catWhiteSet = new Set(
+    categoryWhitelist.map(t => normalizeCategoryText(t)).filter(Boolean)
+  );
+
+  return {
+    brandTokensRaw: brandTokens,
+    brandTokenSet,
+    categoryBlacklistRaw: categoryBlacklist,
+    categoryBlacklistSet: catBlackSet,
+    categoryWhitelistRaw: categoryWhitelist,
+    categoryWhitelistSet: catWhiteSet
+  };
+}
+
+// Pass 2: assign ONE dominant category per product
+function assignCategoryForProduct(product, originalRow, artifacts) {
+  const {
+    brandTokenSet,
+    categoryBlacklistSet,
+    categoryWhitelistSet
+  } = artifacts;
+
+  // Collect candidate phrases from same sources, but now enforce whitelist/blacklist/brand rules
+  const rawCandidates = extractRawCategoryCandidatesFromRow({
+    productTitle: originalRow.productTitle || originalRow.Title,
+    Title: originalRow.Title,
+    itemTypeName: originalRow.itemTypeName,
+    generic_name: originalRow.generic_name,
+    categoryHierarchy: originalRow.categoryHierarchy
+  });
+
+  const brandTokensForRow = extractBrandTokensFromRow(originalRow);
+  const allBrandTokens = new Set([...brandTokenSet, ...brandTokensForRow]);
+
+  const validCandidates = [];
+
+  rawCandidates.forEach(rawPhrase => {
+    if (!rawPhrase) return;
+
+    let words = rawPhrase.split(' ').filter(Boolean);
+    if (words.length < 2) return;
+
+    // Remove any brand tokens
+    words = words.filter(w => !allBrandTokens.has(w));
+    if (words.length < 2) return;
+
+    let phrase = words.join(' ').trim();
+    phrase = stripMarketingAdjectives(phrase);
+    if (!phrase) return;
+
+    const normPhrase = normalizeCategoryText(phrase);
+    if (!normPhrase) return;
+
+    const wordCount = normPhrase.split(' ').filter(Boolean).length;
+    if (wordCount < 2) return;
+
+    // Rule 1: present in whitelist
+    if (!categoryWhitelistSet.has(normPhrase)) return;
+
+    // Rule 2: not present in blacklist
+    if (categoryBlacklistSet.has(normPhrase)) return;
+
+    // Rule 3 & 4: does not contain or equal any brand token
+    const phraseWords = normPhrase.split(' ').filter(Boolean);
+    for (const w of phraseWords) {
+      if (allBrandTokens.has(w)) {
+        return;
+      }
+    }
+    if (allBrandTokens.has(normPhrase)) {
+      return;
+    }
+
+    validCandidates.push({
+      phrase: phrase,
+      normalized: normPhrase,
+      wordCount
+    });
+  });
+
+  if (validCandidates.length === 0) {
+    return '';
+  }
+
+  // Rule 6: longest valid phrase wins
+  validCandidates.sort((a, b) => {
+    if (b.wordCount !== a.wordCount) {
+      return b.wordCount - a.wordCount;
+    }
+    return a.phrase.localeCompare(b.phrase);
+  });
+
+  return validCandidates[0].phrase;
+}
+
+// ============================================
+// REGIONAL VARIANTS & CORE FIELDS
+// ============================================
 
 function generateAsin(row) {
   return row.asin || `B0${Date.now().toString().slice(-8)}${Math.random().toString(36).substr(2, 2).toUpperCase()}`;
@@ -991,14 +1360,13 @@ function parseReferenceMedia(referenceMediaValue, productSourceLink) {
         urls.push(...parsed.map(url => url.trim()).filter(Boolean));
       }
     } catch (e) {
-      console.warn(`⚠️ Invalid JSON in reference_media`);
+      console.warn('⚠️ Invalid JSON in reference_media');
     }
   } else {
     let separator = '|';
     if (trimmed.includes('|')) separator = '|';
     else if (trimmed.includes(';')) separator = ';';
     else if (trimmed.includes(',')) separator = ',';
-
     urls.push(...trimmed.split(separator).map(url => url.trim()).filter(Boolean));
   }
 
@@ -1036,19 +1404,8 @@ function detectRegionalVariants(products) {
   });
 }
 
+// extractCoreFields: now sets category = '' (Pass 2 assigns final category)
 function extractCoreFields(data, pricingValidation, currency, referenceMedia) {
-  const categoryFromHierarchy = extractMainCategory(data.categoryHierarchy || '');
-  const categoryFromField = data.Category?.trim() || '';
-
-  let finalCategory = '';
-  if (categoryFromHierarchy && categoryFromHierarchy.toLowerCase() !== 'general') {
-    finalCategory = categoryFromHierarchy;
-  } else if (categoryFromField && categoryFromField.toLowerCase() !== 'general') {
-    finalCategory = categoryFromField;
-  } else {
-    finalCategory = categoryFromHierarchy || categoryFromField || 'General';
-  }
-
   const releaseDate = getProductReleaseDate(data);
   const { influencer, manualCollections, seasonOverride } = extractInfluencerAndCollections(data);
   const season = detectSeasonFromText(
@@ -1072,7 +1429,8 @@ function extractCoreFields(data, pricingValidation, currency, referenceMedia) {
     currency: currency,
     symbol: currency === 'MISC' ? '🎁' : (CURRENCY_MAP[currency]?.symbol || currency),
     brand: data.brand || '',
-    category: finalCategory,
+    // category is assigned in Pass 2; keep empty placeholder here
+    category: '',
     subcategory: data.itemTypeName || '',
     main_image: data.MainImage || '',
     all_images: (() => {
@@ -1092,16 +1450,18 @@ function extractCoreFields(data, pricingValidation, currency, referenceMedia) {
     amazon_short: data['Amazon SiteStripe (Short)'] || '',
     amazon_long: data['Amazon SiteStripe (Long)'] || '',
     affiliate_link: data['Amazon SiteStripe (Short)'] || '',
-    
     release_date: releaseDate ? releaseDate.toISOString() : null,
     influencer: influencer,
     manual_collections: manualCollections,
     season: season,
-    
     featured: false,
     trending: false
   };
 }
+
+// ============================================
+// FILE MANAGEMENT
+// ============================================
 
 function deleteOldFiles() {
   if (!fs.existsSync(dataDir)) {
@@ -1117,7 +1477,6 @@ function deleteOldFiles() {
     if (file !== 'products.csv' && file !== 'last_updated.txt') {
       let attempts = 0;
       const maxAttempts = 3;
-
       while (attempts < maxAttempts) {
         try {
           fs.unlinkSync(filePath);
@@ -1142,7 +1501,6 @@ function deleteOldFiles() {
 
 function convertCsvToJson() {
   const currencyResults = {};
-
   const processingStats = {
     total: 0,
     processed: 0,
@@ -1156,7 +1514,6 @@ function convertCsvToJson() {
     manualCollectionsFound: new Set(),
     seasonsFound: new Set()
   };
-
   const errorBreakdown = {};
 
   console.log('📄 Checking files before deletion...');
@@ -1166,26 +1523,37 @@ function convertCsvToJson() {
   const deletedFiles = deleteOldFiles();
   console.log('✅ Old files deletion complete.');
 
+  // TSD-1: Pass 1 — vocabulary learning and artifacts regeneration
+  console.log('📚 TSD-1: Running category Pass 1 (vocabulary learning)...');
+  const pass1Result = runCategoryPass1();
+  const artifacts = writeCategoryArtifacts(pass1Result);
+  console.log(`✅ TSD-1: category artifacts regenerated (whitelist: ${artifacts.categoryWhitelistRaw.length}, brands: ${artifacts.brandBlacklist.length})`);
+
   let lastUpdatedContent = `VibeDrips Data Processing Summary
+
 Generated: ${new Date().toISOString()}
 
 📊 STATISTICS
+
 - Total Rows Processed: 0
 - Products Successfully Processed: 0
 - Errors Encountered: 0
 - Success Rate: 0.0%
 
 💰 CURRENCIES
+
 - Currencies Found: 0
-- Available: 
+- Available:
 
 📦 CATEGORIES
+
 - Categories Found: 0
-- Top Categories: 
+- Top Categories:
 
 🏷️ BRANDS
+
 - Brands Found: 0
-- Top Brands: 
+- Top Brands:
 
 📁 FILES BEFORE DELETION
 ${filesBeforeDeletion.map(file => `- ${file}`).join('\n') || '- None'}
@@ -1194,11 +1562,13 @@ ${filesBeforeDeletion.map(file => `- ${file}`).join('\n') || '- None'}
 ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '- None'}`;
 
   const filesAfterDeletion = fs.existsSync(dataDir) ? fs.readdirSync(dataDir) : [];
-  const expectedFiles = ['last_updated.txt', 'products.csv'];
+  const expectedFiles = ['last_updated.txt', 'products.csv', 'category-blacklist.json', 'brand-blacklist.json', 'category-whitelist.json'];
   const unexpectedFiles = filesAfterDeletion.filter(file => !expectedFiles.includes(file));
 
-  lastUpdatedContent += `\n\n📁 FILES PRESENT AFTER DELETION\n${filesAfterDeletion.map(file => `- ${file}`).join('\n') || '- None'}`;
+  lastUpdatedContent += `
 
+📁 FILES PRESENT AFTER DELETION
+${filesAfterDeletion.map(file => `- ${file}`).join('\n') || '- None'}`;
   if (unexpectedFiles.length > 0) {
     lastUpdatedContent += `\n⚠️ Deletion failed for unexpected files:\n${unexpectedFiles.map(file => `- ${file}`).join('\n')}`;
   }
@@ -1206,35 +1576,29 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
   fs.writeFileSync(path.join(dataDir, 'last_updated.txt'), lastUpdatedContent);
 
   console.log('📄 Processing CSV from input...');
+  const categoryArtifactsForPass2 = loadCategoryArtifacts();
 
   process.stdin
     .pipe(csv())
     .on('data', (data) => {
       processingStats.total++;
-
       try {
         console.log(`\n--- Row ${processingStats.total} ---`);
 
         let currency = null;
-
         if (data.Currency && data.Currency.trim()) {
           currency = detectCurrencyFromField(data.Currency);
         }
-
         if (!currency && data.price) {
           currency = detectCurrencyFromPrice(data.price);
         }
-
         if (!currency) {
           currency = 'MISC';
         }
-
         console.log(`✅ Currency: ${currency}`);
-
         processingStats.currenciesFound.add(currency);
-        if (data.categoryHierarchy) processingStats.categoriesFound.add(extractMainCategory(data.categoryHierarchy));
-        if (data.brand) processingStats.brandsFound.add(data.brand);
 
+        if (data.brand) processingStats.brandsFound.add(data.brand);
         if (data.Influencer?.trim()) processingStats.influencersFound.add(data.Influencer.trim());
         if (data.ManualCollections?.trim()) {
           data.ManualCollections.split(/[|,]/).forEach(c => {
@@ -1253,7 +1617,6 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
         if (pricingValidation.errorFlag === 1) {
           processingStats.validationErrors++;
           console.log(`⚠️ Validation: ${pricingValidation.errorReason}`);
-
           const reasons = pricingValidation.errorReason.split('; ');
           reasons.forEach(reason => {
             const errorType = reason.split(':')[0];
@@ -1266,12 +1629,19 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
           data['Product Source Link']
         );
 
+        // Core fields with category placeholder = ''
         const coreFields = extractCoreFields(data, pricingValidation, currency, referenceMedia);
-
         if (coreFields.season) processingStats.seasonsFound.add(coreFields.season);
 
-        const product = structureProductData(data, coreFields);
+        // Pass 2 category assignment based on artifacts
+        const assignedCategory = assignCategoryForProduct(coreFields, data, categoryArtifactsForPass2);
+        coreFields.category = assignedCategory || '';
 
+        if (assignedCategory) {
+          processingStats.categoriesFound.add(assignedCategory);
+        }
+
+        const product = structureProductData(data, coreFields);
         if (product['Error-Fields'] && product['Error-Fields'].length > 0) {
           processingStats.fieldConflicts++;
         }
@@ -1283,9 +1653,7 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
 
         if (!currencyResults[currency]) currencyResults[currency] = [];
         currencyResults[currency].push(product);
-
         processingStats.processed++;
-
       } catch (error) {
         processingStats.errors++;
         console.error(`Error processing row ${processingStats.total}:`, error.message);
@@ -1301,7 +1669,7 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
       const regionalCount = allProducts.filter(p => p.regional_availability === 1).length;
       console.log(`✅ Found ${regionalCount} products with regional variants`);
 
-      console.log(`🎬 Computing drop signals...`);
+      console.log('🎬 Computing drop signals...');
       const dropStats = {
         'creator-picks': 0,
         'global-drops': 0,
@@ -1316,19 +1684,16 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
           product.regional_variants,
           product.release_date
         );
-
         product.drop_signals = dropSignals;
-
         dropSignals.drop_categories.forEach(cat => {
           dropStats[cat] = (dropStats[cat] || 0) + 1;
         });
-
         delete product._dropSignalsPreCompute;
       });
 
-      console.log(`✅ Drop signals computed:`);
+      console.log('✅ Drop signals computed:');
       Object.entries(dropStats).forEach(([cat, count]) => {
-        console.log(`  ${DROPS_CONFIG.CATEGORIES[cat].emoji} ${DROPS_CONFIG.CATEGORIES[cat].label}: ${count} products`);
+        console.log(` ${DROPS_CONFIG.CATEGORIES[cat].emoji} ${DROPS_CONFIG.CATEGORIES[cat].label}: ${count} products`);
       });
 
       Object.keys(currencyResults).forEach(currency => {
@@ -1350,7 +1715,6 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
         const products = currencyResults[currency];
         const filename = `products-${currency}.json`;
         const filepath = path.join(dataDir, filename);
-
         fs.writeFileSync(filepath, JSON.stringify(products, null, 2));
 
         const currencyInfo = {
@@ -1373,41 +1737,32 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
       });
 
       currencyManifest.available_currencies.sort((a, b) => b.product_count - a.product_count);
-
       const manifestPath = path.join(dataDir, 'currencies.json');
       fs.writeFileSync(manifestPath, JSON.stringify(currencyManifest, null, 2));
 
-      // ============================================
-      // GENERATE DROPS.JSON (with product references)
-      // ============================================
-      console.log(`\n🎬 Generating drops.json...`);
+      // DROPS
+      console.log('\n🎬 Generating drops.json...');
       const dropsData = generateDropsJSON(allProducts);
       const dropsPath = path.join(dataDir, 'drops.json');
       fs.writeFileSync(dropsPath, JSON.stringify(dropsData, null, 2));
-      console.log(`✅ Drops manifest created: drops.json`);
+      console.log('✅ Drops manifest created: drops.json');
 
-      // ============================================
-      // GENERATE INFLUENCERS.JSON
-      // ============================================
-      console.log(`\n👤 Generating influencers.json...`);
+      // INFLUENCERS
+      console.log('\n👤 Generating influencers.json...');
       const influencersData = generateInfluencersJSON(allProducts);
       const influencersPath = path.join(dataDir, 'influencers.json');
       fs.writeFileSync(influencersPath, JSON.stringify(influencersData, null, 2));
       console.log(`✅ Influencers manifest created: influencers.json (${Object.keys(influencersData).length} influencers)`);
 
-      // ============================================
-      // GENERATE COLLECTIONS.JSON
-      // ============================================
-      console.log(`\n💎 Generating collections.json...`);
+      // COLLECTIONS
+      console.log('\n💎 Generating collections.json...');
       const collectionsData = generateCollectionsJSON(allProducts);
       const collectionsPath = path.join(dataDir, 'collections.json');
       fs.writeFileSync(collectionsPath, JSON.stringify(collectionsData, null, 2));
       console.log(`✅ Collections manifest created: collections.json (${Object.keys(collectionsData).length} collections)`);
 
-      // ============================================
-      // NEW: GENERATE ERRORS.JSON
-      // ============================================
-      console.log(`\n⚠️  Generating errors.json...`);
+      // ERRORS
+      console.log('\n⚠️ Generating errors.json...');
       const errorsData = generateErrorsJSON(allProducts);
       const errorsPath = path.join(dataDir, 'errors.json');
       fs.writeFileSync(errorsPath, JSON.stringify(errorsData, null, 2));
@@ -1422,85 +1777,106 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
         'drops.json',
         'influencers.json',
         'collections.json',
-        'errors.json'  // ← ADDED
+        'errors.json',
+        'category-blacklist.json',
+        'brand-blacklist.json',
+        'category-whitelist.json'
       ]);
 
       const remnantFiles = finalFiles.filter(file => !generatedFiles.has(file));
 
       const summary = `VibeDrips Data Processing Summary
+
 Generated: ${new Date().toISOString()}
 
 📊 STATISTICS
+
 - Total Rows Processed: ${processingStats.total}
 - Products Successfully Processed: ${processingStats.processed}
 - Errors Encountered: ${processingStats.errors}
 - Success Rate: ${((processingStats.processed / processingStats.total) * 100).toFixed(1)}%
 
 ⚠️ VALIDATION
+
 - Records Flagged: ${processingStats.validationErrors}
 - Field Conflicts: ${processingStats.fieldConflicts}
 ${Object.entries(errorBreakdown).length > 0 ? '- Error Breakdown:\n' + Object.entries(errorBreakdown)
-  .sort(([,a], [,b]) => b - a)
-  .map(([type, count]) => `  • ${type}: ${count}`)
+  .sort(([, a], [, b]) => b - a)
+  .map(([type, count]) => ` • ${type}: ${count}`)
   .join('\n') : ''}
 
 💰 CURRENCIES
+
 - Currencies Found: ${processingStats.currenciesFound.size}
 - Available: ${Array.from(processingStats.currenciesFound).join(', ')}
 
 📦 CATEGORIES
+
 - Categories Found: ${processingStats.categoriesFound.size}
 - Top Categories: ${Array.from(processingStats.categoriesFound).slice(0, 5).join(', ') || 'None'}
 
 🏷️ BRANDS
+
 - Brands Found: ${processingStats.brandsFound.size}
 - Top Brands: ${Array.from(processingStats.brandsFound).slice(0, 5).join(', ') || 'None'}
 
 👤 INFLUENCERS
+
 - Products with influencers: ${allProducts.filter(p => p.influencer).length}
 - Unique influencers: ${Object.keys(influencersData).length}
 - List: ${Object.keys(influencersData).join(', ') || 'None'}
 
 💎 COLLECTIONS
+
 - Products in collections: ${allProducts.filter(p => p.manual_collections && p.manual_collections.length > 0).length}
 - Unique collections: ${Object.keys(collectionsData).length}
 - List: ${Object.keys(collectionsData).join(', ') || 'None'}
 
 🌿 SEASONS
+
 - Seasons Detected: ${processingStats.seasonsFound.size}
 - Active: ${Array.from(processingStats.seasonsFound).join(', ') || 'None'}
 
 ⚠️ ERRORS & VALIDATION
+
 - Products with errors: ${errorsData.flagged_products.length}
 - Error rate: ${errorsData.summary.error_rate}%
 - Critical errors: ${errorsData.flagged_products.filter(p => p.severity === 'critical').length}
 - Warnings: ${errorsData.flagged_products.filter(p => p.severity === 'warning').length}
 - Top error types: ${Object.entries(errorsData.error_breakdown)
-    .sort(([,a], [,b]) => b - a)
-    .slice(0, 3)
-    .map(([type, count]) => `${type} (${count})`)
-    .join(', ') || 'None'}
+  .sort(([, a], [, b]) => b - a)
+  .slice(0, 3)
+  .map(([type, count]) => `${type} (${count})`)
+  .join(', ') || 'None'}
 
 🎬 DROPS
+
 ${Object.entries(dropStats).map(([cat, count]) =>
   `- ${DROPS_CONFIG.CATEGORIES[cat].emoji} ${DROPS_CONFIG.CATEGORIES[cat].label}: ${count} products`
 ).join('\n')}
 
 📁 FILES BEFORE DELETION
+
 ${filesBeforeDeletion.map(file => `- ${file}`).join('\n') || '- None'}
 
 📁 FILES DELETED
+
 ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '- None'}
 
 📁 FILES GENERATED
+
 ${Object.keys(currencyResults).map(currency => `- products-${currency}.json (${currencyResults[currency].length} products)`).join('\n')}
 - currencies.json (manifest)
 - drops.json (drops manifest)
 - influencers.json (${Object.keys(influencersData).length} influencers)
 - collections.json (${Object.keys(collectionsData).length} collections)
 - errors.json (${errorsData.flagged_products.length} flagged products)
+- category-blacklist.json (generic blacklist seed)
+- brand-blacklist.json (learned brand tokens)
+- category-whitelist.json (stable category phrases)
 
 📁 FINAL FILES PRESENT
+
 ${finalFiles.map(file => `- ${file}`).join('\n') || '- None'}
 ${remnantFiles.length > 0 ? `\n⚠️ Remnant files detected:\n${remnantFiles.map(file => `- ${file}`).join('\n')}` : ''}`;
 
@@ -1513,16 +1889,13 @@ ${remnantFiles.length > 0 ? `\n⚠️ Remnant files detected:\n${remnantFiles.ma
       console.log(`👤 Influencers: ${Object.keys(influencersData).length}`);
       console.log(`💎 Collections: ${Object.keys(collectionsData).length}`);
       console.log(`🌿 Seasons: ${Array.from(processingStats.seasonsFound).join(', ')}`);
-      console.log(`⚠️  Errors: ${errorsData.flagged_products.length} flagged (${errorsData.summary.error_rate}% error rate)`);
-
+      console.log(`⚠️ Errors: ${errorsData.flagged_products.length} flagged (${errorsData.summary.error_rate}% error rate)`);
       if (processingStats.validationErrors > 0) {
         console.log(`⚠️ ${processingStats.validationErrors} products flagged for review (Error-Flag=1)`);
       }
-
       if (processingStats.fieldConflicts > 0) {
         console.log(`⚠️ ${processingStats.fieldConflicts} products with field conflicts (check Error-Fields)`);
       }
-
       if (processingStats.errors > 0) {
         console.log(`⚠️ ${processingStats.errors} rows had processing errors`);
       }
@@ -1531,10 +1904,10 @@ ${remnantFiles.length > 0 ? `\n⚠️ Remnant files detected:\n${remnantFiles.ma
       console.error('❌ Error processing CSV:', error);
       process.exit(1);
     });
+
+  console.log('🚀 VibeDrips Multi-Currency Product Processor v7.1 (TSD-1)');
+  console.log('=========================================================');
+  console.log('✨ Lean Manifests + Error Tracking + Drop Products + Two-Pass Categories');
 }
 
-console.log('🚀 VibeDrips Multi-Currency Product Processor v7.0');
-console.log('===================================================');
-console.log('✨ Lean Manifests + Error Tracking + Drop Products');
-console.log('');
 convertCsvToJson();
