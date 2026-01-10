@@ -1527,7 +1527,7 @@ function convertCsvToJson() {
   console.log('📚 TSD-1: Running category Pass 1 (vocabulary learning)...');
   const pass1Result = runCategoryPass1();
   const artifacts = writeCategoryArtifacts(pass1Result);
-  console.log(`✅ TSD-1: category artifacts regenerated (whitelist: ${artifacts.categoryWhitelistRaw.length}, brands: ${artifacts.brandBlacklist.length})`);
+  console.log(`✅ TSD-1: category artifacts regenerated (whitelist: ${artifacts.categoryWhitelist.length}, brands: ${artifacts.brandBlacklist.length})`);
 
   let lastUpdatedContent = `VibeDrips Data Processing Summary
 
