@@ -1473,9 +1473,17 @@ function deleteOldFiles() {
   const files = fs.readdirSync(dataDir);
   const deletedFiles = [];
 
+  const preservedFiles = [
+    'products.csv',
+    'last_updated.txt',
+    'brand-blacklist.json',
+    'category-blacklist.json',
+    'category-whitelist.json'
+  ];
+
   files.forEach(file => {
     const filePath = path.join(dataDir, file);
-    if (file !== 'products.csv' && file !== 'last_updated.txt') {
+    if (!preservedFiles.includes(file)) {
       let attempts = 0;
       const maxAttempts = 3;
       while (attempts < maxAttempts) {
@@ -1802,9 +1810,9 @@ Generated: ${new Date().toISOString()}
 - Records Flagged: ${processingStats.validationErrors}
 - Field Conflicts: ${processingStats.fieldConflicts}
 ${Object.entries(errorBreakdown).length > 0 ? '- Error Breakdown:\n' + Object.entries(errorBreakdown)
-  .sort(([, a], [, b]) => b - a)
-  .map(([type, count]) => ` • ${type}: ${count}`)
-  .join('\n') : ''}
+          .sort(([, a], [, b]) => b - a)
+          .map(([type, count]) => ` • ${type}: ${count}`)
+          .join('\n') : ''}
 
 💰 CURRENCIES
 
@@ -1845,16 +1853,16 @@ ${Object.entries(errorBreakdown).length > 0 ? '- Error Breakdown:\n' + Object.en
 - Critical errors: ${errorsData.flagged_products.filter(p => p.severity === 'critical').length}
 - Warnings: ${errorsData.flagged_products.filter(p => p.severity === 'warning').length}
 - Top error types: ${Object.entries(errorsData.error_breakdown)
-  .sort(([, a], [, b]) => b - a)
-  .slice(0, 3)
-  .map(([type, count]) => `${type} (${count})`)
-  .join(', ') || 'None'}
+          .sort(([, a], [, b]) => b - a)
+          .slice(0, 3)
+          .map(([type, count]) => `${type} (${count})`)
+          .join(', ') || 'None'}
 
 🎬 DROPS
 
 ${Object.entries(dropStats).map(([cat, count]) =>
-  `- ${DROPS_CONFIG.CATEGORIES[cat].emoji} ${DROPS_CONFIG.CATEGORIES[cat].label}: ${count} products`
-).join('\n')}
+            `- ${DROPS_CONFIG.CATEGORIES[cat].emoji} ${DROPS_CONFIG.CATEGORIES[cat].label}: ${count} products`
+          ).join('\n')}
 
 📁 FILES BEFORE DELETION
 
