@@ -222,13 +222,21 @@ const MARKETING_ADJECTIVES = [
   'cordless'
 ];
 
-// Stopwords that should not form standalone phrases
+// Nouns that must NEVER be treated as brand tokens (protection list)
+const PROTECTED_NOUNS = new Set([
+  'air', 'purifier', 'filter', 'smart', 'home', 'water', 'light', 'cleaner',
+  'vacuum', 'system', 'pro', 'plus', 'mini', 'max', 'digital', 'electric',
+  'portable', 'manual', 'automatic', 'heavy', 'duty', 'kit', 'set', 'pack'
+]);
+
+// Stopwords and URL fragments that should not form standalone categories
 const STOPWORDS = new Set([
   'a', 'an', 'the', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for',
   'of', 'with', 'by', 'from', 'as', 'is', 'was', 'are', 'were', 'be',
   'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will',
   'would', 'should', 'could', 'may', 'might', 'must', 'can', 'this',
-  'that', 'these', 'those', 'it', 'its', 'they', 'them', 'their'
+  'that', 'these', 'those', 'it', 'its', 'they', 'them', 'their',
+  'http', 'https', 'www', 'com', 'org', 'net', 'edu', 'gov', 'io'
 ]);
 
 // ============================================
@@ -1097,7 +1105,7 @@ function extractBrandTokensFromRow(row) {
   if (!norm) return tokens;
 
   norm.split(' ').forEach(t => {
-    if (t) tokens.add(t);
+    if (t && !PROTECTED_NOUNS.has(t)) tokens.add(t);
   });
 
   return tokens;
@@ -1382,10 +1390,10 @@ function assignCategoryForProduct(product, originalRow, artifacts) {
     return '';
   }
 
-  // Rule 6: longest valid phrase wins
+  // Rule 6: shortest stable phrase wins (most general product type)
   validCandidates.sort((a, b) => {
-    if (b.wordCount !== a.wordCount) {
-      return b.wordCount - a.wordCount;
+    if (a.wordCount !== b.wordCount) {
+      return a.wordCount - b.wordCount;
     }
     return a.phrase.localeCompare(b.phrase);
   });
