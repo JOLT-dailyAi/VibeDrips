@@ -137,6 +137,8 @@ jobs:
           git add data/*blacklist*.json data/*whitelist*.json 2>/dev/null || true
           git add sw.js 2>/dev/null || true
           git add assets/js/product-loader.js 2>/dev/null || true
+          echo "Staged changes in data/:"
+          git status --short data/
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
