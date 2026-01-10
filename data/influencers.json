@@ -3,10 +3,7 @@
     "name": "HouseFresh",
     "productCount": 8,
     "totalValue": 1784,
-    "categories": [
-      "Furniture",
-      "General"
-    ],
+    "categories": [],
     "brands": [
       "Levoit",
       "Breville",
@@ -62,11 +59,7 @@
     "name": "Food Pharmer",
     "productCount": 5,
     "totalValue": 97566,
-    "categories": [
-      "General",
-      "Beauty & Personal Care",
-      "Furniture"
-    ],
+    "categories": [],
     "brands": [
       "Praan",
       "Qubo",

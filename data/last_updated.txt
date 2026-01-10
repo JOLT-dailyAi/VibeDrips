@@ -1,46 +1,56 @@
 VibeDrips Data Processing Summary
-Generated: 2026-01-06T14:35:01.588Z
+
+Generated: 2026-01-10T04:49:24.025Z
 
 📊 STATISTICS
+
 - Total Rows Processed: 23
 - Products Successfully Processed: 23
 - Errors Encountered: 0
 - Success Rate: 100.0%
 
 ⚠️ VALIDATION
+
 - Records Flagged: 3
 - Field Conflicts: 23
 - Error Breakdown:
-  • DISCOUNT_MISMATCH: 2
-  • INVALID_ORIGINAL: 1
+ • DISCOUNT_MISMATCH: 2
+ • INVALID_ORIGINAL: 1
 
 💰 CURRENCIES
+
 - Currencies Found: 2
 - Available: AUD, INR
 
 📦 CATEGORIES
-- Categories Found: 4
-- Top Categories: Books, Furniture, , Beauty & Personal Care
+
+- Categories Found: 0
+- Top Categories: None
 
 🏷️ BRANDS
+
 - Brands Found: 14
 - Top Brands: HUTCHINSON PUBLISHING - TRADE, Cornerstone Press, MyMirror Publishing House, Levoit, Breville
 
 👤 INFLUENCERS
+
 - Products with influencers: 13
 - Unique influencers: 2
 - List: HouseFresh, Food Pharmer
 
 💎 COLLECTIONS
+
 - Products in collections: 0
 - Unique collections: 0
 - List: None
 
 🌿 SEASONS
+
 - Seasons Detected: 2
 - Active: Winter, Summer
 
 ⚠️ ERRORS & VALIDATION
+
 - Products with errors: 23
 - Error rate: 100%
 - Critical errors: 0
@@ -48,19 +58,23 @@ Generated: 2026-01-06T14:35:01.588Z
 - Top error types: DISCOUNT_MISMATCH (2), INVALID_ORIGINAL (1)
 
 🎬 DROPS
+
 - 🎬 Creator Picks: 7 products
 - 🌍 Global Drops: 0 products
 - 📱 Viral Reels: 0 products
 - 🆕 New Releases: 0 products
 
 📁 FILES BEFORE DELETION
+
 - last_updated.txt
 - products.csv
 
 📁 FILES DELETED
+
 - None
 
 📁 FILES GENERATED
+
 - products-AUD.json (10 products)
 - products-INR.json (13 products)
 - currencies.json (manifest)
@@ -68,8 +82,15 @@ Generated: 2026-01-06T14:35:01.588Z
 - influencers.json (2 influencers)
 - collections.json (0 collections)
 - errors.json (23 flagged products)
+- category-blacklist.json (generic blacklist seed)
+- brand-blacklist.json (learned brand tokens)
+- category-whitelist.json (stable category phrases)
 
 📁 FINAL FILES PRESENT
+
+- brand-blacklist.json
+- category-blacklist.json
+- category-whitelist.json
 - collections.json
 - currencies.json
 - drops.json

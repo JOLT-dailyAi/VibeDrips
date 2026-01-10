@@ -18,7 +18,7 @@
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Levoit",
-    "category": "Furniture",
+    "category": "",
     "subcategory": "Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/91hGOWzAGFL.jpg",
     "all_images": [
@@ -77,12 +77,6 @@
           "label": "Timestamp",
           "category": "Other",
           "value": "1/3/2026 10:41:13"
-        },
-        {
-          "key": "generic_name",
-          "label": "Generic Name",
-          "category": "Other",
-          "value": "Appliances"
         },
         {
           "key": "date_first_available",
@@ -160,7 +154,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 83,
+      "product_age_days": 87,
       "drop_categories": []
     }
   },
@@ -180,13 +174,12 @@
       "Amazon marketplace domain",
       "Reference Media for similar products ",
       "item_model_number",
-      "generic_name",
       "model_number"
     ],
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Winix",
-    "category": "General",
+    "category": "",
     "subcategory": "Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/71Cph7LlfZL.jpg",
     "all_images": [
@@ -292,7 +285,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 91,
+      "product_age_days": 95,
       "drop_categories": []
     }
   },
@@ -312,14 +305,13 @@
       "Amazon marketplace domain",
       "Reference Media for similar products ",
       "color",
-      "generic_name",
       "product_dimensions",
       "colour"
     ],
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Levoit",
-    "category": "Furniture",
+    "category": "",
     "subcategory": "Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/71XylkefYdL.jpg",
     "all_images": [
@@ -424,6 +416,12 @@
           "label": "Noise Level",
           "category": "Technical",
           "value": "28 Decibels"
+        },
+        {
+          "key": "model_number",
+          "label": "Model Number",
+          "category": "Technical",
+          "value": "LAP-C171-QAE"
         }
       ]
     },
@@ -437,7 +435,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 105,
+      "product_age_days": 109,
       "drop_categories": []
     }
   },
@@ -457,13 +455,12 @@
       "Amazon marketplace domain",
       "Reference Media for similar products ",
       "item_model_number",
-      "generic_name",
       "model_number"
     ],
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Winix",
-    "category": "General",
+    "category": "",
     "subcategory": "Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/71dW-xRhaTL.jpg",
     "all_images": [
@@ -593,7 +590,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 356,
+      "product_age_days": 360,
       "drop_categories": []
     }
   },
@@ -612,13 +609,12 @@
     "Error-Fields": [
       "discountPercentage",
       "Amazon marketplace domain",
-      "Reference Media for similar products ",
-      "generic_name"
+      "Reference Media for similar products "
     ],
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Cornerstone Press",
-    "category": "Books",
+    "category": "",
     "subcategory": "Book",
     "main_image": "https://m.media-amazon.com/images/I/61X7tH9kPOL.jpg",
     "all_images": [
@@ -754,7 +750,7 @@
       "is_high_visibility": false,
       "is_social_proof": true,
       "is_new_release": false,
-      "product_age_days": 889,
+      "product_age_days": 893,
       "drop_categories": [
         "creator-picks"
       ]
@@ -775,13 +771,12 @@
     "Error-Fields": [
       "Amazon marketplace domain",
       "Reference Media for similar products ",
-      "includedComponents",
-      "generic_name"
+      "includedComponents"
     ],
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Winix",
-    "category": "Furniture",
+    "category": "",
     "subcategory": "Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/61EZjAU+fUL.jpg",
     "all_images": [
@@ -879,7 +874,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 1189,
+      "product_age_days": 1193,
       "drop_categories": []
     }
   },
@@ -902,7 +897,7 @@
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Breville",
-    "category": "General",
+    "category": "",
     "subcategory": "Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/71AqfDto--L.jpg",
     "all_images": [
@@ -983,6 +978,12 @@
           "label": "Item Model Number",
           "category": "Technical",
           "value": "LAP208WHT2IAN1"
+        },
+        {
+          "key": "model_number",
+          "label": "Model Number",
+          "category": "Technical",
+          "value": "LAP208WHT2IAN1"
         }
       ]
     },
@@ -996,7 +997,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 1195,
+      "product_age_days": 1199,
       "drop_categories": []
     }
   },
@@ -1021,7 +1022,7 @@
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Breville",
-    "category": "General",
+    "category": "",
     "subcategory": "Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/51qL3f4OqJL.jpg",
     "all_images": [
@@ -1081,12 +1082,6 @@
           "value": "1/3/2026 11:24:21"
         },
         {
-          "key": "generic_name",
-          "label": "Generic Name",
-          "category": "Other",
-          "value": "Appliances"
-        },
-        {
           "key": "date_first_available",
           "label": "Date First Available",
           "category": "Other",
@@ -1107,6 +1102,12 @@
           "label": "Item Model Number",
           "category": "Technical",
           "value": "LAP158WHT2IAN1"
+        },
+        {
+          "key": "model_number",
+          "label": "Model Number",
+          "category": "Technical",
+          "value": "LAP158WHT2IAN1"
         }
       ]
     },
@@ -1120,7 +1121,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 1872,
+      "product_age_days": 1876,
       "drop_categories": []
     }
   },
@@ -1139,13 +1140,12 @@
     "Error-Fields": [
       "Amazon marketplace domain",
       "Reference Media for similar products ",
-      "color",
-      "generic_name"
+      "color"
     ],
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Winix",
-    "category": "Furniture",
+    "category": "",
     "subcategory": "Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/61bu1YA8FpL.jpg",
     "all_images": [
@@ -1263,7 +1263,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 2491,
+      "product_age_days": 2495,
       "drop_categories": []
     }
   },
@@ -1282,13 +1282,12 @@
     "Error-Fields": [
       "discountPercentage",
       "Amazon marketplace domain",
-      "Reference Media for similar products ",
-      "generic_name"
+      "Reference Media for similar products "
     ],
     "currency": "AUD",
     "symbol": "A$",
     "brand": "HUTCHINSON PUBLISHING - TRADE",
-    "category": "Books",
+    "category": "",
     "subcategory": "Book",
     "main_image": "https://m.media-amazon.com/images/I/81l3rZK4lnL.jpg",
     "all_images": [
@@ -1430,7 +1429,7 @@
       "is_high_visibility": false,
       "is_social_proof": true,
       "is_new_release": false,
-      "product_age_days": 3032,
+      "product_age_days": 3036,
       "drop_categories": [
         "creator-picks"
       ]

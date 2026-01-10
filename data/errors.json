@@ -3,7 +3,7 @@
     "total_products": 23,
     "products_with_errors": 23,
     "error_rate": 100,
-    "last_updated": "2026-01-06T14:35:01.588Z"
+    "last_updated": "2026-01-10T04:49:24.025Z"
   },
   "error_breakdown": {
     "DISCOUNT_MISMATCH": 2,
@@ -13,7 +13,6 @@
     "discountPercentage": 2,
     "Amazon marketplace domain": 23,
     "Reference Media for similar products ": 23,
-    "generic_name": 19,
     "color": 6,
     "colour": 4,
     "item_model_number": 5,
@@ -51,15 +50,14 @@
         "Reference Media for similar products ",
         "publisher",
         "manufacturer",
-        "particle_retention_size",
-        "generic_name"
+        "particle_retention_size"
       ],
       "price": 126804,
       "original_price": 126804,
       "discount_percentage": 80,
       "affiliate_link": "https://amzn.to/4pdv5iw",
       "main_image": "https://m.media-amazon.com/images/I/71rQ3Md9w0L.jpg",
-      "category": "Furniture",
+      "category": "",
       "brand": "Nuwave",
       "severity": "warning"
     },
@@ -72,15 +70,14 @@
       "error_fields": [
         "discountPercentage",
         "Amazon marketplace domain",
-        "Reference Media for similar products ",
-        "generic_name"
+        "Reference Media for similar products "
       ],
       "price": 16,
       "original_price": 27,
       "discount_percentage": 41,
       "affiliate_link": "https://amzn.to/44RpxTq",
       "main_image": "https://m.media-amazon.com/images/I/81l3rZK4lnL.jpg",
-      "category": "Books",
+      "category": "",
       "brand": "HUTCHINSON PUBLISHING - TRADE",
       "severity": "info"
     },
@@ -93,15 +90,14 @@
       "error_fields": [
         "discountPercentage",
         "Amazon marketplace domain",
-        "Reference Media for similar products ",
-        "generic_name"
+        "Reference Media for similar products "
       ],
       "price": 20.72,
       "original_price": 27,
       "discount_percentage": 23,
       "affiliate_link": "https://amzn.to/49mRnZa",
       "main_image": "https://m.media-amazon.com/images/I/61X7tH9kPOL.jpg",
-      "category": "Books",
+      "category": "",
       "brand": "Cornerstone Press",
       "severity": "info"
     },
@@ -120,7 +116,7 @@
       "discount_percentage": 23,
       "affiliate_link": "https://amzn.to/493nRIX",
       "main_image": "https://m.media-amazon.com/images/I/91hGOWzAGFL.jpg",
-      "category": "Furniture",
+      "category": "",
       "brand": "Levoit",
       "severity": "info"
     },
@@ -139,7 +135,7 @@
       "discount_percentage": 40,
       "affiliate_link": "https://amzn.to/3YROScj",
       "main_image": "https://m.media-amazon.com/images/I/71AqfDto--L.jpg",
-      "category": "General",
+      "category": "",
       "brand": "Breville",
       "severity": "info"
     },
@@ -160,7 +156,7 @@
       "discount_percentage": 44,
       "affiliate_link": "https://amzn.to/3Ymok2Q",
       "main_image": "https://m.media-amazon.com/images/I/51qL3f4OqJL.jpg",
-      "category": "General",
+      "category": "",
       "brand": "Breville",
       "severity": "info"
     },
@@ -174,7 +170,6 @@
         "Amazon marketplace domain",
         "Reference Media for similar products ",
         "item_model_number",
-        "generic_name",
         "model_number"
       ],
       "price": 247,
@@ -182,7 +177,7 @@
       "discount_percentage": 0,
       "affiliate_link": "https://amzn.to/4q7G8Lg",
       "main_image": "https://m.media-amazon.com/images/I/71dW-xRhaTL.jpg",
-      "category": "General",
+      "category": "",
       "brand": "Winix",
       "severity": "info"
     },
@@ -195,15 +190,14 @@
       "error_fields": [
         "Amazon marketplace domain",
         "Reference Media for similar products ",
-        "color",
-        "generic_name"
+        "color"
       ],
       "price": 343,
       "original_price": 399,
       "discount_percentage": 14,
       "affiliate_link": "https://amzn.to/4sjJxIx",
       "main_image": "https://m.media-amazon.com/images/I/61bu1YA8FpL.jpg",
-      "category": "Furniture",
+      "category": "",
       "brand": "Winix",
       "severity": "info"
     },
@@ -216,15 +210,14 @@
       "error_fields": [
         "Amazon marketplace domain",
         "Reference Media for similar products ",
-        "includedComponents",
-        "generic_name"
+        "includedComponents"
       ],
       "price": 270,
       "original_price": 0,
       "discount_percentage": 0,
       "affiliate_link": "https://amzn.to/4pl6OXy",
       "main_image": "https://m.media-amazon.com/images/I/61EZjAU+fUL.jpg",
-      "category": "Furniture",
+      "category": "",
       "brand": "Winix",
       "severity": "info"
     },
@@ -238,7 +231,6 @@
         "Amazon marketplace domain",
         "Reference Media for similar products ",
         "item_model_number",
-        "generic_name",
         "model_number"
       ],
       "price": 298,
@@ -246,7 +238,7 @@
       "discount_percentage": 15,
       "affiliate_link": "https://amzn.to/4pfw29L",
       "main_image": "https://m.media-amazon.com/images/I/71Cph7LlfZL.jpg",
-      "category": "General",
+      "category": "",
       "brand": "Winix",
       "severity": "info"
     },
@@ -260,7 +252,6 @@
         "Amazon marketplace domain",
         "Reference Media for similar products ",
         "color",
-        "generic_name",
         "product_dimensions",
         "colour"
       ],
@@ -269,7 +260,7 @@
       "discount_percentage": 22,
       "affiliate_link": "https://amzn.to/3MYIkWR",
       "main_image": "https://m.media-amazon.com/images/I/71XylkefYdL.jpg",
-      "category": "Furniture",
+      "category": "",
       "brand": "Levoit",
       "severity": "info"
     },
@@ -282,15 +273,14 @@
       "error_fields": [
         "Amazon marketplace domain",
         "Reference Media for similar products ",
-        "language",
-        "generic_name"
+        "language"
       ],
       "price": 269,
       "original_price": 399,
       "discount_percentage": 33,
       "affiliate_link": "https://amzn.to/4s1oEkS",
       "main_image": "https://m.media-amazon.com/images/I/61k6r9VKk5L.jpg",
-      "category": "Books",
+      "category": "",
       "brand": "MyMirror Publishing House",
       "severity": "info"
     },
@@ -307,7 +297,6 @@
         "item_model_number",
         "particle_retention_size",
         "contaminant_filtration_capability",
-        "generic_name",
         "country_of_origin"
       ],
       "price": 80999,
@@ -315,7 +304,7 @@
       "discount_percentage": 19,
       "affiliate_link": "https://amzn.to/4q46SfP",
       "main_image": "https://m.media-amazon.com/images/I/61vwKV811tL.jpg",
-      "category": "General",
+      "category": "",
       "brand": "Praan",
       "severity": "info"
     },
@@ -328,15 +317,14 @@
       "error_fields": [
         "Amazon marketplace domain",
         "Reference Media for similar products ",
-        "color",
-        "generic_name"
+        "color"
       ],
       "price": 3290,
       "original_price": 6990,
       "discount_percentage": 53,
       "affiliate_link": "https://amzn.to/48KIWaZ",
       "main_image": "https://m.media-amazon.com/images/I/41O1OX4huaL.jpg",
-      "category": "General",
+      "category": "",
       "brand": "Qubo",
       "severity": "info"
     },
@@ -350,7 +338,6 @@
         "Amazon marketplace domain",
         "Reference Media for similar products ",
         "countryOfOrigin",
-        "generic_name",
         "country_of_origin"
       ],
       "price": 24999,
@@ -358,7 +345,7 @@
       "discount_percentage": 0,
       "affiliate_link": "https://amzn.to/4jf44JZ",
       "main_image": "https://m.media-amazon.com/images/I/71n7p4fsSkL.jpg",
-      "category": "General",
+      "category": "",
       "brand": "UBreathe",
       "severity": "info"
     },
@@ -371,15 +358,14 @@
       "error_fields": [
         "Amazon marketplace domain",
         "Reference Media for similar products ",
-        "particle_retention_size",
-        "generic_name"
+        "particle_retention_size"
       ],
       "price": 4700,
       "original_price": 4719,
       "discount_percentage": 45,
       "affiliate_link": "https://amzn.to/3KHxW53",
       "main_image": "https://m.media-amazon.com/images/I/41JcwIG7EGL.jpg",
-      "category": "General",
+      "category": "",
       "brand": "UBreathe",
       "severity": "info"
     },
@@ -400,7 +386,6 @@
         "additionalFeatures",
         "particle_retention_size",
         "contaminant_filtration_capability",
-        "generic_name",
         "special_feature",
         "included_components",
         "colour",
@@ -411,7 +396,7 @@
       "discount_percentage": 45,
       "affiliate_link": "https://amzn.to/48PBAD1",
       "main_image": "https://m.media-amazon.com/images/I/61qe7hzT8SL.jpg",
-      "category": "Beauty & Personal Care",
+      "category": "",
       "brand": "LEVOIT",
       "severity": "info"
     },
@@ -432,7 +417,6 @@
         "room_type",
         "noise_level",
         "controller_type",
-        "generic_name",
         "colour"
       ],
       "price": 65628,
@@ -440,7 +424,7 @@
       "discount_percentage": 13,
       "affiliate_link": "https://amzn.to/4p7Vb6m",
       "main_image": "https://m.media-amazon.com/images/I/61pMsCc8y3L.jpg",
-      "category": "Furniture",
+      "category": "",
       "brand": "Dreo",
       "severity": "info"
     },
@@ -453,15 +437,14 @@
       "error_fields": [
         "Amazon marketplace domain",
         "Reference Media for similar products ",
-        "language",
-        "generic_name"
+        "language"
       ],
       "price": 239,
       "original_price": 280,
       "discount_percentage": 15,
       "affiliate_link": "https://amzn.to/48HAvgG",
       "main_image": "https://m.media-amazon.com/images/I/61Td+yd3qaL.jpg",
-      "category": "Books",
+      "category": "",
       "brand": "MyMirror Publishing House",
       "severity": "info"
     },
@@ -475,15 +458,14 @@
         "Amazon marketplace domain",
         "Reference Media for similar products ",
         "controller_type",
-        "particle_retention_size",
-        "generic_name"
+        "particle_retention_size"
       ],
       "price": 4990,
       "original_price": 6489,
       "discount_percentage": 23,
       "affiliate_link": "https://amzn.to/4qf6cUh",
       "main_image": "https://m.media-amazon.com/images/I/51l8CXzuVfL.jpg",
-      "category": "Furniture",
+      "category": "",
       "brand": "UBreathe",
       "severity": "info"
     },
@@ -498,7 +480,6 @@
         "Reference Media for similar products ",
         "includedComponents",
         "item_model_number",
-        "generic_name",
         "included_components"
       ],
       "price": 2299,
@@ -506,7 +487,7 @@
       "discount_percentage": 23,
       "affiliate_link": "https://amzn.to/4904RK9",
       "main_image": "https://m.media-amazon.com/images/I/91atWaiXuyL.jpg",
-      "category": "General",
+      "category": "",
       "brand": "Honeywell",
       "severity": "info"
     },
@@ -525,7 +506,7 @@
       "discount_percentage": 27,
       "affiliate_link": "https://amzn.to/48Q68EV",
       "main_image": "https://m.media-amazon.com/images/I/61VGUxkTJOL.jpg",
-      "category": "Books",
+      "category": "",
       "brand": "Diamond Books",
       "severity": "info"
     },
@@ -538,15 +519,14 @@
       "error_fields": [
         "Amazon marketplace domain",
         "Reference Media for similar products ",
-        "language",
-        "generic_name"
+        "language"
       ],
       "price": 150,
       "original_price": 200,
       "discount_percentage": 25,
       "affiliate_link": "https://amzn.to/3YhVUXP",
       "main_image": "https://m.media-amazon.com/images/I/71CvcFBz4pL.jpg",
-      "category": "Books",
+      "category": "",
       "brand": "Diamond Books",
       "severity": "info"
     }
