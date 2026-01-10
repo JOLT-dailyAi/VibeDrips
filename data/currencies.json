@@ -10,7 +10,7 @@
       "product_count": 13,
       "filename": "products-INR.json",
       "categories": [
-        "General"
+        "humidifier"
       ],
       "brands": [
         "Praan",
@@ -38,7 +38,7 @@
       "product_count": 10,
       "filename": "products-AUD.json",
       "categories": [
-        "General"
+        "air purifier"
       ],
       "brands": [
         "Levoit",
@@ -53,7 +53,7 @@
       }
     }
   ],
-  "last_updated": "2026-01-10T18:36:58.793Z",
+  "last_updated": "2026-01-10T19:17:48.276Z",
   "total_products": 23,
   "default_currency": "INR"
 }
