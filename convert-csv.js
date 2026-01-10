@@ -203,41 +203,19 @@ const GENERIC_CATEGORY_SEED = [
   'sports items'
 ];
 
-// Marketing adjectives that should be stripped from candidate phrases
-const MARKETING_ADJECTIVES = [
-  'smart',
-  'pro',
-  'ultra',
-  'max',
-  'plus',
-  'mini',
-  'lite',
-  'advanced',
-  'premium',
-  'basic',
-  'new',
-  'latest',
-  'improved',
-  'wireless',
-  'cordless'
+// Canonical domains (The only allowed categories)
+const CANONICAL_CATEGORIES = [
+  'air purifier',
+  'water purifier',
+  'humidifier',
+  'dehumidifier'
 ];
 
-// Nouns that must NEVER be treated as brand tokens (protection list)
-const PROTECTED_NOUNS = new Set([
-  'air', 'purifier', 'filter', 'smart', 'home', 'water', 'light', 'cleaner',
-  'vacuum', 'system', 'pro', 'plus', 'mini', 'max', 'digital', 'electric',
-  'portable', 'manual', 'automatic', 'heavy', 'duty', 'kit', 'set', 'pack'
-]);
-
-// Stopwords and URL fragments that should not form standalone categories
-const STOPWORDS = new Set([
-  'a', 'an', 'the', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for',
-  'of', 'with', 'by', 'from', 'as', 'is', 'was', 'are', 'were', 'be',
-  'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will',
-  'would', 'should', 'could', 'may', 'might', 'must', 'can', 'this',
-  'that', 'these', 'those', 'it', 'its', 'they', 'them', 'their',
-  'http', 'https', 'www', 'com', 'org', 'net', 'edu', 'gov', 'io'
-]);
+// Keywords that indicate a product is an accessory/part rather than the device itself
+const NEGATIVE_INTENT_KEYWORDS = [
+  'filter', 'replacement', 'cover', 'cleaner', 'spray', 'parts', 'kit',
+  'accessory', 'spare', 'refill', 'cartridge', 'combo', 'bundle', 'lot', 'used'
+];
 
 // ============================================
 // HELPER FUNCTIONS
@@ -1003,335 +981,34 @@ function normalizeCategoryText(text) {
     .trim();
 }
 
-// Validate phrase shape before counting/whitelisting (CRITICAL HYGIENE)
-function isValidCategoryPhrase(phrase) {
-  if (!phrase || typeof phrase !== 'string') return false;
+// ============================================
+// DOMAIN-BASED CATEGORY CLASSIFICATION
+// ============================================
 
-  const trimmed = phrase.trim();
-
-  // Length check: 2-40 characters
-  if (trimmed.length < 2 || trimmed.length > 40) return false;
-
-  // Alphabetic + spaces only (no URLs, punctuation, numbers)
-  if (!/^[a-z\s]+$/.test(trimmed)) return false;
-
-  // Word count: 2-4 words
-  const words = trimmed.split(/\s+/).filter(Boolean);
-  if (words.length < 2 || words.length > 4) return false;
-
-  // No stopword-only phrases
-  const nonStopwords = words.filter(w => !STOPWORDS.has(w));
-  if (nonStopwords.length === 0) return false;
-
-  // Must contain at least one concrete noun (heuristic: word length >= 4)
-  const hasConcreteNoun = words.some(w => w.length >= 4 && !STOPWORDS.has(w));
-  if (!hasConcreteNoun) return false;
-
-  return true;
-}
-
-// Remove marketing adjectives from edges of phrase
-function stripMarketingAdjectives(phrase) {
-  if (!phrase) return '';
-  let words = phrase.split(' ').filter(Boolean);
-  if (words.length === 0) return '';
-
-  const adjectiveSet = new Set(MARKETING_ADJECTIVES.map(a => a.toLowerCase()));
-
-  // strip from start
-  while (words.length > 0 && adjectiveSet.has(words[0])) {
-    words.shift();
-  }
-  // strip from end
-  while (words.length > 0 && adjectiveSet.has(words[words.length - 1])) {
-    words.pop();
-  }
-
-  return words.join(' ').trim();
-}
-
-// Split categoryHierarchy safely
-function splitHierarchy(hierarchy) {
-  if (!hierarchy) return [];
-  return hierarchy
-    .split('>')
-    .map(p => normalizeCategoryText(p))
-    .filter(Boolean);
-}
-
-// Extract raw candidate phrases from one row (no brand trimming yet)
-function extractRawCategoryCandidatesFromRow(row) {
-  const candidates = [];
-
-  // itemTypeName
-  if (row.itemTypeName) {
-    const norm = normalizeCategoryText(row.itemTypeName);
-    if (norm) candidates.push(norm);
-  }
-
-  // Title
-  const title = row.productTitle || row.Title || '';
-  if (title) {
-    const normTitle = normalizeCategoryText(title);
-    if (normTitle) {
-      // naive multi-word segmentation: keep full phrase
-      candidates.push(normTitle);
-    }
-  }
-
-  // generic_name
-  if (row.generic_name) {
-    const norm = normalizeCategoryText(row.generic_name);
-    if (norm) candidates.push(norm);
-  }
-
-  // categoryHierarchy segments (not trusted alone, but used as sources)
-  if (row.categoryHierarchy) {
-    splitHierarchy(row.categoryHierarchy).forEach(seg => {
-      candidates.push(seg);
-    });
-  }
-
-  return candidates;
-}
-
-// Extract normalized brand tokens from Brand/brand
-function extractBrandTokensFromRow(row) {
-  const brandField = row.brand || row.Brand || '';
-  const tokens = new Set();
-  if (!brandField || !brandField.trim()) return tokens;
-
-  const norm = normalizeCategoryText(brandField);
-  if (!norm) return tokens;
-
-  norm.split(' ').forEach(t => {
-    if (t && !PROTECTED_NOUNS.has(t)) tokens.add(t);
-  });
-
-  return tokens;
-}
-
-// Pass 1: vocabulary learning over full CSV
-function runCategoryPass1() {
-  const productsCsvPath = path.join(dataDir, 'products.csv');
-  if (!fs.existsSync(productsCsvPath)) {
-    console.warn('⚠️ products.csv not found, skipping category learning pass.');
-    return {
-      brandTokensGlobal: new Set(),
-      phraseFrequency: {},
-      productCountByPhrase: {}
-    };
-  }
-
-  const rawCsv = fs.readFileSync(productsCsvPath, 'utf8');
-  const lines = rawCsv.split(/\r?\n/);
-  if (lines.length <= 1) {
-    return {
-      brandTokensGlobal: new Set(),
-      phraseFrequency: {},
-      productCountByPhrase: {}
-    };
-  }
-
-  const header = lines[0].split(',');
-  const rows = [];
-  for (let i = 1; i < lines.length; i++) {
-    const line = lines[i];
-    if (!line.trim()) continue;
-    const cols = line.split(',');
-    const row = {};
-    header.forEach((h, idx) => {
-      row[h] = cols[idx] !== undefined ? cols[idx] : '';
-    });
-    rows.push(row);
-  }
-
-  const phraseFrequency = {};
-  const productCountByPhrase = {};
-  const brandTokensGlobal = new Set();
-
-  // First collect global brand tokens
-  rows.forEach(row => {
-    const tokens = extractBrandTokensFromRow(row);
-    tokens.forEach(t => brandTokensGlobal.add(t));
-  });
-
-  // Now process each row's phrases
-  rows.forEach((row, rowIndex) => {
-    const rawCandidates = extractRawCategoryCandidatesFromRow(row);
-    const brandTokensForRow = extractBrandTokensFromRow(row);
-    const rowSeenPhrases = new Set();
-
-    rawCandidates.forEach(rawPhrase => {
-      if (!rawPhrase) return;
-
-      // phrase-level brand trimming
-      let words = rawPhrase.split(' ').filter(Boolean);
-      if (words.length < 2) return; // single-word phrases discarded
-
-      // remove any word that is a brand token (global)
-      words = words.filter(w => !brandTokensGlobal.has(w));
-      if (words.length < 2) return;
-
-      let phrase = words.join(' ').trim();
-      phrase = stripMarketingAdjectives(phrase);
-      if (!phrase) return;
-
-      const wordCount = phrase.split(' ').filter(Boolean).length;
-      if (wordCount < 2) return;
-
-      // noise rejection: generic blacklist seed
-      const lowerPhrase = phrase.toLowerCase();
-      if (GENERIC_CATEGORY_SEED.includes(lowerPhrase)) {
-        return;
-      }
-
-      // CRITICAL HYGIENE: Phrase shape validation
-      if (!isValidCategoryPhrase(phrase)) {
-        return; // Reject URLs, sentences, long titles, stopword-only phrases
-      }
-
-      // Brand-equals-category kill switch
-      if (brandTokensGlobal.has(lowerPhrase)) {
-        return; // Reject if phrase equals any brand token
-      }
-
-      // track frequencies
-      phraseFrequency[phrase] = (phraseFrequency[phrase] || 0) + 1;
-
-      if (!rowSeenPhrases.has(phrase)) {
-        rowSeenPhrases.add(phrase);
-        productCountByPhrase[phrase] = (productCountByPhrase[phrase] || 0) + 1;
-      }
-    });
-  });
-
-  return {
-    brandTokensGlobal,
-    phraseFrequency,
-    productCountByPhrase
-  };
-}
-
-// Persist artifacts to data/
-function writeCategoryArtifacts(pass1Result) {
-  const { brandTokensGlobal, productCountByPhrase } = pass1Result;
-
-  // brand-blacklist.json: all global brand tokens
-  const brandBlacklist = Array.from(brandTokensGlobal).sort();
-  fs.writeFileSync(
-    path.join(dataDir, 'brand-blacklist.json'),
-    JSON.stringify(brandBlacklist, null, 2)
-  );
-
-  // category-blacklist.json: semantic seed terms only (non-frequency-based)
-  const categoryBlacklist = GENERIC_CATEGORY_SEED.slice().sort();
-  fs.writeFileSync(
-    path.join(dataDir, 'category-blacklist.json'),
-    JSON.stringify(categoryBlacklist, null, 2)
-  );
-
-  // category-whitelist.json: phrases that appear in ≥2 distinct products and are not generic
-  const whitelist = [];
-  Object.entries(productCountByPhrase).forEach(([phrase, productCount]) => {
-    if (productCount >= 2) {
-      const lower = phrase.toLowerCase();
-      if (!GENERIC_CATEGORY_SEED.includes(lower)) {
-        whitelist.push(phrase);
-      }
-    }
-  });
-
-  whitelist.sort((a, b) => a.localeCompare(b));
-  fs.writeFileSync(
-    path.join(dataDir, 'category-whitelist.json'),
-    JSON.stringify(whitelist, null, 2)
-  );
-
-  return {
-    brandBlacklist,
-    categoryBlacklist,
-    categoryWhitelist: whitelist
-  };
-}
-
-// Load artifacts for Pass 2
-function loadCategoryArtifacts() {
-  const brandPath = path.join(dataDir, 'brand-blacklist.json');
-  const catBlackPath = path.join(dataDir, 'category-blacklist.json');
-  const catWhitePath = path.join(dataDir, 'category-whitelist.json');
-
-  let brandTokens = [];
-  let categoryBlacklist = [];
-  let categoryWhitelist = [];
-
-  try {
-    if (fs.existsSync(brandPath)) {
-      brandTokens = JSON.parse(fs.readFileSync(brandPath, 'utf8'));
-    }
-  } catch (e) {
-    console.warn('⚠️ Failed to read brand-blacklist.json, falling back to empty list.');
-  }
-
-  try {
-    if (fs.existsSync(catBlackPath)) {
-      categoryBlacklist = JSON.parse(fs.readFileSync(catBlackPath, 'utf8'));
-    }
-  } catch (e) {
-    console.warn('⚠️ Failed to read category-blacklist.json, falling back to seed list.');
-    categoryBlacklist = GENERIC_CATEGORY_SEED.slice();
-  }
-
-  try {
-    if (fs.existsSync(catWhitePath)) {
-      categoryWhitelist = JSON.parse(fs.readFileSync(catWhitePath, 'utf8'));
-    }
-  } catch (e) {
-    console.warn('⚠️ Failed to read category-whitelist.json, using empty whitelist.');
-  }
-
-  const brandTokenSet = new Set(
-    brandTokens.map(t => normalizeCategoryText(t)).filter(Boolean)
-  );
-  const catBlackSet = new Set(
-    categoryBlacklist.map(t => normalizeCategoryText(t)).filter(Boolean)
-  );
-  const catWhiteSet = new Set(
-    categoryWhitelist.map(t => normalizeCategoryText(t)).filter(Boolean)
-  );
-
-  return {
-    brandTokensRaw: brandTokens,
-    brandTokenSet,
-    categoryBlacklistRaw: categoryBlacklist,
-    categoryBlacklistSet: catBlackSet,
-    categoryWhitelistRaw: categoryWhitelist,
-    categoryWhitelistSet: catWhiteSet
-  };
-}
-
-// Pass 2: assign ONE dominant category per product (Domain-Based Substring Matching)
-function assignCategoryForProduct(product, originalRow, artifacts) {
-  const {
-    categoryWhitelistRaw = []
-  } = artifacts;
-
+// Assign ONE dominant canonical category per product based on title substring matching
+function assignCategoryForProduct(product, originalRow) {
   const title = (originalRow.productTitle || originalRow.Title || '').toLowerCase();
-  if (!title) return 'General';
+  if (!title) return '';
 
-  let bestMatch = null;
+  // 1. Check for negative intent (accessories, parts, junk)
+  for (const keyword of NEGATIVE_INTENT_KEYWORDS) {
+    if (title.includes(keyword)) {
+      return ''; // Reject accessories
+    }
+  }
 
-  // Domain-based substring matching: longest whitelist match wins
-  categoryWhitelistRaw.forEach(phrase => {
-    const normPhrase = phrase.toLowerCase();
-    if (title.includes(normPhrase)) {
-      if (!bestMatch || normPhrase.length > bestMatch.toLowerCase().length) {
-        bestMatch = phrase;
+  // 2. Substring match against canonical domains
+  // Longest match wins to handle overlap (e.g., if we had 'air' and 'air purifier')
+  let bestMatch = '';
+  for (const category of CANONICAL_CATEGORIES) {
+    if (title.includes(category)) {
+      if (category.length > bestMatch.length) {
+        bestMatch = category;
       }
     }
-  });
+  }
 
-  return bestMatch || 'General';
+  return bestMatch;
 }
 
 // ============================================
@@ -1472,10 +1149,7 @@ function deleteOldFiles() {
 
   const preservedFiles = [
     'products.csv',
-    'last_updated.txt',
-    'brand-blacklist.json',
-    'category-blacklist.json',
-    'category-whitelist.json'
+    'last_updated.txt'
   ];
 
   files.forEach(file => {
@@ -1529,11 +1203,8 @@ function convertCsvToJson() {
   const deletedFiles = deleteOldFiles();
   console.log('✅ Old files deletion complete.');
 
-  // TSD-1: Pass 1 — vocabulary learning and artifacts regeneration
-  console.log('📚 TSD-1: Running category Pass 1 (vocabulary learning)...');
-  const pass1Result = runCategoryPass1();
-  const artifacts = writeCategoryArtifacts(pass1Result);
-  console.log(`✅ TSD-1: category artifacts regenerated (whitelist: ${artifacts.categoryWhitelist.length}, brands: ${artifacts.brandBlacklist.length})`);
+  // TSD-1 logic removed in favor of static canonical classification
+  console.log('📚 Category System: Static Canonical Classification...');
 
   let lastUpdatedContent = `VibeDrips Data Processing Summary
 
@@ -1568,7 +1239,7 @@ ${filesBeforeDeletion.map(file => `- ${file}`).join('\n') || '- None'}
 ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '- None'}`;
 
   const filesAfterDeletion = fs.existsSync(dataDir) ? fs.readdirSync(dataDir) : [];
-  const expectedFiles = ['last_updated.txt', 'products.csv', 'category-blacklist.json', 'brand-blacklist.json', 'category-whitelist.json'];
+  const expectedFiles = ['last_updated.txt', 'products.csv'];
   const unexpectedFiles = filesAfterDeletion.filter(file => !expectedFiles.includes(file));
 
   lastUpdatedContent += `
@@ -1582,7 +1253,6 @@ ${filesAfterDeletion.map(file => `- ${file}`).join('\n') || '- None'}`;
   fs.writeFileSync(path.join(dataDir, 'last_updated.txt'), lastUpdatedContent);
 
   console.log('📄 Processing CSV from input...');
-  const categoryArtifactsForPass2 = loadCategoryArtifacts();
 
   process.stdin
     .pipe(csv())
@@ -1639,8 +1309,8 @@ ${filesAfterDeletion.map(file => `- ${file}`).join('\n') || '- None'}`;
         const coreFields = extractCoreFields(data, pricingValidation, currency, referenceMedia);
         if (coreFields.season) processingStats.seasonsFound.add(coreFields.season);
 
-        // Pass 2 category assignment based on artifacts
-        const assignedCategory = assignCategoryForProduct(coreFields, data, categoryArtifactsForPass2);
+        // Category assignment based on canonical list
+        const assignedCategory = assignCategoryForProduct(coreFields, data);
         coreFields.category = assignedCategory || '';
 
         if (assignedCategory) {
@@ -1783,10 +1453,7 @@ ${filesAfterDeletion.map(file => `- ${file}`).join('\n') || '- None'}`;
         'drops.json',
         'influencers.json',
         'collections.json',
-        'errors.json',
-        'category-blacklist.json',
-        'brand-blacklist.json',
-        'category-whitelist.json'
+        'errors.json'
       ]);
 
       const remnantFiles = finalFiles.filter(file => !generatedFiles.has(file));
@@ -1871,15 +1538,12 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
 
 📁 FILES GENERATED
 
-${Object.keys(currencyResults).map(currency => `- products-${currency}.json (${currencyResults[currency].length} products)`).join('\n')}
+- products-*.json (currency-specific data)
 - currencies.json (manifest)
 - drops.json (drops manifest)
 - influencers.json (${Object.keys(influencersData).length} influencers)
 - collections.json (${Object.keys(collectionsData).length} collections)
 - errors.json (${errorsData.flagged_products.length} flagged products)
-- category-blacklist.json (generic blacklist seed)
-- brand-blacklist.json (learned brand tokens)
-- category-whitelist.json (stable category phrases)
 
 📁 FINAL FILES PRESENT
 
@@ -1911,9 +1575,9 @@ ${remnantFiles.length > 0 ? `\n⚠️ Remnant files detected:\n${remnantFiles.ma
       process.exit(1);
     });
 
-  console.log('🚀 VibeDrips Multi-Currency Product Processor v7.1 (TSD-1)');
+  console.log('🚀 VibeDrips Multi-Currency Product Processor v7.2');
   console.log('=========================================================');
-  console.log('✨ Lean Manifests + Error Tracking + Drop Products + Two-Pass Categories');
+  console.log('✨ Lean Manifests + Error Tracking + Drop Products + Static Categories');
 }
 
 convertCsvToJson();
