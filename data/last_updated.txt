@@ -1,6 +1,6 @@
 VibeDrips Data Processing Summary
 
-Generated: 2026-01-10T15:15:02.957Z
+Generated: 2026-01-10T17:22:43.437Z
 
 📊 STATISTICS
 
@@ -66,6 +66,9 @@ Generated: 2026-01-10T15:15:02.957Z
 
 📁 FILES BEFORE DELETION
 
+- brand-blacklist.json
+- category-blacklist.json
+- category-whitelist.json
 - last_updated.txt
 - products.csv
 
