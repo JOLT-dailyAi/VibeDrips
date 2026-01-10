@@ -1,3 +1,4 @@
+console.log(">>> TSD-1 convert-csv.js LOADED <<<");
 const csv = require('csv-parser');
 const fs = require('fs');
 const path = require('path');
