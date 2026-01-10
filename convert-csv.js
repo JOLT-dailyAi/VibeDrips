@@ -1310,95 +1310,28 @@ function loadCategoryArtifacts() {
   };
 }
 
-// Pass 2: assign ONE dominant category per product
+// Pass 2: assign ONE dominant category per product (Domain-Based Substring Matching)
 function assignCategoryForProduct(product, originalRow, artifacts) {
   const {
-    brandTokenSet,
-    categoryBlacklistSet,
-    categoryWhitelistSet
+    categoryWhitelistRaw = []
   } = artifacts;
 
-  // Collect candidate phrases from same sources, but now enforce whitelist/blacklist/brand rules
-  const rawCandidates = extractRawCategoryCandidatesFromRow({
-    productTitle: originalRow.productTitle || originalRow.Title,
-    Title: originalRow.Title,
-    itemTypeName: originalRow.itemTypeName,
-    generic_name: originalRow.generic_name,
-    categoryHierarchy: originalRow.categoryHierarchy
-  });
+  const title = (originalRow.productTitle || originalRow.Title || '').toLowerCase();
+  if (!title) return 'General';
 
-  const brandTokensForRow = extractBrandTokensFromRow(originalRow);
-  const allBrandTokens = new Set([...brandTokenSet, ...brandTokensForRow]);
+  let bestMatch = null;
 
-  const validCandidates = [];
-
-  rawCandidates.forEach(rawPhrase => {
-    if (!rawPhrase) return;
-
-    let words = rawPhrase.split(' ').filter(Boolean);
-    if (words.length < 2) return;
-
-    // Remove any brand tokens
-    words = words.filter(w => !allBrandTokens.has(w));
-    if (words.length < 2) return;
-
-    let phrase = words.join(' ').trim();
-    phrase = stripMarketingAdjectives(phrase);
-    if (!phrase) return;
-
-    const normPhrase = normalizeCategoryText(phrase);
-    if (!normPhrase) return;
-
-    const wordCount = normPhrase.split(' ').filter(Boolean).length;
-    if (wordCount < 2) return;
-
-    // CRITICAL HYGIENE: Phrase shape validation (defense-in-depth)
-    if (!isValidCategoryPhrase(normPhrase)) {
-      return; // Reject URLs, sentences, long titles, stopword-only phrases
-    }
-
-    // Brand-equals-category kill switch (defense-in-depth)
-    if (allBrandTokens.has(normPhrase)) {
-      return; // Reject if phrase equals any brand token
-    }
-
-    // Rule 1: present in whitelist
-    if (!categoryWhitelistSet.has(normPhrase)) return;
-
-    // Rule 2: not present in blacklist
-    if (categoryBlacklistSet.has(normPhrase)) return;
-
-    // Rule 3 & 4: does not contain or equal any brand token
-    const phraseWords = normPhrase.split(' ').filter(Boolean);
-    for (const w of phraseWords) {
-      if (allBrandTokens.has(w)) {
-        return;
+  // Domain-based substring matching: longest whitelist match wins
+  categoryWhitelistRaw.forEach(phrase => {
+    const normPhrase = phrase.toLowerCase();
+    if (title.includes(normPhrase)) {
+      if (!bestMatch || normPhrase.length > bestMatch.toLowerCase().length) {
+        bestMatch = phrase;
       }
     }
-    if (allBrandTokens.has(normPhrase)) {
-      return;
-    }
-
-    validCandidates.push({
-      phrase: phrase,
-      normalized: normPhrase,
-      wordCount
-    });
   });
 
-  if (validCandidates.length === 0) {
-    return '';
-  }
-
-  // Rule 6: shortest stable phrase wins (most general product type)
-  validCandidates.sort((a, b) => {
-    if (a.wordCount !== b.wordCount) {
-      return a.wordCount - b.wordCount;
-    }
-    return a.phrase.localeCompare(b.phrase);
-  });
-
-  return validCandidates[0].phrase;
+  return bestMatch || 'General';
 }
 
 // ============================================
