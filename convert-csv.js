@@ -222,6 +222,15 @@ const MARKETING_ADJECTIVES = [
   'cordless'
 ];
 
+// Stopwords that should not form standalone phrases
+const STOPWORDS = new Set([
+  'a', 'an', 'the', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for',
+  'of', 'with', 'by', 'from', 'as', 'is', 'was', 'are', 'were', 'be',
+  'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did', 'will',
+  'would', 'should', 'could', 'may', 'might', 'must', 'can', 'this',
+  'that', 'these', 'those', 'it', 'its', 'they', 'them', 'their'
+]);
+
 // ============================================
 // HELPER FUNCTIONS
 // ============================================
@@ -986,6 +995,33 @@ function normalizeCategoryText(text) {
     .trim();
 }
 
+// Validate phrase shape before counting/whitelisting (CRITICAL HYGIENE)
+function isValidCategoryPhrase(phrase) {
+  if (!phrase || typeof phrase !== 'string') return false;
+
+  const trimmed = phrase.trim();
+
+  // Length check: 2-40 characters
+  if (trimmed.length < 2 || trimmed.length > 40) return false;
+
+  // Alphabetic + spaces only (no URLs, punctuation, numbers)
+  if (!/^[a-z\s]+$/.test(trimmed)) return false;
+
+  // Word count: 2-4 words
+  const words = trimmed.split(/\s+/).filter(Boolean);
+  if (words.length < 2 || words.length > 4) return false;
+
+  // No stopword-only phrases
+  const nonStopwords = words.filter(w => !STOPWORDS.has(w));
+  if (nonStopwords.length === 0) return false;
+
+  // Must contain at least one concrete noun (heuristic: word length >= 4)
+  const hasConcreteNoun = words.some(w => w.length >= 4 && !STOPWORDS.has(w));
+  if (!hasConcreteNoun) return false;
+
+  return true;
+}
+
 // Remove marketing adjectives from edges of phrase
 function stripMarketingAdjectives(phrase) {
   if (!phrase) return '';
@@ -1140,6 +1176,16 @@ function runCategoryPass1() {
       const lowerPhrase = phrase.toLowerCase();
       if (GENERIC_CATEGORY_SEED.includes(lowerPhrase)) {
         return;
+      }
+
+      // CRITICAL HYGIENE: Phrase shape validation
+      if (!isValidCategoryPhrase(phrase)) {
+        return; // Reject URLs, sentences, long titles, stopword-only phrases
+      }
+
+      // Brand-equals-category kill switch
+      if (brandTokensGlobal.has(lowerPhrase)) {
+        return; // Reject if phrase equals any brand token
       }
 
       // track frequencies
@@ -1297,6 +1343,16 @@ function assignCategoryForProduct(product, originalRow, artifacts) {
 
     const wordCount = normPhrase.split(' ').filter(Boolean).length;
     if (wordCount < 2) return;
+
+    // CRITICAL HYGIENE: Phrase shape validation (defense-in-depth)
+    if (!isValidCategoryPhrase(normPhrase)) {
+      return; // Reject URLs, sentences, long titles, stopword-only phrases
+    }
+
+    // Brand-equals-category kill switch (defense-in-depth)
+    if (allBrandTokens.has(normPhrase)) {
+      return; // Reject if phrase equals any brand token
+    }
 
     // Rule 1: present in whitelist
     if (!categoryWhitelistSet.has(normPhrase)) return;
