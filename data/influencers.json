@@ -4,7 +4,8 @@
     "productCount": 8,
     "totalValue": 1784,
     "categories": [
-      "air purifier"
+      "Furniture",
+      "General"
     ],
     "brands": [
       "Levoit",
@@ -61,7 +62,11 @@
     "name": "Food Pharmer",
     "productCount": 5,
     "totalValue": 97566,
-    "categories": [],
+    "categories": [
+      "General",
+      "Beauty & Personal Care",
+      "Furniture"
+    ],
     "brands": [
       "Praan",
       "Qubo",

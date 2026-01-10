@@ -18,12 +18,13 @@
       "item_model_number",
       "particle_retention_size",
       "contaminant_filtration_capability",
+      "generic_name",
       "country_of_origin"
     ],
     "currency": "INR",
     "symbol": "₹",
     "brand": "Praan",
-    "category": "",
+    "category": "General",
     "subcategory": "Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/61vwKV811tL.jpg",
     "all_images": [
@@ -225,12 +226,13 @@
       "Amazon marketplace domain",
       "Reference Media for similar products ",
       "countryOfOrigin",
+      "generic_name",
       "country_of_origin"
     ],
     "currency": "INR",
     "symbol": "₹",
     "brand": "UBreathe",
-    "category": "",
+    "category": "General",
     "subcategory": "uBreathe Life Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/71n7p4fsSkL.jpg",
     "all_images": [
@@ -402,6 +404,7 @@
       "additionalFeatures",
       "particle_retention_size",
       "contaminant_filtration_capability",
+      "generic_name",
       "special_feature",
       "included_components",
       "colour",
@@ -410,7 +413,7 @@
     "currency": "INR",
     "symbol": "₹",
     "brand": "LEVOIT",
-    "category": "",
+    "category": "Beauty & Personal Care",
     "subcategory": "Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/61qe7hzT8SL.jpg",
     "all_images": [
@@ -569,12 +572,13 @@
       "room_type",
       "noise_level",
       "controller_type",
+      "generic_name",
       "colour"
     ],
     "currency": "INR",
     "symbol": "₹",
     "brand": "Dreo",
-    "category": "humidifier",
+    "category": "Furniture",
     "subcategory": "Humidifier",
     "main_image": "https://m.media-amazon.com/images/I/61pMsCc8y3L.jpg",
     "all_images": [
@@ -735,12 +739,13 @@
     "Error-Fields": [
       "Amazon marketplace domain",
       "Reference Media for similar products ",
-      "particle_retention_size"
+      "particle_retention_size",
+      "generic_name"
     ],
     "currency": "INR",
     "symbol": "₹",
     "brand": "UBreathe",
-    "category": "",
+    "category": "General",
     "subcategory": "uBreathe Life Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/41JcwIG7EGL.jpg",
     "all_images": [
@@ -950,12 +955,13 @@
       "Reference Media for similar products ",
       "publisher",
       "manufacturer",
-      "particle_retention_size"
+      "particle_retention_size",
+      "generic_name"
     ],
     "currency": "INR",
     "symbol": "₹",
     "brand": "Nuwave",
-    "category": "",
+    "category": "Furniture",
     "subcategory": "NUWAVE OxyPure ZERO Smart Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/71rQ3Md9w0L.jpg",
     "all_images": [
@@ -1155,12 +1161,13 @@
       "Amazon marketplace domain",
       "Reference Media for similar products ",
       "controller_type",
-      "particle_retention_size"
+      "particle_retention_size",
+      "generic_name"
     ],
     "currency": "INR",
     "symbol": "₹",
     "brand": "UBreathe",
-    "category": "",
+    "category": "Furniture",
     "subcategory": "Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/51l8CXzuVfL.jpg",
     "all_images": [
@@ -1355,12 +1362,13 @@
     "Error-Fields": [
       "Amazon marketplace domain",
       "Reference Media for similar products ",
-      "language"
+      "language",
+      "generic_name"
     ],
     "currency": "INR",
     "symbol": "₹",
     "brand": "MyMirror Publishing House",
-    "category": "",
+    "category": "Books",
     "subcategory": "Book",
     "main_image": "https://m.media-amazon.com/images/I/61k6r9VKk5L.jpg",
     "all_images": [
@@ -1553,12 +1561,13 @@
     "Error-Fields": [
       "Amazon marketplace domain",
       "Reference Media for similar products ",
-      "color"
+      "color",
+      "generic_name"
     ],
     "currency": "INR",
     "symbol": "₹",
     "brand": "Qubo",
-    "category": "",
+    "category": "General",
     "subcategory": "Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/41O1OX4huaL.jpg",
     "all_images": [
@@ -1723,12 +1732,13 @@
     "Error-Fields": [
       "Amazon marketplace domain",
       "Reference Media for similar products ",
-      "language"
+      "language",
+      "generic_name"
     ],
     "currency": "INR",
     "symbol": "₹",
     "brand": "MyMirror Publishing House",
-    "category": "",
+    "category": "Books",
     "subcategory": "Book",
     "main_image": "https://m.media-amazon.com/images/I/61Td+yd3qaL.jpg",
     "all_images": [
@@ -1922,12 +1932,13 @@
       "Reference Media for similar products ",
       "includedComponents",
       "item_model_number",
+      "generic_name",
       "included_components"
     ],
     "currency": "INR",
     "symbol": "₹",
     "brand": "Honeywell",
-    "category": "",
+    "category": "General",
     "subcategory": "Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/91atWaiXuyL.jpg",
     "all_images": [
@@ -2076,7 +2087,7 @@
     "currency": "INR",
     "symbol": "₹",
     "brand": "Diamond Books",
-    "category": "",
+    "category": "Books",
     "subcategory": "Book",
     "main_image": "https://m.media-amazon.com/images/I/61VGUxkTJOL.jpg",
     "all_images": [
@@ -2141,6 +2152,12 @@
           "label": "Timestamp",
           "category": "Other",
           "value": "12/16/2025 22:22:32"
+        },
+        {
+          "key": "generic_name",
+          "label": "Generic Name",
+          "category": "Other",
+          "value": "Books"
         }
       ],
       "Product Specs": [
@@ -2243,12 +2260,13 @@
     "Error-Fields": [
       "Amazon marketplace domain",
       "Reference Media for similar products ",
-      "language"
+      "language",
+      "generic_name"
     ],
     "currency": "INR",
     "symbol": "₹",
     "brand": "Diamond Books",
-    "category": "",
+    "category": "Books",
     "subcategory": "Book",
     "main_image": "https://m.media-amazon.com/images/I/71CvcFBz4pL.jpg",
     "all_images": [
