@@ -11,10 +11,8 @@
       "filename": "products-INR.json",
       "categories": [
         "Air Purifier",
-        "uBreathe Life Air Purifier",
         "Humidifier",
-        "NUWAVE OxyPure ZERO Smart Air Purifier",
-        "Book"
+        "Books"
       ],
       "brands": [
         "Praan",
@@ -43,7 +41,7 @@
       "filename": "products-AUD.json",
       "categories": [
         "Air Purifier",
-        "Book"
+        "Books"
       ],
       "brands": [
         "Levoit",
@@ -58,7 +56,7 @@
       }
     }
   ],
-  "last_updated": "2026-01-11T06:08:58.062Z",
+  "last_updated": "2026-01-11T06:22:35.814Z",
   "total_products": 23,
   "default_currency": "INR"
 }
