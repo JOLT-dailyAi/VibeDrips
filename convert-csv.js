@@ -993,66 +993,55 @@ function isBlacklisted(value) {
   return GENERIC_BLACKLIST.includes(normalized);
 }
 
-function assignCategory(row, CANDIDATE_LIST) {
-  // Normalized for comparison
-  const candidates = {
-    itemTypeName: normalizeCategory(row.itemTypeName),
-    generic_name: normalizeCategory(row.generic_name),
-    Category: normalizeCategory(row.Category),
-    categoryHierarchy: normalizeCategory(
-      row.categoryHierarchy ? row.categoryHierarchy.split('>')[0] : ''
-    )
-  };
+function assignCategory(row, CANDIDATE_MAP) {
+  const findMatch = (rawVal) => {
+    if (!rawVal) return null;
+    const normalizedField = normalizeCategory(rawVal);
 
-  // Preserve original casing
-  const originals = {
-    itemTypeName: (row.itemTypeName || '').trim(),
-    generic_name: (row.generic_name || '').trim(),
-    Category: (row.Category || '').trim(),
-    categoryHierarchy: row.categoryHierarchy ? row.categoryHierarchy.split('>')[0].trim() : ''
+    // Find all matching candidates from our whitelist
+    const matches = Object.keys(CANDIDATE_MAP)
+      .filter(cand => normalizedField.includes(cand))
+      .sort((a, b) => a.length - b.length); // Shortest match first (more general)
+
+    if (matches.length > 0) {
+      const bestMatch = matches[0];
+      return {
+        normalized: bestMatch,
+        original: CANDIDATE_MAP[bestMatch]
+      };
+    }
+    return null;
   };
 
   const titleLower = (row.Title || row.productTitle || '').toLowerCase();
 
-  // Priority 1: itemTypeName
-  if (candidates.itemTypeName &&
-    CANDIDATE_LIST.includes(candidates.itemTypeName) &&
-    !isBlacklisted(candidates.itemTypeName)) {
-    const validated = titleLower.includes(candidates.itemTypeName);
-    console.log(`📦 ${row.productTitle || row.Title}`);
-    console.log(`   Category: "${originals.itemTypeName}" (${validated ? '✅ validated' : '⚠️ not validated'})`);
-    return originals.itemTypeName;
+  const sources = [
+    { name: 'itemTypeName', val: row.itemTypeName, priority: 1 },
+    { name: 'generic_name', val: row.generic_name, priority: 2 },
+    { name: 'Category', val: row.Category, priority: 3 },
+    { name: 'categoryHierarchy', val: row.categoryHierarchy ? row.categoryHierarchy.split('>')[0] : '', priority: 4 }
+  ];
+
+  for (const source of sources) {
+    const match = findMatch(source.val);
+    if (match && !isBlacklisted(match.normalized)) {
+      const validated = titleLower.includes(match.normalized);
+      console.log(`📦 ${row.productTitle || row.Title}`);
+      console.log(`   Category: "${match.original}" (from ${source.name}, ${validated ? '✅ validated' : '⚠️ not validated'})`);
+      return match.original;
+    }
   }
 
-  // Priority 2: generic_name
-  if (candidates.generic_name &&
-    CANDIDATE_LIST.includes(candidates.generic_name) &&
-    !isBlacklisted(candidates.generic_name)) {
-    const validated = titleLower.includes(candidates.generic_name);
-    console.log(`📦 ${row.productTitle || row.Title}`);
-    console.log(`   Category: "${originals.generic_name}" (${validated ? '✅ validated' : '⚠️ not validated'})`);
-    return originals.generic_name;
+  // Final fallbacks if no whitelisted candidate found in fields
+  if (row.Category && !isBlacklisted(normalizeCategory(row.Category))) {
+    return row.Category.trim();
   }
 
-  // Priority 3: Category (fallback)
-  if (candidates.Category &&
-    CANDIDATE_LIST.includes(candidates.Category) &&
-    !isBlacklisted(candidates.Category)) {
-    console.log(`📦 ${row.productTitle || row.Title}`);
-    console.log(`   Category: "${originals.Category}" (fallback: Category)`);
-    return originals.Category;
+  if (row.categoryHierarchy) {
+    const first = row.categoryHierarchy.split('>')[0].trim();
+    if (!isBlacklisted(normalizeCategory(first))) return first;
   }
 
-  // Priority 4: categoryHierarchy (fallback)
-  if (candidates.categoryHierarchy &&
-    CANDIDATE_LIST.includes(candidates.categoryHierarchy) &&
-    !isBlacklisted(candidates.categoryHierarchy)) {
-    console.log(`📦 ${row.productTitle || row.Title}`);
-    console.log(`   Category: "${originals.categoryHierarchy}" (fallback: categoryHierarchy)`);
-    return originals.categoryHierarchy;
-  }
-
-  // Priority 5: Default
   console.log(`📦 ${row.productTitle || row.Title}`);
   console.log(`   Category: "General" (default)`);
   return 'General';
@@ -1191,20 +1180,25 @@ function deleteOldFiles() {
 
   files.forEach(file => {
     const filePath = path.join(dataDir, file);
-    if (file !== 'products.csv' && file !== 'last_updated.txt') {
-      let attempts = 0;
-      const maxAttempts = 3;
 
-      while (attempts < maxAttempts) {
-        try {
-          fs.unlinkSync(filePath);
-          deletedFiles.push(file);
-          break;
-        } catch (error) {
-          attempts++;
-          if (attempts === maxAttempts) {
-            console.error(`Failed to delete ${file} after ${maxAttempts} attempts`);
-          }
+    // Skip source and logs
+    if (file === 'products.csv' || file === 'last_updated.txt') return;
+
+    // Skip known manifests
+    if (KEEP_PATTERNS.some(p => p.test(file))) return;
+
+    let attempts = 0;
+    const maxAttempts = 3;
+
+    while (attempts < maxAttempts) {
+      try {
+        fs.unlinkSync(filePath);
+        deletedFiles.push(file);
+        break;
+      } catch (error) {
+        attempts++;
+        if (attempts === maxAttempts) {
+          console.error(`Failed to delete ${file} after ${maxAttempts} attempts`);
         }
       }
     }
@@ -1256,33 +1250,42 @@ function convertCsvToJson() {
   fs.createReadStream(csvFilePath)
     .pipe(csv())
     .on('data', (row) => {
-      // Extract and count from itemTypeName
-      const itemType = normalizeCategory(row.itemTypeName);
-      if (itemType) categoryFrequency[itemType] = (categoryFrequency[itemType] || 0) + 1;
+      const record = (val) => {
+        if (!val) return;
+        const norm = normalizeCategory(val);
+        if (!norm || isBlacklisted(norm)) return;
 
-      // Extract and count from generic_name
-      const genericName = normalizeCategory(row.generic_name);
-      if (genericName) categoryFrequency[genericName] = (categoryFrequency[genericName] || 0) + 1;
+        if (!categoryFrequency[norm]) {
+          categoryFrequency[norm] = { count: 0, originals: {} };
+        }
+        categoryFrequency[norm].count++;
 
-      // Extract and count from Category
-      const rowCategory = normalizeCategory(row.Category);
-      if (rowCategory) categoryFrequency[rowCategory] = (categoryFrequency[rowCategory] || 0) + 1;
+        const trimmed = val.trim();
+        categoryFrequency[norm].originals[trimmed] = (categoryFrequency[norm].originals[trimmed] || 0) + 1;
+      };
 
-      // Extract and count from categoryHierarchy parts
+      record(row.itemTypeName);
+      record(row.generic_name);
+      record(row.Category);
       if (row.categoryHierarchy) {
-        row.categoryHierarchy.split('>').forEach(part => {
-          const normPart = normalizeCategory(part);
-          if (normPart) categoryFrequency[normPart] = (categoryFrequency[normPart] || 0) + 1;
-        });
+        row.categoryHierarchy.split('>').forEach(part => record(part));
       }
     })
     .on('end', () => {
-      const CANDIDATE_LIST = Object.keys(categoryFrequency)
-        .filter(value => !isBlacklisted(value));
+      const CANDIDATE_MAP = {};
+      Object.entries(categoryFrequency).forEach(([norm, data]) => {
+        // Frequency threshold: only keep if it appears at least 2 times
+        if (data.count >= 2) {
+          // Pick the most frequent original casing
+          const bestOriginal = Object.entries(data.originals)
+            .sort((a, b) => b[1] - a[1])[0][0];
+          CANDIDATE_MAP[norm] = bestOriginal;
+        }
+      });
 
-      console.log('📋 Category Candidates:', CANDIDATE_LIST);
+      console.log('📋 Category Candidates (Count >= 2):', Object.values(CANDIDATE_MAP));
 
-      runPass2(CANDIDATE_LIST, filesBeforeDeletion, deletedFiles);
+      runPass2(CANDIDATE_MAP, filesBeforeDeletion, deletedFiles);
     })
     .on('error', (error) => {
       console.error('❌ Error during PASS 1:', error);
