@@ -68,7 +68,7 @@ jobs:
       - name: Convert CSV to JSON
         run: |
           echo "Starting CSV conversion..."
-          cat data/products.csv | node convert-csv.js
+          node convert-csv.js
           echo "Conversion complete"
       - name: Verify manifest generation
         run: |

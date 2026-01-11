@@ -954,21 +954,99 @@ function detectCurrencyFromField(currencyField) {
   return null;
 }
 
-function extractMainCategory(categoryHierarchy) {
-  if (!categoryHierarchy) return '';
+const GENERIC_BLACKLIST = [
+  'general',
+  'electronics',
+  'appliance',
+  'appliances',
+  'home appliance',
+  'furniture',
+  'beauty & personal care',
+  'beauty',
+  'home',
+  'product',
+  'products',
+  'item',
+  'items',
+  'kitchen',
+  'office'
+];
 
-  const parts = categoryHierarchy.split('>').map(part => part.trim()).filter(Boolean);
+function normalizeCategory(value) {
+  if (!value || typeof value !== 'string') return '';
 
-  if (parts.length === 1) {
-    return parts[0].toLowerCase() !== 'general' ? parts[0] : '';
+  let normalized = value.toLowerCase().trim();
+
+  // Remove extra whitespace
+  normalized = normalized.replace(/\s+/g, ' ');
+
+  // Singularize (remove trailing 's' for plurals)
+  if (normalized.endsWith('s') && normalized.length > 3) {
+    normalized = normalized.slice(0, -1);
   }
 
-  const genericCategories = ['general', 'all', 'products', 'shop', 'store'];
-  const nonGeneric = parts.filter(cat => !genericCategories.includes(cat.toLowerCase()));
+  return normalized;
+}
 
-  if (nonGeneric.length > 0) return nonGeneric[0];
+function isBlacklisted(value) {
+  const normalized = normalizeCategory(value);
+  return GENERIC_BLACKLIST.includes(normalized);
+}
 
-  return parts[0] || '';
+function assignCategory(row, CANDIDATE_LIST) {
+  const candidates = {
+    itemTypeName: normalizeCategory(row.itemTypeName),
+    generic_name: normalizeCategory(row.generic_name),
+    Category: normalizeCategory(row.Category),
+    categoryHierarchy: normalizeCategory(
+      row.categoryHierarchy ? row.categoryHierarchy.split('>')[0] : ''
+    )
+  };
+
+  const titleLower = (row.Title || row.productTitle || '').toLowerCase();
+
+  // Priority 1: itemTypeName
+  if (candidates.itemTypeName &&
+    CANDIDATE_LIST.includes(candidates.itemTypeName) &&
+    !isBlacklisted(candidates.itemTypeName)) {
+    const validated = titleLower.includes(candidates.itemTypeName);
+    console.log(`📦 ${row.productTitle || row.Title}`);
+    console.log(`   Category: "${candidates.itemTypeName}" (${validated ? '✅ validated' : '⚠️ not validated'})`);
+    return candidates.itemTypeName;
+  }
+
+  // Priority 2: generic_name
+  if (candidates.generic_name &&
+    CANDIDATE_LIST.includes(candidates.generic_name) &&
+    !isBlacklisted(candidates.generic_name)) {
+    const validated = titleLower.includes(candidates.generic_name);
+    console.log(`📦 ${row.productTitle || row.Title}`);
+    console.log(`   Category: "${candidates.generic_name}" (${validated ? '✅ validated' : '⚠️ not validated'})`);
+    return candidates.generic_name;
+  }
+
+  // Priority 3: Category (fallback)
+  if (candidates.Category &&
+    CANDIDATE_LIST.includes(candidates.Category) &&
+    !isBlacklisted(candidates.Category)) {
+    console.log(`📦 ${row.productTitle || row.Title}`);
+    console.log(`   Category: "${candidates.Category}" (fallback: Category)`);
+    return candidates.Category;
+  }
+
+  // Priority 4: categoryHierarchy (fallback)
+  if (candidates.categoryHierarchy &&
+    CANDIDATE_LIST.includes(candidates.categoryHierarchy) &&
+    !isBlacklisted(candidates.categoryHierarchy)) {
+    console.log(`📦 ${row.productTitle || row.Title}`);
+    console.log(`   Category: "${candidates.categoryHierarchy}" (fallback: categoryHierarchy)`);
+    return candidates.categoryHierarchy;
+  }
+
+  // Priority 5: Default
+  console.log(`📦 ${row.productTitle || row.Title}`);
+  console.log(`   Category: "General" (default)`);
+  return 'General';
 }
 
 function generateAsin(row) {
@@ -1036,18 +1114,8 @@ function detectRegionalVariants(products) {
   });
 }
 
-function extractCoreFields(data, pricingValidation, currency, referenceMedia) {
-  const categoryFromHierarchy = extractMainCategory(data.categoryHierarchy || '');
-  const categoryFromField = data.Category?.trim() || '';
-
-  let finalCategory = '';
-  if (categoryFromHierarchy && categoryFromHierarchy.toLowerCase() !== 'general') {
-    finalCategory = categoryFromHierarchy;
-  } else if (categoryFromField && categoryFromField.toLowerCase() !== 'general') {
-    finalCategory = categoryFromField;
-  } else {
-    finalCategory = categoryFromHierarchy || categoryFromField || 'General';
-  }
+function extractCoreFields(data, pricingValidation, currency, referenceMedia, category) {
+  const finalCategory = category || 'General';
 
   const releaseDate = getProductReleaseDate(data);
   const { influencer, manualCollections, seasonOverride } = extractInfluencerAndCollections(data);
@@ -1141,6 +1209,14 @@ function deleteOldFiles() {
 // ============================================
 
 function convertCsvToJson() {
+  const categoryFrequency = {};
+  const csvFilePath = path.join(dataDir, 'products.csv');
+
+  if (!fs.existsSync(csvFilePath)) {
+    console.error(`❌ Error: ${csvFilePath} not found.`);
+    return;
+  }
+
   const currencyResults = {};
 
   const processingStats = {
@@ -1166,7 +1242,47 @@ function convertCsvToJson() {
   const deletedFiles = deleteOldFiles();
   console.log('✅ Old files deletion complete.');
 
-  let lastUpdatedContent = `VibeDrips Data Processing Summary
+  console.log('🔄 PASS 1: Building category candidates...');
+
+  fs.createReadStream(csvFilePath)
+    .pipe(csv())
+    .on('data', (row) => {
+      // Extract and count from itemTypeName
+      const itemType = normalizeCategory(row.itemTypeName);
+      if (itemType) categoryFrequency[itemType] = (categoryFrequency[itemType] || 0) + 1;
+
+      // Extract and count from generic_name
+      const genericName = normalizeCategory(row.generic_name);
+      if (genericName) categoryFrequency[genericName] = (categoryFrequency[genericName] || 0) + 1;
+
+      // Extract and count from Category
+      const rowCategory = normalizeCategory(row.Category);
+      if (rowCategory) categoryFrequency[rowCategory] = (categoryFrequency[rowCategory] || 0) + 1;
+
+      // Extract and count from categoryHierarchy parts
+      if (row.categoryHierarchy) {
+        row.categoryHierarchy.split('>').forEach(part => {
+          const normPart = normalizeCategory(part);
+          if (normPart) categoryFrequency[normPart] = (categoryFrequency[normPart] || 0) + 1;
+        });
+      }
+    })
+    .on('end', () => {
+      const CANDIDATE_LIST = Object.keys(categoryFrequency)
+        .filter(value => !isBlacklisted(value));
+
+      console.log('📋 Category Candidates:', CANDIDATE_LIST);
+
+      runPass2(CANDIDATE_LIST, filesBeforeDeletion, deletedFiles);
+    })
+    .on('error', (error) => {
+      console.error('❌ Error during PASS 1:', error);
+    });
+
+  function runPass2(CANDIDATE_LIST, filesBeforeDeletion, deletedFiles) {
+    console.log('🔄 PASS 2: Processing products...');
+
+    let lastUpdatedContent = `VibeDrips Data Processing Summary
 Generated: ${new Date().toISOString()}
 
 📊 STATISTICS
@@ -1193,241 +1309,241 @@ ${filesBeforeDeletion.map(file => `- ${file}`).join('\n') || '- None'}
 📁 FILES DELETED
 ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '- None'}`;
 
-  const filesAfterDeletion = fs.existsSync(dataDir) ? fs.readdirSync(dataDir) : [];
-  const expectedFiles = ['last_updated.txt', 'products.csv'];
-  const unexpectedFiles = filesAfterDeletion.filter(file => !expectedFiles.includes(file));
+    const filesAfterDeletion = fs.existsSync(dataDir) ? fs.readdirSync(dataDir) : [];
+    const expectedFiles = ['last_updated.txt', 'products.csv'];
+    const unexpectedFiles = filesAfterDeletion.filter(file => !expectedFiles.includes(file));
 
-  lastUpdatedContent += `\n\n📁 FILES PRESENT AFTER DELETION\n${filesAfterDeletion.map(file => `- ${file}`).join('\n') || '- None'}`;
+    lastUpdatedContent += `\n\n📁 FILES PRESENT AFTER DELETION\n${filesAfterDeletion.map(file => `- ${file}`).join('\n') || '- None'}`;
 
-  if (unexpectedFiles.length > 0) {
-    lastUpdatedContent += `\n⚠️ Deletion failed for unexpected files:\n${unexpectedFiles.map(file => `- ${file}`).join('\n')}`;
-  }
+    if (unexpectedFiles.length > 0) {
+      lastUpdatedContent += `\n⚠️ Deletion failed for unexpected files:\n${unexpectedFiles.map(file => `- ${file}`).join('\n')}`;
+    }
 
-  fs.writeFileSync(path.join(dataDir, 'last_updated.txt'), lastUpdatedContent);
+    fs.writeFileSync(path.join(dataDir, 'last_updated.txt'), lastUpdatedContent);
 
-  console.log('📄 Processing CSV from input...');
+    fs.createReadStream(csvFilePath)
+      .pipe(csv())
+      .on('data', (data) => {
+        processingStats.total++;
 
-  process.stdin
-    .pipe(csv())
-    .on('data', (data) => {
-      processingStats.total++;
+        try {
+          console.log(`\n--- Row ${processingStats.total} ---`);
 
-      try {
-        console.log(`\n--- Row ${processingStats.total} ---`);
+          let currency = null;
 
-        let currency = null;
+          if (data.Currency && data.Currency.trim()) {
+            currency = detectCurrencyFromField(data.Currency);
+          }
 
-        if (data.Currency && data.Currency.trim()) {
-          currency = detectCurrencyFromField(data.Currency);
-        }
+          if (!currency && data.price) {
+            currency = detectCurrencyFromPrice(data.price);
+          }
 
-        if (!currency && data.price) {
-          currency = detectCurrencyFromPrice(data.price);
-        }
+          if (!currency) {
+            currency = 'MISC';
+          }
 
-        if (!currency) {
-          currency = 'MISC';
-        }
+          console.log(`✅ Currency: ${currency}`);
 
-        console.log(`✅ Currency: ${currency}`);
+          const finalCategory = assignCategory(data, CANDIDATE_LIST);
 
-        processingStats.currenciesFound.add(currency);
-        if (data.categoryHierarchy) processingStats.categoriesFound.add(extractMainCategory(data.categoryHierarchy));
-        if (data.brand) processingStats.brandsFound.add(data.brand);
+          processingStats.currenciesFound.add(currency);
+          if (finalCategory) processingStats.categoriesFound.add(finalCategory);
+          if (data.brand) processingStats.brandsFound.add(data.brand);
 
-        if (data.Influencer?.trim()) processingStats.influencersFound.add(data.Influencer.trim());
-        if (data.ManualCollections?.trim()) {
-          data.ManualCollections.split(/[|,]/).forEach(c => {
-            const trimmed = c.trim();
-            if (trimmed) processingStats.manualCollectionsFound.add(trimmed);
+          if (data.Influencer?.trim()) processingStats.influencersFound.add(data.Influencer.trim());
+          if (data.ManualCollections?.trim()) {
+            data.ManualCollections.split(/[|,]/).forEach(c => {
+              const trimmed = c.trim();
+              if (trimmed) processingStats.manualCollectionsFound.add(trimmed);
+            });
+          }
+
+          const pricingValidation = validatePricing({
+            price: data.price,
+            originalPrice: data.originalPrice,
+            discountPercentage: data.discountPercentage,
+            availability: data.availability
           });
+
+          if (pricingValidation.errorFlag === 1) {
+            processingStats.validationErrors++;
+            console.log(`⚠️ Validation: ${pricingValidation.errorReason}`);
+
+            const reasons = pricingValidation.errorReason.split('; ');
+            reasons.forEach(reason => {
+              const errorType = reason.split(':')[0];
+              errorBreakdown[errorType] = (errorBreakdown[errorType] || 0) + 1;
+            });
+          }
+
+          const referenceMedia = parseReferenceMedia(
+            data.reference_media || data['Reference Media for similar products'],
+            data['Product Source Link']
+          );
+
+          const coreFields = extractCoreFields(data, pricingValidation, currency, referenceMedia, finalCategory);
+
+          if (coreFields.season) processingStats.seasonsFound.add(coreFields.season);
+
+          const product = structureProductData(data, coreFields);
+
+          if (product['Error-Fields'] && product['Error-Fields'].length > 0) {
+            processingStats.fieldConflicts++;
+          }
+
+          product._dropSignalsPreCompute = {
+            sourceLink: data['Product Source Link'] || '',
+            influencer: data.Influencer || ''
+          };
+
+          if (!currencyResults[currency]) currencyResults[currency] = [];
+          currencyResults[currency].push(product);
+
+          processingStats.processed++;
+
+        } catch (error) {
+          processingStats.errors++;
+          console.error(`Error processing row ${processingStats.total}:`, error.message);
         }
+      })
+      .on('end', () => {
+        console.log('📊 Processing Complete! Generating files...');
 
-        const pricingValidation = validatePricing({
-          price: data.price,
-          originalPrice: data.originalPrice,
-          discountPercentage: data.discountPercentage,
-          availability: data.availability
-        });
+        const allProducts = Object.values(currencyResults).flat();
 
-        if (pricingValidation.errorFlag === 1) {
-          processingStats.validationErrors++;
-          console.log(`⚠️ Validation: ${pricingValidation.errorReason}`);
+        console.log(`🔍 Detecting regional variants across ${allProducts.length} products...`);
+        detectRegionalVariants(allProducts);
+        const regionalCount = allProducts.filter(p => p.regional_availability === 1).length;
+        console.log(`✅ Found ${regionalCount} products with regional variants`);
 
-          const reasons = pricingValidation.errorReason.split('; ');
-          reasons.forEach(reason => {
-            const errorType = reason.split(':')[0];
-            errorBreakdown[errorType] = (errorBreakdown[errorType] || 0) + 1;
-          });
-        }
-
-        const referenceMedia = parseReferenceMedia(
-          data.reference_media || data['Reference Media for similar products'],
-          data['Product Source Link']
-        );
-
-        const coreFields = extractCoreFields(data, pricingValidation, currency, referenceMedia);
-
-        if (coreFields.season) processingStats.seasonsFound.add(coreFields.season);
-
-        const product = structureProductData(data, coreFields);
-
-        if (product['Error-Fields'] && product['Error-Fields'].length > 0) {
-          processingStats.fieldConflicts++;
-        }
-
-        product._dropSignalsPreCompute = {
-          sourceLink: data['Product Source Link'] || '',
-          influencer: data.Influencer || ''
+        console.log(`🎬 Computing drop signals...`);
+        const dropStats = {
+          'creator-picks': 0,
+          'global-drops': 0,
+          'viral-reels': 0,
+          'new-releases': 0
         };
 
-        if (!currencyResults[currency]) currencyResults[currency] = [];
-        currencyResults[currency].push(product);
+        allProducts.forEach(product => {
+          const dropSignals = computeDropSignals(
+            product._dropSignalsPreCompute || {},
+            product.referenceMedia,
+            product.regional_variants,
+            product.release_date
+          );
 
-        processingStats.processed++;
+          product.drop_signals = dropSignals;
 
-      } catch (error) {
-        processingStats.errors++;
-        console.error(`Error processing row ${processingStats.total}:`, error.message);
-      }
-    })
-    .on('end', () => {
-      console.log('📊 Processing Complete! Generating files...');
+          dropSignals.drop_categories.forEach(cat => {
+            dropStats[cat] = (dropStats[cat] || 0) + 1;
+          });
 
-      const allProducts = Object.values(currencyResults).flat();
-
-      console.log(`🔍 Detecting regional variants across ${allProducts.length} products...`);
-      detectRegionalVariants(allProducts);
-      const regionalCount = allProducts.filter(p => p.regional_availability === 1).length;
-      console.log(`✅ Found ${regionalCount} products with regional variants`);
-
-      console.log(`🎬 Computing drop signals...`);
-      const dropStats = {
-        'creator-picks': 0,
-        'global-drops': 0,
-        'viral-reels': 0,
-        'new-releases': 0
-      };
-
-      allProducts.forEach(product => {
-        const dropSignals = computeDropSignals(
-          product._dropSignalsPreCompute || {},
-          product.referenceMedia,
-          product.regional_variants,
-          product.release_date
-        );
-
-        product.drop_signals = dropSignals;
-
-        dropSignals.drop_categories.forEach(cat => {
-          dropStats[cat] = (dropStats[cat] || 0) + 1;
+          delete product._dropSignalsPreCompute;
         });
 
-        delete product._dropSignalsPreCompute;
-      });
-
-      console.log(`✅ Drop signals computed:`);
-      Object.entries(dropStats).forEach(([cat, count]) => {
-        console.log(`  ${DROPS_CONFIG.CATEGORIES[cat].emoji} ${DROPS_CONFIG.CATEGORIES[cat].label}: ${count} products`);
-      });
-
-      Object.keys(currencyResults).forEach(currency => {
-        currencyResults[currency].sort((a, b) => {
-          const dateA = a.release_date ? new Date(a.release_date) : new Date(0);
-          const dateB = b.release_date ? new Date(b.release_date) : new Date(0);
-          return dateB - dateA;
+        console.log(`✅ Drop signals computed:`);
+        Object.entries(dropStats).forEach(([cat, count]) => {
+          console.log(`  ${DROPS_CONFIG.CATEGORIES[cat].emoji} ${DROPS_CONFIG.CATEGORIES[cat].label}: ${count} products`);
         });
-      });
 
-      const currencyManifest = {
-        available_currencies: [],
-        last_updated: new Date().toISOString(),
-        total_products: processingStats.processed,
-        default_currency: 'INR'
-      };
+        Object.keys(currencyResults).forEach(currency => {
+          currencyResults[currency].sort((a, b) => {
+            const dateA = a.release_date ? new Date(a.release_date) : new Date(0);
+            const dateB = b.release_date ? new Date(b.release_date) : new Date(0);
+            return dateB - dateA;
+          });
+        });
 
-      Object.keys(currencyResults).forEach(currency => {
-        const products = currencyResults[currency];
-        const filename = `products-${currency}.json`;
-        const filepath = path.join(dataDir, filename);
-
-        fs.writeFileSync(filepath, JSON.stringify(products, null, 2));
-
-        const currencyInfo = {
-          code: currency,
-          name: currency === 'MISC' ? 'Mixed Currency Products' : (CURRENCY_MAP[currency]?.name || currency),
-          symbol: currency === 'MISC' ? '🎁' : (CURRENCY_MAP[currency]?.symbol || currency),
-          countries: currency === 'MISC' ? ['Global'] : (CURRENCY_MAP[currency]?.countries || []),
-          product_count: products.length,
-          filename: filename,
-          categories: [...new Set(products.map(p => p.category))].filter(Boolean),
-          brands: [...new Set(products.map(p => p.brand))].filter(Boolean),
-          price_range: products.length > 0 ? {
-            min: Math.min(...products.map(p => p.price).filter(p => p > 0)),
-            max: Math.max(...products.map(p => p.price))
-          } : { min: 0, max: 0 }
+        const currencyManifest = {
+          available_currencies: [],
+          last_updated: new Date().toISOString(),
+          total_products: processingStats.processed,
+          default_currency: 'INR'
         };
 
-        currencyManifest.available_currencies.push(currencyInfo);
-        console.log(`💰 ${currency}: ${products.length} products → ${filename}`);
-      });
+        Object.keys(currencyResults).forEach(currency => {
+          const products = currencyResults[currency];
+          const filename = `products-${currency}.json`;
+          const filepath = path.join(dataDir, filename);
 
-      currencyManifest.available_currencies.sort((a, b) => b.product_count - a.product_count);
+          fs.writeFileSync(filepath, JSON.stringify(products, null, 2));
 
-      const manifestPath = path.join(dataDir, 'currencies.json');
-      fs.writeFileSync(manifestPath, JSON.stringify(currencyManifest, null, 2));
+          const currencyInfo = {
+            code: currency,
+            name: currency === 'MISC' ? 'Mixed Currency Products' : (CURRENCY_MAP[currency]?.name || currency),
+            symbol: currency === 'MISC' ? '🎁' : (CURRENCY_MAP[currency]?.symbol || currency),
+            countries: currency === 'MISC' ? ['Global'] : (CURRENCY_MAP[currency]?.countries || []),
+            product_count: products.length,
+            filename: filename,
+            categories: [...new Set(products.map(p => p.category))].filter(Boolean),
+            brands: [...new Set(products.map(p => p.brand))].filter(Boolean),
+            price_range: products.length > 0 ? {
+              min: Math.min(...products.map(p => p.price).filter(p => p > 0)),
+              max: Math.max(...products.map(p => p.price))
+            } : { min: 0, max: 0 }
+          };
 
-      // ============================================
-      // GENERATE DROPS.JSON (with product references)
-      // ============================================
-      console.log(`\n🎬 Generating drops.json...`);
-      const dropsData = generateDropsJSON(allProducts);
-      const dropsPath = path.join(dataDir, 'drops.json');
-      fs.writeFileSync(dropsPath, JSON.stringify(dropsData, null, 2));
-      console.log(`✅ Drops manifest created: drops.json`);
+          currencyManifest.available_currencies.push(currencyInfo);
+          console.log(`💰 ${currency}: ${products.length} products → ${filename}`);
+        });
 
-      // ============================================
-      // GENERATE INFLUENCERS.JSON
-      // ============================================
-      console.log(`\n👤 Generating influencers.json...`);
-      const influencersData = generateInfluencersJSON(allProducts);
-      const influencersPath = path.join(dataDir, 'influencers.json');
-      fs.writeFileSync(influencersPath, JSON.stringify(influencersData, null, 2));
-      console.log(`✅ Influencers manifest created: influencers.json (${Object.keys(influencersData).length} influencers)`);
+        currencyManifest.available_currencies.sort((a, b) => b.product_count - a.product_count);
 
-      // ============================================
-      // GENERATE COLLECTIONS.JSON
-      // ============================================
-      console.log(`\n💎 Generating collections.json...`);
-      const collectionsData = generateCollectionsJSON(allProducts);
-      const collectionsPath = path.join(dataDir, 'collections.json');
-      fs.writeFileSync(collectionsPath, JSON.stringify(collectionsData, null, 2));
-      console.log(`✅ Collections manifest created: collections.json (${Object.keys(collectionsData).length} collections)`);
+        const manifestPath = path.join(dataDir, 'currencies.json');
+        fs.writeFileSync(manifestPath, JSON.stringify(currencyManifest, null, 2));
 
-      // ============================================
-      // NEW: GENERATE ERRORS.JSON
-      // ============================================
-      console.log(`\n⚠️  Generating errors.json...`);
-      const errorsData = generateErrorsJSON(allProducts);
-      const errorsPath = path.join(dataDir, 'errors.json');
-      fs.writeFileSync(errorsPath, JSON.stringify(errorsData, null, 2));
-      console.log(`✅ Errors manifest created: errors.json (${errorsData.flagged_products.length} flagged products)`);
+        // ============================================
+        // GENERATE DROPS.JSON (with product references)
+        // ============================================
+        console.log(`\n🎬 Generating drops.json...`);
+        const dropsData = generateDropsJSON(allProducts);
+        const dropsPath = path.join(dataDir, 'drops.json');
+        fs.writeFileSync(dropsPath, JSON.stringify(dropsData, null, 2));
+        console.log(`✅ Drops manifest created: drops.json`);
 
-      const finalFiles = fs.existsSync(dataDir) ? fs.readdirSync(dataDir) : [];
-      const generatedFiles = new Set([
-        'last_updated.txt',
-        'products.csv',
-        ...Object.keys(currencyResults).map(c => `products-${c}.json`),
-        'currencies.json',
-        'drops.json',
-        'influencers.json',
-        'collections.json',
-        'errors.json'  // ← ADDED
-      ]);
+        // ============================================
+        // GENERATE INFLUENCERS.JSON
+        // ============================================
+        console.log(`\n👤 Generating influencers.json...`);
+        const influencersData = generateInfluencersJSON(allProducts);
+        const influencersPath = path.join(dataDir, 'influencers.json');
+        fs.writeFileSync(influencersPath, JSON.stringify(influencersData, null, 2));
+        console.log(`✅ Influencers manifest created: influencers.json (${Object.keys(influencersData).length} influencers)`);
 
-      const remnantFiles = finalFiles.filter(file => !generatedFiles.has(file));
+        // ============================================
+        // GENERATE COLLECTIONS.JSON
+        // ============================================
+        console.log(`\n💎 Generating collections.json...`);
+        const collectionsData = generateCollectionsJSON(allProducts);
+        const collectionsPath = path.join(dataDir, 'collections.json');
+        fs.writeFileSync(collectionsPath, JSON.stringify(collectionsData, null, 2));
+        console.log(`✅ Collections manifest created: collections.json (${Object.keys(collectionsData).length} collections)`);
 
-      const summary = `VibeDrips Data Processing Summary
+        // ============================================
+        // NEW: GENERATE ERRORS.JSON
+        // ============================================
+        console.log(`\n⚠️  Generating errors.json...`);
+        const errorsData = generateErrorsJSON(allProducts);
+        const errorsPath = path.join(dataDir, 'errors.json');
+        fs.writeFileSync(errorsPath, JSON.stringify(errorsData, null, 2));
+        console.log(`✅ Errors manifest created: errors.json (${errorsData.flagged_products.length} flagged products)`);
+
+        const finalFiles = fs.existsSync(dataDir) ? fs.readdirSync(dataDir) : [];
+        const generatedFiles = new Set([
+          'last_updated.txt',
+          'products.csv',
+          ...Object.keys(currencyResults).map(c => `products-${c}.json`),
+          'currencies.json',
+          'drops.json',
+          'influencers.json',
+          'collections.json',
+          'errors.json'
+        ]);
+
+        const remnantFiles = finalFiles.filter(file => !generatedFiles.has(file));
+
+        const summary = `VibeDrips Data Processing Summary
 Generated: ${new Date().toISOString()}
 
 📊 STATISTICS
@@ -1440,9 +1556,9 @@ Generated: ${new Date().toISOString()}
 - Records Flagged: ${processingStats.validationErrors}
 - Field Conflicts: ${processingStats.fieldConflicts}
 ${Object.entries(errorBreakdown).length > 0 ? '- Error Breakdown:\n' + Object.entries(errorBreakdown)
-          .sort(([, a], [, b]) => b - a)
-          .map(([type, count]) => `  • ${type}: ${count}`)
-          .join('\n') : ''}
+            .sort(([, a], [, b]) => b - a)
+            .map(([type, count]) => `  • ${type}: ${count}`)
+            .join('\n') : ''}
 
 💰 CURRENCIES
 - Currencies Found: ${processingStats.currenciesFound.size}
@@ -1476,15 +1592,15 @@ ${Object.entries(errorBreakdown).length > 0 ? '- Error Breakdown:\n' + Object.en
 - Critical errors: ${errorsData.flagged_products.filter(p => p.severity === 'critical').length}
 - Warnings: ${errorsData.flagged_products.filter(p => p.severity === 'warning').length}
 - Top error types: ${Object.entries(errorsData.error_breakdown)
-          .sort(([, a], [, b]) => b - a)
-          .slice(0, 3)
-          .map(([type, count]) => `${type} (${count})`)
-          .join(', ') || 'None'}
+            .sort(([, a], [, b]) => b - a)
+            .slice(0, 3)
+            .map(([type, count]) => `${type} (${count})`)
+            .join(', ') || 'None'}
 
 🎬 DROPS
 ${Object.entries(dropStats).map(([cat, count]) =>
-            `- ${DROPS_CONFIG.CATEGORIES[cat].emoji} ${DROPS_CONFIG.CATEGORIES[cat].label}: ${count} products`
-          ).join('\n')}
+              `- ${DROPS_CONFIG.CATEGORIES[cat].emoji} ${DROPS_CONFIG.CATEGORIES[cat].label}: ${count} products`
+            ).join('\n')}
 
 📁 FILES BEFORE DELETION
 ${filesBeforeDeletion.map(file => `- ${file}`).join('\n') || '- None'}
@@ -1504,33 +1620,33 @@ ${Object.keys(currencyResults).map(currency => `- products-${currency}.json (${c
 ${finalFiles.map(file => `- ${file}`).join('\n') || '- None'}
 ${remnantFiles.length > 0 ? `\n⚠️ Remnant files detected:\n${remnantFiles.map(file => `- ${file}`).join('\n')}` : ''}`;
 
-      fs.writeFileSync(path.join(dataDir, 'last_updated.txt'), summary);
+        fs.writeFileSync(path.join(dataDir, 'last_updated.txt'), summary);
 
-      console.log('\n✅ SUCCESS! Multi-currency data processing complete.');
-      console.log(`📁 Generated ${Object.keys(currencyResults).length} currency files`);
-      console.log(`📊 Processed ${processingStats.processed} products from ${processingStats.total} rows`);
-      console.log(`💰 Currencies: ${Array.from(processingStats.currenciesFound).join(', ')}`);
-      console.log(`👤 Influencers: ${Object.keys(influencersData).length}`);
-      console.log(`💎 Collections: ${Object.keys(collectionsData).length}`);
-      console.log(`🌿 Seasons: ${Array.from(processingStats.seasonsFound).join(', ')}`);
-      console.log(`⚠️  Errors: ${errorsData.flagged_products.length} flagged (${errorsData.summary.error_rate}% error rate)`);
+        console.log('\n✅ SUCCESS! Multi-currency data processing complete.');
+        console.log(`📁 Generated ${Object.keys(currencyResults).length} currency files`);
+        console.log(`📊 Processed ${processingStats.processed} products from ${processingStats.total} rows`);
+        console.log(`💰 Currencies: ${Array.from(processingStats.currenciesFound).join(', ')}`);
+        console.log(`👤 Influencers: ${Object.keys(influencersData).length}`);
+        console.log(`💎 Collections: ${Object.keys(collectionsData).length}`);
+        console.log(`🌿 Seasons: ${Array.from(processingStats.seasonsFound).join(', ')}`);
+        console.log(`⚠️  Errors: ${errorsData.flagged_products.length} flagged (${errorsData.summary.error_rate}% error rate)`);
 
-      if (processingStats.validationErrors > 0) {
-        console.log(`⚠️ ${processingStats.validationErrors} products flagged for review (Error-Flag=1)`);
-      }
+        if (processingStats.validationErrors > 0) {
+          console.log(`⚠️ ${processingStats.validationErrors} products flagged for review (Error-Flag=1)`);
+        }
 
-      if (processingStats.fieldConflicts > 0) {
-        console.log(`⚠️ ${processingStats.fieldConflicts} products with field conflicts (check Error-Fields)`);
-      }
+        if (processingStats.fieldConflicts > 0) {
+          console.log(`⚠️ ${processingStats.fieldConflicts} products with field conflicts (check Error-Fields)`);
+        }
 
-      if (processingStats.errors > 0) {
-        console.log(`⚠️ ${processingStats.errors} rows had processing errors`);
-      }
-    })
-    .on('error', (error) => {
-      console.error('❌ Error processing CSV:', error);
-      process.exit(1);
-    });
+        if (processingStats.errors > 0) {
+          console.log(`⚠️ ${processingStats.errors} rows had processing errors`);
+        }
+      })
+      .on('error', (error) => {
+        console.error('❌ Error processing CSV during PASS 2:', error);
+      });
+  }
 }
 
 console.log('🚀 VibeDrips Multi-Currency Product Processor v7.0');
