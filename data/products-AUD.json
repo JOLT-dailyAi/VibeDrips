@@ -18,7 +18,7 @@
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Levoit",
-    "category": "Furniture",
+    "category": "air purifier",
     "subcategory": "Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/91hGOWzAGFL.jpg",
     "all_images": [
@@ -160,7 +160,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 87,
+      "product_age_days": 88,
       "drop_categories": []
     }
   },
@@ -186,7 +186,7 @@
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Winix",
-    "category": "General",
+    "category": "air purifier",
     "subcategory": "Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/71Cph7LlfZL.jpg",
     "all_images": [
@@ -292,7 +292,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 95,
+      "product_age_days": 96,
       "drop_categories": []
     }
   },
@@ -319,7 +319,7 @@
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Levoit",
-    "category": "Furniture",
+    "category": "air purifier",
     "subcategory": "Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/71XylkefYdL.jpg",
     "all_images": [
@@ -437,7 +437,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 109,
+      "product_age_days": 110,
       "drop_categories": []
     }
   },
@@ -463,7 +463,7 @@
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Winix",
-    "category": "General",
+    "category": "air purifier",
     "subcategory": "Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/71dW-xRhaTL.jpg",
     "all_images": [
@@ -593,7 +593,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 360,
+      "product_age_days": 361,
       "drop_categories": []
     }
   },
@@ -618,7 +618,7 @@
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Cornerstone Press",
-    "category": "Books",
+    "category": "book",
     "subcategory": "Book",
     "main_image": "https://m.media-amazon.com/images/I/61X7tH9kPOL.jpg",
     "all_images": [
@@ -754,7 +754,7 @@
       "is_high_visibility": false,
       "is_social_proof": true,
       "is_new_release": false,
-      "product_age_days": 893,
+      "product_age_days": 894,
       "drop_categories": [
         "creator-picks"
       ]
@@ -781,7 +781,7 @@
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Winix",
-    "category": "Furniture",
+    "category": "air purifier",
     "subcategory": "Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/61EZjAU+fUL.jpg",
     "all_images": [
@@ -879,7 +879,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 1193,
+      "product_age_days": 1194,
       "drop_categories": []
     }
   },
@@ -902,7 +902,7 @@
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Breville",
-    "category": "General",
+    "category": "air purifier",
     "subcategory": "Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/71AqfDto--L.jpg",
     "all_images": [
@@ -996,7 +996,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 1199,
+      "product_age_days": 1200,
       "drop_categories": []
     }
   },
@@ -1021,7 +1021,7 @@
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Breville",
-    "category": "General",
+    "category": "air purifier",
     "subcategory": "Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/51qL3f4OqJL.jpg",
     "all_images": [
@@ -1120,7 +1120,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 1876,
+      "product_age_days": 1877,
       "drop_categories": []
     }
   },
@@ -1145,7 +1145,7 @@
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Winix",
-    "category": "Furniture",
+    "category": "air purifier",
     "subcategory": "Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/61bu1YA8FpL.jpg",
     "all_images": [
@@ -1263,7 +1263,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 2495,
+      "product_age_days": 2496,
       "drop_categories": []
     }
   },
@@ -1288,7 +1288,7 @@
     "currency": "AUD",
     "symbol": "A$",
     "brand": "HUTCHINSON PUBLISHING - TRADE",
-    "category": "Books",
+    "category": "book",
     "subcategory": "Book",
     "main_image": "https://m.media-amazon.com/images/I/81l3rZK4lnL.jpg",
     "all_images": [
@@ -1430,7 +1430,7 @@
       "is_high_visibility": false,
       "is_social_proof": true,
       "is_new_release": false,
-      "product_age_days": 3036,
+      "product_age_days": 3037,
       "drop_categories": [
         "creator-picks"
       ]

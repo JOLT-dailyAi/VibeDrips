@@ -1,5 +1,5 @@
 VibeDrips Data Processing Summary
-Generated: 2026-01-10T20:30:12.448Z
+Generated: 2026-01-11T05:45:10.664Z
 
 📊 STATISTICS
 - Total Rows Processed: 23
@@ -19,8 +19,8 @@ Generated: 2026-01-10T20:30:12.448Z
 - Available: AUD, INR
 
 📦 CATEGORIES
-- Categories Found: 4
-- Top Categories: Books, Furniture, , Beauty & Personal Care
+- Categories Found: 5
+- Top Categories: book, air purifier, ubreathe life air purifier, humidifier, nuwave oxypure zero smart air purifier
 
 🏷️ BRANDS
 - Brands Found: 14
