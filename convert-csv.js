@@ -1184,9 +1184,6 @@ function deleteOldFiles() {
     // Skip source and logs
     if (file === 'products.csv' || file === 'last_updated.txt') return;
 
-    // Skip known manifests
-    if (KEEP_PATTERNS.some(p => p.test(file))) return;
-
     let attempts = 0;
     const maxAttempts = 3;
 
