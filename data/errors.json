@@ -3,7 +3,7 @@
     "total_products": 23,
     "products_with_errors": 23,
     "error_rate": 100,
-    "last_updated": "2026-01-11T05:46:47.937Z"
+    "last_updated": "2026-01-11T06:01:19.167Z"
   },
   "error_breakdown": {
     "DISCOUNT_MISMATCH": 2,
@@ -59,7 +59,7 @@
       "discount_percentage": 80,
       "affiliate_link": "https://amzn.to/4pdv5iw",
       "main_image": "https://m.media-amazon.com/images/I/71rQ3Md9w0L.jpg",
-      "category": "nuwave oxypure zero smart air purifier",
+      "category": "NUWAVE OxyPure ZERO Smart Air Purifier",
       "brand": "Nuwave",
       "severity": "warning"
     },
@@ -80,7 +80,7 @@
       "discount_percentage": 41,
       "affiliate_link": "https://amzn.to/44RpxTq",
       "main_image": "https://m.media-amazon.com/images/I/81l3rZK4lnL.jpg",
-      "category": "book",
+      "category": "Book",
       "brand": "HUTCHINSON PUBLISHING - TRADE",
       "severity": "info"
     },
@@ -101,7 +101,7 @@
       "discount_percentage": 23,
       "affiliate_link": "https://amzn.to/49mRnZa",
       "main_image": "https://m.media-amazon.com/images/I/61X7tH9kPOL.jpg",
-      "category": "book",
+      "category": "Book",
       "brand": "Cornerstone Press",
       "severity": "info"
     },
@@ -120,7 +120,7 @@
       "discount_percentage": 23,
       "affiliate_link": "https://amzn.to/493nRIX",
       "main_image": "https://m.media-amazon.com/images/I/91hGOWzAGFL.jpg",
-      "category": "air purifier",
+      "category": "Air Purifier",
       "brand": "Levoit",
       "severity": "info"
     },
@@ -139,7 +139,7 @@
       "discount_percentage": 40,
       "affiliate_link": "https://amzn.to/3YROScj",
       "main_image": "https://m.media-amazon.com/images/I/71AqfDto--L.jpg",
-      "category": "air purifier",
+      "category": "Air Purifier",
       "brand": "Breville",
       "severity": "info"
     },
@@ -160,7 +160,7 @@
       "discount_percentage": 44,
       "affiliate_link": "https://amzn.to/3Ymok2Q",
       "main_image": "https://m.media-amazon.com/images/I/51qL3f4OqJL.jpg",
-      "category": "air purifier",
+      "category": "Air Purifier",
       "brand": "Breville",
       "severity": "info"
     },
@@ -182,7 +182,7 @@
       "discount_percentage": 0,
       "affiliate_link": "https://amzn.to/4q7G8Lg",
       "main_image": "https://m.media-amazon.com/images/I/71dW-xRhaTL.jpg",
-      "category": "air purifier",
+      "category": "Air Purifier",
       "brand": "Winix",
       "severity": "info"
     },
@@ -203,7 +203,7 @@
       "discount_percentage": 14,
       "affiliate_link": "https://amzn.to/4sjJxIx",
       "main_image": "https://m.media-amazon.com/images/I/61bu1YA8FpL.jpg",
-      "category": "air purifier",
+      "category": "Air Purifier",
       "brand": "Winix",
       "severity": "info"
     },
@@ -224,7 +224,7 @@
       "discount_percentage": 0,
       "affiliate_link": "https://amzn.to/4pl6OXy",
       "main_image": "https://m.media-amazon.com/images/I/61EZjAU+fUL.jpg",
-      "category": "air purifier",
+      "category": "Air Purifier",
       "brand": "Winix",
       "severity": "info"
     },
@@ -246,7 +246,7 @@
       "discount_percentage": 15,
       "affiliate_link": "https://amzn.to/4pfw29L",
       "main_image": "https://m.media-amazon.com/images/I/71Cph7LlfZL.jpg",
-      "category": "air purifier",
+      "category": "Air Purifier",
       "brand": "Winix",
       "severity": "info"
     },
@@ -269,7 +269,7 @@
       "discount_percentage": 22,
       "affiliate_link": "https://amzn.to/3MYIkWR",
       "main_image": "https://m.media-amazon.com/images/I/71XylkefYdL.jpg",
-      "category": "air purifier",
+      "category": "Air Purifier",
       "brand": "Levoit",
       "severity": "info"
     },
@@ -290,7 +290,7 @@
       "discount_percentage": 33,
       "affiliate_link": "https://amzn.to/4s1oEkS",
       "main_image": "https://m.media-amazon.com/images/I/61k6r9VKk5L.jpg",
-      "category": "book",
+      "category": "Book",
       "brand": "MyMirror Publishing House",
       "severity": "info"
     },
@@ -315,7 +315,7 @@
       "discount_percentage": 19,
       "affiliate_link": "https://amzn.to/4q46SfP",
       "main_image": "https://m.media-amazon.com/images/I/61vwKV811tL.jpg",
-      "category": "air purifier",
+      "category": "Air Purifier",
       "brand": "Praan",
       "severity": "info"
     },
@@ -336,7 +336,7 @@
       "discount_percentage": 53,
       "affiliate_link": "https://amzn.to/48KIWaZ",
       "main_image": "https://m.media-amazon.com/images/I/41O1OX4huaL.jpg",
-      "category": "air purifier",
+      "category": "Air Purifier",
       "brand": "Qubo",
       "severity": "info"
     },
@@ -358,7 +358,7 @@
       "discount_percentage": 0,
       "affiliate_link": "https://amzn.to/4jf44JZ",
       "main_image": "https://m.media-amazon.com/images/I/71n7p4fsSkL.jpg",
-      "category": "ubreathe life air purifier",
+      "category": "uBreathe Life Air Purifier",
       "brand": "UBreathe",
       "severity": "info"
     },
@@ -379,7 +379,7 @@
       "discount_percentage": 45,
       "affiliate_link": "https://amzn.to/3KHxW53",
       "main_image": "https://m.media-amazon.com/images/I/41JcwIG7EGL.jpg",
-      "category": "ubreathe life air purifier",
+      "category": "uBreathe Life Air Purifier",
       "brand": "UBreathe",
       "severity": "info"
     },
@@ -411,7 +411,7 @@
       "discount_percentage": 45,
       "affiliate_link": "https://amzn.to/48PBAD1",
       "main_image": "https://m.media-amazon.com/images/I/61qe7hzT8SL.jpg",
-      "category": "air purifier",
+      "category": "Air Purifier",
       "brand": "LEVOIT",
       "severity": "info"
     },
@@ -440,7 +440,7 @@
       "discount_percentage": 13,
       "affiliate_link": "https://amzn.to/4p7Vb6m",
       "main_image": "https://m.media-amazon.com/images/I/61pMsCc8y3L.jpg",
-      "category": "humidifier",
+      "category": "Humidifier",
       "brand": "Dreo",
       "severity": "info"
     },
@@ -461,7 +461,7 @@
       "discount_percentage": 15,
       "affiliate_link": "https://amzn.to/48HAvgG",
       "main_image": "https://m.media-amazon.com/images/I/61Td+yd3qaL.jpg",
-      "category": "book",
+      "category": "Book",
       "brand": "MyMirror Publishing House",
       "severity": "info"
     },
@@ -483,7 +483,7 @@
       "discount_percentage": 23,
       "affiliate_link": "https://amzn.to/4qf6cUh",
       "main_image": "https://m.media-amazon.com/images/I/51l8CXzuVfL.jpg",
-      "category": "air purifier",
+      "category": "Air Purifier",
       "brand": "UBreathe",
       "severity": "info"
     },
@@ -506,7 +506,7 @@
       "discount_percentage": 23,
       "affiliate_link": "https://amzn.to/4904RK9",
       "main_image": "https://m.media-amazon.com/images/I/91atWaiXuyL.jpg",
-      "category": "air purifier",
+      "category": "Air Purifier",
       "brand": "Honeywell",
       "severity": "info"
     },
@@ -525,7 +525,7 @@
       "discount_percentage": 27,
       "affiliate_link": "https://amzn.to/48Q68EV",
       "main_image": "https://m.media-amazon.com/images/I/61VGUxkTJOL.jpg",
-      "category": "book",
+      "category": "Book",
       "brand": "Diamond Books",
       "severity": "info"
     },
@@ -546,7 +546,7 @@
       "discount_percentage": 25,
       "affiliate_link": "https://amzn.to/3YhVUXP",
       "main_image": "https://m.media-amazon.com/images/I/71CvcFBz4pL.jpg",
-      "category": "book",
+      "category": "Book",
       "brand": "Diamond Books",
       "severity": "info"
     }

@@ -1,5 +1,5 @@
 VibeDrips Data Processing Summary
-Generated: 2026-01-11T05:46:47.938Z
+Generated: 2026-01-11T06:01:19.168Z
 
 📊 STATISTICS
 - Total Rows Processed: 23
@@ -20,7 +20,7 @@ Generated: 2026-01-11T05:46:47.938Z
 
 📦 CATEGORIES
 - Categories Found: 5
-- Top Categories: book, air purifier, ubreathe life air purifier, humidifier, nuwave oxypure zero smart air purifier
+- Top Categories: Book, Air Purifier, uBreathe Life Air Purifier, Humidifier, NUWAVE OxyPure ZERO Smart Air Purifier
 
 🏷️ BRANDS
 - Brands Found: 14

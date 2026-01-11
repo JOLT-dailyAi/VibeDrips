@@ -10,11 +10,11 @@
       "product_count": 13,
       "filename": "products-INR.json",
       "categories": [
-        "air purifier",
-        "ubreathe life air purifier",
-        "humidifier",
-        "nuwave oxypure zero smart air purifier",
-        "book"
+        "Air Purifier",
+        "uBreathe Life Air Purifier",
+        "Humidifier",
+        "NUWAVE OxyPure ZERO Smart Air Purifier",
+        "Book"
       ],
       "brands": [
         "Praan",
@@ -42,8 +42,8 @@
       "product_count": 10,
       "filename": "products-AUD.json",
       "categories": [
-        "air purifier",
-        "book"
+        "Air Purifier",
+        "Book"
       ],
       "brands": [
         "Levoit",
@@ -58,7 +58,7 @@
       }
     }
   ],
-  "last_updated": "2026-01-11T05:46:47.933Z",
+  "last_updated": "2026-01-11T06:01:19.163Z",
   "total_products": 23,
   "default_currency": "INR"
 }
