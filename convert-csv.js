@@ -994,6 +994,7 @@ function isBlacklisted(value) {
 }
 
 function assignCategory(row, CANDIDATE_LIST) {
+  // Normalized for comparison
   const candidates = {
     itemTypeName: normalizeCategory(row.itemTypeName),
     generic_name: normalizeCategory(row.generic_name),
@@ -1001,6 +1002,14 @@ function assignCategory(row, CANDIDATE_LIST) {
     categoryHierarchy: normalizeCategory(
       row.categoryHierarchy ? row.categoryHierarchy.split('>')[0] : ''
     )
+  };
+
+  // Preserve original casing
+  const originals = {
+    itemTypeName: (row.itemTypeName || '').trim(),
+    generic_name: (row.generic_name || '').trim(),
+    Category: (row.Category || '').trim(),
+    categoryHierarchy: row.categoryHierarchy ? row.categoryHierarchy.split('>')[0].trim() : ''
   };
 
   const titleLower = (row.Title || row.productTitle || '').toLowerCase();
@@ -1011,8 +1020,8 @@ function assignCategory(row, CANDIDATE_LIST) {
     !isBlacklisted(candidates.itemTypeName)) {
     const validated = titleLower.includes(candidates.itemTypeName);
     console.log(`📦 ${row.productTitle || row.Title}`);
-    console.log(`   Category: "${candidates.itemTypeName}" (${validated ? '✅ validated' : '⚠️ not validated'})`);
-    return candidates.itemTypeName;
+    console.log(`   Category: "${originals.itemTypeName}" (${validated ? '✅ validated' : '⚠️ not validated'})`);
+    return originals.itemTypeName;
   }
 
   // Priority 2: generic_name
@@ -1021,8 +1030,8 @@ function assignCategory(row, CANDIDATE_LIST) {
     !isBlacklisted(candidates.generic_name)) {
     const validated = titleLower.includes(candidates.generic_name);
     console.log(`📦 ${row.productTitle || row.Title}`);
-    console.log(`   Category: "${candidates.generic_name}" (${validated ? '✅ validated' : '⚠️ not validated'})`);
-    return candidates.generic_name;
+    console.log(`   Category: "${originals.generic_name}" (${validated ? '✅ validated' : '⚠️ not validated'})`);
+    return originals.generic_name;
   }
 
   // Priority 3: Category (fallback)
@@ -1030,8 +1039,8 @@ function assignCategory(row, CANDIDATE_LIST) {
     CANDIDATE_LIST.includes(candidates.Category) &&
     !isBlacklisted(candidates.Category)) {
     console.log(`📦 ${row.productTitle || row.Title}`);
-    console.log(`   Category: "${candidates.Category}" (fallback: Category)`);
-    return candidates.Category;
+    console.log(`   Category: "${originals.Category}" (fallback: Category)`);
+    return originals.Category;
   }
 
   // Priority 4: categoryHierarchy (fallback)
@@ -1039,8 +1048,8 @@ function assignCategory(row, CANDIDATE_LIST) {
     CANDIDATE_LIST.includes(candidates.categoryHierarchy) &&
     !isBlacklisted(candidates.categoryHierarchy)) {
     console.log(`📦 ${row.productTitle || row.Title}`);
-    console.log(`   Category: "${candidates.categoryHierarchy}" (fallback: categoryHierarchy)`);
-    return candidates.categoryHierarchy;
+    console.log(`   Category: "${originals.categoryHierarchy}" (fallback: categoryHierarchy)`);
+    return originals.categoryHierarchy;
   }
 
   // Priority 5: Default

@@ -16,7 +16,11 @@ const KEEP_FILES = [
 // Pattern for files that should be kept (current generation)
 const KEEP_PATTERNS = [
     /^products-[A-Z]{3}\.json$/,  // products-INR.json, products-USD.json, etc.
-    /^currencies\.json$/          // currencies.json
+    /^currencies\.json$/,          // currencies.json
+    /^drops\.json$/,               // NEW: drops manifest
+    /^influencers\.json$/,         // NEW: influencers manifest
+    /^collections\.json$/,         // NEW: collections manifest
+    /^errors\.json$/               // NEW: errors manifest
 ];
 
 function shouldKeepFile(filename) {
