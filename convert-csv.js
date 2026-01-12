@@ -994,54 +994,64 @@ function isBlacklisted(value) {
 }
 
 function assignCategory(row, CANDIDATE_MAP) {
-  const findMatch = (rawVal) => {
-    if (!rawVal) return null;
-    const normalizedField = normalizeCategory(rawVal);
+  // Extract and normalize values from all priority fields
+  const candidates = {
+    itemTypeName: normalizeCategory(row.itemTypeName),
+    generic_name: normalizeCategory(row.generic_name),
+    Category: normalizeCategory(row.Category),
+    categoryHierarchy: normalizeCategory(
+      row.categoryHierarchy ? row.categoryHierarchy.split('>')[0] : ''
+    )
+  };
 
-    // Find all matching candidates from our whitelist
-    const matches = Object.keys(CANDIDATE_MAP)
-      .filter(cand => normalizedField.includes(cand))
-      .sort((a, b) => a.length - b.length); // Shortest match first (more general)
-
-    if (matches.length > 0) {
-      const bestMatch = matches[0];
-      return {
-        normalized: bestMatch,
-        original: CANDIDATE_MAP[bestMatch]
-      };
-    }
-    return null;
+  // Store original (non-normalized) values
+  const originals = {
+    itemTypeName: (row.itemTypeName || '').trim(),
+    generic_name: (row.generic_name || '').trim(),
+    Category: (row.Category || '').trim(),
+    categoryHierarchy: row.categoryHierarchy ? row.categoryHierarchy.split('>')[0].trim() : ''
   };
 
   const titleLower = (row.Title || row.productTitle || '').toLowerCase();
 
-  const sources = [
-    { name: 'itemTypeName', val: row.itemTypeName, priority: 1 },
-    { name: 'generic_name', val: row.generic_name, priority: 2 },
-    { name: 'Category', val: row.Category, priority: 3 },
-    { name: 'categoryHierarchy', val: row.categoryHierarchy ? row.categoryHierarchy.split('>')[0] : '', priority: 4 }
+  // Priority order for matching
+  const priorities = [
+    { source: 'itemTypeName', normalized: candidates.itemTypeName, original: originals.itemTypeName },
+    { source: 'generic_name', normalized: candidates.generic_name, original: originals.generic_name },
+    { source: 'Category', normalized: candidates.Category, original: originals.Category },
+    { source: 'categoryHierarchy', normalized: candidates.categoryHierarchy, original: originals.categoryHierarchy }
   ];
 
-  for (const source of sources) {
-    const match = findMatch(source.val);
-    if (match && !isBlacklisted(match.normalized)) {
-      const validated = titleLower.includes(match.normalized);
+  // Try each priority level
+  for (const priority of priorities) {
+    if (!priority.normalized) continue;
+
+    // EXACT MATCH: Check if this normalized value exists in CANDIDATE_MAP
+    if (CANDIDATE_MAP[priority.normalized] && !isBlacklisted(priority.normalized)) {
+      const canonicalCategory = CANDIDATE_MAP[priority.normalized];
+      const validated = titleLower.includes(priority.normalized);
+
       console.log(`📦 ${row.productTitle || row.Title}`);
-      console.log(`   Category: "${match.original}" (from ${source.name}, ${validated ? '✅ validated' : '⚠️ not validated'})`);
-      return match.original;
+      console.log(`   Category: "${canonicalCategory}" (from ${priority.source}, ${validated ? '✅ validated' : '⚠️ not validated'})`);
+
+      return canonicalCategory;
     }
   }
 
-  // Final fallbacks if no whitelisted candidate found in fields
-  if (row.Category && !isBlacklisted(normalizeCategory(row.Category))) {
-    return row.Category.trim();
+  // Final fallback: use original Category or categoryHierarchy if not blacklisted
+  if (originals.Category && !isBlacklisted(candidates.Category)) {
+    console.log(`📦 ${row.productTitle || row.Title}`);
+    console.log(`   Category: "${originals.Category}" (fallback: raw Category)`);
+    return originals.Category;
   }
 
-  if (row.categoryHierarchy) {
-    const first = row.categoryHierarchy.split('>')[0].trim();
-    if (!isBlacklisted(normalizeCategory(first))) return first;
+  if (originals.categoryHierarchy && !isBlacklisted(candidates.categoryHierarchy)) {
+    console.log(`📦 ${row.productTitle || row.Title}`);
+    console.log(`   Category: "${originals.categoryHierarchy}" (fallback: raw categoryHierarchy)`);
+    return originals.categoryHierarchy;
   }
 
+  // Default
   console.log(`📦 ${row.productTitle || row.Title}`);
   console.log(`   Category: "General" (default)`);
   return 'General';
