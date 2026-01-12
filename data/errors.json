@@ -3,7 +3,7 @@
     "total_products": 23,
     "products_with_errors": 23,
     "error_rate": 100,
-    "last_updated": "2026-01-12T03:50:29.676Z"
+    "last_updated": "2026-01-12T04:51:47.048Z"
   },
   "error_breakdown": {
     "DISCOUNT_MISMATCH": 2,
@@ -59,7 +59,7 @@
       "discount_percentage": 80,
       "affiliate_link": "https://amzn.to/4pdv5iw",
       "main_image": "https://m.media-amazon.com/images/I/71rQ3Md9w0L.jpg",
-      "category": "Air Purifier",
+      "category": "NUWAVE OxyPure ZERO Smart Air Purifier",
       "brand": "Nuwave",
       "severity": "warning"
     },
@@ -358,7 +358,7 @@
       "discount_percentage": 0,
       "affiliate_link": "https://amzn.to/4jf44JZ",
       "main_image": "https://m.media-amazon.com/images/I/71n7p4fsSkL.jpg",
-      "category": "Air Purifier",
+      "category": "uBreathe Life Air Purifier",
       "brand": "UBreathe",
       "severity": "info"
     },
@@ -379,7 +379,7 @@
       "discount_percentage": 45,
       "affiliate_link": "https://amzn.to/3KHxW53",
       "main_image": "https://m.media-amazon.com/images/I/41JcwIG7EGL.jpg",
-      "category": "Air Purifier",
+      "category": "uBreathe Life Air Purifier",
       "brand": "UBreathe",
       "severity": "info"
     },
