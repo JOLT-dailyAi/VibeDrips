@@ -3,7 +3,7 @@
     "total_products": 23,
     "products_with_errors": 23,
     "error_rate": 100,
-    "last_updated": "2026-01-13T03:02:35.293Z"
+    "last_updated": "2026-01-13T03:12:27.331Z"
   },
   "error_breakdown": {
     "DISCOUNT_MISMATCH": 2,
@@ -80,7 +80,7 @@
       "discount_percentage": 41,
       "affiliate_link": "https://amzn.to/44RpxTq",
       "main_image": "https://m.media-amazon.com/images/I/81l3rZK4lnL.jpg",
-      "category": "Books",
+      "category": "Book",
       "brand": "HUTCHINSON PUBLISHING - TRADE",
       "severity": "info"
     },
@@ -101,7 +101,7 @@
       "discount_percentage": 23,
       "affiliate_link": "https://amzn.to/49mRnZa",
       "main_image": "https://m.media-amazon.com/images/I/61X7tH9kPOL.jpg",
-      "category": "Books",
+      "category": "Book",
       "brand": "Cornerstone Press",
       "severity": "info"
     },
@@ -290,7 +290,7 @@
       "discount_percentage": 33,
       "affiliate_link": "https://amzn.to/4s1oEkS",
       "main_image": "https://m.media-amazon.com/images/I/61k6r9VKk5L.jpg",
-      "category": "Books",
+      "category": "Book",
       "brand": "MyMirror Publishing House",
       "severity": "info"
     },
@@ -358,7 +358,7 @@
       "discount_percentage": 0,
       "affiliate_link": "https://amzn.to/4jf44JZ",
       "main_image": "https://m.media-amazon.com/images/I/71n7p4fsSkL.jpg",
-      "category": "uBreathe Life Air Purifier",
+      "category": "General",
       "brand": "UBreathe",
       "severity": "info"
     },
@@ -379,7 +379,7 @@
       "discount_percentage": 45,
       "affiliate_link": "https://amzn.to/3KHxW53",
       "main_image": "https://m.media-amazon.com/images/I/41JcwIG7EGL.jpg",
-      "category": "uBreathe Life Air Purifier",
+      "category": "General",
       "brand": "UBreathe",
       "severity": "info"
     },
@@ -461,7 +461,7 @@
       "discount_percentage": 15,
       "affiliate_link": "https://amzn.to/48HAvgG",
       "main_image": "https://m.media-amazon.com/images/I/61Td+yd3qaL.jpg",
-      "category": "Books",
+      "category": "Book",
       "brand": "MyMirror Publishing House",
       "severity": "info"
     },
@@ -525,7 +525,7 @@
       "discount_percentage": 27,
       "affiliate_link": "https://amzn.to/48Q68EV",
       "main_image": "https://m.media-amazon.com/images/I/61VGUxkTJOL.jpg",
-      "category": "Books",
+      "category": "Book",
       "brand": "Diamond Books",
       "severity": "info"
     },
@@ -546,7 +546,7 @@
       "discount_percentage": 25,
       "affiliate_link": "https://amzn.to/3YhVUXP",
       "main_image": "https://m.media-amazon.com/images/I/71CvcFBz4pL.jpg",
-      "category": "Books",
+      "category": "Book",
       "brand": "Diamond Books",
       "severity": "info"
     }

@@ -1,105 +1,93 @@
 {
-  "HouseFresh": {
-    "name": "HouseFresh",
-    "productCount": 8,
-    "totalValue": 1784,
-    "categories": [
-      "Air Purifier"
-    ],
-    "brands": [
-      "Levoit",
-      "Breville",
-      "Winix"
-    ],
-    "currencies": [
-      "AUD"
-    ],
-    "products": [
-      {
-        "asin": "B0F2MLPWTG",
-        "currency": "AUD",
-        "drop_categories": []
-      },
-      {
-        "asin": "B0BGRHMQ7C",
-        "currency": "AUD",
-        "drop_categories": []
-      },
-      {
-        "asin": "B08NYTLNQ9",
-        "currency": "AUD",
-        "drop_categories": []
-      },
-      {
-        "asin": "B0DT4F8T4L",
-        "currency": "AUD",
-        "drop_categories": []
-      },
-      {
-        "asin": "B07PNJQMK6",
-        "currency": "AUD",
-        "drop_categories": []
-      },
-      {
-        "asin": "B094DRK41G",
-        "currency": "AUD",
-        "drop_categories": []
-      },
-      {
-        "asin": "B0FVXJ52W6",
-        "currency": "AUD",
-        "drop_categories": []
-      },
-      {
-        "asin": "B0F9FJS3VW",
-        "currency": "AUD",
-        "drop_categories": []
-      }
-    ]
+  "summary": {
+    "total_influencers": 2,
+    "last_updated": "2026-01-13T03:12:27.330Z"
   },
-  "Food Pharmer": {
-    "name": "Food Pharmer",
-    "productCount": 5,
-    "totalValue": 97566,
-    "categories": [
-      "Air Purifier"
-    ],
-    "brands": [
-      "Praan",
-      "Qubo",
-      "LEVOIT",
-      "UBreathe",
-      "Honeywell"
-    ],
-    "currencies": [
-      "INR"
-    ],
-    "products": [
-      {
-        "asin": "B0FJ5R8JN7",
-        "currency": "INR",
-        "drop_categories": []
-      },
-      {
-        "asin": "B0DHGFCG6P",
-        "currency": "INR",
-        "drop_categories": []
-      },
-      {
-        "asin": "B0CG1N11DV",
-        "currency": "INR",
-        "drop_categories": []
-      },
-      {
-        "asin": "B0BDX9ZN46",
-        "currency": "INR",
-        "drop_categories": []
-      },
-      {
-        "asin": "B076HP91MN",
-        "currency": "INR",
-        "drop_categories": []
-      }
-    ]
+  "influencers": {
+    "HouseFresh": {
+      "name": "HouseFresh",
+      "productCount": 8,
+      "totalValue": 1784,
+      "categories": {},
+      "brands": {},
+      "currencies": {},
+      "products": [
+        {
+          "asin": "B0F2MLPWTG",
+          "currency": "AUD",
+          "drop_categories": []
+        },
+        {
+          "asin": "B0BGRHMQ7C",
+          "currency": "AUD",
+          "drop_categories": []
+        },
+        {
+          "asin": "B08NYTLNQ9",
+          "currency": "AUD",
+          "drop_categories": []
+        },
+        {
+          "asin": "B0DT4F8T4L",
+          "currency": "AUD",
+          "drop_categories": []
+        },
+        {
+          "asin": "B07PNJQMK6",
+          "currency": "AUD",
+          "drop_categories": []
+        },
+        {
+          "asin": "B094DRK41G",
+          "currency": "AUD",
+          "drop_categories": []
+        },
+        {
+          "asin": "B0FVXJ52W6",
+          "currency": "AUD",
+          "drop_categories": []
+        },
+        {
+          "asin": "B0F9FJS3VW",
+          "currency": "AUD",
+          "drop_categories": []
+        }
+      ]
+    },
+    "Food Pharmer": {
+      "name": "Food Pharmer",
+      "productCount": 5,
+      "totalValue": 97566,
+      "categories": {},
+      "brands": {},
+      "currencies": {},
+      "products": [
+        {
+          "asin": "B0FJ5R8JN7",
+          "currency": "INR",
+          "drop_categories": []
+        },
+        {
+          "asin": "B0DHGFCG6P",
+          "currency": "INR",
+          "drop_categories": []
+        },
+        {
+          "asin": "B0CG1N11DV",
+          "currency": "INR",
+          "drop_categories": []
+        },
+        {
+          "asin": "B0BDX9ZN46",
+          "currency": "INR",
+          "drop_categories": []
+        },
+        {
+          "asin": "B076HP91MN",
+          "currency": "INR",
+          "drop_categories": []
+        }
+      ]
+    }
   }
 }

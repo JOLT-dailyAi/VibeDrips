@@ -11,10 +11,9 @@
       "filename": "products-INR.json",
       "categories": [
         "Air Purifier",
-        "uBreathe Life Air Purifier",
-        "Humidifier",
         "General",
-        "Books"
+        "Humidifier",
+        "Book"
       ],
       "brands": [
         "Praan",
@@ -43,7 +42,7 @@
       "filename": "products-AUD.json",
       "categories": [
         "Air Purifier",
-        "Books"
+        "Book"
       ],
       "brands": [
         "Levoit",
@@ -58,7 +57,7 @@
       }
     }
   ],
-  "last_updated": "2026-01-13T03:02:35.290Z",
+  "last_updated": "2026-01-13T03:12:27.327Z",
   "total_products": 23,
   "default_currency": "INR"
 }

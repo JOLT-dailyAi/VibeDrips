@@ -232,7 +232,7 @@
     "currency": "INR",
     "symbol": "₹",
     "brand": "UBreathe",
-    "category": "uBreathe Life Air Purifier",
+    "category": "General",
     "subcategory": "uBreathe Life Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/71n7p4fsSkL.jpg",
     "all_images": [
@@ -745,7 +745,7 @@
     "currency": "INR",
     "symbol": "₹",
     "brand": "UBreathe",
-    "category": "uBreathe Life Air Purifier",
+    "category": "General",
     "subcategory": "uBreathe Life Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/41JcwIG7EGL.jpg",
     "all_images": [
@@ -1368,7 +1368,7 @@
     "currency": "INR",
     "symbol": "₹",
     "brand": "MyMirror Publishing House",
-    "category": "Books",
+    "category": "Book",
     "subcategory": "Book",
     "main_image": "https://m.media-amazon.com/images/I/61k6r9VKk5L.jpg",
     "all_images": [
@@ -1738,7 +1738,7 @@
     "currency": "INR",
     "symbol": "₹",
     "brand": "MyMirror Publishing House",
-    "category": "Books",
+    "category": "Book",
     "subcategory": "Book",
     "main_image": "https://m.media-amazon.com/images/I/61Td+yd3qaL.jpg",
     "all_images": [
@@ -2087,7 +2087,7 @@
     "currency": "INR",
     "symbol": "₹",
     "brand": "Diamond Books",
-    "category": "Books",
+    "category": "Book",
     "subcategory": "Book",
     "main_image": "https://m.media-amazon.com/images/I/61VGUxkTJOL.jpg",
     "all_images": [
@@ -2266,7 +2266,7 @@
     "currency": "INR",
     "symbol": "₹",
     "brand": "Diamond Books",
-    "category": "Books",
+    "category": "Book",
     "subcategory": "Book",
     "main_image": "https://m.media-amazon.com/images/I/71CvcFBz4pL.jpg",
     "all_images": [
