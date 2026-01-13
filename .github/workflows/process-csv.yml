@@ -126,16 +126,32 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          echo "Staging files for commit..."
-          git add data/products-*.json 2>/dev/null || true
-          git add data/currencies.json 2>/dev/null || true
-          git add data/drops.json 2>/dev/null || true
-          git add data/influencers.json 2>/dev/null || true
-          git add data/collections.json 2>/dev/null || true
-          git add data/errors.json 2>/dev/null || true
-          git add data/last_updated.txt 2>/dev/null || true
-          git add sw.js 2>/dev/null || true
-          git add assets/js/product-loader.js 2>/dev/null || true
+          
+          echo "=== PRE-COMMIT FILE STATUS ==="
+          ls -la data/*.json 2>/dev/null || echo "No JSON files found"
+          
+          echo "=== FORCE REMOVING OLD MANIFESTS FROM GIT ==="
+          git rm --cached data/collections.json 2>/dev/null || echo "collections.json not in cache"
+          git rm --cached data/influencers.json 2>/dev/null || echo "influencers.json not in cache"
+          git rm --cached data/drops.json 2>/dev/null || echo "drops.json not in cache"
+          git rm --cached data/currencies.json 2>/dev/null || echo "currencies.json not in cache"
+          git rm --cached data/errors.json 2>/dev/null || echo "errors.json not in cache"
+          git rm --cached data/products-*.json 2>/dev/null || echo "No product files in cache"
+          
+          echo "=== STAGING FRESHLY GENERATED FILES ==="
+          git add -f data/products-*.json 2>/dev/null || echo "No product files to add"
+          git add -f data/currencies.json 2>/dev/null || echo "No currencies.json to add"
+          git add -f data/drops.json 2>/dev/null || echo "No drops.json to add"
+          git add -f data/influencers.json 2>/dev/null || echo "No influencers.json to add"
+          git add -f data/collections.json 2>/dev/null || echo "No collections.json to add"
+          git add -f data/errors.json 2>/dev/null || echo "No errors.json to add"
+          git add -f data/last_updated.txt 2>/dev/null || echo "No last_updated.txt to add"
+          git add -f sw.js 2>/dev/null || echo "No sw.js to add"
+          git add -f assets/js/product-loader.js 2>/dev/null || echo "No product-loader.js to add"
+          
+          echo "=== STAGED FILES ==="
+          git diff --staged --name-status
+          
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
