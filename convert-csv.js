@@ -1033,6 +1033,18 @@ function assignCategory(row, CANDIDATE_MAP) {
 
       return canonicalCategory;
     }
+
+    // SUBSTRING EXTRACTION: Try to find a known category within the value
+    // This handles cases like "uBreathe Life Air Purifier" -> extract "Air Purifier"
+    const originalValue = priority.original.toLowerCase();
+    for (const [knownNorm, knownCanonical] of Object.entries(CANDIDATE_MAP)) {
+      if (originalValue.includes(knownNorm) && !isBlacklisted(knownNorm)) {
+        const validated = titleLower.includes(knownNorm);
+        console.log(`📦 ${row.productTitle || row.Title}`);
+        console.log(`   Category: "${knownCanonical}" (extracted from ${priority.source}: "${priority.original}", ${validated ? '✅ validated' : '⚠️ not validated'})`);
+        return knownCanonical;
+      }
+    }
   }
 
   // Final fallback: use original Category or categoryHierarchy if not blacklisted
@@ -1267,7 +1279,7 @@ function convertCsvToJson() {
 
         // Reject if too many words (likely a product title)
         const wordCount = trimmed.split(/\s+/).length;
-        if (wordCount > 3) {
+        if (wordCount > 2) {
           console.log(`⚠️ Rejected (too many words): "${trimmed}"`);
           return;
         }
