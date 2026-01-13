@@ -5,40 +5,40 @@ const DATA_VERSION = '20260113-auto'; // ⬅️ CHANGE THIS ON EVERY CSV UPDATE 
 // Load products for specified currency
 async function loadProducts(currency) {
     console.log(`📦 Loading products for ${currency}...`);
-    
+
     try {
         showLoadingState();
-        
+
         const currencyData = VibeDrips.availableCurrencies.find(c => c.code === currency);
         if (!currencyData) {
             throw new Error(`Currency ${currency} not found`);
         }
-        
+
         // Add cache-busting parameter to force fresh data
         const url = `${VibeDrips.config.dataUrl}/${currencyData.filename}?v=${DATA_VERSION}`;
         console.log(`🔄 Fetching: ${url}`);
-        
+
         const response = await fetch(url, {
             cache: 'no-store' // Don't use browser cache
         });
-        
+
         if (!response.ok) {
             throw new Error(`Failed to load ${currencyData.filename}: ${response.status}`);
         }
-        
+
         const products = await response.json();
         console.log(`✅ Loaded ${products.length} products (version: ${DATA_VERSION})`);
-        
+
         VibeDrips.allProducts = products.map(processProductData);
         VibeDrips.filteredProducts = [...VibeDrips.allProducts];
-        
+
         extractCategories();
         populateCategoryFilter();
         setTimeFilter(VibeDrips.currentTimeFilter);
-        
+
         VibeDrips.elements.productCount.textContent = VibeDrips.allProducts.length || 0;
         VibeDrips.elements.categoryCount.textContent = VibeDrips.categories.size || 0;
-        
+
     } catch (error) {
         console.error('❌ Product loading failed:', error);
         showError('Unable to load products. Please check your connection and try again.');
@@ -50,7 +50,7 @@ function processProductData(product) {
     // ========================================
     // DISCOUNT VALIDATION & COMPUTATION LOGIC
     // ========================================
-    
+
     // Helper function to safely parse price (handles both string and number, removes currency symbols)
     const parsePrice = (value) => {
         if (!value) return 0;
@@ -66,32 +66,32 @@ function processProductData(product) {
         }
         return 0;
     };
-    
+
     // Parse pricing fields from CSV (exact column names from products.csv)
     const currentPrice = parsePrice(product.price);
     const originalPrice = parsePrice(product.originalPrice);
-    
+
     // Parse discount percentage (handles "27%" format)
     let discountPercent = 0;
     if (product.discountPercentage) {
         const percentStr = String(product.discountPercentage).replace(/[^\d.]/g, '');
         discountPercent = parseInt(percentStr) || 0;
     }
-    
+
     // Auto-calculate discount if missing but prices differ
     if (discountPercent === 0 && originalPrice > currentPrice && currentPrice > 0) {
         discountPercent = Math.round(((originalPrice - currentPrice) / originalPrice) * 100);
     }
-    
+
     // Validate discount logic
     let showDiscount = false;
-    
+
     // Check if originalPrice field was actually provided (not just missing/empty)
-    const hasOriginalPrice = product.originalPrice !== undefined && 
-                             product.originalPrice !== null && 
-                             product.originalPrice !== '' &&
-                             originalPrice > 0;
-    
+    const hasOriginalPrice = product.originalPrice !== undefined &&
+        product.originalPrice !== null &&
+        product.originalPrice !== '' &&
+        originalPrice > 0;
+
     if (hasOriginalPrice && currentPrice > originalPrice) {
         // INVALID: Current price higher than original (real data error)
         showDiscount = false;
@@ -103,7 +103,7 @@ function processProductData(product) {
         // VALID: Show discount badge
         showDiscount = true;
     }
-    
+
     // 🐛 ENHANCED DEBUG - Log first 3 products
     const debugProducts = ['9355995008', 'B0FM2Y25HP', '9388550315'];
     if (debugProducts.includes(product.asin)) {
@@ -118,24 +118,24 @@ function processProductData(product) {
             showDiscount
         });
     }
-    
+
     // ========================================
     // RETURN NORMALIZED PRODUCT DATA
     // ========================================
-    
+
     return {
         ...product,
         id: product.asin || product.id || generateId(),
         name: product.name || product.productTitle || product.Title || 'Untitled Product',
         description: product.description || product.Description || 'No description available',
-        
+
         // Normalized pricing fields
         price: currentPrice, // Always display this value
         display_price: currentPrice, // Explicit display field
         display_original: originalPrice, // For internal use only (not rendered in UI)
         computed_discount: discountPercent, // Discount percentage as number
         show_discount: showDiscount, // Boolean flag for badge visibility
-        
+
         main_image: product.main_image || product.MainImage || '',
         all_images: (() => {
             // Handle JSON string format from new scraper
@@ -164,7 +164,7 @@ function processProductData(product) {
         brand: product.brand || 'VibeDrips',
         category: product.category || product.categoryHierarchy || product.Category || 'General',
         subcategory: product.subcategory || product.itemTypeName || '',
-        
+
         // New fields from updated scraper
         material: product.material || '',
         dimensions: product.dimensions || '',
@@ -195,9 +195,6 @@ function extractCategories() {
         if (product.category && product.category.trim()) {
             VibeDrips.categories.add(product.category.trim());
         }
-        if (product.subcategory && product.subcategory.trim()) {
-            VibeDrips.categories.add(product.subcategory.trim());
-        }
     });
     console.log(`📂 Found ${VibeDrips.categories.size} categories`);
 }
@@ -206,9 +203,9 @@ function extractCategories() {
 function populateCategoryFilter() {
     const categoryFilter = VibeDrips.elements.categoryFilter;
     if (!categoryFilter) return;
-    
+
     categoryFilter.innerHTML = '<option value="">All Categories</option>';
-    
+
     Array.from(VibeDrips.categories).sort().forEach(category => {
         const option = document.createElement('option');
         option.value = category;

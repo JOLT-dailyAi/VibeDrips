@@ -53,9 +53,9 @@ function getHotProducts() {
 
         try {
             const productDate = new Date(dateStr);
-            return (productDate.getMonth() === currentMonth && 
-                    productDate.getFullYear() === currentYear) ||
-                   (productDate.getMonth() === (currentMonth - 1 + 12) % 12 && 
+            return (productDate.getMonth() === currentMonth &&
+                productDate.getFullYear() === currentYear) ||
+                (productDate.getMonth() === (currentMonth - 1 + 12) % 12 &&
                     productDate.getFullYear() === currentYear);
         } catch (error) {
             console.warn('Invalid date format for product:', product.name, dateStr);
@@ -88,24 +88,24 @@ function getNewArrivals() {
  */
 function updateSectionTitle(filter) {
     const titles = {
-        'hot': { 
-            title: 'Hot This Month', 
+        'hot': {
+            title: 'Hot This Month',
             subtitle: 'Trending products that just dropped and making waves'
         },
-        'featured': { 
-            title: 'Featured Products', 
+        'featured': {
+            title: 'Featured Products',
             subtitle: 'Our hand-picked recommendations just for you'
         },
-        'new': { 
-            title: 'New Arrivals', 
+        'new': {
+            title: 'New Arrivals',
             subtitle: 'Fresh drops from the last 30 days'
         },
-        'trending': { 
-            title: 'Trending Now', 
+        'trending': {
+            title: 'Trending Now',
             subtitle: 'What everyone is talking about'
         },
-        'all': { 
-            title: 'All Products', 
+        'all': {
+            title: 'All Products',
             subtitle: 'Complete collection of curated finds'
         }
     };
@@ -133,19 +133,19 @@ function applyCurrentFilters() {
     if (searchTerm || categoryValue) {
         VibeDrips.filteredProducts = VibeDrips.filteredProducts.filter(product => {
             const searchFields = [
-                product.name, 
-                product.description, 
+                product.name,
+                product.description,
                 product.category,
                 product.subcategory,
                 product.brand
             ].filter(field => field && field.toString().trim());
 
-            const matchesSearch = !searchTerm || searchFields.some(field => 
+            const matchesSearch = !searchTerm || searchFields.some(field =>
                 field.toString().toLowerCase().includes(searchTerm)
             );
 
-            const matchesCategory = !categoryValue || 
-                product.category === categoryValue || 
+            const matchesCategory = !categoryValue ||
+                product.category === categoryValue ||
                 product.subcategory === categoryValue;
 
             return matchesSearch && matchesCategory;
@@ -240,86 +240,86 @@ function renderProducts() {
 // ============================================
 
 const CURRENCY_FORMAT_RULES = {
-  'INR': {
-    units: [
-      { value: 10000000, suffix: 'Cr' },
-      { value: 100000, suffix: 'L' },
-      { value: 1000, suffix: 'K' }
-    ],
-    locale: 'en-IN'
-  },
-  'USD': {
-    units: [
-      { value: 1000000000, suffix: 'B' },
-      { value: 1000000, suffix: 'M' },
-      { value: 1000, suffix: 'K' }
-    ],
-    locale: 'en-US'
-  },
-  'EUR': {
-    units: [
-      { value: 1000000000, suffix: 'Mrd' },
-      { value: 1000000, suffix: 'Mio' },
-      { value: 1000, suffix: 'K' }
-    ],
-    locale: 'de-DE'
-  },
-  'GBP': {
-    units: [
-      { value: 1000000000, suffix: 'B' },
-      { value: 1000000, suffix: 'M' },
-      { value: 1000, suffix: 'K' }
-    ],
-    locale: 'en-GB'
-  },
-  'JPY': {
-    units: [
-      { value: 100000000, suffix: '億' },
-      { value: 10000, suffix: '万' },
-      { value: 1000, suffix: 'K' }
-    ],
-    locale: 'ja-JP'
-  },
-  'DEFAULT': {
-    units: [
-      { value: 1000000, suffix: 'M' },
-      { value: 1000, suffix: 'K' }
-    ],
-    locale: 'en-US'
-  }
+    'INR': {
+        units: [
+            { value: 10000000, suffix: 'Cr' },
+            { value: 100000, suffix: 'L' },
+            { value: 1000, suffix: 'K' }
+        ],
+        locale: 'en-IN'
+    },
+    'USD': {
+        units: [
+            { value: 1000000000, suffix: 'B' },
+            { value: 1000000, suffix: 'M' },
+            { value: 1000, suffix: 'K' }
+        ],
+        locale: 'en-US'
+    },
+    'EUR': {
+        units: [
+            { value: 1000000000, suffix: 'Mrd' },
+            { value: 1000000, suffix: 'Mio' },
+            { value: 1000, suffix: 'K' }
+        ],
+        locale: 'de-DE'
+    },
+    'GBP': {
+        units: [
+            { value: 1000000000, suffix: 'B' },
+            { value: 1000000, suffix: 'M' },
+            { value: 1000, suffix: 'K' }
+        ],
+        locale: 'en-GB'
+    },
+    'JPY': {
+        units: [
+            { value: 100000000, suffix: '億' },
+            { value: 10000, suffix: '万' },
+            { value: 1000, suffix: 'K' }
+        ],
+        locale: 'ja-JP'
+    },
+    'DEFAULT': {
+        units: [
+            { value: 1000000, suffix: 'M' },
+            { value: 1000, suffix: 'K' }
+        ],
+        locale: 'en-US'
+    }
 };
 
 const formatPrice = (amount, currencyCode = 'INR', symbol = '₹', compact = true) => {
-  if (!amount || amount === 0) return `${symbol}0`;
-  const num = parseFloat(amount);
-  if (isNaN(num)) return `${symbol}0`;
+    if (!amount || amount === 0) return `${symbol}0`;
+    const num = parseFloat(amount);
+    if (isNaN(num)) return `${symbol}0`;
 
-  const rules = CURRENCY_FORMAT_RULES[currencyCode] || CURRENCY_FORMAT_RULES['DEFAULT'];
+    const rules = CURRENCY_FORMAT_RULES[currencyCode] || CURRENCY_FORMAT_RULES['DEFAULT'];
 
-  if (compact) {
-    // No decimals in compact mode
-    if (num < 1000) return `${symbol}${Math.round(num)}`;
-    for (const unit of rules.units) {
-      if (num >= unit.value) {
-        const formatted = (num / unit.value).toFixed(1).replace(/\.0$/, '');
-        return `${symbol}${formatted}${unit.suffix}`;
-      }
+    if (compact) {
+        // No decimals in compact mode
+        if (num < 1000) return `${symbol}${Math.round(num)}`;
+        for (const unit of rules.units) {
+            if (num >= unit.value) {
+                const formatted = (num / unit.value).toFixed(1).replace(/\.0$/, '');
+                return `${symbol}${formatted}${unit.suffix}`;
+            }
+        }
+        return `${symbol}${Math.round(num)}`;
+    } else {
+        return `${symbol}${num.toLocaleString(rules.locale, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}`;
     }
-    return `${symbol}${Math.round(num)}`;
-  } else {
-    return `${symbol}${num.toLocaleString(rules.locale, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}`;
-  }
 };
 
 // ✅ NEW: Truncate text with word boundary (for brand/category)
 const truncateTextAtWord = (text, maxChars = 18) => {
-  if (!text || text.length <= maxChars) return text;
-  const truncated = text.substring(0, maxChars);
-  const lastSpace = truncated.lastIndexOf(' ');
-  if (lastSpace > 0) {
-    return truncated.substring(0, lastSpace) + '...';
-  }
-  return truncated + '...';
+    if (!text || text.length <= maxChars) return text;
+    const truncated = text.substring(0, maxChars);
+    const lastSpace = truncated.lastIndexOf(' ');
+    if (lastSpace > 0) {
+        return truncated.substring(0, lastSpace) + '...';
+    }
+    return truncated + '...';
 };
 
 /**
@@ -338,7 +338,7 @@ function createProductCard(product) {
     const productId = product.asin || product.id || '';
 
     // ✅ UPDATED: Truncate category and brand to 18 chars at word boundary
-    const category = truncateTextAtWord(product.subcategory || product.itemTypeName || product.category || 'General', 18);
+    const category = truncateTextAtWord(product.category || 'General', 18);
     const brand = truncateTextAtWord(product.brand || 'VibeDrips', 18);
 
     const rating = parseFloat(product.customer_rating) || 0;
@@ -346,9 +346,9 @@ function createProductCard(product) {
 
     // ✅ Format review count helper
     const formatCount = (n) => {
-      if (!n || n < 1000) return String(n || 0);
-      if (n < 10000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
-      return Math.round(n / 1000) + 'k';
+        if (!n || n < 1000) return String(n || 0);
+        if (n < 10000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+        return Math.round(n / 1000) + 'k';
     };
 
     // ✅ Use formatPrice with currency awareness (compact, no decimals)
@@ -360,7 +360,7 @@ function createProductCard(product) {
     // Discount badge logic
     const showDiscount = product.show_discount || false;
     const discountPercent = product.computed_discount || 0;
-    const discountBadge = showDiscount && discountPercent > 0 
+    const discountBadge = showDiscount && discountPercent > 0
         ? `<span class="discount-badge"><span class="live-dot" aria-hidden="true"></span>${discountPercent}%</span>`
         : '';
 
