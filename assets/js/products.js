@@ -453,13 +453,30 @@ function showProductModal(productId) {
     // Prepare images for gallery
     const images = [product.main_image, ...(product.all_images || [])].filter(Boolean);
 
+    // Title truncation (80 chars / 1 line)
+    const maxTitleLength = 80;
+    const productTitle = (product.name || 'Product').trim();
+    const isTitleLong = productTitle.length > maxTitleLength;
+    const displayTitle = isTitleLong
+        ? productTitle.substring(0, 80).trim() + '...'
+        : productTitle;
+
+    // Description truncation (200 chars)
+    const maxDescLength = 200;
+    const description = (product.description || '').trim();
+    const isDescLong = description.length > maxDescLength;
+    const displayDesc = isDescLong
+        ? description.substring(0, 200).trim() + '...'
+        : description;
+
     // Build modal HTML
     const modalContent = `
         <div class="simple-modal dynamic-modal">
             <div class="modal-overlay" onclick="closeDynamicModal(event)"></div>
             <div class="simple-modal-content">
                 <div class="simple-modal-header">
-                    <h2>${escapeHtml(product.name)}</h2>
+                    <h2 id="modal-title-${productId}">${escapeHtml(displayTitle)}</h2>
+                    ${isTitleLong ? `<button class="title-expand-btn" onclick="toggleTitle_${productId}()">Expand ▼</button>` : ''}
                     <button class="modal-close-button" onclick="closeDynamicModal(event)">❌</button>
                 </div>
                 <div class="simple-modal-body">
@@ -476,11 +493,46 @@ function showProductModal(productId) {
                     <!-- Image Gallery Section (BEFORE Category) -->
                     ${images.length > 0 ? `
                     <div class="modal-image-gallery">
+                        <!-- Desktop: Split View -->
+                        <div class="gallery-desktop">
+                            <div class="gallery-thumbnails">
+                                ${images.map((img, idx) => `
+                                <div class="thumbnail ${idx === 0 ? 'active' : ''}" onclick="selectImage_${productId}(${idx})">
+                                    <img src="${img}" alt="Thumb ${idx + 1}">
+                                </div>
+                                `).join('')}
+                            </div>
+                            <div class="gallery-main">
                         <img src="${images[0]}" 
                              alt="${escapeHtml(product.name)}" 
                              style="max-width: 100%; max-height: 400px; border-radius: 12px; cursor: pointer;"
-                             onclick="openImageGallery_${productId}()">
-                        ${images.length > 1 ? `<p style="margin-top: 8px; opacity: 0.8; font-size: 13px;">Click to view ${images.length} images</p>` : ''}
+                             ondblclick="openImageGallery_${productId}()" id="main-image-${productId}">
+                                <div class="carousel-controls">
+                                    <button onclick="prevImage_${productId}()">◀</button>
+                                    <span class="counter" id="counter-${productId}">1 / ${images.length}</span>
+                                    <button onclick="nextImage_${productId}()">▶</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Mobile: Main + Slider -->
+                        <div class="gallery-mobile">
+                            <div class="mobile-main">
+                                <img id="main-image-mobile-${productId}" src="${images[0]}" ondblclick="openImageGallery_${productId}()">
+                                <div class="carousel-controls">
+                                    <button onclick="prevImage_${productId}()">◀</button>
+                                    <span class="counter" id="counter-mobile-${productId}">1 / ${images.length}</span>
+                                    <button onclick="nextImage_${productId}()">▶</button>
+                                </div>
+                            </div>
+                            <div class="mobile-thumbnails">
+                                ${images.map((img, idx) => `
+                                <div class="thumbnail ${idx === 0 ? 'active' : ''}" onclick="selectImage_${productId}(${idx})">
+                                    <img src="${img}" alt="Thumb ${idx + 1}">
+                                </div>
+                                `).join('')}
+                            </div>
+                        </div>
                     </div>
                     ` : ''}
                     
@@ -559,37 +611,35 @@ function showProductModal(productId) {
                             <span class="toggle-icon">▶</span>
                         </div>
                         <div class="modal-section-content">
-                            ${Object.entries(product.additionalInfo).map(([groupName, items]) => {
-        if (!items || items.length === 0) return '';
-        // Skip Books group for non-book products
-        if (groupName === 'Books' && product.category !== 'Book') return '';
-
-        const groupEmoji = getGroupEmoji(groupName);
-        return `
-                                <div class="info-group">
-                                    <div class="info-group-header">
-                                        <span class="emoji">${groupEmoji}</span>
-                                        <span>${escapeHtml(groupName)}</span>
-                                    </div>
-                                    ${items
+                            ${Object.entries(product.additionalInfo)
+                .flatMap(([groupName, items]) => {
+                    // Skip Books group for non-book products
+                    if (groupName === 'Books' && product.category !== 'Book') return [];
+                    return items || [];
+                })
                 .filter(item => item.key !== 'Timestamp' && item.key !== 'timestamp')
                 .map(item => `
-                                    <div class="info-item">
-                                        <span class="label">${escapeHtml((item.label || '').trim())}</span>
-                                        <span class="value">${escapeHtml((item.value || '').trim())}</span>
-                                    </div>
-                                    `).join('')}
-                                </div>
-                                `;
-    }).join('')}
+                            <div class="info-row">
+                                <span class="emoji"></span>
+                                <span class="label">${escapeHtml((item.label || '').trim())}</span>
+                                <span class="value">${escapeHtml((item.value || '').trim())}</span>
+                            </div>
+                                `).join('')}
                         </div>
                     </div>
                     ` : ''}
                     
                     <!-- Description Section -->
-                    ${product.description ? `
-                    <div class="modal-description">
-                        <div class="description-text">${escapeHtml(product.description)}</div>
+                    ${description ? `
+                    <div class="modal-description-section">
+                        <div class="section-label">
+                            <span class="emoji">📝</span>
+                            <span>Description</span>
+                        </div>
+                        <div class="description-text" id="desc-${productId}">${escapeHtml(displayDesc)}</div>
+                        ${isDescLong ? `
+                        <button class="read-more-btn" onclick="toggleDescription_${productId}()">Read More ▼</button>
+                        ` : ''}
                     </div>
                     ` : ''}
                     
@@ -616,6 +666,87 @@ function showProductModal(productId) {
                 enableKeyboard: true
             });
             lightbox.open(images, 0);
+        };
+    }
+
+    // Setup carousel navigation
+    if (images.length > 0) {
+        let currentImageIndex = 0;
+
+        window[`selectImage_${productId}`] = function (index) {
+            currentImageIndex = index;
+            updateMainImage();
+            updateThumbnails();
+        };
+
+        window[`prevImage_${productId}`] = function () {
+            currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+            updateMainImage();
+            updateThumbnails();
+        };
+
+        window[`nextImage_${productId}`] = function () {
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+            updateMainImage();
+            updateThumbnails();
+        };
+
+        function updateMainImage() {
+            // Desktop
+            const mainImg = document.getElementById(`main-image-${productId}`);
+            if (mainImg) mainImg.src = images[currentImageIndex];
+
+            // Mobile
+            const mainImgMobile = document.getElementById(`main-image-mobile-${productId}`);
+            if (mainImgMobile) mainImgMobile.src = images[currentImageIndex];
+
+            // Counters
+            const counter = document.getElementById(`counter-${productId}`);
+            if (counter) counter.textContent = `${currentImageIndex + 1} / ${images.length}`;
+
+            const counterMobile = document.getElementById(`counter-mobile-${productId}`);
+            if (counterMobile) counterMobile.textContent = `${currentImageIndex + 1} / ${images.length}`;
+        }
+
+        function updateThumbnails() {
+            const modal = document.querySelector('.dynamic-modal');
+            if (modal) {
+                modal.querySelectorAll('.thumbnail').forEach((thumb, idx) => {
+                    thumb.classList.toggle('active', idx === currentImageIndex);
+                });
+            }
+        }
+    }
+
+    // Setup title toggle if title is long
+    if (isTitleLong) {
+        window[`toggleTitle_${productId}`] = function () {
+            const titleEl = document.getElementById(`modal-title-${productId}`);
+            const btn = event.target;
+
+            if (btn.textContent.includes('Expand')) {
+                titleEl.textContent = productTitle;
+                btn.textContent = 'Collapse ▲';
+            } else {
+                titleEl.textContent = productTitle.substring(0, 80).trim() + '...';
+                btn.textContent = 'Expand ▼';
+            }
+        };
+    }
+
+    // Setup description toggle if description is long
+    if (isDescLong) {
+        window[`toggleDescription_${productId}`] = function () {
+            const descEl = document.getElementById(`desc-${productId}`);
+            const btn = event.target;
+
+            if (btn.textContent.includes('More')) {
+                descEl.textContent = description;
+                btn.textContent = 'Read Less ▲';
+            } else {
+                descEl.textContent = description.substring(0, 200).trim() + '...';
+                btn.textContent = 'Read More ▼';
+            }
         };
     }
 }
