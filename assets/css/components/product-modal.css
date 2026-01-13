@@ -454,3 +454,113 @@ body.glass-theme .simple-modal-body p strong {
         padding-left: 18px;
     }
 }
+
+/* ============================================
+   GLOBAL FIXES
+   ============================================ */
+
+/* Hide lightbox caption globally (filename display) */
+.lightbox-caption {
+    display: none !important;
+}
+
+/* ============================================
+   DISCOUNT BADGE (Reused from product-card.css)
+   ============================================ */
+
+.discount-badge {
+    background: rgba(17, 24, 39, 0.92);
+    border: 1px solid rgba(74, 222, 128, 0.5);
+    color: rgba(255, 255, 255, 0.95);
+    display: inline-flex;
+    align-items: center;
+    height: 18px;
+    padding: 0 6px;
+    border-radius: 999px;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+    margin-left: 8px;
+}
+
+body.glass-theme .discount-badge {
+    background: rgba(74, 222, 128, 0.16);
+    border: 1px solid rgba(74, 222, 128, 0.28);
+    color: #ffffff;
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
+}
+
+.discount-badge .live-dot {
+    position: relative;
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background-color: #4ade80;
+    margin-right: 6px;
+    box-shadow: 0 0 8px rgba(74, 222, 128, 0.55);
+}
+
+.discount-badge .live-dot::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 999px;
+    background: rgba(74, 222, 128, 0.38);
+    animation: livePulse 1.25s ease-out infinite;
+}
+
+@keyframes livePulse {
+    0%   { transform: scale(0.1); opacity: 0.55; }
+    70%  { transform: scale(1);   opacity: 0; }
+    100% { transform: scale(1.05); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .discount-badge .live-dot::after {
+        animation: none;
+        opacity: 0;
+    }
+}
+
+/* ============================================
+   COMPACT SPACING & GRID LAYOUT
+   ============================================ */
+
+.modal-brand-section,
+.modal-category-section {
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.info-row .emoji {
+    font-size: 18px;
+}
+
+.title-expand-btn {
+    background: none;
+    border: none;
+    color: inherit;
+    opacity: 0.8;
+    cursor: pointer;
+    font-size: 13px;
+    margin-top: 4px;
+    text-decoration: underline;
+}
+
+.title-expand-btn:hover {
+    opacity: 1;
+}
+
+.simple-modal-header h2.expanded {
+    -webkit-line-clamp: unset;
+}
+
+@media (max-width: 768px) {
+    .modal-brand-section,
+    .modal-category-section {
+        padding: 12px 20px;
+    }
+}

@@ -441,14 +441,12 @@ function showProductModal(productId) {
         return n ? n.toLocaleString('en-US') : '0';
     };
 
-    // Prepare data (TRIM all values)
+    // Prepare data
     const currencyCode = product.currency || 'INR';
     const symbol = product.symbol || '₹';
     const priceFormatted = formatPriceFull(product.price || 0, currencyCode, symbol);
     const rating = parseFloat(product.customer_rating) || 0;
     const reviewCount = parseInt(product.review_count) || 0;
-    const showDiscount = product.show_discount || false;
-    const discountPercent = product.computed_discount || 0;
 
     // Prepare images for gallery
     const images = [product.main_image, ...(product.all_images || [])].filter(Boolean);
@@ -468,37 +466,30 @@ function showProductModal(productId) {
                     <div class="modal-core-info">
                         <div class="info-row">
                             <span class="emoji">💰</span>
-                            <span class="label">Price</span>
-                            <span class="value">
-                                ${priceFormatted}
-                                ${showDiscount && discountPercent > 0 ? `
-                                    <span class="discount-badge">
-                                        <span class="live-dot" aria-hidden="true"></span>${discountPercent}%
-                                    </span>
-                                ` : ''}
-                            </span>
+                            <span class="label">Price:</span>
+                            <span class="value">${priceFormatted}</span>
                         </div>
                         <div class="info-row">
                             <span class="emoji">🏷️</span>
-                            <span class="label">Brand</span>
-                            <span class="value">${escapeHtml((product.brand || 'Unknown').trim())}</span>
+                            <span class="label">Brand:</span>
+                            <span class="value">${escapeHtml(product.brand || 'Unknown')}</span>
                         </div>
                         <div class="info-row">
                             <span class="emoji">📦</span>
-                            <span class="label">Category</span>
-                            <span class="value">${escapeHtml((product.category || 'General').trim())}</span>
+                            <span class="label">Category:</span>
+                            <span class="value">${escapeHtml(product.category || 'General')}</span>
                         </div>
                         ${rating > 0 ? `
                         <div class="info-row">
                             <span class="emoji">⭐</span>
-                            <span class="label">Rating</span>
+                            <span class="label">Rating:</span>
                             <span class="value">${rating.toFixed(1)} out of 5 stars</span>
                         </div>
                         ` : ''}
                         ${reviewCount > 0 ? `
                         <div class="info-row">
                             <span class="emoji">👥</span>
-                            <span class="label">Reviews</span>
+                            <span class="label">Reviews:</span>
                             <span class="value">${formatCountFull(reviewCount)} customer reviews</span>
                         </div>
                         ` : ''}
@@ -523,16 +514,16 @@ function showProductModal(productId) {
                                 <span class="emoji">📋</span>
                                 <span>Product Details</span>
                             </div>
-                            <span class="toggle-icon">▶</span>
+                            <span class="toggle-icon">▼</span>
                         </div>
-                        <div class="modal-section-content">
+                        <div class="modal-section-content expanded">
                             ${product.productDetails.sort((a, b) => (a.priority || 0) - (b.priority || 0)).map(item => {
         const emoji = getDetailEmoji(item.key);
         return `
                                 <div class="detail-row">
                                     <span class="emoji">${emoji}</span>
-                                    <span class="label">${escapeHtml((item.label || '').trim())}</span>
-                                    <span class="value">${escapeHtml((item.value || '').trim())}</span>
+                                    <span class="label">${escapeHtml(item.label)}:</span>
+                                    <span class="value">${escapeHtml(item.value)}</span>
                                 </div>
                                 `;
     }).join('')}
@@ -548,14 +539,11 @@ function showProductModal(productId) {
                                 <span class="emoji">ℹ️</span>
                                 <span>Additional Information</span>
                             </div>
-                            <span class="toggle-icon">▶</span>
+                            <span class="toggle-icon">▼</span>
                         </div>
                         <div class="modal-section-content">
                             ${Object.entries(product.additionalInfo).map(([groupName, items]) => {
         if (!items || items.length === 0) return '';
-        // Skip Books group for non-book products
-        if (groupName === 'Books' && product.category !== 'Book') return '';
-
         const groupEmoji = getGroupEmoji(groupName);
         return `
                                 <div class="info-group">
@@ -563,12 +551,10 @@ function showProductModal(productId) {
                                         <span class="emoji">${groupEmoji}</span>
                                         <span>${escapeHtml(groupName)}</span>
                                     </div>
-                                    ${items
-                .filter(item => item.key !== 'Timestamp' && item.key !== 'timestamp')
-                .map(item => `
+                                    ${items.map(item => `
                                     <div class="info-item">
-                                        <span class="label">${escapeHtml((item.label || '').trim())}</span>
-                                        <span class="value">${escapeHtml((item.value || '').trim())}</span>
+                                        <span class="label">${escapeHtml(item.label)}:</span>
+                                        <span class="value">${escapeHtml(item.value)}</span>
                                     </div>
                                     `).join('')}
                                 </div>
@@ -643,10 +629,6 @@ function toggleSection(header) {
     header.classList.toggle('expanded');
     const content = header.nextElementSibling;
     content.classList.toggle('expanded');
-
-    // Update toggle icon
-    const icon = header.querySelector('.toggle-icon');
-    icon.textContent = header.classList.contains('expanded') ? '▼' : '▶';
 }
 
 /**
