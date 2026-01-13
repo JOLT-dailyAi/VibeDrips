@@ -564,3 +564,22 @@ body.glass-theme .discount-badge {
         padding: 12px 20px;
     }
 }
+
+/* Left-align all values */
+.info-row .value,
+.detail-row .value,
+.info-item .value {
+    text-align: left;
+    justify-self: start;
+}
+
+/* Ensure grid layout is applied */
+.modal-core-info .info-row,
+.modal-brand-section .info-row,
+.modal-category-section .info-row {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    gap: 8px 12px;
+    align-items: center;
+    padding: 4px 0;
+}

@@ -464,7 +464,36 @@ function showProductModal(productId) {
                 </div>
                 <div class="simple-modal-body">
                     
-                    <!-- Core Info Section -->
+                    <!-- Brand Section (SEPARATE) -->
+                    <div class="modal-brand-section">
+                        <div class="info-row">
+                            <span class="emoji">🏷️</span>
+                            <span class="label">Brand</span>
+                            <span class="value">${escapeHtml((product.brand || 'Unknown').trim())}</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Image Gallery Section (BEFORE Category) -->
+                    ${images.length > 0 ? `
+                    <div class="modal-image-gallery">
+                        <img src="${images[0]}" 
+                             alt="${escapeHtml(product.name)}" 
+                             style="max-width: 100%; max-height: 400px; border-radius: 12px; cursor: pointer;"
+                             onclick="openImageGallery_${productId}()">
+                        ${images.length > 1 ? `<p style="margin-top: 8px; opacity: 0.8; font-size: 13px;">Click to view ${images.length} images</p>` : ''}
+                    </div>
+                    ` : ''}
+                    
+                    <!-- Category Section (SEPARATE) -->
+                    <div class="modal-category-section">
+                        <div class="info-row">
+                            <span class="emoji">📦</span>
+                            <span class="label">Category</span>
+                            <span class="value">${escapeHtml((product.category || 'General').trim())}</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Price + Rating + Reviews Section (NO Brand/Category) -->
                     <div class="modal-core-info">
                         <div class="info-row">
                             <span class="emoji">💰</span>
@@ -477,16 +506,6 @@ function showProductModal(productId) {
                                     </span>
                                 ` : ''}
                             </span>
-                        </div>
-                        <div class="info-row">
-                            <span class="emoji">🏷️</span>
-                            <span class="label">Brand</span>
-                            <span class="value">${escapeHtml((product.brand || 'Unknown').trim())}</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="emoji">📦</span>
-                            <span class="label">Category</span>
-                            <span class="value">${escapeHtml((product.category || 'General').trim())}</span>
                         </div>
                         ${rating > 0 ? `
                         <div class="info-row">
@@ -503,17 +522,6 @@ function showProductModal(productId) {
                         </div>
                         ` : ''}
                     </div>
-                    
-                    <!-- Image Gallery Section -->
-                    ${images.length > 0 ? `
-                    <div class="modal-image-gallery">
-                        <img src="${images[0]}" 
-                             alt="${escapeHtml(product.name)}" 
-                             style="max-width: 100%; max-height: 400px; border-radius: 12px; cursor: pointer;"
-                             onclick="openImageGallery_${productId}()">
-                        ${images.length > 1 ? `<p style="margin-top: 8px; opacity: 0.8; font-size: 13px;">Click to view ${images.length} images</p>` : ''}
-                    </div>
-                    ` : ''}
                     
                     <!-- Product Details Section (Collapsible) -->
                     ${product.productDetails && product.productDetails.length > 0 ? `
