@@ -77,12 +77,36 @@ const FIELD_CONFIG = {
     'itemTypeName', 'productType', 'product_type'
   ],
 
+
   PRODUCT_DETAILS_KEYWORDS: {
+    // Priority 0 - Country (always first)
+    country_of_origin: { label: 'Country of Origin', priority: 0, patterns: [/country.*origin/i, /countryoforigin/i] },
+    origin: { label: 'Country of Origin', priority: 0, patterns: [/^origin$/i, /made.*in/i] },
+
+    // Priority 1-4 - Physical
     weight: { label: 'Weight', priority: 1, patterns: [/weight/i] },
-    dimensions: { label: 'Dimensions', priority: 1, patterns: [/dimension/i, /size/i] },
-    color: { label: 'Color', priority: 1, patterns: [/colou?r/i] },
-    material: { label: 'Material', priority: 1, patterns: [/material/i, /fabric/i] },
-    origin: { label: 'Made in', priority: 2, patterns: [/country.*origin/i, /made.*in/i, /origin/i] }
+    dimensions: { label: 'Dimensions', priority: 2, patterns: [/dimension/i, /size/i] },
+    color: { label: 'Color', priority: 3, patterns: [/colou?r/i] },
+    material: { label: 'Material', priority: 4, patterns: [/material/i, /fabric/i] },
+
+    // Priority 5-9 - Performance
+    wattage: { label: 'Wattage', priority: 5, patterns: [/wattage/i, /watts/i] },
+    voltage: { label: 'Voltage', priority: 6, patterns: [/voltage/i, /volts/i] },
+    noise_level: { label: 'Noise Level', priority: 7, patterns: [/noise.*level/i, /noiselevel/i, /sound.*level/i] },
+    floor_area: { label: 'Floor Area', priority: 8, patterns: [/floor.*area/i, /coverage.*area/i] },
+    room_type: { label: 'Room Type', priority: 9, patterns: [/room.*type/i, /roomtype/i] },
+
+    // Priority 10-11 - Features
+    special_feature: { label: 'Special Features', priority: 10, patterns: [/special.*feature/i, /specialfeature/i] },
+    included_components: { label: 'Included Components', priority: 11, patterns: [/included.*component/i, /includedcomponent/i] },
+
+    // Priority 12-17 - Books
+    hardcover: { label: 'Hardcover', priority: 12, patterns: [/hardcover/i] },
+    paperback: { label: 'Paperback', priority: 13, patterns: [/paperback/i] },
+    publisher: { label: 'Publisher', priority: 14, patterns: [/publisher/i] },
+    language: { label: 'Language', priority: 15, patterns: [/language/i] },
+    publication_date: { label: 'Publication Date', priority: 16, patterns: [/publication.*date/i, /publicationdate/i] },
+    print_length: { label: 'Number of Pages', priority: 17, patterns: [/print.*length/i, /number.*pages/i] }
   },
 
   ADDITIONAL_INFO_CATEGORIES: {
