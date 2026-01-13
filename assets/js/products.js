@@ -453,12 +453,13 @@ function showProductModal(productId) {
     // Prepare images for gallery
     const images = [product.main_image, ...(product.all_images || [])].filter(Boolean);
 
-    // Title truncation (80 chars / 1 line)
-    const maxTitleLength = 80;
+    // Title truncation - Responsive (35 chars mobile, 80 desktop)
+    const isMobile = window.innerWidth <= 768;
+    const maxTitleLength = isMobile ? 35 : 80;
     const productTitle = (product.name || 'Product').trim();
     const isTitleLong = productTitle.length > maxTitleLength;
     const displayTitle = isTitleLong
-        ? productTitle.substring(0, 80).trim() + '...'
+        ? productTitle.substring(0, maxTitleLength).trim() + '...'
         : productTitle;
 
     // Description truncation (200 chars)
@@ -475,8 +476,11 @@ function showProductModal(productId) {
             <div class="modal-overlay" onclick="closeDynamicModal(event)"></div>
             <div class="simple-modal-content">
                 <div class="simple-modal-header">
-                    <h2 id="modal-title-${productId}">${escapeHtml(displayTitle)}</h2>
-                    ${isTitleLong ? `<button class="title-expand-btn" onclick="toggleTitle_${productId}()">Expand ▼</button>` : ''}
+                    <h2 id="modal-title-${productId}" 
+                        class="${isTitleLong ? 'expandable' : ''}" 
+                        ${isTitleLong ? `onclick="toggleTitle_${productId}()"` : ''}>
+                        ${escapeHtml(displayTitle)}
+                    </h2>
                     <button class="modal-close-button" onclick="closeDynamicModal(event)">❌</button>
                 </div>
                 <div class="simple-modal-body">
@@ -722,14 +726,18 @@ function showProductModal(productId) {
     if (isTitleLong) {
         window[`toggleTitle_${productId}`] = function () {
             const titleEl = document.getElementById(`modal-title-${productId}`);
-            const btn = event.target;
+            const isExpanded = titleEl.classList.contains('expanded');
 
-            if (btn.textContent.includes('Expand')) {
-                titleEl.textContent = productTitle;
-                btn.textContent = 'Collapse ▲';
+            if (isExpanded) {
+                // Collapse
+                const isMobile = window.innerWidth <= 768;
+                const maxLen = isMobile ? 35 : 80;
+                titleEl.textContent = productTitle.substring(0, maxLen).trim() + '...';
+                titleEl.classList.remove('expanded');
             } else {
-                titleEl.textContent = productTitle.substring(0, 80).trim() + '...';
-                btn.textContent = 'Expand ▼';
+                // Expand
+                titleEl.textContent = productTitle;
+                titleEl.classList.add('expanded');
             }
         };
     }

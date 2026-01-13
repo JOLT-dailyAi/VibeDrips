@@ -817,3 +817,136 @@ body.glass-theme .discount-badge {
     .gallery-desktop { display: grid; }
     .gallery-mobile { display: none; }
 }
+
+/* ============================================
+   PADDING REDUCTIONS & GRID REFINEMENTS
+   ============================================ */
+
+/* Modal Header - Reduced padding */
+.simple-modal-header {
+    padding: 14px 12px !important;
+}
+
+/* Title Toggle Styles */
+.simple-modal-header h2.expandable {
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.simple-modal-header h2.expandable:hover {
+    opacity: 0.8;
+}
+
+.simple-modal-header h2.expanded {
+    white-space: normal;
+}
+
+/* Modal Body - No padding */
+.simple-modal-body {
+    padding: 0 !important;
+}
+
+/* Brand & Category Sections - Reduced padding */
+.modal-brand-section,
+.modal-category-section {
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Image Gallery - No padding */
+.modal-image-gallery {
+    padding: 0 !important;
+}
+
+.gallery-desktop {
+    padding: 0 !important;
+}
+
+.gallery-mobile {
+    padding: 8px !important;
+}
+
+/* Core Info Section - Reduced padding */
+.modal-core-info {
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Modal Sections (Product Details, Additional Info) - Reduced padding */
+.modal-section {
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Description Section - Reduced padding */
+.modal-description-section {
+    padding: 8px 12px !important;
+}
+
+/* Modal Actions - Reduced padding */
+.modal-actions {
+    padding: 8px 12px;
+}
+
+/* ============================================
+   GRID LAYOUT - 30/70 SPLIT
+   ============================================ */
+
+/* Core Sections WITH Emojis (Brand, Category, Core Info, Product Details) */
+.modal-brand-section .info-row,
+.modal-category-section .info-row,
+.modal-core-info .info-row,
+.modal-section .detail-row {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    gap: 12px;
+    align-items: start;
+    padding: 4px 0;
+}
+
+/* Emoji + Label together in first column */
+.modal-brand-section .info-row .label,
+.modal-category-section .info-row .label,
+.modal-core-info .info-row .label,
+.modal-section .detail-row .label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.modal-brand-section .info-row .emoji,
+.modal-category-section .info-row .emoji,
+.modal-core-info .info-row .emoji,
+.modal-section .detail-row .emoji {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+/* Additional Info - NO Emojis, 30/70 split */
+.modal-section .info-row {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    gap: 12px;
+    align-items: start;
+    padding: 4px 0;
+}
+
+.modal-section .info-row .label {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Hide emoji in Additional Info */
+.modal-section .info-row .emoji {
+    display: none !important;
+}
+
+/* Values for all sections */
+.info-row .value,
+.detail-row .value {
+    text-align: left;
+    word-wrap: break-word;
+    opacity: 0.95;
+}
