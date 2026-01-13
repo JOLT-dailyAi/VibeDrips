@@ -488,7 +488,7 @@ function showProductModal(productId) {
                     <!-- Brand Section (SEPARATE) -->
                     <div class="modal-brand-section">
                         <div class="info-row">
-                            <span class="label">Brand 🏷️</span>
+                            <span class="label" style="text-align: right; padding-right: 12px;">Brand 🏷️</span>
                             <span class="value">${escapeHtml((product.brand || 'Unknown').trim())}</span>
                         </div>
                     </div>
@@ -549,7 +549,7 @@ function showProductModal(productId) {
                     <!-- Category Section (SEPARATE) -->
                     <div class="modal-category-section">
                         <div class="info-row">
-                            <span class="label">Category 📦</span>
+                            <span class="label" style="text-align: right; padding-right: 12px;">Category 📦</span>
                             <span class="value">${escapeHtml((product.category || 'General').trim())}</span>
                         </div>
                     </div>
@@ -557,7 +557,7 @@ function showProductModal(productId) {
                     <!-- Price + Rating + Reviews Section (NO Brand/Category) -->
                     <div class="modal-core-info">
                         <div class="info-row">
-                            <span class="label">Price 💰</span>
+                            <span class="label" style="text-align: right; padding-right: 12px;">Price 💰</span>
                             <span class="value">
                                 ${priceFormatted}
                                 ${showDiscount && discountPercent > 0 ? `
@@ -569,13 +569,13 @@ function showProductModal(productId) {
                         </div>
                         ${rating > 0 ? `
                         <div class="info-row">
-                            <span class="label">Rating ⭐</span>
+                            <span class="label" style="text-align: right; padding-right: 12px;">Rating ⭐</span>
                             <span class="value">${rating.toFixed(1)} out of 5 stars</span>
                         </div>
                         ` : ''}
                         ${reviewCount > 0 ? `
                         <div class="info-row">
-                            <span class="label">Reviews 👥</span>
+                            <span class="label" style="text-align: right; padding-right: 12px;">Reviews 👥</span>
                             <span class="value">${formatCountFull(reviewCount)} customer reviews</span>
                         </div>
                         ` : ''}
@@ -593,11 +593,11 @@ function showProductModal(productId) {
                         </div>
                         <div class="modal-section-content">
                             ${product.productDetails.sort((a, b) => (a.priority || 0) - (b.priority || 0)).map(item => {
-        const emoji = getDetailEmoji(item.key);
+        const emoji = getDetailEmoji(item.key, item.value);
         const label = escapeHtml((item.label || '').trim());
         return `
                                 <div class="detail-row">
-                                    <span class="label">${label} ${emoji}</span>
+                                    <span class=\"label\" style=\"text-align: right; padding-right: 12px;\">${label} ${emoji}</span>
                                     <span class="value">${escapeHtml((item.value || '').trim())}</span>
                                 </div>
                                 `;
@@ -623,12 +623,25 @@ function showProductModal(productId) {
                     if (groupName === 'Books' && product.category !== 'Book') return [];
                     return items || [];
                 })
-                .filter(item =>
-                    item.key !== 'Timestamp' &&
-                    item.key !== 'timestamp' &&
-                    item.key !== 'Discount' &&
-                    item.key !== 'discount'
-                )
+                .filter(item => {
+                    // Hide timestamp
+                    if (item.key === 'Timestamp' || item.key === 'timestamp') return false;
+                    // Hide discount (already shown in price badge)
+                    if (item.key === 'Discount' || item.key === 'discount') return false;
+                    // Hide net quantity (usually "1 Count")
+                    if (item.key === 'Net Quantity' || item.key === 'net_quantity') return false;
+                    // Hide generic name (redundant with category)
+                    if (item.key === 'Generic Name' || item.key === 'generic_name') return false;
+                    // Hide item weight/dimensions (duplicate of Product Details)
+                    if (item.key === 'Item Weight' || item.key === 'item_weight') return false;
+                    if (item.key === 'Item Dimensions' || item.key === 'item_dimensions') return false;
+                    if (item.key === 'Product Dimensions' || item.key === 'product_dimensions') return false;
+                    // Hide country of origin (moved to Product Details)
+                    if (item.key === 'Country of Origin' || item.key === 'country_of_origin') return false;
+                    // Hide packer if same as manufacturer
+                    if ((item.key === 'Packer' || item.key === 'packer') && product.manufacturer && item.value === product.manufacturer) return false;
+                    return true;
+                })
                 .map(item => `
                             <div class="info-row">
                                 <span class="emoji"></span>
@@ -790,16 +803,80 @@ function showProductModal(productId) {
 }
 
 // Helper: Get emoji for product detail keys
-function getDetailEmoji(key) {
+// Helper: Get dynamic Material emoji based on value
+function getMaterialEmoji(materialValue) {
+    if (!materialValue) return '🧵';
+    const material = materialValue.toLowerCase();
+
+    // Paper
+    if (material.includes('paper') || material.includes('cardboard')) return '📄';
+    // Wood
+    if (material.includes('wood') || material.includes('timber') || material.includes('bamboo') || material.includes('pine')) return '🪵';
+    // Metal
+    if (material.includes('metal') || material.includes('steel') || material.includes('aluminum') || material.includes('iron') || material.includes('brass') || material.includes('copper')) return '🔩';
+    // Plastic
+    if (material.includes('plastic') || material.includes('polymer') || material.includes('pvc') || material.includes('abs') || material.includes('pet') || material.includes('synthetic')) return '🧪';
+    // Fabric
+    if (material.includes('fabric') || material.includes('cloth') || material.includes('silk') || material.includes('cotton') || material.includes('polyester') || material.includes('wool')) return '🧵';
+    // Glass
+    if (material.includes('glass') || material.includes('crystal')) return '🪟';
+    // Leather
+    if (material.includes('leather')) return '🎒';
+    // Stone
+    if (material.includes('stone') || material.includes('marble') || material.includes('granite') || material.includes('ceramic')) return '🪨';
+    // Masonry
+    if (material.includes('brick') || material.includes('concrete')) return '🧱';
+    // Eco
+    if (material.includes('recycled') || material.includes('eco') || material.includes('sustainable') || material.includes('bio')) return '♻️';
+
+    return '🧵'; // Default
+}
+
+function getDetailEmoji(key, value) {
     const emojiMap = {
+        // Priority 0 - Country
+        'country_of_origin': '🌍',
+        'countryOfOrigin': '🌍',
+        'country': '🌍',
+        'origin': '🌍',
+        'made_in': '🌍',
+
+        // Physical
         'weight': '⚖️',
         'dimensions': '📏',
         'color': '🎨',
-        'material': '🧱',
-        'origin': '🌍',
-        'made_in': '🌍'
+        'material': (value) => getMaterialEmoji(value), // DYNAMIC!
+
+        // Performance
+        'wattage': '⚡',
+        'voltage': '⚡',
+        'noise_level': '🔊',
+        'sound_level': '🔊',
+        'floor_area': '📐',
+        'coverage_area': '📐',
+        'room_type': '🏠',
+
+        // Features
+        'special_feature': '⭐',
+        'special_features': '⭐',
+        'included_components': '📦',
+
+        // Books
+        'paperback': '📄',
+        'hardcover': '📘',
+        'publisher': '📚',
+        'language': '🌐',
+        'publication_date': '📅',
+        'print_length': '📄',
+        'number_of_pages': '📄'
     };
-    return emojiMap[key] || '•';
+
+    const emoji = emojiMap[key];
+    // If emoji is a function (like Material), call it with the value
+    if (typeof emoji === 'function') {
+        return emoji(value);
+    }
+    return emoji || '•';
 }
 
 // Helper: Get emoji for additional info groups
