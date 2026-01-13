@@ -666,6 +666,76 @@ function generateCollectionsJSON(products) {
 }
 
 // ============================================
+// CATEGORIES JSON MANIFEST
+// ============================================
+
+function generateCategoriesJSON(products) {
+  const categories = {};
+
+  products.forEach(product => {
+    const category = product.category || 'General';
+
+    if (!categories[category]) {
+      categories[category] = {
+        name: category,
+        product_count: 0,
+        asins: []
+      };
+    }
+
+    categories[category].product_count++;
+    categories[category].asins.push(product.asin);
+  });
+
+  // Convert to array and sort by product count (descending)
+  const categoriesArray = Object.values(categories).sort((a, b) => b.product_count - a.product_count);
+
+  return {
+    summary: {
+      total_categories: categoriesArray.length,
+      total_products: products.length,
+      last_updated: new Date().toISOString()
+    },
+    categories: categoriesArray
+  };
+}
+
+// ============================================
+// BRANDS JSON MANIFEST
+// ============================================
+
+function generateBrandsJSON(products) {
+  const brands = {};
+
+  products.forEach(product => {
+    const brand = product.brand || 'Unknown';
+
+    if (!brands[brand]) {
+      brands[brand] = {
+        name: brand,
+        product_count: 0,
+        asins: []
+      };
+    }
+
+    brands[brand].product_count++;
+    brands[brand].asins.push(product.asin);
+  });
+
+  // Convert to array and sort by product count (descending)
+  const brandsArray = Object.values(brands).sort((a, b) => b.product_count - a.product_count);
+
+  return {
+    summary: {
+      total_brands: brandsArray.length,
+      total_products: products.length,
+      last_updated: new Date().toISOString()
+    },
+    brands: brandsArray
+  };
+}
+
+// ============================================
 // NEW: DROPS JSON WITH PRODUCT REFERENCES
 // ============================================
 
@@ -1593,6 +1663,24 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
         console.log(`✅ Collections manifest created: collections.json (${Object.keys(collectionsData.collections).length} collections)`);
 
         // ============================================
+        // GENERATE CATEGORIES.JSON
+        // ============================================
+        console.log(`\n📦 Generating categories.json...`);
+        const categoriesData = generateCategoriesJSON(allProducts);
+        const categoriesPath = path.join(dataDir, 'categories.json');
+        fs.writeFileSync(categoriesPath, JSON.stringify(categoriesData, null, 2));
+        console.log(`✅ Categories manifest created: categories.json (${categoriesData.categories.length} categories)`);
+
+        // ============================================
+        // GENERATE BRANDS.JSON
+        // ============================================
+        console.log(`\n🏷️  Generating brands.json...`);
+        const brandsData = generateBrandsJSON(allProducts);
+        const brandsPath = path.join(dataDir, 'brands.json');
+        fs.writeFileSync(brandsPath, JSON.stringify(brandsData, null, 2));
+        console.log(`✅ Brands manifest created: brands.json (${brandsData.brands.length} brands)`);
+
+        // ============================================
         // NEW: GENERATE ERRORS.JSON
         // ============================================
         console.log(`\n⚠️  Generating errors.json...`);
@@ -1610,6 +1698,8 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
           'drops.json',
           'influencers.json',
           'collections.json',
+          'categories.json',
+          'brands.json',
           'errors.json'
         ]);
 

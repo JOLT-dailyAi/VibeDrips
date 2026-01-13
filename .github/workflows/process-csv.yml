@@ -136,6 +136,8 @@ jobs:
           git rm --cached data/drops.json 2>/dev/null || echo "drops.json not in cache"
           git rm --cached data/currencies.json 2>/dev/null || echo "currencies.json not in cache"
           git rm --cached data/errors.json 2>/dev/null || echo "errors.json not in cache"
+          git rm --cached data/categories.json 2>/dev/null || echo "categories.json not in cache"
+          git rm --cached data/brands.json 2>/dev/null || echo "brands.json not in cache"
           git rm --cached data/products-*.json 2>/dev/null || echo "No product files in cache"
           
           echo "=== STAGING FRESHLY GENERATED FILES ==="
@@ -144,6 +146,8 @@ jobs:
           git add -f data/drops.json 2>/dev/null || echo "No drops.json to add"
           git add -f data/influencers.json 2>/dev/null || echo "No influencers.json to add"
           git add -f data/collections.json 2>/dev/null || echo "No collections.json to add"
+          git add -f data/categories.json 2>/dev/null || echo "No categories.json to add"
+          git add -f data/brands.json 2>/dev/null || echo "No brands.json to add"
           git add -f data/errors.json 2>/dev/null || echo "No errors.json to add"
           git add -f data/last_updated.txt 2>/dev/null || echo "No last_updated.txt to add"
           git add -f sw.js 2>/dev/null || echo "No sw.js to add"
