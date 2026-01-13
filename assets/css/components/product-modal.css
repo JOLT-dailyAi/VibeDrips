@@ -1053,3 +1053,79 @@ body.glass-theme .discount-badge {
         z-index: 5;
     }
 }
+
+/* ============================================
+   FINAL MODAL REFINEMENTS
+   ============================================ */
+
+/* Modal Header - Reduce padding by half on all sides */
+.simple-modal-header {
+    padding: 7px 6px !important;
+}
+
+/* Modal Body - Remove top padding */
+.simple-modal-body {
+    padding: 0 8px 8px 8px !important;
+}
+
+/* Gallery Desktop - Add vertical padding */
+.gallery-desktop {
+    padding: 8px 0 !important;
+}
+
+/* Additional Info - Right-align labels, smaller font */
+.modal-section .info-row .label {
+    text-align: right;
+    font-size: 14px;
+    padding-right: 8px;
+}
+
+.modal-section .info-row .value {
+    text-align: left;
+    font-size: 14px;
+}
+
+/* Discount Badge - Match price text size */
+.discount-badge {
+    font-size: inherit;
+    padding: 4px 10px;
+    line-height: 1.2;
+    vertical-align: middle;
+    margin-left: 8px;
+}
+
+/* Mobile: Zoom hint - just icon */
+@media (max-width: 768px) {
+    .mobile-main .zoom-hint {
+        font-size: 18px;
+    }
+}
+
+/* Mobile: Fix text wrapping - Option A + B */
+@media (max-width: 768px) {
+    /* Option A: Allow wrapping */
+    .info-row .label,
+    .detail-row .label {
+        white-space: normal;
+        word-wrap: break-word;
+    }
+    
+    /* Option B: Adjust grid split for more label space */
+    .modal-brand-section .info-row,
+    .modal-category-section .info-row,
+    .modal-core-info .info-row,
+    .modal-section .detail-row,
+    .modal-section .info-row {
+        grid-template-columns: 40% 60%;
+    }
+    
+    /* Additional Info - keep right-align on mobile */
+    .modal-section .info-row .label {
+        text-align: right;
+        font-size: 13px;
+    }
+    
+    .modal-section .info-row .value {
+        font-size: 13px;
+    }
+}

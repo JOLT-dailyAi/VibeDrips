@@ -528,7 +528,7 @@ function showProductModal(productId) {
                                 <img id="main-image-mobile-${productId}" 
                                      src="${images[0]}" 
                                      onclick="openImageGallery_${productId}()">
-                                <div class="zoom-hint">🔍 Tap to view full screen</div>
+                                <div class="zoom-hint">🔍</div>
                                 <div class="carousel-controls" onclick="event.stopPropagation()">
                                     <button onclick="prevImage_${productId}()">◀</button>
                                     <span class="counter" id="counter-mobile-${productId}">1 / ${images.length}</span>
@@ -596,8 +596,7 @@ function showProductModal(productId) {
         const emoji = getDetailEmoji(item.key);
         return `
                                 <div class="detail-row">
-                                    <span class="emoji">${emoji}</span>
-                                    <span class="label">${escapeHtml((item.label || '').trim())}</span>
+                                    <span class="label">${emoji} ${escapeHtml((item.label || '').trim())}</span>
                                     <span class="value">${escapeHtml((item.value || '').trim())}</span>
                                 </div>
                                 `;
