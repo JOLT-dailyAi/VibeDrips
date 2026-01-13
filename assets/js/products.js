@@ -450,8 +450,8 @@ function showProductModal(productId) {
     const showDiscount = product.show_discount || false;
     const discountPercent = product.computed_discount || 0;
 
-    // Prepare images for gallery
-    const images = [product.main_image, ...(product.all_images || [])].filter(Boolean);
+    // Prepare images for gallery - Use all_images only (no main_image)
+    const images = product.all_images || [];
 
     // Title truncation - Responsive (35 chars mobile, 80 desktop)
     const isMobile = window.innerWidth <= 768;
@@ -488,8 +488,7 @@ function showProductModal(productId) {
                     <!-- Brand Section (SEPARATE) -->
                     <div class="modal-brand-section">
                         <div class="info-row">
-                            <span class="emoji">🏷️</span>
-                            <span class="label">Brand</span>
+                            <span class="label">🏷️ Brand</span>
                             <span class="value">${escapeHtml((product.brand || 'Unknown').trim())}</span>
                         </div>
                     </div>
@@ -501,16 +500,20 @@ function showProductModal(productId) {
                         <div class="gallery-desktop">
                             <div class="gallery-thumbnails">
                                 ${images.map((img, idx) => `
-                                <div class="thumbnail ${idx === 0 ? 'active' : ''}" onclick="selectImage_${productId}(${idx})">
+                                <div class="thumbnail ${idx === 0 ? 'active' : ''}" 
+                                     onmouseover="previewImage_${productId}(${idx})"
+                                     onclick="selectImage_${productId}(${idx})"
+                                     ondblclick="openImageGallery_${productId}(${idx})">
                                     <img src="${img}" alt="Thumb ${idx + 1}">
                                 </div>
                                 `).join('')}
                             </div>
                             <div class="gallery-main">
-                        <img src="${images[0]}" 
-                             alt="${escapeHtml(product.name)}" 
-                             style="max-width: 100%; max-height: 400px; border-radius: 12px; cursor: pointer;"
-                             ondblclick="openImageGallery_${productId}()" id="main-image-${productId}">
+                                <img src="${images[0]}" 
+                                     alt="${escapeHtml(product.name)}" 
+                                     style="max-width: 100%; max-height: 400px; border-radius: 12px; cursor: pointer;"
+                                     ondblclick="openImageGallery_${productId}()" id="main-image-${productId}">
+                                <div class="zoom-hint">🔍 Double-click to view full screen</div>
                                 <div class="carousel-controls">
                                     <button onclick="prevImage_${productId}()">◀</button>
                                     <span class="counter" id="counter-${productId}">1 / ${images.length}</span>
@@ -522,8 +525,11 @@ function showProductModal(productId) {
                         <!-- Mobile: Main + Slider -->
                         <div class="gallery-mobile">
                             <div class="mobile-main">
-                                <img id="main-image-mobile-${productId}" src="${images[0]}" ondblclick="openImageGallery_${productId}()">
-                                <div class="carousel-controls">
+                                <img id="main-image-mobile-${productId}" 
+                                     src="${images[0]}" 
+                                     onclick="openImageGallery_${productId}()">
+                                <div class="zoom-hint">🔍 Tap to view full screen</div>
+                                <div class="carousel-controls" onclick="event.stopPropagation()">
                                     <button onclick="prevImage_${productId}()">◀</button>
                                     <span class="counter" id="counter-mobile-${productId}">1 / ${images.length}</span>
                                     <button onclick="nextImage_${productId}()">▶</button>
@@ -543,8 +549,7 @@ function showProductModal(productId) {
                     <!-- Category Section (SEPARATE) -->
                     <div class="modal-category-section">
                         <div class="info-row">
-                            <span class="emoji">📦</span>
-                            <span class="label">Category</span>
+                            <span class="label">📦 Category</span>
                             <span class="value">${escapeHtml((product.category || 'General').trim())}</span>
                         </div>
                     </div>
@@ -552,8 +557,7 @@ function showProductModal(productId) {
                     <!-- Price + Rating + Reviews Section (NO Brand/Category) -->
                     <div class="modal-core-info">
                         <div class="info-row">
-                            <span class="emoji">💰</span>
-                            <span class="label">Price</span>
+                            <span class="label">💰 Price</span>
                             <span class="value">
                                 ${priceFormatted}
                                 ${showDiscount && discountPercent > 0 ? `
@@ -565,15 +569,13 @@ function showProductModal(productId) {
                         </div>
                         ${rating > 0 ? `
                         <div class="info-row">
-                            <span class="emoji">⭐</span>
-                            <span class="label">Rating</span>
+                            <span class="label">⭐ Rating</span>
                             <span class="value">${rating.toFixed(1)} out of 5 stars</span>
                         </div>
                         ` : ''}
                         ${reviewCount > 0 ? `
                         <div class="info-row">
-                            <span class="emoji">👥</span>
-                            <span class="label">Reviews</span>
+                            <span class="label">👥 Reviews</span>
                             <span class="value">${formatCountFull(reviewCount)} customer reviews</span>
                         </div>
                         ` : ''}
@@ -683,6 +685,13 @@ function showProductModal(productId) {
             updateThumbnails();
         };
 
+        // Thumbnail hover preview (desktop only)
+        window[`previewImage_${productId}`] = function (index) {
+            if (window.innerWidth > 768) {
+                updateMainImage(index, true); // true = preview mode
+            }
+        };
+
         window[`prevImage_${productId}`] = function () {
             currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
             updateMainImage();
@@ -695,21 +704,37 @@ function showProductModal(productId) {
             updateThumbnails();
         };
 
-        function updateMainImage() {
+        function updateMainImage(previewIndex = null, isPreview = false) {
+            const index = previewIndex !== null ? previewIndex : currentImageIndex;
+
             // Desktop
             const mainImg = document.getElementById(`main-image-${productId}`);
-            if (mainImg) mainImg.src = images[currentImageIndex];
+            if (mainImg) {
+                mainImg.classList.add('changing');
+                setTimeout(() => {
+                    mainImg.src = images[index];
+                    mainImg.classList.remove('changing');
+                }, 150);
+            }
 
             // Mobile
             const mainImgMobile = document.getElementById(`main-image-mobile-${productId}`);
-            if (mainImgMobile) mainImgMobile.src = images[currentImageIndex];
+            if (mainImgMobile) {
+                mainImgMobile.classList.add('changing');
+                setTimeout(() => {
+                    mainImgMobile.src = images[index];
+                    mainImgMobile.classList.remove('changing');
+                }, 150);
+            }
 
-            // Counters
-            const counter = document.getElementById(`counter-${productId}`);
-            if (counter) counter.textContent = `${currentImageIndex + 1} / ${images.length}`;
+            // Update counters only if not preview
+            if (!isPreview) {
+                const counter = document.getElementById(`counter-${productId}`);
+                if (counter) counter.textContent = `${currentImageIndex + 1} / ${images.length}`;
 
-            const counterMobile = document.getElementById(`counter-mobile-${productId}`);
-            if (counterMobile) counterMobile.textContent = `${currentImageIndex + 1} / ${images.length}`;
+                const counterMobile = document.getElementById(`counter-mobile-${productId}`);
+                if (counterMobile) counterMobile.textContent = `${currentImageIndex + 1} / ${images.length}`;
+            }
         }
 
         function updateThumbnails() {
