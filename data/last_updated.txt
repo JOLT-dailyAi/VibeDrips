@@ -1,5 +1,5 @@
 VibeDrips Data Processing Summary
-Generated: 2026-01-13T03:40:49.228Z
+Generated: 2026-01-13T03:50:45.255Z
 
 📊 STATISTICS
 - Total Rows Processed: 23
@@ -70,6 +70,8 @@ Generated: 2026-01-13T03:40:49.228Z
 - errors.json (23 flagged products)
 
 📁 FINAL FILES PRESENT
+- brands.json
+- categories.json
 - collections.json
 - currencies.json
 - drops.json

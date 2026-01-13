@@ -1,0 +1,116 @@
+{
+  "summary": {
+    "total_brands": 14,
+    "total_products": 23,
+    "last_updated": "2026-01-13T03:50:45.254Z"
+  },
+  "brands": [
+    {
+      "name": "Winix",
+      "product_count": 4,
+      "asins": [
+        "B0DT4F8T4L",
+        "B07PNJQMK6",
+        "B094DRK41G",
+        "B0FVXJ52W6"
+      ]
+    },
+    {
+      "name": "UBreathe",
+      "product_count": 3,
+      "asins": [
+        "B0F1MR9W8R",
+        "B0CQ2MVRXR",
+        "B0BDX9ZN46"
+      ]
+    },
+    {
+      "name": "Levoit",
+      "product_count": 2,
+      "asins": [
+        "B0F2MLPWTG",
+        "B0F9FJS3VW"
+      ]
+    },
+    {
+      "name": "Breville",
+      "product_count": 2,
+      "asins": [
+        "B0BGRHMQ7C",
+        "B08NYTLNQ9"
+      ]
+    },
+    {
+      "name": "MyMirror Publishing House",
+      "product_count": 2,
+      "asins": [
+        "9388550315",
+        "9388550072"
+      ]
+    },
+    {
+      "name": "Diamond Books",
+      "product_count": 2,
+      "asins": [
+        "9355995008",
+        "9355991479"
+      ]
+    },
+    {
+      "name": "HUTCHINSON PUBLISHING - TRADE",
+      "product_count": 1,
+      "asins": [
+        "178633089X"
+      ]
+    },
+    {
+      "name": "Cornerstone Press",
+      "product_count": 1,
+      "asins": [
+        "1529902401"
+      ]
+    },
+    {
+      "name": "Praan",
+      "product_count": 1,
+      "asins": [
+        "B0FJ5R8JN7"
+      ]
+    },
+    {
+      "name": "Qubo",
+      "product_count": 1,
+      "asins": [
+        "B0DHGFCG6P"
+      ]
+    },
+    {
+      "name": "LEVOIT",
+      "product_count": 1,
+      "asins": [
+        "B0CG1N11DV"
+      ]
+    },
+    {
+      "name": "Dreo",
+      "product_count": 1,
+      "asins": [
+        "B0DF6NBJDW"
+      ]
+    },
+    {
+      "name": "Nuwave",
+      "product_count": 1,
+      "asins": [
+        "B0BCC8KZHK"
+      ]
+    },
+    {
+      "name": "Honeywell",
+      "product_count": 1,
+      "asins": [
+        "B076HP91MN"
+      ]
+    }
+  ]
+}

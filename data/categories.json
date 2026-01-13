@@ -1,0 +1,50 @@
+{
+  "summary": {
+    "total_categories": 3,
+    "total_products": 23,
+    "last_updated": "2026-01-13T03:50:45.253Z"
+  },
+  "categories": [
+    {
+      "name": "Air Purifier",
+      "product_count": 16,
+      "asins": [
+        "B0F2MLPWTG",
+        "B0BGRHMQ7C",
+        "B08NYTLNQ9",
+        "B0DT4F8T4L",
+        "B07PNJQMK6",
+        "B094DRK41G",
+        "B0FVXJ52W6",
+        "B0F9FJS3VW",
+        "B0FJ5R8JN7",
+        "B0DHGFCG6P",
+        "B0F1MR9W8R",
+        "B0CQ2MVRXR",
+        "B0CG1N11DV",
+        "B0BCC8KZHK",
+        "B0BDX9ZN46",
+        "B076HP91MN"
+      ]
+    },
+    {
+      "name": "Book",
+      "product_count": 6,
+      "asins": [
+        "178633089X",
+        "1529902401",
+        "9388550315",
+        "9388550072",
+        "9355995008",
+        "9355991479"
+      ]
+    },
+    {
+      "name": "Humidifier",
+      "product_count": 1,
+      "asins": [
+        "B0DF6NBJDW"
+      ]
+    }
+  ]
+}
