@@ -1,5 +1,5 @@
 VibeDrips Data Processing Summary
-Generated: 2026-01-13T03:50:45.255Z
+Generated: 2026-01-13T04:59:46.420Z
 
 📊 STATISTICS
 - Total Rows Processed: 23
@@ -54,11 +54,14 @@ Generated: 2026-01-13T03:50:45.255Z
 - 🆕 New Releases: 0 products
 
 📁 FILES BEFORE DELETION
+- brands.json
+- categories.json
 - last_updated.txt
 - products.csv
 
 📁 FILES DELETED
-- None
+- brands.json
+- categories.json
 
 📁 FILES GENERATED
 - products-AUD.json (10 products)
