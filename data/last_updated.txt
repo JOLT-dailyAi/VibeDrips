@@ -1,5 +1,5 @@
 VibeDrips Data Processing Summary
-Generated: 2026-01-13T03:12:27.332Z
+Generated: 2026-01-13T03:40:49.228Z
 
 📊 STATISTICS
 - Total Rows Processed: 23
@@ -19,8 +19,8 @@ Generated: 2026-01-13T03:12:27.332Z
 - Available: AUD, INR
 
 📦 CATEGORIES
-- Categories Found: 4
-- Top Categories: Book, Air Purifier, General, Humidifier
+- Categories Found: 3
+- Top Categories: Book, Air Purifier, Humidifier
 
 🏷️ BRANDS
 - Brands Found: 14
