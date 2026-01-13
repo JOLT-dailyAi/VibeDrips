@@ -603,13 +603,13 @@ function generateInfluencersJSON(products) {
     });
   });
 
-  Object.values(influencers).forEach(inf => {
-    inf.categories = Array.from(inf.categories);
-    inf.brands = Array.from(inf.brands);
-    inf.currencies = Array.from(inf.currencies);
-  });
-
-  return influencers;
+  return {
+    summary: {
+      total_influencers: Object.keys(influencers).length,
+      last_updated: new Date().toISOString()
+    },
+    influencers: influencers
+  };
 }
 
 function generateCollectionsJSON(products) {
@@ -656,16 +656,13 @@ function generateCollectionsJSON(products) {
     });
   });
 
-  Object.values(collections).forEach(col => {
-    col.categories = Array.from(col.categories);
-    col.brands = Array.from(col.brands);
-    col.currencies = Array.from(col.currencies);
-    col.influencers = Array.from(col.influencers);
-
-    if (col.priceRange.min === Infinity) col.priceRange.min = 0;
-  });
-
-  return collections;
+  return {
+    summary: {
+      total_collections: Object.keys(collections).length,
+      last_updated: new Date().toISOString()
+    },
+    collections: collections
+  };
 }
 
 // ============================================
@@ -1270,7 +1267,7 @@ function convertCsvToJson() {
 
         // Reject if too many words (likely a product title)
         const wordCount = trimmed.split(/\s+/).length;
-        if (wordCount > 4) {
+        if (wordCount > 3) {
           console.log(`⚠️ Rejected (too many words): "${trimmed}"`);
           return;
         }
@@ -1316,9 +1313,20 @@ function convertCsvToJson() {
       Object.entries(categoryFrequency).forEach(([norm, data]) => {
         // Frequency threshold: only keep if it appears at least 2 times
         if (data.count >= 2) {
-          // Pick the most frequent original casing
-          const bestOriginal = Object.entries(data.originals)
-            .sort((a, b) => b[1] - a[1])[0][0];
+          // SINGULAR PREFERENCE: Check if any original exactly matches the normalized version (singular)
+          const originalsList = Object.entries(data.originals);
+          let bestOriginal = originalsList.sort((a, b) => b[1] - a[1])[0][0];
+
+          // If the most frequent is plural (ends in 's'), but a singular version exists, prefer the singular
+          if (bestOriginal.toLowerCase().endsWith('s') && bestOriginal.length > 3) {
+            const singularCand = bestOriginal.slice(0, -1).toLowerCase();
+            const foundSingular = Object.keys(data.originals).find(o => o.toLowerCase() === singularCand);
+            if (foundSingular) {
+              bestOriginal = foundSingular;
+              console.log(`✨ Singularized category: "${norm}" -> prefer "${bestOriginal}" over frequent plural`);
+            }
+          }
+
           CANDIDATE_MAP[norm] = bestOriginal;
         }
       });
@@ -1561,7 +1569,7 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
         const influencersData = generateInfluencersJSON(allProducts);
         const influencersPath = path.join(dataDir, 'influencers.json');
         fs.writeFileSync(influencersPath, JSON.stringify(influencersData, null, 2));
-        console.log(`✅ Influencers manifest created: influencers.json (${Object.keys(influencersData).length} influencers)`);
+        console.log(`✅ Influencers manifest created: influencers.json (${Object.keys(influencersData.influencers).length} influencers)`);
 
         // ============================================
         // GENERATE COLLECTIONS.JSON
@@ -1570,7 +1578,7 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
         const collectionsData = generateCollectionsJSON(allProducts);
         const collectionsPath = path.join(dataDir, 'collections.json');
         fs.writeFileSync(collectionsPath, JSON.stringify(collectionsData, null, 2));
-        console.log(`✅ Collections manifest created: collections.json (${Object.keys(collectionsData).length} collections)`);
+        console.log(`✅ Collections manifest created: collections.json (${Object.keys(collectionsData.collections).length} collections)`);
 
         // ============================================
         // NEW: GENERATE ERRORS.JSON
@@ -1626,13 +1634,13 @@ ${Object.entries(errorBreakdown).length > 0 ? '- Error Breakdown:\n' + Object.en
 
 👤 INFLUENCERS
 - Products with influencers: ${allProducts.filter(p => p.influencer).length}
-- Unique influencers: ${Object.keys(influencersData).length}
-- List: ${Object.keys(influencersData).join(', ') || 'None'}
+- Unique influencers: ${Object.keys(influencersData.influencers).length}
+- List: ${Object.keys(influencersData.influencers).join(', ') || 'None'}
 
 💎 COLLECTIONS
 - Products in collections: ${allProducts.filter(p => p.manual_collections && p.manual_collections.length > 0).length}
-- Unique collections: ${Object.keys(collectionsData).length}
-- List: ${Object.keys(collectionsData).join(', ') || 'None'}
+- Unique collections: ${Object.keys(collectionsData.collections).length}
+- List: ${Object.keys(collectionsData.collections).join(', ') || 'None'}
 
 🌿 SEASONS
 - Seasons Detected: ${processingStats.seasonsFound.size}
@@ -1664,8 +1672,8 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
 ${Object.keys(currencyResults).map(currency => `- products-${currency}.json (${currencyResults[currency].length} products)`).join('\n')}
 - currencies.json (manifest)
 - drops.json (drops manifest)
-- influencers.json (${Object.keys(influencersData).length} influencers)
-- collections.json (${Object.keys(collectionsData).length} collections)
+- influencers.json (${Object.keys(influencersData.influencers).length} influencers)
+- collections.json (${Object.keys(collectionsData.collections).length} collections)
 - errors.json (${errorsData.flagged_products.length} flagged products)
 
 📁 FINAL FILES PRESENT
