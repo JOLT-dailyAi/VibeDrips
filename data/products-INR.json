@@ -67,13 +67,43 @@
         "key": "dimensions",
         "label": "Dimensions",
         "value": "68.4D x 15W x 22H Centimeters",
-        "priority": 1
+        "priority": 2
       },
       {
         "key": "color",
         "label": "Color",
         "value": "Space Gray",
-        "priority": 1
+        "priority": 3
+      },
+      {
+        "key": "wattage",
+        "label": "Wattage",
+        "value": "55 Watts",
+        "priority": 5
+      },
+      {
+        "key": "noise_level",
+        "label": "Noise Level",
+        "value": "50 Decibels",
+        "priority": 7
+      },
+      {
+        "key": "special_feature",
+        "label": "Special Features",
+        "value": "AI-powered, Medical-grade, Clinically certified, Real-time air quality tracking, App control",
+        "priority": 10
+      },
+      {
+        "key": "includedComponents",
+        "label": "Included Components",
+        "value": "1 Air Purifier, 1 Stand",
+        "priority": 11
+      },
+      {
+        "key": "publisher",
+        "label": "Publisher",
+        "value": "Praan Climate Technologies Private Limited, Praan Climate Technologies Private Limited Ground Floor, Plot No. 2A, CTS 653/6, Ujagar Infotech Park, Opp. Deonar Bus Depot, Chembur, Mumbai - 400088",
+        "priority": 14
       }
     ],
     "additionalInfo": {
@@ -135,30 +165,10 @@
           "value": "1 Count"
         },
         {
-          "key": "includedComponents",
-          "label": "Included Components",
-          "category": "Product Specs",
-          "value": "1 Air Purifier, 1 Stand"
-        },
-        {
           "key": "additionalFeatures",
           "label": "Additional Features",
           "category": "Product Specs",
           "value": "AI-powered, Medical-grade, Clinically certified, Real-time air quality tracking, App control"
-        },
-        {
-          "key": "special_feature",
-          "label": "Special Feature",
-          "category": "Product Specs",
-          "value": "AI-powered, Medical-grade, Clinically certified, Real-time air quality tracking, App control"
-        }
-      ],
-      "Books": [
-        {
-          "key": "publisher",
-          "label": "Publisher",
-          "category": "Books",
-          "value": "Praan Climate Technologies Private Limited, Praan Climate Technologies Private Limited Ground Floor, Plot No. 2A, CTS 653/6, Ujagar Infotech Park, Opp. Deonar Bus Depot, Chembur, Mumbai - 400088"
         }
       ],
       "Manufacturing": [
@@ -179,20 +189,6 @@
           "label": "Packer",
           "category": "Manufacturing",
           "value": "Praan Climate Technologies Private Limited Ground Floor, Plot No. 2A, CTS 653/6, Ujagar Infotech Park, Opp. Deonar Bus Depot, Chembur, Mumbai - 400088"
-        }
-      ],
-      "Technical": [
-        {
-          "key": "wattage",
-          "label": "Wattage",
-          "category": "Technical",
-          "value": "55 Watts"
-        },
-        {
-          "key": "noise_level",
-          "label": "Noise Level",
-          "category": "Technical",
-          "value": "50 Decibels"
         }
       ]
     },
@@ -274,13 +270,43 @@
         "key": "dimensions",
         "label": "Dimensions",
         "value": "35D x 35W x 75H Centimeters",
-        "priority": 1
+        "priority": 2
       },
       {
         "key": "color",
         "label": "Color",
         "value": "Moonlight",
-        "priority": 1
+        "priority": 3
+      },
+      {
+        "key": "wattage",
+        "label": "Wattage",
+        "value": "55 Watts",
+        "priority": 5
+      },
+      {
+        "key": "noise_level",
+        "label": "Noise Level",
+        "value": "37 Decibels",
+        "priority": 7
+      },
+      {
+        "key": "floor_area",
+        "label": "Floor Area",
+        "value": "400 Square Feet",
+        "priority": 8
+      },
+      {
+        "key": "includedComponents",
+        "label": "Included Components",
+        "value": "Advanced Bio Filtration + UV Disinfection, IoT Integrated with Companion app, Plant is NOT INCLUDED, Real time AQI monitoring, Silent operation",
+        "priority": 11
+      },
+      {
+        "key": "publisher",
+        "label": "Publisher",
+        "value": "Urban Air Labs Pvt Ltd",
+        "priority": 14
       }
     ],
     "additionalInfo": {
@@ -290,12 +316,6 @@
           "label": "Timestamp",
           "category": "Other",
           "value": "1/3/2026 14:46:29"
-        },
-        {
-          "key": "floor_area",
-          "label": "Floor Area",
-          "category": "Other",
-          "value": "400 Square Feet"
         },
         {
           "key": "controller_type",
@@ -316,20 +336,6 @@
           "label": "Discount",
           "category": "Product Specs",
           "value": "38"
-        },
-        {
-          "key": "includedComponents",
-          "label": "Included Components",
-          "category": "Product Specs",
-          "value": "Advanced Bio Filtration + UV Disinfection, IoT Integrated with Companion app, Plant is NOT INCLUDED, Real time AQI monitoring, Silent operation"
-        }
-      ],
-      "Books": [
-        {
-          "key": "publisher",
-          "label": "Publisher",
-          "category": "Books",
-          "value": "Urban Air Labs Pvt Ltd"
         }
       ],
       "Manufacturing": [
@@ -352,18 +358,6 @@
           "label": "Item Model Number",
           "category": "Technical",
           "value": "Life2"
-        },
-        {
-          "key": "wattage",
-          "label": "Wattage",
-          "category": "Technical",
-          "value": "55 Watts"
-        },
-        {
-          "key": "noise_level",
-          "label": "Noise Level",
-          "category": "Technical",
-          "value": "37 Decibels"
         }
       ]
     },
@@ -447,6 +441,12 @@
     "trending": false,
     "productDetails": [
       {
+        "key": "origin",
+        "label": "Country of Origin",
+        "value": "China",
+        "priority": 0
+      },
+      {
         "key": "weight",
         "label": "Weight",
         "value": "1 kg 60 g",
@@ -456,13 +456,25 @@
         "key": "dimensions",
         "label": "Dimensions",
         "value": "19.3D x 29W x 19.8H Centimeters",
-        "priority": 1
+        "priority": 2
       },
       {
-        "key": "origin",
-        "label": "Made in",
-        "value": "China",
-        "priority": 2
+        "key": "wattage",
+        "label": "Wattage",
+        "value": "7 Watts",
+        "priority": 5
+      },
+      {
+        "key": "noise_level",
+        "label": "Noise Level",
+        "value": "25 Decibels",
+        "priority": 7
+      },
+      {
+        "key": "floor_area",
+        "label": "Floor Area",
+        "value": "370 Square Feet",
+        "priority": 8
       }
     ],
     "additionalInfo": {
@@ -472,12 +484,6 @@
           "label": "Timestamp",
           "category": "Other",
           "value": "1/3/2026 14:46:29"
-        },
-        {
-          "key": "floor_area",
-          "label": "Floor Area",
-          "category": "Other",
-          "value": "370 Square Feet"
         },
         {
           "key": "controller_type",
@@ -520,18 +526,6 @@
           "label": "Item Model Number",
           "category": "Technical",
           "value": "LAP-C161-WUK"
-        },
-        {
-          "key": "wattage",
-          "label": "Wattage",
-          "category": "Technical",
-          "value": "7 Watts"
-        },
-        {
-          "key": "noise_level",
-          "label": "Noise Level",
-          "category": "Technical",
-          "value": "25 Decibels"
         }
       ]
     },
@@ -621,7 +615,31 @@
         "key": "dimensions",
         "label": "Dimensions",
         "value": "26D x 22.5W x 78.5H Centimeters",
-        "priority": 1
+        "priority": 2
+      },
+      {
+        "key": "voltage",
+        "label": "Voltage",
+        "value": "120 Volts",
+        "priority": 6
+      },
+      {
+        "key": "floor_area",
+        "label": "Floor Area",
+        "value": "700 Square Feet",
+        "priority": 8
+      },
+      {
+        "key": "special_feature",
+        "label": "Special Features",
+        "value": "Aroma Diffuser, Digital Display, Easy Top-Fill, Night Light, Removable Tank, Smart Control",
+        "priority": 10
+      },
+      {
+        "key": "includedComponents",
+        "label": "Included Components",
+        "value": "11L Humidifier x1, Aroma Pad, Cleaning Brush, Screw x 1, User Manual",
+        "priority": 11
       }
     ],
     "additionalInfo": {
@@ -631,12 +649,6 @@
           "label": "Timestamp",
           "category": "Other",
           "value": "1/3/2026 14:46:29"
-        },
-        {
-          "key": "floor_area",
-          "label": "Floor Area",
-          "category": "Other",
-          "value": "700 Square Feet"
         },
         {
           "key": "shape",
@@ -677,20 +689,8 @@
           "value": "1"
         },
         {
-          "key": "includedComponents",
-          "label": "Included Components",
-          "category": "Product Specs",
-          "value": "11L Humidifier x1, Aroma Pad, Cleaning Brush, Screw x 1, User Manual"
-        },
-        {
           "key": "additionalFeatures",
           "label": "Additional Features",
-          "category": "Product Specs",
-          "value": "Aroma Diffuser, Digital Display, Easy Top-Fill, Night Light, Removable Tank, Smart Control"
-        },
-        {
-          "key": "special_feature",
-          "label": "Special Feature",
           "category": "Product Specs",
           "value": "Aroma Diffuser, Digital Display, Easy Top-Fill, Night Light, Removable Tank, Smart Control"
         }
@@ -701,12 +701,6 @@
           "label": "Model Name",
           "category": "Technical",
           "value": "HM735S"
-        },
-        {
-          "key": "voltage",
-          "label": "Voltage",
-          "category": "Technical",
-          "value": "120 Volts"
         }
       ]
     },
@@ -779,6 +773,12 @@
     "trending": false,
     "productDetails": [
       {
+        "key": "origin",
+        "label": "Country of Origin",
+        "value": "India",
+        "priority": 0
+      },
+      {
         "key": "weight",
         "label": "Weight",
         "value": "1 kg",
@@ -788,19 +788,49 @@
         "key": "dimensions",
         "label": "Dimensions",
         "value": "15D x 15W x 30H Centimeters",
-        "priority": 1
+        "priority": 2
       },
       {
         "key": "color",
         "label": "Color",
         "value": "Snow grey",
-        "priority": 1
+        "priority": 3
       },
       {
-        "key": "origin",
-        "label": "Made in",
-        "value": "India",
-        "priority": 2
+        "key": "wattage",
+        "label": "Wattage",
+        "value": "8 Watts",
+        "priority": 5
+      },
+      {
+        "key": "noise_level",
+        "label": "Noise Level",
+        "value": "12 Decibels",
+        "priority": 7
+      },
+      {
+        "key": "floor_area",
+        "label": "Floor Area",
+        "value": "80 Square Feet",
+        "priority": 8
+      },
+      {
+        "key": "special_feature",
+        "label": "Special Features",
+        "value": "Breathing Roots Technology, Built-in Self-watering System, Air Purifier with Decorative Planter",
+        "priority": 10
+      },
+      {
+        "key": "includedComponents",
+        "label": "Included Components",
+        "value": "Lid",
+        "priority": 11
+      },
+      {
+        "key": "publisher",
+        "label": "Publisher",
+        "value": "Urban Air Labs",
+        "priority": 14
       }
     ],
     "additionalInfo": {
@@ -810,12 +840,6 @@
           "label": "Timestamp",
           "category": "Other",
           "value": "1/3/2026 14:46:29"
-        },
-        {
-          "key": "floor_area",
-          "label": "Floor Area",
-          "category": "Other",
-          "value": "80 Square Feet"
         },
         {
           "key": "controller_type",
@@ -868,30 +892,10 @@
           "value": "1 Count"
         },
         {
-          "key": "includedComponents",
-          "label": "Included Components",
-          "category": "Product Specs",
-          "value": "Lid"
-        },
-        {
           "key": "additionalFeatures",
           "label": "Additional Features",
           "category": "Product Specs",
           "value": "Breathing Roots Technology, Built-in Self-watering System, Air Purifier with Decorative Planter"
-        },
-        {
-          "key": "special_feature",
-          "label": "Special Feature",
-          "category": "Product Specs",
-          "value": "Breathing Roots Technology, Built-in Self-watering System, Air Purifier with Decorative Planter"
-        }
-      ],
-      "Books": [
-        {
-          "key": "publisher",
-          "label": "Publisher",
-          "category": "Books",
-          "value": "Urban Air Labs"
         }
       ],
       "Manufacturing": [
@@ -908,18 +912,6 @@
           "label": "Item Model Number",
           "category": "Technical",
           "value": "UB mini-lite"
-        },
-        {
-          "key": "wattage",
-          "label": "Wattage",
-          "category": "Technical",
-          "value": "8 Watts"
-        },
-        {
-          "key": "noise_level",
-          "label": "Noise Level",
-          "category": "Technical",
-          "value": "12 Decibels"
         }
       ]
     },
@@ -1004,13 +996,43 @@
         "key": "dimensions",
         "label": "Dimensions",
         "value": "30.5D x 35.6W x 58.4H Centimeters",
-        "priority": 1
+        "priority": 2
       },
       {
         "key": "color",
         "label": "Color",
         "value": "White",
-        "priority": 1
+        "priority": 3
+      },
+      {
+        "key": "wattage",
+        "label": "Wattage",
+        "value": "60 Watts",
+        "priority": 5
+      },
+      {
+        "key": "noise_level",
+        "label": "Noise Level",
+        "value": "21.4 Decibels",
+        "priority": 7
+      },
+      {
+        "key": "floor_area",
+        "label": "Floor Area",
+        "value": "2002 Square Feet",
+        "priority": 8
+      },
+      {
+        "key": "special_feature",
+        "label": "Special Features",
+        "value": "4 Stage Filtration;, 6 Fan Speeds;, Adjustable 30°, 60°, 90° Vents;, Auto/Eco Mode;, Sleep Mode &amp; Timer;, Turbo Mode;, Ultimate Clean Mode;, ZERO Waste &amp; ZERO Filter Replacements;",
+        "priority": 10
+      },
+      {
+        "key": "includedComponents",
+        "label": "Included Components",
+        "value": "1 x Nuwave ZERO Smart Air Purifiers, 2 Stainless-steel Pre-filters (Pre-installed); 2 Ozone Emission Removal Filters (Pre-installed); 2 Bio-Guard Filters (Pre-installed), 1 Bio-Guard 360 Filter (Pre-installed), 1 x User Manual",
+        "priority": 11
       }
     ],
     "additionalInfo": {
@@ -1020,12 +1042,6 @@
           "label": "Timestamp",
           "category": "Other",
           "value": "1/3/2026 14:46:29"
-        },
-        {
-          "key": "floor_area",
-          "label": "Floor Area",
-          "category": "Other",
-          "value": "2002 Square Feet"
         },
         {
           "key": "controller_type",
@@ -1090,20 +1106,8 @@
           "value": "1 Count"
         },
         {
-          "key": "includedComponents",
-          "label": "Included Components",
-          "category": "Product Specs",
-          "value": "1 x Nuwave ZERO Smart Air Purifiers, 2 Stainless-steel Pre-filters (Pre-installed); 2 Ozone Emission Removal Filters (Pre-installed); 2 Bio-Guard Filters (Pre-installed), 1 Bio-Guard 360 Filter (Pre-installed), 1 x User Manual"
-        },
-        {
           "key": "additionalFeatures",
           "label": "Additional Features",
-          "category": "Product Specs",
-          "value": "4 Stage Filtration;, 6 Fan Speeds;, Adjustable 30°, 60°, 90° Vents;, Auto/Eco Mode;, Sleep Mode &amp; Timer;, Turbo Mode;, Ultimate Clean Mode;, ZERO Waste &amp; ZERO Filter Replacements;"
-        },
-        {
-          "key": "special_feature",
-          "label": "Special Feature",
           "category": "Product Specs",
           "value": "4 Stage Filtration;, 6 Fan Speeds;, Adjustable 30°, 60°, 90° Vents;, Auto/Eco Mode;, Sleep Mode &amp; Timer;, Turbo Mode;, Ultimate Clean Mode;, ZERO Waste &amp; ZERO Filter Replacements;"
         }
@@ -1114,18 +1118,6 @@
           "label": "Item Model Number",
           "category": "Technical",
           "value": "47251"
-        },
-        {
-          "key": "wattage",
-          "label": "Wattage",
-          "category": "Technical",
-          "value": "60 Watts"
-        },
-        {
-          "key": "noise_level",
-          "label": "Noise Level",
-          "category": "Technical",
-          "value": "21.4 Decibels"
         }
       ]
     },
@@ -1201,6 +1193,12 @@
     "trending": false,
     "productDetails": [
       {
+        "key": "origin",
+        "label": "Country of Origin",
+        "value": "India",
+        "priority": 0
+      },
+      {
         "key": "weight",
         "label": "Weight",
         "value": "1 kg 200 g",
@@ -1210,19 +1208,43 @@
         "key": "dimensions",
         "label": "Dimensions",
         "value": "16D x 16W x 19H Centimeters",
-        "priority": 1
+        "priority": 2
       },
       {
         "key": "color",
         "label": "Color",
         "value": "Wood Finish",
-        "priority": 1
+        "priority": 3
       },
       {
-        "key": "origin",
-        "label": "Made in",
-        "value": "India",
-        "priority": 2
+        "key": "wattage",
+        "label": "Wattage",
+        "value": "8 Watts",
+        "priority": 5
+      },
+      {
+        "key": "noise_level",
+        "label": "Noise Level",
+        "value": "12 Decibels",
+        "priority": 7
+      },
+      {
+        "key": "floor_area",
+        "label": "Floor Area",
+        "value": "80 Square Feet",
+        "priority": 8
+      },
+      {
+        "key": "includedComponents",
+        "label": "Included Components",
+        "value": "Adapter, Plant Pot, Plant Selection Guide, Purifier Unit, User Manual Guide",
+        "priority": 11
+      },
+      {
+        "key": "publisher",
+        "label": "Publisher",
+        "value": "Urban Air Labs Pvt Ltd",
+        "priority": 14
       }
     ],
     "additionalInfo": {
@@ -1232,12 +1254,6 @@
           "label": "Timestamp",
           "category": "Other",
           "value": "1/3/2026 14:46:29"
-        },
-        {
-          "key": "floor_area",
-          "label": "Floor Area",
-          "category": "Other",
-          "value": "80 Square Feet"
         },
         {
           "key": "manufacture_year",
@@ -1282,20 +1298,6 @@
           "label": "Unit Count",
           "category": "Product Specs",
           "value": "1 Count"
-        },
-        {
-          "key": "includedComponents",
-          "label": "Included Components",
-          "category": "Product Specs",
-          "value": "Adapter, Plant Pot, Plant Selection Guide, Purifier Unit, User Manual Guide"
-        }
-      ],
-      "Books": [
-        {
-          "key": "publisher",
-          "label": "Publisher",
-          "category": "Books",
-          "value": "Urban Air Labs Pvt Ltd"
         }
       ],
       "Manufacturing": [
@@ -1318,18 +1320,6 @@
           "label": "Item Model Number",
           "category": "Technical",
           "value": "Wood Finish"
-        },
-        {
-          "key": "wattage",
-          "label": "Wattage",
-          "category": "Technical",
-          "value": "8 Watts"
-        },
-        {
-          "key": "noise_level",
-          "label": "Noise Level",
-          "category": "Technical",
-          "value": "12 Decibels"
         }
       ]
     },
@@ -1404,6 +1394,12 @@
     "trending": false,
     "productDetails": [
       {
+        "key": "origin",
+        "label": "Country of Origin",
+        "value": "India",
+        "priority": 0
+      },
+      {
         "key": "weight",
         "label": "Weight",
         "value": "210 g",
@@ -1413,19 +1409,25 @@
         "key": "dimensions",
         "label": "Dimensions",
         "value": "14 x 1.5 x 22 cm",
-        "priority": 1
+        "priority": 2
       },
       {
         "key": "material",
         "label": "Material",
         "value": "Paper",
-        "priority": 1
+        "priority": 4
       },
       {
-        "key": "origin",
-        "label": "Made in",
-        "value": "India",
-        "priority": 2
+        "key": "hardcover",
+        "label": "Hardcover",
+        "value": "192 pages",
+        "priority": 12
+      },
+      {
+        "key": "publisher",
+        "label": "Publisher",
+        "value": "MyMirror Publishing House Pvt. Ltd. (19 May 2021); MyMirror Publishing House Pvt. Ltd.36 Vedantgad, Tulshibagwale Colony Rd, Sahakarnagar No - 2, Pune, Maharashtra 411009",
+        "priority": 14
       }
     ],
     "additionalInfo": {
@@ -1469,38 +1471,6 @@
           "value": "1 Count"
         }
       ],
-      "Books": [
-        {
-          "key": "hardcover",
-          "label": "Hardcover",
-          "category": "Books",
-          "value": "192 pages"
-        },
-        {
-          "key": "publisher",
-          "label": "Publisher",
-          "category": "Books",
-          "value": "MyMirror Publishing House Pvt. Ltd. (19 May 2021); MyMirror Publishing House Pvt. Ltd.36 Vedantgad, Tulshibagwale Colony Rd, Sahakarnagar No - 2, Pune, Maharashtra 411009"
-        },
-        {
-          "key": "isbn_10",
-          "label": "Isbn 10",
-          "category": "Books",
-          "value": "9388550315"
-        },
-        {
-          "key": "isbn_13",
-          "label": "Isbn 13",
-          "category": "Books",
-          "value": "978-9388550314"
-        },
-        {
-          "key": "reading_age",
-          "label": "Reading Age",
-          "category": "Books",
-          "value": "Customer suggested age: 16 years and up"
-        }
-      ],
       "Manufacturing": [
         {
           "key": "manufacturer",
@@ -1525,6 +1495,26 @@
           "label": "Importer",
           "category": "Manufacturing",
           "value": "MyMirror Publishing House Pvt. Ltd.36 Vedantgad, Tulshibagwale Colony Rd, Sahakarnagar No - 2, Pune, Maharashtra 411009"
+        }
+      ],
+      "Books": [
+        {
+          "key": "isbn_10",
+          "label": "Isbn 10",
+          "category": "Books",
+          "value": "9388550315"
+        },
+        {
+          "key": "isbn_13",
+          "label": "Isbn 13",
+          "category": "Books",
+          "value": "978-9388550314"
+        },
+        {
+          "key": "reading_age",
+          "label": "Reading Age",
+          "category": "Books",
+          "value": "Customer suggested age: 16 years and up"
         }
       ]
     },
@@ -1601,6 +1591,12 @@
     "trending": false,
     "productDetails": [
       {
+        "key": "origin",
+        "label": "Country of Origin",
+        "value": "China",
+        "priority": 0
+      },
+      {
         "key": "weight",
         "label": "Weight",
         "value": "396 g",
@@ -1610,13 +1606,19 @@
         "key": "dimensions",
         "label": "Dimensions",
         "value": "6.3 x 6.3 x 18.7 Centimeters",
-        "priority": 1
+        "priority": 2
       },
       {
-        "key": "origin",
-        "label": "Made in",
-        "value": "China",
-        "priority": 2
+        "key": "includedComponents",
+        "label": "Included Components",
+        "value": "Car Air purifier with Filters 1N, 0.5 meter USB Cable 1N, QR Card (Warranty & Digital User Manual)",
+        "priority": 11
+      },
+      {
+        "key": "publisher",
+        "label": "Publisher",
+        "value": "Hero Electronix Pvt. Ltd",
+        "priority": 14
       }
     ],
     "additionalInfo": {
@@ -1652,20 +1654,6 @@
           "label": "Unit Count",
           "category": "Product Specs",
           "value": "1 Count"
-        },
-        {
-          "key": "includedComponents",
-          "label": "Included Components",
-          "category": "Product Specs",
-          "value": "Car Air purifier with Filters 1N, 0.5 meter USB Cable 1N, QR Card (Warranty & Digital User Manual)"
-        }
-      ],
-      "Books": [
-        {
-          "key": "publisher",
-          "label": "Publisher",
-          "category": "Books",
-          "value": "Hero Electronix Pvt. Ltd"
         }
       ],
       "Manufacturing": [
@@ -1773,6 +1761,12 @@
     "trending": false,
     "productDetails": [
       {
+        "key": "origin",
+        "label": "Country of Origin",
+        "value": "India",
+        "priority": 0
+      },
+      {
         "key": "weight",
         "label": "Weight",
         "value": "230 g",
@@ -1782,19 +1776,25 @@
         "key": "dimensions",
         "label": "Dimensions",
         "value": "20.3 x 25.4 x 4.7 cm",
-        "priority": 1
+        "priority": 2
       },
       {
         "key": "material",
         "label": "Material",
         "value": "Paper",
-        "priority": 1
+        "priority": 4
       },
       {
-        "key": "origin",
-        "label": "Made in",
-        "value": "India",
-        "priority": 2
+        "key": "paperback",
+        "label": "Paperback",
+        "value": "208 pages",
+        "priority": 13
+      },
+      {
+        "key": "publisher",
+        "label": "Publisher",
+        "value": "MyMirror Publishing House Pvt. Ltd.; First Edition (31 December 2019); MyMirror",
+        "priority": 14
       }
     ],
     "additionalInfo": {
@@ -1838,38 +1838,6 @@
           "value": "1 Count"
         }
       ],
-      "Books": [
-        {
-          "key": "paperback",
-          "label": "Paperback",
-          "category": "Books",
-          "value": "208 pages"
-        },
-        {
-          "key": "publisher",
-          "label": "Publisher",
-          "category": "Books",
-          "value": "MyMirror Publishing House Pvt. Ltd.; First Edition (31 December 2019); MyMirror"
-        },
-        {
-          "key": "isbn_10",
-          "label": "Isbn 10",
-          "category": "Books",
-          "value": "819388132X"
-        },
-        {
-          "key": "isbn_13",
-          "label": "Isbn 13",
-          "category": "Books",
-          "value": "978-8193881323"
-        },
-        {
-          "key": "reading_age",
-          "label": "Reading Age",
-          "category": "Books",
-          "value": "Customer suggested age: 16 years and up"
-        }
-      ],
       "Manufacturing": [
         {
           "key": "manufacturer",
@@ -1894,6 +1862,26 @@
           "label": "Importer",
           "category": "Manufacturing",
           "value": "MyMirror Publishing House Pvt. Ltd. 36 Vedantgad Tulshibagwale Colony Pune 09"
+        }
+      ],
+      "Books": [
+        {
+          "key": "isbn_10",
+          "label": "Isbn 10",
+          "category": "Books",
+          "value": "819388132X"
+        },
+        {
+          "key": "isbn_13",
+          "label": "Isbn 13",
+          "category": "Books",
+          "value": "978-8193881323"
+        },
+        {
+          "key": "reading_age",
+          "label": "Reading Age",
+          "category": "Books",
+          "value": "Customer suggested age: 16 years and up"
         }
       ]
     },
@@ -1981,7 +1969,13 @@
         "key": "dimensions",
         "label": "Dimensions",
         "value": "30 x 3.5 x 34 Centimeters",
-        "priority": 1
+        "priority": 2
+      },
+      {
+        "key": "publisher",
+        "label": "Publisher",
+        "value": "Secure Connection Limited",
+        "priority": 14
       }
     ],
     "additionalInfo": {
@@ -2017,14 +2011,6 @@
           "label": "Unit Count",
           "category": "Product Specs",
           "value": "1 Count"
-        }
-      ],
-      "Books": [
-        {
-          "key": "publisher",
-          "label": "Publisher",
-          "category": "Books",
-          "value": "Secure Connection Limited"
         }
       ],
       "Manufacturing": [
@@ -2121,6 +2107,12 @@
     "trending": false,
     "productDetails": [
       {
+        "key": "origin",
+        "label": "Country of Origin",
+        "value": "India",
+        "priority": 0
+      },
+      {
         "key": "weight",
         "label": "Weight",
         "value": "300 g",
@@ -2130,19 +2122,31 @@
         "key": "dimensions",
         "label": "Dimensions",
         "value": "20.3 x 25.4 x 4.7 cm",
-        "priority": 1
+        "priority": 2
       },
       {
         "key": "material",
         "label": "Material",
         "value": "Paper",
-        "priority": 1
+        "priority": 4
       },
       {
-        "key": "origin",
-        "label": "Made in",
-        "value": "India",
-        "priority": 2
+        "key": "hardcover",
+        "label": "Hardcover",
+        "value": "112 pages",
+        "priority": 12
+      },
+      {
+        "key": "publisher",
+        "label": "Publisher",
+        "value": "Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020; First Edition (30 July 2022); Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020",
+        "priority": 14
+      },
+      {
+        "key": "language",
+        "label": "Language",
+        "value": "English",
+        "priority": 15
       }
     ],
     "additionalInfo": {
@@ -2174,25 +2178,21 @@
           "value": "14 years and up"
         }
       ],
+      "Manufacturing": [
+        {
+          "key": "manufacturer",
+          "label": "Manufacturer",
+          "category": "Manufacturing",
+          "value": "Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020"
+        },
+        {
+          "key": "packer",
+          "label": "Packer",
+          "category": "Manufacturing",
+          "value": "Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020"
+        }
+      ],
       "Books": [
-        {
-          "key": "language",
-          "label": "Language",
-          "category": "Books",
-          "value": "English"
-        },
-        {
-          "key": "hardcover",
-          "label": "Hardcover",
-          "category": "Books",
-          "value": "112 pages"
-        },
-        {
-          "key": "publisher",
-          "label": "Publisher",
-          "category": "Books",
-          "value": "Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020; First Edition (30 July 2022); Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020"
-        },
         {
           "key": "isbn_10",
           "label": "Isbn 10",
@@ -2210,20 +2210,6 @@
           "label": "Reading Age",
           "category": "Books",
           "value": "14 years and up"
-        }
-      ],
-      "Manufacturing": [
-        {
-          "key": "manufacturer",
-          "label": "Manufacturer",
-          "category": "Manufacturing",
-          "value": "Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020"
-        },
-        {
-          "key": "packer",
-          "label": "Packer",
-          "category": "Manufacturing",
-          "value": "Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020"
         }
       ]
     },
@@ -2300,6 +2286,12 @@
     "trending": false,
     "productDetails": [
       {
+        "key": "origin",
+        "label": "Country of Origin",
+        "value": "India",
+        "priority": 0
+      },
+      {
         "key": "weight",
         "label": "Weight",
         "value": "210 g",
@@ -2309,19 +2301,25 @@
         "key": "dimensions",
         "label": "Dimensions",
         "value": "21.59 x 13.97 x 1.27 cm",
-        "priority": 1
+        "priority": 2
       },
       {
         "key": "material",
         "label": "Material",
         "value": "Paper",
-        "priority": 1
+        "priority": 4
       },
       {
-        "key": "origin",
-        "label": "Made in",
-        "value": "India",
-        "priority": 2
+        "key": "paperback",
+        "label": "Paperback",
+        "value": "112 pages",
+        "priority": 13
+      },
+      {
+        "key": "publisher",
+        "label": "Publisher",
+        "value": "Diamond Books; First Edition (24 March 2022); Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020",
+        "priority": 14
       }
     ],
     "additionalInfo": {
@@ -2347,38 +2345,6 @@
           "value": "14 years and up"
         }
       ],
-      "Books": [
-        {
-          "key": "paperback",
-          "label": "Paperback",
-          "category": "Books",
-          "value": "112 pages"
-        },
-        {
-          "key": "publisher",
-          "label": "Publisher",
-          "category": "Books",
-          "value": "Diamond Books; First Edition (24 March 2022); Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020"
-        },
-        {
-          "key": "isbn_10",
-          "label": "Isbn 10",
-          "category": "Books",
-          "value": "9355991479"
-        },
-        {
-          "key": "isbn_13",
-          "label": "Isbn 13",
-          "category": "Books",
-          "value": "978-9355991478"
-        },
-        {
-          "key": "reading_age",
-          "label": "Reading Age",
-          "category": "Books",
-          "value": "14 years and up"
-        }
-      ],
       "Manufacturing": [
         {
           "key": "manufacturer",
@@ -2397,6 +2363,26 @@
           "label": "Packer",
           "category": "Manufacturing",
           "value": "Diamond Books X-30, Okhla Industrial Area, Phase-2, New Delhi - 110020"
+        }
+      ],
+      "Books": [
+        {
+          "key": "isbn_10",
+          "label": "Isbn 10",
+          "category": "Books",
+          "value": "9355991479"
+        },
+        {
+          "key": "isbn_13",
+          "label": "Isbn 13",
+          "category": "Books",
+          "value": "978-9355991478"
+        },
+        {
+          "key": "reading_age",
+          "label": "Reading Age",
+          "category": "Books",
+          "value": "14 years and up"
         }
       ]
     },

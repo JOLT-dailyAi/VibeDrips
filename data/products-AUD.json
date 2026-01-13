@@ -61,13 +61,31 @@
         "key": "dimensions",
         "label": "Dimensions",
         "value": "22 x 22 x 36 cm; 2.72 kg",
-        "priority": 1
+        "priority": 2
       },
       {
         "key": "color",
         "label": "Color",
         "value": "white",
-        "priority": 1
+        "priority": 3
+      },
+      {
+        "key": "wattage",
+        "label": "Wattage",
+        "value": "39 watts",
+        "priority": 5
+      },
+      {
+        "key": "noise_level",
+        "label": "Noise Level",
+        "value": "24 Decibels",
+        "priority": 7
+      },
+      {
+        "key": "special_feature",
+        "label": "Special Features",
+        "value": "Plasma Pro Technology, HEPASmart Technology, Real-time Air Quality Monitoring, Smart App Integration",
+        "priority": 10
       }
     ],
     "additionalInfo": {
@@ -109,44 +127,14 @@
           "label": "Additional Features",
           "category": "Product Specs",
           "value": "Plasma Pro Technology, HEPASmart Technology, Real-time Air Quality Monitoring, Smart App Integration"
-        },
-        {
-          "key": "special_feature",
-          "label": "Special Feature",
-          "category": "Product Specs",
-          "value": "Plasma Pro Technology, HEPASmart Technology, Real-time Air Quality Monitoring, Smart App Integration"
-        },
-        {
-          "key": "special_features",
-          "label": "Special Features",
-          "category": "Product Specs",
-          "value": "Plasma Pro Technology, HEPASmart Technology, Real-time Air Quality Monitoring, Smart App Integration"
         }
       ],
       "Technical": [
-        {
-          "key": "wattage",
-          "label": "Wattage",
-          "category": "Technical",
-          "value": "39 watts"
-        },
-        {
-          "key": "noise_level",
-          "label": "Noise Level",
-          "category": "Technical",
-          "value": "24 Decibels"
-        },
         {
           "key": "model_number",
           "label": "Model Number",
           "category": "Technical",
           "value": "LAP-C302S-WGC"
-        },
-        {
-          "key": "powerwattage",
-          "label": "Powerwattage",
-          "category": "Technical",
-          "value": "39 watts"
         }
       ]
     },
@@ -229,13 +217,19 @@
         "key": "dimensions",
         "label": "Dimensions",
         "value": "28.7 x 28.7 x 41.6 cm; 4.12 kg",
-        "priority": 1
+        "priority": 2
       },
       {
         "key": "color",
         "label": "Color",
         "value": "White",
-        "priority": 1
+        "priority": 3
+      },
+      {
+        "key": "wattage",
+        "label": "Wattage",
+        "value": "49 watts",
+        "priority": 5
       }
     ],
     "additionalInfo": {
@@ -265,20 +259,6 @@
           "label": "Discount",
           "category": "Product Specs",
           "value": "15"
-        }
-      ],
-      "Technical": [
-        {
-          "key": "wattage",
-          "label": "Wattage",
-          "category": "Technical",
-          "value": "49 watts"
-        },
-        {
-          "key": "powerwattage",
-          "label": "Powerwattage",
-          "category": "Technical",
-          "value": "49 watts"
         }
       ]
     },
@@ -362,7 +342,19 @@
         "key": "dimensions",
         "label": "Dimensions",
         "value": "16 x 16 x 26 cm",
-        "priority": 1
+        "priority": 2
+      },
+      {
+        "key": "noise_level",
+        "label": "Noise Level",
+        "value": "28 Decibels",
+        "priority": 7
+      },
+      {
+        "key": "special_feature",
+        "label": "Special Features",
+        "value": "Manual",
+        "priority": 10
       }
     ],
     "additionalInfo": {
@@ -398,18 +390,6 @@
           "label": "Additional Features",
           "category": "Product Specs",
           "value": "Manual"
-        },
-        {
-          "key": "special_feature",
-          "label": "Special Feature",
-          "category": "Product Specs",
-          "value": "Manual"
-        },
-        {
-          "key": "special_features",
-          "label": "Special Features",
-          "category": "Product Specs",
-          "value": "Manual"
         }
       ],
       "Technical": [
@@ -418,12 +398,6 @@
           "label": "Item Model Number",
           "category": "Technical",
           "value": "LAP-C171-QAE"
-        },
-        {
-          "key": "noise_level",
-          "label": "Noise Level",
-          "category": "Technical",
-          "value": "28 Decibels"
         }
       ]
     },
@@ -506,13 +480,31 @@
         "key": "dimensions",
         "label": "Dimensions",
         "value": "21.08 x 34.54 x 57.66 cm; 6.03 kg",
-        "priority": 1
+        "priority": 2
       },
       {
         "key": "color",
         "label": "Color",
         "value": "Black",
-        "priority": 1
+        "priority": 3
+      },
+      {
+        "key": "wattage",
+        "label": "Wattage",
+        "value": "50 watts",
+        "priority": 5
+      },
+      {
+        "key": "noise_level",
+        "label": "Noise Level",
+        "value": "27 Decibels",
+        "priority": 7
+      },
+      {
+        "key": "special_feature",
+        "label": "Special Features",
+        "value": "PlasmaWave Technology and Intelligent Sensors",
+        "priority": 10
       }
     ],
     "additionalInfo": {
@@ -548,38 +540,6 @@
           "label": "Additional Features",
           "category": "Product Specs",
           "value": "PlasmaWave Technology and Intelligent Sensors"
-        },
-        {
-          "key": "special_feature",
-          "label": "Special Feature",
-          "category": "Product Specs",
-          "value": "PlasmaWave Technology and Intelligent Sensors"
-        },
-        {
-          "key": "special_features",
-          "label": "Special Features",
-          "category": "Product Specs",
-          "value": "PlasmaWave Technology and Intelligent Sensors"
-        }
-      ],
-      "Technical": [
-        {
-          "key": "wattage",
-          "label": "Wattage",
-          "category": "Technical",
-          "value": "50 watts"
-        },
-        {
-          "key": "noise_level",
-          "label": "Noise Level",
-          "category": "Technical",
-          "value": "27 Decibels"
-        },
-        {
-          "key": "powerwattage",
-          "label": "Powerwattage",
-          "category": "Technical",
-          "value": "50 watts"
         }
       ]
     },
@@ -663,13 +623,43 @@
         "key": "dimensions",
         "label": "Dimensions",
         "value": "13.5 x 1.5 x 22 cm",
-        "priority": 1
+        "priority": 2
       },
       {
         "key": "material",
         "label": "Material",
         "value": "Paper",
-        "priority": 1
+        "priority": 4
+      },
+      {
+        "key": "paperback",
+        "label": "Paperback",
+        "value": "208 pages",
+        "priority": 13
+      },
+      {
+        "key": "publisher",
+        "label": "Publisher",
+        "value": "Cornerstone Press",
+        "priority": 14
+      },
+      {
+        "key": "language",
+        "label": "Language",
+        "value": "English",
+        "priority": 15
+      },
+      {
+        "key": "publication_date",
+        "label": "Publication Date",
+        "value": "1 August 2023",
+        "priority": 16
+      },
+      {
+        "key": "print_length",
+        "label": "Number of Pages",
+        "value": "208 pages",
+        "priority": 17
       }
     ],
     "additionalInfo": {
@@ -679,18 +669,6 @@
           "label": "Timestamp",
           "category": "Other",
           "value": "1/1/2026 14:24:13"
-        },
-        {
-          "key": "publication_date",
-          "label": "Publication Date",
-          "category": "Other",
-          "value": "1 August 2023"
-        },
-        {
-          "key": "print_length",
-          "label": "Print Length",
-          "category": "Other",
-          "value": "208 pages"
         }
       ],
       "Product Specs": [
@@ -701,25 +679,15 @@
           "value": "26"
         }
       ],
-      "Books": [
+      "Manufacturing": [
         {
-          "key": "language",
-          "label": "Language",
-          "category": "Books",
-          "value": "English"
-        },
-        {
-          "key": "paperback",
-          "label": "Paperback",
-          "category": "Books",
-          "value": "208 pages"
-        },
-        {
-          "key": "publisher",
-          "label": "Publisher",
-          "category": "Books",
+          "key": "manufacturer",
+          "label": "Manufacturer",
+          "category": "Manufacturing",
           "value": "Cornerstone Press"
-        },
+        }
+      ],
+      "Books": [
         {
           "key": "isbn_10",
           "label": "Isbn 10",
@@ -731,14 +699,6 @@
           "label": "Isbn 13",
           "category": "Books",
           "value": "978-1529902402"
-        }
-      ],
-      "Manufacturing": [
-        {
-          "key": "manufacturer",
-          "label": "Manufacturer",
-          "category": "Manufacturing",
-          "value": "Cornerstone Press"
         }
       ]
     },
@@ -824,7 +784,7 @@
         "key": "color",
         "label": "Color",
         "value": "White,black",
-        "priority": 1
+        "priority": 3
       }
     ],
     "additionalInfo": {
@@ -945,13 +905,13 @@
         "key": "dimensions",
         "label": "Dimensions",
         "value": "24 x 34 x 57 cm; 8.5 kg",
-        "priority": 1
+        "priority": 2
       },
       {
         "key": "color",
         "label": "Color",
         "value": "White",
-        "priority": 1
+        "priority": 3
       }
     ],
     "additionalInfo": {
@@ -1063,13 +1023,13 @@
         "key": "dimensions",
         "label": "Dimensions",
         "value": "36.7 x 24.5 x 24.4 cm; 1.64 kg",
-        "priority": 1
+        "priority": 2
       },
       {
         "key": "material",
         "label": "Material",
         "value": "Plastic",
-        "priority": 1
+        "priority": 4
       }
     ],
     "additionalInfo": {
@@ -1183,6 +1143,12 @@
         "label": "Weight",
         "value": "7.5 Kilograms",
         "priority": 1
+      },
+      {
+        "key": "includedComponents",
+        "label": "Included Components",
+        "value": "1 x Air Purifier, 1 x Deodorization Activated Carbon Filter, 1 x Pre-Filter, 1 x True HEPA Filter, 1 x User Manual",
+        "priority": 11
       }
     ],
     "additionalInfo": {
@@ -1236,12 +1202,6 @@
           "label": "Number Of Pieces",
           "category": "Product Specs",
           "value": "1"
-        },
-        {
-          "key": "includedComponents",
-          "label": "Included Components",
-          "category": "Product Specs",
-          "value": "1 x Air Purifier, 1 x Deodorization Activated Carbon Filter, 1 x Pre-Filter, 1 x True HEPA Filter, 1 x User Manual"
         }
       ],
       "Care Instructions": [
@@ -1333,13 +1293,43 @@
         "key": "dimensions",
         "label": "Dimensions",
         "value": "13.4 x 2.2 x 18.4 cm",
-        "priority": 1
+        "priority": 2
       },
       {
         "key": "material",
         "label": "Material",
         "value": "Paper",
-        "priority": 1
+        "priority": 4
+      },
+      {
+        "key": "hardcover",
+        "label": "Hardcover",
+        "value": "208 pages",
+        "priority": 12
+      },
+      {
+        "key": "publisher",
+        "label": "Publisher",
+        "value": "HUTCHINSON PUBLISHING - TRADE",
+        "priority": 14
+      },
+      {
+        "key": "language",
+        "label": "Language",
+        "value": "English",
+        "priority": 15
+      },
+      {
+        "key": "publication_date",
+        "label": "Publication Date",
+        "value": "18 September 2017",
+        "priority": 16
+      },
+      {
+        "key": "print_length",
+        "label": "Number of Pages",
+        "value": "208 pages",
+        "priority": 17
       }
     ],
     "additionalInfo": {
@@ -1349,18 +1339,6 @@
           "label": "Timestamp",
           "category": "Other",
           "value": "1/1/2026 14:13:46"
-        },
-        {
-          "key": "publication_date",
-          "label": "Publication Date",
-          "category": "Other",
-          "value": "18 September 2017"
-        },
-        {
-          "key": "print_length",
-          "label": "Print Length",
-          "category": "Other",
-          "value": "208 pages"
         }
       ],
       "Product Specs": [
@@ -1371,25 +1349,15 @@
           "value": "43"
         }
       ],
-      "Books": [
+      "Manufacturing": [
         {
-          "key": "language",
-          "label": "Language",
-          "category": "Books",
-          "value": "English"
-        },
-        {
-          "key": "hardcover",
-          "label": "Hardcover",
-          "category": "Books",
-          "value": "208 pages"
-        },
-        {
-          "key": "publisher",
-          "label": "Publisher",
-          "category": "Books",
+          "key": "manufacturer",
+          "label": "Manufacturer",
+          "category": "Manufacturing",
           "value": "HUTCHINSON PUBLISHING - TRADE"
-        },
+        }
+      ],
+      "Books": [
         {
           "key": "isbn_10",
           "label": "Isbn 10",
@@ -1407,14 +1375,6 @@
           "label": "Edition",
           "category": "Books",
           "value": "First Edition"
-        }
-      ],
-      "Manufacturing": [
-        {
-          "key": "manufacturer",
-          "label": "Manufacturer",
-          "category": "Manufacturing",
-          "value": "HUTCHINSON PUBLISHING - TRADE"
         }
       ]
     },
