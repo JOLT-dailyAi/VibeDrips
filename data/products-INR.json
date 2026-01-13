@@ -206,7 +206,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 376,
+      "product_age_days": 377,
       "drop_categories": []
     }
   },
@@ -377,7 +377,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 742,
+      "product_age_days": 743,
       "drop_categories": []
     }
   },
@@ -545,7 +545,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 742,
+      "product_age_days": 743,
       "drop_categories": []
     }
   },
@@ -720,7 +720,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 742,
+      "product_age_days": 743,
       "drop_categories": []
     }
   },
@@ -933,7 +933,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 1107,
+      "product_age_days": 1108,
       "drop_categories": []
     }
   },
@@ -961,7 +961,7 @@
     "currency": "INR",
     "symbol": "₹",
     "brand": "Nuwave",
-    "category": "NUWAVE OxyPure ZERO Smart Air Purifier",
+    "category": "General",
     "subcategory": "NUWAVE OxyPure ZERO Smart Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/71rQ3Md9w0L.jpg",
     "all_images": [
@@ -1139,7 +1139,7 @@
       "is_high_visibility": false,
       "is_social_proof": true,
       "is_new_release": false,
-      "product_age_days": 1472,
+      "product_age_days": 1473,
       "drop_categories": [
         "creator-picks"
       ]
@@ -1343,7 +1343,7 @@
       "is_high_visibility": false,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 1472,
+      "product_age_days": 1473,
       "drop_categories": []
     }
   },

@@ -13,7 +13,7 @@
         "Air Purifier",
         "uBreathe Life Air Purifier",
         "Humidifier",
-        "NUWAVE OxyPure ZERO Smart Air Purifier",
+        "General",
         "Books"
       ],
       "brands": [
@@ -58,7 +58,7 @@
       }
     }
   ],
-  "last_updated": "2026-01-12T04:55:13.794Z",
+  "last_updated": "2026-01-13T02:51:23.908Z",
   "total_products": 23,
   "default_currency": "INR"
 }
