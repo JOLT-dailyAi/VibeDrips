@@ -488,7 +488,7 @@ function showProductModal(productId) {
                     <!-- Brand Section (SEPARATE) -->
                     <div class="modal-brand-section">
                         <div class="info-row">
-                            <span class="label">🏷️ Brand</span>
+                            <span class="label">Brand 🏷️</span>
                             <span class="value">${escapeHtml((product.brand || 'Unknown').trim())}</span>
                         </div>
                     </div>
@@ -549,7 +549,7 @@ function showProductModal(productId) {
                     <!-- Category Section (SEPARATE) -->
                     <div class="modal-category-section">
                         <div class="info-row">
-                            <span class="label">📦 Category</span>
+                            <span class="label">Category 📦</span>
                             <span class="value">${escapeHtml((product.category || 'General').trim())}</span>
                         </div>
                     </div>
@@ -557,7 +557,7 @@ function showProductModal(productId) {
                     <!-- Price + Rating + Reviews Section (NO Brand/Category) -->
                     <div class="modal-core-info">
                         <div class="info-row">
-                            <span class="label">💰 Price</span>
+                            <span class="label">Price 💰</span>
                             <span class="value">
                                 ${priceFormatted}
                                 ${showDiscount && discountPercent > 0 ? `
@@ -569,13 +569,13 @@ function showProductModal(productId) {
                         </div>
                         ${rating > 0 ? `
                         <div class="info-row">
-                            <span class="label">⭐ Rating</span>
+                            <span class="label">Rating ⭐</span>
                             <span class="value">${rating.toFixed(1)} out of 5 stars</span>
                         </div>
                         ` : ''}
                         ${reviewCount > 0 ? `
                         <div class="info-row">
-                            <span class="label">👥 Reviews</span>
+                            <span class="label">Reviews 👥</span>
                             <span class="value">${formatCountFull(reviewCount)} customer reviews</span>
                         </div>
                         ` : ''}
@@ -594,9 +594,10 @@ function showProductModal(productId) {
                         <div class="modal-section-content">
                             ${product.productDetails.sort((a, b) => (a.priority || 0) - (b.priority || 0)).map(item => {
         const emoji = getDetailEmoji(item.key);
+        const label = escapeHtml((item.label || '').trim());
         return `
                                 <div class="detail-row">
-                                    <span class="label">${emoji} ${escapeHtml((item.label || '').trim())}</span>
+                                    <span class="label">${label} ${emoji}</span>
                                     <span class="value">${escapeHtml((item.value || '').trim())}</span>
                                 </div>
                                 `;
@@ -622,7 +623,12 @@ function showProductModal(productId) {
                     if (groupName === 'Books' && product.category !== 'Book') return [];
                     return items || [];
                 })
-                .filter(item => item.key !== 'Timestamp' && item.key !== 'timestamp')
+                .filter(item =>
+                    item.key !== 'Timestamp' &&
+                    item.key !== 'timestamp' &&
+                    item.key !== 'Discount' &&
+                    item.key !== 'discount'
+                )
                 .map(item => `
                             <div class="info-row">
                                 <span class="emoji"></span>

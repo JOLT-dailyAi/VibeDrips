@@ -1129,3 +1129,78 @@ body.glass-theme .discount-badge {
         font-size: 13px;
     }
 }
+
+/* ============================================
+   POLISH REFINEMENTS
+   ============================================ */
+
+/* Section Spacing - 6px between sections */
+.modal-category-section,
+.modal-core-info,
+.modal-section,
+.modal-description-section {
+    margin-top: 6px;
+}
+
+/* Right-align all labels */
+.modal-brand-section .info-row .label,
+.modal-category-section .info-row .label,
+.modal-core-info .info-row .label,
+.modal-section .detail-row .label {
+    text-align: right !important;
+    padding-right: 12px;
+}
+
+/* Gallery Shadow for Depth */
+.gallery-main img {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease;
+}
+
+.gallery-main img:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Section Header Hover Effects */
+.modal-section-header {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 6px;
+    padding: 8px 12px;
+    margin: -8px -12px;
+}
+
+.modal-section-header:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.modal-section-header:hover .toggle-icon {
+    color: #4ade80;
+}
+
+/* Description Line-Height Improvement */
+.description-text {
+    line-height: 1.7 !important;
+    letter-spacing: 0.01em;
+    opacity: 0.92;
+}
+
+/* Discount Badge Fine-Tuning */
+.discount-badge {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    vertical-align: baseline !important;
+    line-height: 1.2 !important;
+    padding: 3px 8px !important;
+    margin-left: 6px !important;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.live-dot {
+    width: 6px;
+    height: 6px;
+    margin-right: 4px;
+    vertical-align: middle;
+}
