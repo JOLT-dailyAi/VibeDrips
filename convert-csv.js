@@ -1259,23 +1259,49 @@ function convertCsvToJson() {
     .on('data', (row) => {
       const record = (val) => {
         if (!val) return;
+
+        const trimmed = val.trim();
+
+        // Reject if too long (likely a product name)
+        if (trimmed.length > 40) return;
+
+        // Reject if too many words (likely a product title)
+        const wordCount = trimmed.split(/\s+/).length;
+        if (wordCount > 4) return;
+
         const norm = normalizeCategory(val);
         if (!norm || isBlacklisted(norm)) return;
+
+        // Reject if contains common product name patterns
+        const productNamePatterns = [
+          /\d+[a-z]/i,           // "11L", "300S", "Zero"
+          /smart/i,              // "Smart Air Purifier"
+          /pro\b/i,              // "Pro"
+          /mini\b/i,             // "Mini"
+          /advanced/i,           // "Advanced"
+          /\b(zero|lite|plus|max|ultra)\b/i  // Model suffixes
+        ];
+
+        if (productNamePatterns.some(pattern => pattern.test(trimmed))) {
+          return;  // Silently reject product-like values
+        }
 
         if (!categoryFrequency[norm]) {
           categoryFrequency[norm] = { count: 0, originals: {} };
         }
         categoryFrequency[norm].count++;
 
-        const trimmed = val.trim();
         categoryFrequency[norm].originals[trimmed] = (categoryFrequency[norm].originals[trimmed] || 0) + 1;
       };
 
       record(row.itemTypeName);
       record(row.generic_name);
       record(row.Category);
+
+      // ONLY process first part of categoryHierarchy
       if (row.categoryHierarchy) {
-        row.categoryHierarchy.split('>').forEach(part => record(part));
+        const firstPart = row.categoryHierarchy.split('>')[0];
+        record(firstPart);
       }
     })
     .on('end', () => {
