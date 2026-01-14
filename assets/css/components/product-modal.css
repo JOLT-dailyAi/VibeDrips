@@ -1541,6 +1541,19 @@ body.glass-theme .discount-badge {
 /* Mobile Responsive - Percentage-Based Approach */
 @media (max-width: 768px) {
 
+    /* Override grid with flexbox for 45:55 ratio */
+    .modal-brand-section .info-row,
+    .modal-category-section .info-row,
+    .modal-core-info .info-row,
+    .modal-section .detail-row,
+    .modal-section .info-row,
+    .info-row,
+    .detail-row {
+        display: flex !important;
+        justify-content: space-between;
+        align-items: center;
+    }
+
     .info-row .label,
     .detail-row .label,
     .modal-section .info-row .label {
