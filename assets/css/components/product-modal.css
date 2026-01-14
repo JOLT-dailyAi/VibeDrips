@@ -1590,7 +1590,7 @@ body.glass-theme .discount-badge {
         flex-basis: 38% !important;
         max-width: 100px !important;
         min-width: 0 !important;
-        font-size: 10px;
+        font-size: 9px;
         /* Reduced from 13px */
         padding-right: 8px;
     }
@@ -1598,8 +1598,12 @@ body.glass-theme .discount-badge {
     .info-row .value,
     .detail-row .value,
     .modal-section .info-row .value {
-        font-size: 12px;
+        font-size: 10px;
         /* Reduced from 14px */
+    }
+
+    .description-text {
+        font-size: 10px;
     }
 
     .info-row,
