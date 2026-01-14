@@ -1262,14 +1262,7 @@ body.glass-theme .discount-badge {
     }
 
     /* Option B: Adjust grid split for more label space */
-    .modal-brand-section .info-row,
-    .modal-category-section .info-row,
-    .modal-core-info .info-row,
-    .modal-section .detail-row,
-    .modal-section .info-row {
-        grid-template-columns: 45% 55%;
-        /* Changed from 40% 60% to match flexbox ratio */
-    }
+    /* Grid columns removed - using flexbox instead (see line 1542) */
 
     /* Additional Info - keep right-align on mobile */
     .modal-section .info-row .label {
@@ -1572,7 +1565,8 @@ body.glass-theme .discount-badge {
     }
 
     .info-row .value,
-    .detail-row .value {
+    .detail-row .value,
+    .modal-section .info-row .value {
         flex-basis: 55%;
         /* Changed from 60% to match mobile 45:55 ratio */
         flex-grow: 1;
