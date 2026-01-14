@@ -1520,15 +1520,27 @@ body.glass-theme .discount-badge {
     flex: 1;
 }
 
-/* Mobile Responsive */
+/* Mobile Responsive - Percentage-Based Approach */
 @media (max-width: 768px) {
 
     .info-row .label,
     .detail-row .label {
-        width: 160px;
-        /* Smaller fixed width on mobile */
-        padding-right: 12px;
+        width: auto !important;
+        flex-basis: 40% !important;
+        max-width: 180px !important;
+        flex-shrink: 0;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+        padding-right: 10px;
         border-right-width: 1px;
+    }
+
+    .info-row .value,
+    .detail-row .value {
+        flex-basis: 60%;
+        flex-grow: 1;
     }
 
     /* Reduce padding on mobile */
@@ -1536,9 +1548,7 @@ body.glass-theme .discount-badge {
     .modal-category-section,
     .modal-core-info {
         padding-left: 24px !important;
-        /* Smaller left padding on mobile */
         padding-right: 12px !important;
-        /* Keep reduced right padding */
     }
 
     .info-row .label::after,
@@ -1548,6 +1558,31 @@ body.glass-theme .discount-badge {
 
     .info-row,
     .detail-row {
-        gap: 16px;
+        gap: 12px !important;
     }
 }
+
+/* Extra Small Mobile (≤480px) */
+@media (max-width: 480px) {
+
+    .info-row .label,
+    .detail-row .label {
+        flex-basis: 38% !important;
+        max-width: 100px !important;
+        font-size: 13px;
+        padding-right: 8px;
+    }
+
+    .info-row,
+    .detail-row {
+        gap: 10px !important;
+    }
+
+    .modal-brand-section,
+    .modal-category-section,
+    .modal-core-info {
+        padding-left: 16px !important;
+        padding-right: 8px !important;
+    }
+}
+
