@@ -19,7 +19,8 @@
 @import url('./components/stats.css');
 @import url('./components/install-banner.css');
 @import url('./components/reels-feed.css');
-@import url('./components/reels-modal.css'); /* NEW - Add this line */
+@import url('./components/reels-modal.css');
+/* NEW - Add this line */
 @import url('./components/lightbox.css');
 
 /* States */
@@ -30,8 +31,45 @@
 /* Utils */
 @import url('./utils/floating.css');
 @import url('./utils/responsive.css');
-@import url('./utils/glass.css'); /* Glass morphism with CSS variables */
+@import url('./utils/glass.css');
+/* Glass morphism with CSS variables */
 
 /* Themes (load last) */
 @import url('./themes/light-theme.css');
 @import url('./themes/dark-theme.css');
+
+/* ============================================
+   GLASSMORPHIC SCROLLBAR - MAIN PAGE
+   ============================================ */
+
+/* Main Page Scrollbar */
+body::-webkit-scrollbar,
+html::-webkit-scrollbar {
+    width: 10px;
+}
+
+body::-webkit-scrollbar-track,
+html::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+}
+
+body::-webkit-scrollbar-thumb,
+html::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15));
+    backdrop-filter: blur(10px);
+    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body::-webkit-scrollbar-thumb:hover,
+html::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.25));
+}
+
+/* Firefox */
+body,
+html {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05);
+}

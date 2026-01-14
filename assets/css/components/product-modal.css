@@ -198,7 +198,7 @@
 .modal-brand-section,
 .modal-category-section,
 .modal-core-info {
-    padding-left: 28px;
+    padding-left: 28px !important;
 }
 
 .simple-modal-body img {
