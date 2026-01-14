@@ -1485,7 +1485,8 @@ body.glass-theme .discount-badge {
 .detail-row .label {
     text-align: right;
     flex-shrink: 0;
-    min-width: 180px;
+    width: 220px;
+    /* Fixed width for perfect alignment */
     padding-right: 16px;
     border-right: 2px solid rgba(255, 255, 255, 0.2);
     position: relative;
@@ -1515,14 +1516,34 @@ body.glass-theme .discount-badge {
     flex: 1;
 }
 
+/* ============================================
+   CONSISTENT LEFT PADDING FOR CORE SECTIONS
+   ============================================ */
+
+/* Add 40px left padding to core sections (28px base + 12px additional) */
+.modal-brand-section,
+.modal-category-section,
+.modal-core-info {
+    padding-left: 40px;
+}
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
 
     .info-row .label,
     .detail-row .label {
-        min-width: 120px;
+        width: 160px;
+        /* Smaller fixed width on mobile */
         padding-right: 12px;
         border-right-width: 1px;
+    }
+
+    /* Reduce padding on mobile */
+    .modal-brand-section,
+    .modal-category-section,
+    .modal-core-info {
+        padding-left: 24px;
+        /* Smaller padding on mobile */
     }
 
     .info-row .label::after,
