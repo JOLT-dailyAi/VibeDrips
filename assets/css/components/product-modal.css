@@ -55,14 +55,120 @@
     min-height: 60vh;
     max-height: 80vh;
     overflow-y: auto;
+    overflow-x: hidden;
+    /* Eliminate horizontal scrollbar */
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     margin: 20px;
     padding: 0;
     z-index: 1001;
     position: relative;
+    box-sizing: border-box;
+    /* Prevent padding overflow */
 }
 
-/* Modal Header */
+/* Constrain all children to prevent horizontal overflow */
+.simple-modal-content * {
+    box-sizing: border-box;
+}
+
+/* Glassmorphic Scrollbar - Main Modal */
+.simple-modal-content::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.simple-modal-content::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 4px;
+}
+
+.simple-modal-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15));
+    backdrop-filter: blur(10px);
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.simple-modal-content::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.25));
+}
+
+/* Firefox */
+.simple-modal-content {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05);
+}
+
+/* Glassmorphic Scrollbar - Gallery/Image Containers */
+/* Apply to any scrollable container with images */
+.simple-modal-body>div:first-child::-webkit-scrollbar,
+[class*="gallery"]::-webkit-scrollbar,
+[class*="thumbnail"]::-webkit-scrollbar,
+[class*="image"]::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.simple-modal-body>div:first-child::-webkit-scrollbar-track,
+[class*="gallery"]::-webkit-scrollbar-track,
+[class*="thumbnail"]::-webkit-scrollbar-track,
+[class*="image"]::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 3px;
+}
+
+.simple-modal-body>div:first-child::-webkit-scrollbar-thumb,
+[class*="gallery"]::-webkit-scrollbar-thumb,
+[class*="thumbnail"]::-webkit-scrollbar-thumb,
+[class*="image"]::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15));
+    backdrop-filter: blur(10px);
+    border-radius: 3px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.simple-modal-body>div:first-child::-webkit-scrollbar-thumb:hover,
+[class*="gallery"]::-webkit-scrollbar-thumb:hover,
+[class*="thumbnail"]::-webkit-scrollbar-thumb:hover,
+[class*="image"]::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.25));
+}
+
+/* Hide gallery scrollbar by default, show on hover */
+.simple-modal-body>div:first-child,
+[class*="gallery"],
+[class*="thumbnail"],
+[class*="image"] {
+    scrollbar-width: none;
+    /* Firefox - hide by default */
+}
+
+.simple-modal-body>div:first-child:hover,
+[class*="gallery"]:hover,
+[class*="thumbnail"]:hover,
+[class*="image"]:hover {
+    scrollbar-width: thin;
+    /* Firefox - show on hover */
+}
+
+.simple-modal-body>div:first-child::-webkit-scrollbar,
+[class*="gallery"]::-webkit-scrollbar,
+[class*="thumbnail"]::-webkit-scrollbar,
+[class*="image"]::-webkit-scrollbar {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.simple-modal-body>div:first-child:hover::-webkit-scrollbar,
+[class*="gallery"]:hover::-webkit-scrollbar,
+[class*="thumbnail"]:hover::-webkit-scrollbar,
+[class*="image"]:hover::-webkit-scrollbar {
+    opacity: 1;
+}
+
 .simple-modal-header {
     display: flex;
     justify-content: space-between;
@@ -86,6 +192,13 @@
 .simple-modal-body {
     padding: 28px 24px;
     text-align: center;
+}
+
+/* Core Fields Indentation - Match Product Details */
+.modal-brand-section,
+.modal-category-section,
+.modal-core-info {
+    padding-left: 28px;
 }
 
 .simple-modal-body img {
