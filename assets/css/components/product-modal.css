@@ -1553,7 +1553,7 @@ body.glass-theme .discount-badge {
         width: auto !important;
         flex-basis: 45% !important;
         /* Changed from 40% to match mobile 45:55 ratio */
-        max-width: 180px !important;
+        /* max-width removed to allow flex-basis 45% to work */
         min-width: 0 !important;
         flex-shrink: 0;
         white-space: normal !important;
@@ -1601,7 +1601,7 @@ body.glass-theme .discount-badge {
     .modal-section .info-row .label {
         flex-basis: 45% !important;
         /* Changed from 38% for 45:55 ratio */
-        max-width: 100px !important;
+        /* max-width removed to allow flex-basis 45% to work */
         min-width: 0 !important;
         font-size: 9px;
         /* Reduced from 13px */
