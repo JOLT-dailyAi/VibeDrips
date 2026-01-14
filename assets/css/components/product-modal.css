@@ -1461,77 +1461,77 @@ body.glass-theme .discount-badge {
 }
 
 /* ============================================
-   GLASSMORPHIC VERTICAL BAR SEPARATOR
+   GLASSMORPHIC BORDER SEPARATOR
    ============================================ 
    
    REVERTIBLE: To remove this feature, delete this entire section
-   from "GLASSMORPHIC VERTICAL BAR SEPARATOR" to the end of file.
+   from "GLASSMORPHIC BORDER SEPARATOR" to the end of file.
    
-   Purpose: Creates a fixed visual pivot between labels and values
-   to solve alignment inconsistency across different field sections.
+   Purpose: Creates a fixed visual separator between labels and values
+   using a glassmorphic border on the label's right side.
 */
 
-/* 3-Column Grid Layout with Separator Bar */
+/* Field Row Layout - Flexbox */
 .info-row,
 .detail-row {
-    display: grid !important;
-    grid-template-columns: 1fr 2px 2fr;
-    /* Label | Bar | Value */
-    gap: 16px;
+    display: flex !important;
+    justify-content: space-between;
     align-items: center;
-    position: relative;
+    gap: 20px;
 }
 
-/* Glassmorphic Vertical Bar (Pivot) */
-.info-row::before,
-.detail-row::before {
-    content: '';
-    grid-column: 2;
-    /* Position in middle column */
-    width: 2px;
-    height: 100%;
-    min-height: 20px;
-    /* Ensure visibility for short rows */
-    background: linear-gradient(to bottom,
-            transparent 0%,
-            rgba(255, 255, 255, 0.3) 20%,
-            rgba(255, 255, 255, 0.3) 80%,
-            transparent 100%);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 0 8px rgba(255, 255, 255, 0.15);
-    border-radius: 1px;
-}
-
-/* Label Styling - Right-align to bar */
+/* Label with Glassmorphic Border Separator */
 .info-row .label,
 .detail-row .label {
     text-align: right;
-    justify-self: end;
-    padding-right: 0;
-    /* Gap handles spacing */
+    flex-shrink: 0;
+    min-width: 180px;
+    padding-right: 16px;
+    border-right: 2px solid rgba(255, 255, 255, 0.2);
+    position: relative;
 }
 
-/* Value Styling - Left-align from bar */
+/* Add subtle gradient effect to border */
+.info-row .label::after,
+.detail-row .label::after {
+    content: '';
+    position: absolute;
+    right: -2px;
+    top: 15%;
+    bottom: 15%;
+    width: 2px;
+    background: linear-gradient(to bottom,
+            transparent 0%,
+            rgba(255, 255, 255, 0.3) 30%,
+            rgba(255, 255, 255, 0.3) 70%,
+            transparent 100%);
+    pointer-events: none;
+}
+
+/* Value Styling */
 .info-row .value,
 .detail-row .value {
     text-align: left;
-    justify-self: start;
-    padding-left: 0;
-    /* Gap handles spacing */
+    flex: 1;
 }
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
 
-    .info-row,
-    .detail-row {
-        gap: 12px;
-        /* Smaller gap on mobile */
+    .info-row .label,
+    .detail-row .label {
+        min-width: 120px;
+        padding-right: 12px;
+        border-right-width: 1px;
     }
 
-    .info-row::before,
-    .detail-row::before {
+    .info-row .label::after,
+    .detail-row .label::after {
         width: 1px;
-        /* Thinner bar on mobile */
+    }
+
+    .info-row,
+    .detail-row {
+        gap: 16px;
     }
 }
