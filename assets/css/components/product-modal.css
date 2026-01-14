@@ -1209,7 +1209,8 @@ body.glass-theme .discount-badge {
 .modal-section .info-row .label {
     text-align: right;
     font-size: 14px;
-    padding-right: 8px;
+    padding-right: 12px;
+    /* Updated from 8px to match Product Details (8px + 4px) */
 }
 
 .modal-section .info-row .value {
