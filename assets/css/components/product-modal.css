@@ -1267,7 +1267,8 @@ body.glass-theme .discount-badge {
     .modal-core-info .info-row,
     .modal-section .detail-row,
     .modal-section .info-row {
-        grid-template-columns: 40% 60%;
+        grid-template-columns: 45% 55%;
+        /* Changed from 40% 60% to match flexbox ratio */
     }
 
     /* Additional Info - keep right-align on mobile */
