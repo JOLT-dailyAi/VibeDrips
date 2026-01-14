@@ -1599,8 +1599,8 @@ body.glass-theme .discount-badge {
     }
 }
 
-/* Extra Small Mobile (≤480px) */
-@media (max-width: 480px) {
+/* Extra Small Mobile (≤500px) - Includes iPhone 14 Pro Max (430px) */
+@media (max-width: 500px) {
 
     .info-row .label,
     .detail-row .label,
