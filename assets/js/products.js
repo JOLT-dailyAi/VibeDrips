@@ -860,6 +860,7 @@ function getDetailEmoji(key, value) {
         'special_feature': '⭐',
         'special_features': '⭐',
         'included_components': '🧩', // REVERTIBLE: Change back to '📦' if needed
+        'includedComponents': '🧩', // Actual key from JSON data
 
         // Books
         'paperback': '📄',
