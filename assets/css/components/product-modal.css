@@ -1524,10 +1524,12 @@ body.glass-theme .discount-badge {
 @media (max-width: 768px) {
 
     .info-row .label,
-    .detail-row .label {
+    .detail-row .label,
+    .modal-section .info-row .label {
         width: auto !important;
         flex-basis: 40% !important;
         max-width: 180px !important;
+        min-width: 0 !important;
         flex-shrink: 0;
         white-space: normal !important;
         word-wrap: break-word !important;
@@ -1566,9 +1568,11 @@ body.glass-theme .discount-badge {
 @media (max-width: 480px) {
 
     .info-row .label,
-    .detail-row .label {
+    .detail-row .label,
+    .modal-section .info-row .label {
         flex-basis: 38% !important;
         max-width: 100px !important;
+        min-width: 0 !important;
         font-size: 13px;
         padding-right: 8px;
     }
