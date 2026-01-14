@@ -1500,8 +1500,8 @@ body.glass-theme .discount-badge {
 .detail-row .label {
     text-align: right;
     flex-shrink: 0;
-    width: 220px;
-    /* Fixed width for perfect alignment */
+    flex-basis: 45%;
+    /* Changed from width: 220px to enable 45:55 ratio */
     padding-right: 16px;
     border-right: 2px solid rgba(255, 255, 255, 0.2);
     position: relative;
