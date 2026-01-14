@@ -1550,8 +1550,9 @@ body.glass-theme .discount-badge {
     .modal-category-section,
     .modal-core-info {
         padding-left: 36px !important;
-        /* 24px + 12px moved from right */
-        padding-right: 0 !important;
+        /* Tablet padding */
+        padding-right: 12px !important;
+        /* Keep right padding */
     }
 
     .info-row .label::after,
@@ -1587,7 +1588,8 @@ body.glass-theme .discount-badge {
     .modal-category-section,
     .modal-core-info {
         padding-left: 24px !important;
-        /* 16px + 8px moved from right */
-        padding-right: 0 !important;
+        /* Mobile padding */
+        padding-right: 12px !important;
+        /* Keep right padding */
     }
 }
