@@ -656,14 +656,17 @@ function showProductModal(productId) {
                     <!-- Description Section -->
                     ${description ? `
                     <div class="modal-description-section">
-                        <div class="section-label">
+                        <div class="modal-section-header" onclick="toggleSection(this)">
                             <span class="emoji">📝</span>
                             <span>Description</span>
+                            <span class="toggle-icon">▼</span>
                         </div>
-                        <div class="description-text" id="desc-${productId}">${escapeHtml(displayDesc)}</div>
-                        ${isDescLong ? `
-                        <button class="read-more-btn" onclick="toggleDescription_${productId}()">Read More ▼</button>
-                        ` : ''}
+                        <div class="modal-section-content expanded">
+                            <div class="description-text" id="desc-${productId}" onclick="toggleDescription_${productId}()" style="cursor: pointer;">${escapeHtml(displayDesc)}</div>
+                            ${isDescLong ? `
+                            <button class="read-more-btn" onclick="toggleDescription_${productId}()">Read More ▼</button>
+                            ` : ''}
+                        </div>
                     </div>
                     ` : ''}
                     
