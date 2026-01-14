@@ -859,7 +859,7 @@ function getDetailEmoji(key, value) {
         // Features
         'special_feature': '⭐',
         'special_features': '⭐',
-        'included_components': '📦',
+        'included_components': '🧩', // REVERTIBLE: Change back to '📦' if needed
 
         // Books
         'paperback': '📄',
