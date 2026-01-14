@@ -1056,7 +1056,8 @@ body.glass-theme .discount-badge {
 .modal-core-info .info-row,
 .modal-section .detail-row {
     display: grid;
-    grid-template-columns: 35% 65%;
+    grid-template-columns: 40% 60%;
+    /* Changed from 35% 65% */
     gap: 12px;
     align-items: start;
     padding: 4px 0;
@@ -1085,7 +1086,8 @@ body.glass-theme .discount-badge {
 /* Additional Info - NO Emojis, 35/65 split */
 .modal-section .info-row {
     display: grid;
-    grid-template-columns: 35% 65%;
+    grid-template-columns: 40% 60%;
+    /* Changed from 35% 65% */
     gap: 12px;
     align-items: start;
     padding: 4px 0;
@@ -1587,7 +1589,8 @@ body.glass-theme .discount-badge {
     .info-row .label,
     .detail-row .label,
     .modal-section .info-row .label {
-        flex-basis: 38% !important;
+        flex-basis: 45% !important;
+        /* Changed from 38% for 45:55 ratio */
         max-width: 100px !important;
         min-width: 0 !important;
         font-size: 9px;
