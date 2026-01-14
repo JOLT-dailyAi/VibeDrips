@@ -1590,7 +1590,7 @@ body.glass-theme .discount-badge {
         flex-basis: 38% !important;
         max-width: 100px !important;
         min-width: 0 !important;
-        font-size: 11px;
+        font-size: 10px;
         /* Reduced from 13px */
         padding-right: 8px;
     }
