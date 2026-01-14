@@ -1595,8 +1595,8 @@ body.glass-theme .discount-badge {
     .modal-brand-section,
     .modal-category-section,
     .modal-core-info {
-        padding-left: 24px !important;
-        /* Mobile padding */
+        padding-left: 36px !important;
+        /* Match tablet padding */
         padding-right: 12px !important;
         /* Keep right padding */
     }
