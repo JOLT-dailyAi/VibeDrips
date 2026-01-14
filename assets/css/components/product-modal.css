@@ -223,7 +223,8 @@
 }
 
 .simple-modal-body .amazon-button {
-    margin-top: 24px;
+    margin-top: 2px;
+    /* Reduced from 24px */
     width: 100%;
     padding: 14px;
     border: none;
@@ -563,8 +564,14 @@ body.glass-theme .simple-modal-body p strong {
    ============================================ */
 
 .modal-actions {
+    position: sticky;
+    bottom: 0;
     padding: 24px;
     text-align: center;
+    background: rgba(20, 20, 30, 0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 10;
 }
 
 /* ============================================
