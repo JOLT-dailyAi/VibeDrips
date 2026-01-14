@@ -198,7 +198,10 @@
 .modal-brand-section,
 .modal-category-section,
 .modal-core-info {
-    padding-left: 28px !important;
+    padding-left: 40px !important;
+    /* 28px base + 12px additional */
+    padding-right: 12px !important;
+    /* Reduced from 24px (inherited) */
 }
 
 .simple-modal-body img {
@@ -1516,17 +1519,6 @@ body.glass-theme .discount-badge {
     flex: 1;
 }
 
-/* ============================================
-   CONSISTENT LEFT PADDING FOR CORE SECTIONS
-   ============================================ */
-
-/* Add 40px left padding to core sections (28px base + 12px additional) */
-.modal-brand-section,
-.modal-category-section,
-.modal-core-info {
-    padding-left: 40px;
-}
-
 /* Mobile Responsive */
 @media (max-width: 768px) {
 
@@ -1542,8 +1534,10 @@ body.glass-theme .discount-badge {
     .modal-brand-section,
     .modal-category-section,
     .modal-core-info {
-        padding-left: 24px;
-        /* Smaller padding on mobile */
+        padding-left: 24px !important;
+        /* Smaller left padding on mobile */
+        padding-right: 12px !important;
+        /* Keep reduced right padding */
     }
 
     .info-row .label::after,
