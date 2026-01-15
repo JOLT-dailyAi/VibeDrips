@@ -289,69 +289,6 @@
 }
 
 
-/* Dark Theme */
-body.dark-theme .simple-modal-content {
-    background: #1a1a1a;
-}
-
-body.dark-theme .simple-modal-header {
-    border-bottom-color: rgba(255, 255, 255, 0.1);
-}
-
-body.dark-theme .simple-modal-header h2 {
-    color: white;
-}
-
-body.dark-theme .simple-modal-body p {
-    color: rgba(255, 255, 255, 0.9);
-}
-
-body.dark-theme .simple-modal-body p strong {
-    color: white;
-}
-
-/* Glass Theme - Matches Install Modal Exactly */
-body.glass-theme .simple-modal-content {
-    background: rgba(255, 255, 255, var(--glass-refraction));
-    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow:
-        0 8px 32px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5);
-    color: white;
-}
-
-body.glass-theme .simple-modal-header {
-    border-bottom-color: rgba(255, 255, 255, 0.2);
-}
-
-body.glass-theme .simple-modal-header h2 {
-    color: white;
-}
-
-/*
-body.glass-theme .simple-modal-header button {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.3);
-    color: white;
-}
-
-body.glass-theme .simple-modal-header button:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.5);
-}
-*/
-
-body.glass-theme .simple-modal-body p {
-    color: rgba(255, 255, 255, 0.95);
-}
-
-body.glass-theme .simple-modal-body p strong {
-    color: white;
-    font-weight: 700;
-}
-
 /* Responsive */
 @media (max-width: 768px) {
     .simple-modal-content {
