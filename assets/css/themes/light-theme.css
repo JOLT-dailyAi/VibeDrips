@@ -40,3 +40,12 @@ body.light-theme .detail-row .label::after {
 body.light-theme .modal-actions {
     border-top-color: rgba(45, 55, 72, 0.15);
 }
+
+/* Section Separator and Modal Actions Background */
+body.light-theme .modal-description-section {
+    border-bottom-color: rgba(45, 55, 72, 0.15);
+}
+
+body.light-theme .modal-actions {
+    background: rgba(255, 255, 255, 0.95);
+}
