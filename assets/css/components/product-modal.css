@@ -1725,24 +1725,6 @@ body.glass-theme .discount-badge {
     filter: blur(1px);
 }
 
-/* Modal Header - Close Button Enhancement */
-.simple-modal-header .modal-close-button {
-    transition: all 0.2s ease;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    padding: 8px;
-    font-size: 20px;
-}
-
-.simple-modal-header .modal-close-button:hover {
-    background: rgba(255, 77, 77, 0.2);
-    transform: scale(1.1);
-    box-shadow: 0 4px 8px rgba(255, 77, 77, 0.3);
-}
-
-.simple-modal-header .modal-close-button:active {
-    transform: scale(0.95);
-}
 
 /* Modal Header - Responsive */
 @media (max-width: 768px) {
