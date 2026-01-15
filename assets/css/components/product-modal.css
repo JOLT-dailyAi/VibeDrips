@@ -176,15 +176,45 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 28px 24px;
-    border-bottom: 1px solid #e2e8f0;
+    padding: 24px 28px;
+
+    /* Background & Glassmorphic Effect */
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.08) 0%,
+            rgba(255, 255, 255, 0.03) 100%);
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
+
+    /* Borders & Shadows */
+    border-bottom: 2px solid rgba(74, 222, 128, 0.3);
+    border-left: 4px solid rgba(74, 222, 128, 0.6);
+    border-top-left-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+    /* Sticky Header */
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 .simple-modal-header h2 {
-    font-size: 20px;
-    color: #333;
+    font-size: 22px;
+    color: #ffffff;
+    font-weight: 700;
     margin: 0;
-    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    letter-spacing: -0.3px;
+    line-height: 1.3;
+
+    /* Prevent long titles from breaking layout */
+    max-width: calc(100% - 50px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    /* Standard property for compatibility */
+    -webkit-box-orient: vertical;
 }
 
 /* Close button inherits from .modal-close-button in buttons.css */
@@ -1668,6 +1698,7 @@ body.glass-theme .discount-badge {
         /* Keep right padding */
     }
 }
+
 /* ============================================
    PHASE 1: ROW HOVER EFFECTS & BORDER GLOW
    ============================================ */
@@ -1682,7 +1713,7 @@ body.glass-theme .discount-badge {
 .info-row:hover,
 .detail-row:hover {
     background: rgba(255, 255, 255, 0.03);
-    box-shadow: 
+    box-shadow:
         inset 0 0 20px rgba(74, 222, 128, 0.05),
         0 2px 8px rgba(0, 0, 0, 0.1);
 }
@@ -1692,4 +1723,37 @@ body.glass-theme .discount-badge {
 .detail-row .label::after {
     box-shadow: 0 0 10px rgba(74, 222, 128, 0.3);
     filter: blur(1px);
+}
+
+/* Modal Header - Close Button Enhancement */
+.simple-modal-header .modal-close-button {
+    transition: all 0.2s ease;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 8px;
+    font-size: 20px;
+}
+
+.simple-modal-header .modal-close-button:hover {
+    background: rgba(255, 77, 77, 0.2);
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(255, 77, 77, 0.3);
+}
+
+.simple-modal-header .modal-close-button:active {
+    transform: scale(0.95);
+}
+
+/* Modal Header - Responsive */
+@media (max-width: 768px) {
+    .simple-modal-header {
+        padding: 20px 16px;
+    }
+
+    .simple-modal-header h2 {
+        font-size: 18px;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+        /* Standard property for compatibility */
+    }
 }
