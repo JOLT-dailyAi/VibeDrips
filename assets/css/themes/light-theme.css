@@ -49,3 +49,14 @@ body.light-theme .modal-description-section {
 body.light-theme .modal-actions {
     background: rgba(255, 255, 255, 0.95);
 }
+
+/* Brand and Category Section Separators */
+body.light-theme .modal-brand-section,
+body.light-theme .modal-category-section {
+    border-bottom-color: rgba(45, 55, 72, 0.15);
+}
+
+/* Collapsible Section Separators (Product Details, Additional Info, Description) */
+body.light-theme .modal-section {
+    border-bottom-color: rgba(45, 55, 72, 0.1);
+}
