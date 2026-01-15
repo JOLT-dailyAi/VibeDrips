@@ -59,7 +59,7 @@
     /* Eliminate horizontal scrollbar */
     box-shadow:
         0 20px 60px rgba(0, 0, 0, 0.3),
-        0 0 100px rgba(74, 222, 128, 0.1),
+        0 0 100px rgba(46, 29, 128, 0.15),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
     margin: 20px;
     padding: 0;
@@ -186,8 +186,8 @@
     -webkit-backdrop-filter: blur(10px) saturate(180%);
 
     /* Borders & Shadows */
-    border-bottom: 2px solid rgba(74, 222, 128, 0.3);
-    border-left: 4px solid rgba(74, 222, 128, 0.6);
+    border-bottom: 2px solid rgba(46, 29, 128, 0.5);
+    border-left: 4px solid rgba(46, 29, 128, 0.7);
     border-top-left-radius: 16px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
@@ -464,7 +464,7 @@ body.glass-theme .simple-modal-body p strong {
             rgba(255, 255, 255, 0.05) 0%,
             rgba(255, 255, 255, 0.02) 100%);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    border-left: 3px solid rgba(74, 222, 128, 0.5);
+    border-left: 3px solid rgba(46, 29, 128, 0.6);
     border-radius: 6px;
     transition: all 0.3s ease;
 }
@@ -660,7 +660,7 @@ body.glass-theme .simple-modal-body p strong {
 
 .discount-badge {
     background: rgba(17, 24, 39, 0.92);
-    border: 1px solid rgba(74, 222, 128, 0.5);
+    border: 1px solid rgba(46, 29, 128, 0.6);
     color: rgba(255, 255, 255, 0.95);
     display: inline-flex;
     align-items: center;
@@ -675,8 +675,8 @@ body.glass-theme .simple-modal-body p strong {
 }
 
 body.glass-theme .discount-badge {
-    background: rgba(74, 222, 128, 0.16);
-    border: 1px solid rgba(74, 222, 128, 0.28);
+    background: rgba(46, 29, 128, 0.25);
+    border: 1px solid rgba(46, 29, 128, 0.4);
     color: #ffffff;
     backdrop-filter: blur(10px) saturate(180%);
     -webkit-backdrop-filter: blur(10px) saturate(180%);
@@ -688,9 +688,9 @@ body.glass-theme .discount-badge {
     width: 6px;
     height: 6px;
     border-radius: 999px;
-    background-color: #4ade80;
+    background-color: #2e1d80;
     margin-right: 6px;
-    box-shadow: 0 0 8px rgba(74, 222, 128, 0.55);
+    box-shadow: 0 0 8px rgba(46, 29, 128, 0.65);
 }
 
 .discount-badge .live-dot::after {
@@ -698,7 +698,7 @@ body.glass-theme .discount-badge {
     position: absolute;
     inset: -3px;
     border-radius: 999px;
-    background: rgba(74, 222, 128, 0.38);
+    background: rgba(46, 29, 128, 0.5);
     animation: livePulse 1.25s ease-out infinite;
 }
 
@@ -857,10 +857,10 @@ body.glass-theme .discount-badge {
 
 .read-more-btn:hover {
     opacity: 1;
-    background: rgba(74, 222, 128, 0.1);
+    background: rgba(46, 29, 128, 0.15);
     transform: scale(1.05);
-    box-shadow: 0 4px 8px rgba(74, 222, 128, 0.3);
-    color: #4ade80;
+    box-shadow: 0 4px 8px rgba(46, 29, 128, 0.5);
+    color: #2e1d80;
 }
 
 .read-more-btn:active {
@@ -900,7 +900,7 @@ body.glass-theme .discount-badge {
 }
 
 .gallery-thumbnails::-webkit-scrollbar-thumb {
-    background: rgba(74, 222, 128, 0.5);
+    background: rgba(46, 29, 128, 0.6);
     border-radius: 3px;
 }
 
@@ -914,12 +914,12 @@ body.glass-theme .discount-badge {
 }
 
 .thumbnail.active {
-    border-color: #4ade80;
-    box-shadow: 0 0 12px rgba(74, 222, 128, 0.6);
+    border-color: #2e1d80;
+    box-shadow: 0 0 12px rgba(46, 29, 128, 0.7);
 }
 
 .thumbnail:hover {
-    border-color: rgba(74, 222, 128, 0.5);
+    border-color: rgba(46, 29, 128, 0.6);
     transform: scale(1.05);
 }
 
@@ -968,7 +968,7 @@ body.glass-theme .discount-badge {
 
 .carousel-controls button:hover {
     background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(74, 222, 128, 0.5);
+    border-color: rgba(46, 29, 128, 0.6);
 }
 
 .carousel-controls .counter {
@@ -1237,7 +1237,7 @@ body.glass-theme .discount-badge {
     content: '';
     position: absolute;
     inset: 0;
-    background: rgba(74, 222, 128, 0.2);
+    background: rgba(46, 29, 128, 0.3);
     opacity: 0;
     transition: opacity 0.3s ease;
     border-radius: 8px;
@@ -1249,7 +1249,7 @@ body.glass-theme .discount-badge {
 
 /* Active thumbnail glow */
 .thumbnail.active {
-    box-shadow: 0 0 16px rgba(74, 222, 128, 0.8);
+    box-shadow: 0 0 16px rgba(46, 29, 128, 0.85);
 }
 
 /* Thumbnail Preview Hint (Desktop) */
@@ -1373,10 +1373,10 @@ body.glass-theme .discount-badge {
             rgba(255, 255, 255, 0.08) 0%,
             rgba(255, 255, 255, 0.04) 100%);
     box-shadow:
-        0 4px 12px rgba(74, 222, 128, 0.2),
-        0 0 20px rgba(74, 222, 128, 0.1);
+        0 4px 12px rgba(46, 29, 128, 0.3),
+        0 0 20px rgba(46, 29, 128, 0.15);
     transform: translateY(-1px);
-    border-left-color: rgba(74, 222, 128, 0.8);
+    border-left-color: rgba(46, 29, 128, 0.85);
 }
 
 .modal-section-header:active {
@@ -1385,7 +1385,7 @@ body.glass-theme .discount-badge {
 }
 
 .modal-section-header:hover .toggle-icon {
-    color: #4ade80;
+    color: #2e1d80;
 }
 
 /* Description Line-Height Improvement */
@@ -1714,14 +1714,14 @@ body.glass-theme .discount-badge {
 .detail-row:hover {
     background: rgba(255, 255, 255, 0.03);
     box-shadow:
-        inset 0 0 20px rgba(74, 222, 128, 0.05),
+        inset 0 0 20px rgba(46, 29, 128, 0.08),
         0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Enhanced Glassmorphic Border Glow */
 .info-row .label::after,
 .detail-row .label::after {
-    box-shadow: 0 0 10px rgba(74, 222, 128, 0.3);
+    box-shadow: 0 0 10px rgba(46, 29, 128, 0.5);
     filter: blur(1px);
 }
 
@@ -1757,3 +1757,4 @@ body.glass-theme .discount-badge {
         /* Standard property for compatibility */
     }
 }
+
