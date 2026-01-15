@@ -675,8 +675,8 @@ body.glass-theme .simple-modal-body p strong {
 }
 
 body.glass-theme .discount-badge {
-    background: rgba(46, 29, 128, 0.25);
-    border: 1px solid rgba(46, 29, 128, 0.4);
+    background: rgba(74, 222, 128, 0.16);
+    border: 1px solid rgba(74, 222, 128, 0.28);
     color: #ffffff;
     backdrop-filter: blur(10px) saturate(180%);
     -webkit-backdrop-filter: blur(10px) saturate(180%);
@@ -688,9 +688,9 @@ body.glass-theme .discount-badge {
     width: 6px;
     height: 6px;
     border-radius: 999px;
-    background-color: #2e1d80;
+    background-color: #4ade80;
     margin-right: 6px;
-    box-shadow: 0 0 8px rgba(46, 29, 128, 0.65);
+    box-shadow: 0 0 8px rgba(74, 222, 128, 0.55);
 }
 
 .discount-badge .live-dot::after {
@@ -698,7 +698,7 @@ body.glass-theme .discount-badge {
     position: absolute;
     inset: -3px;
     border-radius: 999px;
-    background: rgba(46, 29, 128, 0.5);
+    background: rgba(74, 222, 128, 0.38);
     animation: livePulse 1.25s ease-out infinite;
 }
 
@@ -1757,4 +1757,3 @@ body.glass-theme .discount-badge {
         /* Standard property for compatibility */
     }
 }
-
