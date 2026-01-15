@@ -57,7 +57,10 @@
     overflow-y: auto;
     overflow-x: hidden;
     /* Eliminate horizontal scrollbar */
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        0 0 100px rgba(74, 222, 128, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
     margin: 20px;
     padding: 0;
     z-index: 1001;
@@ -234,18 +237,27 @@
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 8px rgba(255, 153, 0, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:
+        0 4px 12px rgba(255, 153, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.2);
 }
 
 .simple-modal-body .amazon-button:hover {
     background: linear-gradient(135deg, #ffaa00 0%, #ff7700 100%);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(255, 153, 0, 0.5);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow:
+        0 6px 20px rgba(255, 153, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.2);
 }
 
 .simple-modal-body .amazon-button:active {
-    transform: translateY(0);
+    transform: translateY(0) scale(0.98);
+    box-shadow:
+        0 2px 8px rgba(255, 153, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 
@@ -415,9 +427,16 @@ body.glass-theme .simple-modal-body p strong {
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
-    padding: 8px 0;
+    padding: 8px 12px;
     margin-bottom: 12px;
     user-select: none;
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.05) 0%,
+            rgba(255, 255, 255, 0.02) 100%);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-left: 3px solid rgba(74, 222, 128, 0.5);
+    border-radius: 6px;
+    transition: all 0.3s ease;
 }
 
 .modal-section-header .title {
@@ -800,10 +819,22 @@ body.glass-theme .discount-badge {
     font-size: 13px;
     margin-top: 8px;
     text-decoration: underline;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 4px 8px;
+    border-radius: 4px;
 }
 
 .read-more-btn:hover {
     opacity: 1;
+    background: rgba(74, 222, 128, 0.1);
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(74, 222, 128, 0.3);
+    color: #4ade80;
+}
+
+.read-more-btn:active {
+    transform: scale(0.95);
 }
 
 /* ============================================
@@ -1307,16 +1338,20 @@ body.glass-theme .discount-badge {
 }
 
 /* Section Header Hover Effects */
-.modal-section-header {
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border-radius: 6px;
-    padding: 8px 12px;
-    margin: -8px -12px;
+.modal-section-header:hover {
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.08) 0%,
+            rgba(255, 255, 255, 0.04) 100%);
+    box-shadow:
+        0 4px 12px rgba(74, 222, 128, 0.2),
+        0 0 20px rgba(74, 222, 128, 0.1);
+    transform: translateY(-1px);
+    border-left-color: rgba(74, 222, 128, 0.8);
 }
 
-.modal-section-header:hover {
-    background: rgba(255, 255, 255, 0.05);
+.modal-section-header:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .modal-section-header:hover .toggle-icon {
@@ -1632,4 +1667,29 @@ body.glass-theme .discount-badge {
         padding-right: 12px !important;
         /* Keep right padding */
     }
+}
+/* ============================================
+   PHASE 1: ROW HOVER EFFECTS & BORDER GLOW
+   ============================================ */
+
+/* Row Hover Effects */
+.info-row,
+.detail-row {
+    transition: all 0.2s ease;
+    border-radius: 4px;
+}
+
+.info-row:hover,
+.detail-row:hover {
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow: 
+        inset 0 0 20px rgba(74, 222, 128, 0.05),
+        0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Enhanced Glassmorphic Border Glow */
+.info-row .label::after,
+.detail-row .label::after {
+    box-shadow: 0 0 10px rgba(74, 222, 128, 0.3);
+    filter: blur(1px);
 }
