@@ -59,8 +59,9 @@
     /* Eliminate horizontal scrollbar */
     box-shadow:
         0 20px 60px rgba(0, 0, 0, 0.3),
-        0 0 100px rgba(90, 75, 255, 0.4),
-        0 0 200px rgba(90, 75, 255, 0.2),
+        0 0 80px rgba(90, 75, 255, 0.6),
+        0 0 150px rgba(90, 75, 255, 0.4),
+        0 0 300px rgba(90, 75, 255, 0.2),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
     margin: 20px;
     padding: 0;
@@ -289,6 +290,17 @@
     box-shadow:
         0 2px 8px rgba(255, 153, 0, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Touch device press effect for Amazon button */
+@media (hover: none) and (pointer: coarse) {
+    .simple-modal-body .amazon-button:active {
+        transform: scale(0.95);
+        box-shadow:
+            0 2px 8px rgba(255, 153, 0, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        transition: all 0.1s ease;
+    }
 }
 
 
