@@ -22,3 +22,21 @@ body.light-theme .simple-modal-body p {
 body.light-theme .simple-modal-body p strong {
     color: #2E1D80;
 }
+/* Separator Colors for Light Theme */
+body.light-theme .info-row .label,
+body.light-theme .detail-row .label {
+    border-right-color: rgba(45, 55, 72, 0.2);
+}
+
+body.light-theme .info-row .label::after,
+body.light-theme .detail-row .label::after {
+    background: linear-gradient(to bottom,
+        transparent 0%,
+        rgba(45, 55, 72, 0.3) 30%,
+        rgba(45, 55, 72, 0.3) 70%,
+        transparent 100%);
+}
+
+body.light-theme .modal-actions {
+    border-top-color: rgba(45, 55, 72, 0.15);
+}
