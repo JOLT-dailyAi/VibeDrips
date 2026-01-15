@@ -275,3 +275,12 @@
 .glass-hidden {
     display: none !important;
 }
+
+/* ========================================
+   GLASS THEME: Modal Styles
+   ======================================== */
+
+body.glass-theme .simple-modal-header h2 {
+    color: #FFFFFF;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}

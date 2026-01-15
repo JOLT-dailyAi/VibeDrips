@@ -199,10 +199,8 @@
 
 .simple-modal-header h2 {
     font-size: 22px;
-    color: #ffffff;
     font-weight: 700;
     margin: 0;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     letter-spacing: -0.3px;
     line-height: 1.3;
 
@@ -1751,26 +1749,25 @@ body.glass-theme .discount-badge {
 
 /* Touch: Active/Press Effects */
 @media (hover: none) and (pointer: coarse) {
+
     /* Rows - Brighter feedback on tap */
     .info-row:active,
     .detail-row:active {
         background: rgba(255, 255, 255, 0.05);
-        box-shadow: 
+        box-shadow:
             inset 0 0 20px rgba(90, 75, 255, 0.12),
             0 2px 8px rgba(0, 0, 0, 0.15);
     }
-    
+
     /* Section Headers - Press down effect */
     .modal-section-header:active {
-        background: linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.1) 0%,
-            rgba(255, 255, 255, 0.05) 100%
-        );
+        background: linear-gradient(135deg,
+                rgba(255, 255, 255, 0.1) 0%,
+                rgba(255, 255, 255, 0.05) 100%);
         transform: scale(0.98);
         box-shadow: 0 2px 8px rgba(90, 75, 255, 0.2);
     }
-    
+
     /* Read More Button - Press effect */
     .read-more-btn:active {
         background: rgba(90, 75, 255, 0.2);
@@ -1778,7 +1775,7 @@ body.glass-theme .discount-badge {
         box-shadow: 0 2px 4px rgba(90, 75, 255, 0.4);
         color: #5A4BFF;
     }
-    
+
     /* Faster transitions for touch */
     .info-row,
     .detail-row,

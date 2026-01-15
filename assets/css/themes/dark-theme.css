@@ -85,8 +85,10 @@ body.dark-theme .stat-label {
 
 /* Product Cards */
 body.dark-theme .product-card {
-    background: rgba(0, 0, 0, 0.9);  /* ← Remove !important */
-    color: #FFFFFF;  /* ← Remove !important */
+    background: rgba(0, 0, 0, 0.9);
+    /* ← Remove !important */
+    color: #FFFFFF;
+    /* ← Remove !important */
 }
 
 body.dark-theme .product-card:hover {
@@ -185,6 +187,7 @@ body.dark-theme .simple-modal-header {
 
 body.dark-theme .simple-modal-header h2 {
     color: #FFFFFF;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 body.dark-theme .simple-modal-header button {
