@@ -126,3 +126,19 @@
 }
 
 /* NO theme overrides - red stays red */
+/* ========================================
+   TOUCH DEVICE: Close Button Animation
+   ======================================== */
+
+.modal-close-button.closing {
+    animation: rotateClose 0.3s ease forwards;
+}
+
+@keyframes rotateClose {
+    0% { 
+        transform: rotate(0deg) scale(1); 
+    }
+    100% { 
+        transform: rotate(90deg) scale(1.1); 
+    }
+}

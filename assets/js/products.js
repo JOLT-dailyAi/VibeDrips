@@ -915,9 +915,27 @@ function toggleSection(header) {
 function closeDynamicModal(event) {
     event.stopPropagation();
     const modal = event.target.closest('.dynamic-modal');
+    const button = event.target.closest('button');
+
     if (modal) {
-        if (event.target.classList.contains('modal-overlay') || event.target.closest('button')) {
-            modal.remove();
+        if (event.target.classList.contains('modal-overlay') || button) {
+            // Detect touch device
+            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+            if (isTouchDevice && button && button.classList.contains('modal-close-button')) {
+                // Add closing animation class
+                button.classList.add('closing');
+
+                // Delay close to show animation
+                setTimeout(() => {
+                    modal.remove();
+                    // Clean up class (in case button is reused)
+                    button.classList.remove('closing');
+                }, 300); // Match animation duration
+            } else {
+                // Desktop or non-button close: immediate
+                modal.remove();
+            }
         }
     }
 }
