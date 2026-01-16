@@ -298,6 +298,14 @@ body.glass-theme .simple-modal-content {
 
 /* Header border removed - uses purple ribbon */
 
+/* Transparent glassmorphic ribbon for glass theme */
+body.glass-theme .simple-modal-header {
+    background: rgba(90, 75, 255, 0.3);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
 body.glass-theme .simple-modal-header h2 {
     color: #FFFFFF;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
