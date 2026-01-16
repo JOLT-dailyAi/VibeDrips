@@ -221,20 +221,14 @@ function renderProducts() {
                 </button>
             </div>`;
         updateStats();
-
-        // Clear current displayed products
-        window.currentDisplayedProducts = [];
         return;
     }
 
     // Clear container and add cards directly (no wrapper needed)
     container.innerHTML = '';
 
-    // Store current displayed products for carousel
-    window.currentDisplayedProducts = VibeDrips.filteredProducts;
-
-    VibeDrips.filteredProducts.forEach((product, index) => {
-        const productCard = createProductCard(product, index);
+    VibeDrips.filteredProducts.forEach(product => {
+        const productCard = createProductCard(product);
         container.appendChild(productCard);
     });
 
@@ -331,7 +325,7 @@ const truncateTextAtWord = (text, maxChars = 18) => {
 /**
  * Create a product card element - UPDATED WITH DISCOUNT BADGE
  */
-function createProductCard(product, index) {
+function createProductCard(product) {
     const card = document.createElement('div');
     card.className = 'product-card';
 
@@ -400,15 +394,8 @@ function createProductCard(product, index) {
         </button>
     `;
 
-    // Make entire card clickable to open modal carousel
-    card.onclick = () => {
-        if (typeof window.openProductModalCarousel === 'function') {
-            window.openProductModalCarousel(index);
-        } else {
-            // Fallback to regular modal if carousel not loaded
-            showProductModal(productId);
-        }
-    };
+    // Make entire card clickable to open modal
+    card.onclick = () => showProductModal(productId);
     card.style.cursor = 'pointer';
 
     return card;
@@ -712,7 +699,15 @@ function showProductModal(productId) {
         </div>
     `;
 
-    document.body.insertAdjacentHTML('beforeend', modalContent);
+    // Wrap modal with carousel container (peek left/right)
+    const wrappedModal = wrapModalWithCarousel(modalContent, productId);
+
+    // Insert into DOM
+    document.body.insertAdjacentHTML('beforeend', wrappedModal);
+
+    // Attach carousel navigation events
+    attachModalCarouselNavigation();
+
 
     // Setup image gallery if MediaLightbox is available
     if (images.length > 0 && typeof MediaLightbox !== 'undefined') {
@@ -944,10 +939,188 @@ function truncateText(text, maxLength) {
     return text.substr(0, maxLength) + '...';
 }
 
+// ============================================
+// MODAL CAROUSEL - SIMPLIFIED PEEK NAVIGATION
+// ============================================
+
+/**
+ * Generate peek HTML for prev/next product
+ */
+function generatePeekHTML(product) {
+    if (!product) return '';
+
+    const imageUrl = product.main_image || '';
+    const productName = product.name || product.productTitle || 'Product';
+    const price = product.display_price || product.price || 0;
+    const currencyCode = product.currency || 'INR';
+    const symbol = product.symbol || '₹';
+    const priceFormatted = formatPrice(price, currencyCode, symbol, true);
+
+    return `
+        <div class="peek-content">
+            <img src="${imageUrl}" alt="${productName}" loading="lazy">
+            <div class="peek-title">${productName}</div>
+            <div class="peek-price">${priceFormatted}</div>
+        </div>
+    `;
+}
+
+/**
+ * Wrap modal with carousel container (peek left/right)
+ */
+function wrapModalWithCarousel(modalHTML, productId) {
+    // Find product index in filtered list
+    const productIndex = VibeDrips.filteredProducts.findIndex(
+        p => (p.id === productId) || (p.asin === productId)
+    );
+
+    if (productIndex === -1) {
+        // Product not in filtered list, return modal as-is
+        return modalHTML;
+    }
+
+    // Get prev/next products
+    const prevProduct = productIndex > 0 ? VibeDrips.filteredProducts[productIndex - 1] : null;
+    const nextProduct = productIndex < VibeDrips.filteredProducts.length - 1
+        ? VibeDrips.filteredProducts[productIndex + 1]
+        : null;
+
+    // Store context for navigation
+    window.modalCarouselContext = {
+        products: VibeDrips.filteredProducts,
+        currentIndex: productIndex
+    };
+
+    // Generate peek HTML
+    const prevPeekHTML = prevProduct ? generatePeekHTML(prevProduct) : '';
+    const nextPeekHTML = nextProduct ? generatePeekHTML(nextProduct) : '';
+
+    // Extract modal overlay and modal content
+    const overlayMatch = modalHTML.match(/<div class="modal-overlay"[^>]*>([\s\S]*)<\/div>\s*$/);
+    if (!overlayMatch) return modalHTML;
+
+    const overlayAttrs = modalHTML.match(/<div class="modal-overlay"([^>]*)>/)[1];
+    const modalContent = overlayMatch[1];
+
+    // Wrap with carousel container
+    return `
+        <div class="modal-overlay"${overlayAttrs}>
+            <div class="modal-carousel-container">
+                ${prevPeekHTML ? `
+                    <div class="modal-peek modal-peek-left" data-direction="-1">
+                        ${prevPeekHTML}
+                    </div>
+                ` : '<div style="width: 5%"></div>'}
+                
+                ${modalContent}
+                
+                ${nextPeekHTML ? `
+                    <div class="modal-peek modal-peek-right" data-direction="1">
+                        ${nextPeekHTML}
+                    </div>
+                ` : '<div style="width: 5%"></div>'}
+            </div>
+        </div>
+    `;
+}
+
+/**
+ * Attach carousel navigation events
+ */
+function attachModalCarouselNavigation() {
+    const overlay = document.getElementById('dynamic-modal-overlay');
+    if (!overlay || !window.modalCarouselContext) return;
+
+    // Click on peek areas
+    overlay.querySelectorAll('.modal-peek').forEach(peek => {
+        peek.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const direction = parseInt(peek.dataset.direction);
+            navigateModal(direction);
+        });
+    });
+
+    // Touch swipe
+    let startX = 0;
+    overlay.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+    }, { passive: true });
+
+    overlay.addEventListener('touchend', (e) => {
+        const endX = e.changedTouches[0].clientX;
+        const diff = startX - endX;
+
+        if (Math.abs(diff) > 50) {
+            navigateModal(diff > 0 ? 1 : -1);
+        }
+    }, { passive: true });
+
+    // Shift+Scroll for carousel (normal scroll for content)
+    overlay.addEventListener('wheel', (e) => {
+        if (e.shiftKey) {
+            e.preventDefault();
+            navigateModal(e.deltaY > 0 ? 1 : -1);
+        }
+        // Normal scroll = content scroll (do nothing)
+    }, { passive: false });
+
+    // Keyboard
+    const keyHandler = (e) => {
+        // Only if modal is open
+        if (!document.getElementById('dynamic-modal-overlay')) return;
+
+        if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            navigateModal(-1);
+        } else if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            navigateModal(1);
+        }
+    };
+    document.addEventListener('keydown', keyHandler);
+
+    // Store for cleanup
+    overlay.dataset.carouselKeyHandler = 'attached';
+}
+
+/**
+ * Navigate to prev/next product
+ */
+function navigateModal(direction) {
+    const context = window.modalCarouselContext;
+    if (!context) return;
+
+    const newIndex = context.currentIndex + direction;
+
+    // Check bounds
+    if (newIndex < 0 || newIndex >= context.products.length) {
+        // Flash red glow
+        const overlay = document.getElementById('dynamic-modal-overlay');
+        if (overlay) {
+            const className = direction < 0 ? 'flash-left' : 'flash-right';
+            overlay.classList.add(className);
+            setTimeout(() => overlay.classList.remove(className), 400);
+        }
+        return;
+    }
+
+    // Update index
+    context.currentIndex = newIndex;
+
+    // Close current modal
+    closeDynamicModal();
+
+    // Open new modal
+    const newProduct = context.products[newIndex];
+    showProductModal(newProduct.id || newProduct.asin);
+}
+
 // Export functions to global scope
 window.setTimeFilter = setTimeFilter;
 window.filterProducts = filterProducts;
 window.sortProducts = sortProducts;
 window.openAmazonLink = openAmazonLink;
 window.showProductModal = showProductModal;
+window.wrapModalWithCarousel = wrapModalWithCarousel;
+window.attachModalCarouselNavigation = attachModalCarouselNavigation;
 console.log('Products.js loaded successfully with currency-aware price formatting and text truncation');

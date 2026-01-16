@@ -1855,3 +1855,164 @@ body.glass-theme .discount-badge {
     width: 24px;
     height: 24px;
 }
+
+/* ============================================
+   MODAL CAROUSEL - SIMPLIFIED PEEK APPROACH
+   5% peek left/right, 90% current modal
+   ============================================ */
+
+/* Modal Carousel Container */
+.modal-carousel-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+}
+
+/* Current Modal (90%) */
+.modal-carousel-container .dynamic-modal {
+    width: 90%;
+    max-width: 900px;
+    z-index: 3;
+    flex-shrink: 0;
+}
+
+/* Peek Areas (5% each) */
+.modal-peek {
+    width: 5%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    opacity: 0.3;
+    filter: blur(calc(var(--glass-blur) * 0.4));
+    cursor: pointer;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    flex-shrink: 0;
+    z-index: 1;
+}
+
+.modal-peek:hover {
+    opacity: 0.5;
+    filter: blur(calc(var(--glass-blur) * 0.2));
+}
+
+.modal-peek-left {
+    justify-content: flex-end;
+    padding-right: 10px;
+}
+
+.modal-peek-right {
+    justify-content: flex-start;
+    padding-left: 10px;
+}
+
+/* Peek Content */
+.peek-content {
+    width: 200px;
+    height: 300px;
+    background: rgba(255, 255, 255, var(--glass-refraction));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    border-radius: var(--glass-border-radius);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.peek-content img {
+    width: 100%;
+    height: 150px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.peek-content .peek-title {
+    font-size: 12px;
+    text-align: center;
+    color: white;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-height: 1.3;
+}
+
+.peek-content .peek-price {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(90, 75, 255, 1);
+}
+
+/* Red Edge Glow (only on flash - not persistent) */
+.modal-overlay.flash-left::before {
+    content: '';
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 30px;
+    background: linear-gradient(to right,
+            rgba(229, 62, 62, 0.8) 0%,
+            rgba(229, 62, 62, 0.4) 50%,
+            transparent 100%);
+    z-index: 10002;
+    pointer-events: none;
+    animation: flash-glow 0.4s ease-out;
+}
+
+.modal-overlay.flash-right::after {
+    content: '';
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 30px;
+    background: linear-gradient(to left,
+            rgba(229, 62, 62, 0.8) 0%,
+            rgba(229, 62, 62, 0.4) 50%,
+            transparent 100%);
+    z-index: 10002;
+    pointer-events: none;
+    animation: flash-glow 0.4s ease-out;
+}
+
+@keyframes flash-glow {
+    0% {
+        opacity: 0;
+    }
+
+    30% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Mobile: Hide peeks, full width modal */
+@media (max-width: 768px) {
+    .modal-peek {
+        display: none;
+    }
+
+    .modal-carousel-container .dynamic-modal {
+        width: 95%;
+        max-width: none;
+    }
+}
+
+/* Ultra-wide: Larger modal */
+@media (min-width: 1920px) {
+    .modal-carousel-container .dynamic-modal {
+        max-width: 1200px;
+    }
+}
