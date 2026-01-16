@@ -1742,6 +1742,7 @@ body.glass-theme .discount-badge {
         transition: all 0.15s ease;
     }
 }
+
 /* ============================================
    ENHANCED THUMBNAILS - Phase 1
    Glassmorphic styling with hover and active states
@@ -1753,12 +1754,12 @@ body.glass-theme .discount-badge {
     border-radius: 8px;
     overflow: hidden;
     cursor: pointer;
-    
+
     /* Glassmorphic border */
     border: 2px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
-    
+
     /* Smooth transitions */
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
@@ -1767,10 +1768,10 @@ body.glass-theme .discount-badge {
 .thumbnail:hover {
     /* Lift effect */
     transform: translateY(-4px) scale(1.05);
-    
+
     /* Purple glow */
     border-color: rgba(90, 75, 255, 0.5);
-    box-shadow: 
+    box-shadow:
         0 8px 16px rgba(0, 0, 0, 0.2),
         0 0 20px rgba(90, 75, 255, 0.3),
         0 0 40px rgba(90, 75, 255, 0.15);
@@ -1779,11 +1780,11 @@ body.glass-theme .discount-badge {
 .thumbnail.active {
     /* Strong purple glow for active state */
     border-color: rgba(90, 75, 255, 0.8);
-    box-shadow: 
+    box-shadow:
         0 0 20px rgba(90, 75, 255, 0.6),
         0 0 40px rgba(90, 75, 255, 0.3),
         inset 0 0 20px rgba(90, 75, 255, 0.2);
-    
+
     /* Slight scale */
     transform: scale(1.05);
 }
@@ -1792,7 +1793,7 @@ body.glass-theme .discount-badge {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    
+
     /* Smooth zoom on hover */
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -1835,7 +1836,6 @@ body.glass-theme .discount-badge {
     color: white;
     transition: all 0.2s ease;
     padding: 0;
-    position: relative;
 }
 
 .carousel-controls .arrow-button:hover,
