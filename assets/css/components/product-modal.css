@@ -1814,3 +1814,44 @@ body.glass-theme .discount-badge {
         height: 60px;
     }
 }
+
+/* ============================================
+   CAROUSEL NAVIGATION BUTTONS
+   Match lightbox arrow styling
+   ============================================ */
+
+.carousel-controls .arrow-button,
+.carousel-controls .lightbox-arrow {
+    /* Base arrow button style - match lightbox */
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    transition: all 0.2s ease;
+    padding: 0;
+    position: relative;
+}
+
+.carousel-controls .arrow-button:hover,
+.carousel-controls .lightbox-arrow:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.carousel-controls .arrow-button:active,
+.carousel-controls .lightbox-arrow:active {
+    transform: scale(0.95);
+}
+
+/* SVG icon sizing */
+.carousel-controls .arrow-button svg,
+.carousel-controls .lightbox-arrow svg {
+    width: 24px;
+    height: 24px;
+}
