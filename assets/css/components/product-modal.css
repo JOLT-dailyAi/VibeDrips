@@ -59,8 +59,8 @@
     /* Eliminate horizontal scrollbar */
     box-shadow:
         0 20px 60px rgba(0, 0, 0, 0.3),
-        0 0 60px 10px rgba(90, 75, 255, 0.25),
-        0 0 120px 20px rgba(90, 75, 255, 0.15),
+        0 0 60px 10px rgba(90, 75, 255, 0.35),
+        0 0 120px 20px rgba(90, 75, 255, 0.2),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
     margin: 20px;
     padding: 0;
@@ -1333,8 +1333,9 @@ body.glass-theme .discount-badge {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Persistent glow on expanded sections */
-.modal-section-header.expanded {
+/* Persistent glow on expanded sections - combined with hover for specificity */
+.modal-section-header.expanded,
+.modal-section-header.expanded:hover {
     background: linear-gradient(135deg,
             rgba(255, 255, 255, 0.08) 0%,
             rgba(255, 255, 255, 0.04) 100%);
