@@ -515,9 +515,17 @@ function showProductModal(productId) {
                                      ondblclick="openImageGallery_${productId}()" id="main-image-${productId}">
                                 <div class="zoom-hint">🔍 Double-click to view full screen</div>
                                 <div class="carousel-controls">
-                                    <button onclick="prevImage_${productId}()">◀</button>
+                                    <button class="lightbox-arrow lightbox-prev" onclick="prevImage_${productId}()" aria-label="Previous">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="15 18 9 12 15 6"></polyline>
+                                        </svg>
+                                    </button>
                                     <span class="counter" id="counter-${productId}">1 / ${images.length}</span>
-                                    <button onclick="nextImage_${productId}()">▶</button>
+                                    <button class="lightbox-arrow lightbox-next" onclick="nextImage_${productId}()" aria-label="Next">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9 18 15 12 9 6"></polyline>
+                                        </svg>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -530,9 +538,17 @@ function showProductModal(productId) {
                                      onclick="openImageGallery_${productId}()">
                                 <div class="zoom-hint">🔍</div>
                                 <div class="carousel-controls" onclick="event.stopPropagation()">
-                                    <button onclick="prevImage_${productId}()">◀</button>
+                                    <button class="lightbox-arrow lightbox-prev" onclick="prevImage_${productId}()" aria-label="Previous">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="15 18 9 12 15 6"></polyline>
+                                        </svg>
+                                    </button>
                                     <span class="counter" id="counter-mobile-${productId}">1 / ${images.length}</span>
-                                    <button onclick="nextImage_${productId}()">▶</button>
+                                    <button class="lightbox-arrow lightbox-next" onclick="nextImage_${productId}()" aria-label="Next">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9 18 15 12 9 6"></polyline>
+                                        </svg>
+                                    </button>
                                 </div>
                             </div>
                             <div class="mobile-thumbnails">
