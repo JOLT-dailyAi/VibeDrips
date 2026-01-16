@@ -51,81 +51,54 @@
 }
 
 .retry-button:hover {
-    background: #5a67d8;
+    background: #5568d3;
 }
 
-/* Product card specific button container */
-.product-actions {
-    display: flex;
-    gap: 10px;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .product-actions {
-        flex-direction: column;
-    }
-
-    .amazon-button,
-    .details-button {
-        width: 100%;
-    }
-}
-
-/* ====================================== */
-/* UNIVERSAL CLOSE BUTTON - All Modals   */
-/* Added: 2025-12-21                      */
-/* ====================================== */
+/* ========================================
+   MODAL CLOSE BUTTON
+   Universal close button for all modals
+   ======================================== */
 
 .modal-close-button {
-    /* Layout */
-    width: 32px;
-    height: 32px;
-    min-width: 32px;
-    min-height: 32px;
-    padding: 0;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
-
-    /* Style - RED across all themes */
-    background: rgba(229, 62, 62, 0.1);
-    border: 2px solid #E53E3E;
-    border-radius: 8px;
-    color: #E53E3E;
-
-    /* Typography */
-    font-size: 16px;
-    /* ← Changed from 18px to 16px for emoji */
-    font-weight: bold;
-    line-height: 1;
-
-    /* Interaction */
     cursor: pointer;
+    font-size: 20px;
+    font-weight: 700;
+    color: #FFFFFF;
     transition: all 0.2s ease;
-
-    /* Reset */
-    outline: none;
+    flex-shrink: 0;
 }
 
 .modal-close-button:hover {
-    background: rgba(229, 62, 62, 0.2);
-    transform: rotate(90deg) scale(1.1);
-    border-color: #C53030;
-    box-shadow: 0 4px 8px rgba(229, 62, 62, 0.3);
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05) rotate(90deg);
 }
 
-.modal-close-button:active {
-    transform: rotate(90deg) scale(0.95);
-    background: rgba(229, 62, 62, 0.3);
+/* Touch Device Support */
+@media (hover: none) and (pointer: coarse) {
+    .modal-close-button:active {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(0.95);
+    }
 }
 
-.modal-close-button:focus {
-    outline: 2px solid rgba(229, 62, 62, 0.4);
-    outline-offset: 2px;
+/* ========================================
+   TOUCH DEVICE: Close Button Delay
+   Prevents accidental closes on mobile
+   ======================================== */
+
+.modal-close-button.touch-delay {
+    pointer-events: none;
+    opacity: 0.5;
 }
 
-/* NO theme overrides - red stays red */
 /* ========================================
    TOUCH DEVICE: Close Button Animation
    ======================================== */
@@ -135,10 +108,59 @@
 }
 
 @keyframes rotateClose {
-    0% { 
-        transform: rotate(0deg) scale(1); 
+    0% {
+        transform: rotate(0deg) scale(1);
     }
-    100% { 
-        transform: rotate(90deg) scale(1.1); 
+
+    100% {
+        transform: rotate(90deg) scale(1.1);
+    }
+}
+
+/* ========================================
+   ARROW NAVIGATION BUTTONS
+   Reusable arrow buttons for lightbox, carousel, galleries
+   ======================================== */
+
+.arrow-button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    transition: all 0.2s ease;
+    padding: 0;
+}
+
+.arrow-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.arrow-button:active {
+    transform: scale(0.95);
+}
+
+/* Size variants */
+.arrow-button.arrow-sm {
+    width: 40px;
+    height: 40px;
+}
+
+.arrow-button.arrow-lg {
+    width: 60px;
+    height: 60px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .arrow-button {
+        width: 40px;
+        height: 40px;
     }
 }
