@@ -714,76 +714,16 @@ function showProductModal(productId) {
         };
     }
 
-    // Setup carousel navigation
+    // Setup carousel navigation using CarouselUtils
     if (images.length > 0) {
-        let currentImageIndex = 0;
+        // Create carousel controller
+        const carousel = CarouselUtils.createCarousel(productId, images);
 
-        window[`selectImage_${productId}`] = function (index) {
-            currentImageIndex = index;
-            updateMainImage();
-            updateThumbnails();
-        };
-
-        // Thumbnail hover preview (desktop only)
-        window[`previewImage_${productId}`] = function (index) {
-            if (window.innerWidth > 768) {
-                updateMainImage(index, true); // true = preview mode
-            }
-        };
-
-        window[`prevImage_${productId}`] = function () {
-            currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
-            updateMainImage();
-            updateThumbnails();
-        };
-
-        window[`nextImage_${productId}`] = function () {
-            currentImageIndex = (currentImageIndex + 1) % images.length;
-            updateMainImage();
-            updateThumbnails();
-        };
-
-        function updateMainImage(previewIndex = null, isPreview = false) {
-            const index = previewIndex !== null ? previewIndex : currentImageIndex;
-
-            // Desktop
-            const mainImg = document.getElementById(`main-image-${productId}`);
-            if (mainImg) {
-                mainImg.classList.add('changing');
-                setTimeout(() => {
-                    mainImg.src = images[index];
-                    mainImg.classList.remove('changing');
-                }, 150);
-            }
-
-            // Mobile
-            const mainImgMobile = document.getElementById(`main-image-mobile-${productId}`);
-            if (mainImgMobile) {
-                mainImgMobile.classList.add('changing');
-                setTimeout(() => {
-                    mainImgMobile.src = images[index];
-                    mainImgMobile.classList.remove('changing');
-                }, 150);
-            }
-
-            // Update counters only if not preview
-            if (!isPreview) {
-                const counter = document.getElementById(`counter-${productId}`);
-                if (counter) counter.textContent = `${currentImageIndex + 1} / ${images.length}`;
-
-                const counterMobile = document.getElementById(`counter-mobile-${productId}`);
-                if (counterMobile) counterMobile.textContent = `${currentImageIndex + 1} / ${images.length}`;
-            }
-        }
-
-        function updateThumbnails() {
-            const modal = document.querySelector('.dynamic-modal');
-            if (modal) {
-                modal.querySelectorAll('.thumbnail').forEach((thumb, idx) => {
-                    thumb.classList.toggle('active', idx === currentImageIndex);
-                });
-            }
-        }
+        // Expose navigation functions
+        window[`selectImage_${productId}`] = (index) => carousel.selectImage(index);
+        window[`previewImage_${productId}`] = (index) => carousel.previewImage(index);
+        window[`prevImage_${productId}`] = () => carousel.prev();
+        window[`nextImage_${productId}`] = () => carousel.next();
     }
 
     // Setup title toggle if title is long
