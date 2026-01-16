@@ -54,37 +54,65 @@
     background: #5568d3;
 }
 
-/* ========================================
-   MODAL CLOSE BUTTON
-   Universal close button for all modals
-   ======================================== */
+/* ======================================
+   UNIVERSAL CLOSE BUTTON - All Modals
+   Added: 2025-12-21
+   ====================================== */
 
 .modal-close-button {
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
+    /* Layout */
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
+
+    /* Style - RED across all themes */
+    background: rgba(229, 62, 62, 0.1);
+    border: 2px solid #E53E3E;
+    border-radius: 8px;
+    color: #E53E3E;
+
+    /* Typography */
+    font-size: 16px;
+    /* Changed from 18px to 16px for emoji */
+    font-weight: bold;
+    line-height: 1;
+
+    /* Interaction */
     cursor: pointer;
-    font-size: 20px;
-    font-weight: 700;
-    color: #FFFFFF;
     transition: all 0.2s ease;
     flex-shrink: 0;
+
+    /* Reset */
+    outline: none;
 }
 
 .modal-close-button:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.05) rotate(90deg);
+    background: rgba(229, 62, 62, 0.2);
+    transform: rotate(90deg);
+    border-color: #C53030;
 }
+
+.modal-close-button:active {
+    transform: rotate(90deg) scale(0.95);
+    background: rgba(229, 62, 62, 0.3);
+}
+
+.modal-close-button:focus {
+    outline: 2px solid rgba(229, 62, 62, 0.4);
+    outline-offset: 2px;
+}
+
+/* NO theme overrides - red stays red */
 
 /* Touch Device Support */
 @media (hover: none) and (pointer: coarse) {
     .modal-close-button:active {
-        background: rgba(255, 255, 255, 0.3);
+        background: rgba(229, 62, 62, 0.3);
         transform: scale(0.95);
     }
 }
