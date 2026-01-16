@@ -331,7 +331,7 @@ function createProductCard(product) {
 
     // Extract all fields from product data
     const imageUrl = product.main_image || '';
-    const allImages = [product.main_image, ...(product.all_images || [])].filter(Boolean);
+    const allImages = [...(product.all_images || [])].filter(Boolean);
     const imageCount = allImages.length;
     const amazonLink = product.amazon_short || product.amazon_long || product.source_link || '#';
     const productName = product.name || product.productTitle || 'Product Name';
