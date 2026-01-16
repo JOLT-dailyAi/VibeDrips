@@ -221,14 +221,20 @@ function renderProducts() {
                 </button>
             </div>`;
         updateStats();
+
+        // Clear current displayed products
+        window.currentDisplayedProducts = [];
         return;
     }
 
     // Clear container and add cards directly (no wrapper needed)
     container.innerHTML = '';
 
-    VibeDrips.filteredProducts.forEach(product => {
-        const productCard = createProductCard(product);
+    // Store current displayed products for carousel
+    window.currentDisplayedProducts = VibeDrips.filteredProducts;
+
+    VibeDrips.filteredProducts.forEach((product, index) => {
+        const productCard = createProductCard(product, index);
         container.appendChild(productCard);
     });
 
@@ -325,7 +331,7 @@ const truncateTextAtWord = (text, maxChars = 18) => {
 /**
  * Create a product card element - UPDATED WITH DISCOUNT BADGE
  */
-function createProductCard(product) {
+function createProductCard(product, index) {
     const card = document.createElement('div');
     card.className = 'product-card';
 
@@ -394,8 +400,15 @@ function createProductCard(product) {
         </button>
     `;
 
-    // Make entire card clickable to open modal
-    card.onclick = () => showProductModal(productId);
+    // Make entire card clickable to open modal carousel
+    card.onclick = () => {
+        if (typeof window.openProductModalCarousel === 'function') {
+            window.openProductModalCarousel(index);
+        } else {
+            // Fallback to regular modal if carousel not loaded
+            showProductModal(productId);
+        }
+    };
     card.style.cursor = 'pointer';
 
     return card;
