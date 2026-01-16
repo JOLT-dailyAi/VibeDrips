@@ -21,6 +21,7 @@
 @import url('./components/reels-feed.css');
 @import url('./components/reels-modal.css');
 /* NEW - Add this line */
+@import url('./components/inline-carousel.css');
 @import url('./components/lightbox.css');
 
 /* States */
