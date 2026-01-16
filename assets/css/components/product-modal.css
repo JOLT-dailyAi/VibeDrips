@@ -75,34 +75,15 @@
     box-sizing: border-box;
 }
 
-/* Glassmorphic Scrollbar - Main Modal */
-.simple-modal-content::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-}
-
-.simple-modal-content::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    border-radius: 4px;
-}
-
-.simple-modal-content::-webkit-scrollbar-thumb {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15));
-    backdrop-filter: blur(10px);
-    border-radius: 4px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.simple-modal-content::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.25));
-}
-
-/* Firefox */
+/* Hide main modal scrollbar for clean design */
 .simple-modal-content {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05);
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.simple-modal-content::-webkit-scrollbar {
+    display: none;
+    /* Chrome/Safari/Edge */
 }
 
 /* Glassmorphic Scrollbar - Gallery/Image Containers */
