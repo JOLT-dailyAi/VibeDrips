@@ -159,13 +159,16 @@
     justify-content: space-between;
     align-items: center;
 
-    /* Ribbon positioning - no negative margin */
-    margin: 0;
-    padding: 28px 40px;
+    /* Extend header to modal edges */
+    margin: 0 -20px 20px;
+    padding: 28px 60px;
     border-radius: 24px 24px 0 0;
 
-    /* Purple gradient ribbon */
-    background: linear-gradient(135deg, #5A4BFF 0%, #7B68FF 100%);
+    /* Transparent glassmorphic ribbon for ALL themes */
+    background: rgba(90, 75, 255, 0.3);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 
     /* Ribbon shadow */
     box-shadow:
