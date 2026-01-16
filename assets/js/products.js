@@ -1077,14 +1077,42 @@ function attachModalCarouselNavigation() {
         }
     }, { passive: true });
 
-    // Shift+Scroll for carousel (normal scroll for content)
-    overlay.addEventListener('wheel', (e) => {
-        if (e.shiftKey) {
-            e.preventDefault();
-            navigateModal(e.deltaY > 0 ? 1 : -1);
+    // Mouse Drag support for desktop (alternative to scroll wheel)
+    let isDragging = false;
+    let dragStartX = 0;
+    let mouseMoved = false;
+
+    overlay.addEventListener('mousedown', (e) => {
+        // Only drag if clicking on the overlay itself or peek areas, not products/buttons
+        if (e.target.classList.contains('modal-overlay') ||
+            e.target.classList.contains('modal-peek') ||
+            e.target.closest('.modal-peek')) {
+            isDragging = true;
+            dragStartX = e.clientX;
+            mouseMoved = false;
         }
-        // Normal scroll = content scroll (do nothing)
-    }, { passive: false });
+    });
+
+    overlay.addEventListener('mousemove', () => {
+        if (isDragging) mouseMoved = true;
+    });
+
+    overlay.addEventListener('mouseup', (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+
+        if (mouseMoved) {
+            const diff = dragStartX - e.clientX;
+            if (Math.abs(diff) > 100) { // Require 100px drag
+                navigateModal(diff > 0 ? 1 : -1);
+            }
+        }
+    });
+
+    // Cancel drag if mouse leaves overlay
+    overlay.addEventListener('mouseleave', () => {
+        isDragging = false;
+    });
 
     // Keyboard
     const keyHandler = (e) => {
