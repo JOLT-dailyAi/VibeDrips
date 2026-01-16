@@ -795,13 +795,16 @@ function showProductModal(productId) {
         window[`toggleDescription_${productId}`] = function () {
             const descEl = document.getElementById(`desc-${productId}`);
             const btn = descEl.parentElement.querySelector('.read-more-btn');
+            const header = descEl.closest('.modal-description-section').querySelector('.modal-section-header');
 
             if (btn.textContent.includes('More')) {
                 descEl.textContent = description;
                 btn.textContent = 'Read Less ▲';
+                header.classList.add('expanded');
             } else {
                 descEl.textContent = description.substring(0, 200).trim() + '...';
                 btn.textContent = 'Read More ▼';
+                header.classList.remove('expanded');
             }
         };
     }
