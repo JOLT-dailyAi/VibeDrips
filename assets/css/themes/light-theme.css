@@ -10,10 +10,7 @@ body.light-theme .simple-modal-content {
     background: #FFFFFF;
 }
 
-body.light-theme .simple-modal-header h2 {
-    color: #1a202c;
-    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
-}
+/* Header title color removed - uses base white from ribbon */
 
 body.light-theme .simple-modal-body p {
     color: #2d3748;
@@ -22,6 +19,7 @@ body.light-theme .simple-modal-body p {
 body.light-theme .simple-modal-body p strong {
     color: #2E1D80;
 }
+
 /* Separator Colors for Light Theme */
 body.light-theme .info-row .label,
 body.light-theme .detail-row .label {
@@ -31,10 +29,10 @@ body.light-theme .detail-row .label {
 body.light-theme .info-row .label::after,
 body.light-theme .detail-row .label::after {
     background: linear-gradient(to bottom,
-        transparent 0%,
-        rgba(45, 55, 72, 0.3) 30%,
-        rgba(45, 55, 72, 0.3) 70%,
-        transparent 100%);
+            transparent 0%,
+            rgba(45, 55, 72, 0.3) 30%,
+            rgba(45, 55, 72, 0.3) 70%,
+            transparent 100%);
 }
 
 body.light-theme .modal-actions {

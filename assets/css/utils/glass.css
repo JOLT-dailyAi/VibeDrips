@@ -296,9 +296,7 @@ body.glass-theme .simple-modal-content {
     /* box-shadow removed - use base glow from product-modal.css */
 }
 
-body.glass-theme .simple-modal-header {
-    border-bottom-color: rgba(255, 255, 255, 0.2);
-}
+/* Header border removed - uses purple ribbon */
 
 body.glass-theme .simple-modal-header h2 {
     color: #FFFFFF;

@@ -181,9 +181,7 @@ body.dark-theme .simple-modal-content {
     background: rgba(0, 0, 0, 0.9);
 }
 
-body.dark-theme .simple-modal-header {
-    border-bottom: 1px solid #4a5568;
-}
+/* Header border removed - uses purple ribbon */
 
 body.dark-theme .simple-modal-header h2 {
     color: #FFFFFF;
