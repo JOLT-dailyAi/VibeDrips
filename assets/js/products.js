@@ -331,7 +331,7 @@ function createProductCard(product) {
 
     // Extract all fields from product data
     const imageUrl = product.main_image || '';
-    const allImages = [...(product.all_images || [])].filter(Boolean);
+    const allImages = [product.main_image, ...(product.all_images || [])].filter(Boolean);
     const imageCount = allImages.length;
     const amazonLink = product.amazon_short || product.amazon_long || product.source_link || '#';
     const productName = product.name || product.productTitle || 'Product Name';
@@ -441,34 +441,15 @@ function showProductModal(productId) {
         return n ? n.toLocaleString('en-US') : '0';
     };
 
-    // Prepare data (TRIM all values)
+    // Prepare data
     const currencyCode = product.currency || 'INR';
     const symbol = product.symbol || '₹';
     const priceFormatted = formatPriceFull(product.price || 0, currencyCode, symbol);
     const rating = parseFloat(product.customer_rating) || 0;
     const reviewCount = parseInt(product.review_count) || 0;
-    const showDiscount = product.show_discount || false;
-    const discountPercent = product.computed_discount || 0;
 
-    // Prepare images for gallery - Use all_images only (no main_image)
-    const images = product.all_images || [];
-
-    // Title truncation - Responsive (35 chars mobile, 80 desktop)
-    const isMobile = window.innerWidth <= 768;
-    const maxTitleLength = isMobile ? 35 : 80;
-    const productTitle = (product.name || 'Product').trim();
-    const isTitleLong = productTitle.length > maxTitleLength;
-    const displayTitle = isTitleLong
-        ? productTitle.substring(0, maxTitleLength).trim() + '...'
-        : productTitle;
-
-    // Description truncation (200 chars)
-    const maxDescLength = 200;
-    const description = (product.description || '').trim();
-    const isDescLong = description.length > maxDescLength;
-    const displayDesc = isDescLong
-        ? description.substring(0, 200).trim() + '...'
-        : description;
+    // Prepare images for gallery
+    const images = [product.main_image, ...(product.all_images || [])].filter(Boolean);
 
     // Build modal HTML
     const modalContent = `
@@ -476,126 +457,54 @@ function showProductModal(productId) {
             <div class="modal-overlay" onclick="closeDynamicModal(event)"></div>
             <div class="simple-modal-content">
                 <div class="simple-modal-header">
-                    <h2 id="modal-title-${productId}" 
-                        class="${isTitleLong ? 'expandable' : ''}" 
-                        ${isTitleLong ? `onclick="toggleTitle_${productId}()"` : ''}>
-                        ${escapeHtml(displayTitle)}
-                    </h2>
+                    <h2>${escapeHtml(product.name)}</h2>
                     <button class="modal-close-button" onclick="closeDynamicModal(event)">❌</button>
                 </div>
                 <div class="simple-modal-body">
                     
-                    <!-- Brand Section (SEPARATE) -->
-                    <div class="modal-brand-section">
-                        <div class="info-row">
-                            <span class="label">Brand 🏷️</span>
-                            <span class="value">${escapeHtml((product.brand || 'Unknown').trim())}</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Image Gallery Section (BEFORE Category) -->
-                    ${images.length > 0 ? `
-                    <div class="modal-image-gallery">
-                        <!-- Desktop: Split View -->
-                        <div class="gallery-desktop">
-                            <div class="gallery-thumbnails">
-                                ${images.map((img, idx) => `
-                                <div class="thumbnail ${idx === 0 ? 'active' : ''}" 
-                                     onmouseover="previewImage_${productId}(${idx})"
-                                     onclick="selectImage_${productId}(${idx})"
-                                     ondblclick="openImageGallery_${productId}(${idx})">
-                                    <img src="${img}" alt="Thumb ${idx + 1}">
-                                </div>
-                                `).join('')}
-                            </div>
-                            <div class="gallery-main">
-                                <img src="${images[0]}" 
-                                     alt="${escapeHtml(product.name)}" 
-                                     style="max-width: 100%; max-height: 400px; border-radius: 12px; cursor: pointer;"
-                                     ondblclick="openImageGallery_${productId}()" id="main-image-${productId}">
-                                <div class="zoom-hint">🔍 Double-click to view full screen</div>
-                                <div class="carousel-controls">
-                                    <button class="arrow-button lightbox-arrow lightbox-prev" onclick="prevImage_${productId}()" aria-label="Previous">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <polyline points="15 18 9 12 15 6"></polyline>
-                                        </svg>
-                                    </button>
-                                    <span class="counter" id="counter-${productId}">1 / ${images.length}</span>
-                                    <button class="arrow-button lightbox-arrow lightbox-next" onclick="nextImage_${productId}()" aria-label="Next">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <polyline points="9 18 15 12 9 6"></polyline>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Mobile: Main + Slider -->
-                        <div class="gallery-mobile">
-                            <div class="mobile-main">
-                                <img id="main-image-mobile-${productId}" 
-                                     src="${images[0]}" 
-                                     onclick="openImageGallery_${productId}()">
-                                <div class="zoom-hint">🔍</div>
-                                <div class="carousel-controls" onclick="event.stopPropagation()">
-                                    <button class="arrow-button lightbox-arrow lightbox-prev" onclick="prevImage_${productId}()" aria-label="Previous">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <polyline points="15 18 9 12 15 6"></polyline>
-                                        </svg>
-                                    </button>
-                                    <span class="counter" id="counter-mobile-${productId}">1 / ${images.length}</span>
-                                    <button class="arrow-button lightbox-arrow lightbox-next" onclick="nextImage_${productId}()" aria-label="Next">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <polyline points="9 18 15 12 9 6"></polyline>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="mobile-thumbnails">
-                                ${images.map((img, idx) => `
-                                <div class="thumbnail ${idx === 0 ? 'active' : ''}" onclick="selectImage_${productId}(${idx})">
-                                    <img src="${img}" alt="Thumb ${idx + 1}">
-                                </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    </div>
-                    ` : ''}
-                    
-                    <!-- Category Section (SEPARATE) -->
-                    <div class="modal-category-section">
-                        <div class="info-row">
-                            <span class="label">Category 📦</span>
-                            <span class="value">${escapeHtml((product.category || 'General').trim())}</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Price + Rating + Reviews Section (NO Brand/Category) -->
+                    <!-- Core Info Section -->
                     <div class="modal-core-info">
                         <div class="info-row">
-                            <span class="label">Price 💰</span>
-                            <span class="value">
-                                ${priceFormatted}
-                                ${showDiscount && discountPercent > 0 ? `
-                                    <span class="discount-badge">
-                                        <span class="live-dot" aria-hidden="true"></span>${discountPercent}%
-                                    </span>
-                                ` : ''}
-                            </span>
+                            <span class="emoji">💰</span>
+                            <span class="label">Price:</span>
+                            <span class="value">${priceFormatted}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="emoji">🏷️</span>
+                            <span class="label">Brand:</span>
+                            <span class="value">${escapeHtml(product.brand || 'Unknown')}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="emoji">📦</span>
+                            <span class="label">Category:</span>
+                            <span class="value">${escapeHtml(product.category || 'General')}</span>
                         </div>
                         ${rating > 0 ? `
                         <div class="info-row">
-                            <span class="label">Rating ⭐</span>
+                            <span class="emoji">⭐</span>
+                            <span class="label">Rating:</span>
                             <span class="value">${rating.toFixed(1)} out of 5 stars</span>
                         </div>
                         ` : ''}
                         ${reviewCount > 0 ? `
                         <div class="info-row">
-                            <span class="label">Reviews 👥</span>
+                            <span class="emoji">👥</span>
+                            <span class="label">Reviews:</span>
                             <span class="value">${formatCountFull(reviewCount)} customer reviews</span>
                         </div>
                         ` : ''}
                     </div>
+                    
+                    <!-- Image Gallery Section -->
+                    ${images.length > 0 ? `
+                    <div class="modal-image-gallery">
+                        <img src="${images[0]}" 
+                             alt="${escapeHtml(product.name)}" 
+                             style="max-width: 100%; max-height: 400px; border-radius: 12px; cursor: pointer;"
+                             onclick="openImageGallery_${productId}()">
+                        ${images.length > 1 ? `<p style="margin-top: 8px; opacity: 0.8; font-size: 13px;">Click to view ${images.length} images</p>` : ''}
+                    </div>
+                    ` : ''}
                     
                     <!-- Product Details Section (Collapsible) -->
                     ${product.productDetails && product.productDetails.length > 0 ? `
@@ -605,16 +514,16 @@ function showProductModal(productId) {
                                 <span class="emoji">📋</span>
                                 <span>Product Details</span>
                             </div>
-                            <span class="toggle-icon">▶</span>
+                            <span class="toggle-icon">▼</span>
                         </div>
-                        <div class="modal-section-content">
+                        <div class="modal-section-content expanded">
                             ${product.productDetails.sort((a, b) => (a.priority || 0) - (b.priority || 0)).map(item => {
-        const emoji = getDetailEmoji(item.key, item.value);
-        const label = escapeHtml((item.label || '').trim());
+        const emoji = getDetailEmoji(item.key);
         return `
                                 <div class="detail-row">
-                                    <span class="label">${label} ${emoji}</span>
-                                    <span class="value">${escapeHtml((item.value || '').trim())}</span>
+                                    <span class="emoji">${emoji}</span>
+                                    <span class="label">${escapeHtml(item.label)}:</span>
+                                    <span class="value">${escapeHtml(item.value)}</span>
                                 </div>
                                 `;
     }).join('')}
@@ -630,61 +539,35 @@ function showProductModal(productId) {
                                 <span class="emoji">ℹ️</span>
                                 <span>Additional Information</span>
                             </div>
-                            <span class="toggle-icon">▶</span>
+                            <span class="toggle-icon">▼</span>
                         </div>
                         <div class="modal-section-content">
-                            ${Object.entries(product.additionalInfo)
-                .flatMap(([groupName, items]) => {
-                    // Skip Books group for non-book products
-                    if (groupName === 'Books' && product.category !== 'Book') return [];
-                    return items || [];
-                })
-                .filter(item => {
-                    // Hide timestamp
-                    if (item.key === 'Timestamp' || item.key === 'timestamp') return false;
-                    // Hide discount (already shown in price badge)
-                    if (item.key === 'Discount' || item.key === 'discount') return false;
-                    // Hide net quantity (usually "1 Count")
-                    if (item.key === 'Net Quantity' || item.key === 'net_quantity') return false;
-                    // Hide generic name (redundant with category)
-                    if (item.key === 'Generic Name' || item.key === 'generic_name') return false;
-                    // Hide item weight/dimensions (duplicate of Product Details)
-                    if (item.key === 'Item Weight' || item.key === 'item_weight') return false;
-                    if (item.key === 'Item Dimensions' || item.key === 'item_dimensions') return false;
-                    if (item.key === 'Product Dimensions' || item.key === 'product_dimensions') return false;
-                    // Hide country of origin (moved to Product Details)
-                    if (item.key === 'Country of Origin' || item.key === 'country_of_origin') return false;
-                    // Hide packer if same as manufacturer
-                    if ((item.key === 'Packer' || item.key === 'packer') && product.manufacturer && item.value === product.manufacturer) return false;
-                    return true;
-                })
-                .map(item => `
-                            <div class="info-row">
-                                <span class="emoji"></span>
-                                <span class="label">${escapeHtml((item.label || '').trim())}</span>
-                                <span class="value">${escapeHtml((item.value || '').trim())}</span>
-                            </div>
-                                `).join('')}
+                            ${Object.entries(product.additionalInfo).map(([groupName, items]) => {
+        if (!items || items.length === 0) return '';
+        const groupEmoji = getGroupEmoji(groupName);
+        return `
+                                <div class="info-group">
+                                    <div class="info-group-header">
+                                        <span class="emoji">${groupEmoji}</span>
+                                        <span>${escapeHtml(groupName)}</span>
+                                    </div>
+                                    ${items.map(item => `
+                                    <div class="info-item">
+                                        <span class="label">${escapeHtml(item.label)}:</span>
+                                        <span class="value">${escapeHtml(item.value)}</span>
+                                    </div>
+                                    `).join('')}
+                                </div>
+                                `;
+    }).join('')}
                         </div>
                     </div>
                     ` : ''}
                     
                     <!-- Description Section -->
-                    ${description ? `
-                    <div class="modal-description-section">
-                        <div class="modal-section-header" onclick="toggleDescription_${productId}()" style="cursor: pointer;">
-                            <div class="title">
-                                <span class="emoji">📝</span>
-                                <span>Description</span>
-                            </div>
-                            <span class="toggle-icon">▼</span>
-                        </div>
-                        <div class="modal-section-content expanded">
-                            <div class="description-text" id="desc-${productId}" onclick="toggleDescription_${productId}()" style="cursor: pointer;">${escapeHtml(displayDesc)}</div>
-                            ${isDescLong ? `
-                            <button class="read-more-btn" onclick="toggleDescription_${productId}()">Read More ▼</button>
-                            ` : ''}
-                        </div>
+                    ${product.description ? `
+                    <div class="modal-description">
+                        <div class="description-text">${escapeHtml(product.description)}</div>
                     </div>
                     ` : ''}
                     
@@ -708,7 +591,6 @@ function showProductModal(productId) {
     // Attach carousel navigation events
     attachModalCarouselNavigation();
 
-
     // Setup image gallery if MediaLightbox is available
     if (images.length > 0 && typeof MediaLightbox !== 'undefined') {
         window[`openImageGallery_${productId}`] = function () {
@@ -721,282 +603,47 @@ function showProductModal(productId) {
             lightbox.open(images, 0);
         };
     }
-
-    // Setup carousel navigation using CarouselUtils
-    if (images.length > 0) {
-        // Create carousel controller
-        const carousel = CarouselUtils.createCarousel(productId, images);
-
-        // Expose navigation functions
-        window[`selectImage_${productId}`] = (index) => carousel.selectImage(index);
-        window[`previewImage_${productId}`] = (index) => carousel.previewImage(index);
-        window[`prevImage_${productId}`] = () => carousel.prev();
-        window[`nextImage_${productId}`] = () => carousel.next();
-    }
-
-    // Setup title toggle if title is long
-    if (isTitleLong) {
-        window[`toggleTitle_${productId}`] = function () {
-            const titleEl = document.getElementById(`modal-title-${productId}`);
-            const isExpanded = titleEl.classList.contains('expanded');
-
-            if (isExpanded) {
-                // Collapse
-                const isMobile = window.innerWidth <= 768;
-                const maxLen = isMobile ? 35 : 80;
-                titleEl.textContent = productTitle.substring(0, maxLen).trim() + '...';
-                titleEl.classList.remove('expanded');
-            } else {
-                // Expand
-                titleEl.textContent = productTitle;
-                titleEl.classList.add('expanded');
-            }
-        };
-    }
-
-    // Setup description toggle if description is long
-    if (isDescLong) {
-        window[`toggleDescription_${productId}`] = function () {
-            const descEl = document.getElementById(`desc-${productId}`);
-            const btn = descEl.parentElement.querySelector('.read-more-btn');
-            const header = descEl.closest('.modal-description-section').querySelector('.modal-section-header');
-
-            if (btn.textContent.includes('More')) {
-                descEl.textContent = description;
-                btn.textContent = 'Read Less ▲';
-                header.classList.add('expanded');
-            } else {
-                descEl.textContent = description.substring(0, 200).trim() + '...';
-                btn.textContent = 'Read More ▼';
-                header.classList.remove('expanded');
-            }
-        };
-    }
-}
-
-// Helper: Get emoji for product detail keys
-// Helper: Get dynamic Material emoji based on value
-function getMaterialEmoji(materialValue) {
-    if (!materialValue) return '🧵';
-    const material = materialValue.toLowerCase();
-
-    // Paper
-    if (material.includes('paper') || material.includes('cardboard')) return '📄';
-    // Wood
-    if (material.includes('wood') || material.includes('timber') || material.includes('bamboo') || material.includes('pine')) return '🪵';
-    // Metal
-    if (material.includes('metal') || material.includes('steel') || material.includes('aluminum') || material.includes('iron') || material.includes('brass') || material.includes('copper')) return '🔩';
-    // Plastic
-    if (material.includes('plastic') || material.includes('polymer') || material.includes('pvc') || material.includes('abs') || material.includes('pet') || material.includes('synthetic')) return '🧪';
-    // Fabric
-    if (material.includes('fabric') || material.includes('cloth') || material.includes('silk') || material.includes('cotton') || material.includes('polyester') || material.includes('wool')) return '🧵';
-    // Glass
-    if (material.includes('glass') || material.includes('crystal')) return '🪟';
-    // Leather
-    if (material.includes('leather')) return '🎒';
-    // Stone
-    if (material.includes('stone') || material.includes('marble') || material.includes('granite') || material.includes('ceramic')) return '🪨';
-    // Masonry
-    if (material.includes('brick') || material.includes('concrete')) return '🧱';
-    // Eco
-    if (material.includes('recycled') || material.includes('eco') || material.includes('sustainable') || material.includes('bio')) return '♻️';
-
-    return '🧵'; // Default
-}
-
-function getDetailEmoji(key, value) {
-    const emojiMap = {
-        // Priority 0 - Country
-        'country_of_origin': '🌍',
-        'countryOfOrigin': '🌍',
-        'country': '🌍',
-        'origin': '🌍',
-        'made_in': '🌍',
-
-        // Physical
-        'weight': '⚖️',
-        'dimensions': '📏',
-        'color': '🎨',
-        'material': (value) => getMaterialEmoji(value), // DYNAMIC!
-
-        // Performance
-        'wattage': '⚡',
-        'voltage': '⚡',
-        'noise_level': '🔊',
-        'sound_level': '🔊',
-        'floor_area': '📐',
-        'coverage_area': '📐',
-        'room_type': '🏠',
-
-        // Features
-        'special_feature': '⭐',
-        'special_features': '⭐',
-        'included_components': '🧩', // REVERTIBLE: Change back to '📦' if needed
-        'includedComponents': '🧩', // Actual key from JSON data
-
-        // Books
-        'paperback': '📄',
-        'hardcover': '📘',
-        'publisher': '📚',
-        'language': '🌐',
-        'publication_date': '📅',
-        'print_length': '📄',
-        'number_of_pages': '📄'
-    };
-
-    const emoji = emojiMap[key];
-    // If emoji is a function (like Material), call it with the value
-    if (typeof emoji === 'function') {
-        return emoji(value);
-    }
-    return emoji || '•';
-}
-
-// Helper: Get emoji for additional info groups
-function getGroupEmoji(groupName) {
-    const emojiMap = {
-        'Manufacturing': '🏭',
-        'Product Specs': '🔢',
-        'Books': '📚',
-        'Technical': '⚡',
-        'Care Instructions': '🧼',
-        'Other': 'ℹ️'
-    };
-    return emojiMap[groupName] || 'ℹ️';
-}
-
-// Helper: Toggle collapsible section
-function toggleSection(header) {
-    header.classList.toggle('expanded');
-    const content = header.nextElementSibling;
-    content.classList.toggle('expanded');
-
-    // Update toggle icon
-    const icon = header.querySelector('.toggle-icon');
-    icon.textContent = header.classList.contains('expanded') ? '▼' : '▶';
 }
 
 /**
- * Close dynamic modal (specific to modals created by showProductModal)
- */
-function closeDynamicModal(event) {
-    // If called without event (programmatically from navigateModal), just find and remove the modal
-    if (!event) {
-        const modal = document.querySelector('.simple-modal.dynamic-modal');
-        if (modal) {
-            modal.remove();
-        }
-        return;
-    }
-
-    event.stopPropagation();
-    const modal = event.target.closest('.dynamic-modal');
-    const button = event.target.closest('button');
-
-    if (modal) {
-        if (event.target.classList.contains('modal-overlay') || button) {
-            // Detect touch device
-            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-
-            if (isTouchDevice && button && button.classList.contains('modal-close-button')) {
-                // Add closing animation class
-                button.classList.add('closing');
-
-                // Delay close to show animation
-                setTimeout(() => {
-                    modal.remove();
-                    // Clean up class (in case button is reused)
-                    button.classList.remove('closing');
-                }, 300); // Match animation duration
-            } else {
-                // Desktop or non-button close: immediate
-                modal.remove();
-            }
-        }
-    }
-}
-
-/**
- * Update statistics display
- */
-function updateStats() {
-    if (VibeDrips.elements.productCount) {
-        VibeDrips.elements.productCount.textContent = VibeDrips.filteredProducts.length;
-    }
-    if (VibeDrips.elements.categoryCount) {
-        VibeDrips.elements.categoryCount.textContent = VibeDrips.categories.size;
-    }
-}
-
-/**
- * Utility functions
- */
-function escapeHtml(unsafe) {
-    if (!unsafe) return '';
-    return unsafe
-        .toString()
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "'");
-}
-
-function truncateText(text, maxLength) {
-    if (!text) return '';
-    if (text.length <= maxLength) return text;
-    return text.substr(0, maxLength) + '...';
-}
-
-// ============================================
-// MODAL CAROUSEL - SIMPLIFIED PEEK NAVIGATION
-// ============================================
-
-/**
- * Generate peek HTML for prev/next product
+ * Generate HTML for the peek preview of a product
  */
 function generatePeekHTML(product) {
     if (!product) return '';
-
-    const imageUrl = product.main_image || '';
-    const productName = product.name || product.productTitle || 'Product';
-    const price = product.display_price || product.price || 0;
-    const currencyCode = product.currency || 'INR';
-    const symbol = product.symbol || '₹';
-    const priceFormatted = formatPrice(price, currencyCode, symbol, true);
+    const img = product.main_image || '';
+    const name = product.name || 'Product';
+    const price = formatPrice(product.price || 0, product.currency || 'INR', product.symbol || '₹', true);
 
     return `
         <div class="peek-content">
-            <img src="${imageUrl}" alt="${productName}" loading="lazy">
-            <div class="peek-title">${productName}</div>
-            <div class="peek-price">${priceFormatted}</div>
+            <img src="${img}" alt="${escapeHtml(name)}">
+            <div class="peek-info">
+                <div class="peek-name">${escapeHtml(truncateText(name, 20))}</div>
+                <div class="peek-price">${price}</div>
+            </div>
         </div>
     `;
 }
 
 /**
- * Wrap modal with carousel container (peek left/right)
+ * Wrap the existing modal HTML with a carousel container that allows 5% peeks
  */
 function wrapModalWithCarousel(modalHTML, productId) {
-    // Find product index in filtered list
-    const productIndex = VibeDrips.filteredProducts.findIndex(
-        p => (p.id === productId) || (p.asin === productId)
-    );
+    const products = VibeDrips.filteredProducts || VibeDrips.allProducts;
+    const productIndex = products.findIndex(p => p.id === productId || p.asin === productId);
 
     if (productIndex === -1) {
-        // Product not in filtered list, return modal as-is
-        return modalHTML;
+        console.warn('Product index not found for carousel');
+        return modalHTML; // Fallback to original
     }
 
     // Get prev/next products
-    const prevProduct = productIndex > 0 ? VibeDrips.filteredProducts[productIndex - 1] : null;
-    const nextProduct = productIndex < VibeDrips.filteredProducts.length - 1
-        ? VibeDrips.filteredProducts[productIndex + 1]
-        : null;
+    const prevProduct = productIndex > 0 ? products[productIndex - 1] : null;
+    const nextProduct = productIndex < products.length - 1 ? products[productIndex + 1] : null;
 
     // Store context for navigation
     window.modalCarouselContext = {
-        products: VibeDrips.filteredProducts,
+        products: products,
         currentIndex: productIndex
     };
 
@@ -1004,56 +651,47 @@ function wrapModalWithCarousel(modalHTML, productId) {
     const prevPeekHTML = prevProduct ? generatePeekHTML(prevProduct) : '';
     const nextPeekHTML = nextProduct ? generatePeekHTML(nextProduct) : '';
 
-    // Parse modal HTML to extract components
-    // Structure: <div class="simple-modal dynamic-modal"><div class="modal-overlay"><div class="simple-modal-content">...</div></div></div>
+    /**
+     * ROBUST WRAPPING: 
+     * Instead of parsing the existing modalHTML with potentially breaking regex,
+     * we wrap the ENTIRE modalHTML in a new container that handles the carousel.
+     * We just need to make sure the outer overlay covers everything.
+     */
 
-    // Find the modal overlay div
-    const overlayStart = modalHTML.indexOf('<div class="modal-overlay"');
-    const overlayEnd = modalHTML.lastIndexOf('</div>'); // Last closing div of overlay
-
-    if (overlayStart === -1) {
-        console.warn('Could not find modal-overlay in HTML');
-        return modalHTML;
-    }
-
-    // Extract parts
-    const beforeOverlay = modalHTML.substring(0, overlayStart);
-    const overlayTag = modalHTML.substring(overlayStart, modalHTML.indexOf('>', overlayStart) + 1);
-    const modalContent = modalHTML.substring(modalHTML.indexOf('>', overlayStart) + 1, overlayEnd);
-    const afterOverlay = modalHTML.substring(overlayEnd);
-
-    // Add ID to overlay and wrap content with carousel container
-    const overlayWithId = overlayTag.replace('<div class="modal-overlay"', '<div class="modal-overlay" id="dynamic-modal-overlay"');
-
-    // Wrap with carousel container
-    return `${beforeOverlay}${overlayWithId}
+    return `
+        <div class="modal-overlay dynamic-modal" id="dynamic-modal-overlay">
             <div class="modal-carousel-container">
+                <!-- Left Peek Area (5%) -->
                 ${prevPeekHTML ? `
                     <div class="modal-peek modal-peek-left" data-direction="-1">
                         ${prevPeekHTML}
                     </div>
                 ` : '<div style="width: 5%"></div>'}
                 
-                ${modalContent}
+                <!-- Main Modal Wrapper (90%) -->
+                <div class="modal-main-wrapper" style="flex: 1; position: relative; z-index: 10;">
+                    ${modalHTML}
+                </div>
                 
+                <!-- Right Peek Area (5%) -->
                 ${nextPeekHTML ? `
                     <div class="modal-peek modal-peek-right" data-direction="1">
                         ${nextPeekHTML}
                     </div>
                 ` : '<div style="width: 5%"></div>'}
             </div>
-        ${afterOverlay}
+        </div>
     `;
 }
 
 /**
- * Attach carousel navigation events
+ * Attach carousel navigation events (Option C: Touch/Drag/Keyboard, NO Scroll)
  */
 function attachModalCarouselNavigation() {
     const overlay = document.getElementById('dynamic-modal-overlay');
     if (!overlay || !window.modalCarouselContext) return;
 
-    // Click on peek areas
+    // 1. Click on peek areas
     overlay.querySelectorAll('.modal-peek').forEach(peek => {
         peek.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -1062,62 +700,54 @@ function attachModalCarouselNavigation() {
         });
     });
 
-    // Touch swipe
-    let startX = 0;
+    // 2. Touch swipe (Mobile/Trackpad)
+    let touchStartX = 0;
     overlay.addEventListener('touchstart', (e) => {
-        startX = e.touches[0].clientX;
+        touchStartX = e.touches[0].clientX;
     }, { passive: true });
 
     overlay.addEventListener('touchend', (e) => {
-        const endX = e.changedTouches[0].clientX;
-        const diff = startX - endX;
-
+        const diff = touchStartX - e.changedTouches[0].clientX;
         if (Math.abs(diff) > 50) {
             navigateModal(diff > 0 ? 1 : -1);
         }
     }, { passive: true });
 
-    // Mouse Drag support for desktop (alternative to scroll wheel)
+    // 3. Mouse Drag (Desktop alternative to swipe)
     let isDragging = false;
     let dragStartX = 0;
-    let mouseMoved = false;
+    let dragThreshold = 100; // Require 100px drag for navigation
 
     overlay.addEventListener('mousedown', (e) => {
-        // Only drag if clicking on the overlay itself or peek areas, not products/buttons
-        if (e.target.classList.contains('modal-overlay') ||
-            e.target.classList.contains('modal-peek') ||
-            e.target.closest('.modal-peek')) {
+        // Only start drag if clicking on overlay or peeks, not on the product content itself
+        if (e.target === overlay || e.target.classList.contains('modal-carousel-container') || e.target.closest('.modal-peek')) {
             isDragging = true;
             dragStartX = e.clientX;
-            mouseMoved = false;
         }
     });
 
-    overlay.addEventListener('mousemove', () => {
-        if (isDragging) mouseMoved = true;
+    window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        // Optional: you could add visual feedback here based on (dragStartX - e.clientX)
     });
 
-    overlay.addEventListener('mouseup', (e) => {
+    window.addEventListener('mouseup', (e) => {
         if (!isDragging) return;
         isDragging = false;
 
-        if (mouseMoved) {
-            const diff = dragStartX - e.clientX;
-            if (Math.abs(diff) > 100) { // Require 100px drag
-                navigateModal(diff > 0 ? 1 : -1);
-            }
+        const diff = dragStartX - e.clientX;
+        if (Math.abs(diff) > dragThreshold) {
+            navigateModal(diff > 0 ? 1 : -1);
         }
     });
 
-    // Cancel drag if mouse leaves overlay
-    overlay.addEventListener('mouseleave', () => {
-        isDragging = false;
-    });
-
-    // Keyboard
+    // 4. Keyboard Arrow Keys
     const keyHandler = (e) => {
-        // Only if modal is open
-        if (!document.getElementById('dynamic-modal-overlay')) return;
+        // Check if modal is still in the DOM
+        if (!document.getElementById('dynamic-modal-overlay')) {
+            document.removeEventListener('keydown', keyHandler);
+            return;
+        }
 
         if (e.key === 'ArrowLeft') {
             e.preventDefault();
@@ -1128,13 +758,10 @@ function attachModalCarouselNavigation() {
         }
     };
     document.addEventListener('keydown', keyHandler);
-
-    // Store for cleanup
-    overlay.dataset.carouselKeyHandler = 'attached';
 }
 
 /**
- * Navigate to prev/next product
+ * Navigate to prev/next product with boundary checks and flash feedback
  */
 function navigateModal(direction) {
     const context = window.modalCarouselContext;
@@ -1142,35 +769,62 @@ function navigateModal(direction) {
 
     const newIndex = context.currentIndex + direction;
 
-    // Check bounds
+    // Boundary Check
     if (newIndex < 0 || newIndex >= context.products.length) {
-        // Flash red glow
+        // Flash red glow as feedback
         const overlay = document.getElementById('dynamic-modal-overlay');
         if (overlay) {
-            const className = direction < 0 ? 'flash-left' : 'flash-right';
-            overlay.classList.add(className);
-            setTimeout(() => overlay.classList.remove(className), 400);
+            const flashClass = direction < 0 ? 'flash-left' : 'flash-right';
+            overlay.classList.add(flashClass);
+            setTimeout(() => overlay.classList.remove(flashClass), 400);
         }
         return;
     }
 
-    // Update index
+    // Switch to new product
     context.currentIndex = newIndex;
+    closeDynamicModal(); // Close current modal using the existing function (passed event-less because of our fix)
 
-    // Close current modal
-    closeDynamicModal();
+    // We need to ensure closeDynamicModal works without an event for programmatic calls
+    // Since we reverted products.js, let's redefine closeDynamicModal slightly to be safer
 
-    // Open new modal
-    const newProduct = context.products[newIndex];
-    showProductModal(newProduct.id || newProduct.asin);
+    const nextProduct = context.products[newIndex];
+    showProductModal(nextProduct.id || nextProduct.asin);
 }
 
-// Export functions to global scope
+// Helper: Ensure closeDynamicModal works for programmatic calls and removes the entire carousel overlay
+const originalCloseDynamicModal = window.closeDynamicModal;
+window.closeDynamicModal = function (e) {
+    // Priority: Remove the outer carousel overlay if it exists
+    const overlay = document.getElementById('dynamic-modal-overlay');
+    if (overlay) {
+        overlay.remove();
+        return;
+    }
+
+    if (!e) {
+        const modal = document.querySelector('.dynamic-modal');
+        if (modal) modal.remove();
+        return;
+    }
+
+    // Fallback: Check if it's the old version or our new exported one
+    if (typeof originalCloseDynamicModal === 'function') {
+        originalCloseDynamicModal(e);
+    } else {
+        const modal = e.target.closest('.dynamic-modal');
+        if (modal && (e.target.classList.contains('modal-overlay') || e.target.closest('button'))) {
+            modal.remove();
+        }
+    }
+};
+
+// Update exports
 window.setTimeFilter = setTimeFilter;
 window.filterProducts = filterProducts;
 window.sortProducts = sortProducts;
 window.openAmazonLink = openAmazonLink;
 window.showProductModal = showProductModal;
-window.wrapModalWithCarousel = wrapModalWithCarousel;
-window.attachModalCarouselNavigation = attachModalCarouselNavigation;
-console.log('Products.js loaded successfully with currency-aware price formatting and text truncation');
+window.closeDynamicModal = window.closeDynamicModal;
+
+console.log('Products.js (Carousel Option C) loaded successfully');

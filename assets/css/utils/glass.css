@@ -188,6 +188,7 @@
 /* Vertical slider */
 .glass-slider {
     -webkit-appearance: slider-vertical;
+    appearance: slider-vertical;
     writing-mode: bt-lr;
     width: 8px;
     height: 180px;
@@ -201,6 +202,7 @@
 .glass-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
+    background: transparent;
     width: 24px;
     height: 24px;
     border-radius: 50%;
