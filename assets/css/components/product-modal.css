@@ -159,15 +159,15 @@
     justify-content: space-between;
     align-items: center;
 
-    /* Extend header to modal edges */
-    margin: 0 -20px 20px;
-    padding: 28px 60px;
+    /* Header positioning - no negative margin to prevent truncation */
+    margin: 0;
+    padding: 28px 40px;
     border-radius: 24px 24px 0 0;
 
-    /* Transparent glassmorphic ribbon for ALL themes */
+    /* Transparent glassmorphic ribbon using CSS variables */
     background: rgba(90, 75, 255, 0.3);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     border: 1px solid rgba(255, 255, 255, 0.2);
 
     /* Ribbon shadow */
