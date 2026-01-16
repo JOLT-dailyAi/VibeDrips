@@ -880,6 +880,15 @@ function toggleSection(header) {
  * Close dynamic modal (specific to modals created by showProductModal)
  */
 function closeDynamicModal(event) {
+    // If called without event (programmatically from navigateModal), just find and remove the modal
+    if (!event) {
+        const modal = document.querySelector('.simple-modal.dynamic-modal');
+        if (modal) {
+            modal.remove();
+        }
+        return;
+    }
+
     event.stopPropagation();
     const modal = event.target.closest('.dynamic-modal');
     const button = event.target.closest('button');
@@ -995,16 +1004,29 @@ function wrapModalWithCarousel(modalHTML, productId) {
     const prevPeekHTML = prevProduct ? generatePeekHTML(prevProduct) : '';
     const nextPeekHTML = nextProduct ? generatePeekHTML(nextProduct) : '';
 
-    // Extract modal overlay and modal content
-    const overlayMatch = modalHTML.match(/<div class="modal-overlay"[^>]*>([\s\S]*)<\/div>\s*$/);
-    if (!overlayMatch) return modalHTML;
+    // Parse modal HTML to extract components
+    // Structure: <div class="simple-modal dynamic-modal"><div class="modal-overlay"><div class="simple-modal-content">...</div></div></div>
 
-    const overlayAttrs = modalHTML.match(/<div class="modal-overlay"([^>]*)>/)[1];
-    const modalContent = overlayMatch[1];
+    // Find the modal overlay div
+    const overlayStart = modalHTML.indexOf('<div class="modal-overlay"');
+    const overlayEnd = modalHTML.lastIndexOf('</div>'); // Last closing div of overlay
+
+    if (overlayStart === -1) {
+        console.warn('Could not find modal-overlay in HTML');
+        return modalHTML;
+    }
+
+    // Extract parts
+    const beforeOverlay = modalHTML.substring(0, overlayStart);
+    const overlayTag = modalHTML.substring(overlayStart, modalHTML.indexOf('>', overlayStart) + 1);
+    const modalContent = modalHTML.substring(modalHTML.indexOf('>', overlayStart) + 1, overlayEnd);
+    const afterOverlay = modalHTML.substring(overlayEnd);
+
+    // Add ID to overlay and wrap content with carousel container
+    const overlayWithId = overlayTag.replace('<div class="modal-overlay"', '<div class="modal-overlay" id="dynamic-modal-overlay"');
 
     // Wrap with carousel container
-    return `
-        <div class="modal-overlay"${overlayAttrs}>
+    return `${beforeOverlay}${overlayWithId}
             <div class="modal-carousel-container">
                 ${prevPeekHTML ? `
                     <div class="modal-peek modal-peek-left" data-direction="-1">
@@ -1020,7 +1042,7 @@ function wrapModalWithCarousel(modalHTML, productId) {
                     </div>
                 ` : '<div style="width: 5%"></div>'}
             </div>
-        </div>
+        ${afterOverlay}
     `;
 }
 
