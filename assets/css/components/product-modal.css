@@ -19,6 +19,128 @@
     display: none;
 }
 
+/* --- MODAL NAVIGATION WRAPPER (PHASE 1) --- */
+.modal-nav-container {
+    display: flex;
+    align-items: stretch;
+    /* Crucial for dynamic height matching */
+    justify-content: center;
+    gap: 30px;
+    width: 100%;
+    max-width: fit-content;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1001;
+    pointer-events: none;
+    /* Allow clicks to pass to modal content by default */
+}
+
+/* Glass Zones: Sizing & Placement */
+.glass-zone {
+    width: 60px;
+    min-height: 200px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    pointer-events: auto;
+    /* Enable clicks for zones */
+    opacity: 0.6;
+    user-select: none;
+}
+
+/* Vertical Glow Line (Placeholder for Phase 2) */
+.glass-zone::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 40%;
+    background: var(--accent-glow-color, #a855f7);
+    border-radius: 2px;
+    box-shadow: 0 0 10px var(--accent-glow-color, #a855f7);
+    opacity: 0.5;
+}
+
+.glass-zone:hover {
+    background: rgba(255, 255, 255, 0.1);
+    opacity: 1;
+    transform: scaleX(1.1);
+}
+
+/* Internal Arrows */
+.nav-arrow {
+    font-size: 32px;
+    color: white;
+    font-family: 'Inter', sans-serif;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* Modal Content Override (Centered sibling) */
+.simple-modal-content {
+    pointer-events: auto;
+    margin: 0 !important;
+    /* Managed by flex parent */
+    position: relative;
+    z-index: 10;
+}
+
+/* Boundary Flash Animations (Logic hooks) */
+.flash-left {
+    animation: flash-red-left 0.4s ease;
+}
+
+.flash-right {
+    animation: flash-red-right 0.4s ease;
+}
+
+@keyframes flash-red-left {
+
+    0%,
+    100% {
+        transform: translateX(0);
+        box-shadow: none;
+    }
+
+    50% {
+        transform: translateX(-10px);
+        box-shadow: -10px 0 20px rgba(239, 44, 44, 0.4);
+    }
+}
+
+@keyframes flash-red-right {
+
+    0%,
+    100% {
+        transform: translateX(0);
+        box-shadow: none;
+    }
+
+    50% {
+        transform: translateX(10px);
+        box-shadow: 10px 0 20px rgba(239, 44, 44, 0.4);
+    }
+}
+
+/* Target Mobile: Hide zones but keep container for swipe */
+@media (max-width: 768px) {
+    .modal-nav-container {
+        pointer-events: auto;
+        gap: 0;
+        width: 100vw;
+        max-width: 100%;
+    }
+
+    .glass-zone {
+        display: none;
+    }
+}
+
 .dynamic-modal {
     position: fixed;
     top: 0;

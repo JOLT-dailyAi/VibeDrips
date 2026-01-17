@@ -414,6 +414,139 @@ function openAmazonLink(link, productId) {
 }
 
 /**
+ * Modal Carousel State
+ */
+const modalCarouselState = {
+    currentIndex: -1,
+    products: [],
+    startX: 0,
+    startTime: 0,
+    isDragging: false,
+    dragThreshold: 50 // px
+};
+
+/**
+ * Navigate to next/prev product in the modal
+ * @param {string} direction - 'next' or 'prev'
+ */
+function navigateModal(direction) {
+    const total = modalCarouselState.products.length;
+    if (total <= 1) return;
+
+    let nextIndex;
+    if (direction === 'next') {
+        nextIndex = modalCarouselState.currentIndex + 1;
+        if (nextIndex >= total) {
+            if (typeof triggerEdgeFlash === 'function') triggerEdgeFlash('right');
+            return;
+        }
+    } else {
+        nextIndex = modalCarouselState.currentIndex - 1;
+        if (nextIndex < 0) {
+            if (typeof triggerEdgeFlash === 'function') triggerEdgeFlash('left');
+            return;
+        }
+    }
+
+    const nextProduct = modalCarouselState.products[nextIndex];
+    if (nextProduct) {
+        // Smoothly transition by closing and reopening
+        // We use a small timeout to let the close animation finish if any
+        closeDynamicModal();
+        setTimeout(() => {
+            showProductModal(nextProduct.id);
+        }, 10);
+    }
+}
+
+/**
+ * Attach carousel-like navigation events (Drag, Swipe, Keys)
+ */
+function attachModalCarouselNavigation() {
+    const modalOverlay = document.getElementById('dynamic-modal-overlay');
+    // The nav container is the flex parent of the modal content and glass zones
+    const navContainer = document.querySelector('.modal-nav-container');
+    if (!modalOverlay || !navContainer) return;
+
+    // 1. Mouse Drag
+    navContainer.onmousedown = (e) => {
+        // Only start drag if not clicking a real interactive element
+        if (e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.tagName === 'A' || e.target.closest('.thumbnail')) return;
+
+        modalCarouselState.isDragging = true;
+        modalCarouselState.startX = e.clientX;
+        modalCarouselState.startTime = Date.now();
+    };
+
+    window.onmousemove = (e) => {
+        if (!modalCarouselState.isDragging) return;
+    };
+
+    window.onmouseup = (e) => {
+        if (!modalCarouselState.isDragging) return;
+        modalCarouselState.isDragging = false;
+
+        const deltaX = e.clientX - modalCarouselState.startX;
+        const duration = Date.now() - modalCarouselState.startTime;
+
+        // Quick flick or long drag
+        if (Math.abs(deltaX) > modalCarouselState.dragThreshold || (Math.abs(deltaX) > 20 && duration < 200)) {
+            if (deltaX > 0) navigateModal('prev');
+            else navigateModal('next');
+        }
+    };
+
+    // 2. Touch Swipe
+    let touchStartX = 0;
+    navContainer.ontouchstart = (e) => {
+        if (e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.tagName === 'A' || e.target.closest('.thumbnail')) return;
+        touchStartX = e.touches[0].clientX;
+    };
+
+    navContainer.ontouchend = (e) => {
+        const deltaX = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(deltaX) > modalCarouselState.dragThreshold) {
+            if (deltaX > 0) navigateModal('prev');
+            else navigateModal('next');
+        }
+    };
+
+    // 3. Keyboard Arrows
+    const handleKeyDown = (e) => {
+        if (e.key === 'ArrowLeft') navigateModal('prev');
+        else if (e.key === 'ArrowRight') navigateModal('next');
+        else if (e.key === 'Escape') {
+            closeDynamicModal();
+        }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+
+    // Ensure we clean up keydown when modal closes
+    const closeObserver = new MutationObserver((mutations) => {
+        if (!document.getElementById('dynamic-modal-overlay')) {
+            document.removeEventListener('keydown', handleKeyDown);
+            closeObserver.disconnect();
+        }
+    });
+    closeObserver.observe(document.body, { childList: true });
+}
+
+/**
+ * Visual feedback when reaching carousel boundaries
+ * @param {string} side - 'left' or 'right'
+ */
+function triggerEdgeFlash(side) {
+    const container = document.querySelector('.modal-nav-container');
+    if (!container) return;
+
+    const flashClass = side === 'left' ? 'flash-left' : 'flash-right';
+    container.classList.add(flashClass);
+    setTimeout(() => {
+        container.classList.remove(flashClass);
+    }, 400);
+}
+
+/**
  * Show detailed product modal with enhanced UI
  */
 function showProductModal(productId) {
@@ -470,170 +603,184 @@ function showProductModal(productId) {
         ? description.substring(0, 200).trim() + '...'
         : description;
 
-    // Build modal HTML
+    // Initialize/Update Modal Carousel State
+    modalCarouselState.products = VibeDrips.filteredProducts && VibeDrips.filteredProducts.length > 0
+        ? VibeDrips.filteredProducts
+        : VibeDrips.allProducts;
+
+    modalCarouselState.currentIndex = modalCarouselState.products.findIndex(p => p.id === productId);
+
+    // Build modal HTML with navigation wrapper
     const modalContent = `
-        <div class="simple-modal dynamic-modal">
+        <div id="dynamic-modal-overlay" class="dynamic-modal">
             <div class="modal-overlay" onclick="closeDynamicModal(event)"></div>
-            <div class="simple-modal-content">
-                <div class="simple-modal-header">
-                    <h2 id="modal-title-${productId}" 
-                        class="${isTitleLong ? 'expandable' : ''}" 
-                        ${isTitleLong ? `onclick="toggleTitle_${productId}()"` : ''}>
-                        ${escapeHtml(displayTitle)}
-                    </h2>
-                    <button class="modal-close-button" onclick="closeDynamicModal(event)">❌</button>
+            <div class="modal-nav-container">
+                <!-- Prev Glass Zone -->
+                <div class="glass-zone prev-zone" onclick="navigateModal('prev')">
+                    <span class="nav-arrow">￩</span>
                 </div>
-                <div class="simple-modal-body">
-                    
-                    <!-- Brand Section (SEPARATE) -->
-                    <div class="modal-brand-section">
-                        <div class="info-row">
-                            <span class="label">Brand 🏷️</span>
-                            <span class="value">${escapeHtml((product.brand || 'Unknown').trim())}</span>
-                        </div>
+
+                <!-- Main Modal Content (No-Touch Zone) -->
+                <div class="simple-modal-content" onclick="event.stopPropagation()">
+                    <div class="simple-modal-header">
+                        <h2 id="modal-title-${productId}" 
+                            class="${isTitleLong ? 'expandable' : ''}" 
+                            ${isTitleLong ? `onclick="toggleTitle_${productId}()"` : ''}>
+                            ${escapeHtml(displayTitle)}
+                        </h2>
+                        <button class="modal-close-button" onclick="closeDynamicModal(event)">❌</button>
                     </div>
-                    
-                    <!-- Image Gallery Section (BEFORE Category) -->
-                    ${images.length > 0 ? `
-                    <div class="modal-image-gallery">
-                        <!-- Desktop: Split View -->
-                        <div class="gallery-desktop">
-                            <div class="gallery-thumbnails">
-                                ${images.map((img, idx) => `
-                                <div class="thumbnail ${idx === 0 ? 'active' : ''}" 
-                                     onmouseover="previewImage_${productId}(${idx})"
-                                     onclick="selectImage_${productId}(${idx})"
-                                     ondblclick="openImageGallery_${productId}(${idx})">
-                                    <img src="${img}" alt="Thumb ${idx + 1}">
-                                </div>
-                                `).join('')}
-                            </div>
-                            <div class="gallery-main">
-                                <img src="${images[0]}" 
-                                     alt="${escapeHtml(product.name)}" 
-                                     style="max-width: 100%; max-height: 400px; border-radius: 12px; cursor: pointer;"
-                                     ondblclick="openImageGallery_${productId}()" id="main-image-${productId}">
-                                <div class="zoom-hint">🔍 Double-click to view full screen</div>
-                                <div class="carousel-controls">
-                                    <button class="arrow-button lightbox-arrow lightbox-prev" onclick="prevImage_${productId}()" aria-label="Previous">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <polyline points="15 18 9 12 15 6"></polyline>
-                                        </svg>
-                                    </button>
-                                    <span class="counter" id="counter-${productId}">1 / ${images.length}</span>
-                                    <button class="arrow-button lightbox-arrow lightbox-next" onclick="nextImage_${productId}()" aria-label="Next">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <polyline points="9 18 15 12 9 6"></polyline>
-                                        </svg>
-                                    </button>
-                                </div>
+                    <div class="simple-modal-body">
+                        
+                        <!-- Brand Section (SEPARATE) -->
+                        <div class="modal-brand-section">
+                            <div class="info-row">
+                                <span class="label">Brand 🏷️</span>
+                                <span class="value">${escapeHtml((product.brand || 'Unknown').trim())}</span>
                             </div>
                         </div>
                         
-                        <!-- Mobile: Main + Slider -->
-                        <div class="gallery-mobile">
-                            <div class="mobile-main">
-                                <img id="main-image-mobile-${productId}" 
-                                     src="${images[0]}" 
-                                     onclick="openImageGallery_${productId}()">
-                                <div class="zoom-hint">🔍</div>
-                                <div class="carousel-controls" onclick="event.stopPropagation()">
-                                    <button class="arrow-button lightbox-arrow lightbox-prev" onclick="prevImage_${productId}()" aria-label="Previous">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <polyline points="15 18 9 12 15 6"></polyline>
-                                        </svg>
-                                    </button>
-                                    <span class="counter" id="counter-mobile-${productId}">1 / ${images.length}</span>
-                                    <button class="arrow-button lightbox-arrow lightbox-next" onclick="nextImage_${productId}()" aria-label="Next">
-                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <polyline points="9 18 15 12 9 6"></polyline>
-                                        </svg>
-                                    </button>
+                        <!-- Image Gallery Section (BEFORE Category) -->
+                        ${images.length > 0 ? `
+                        <div class="modal-image-gallery">
+                            <!-- Desktop: Split View -->
+                            <div class="gallery-desktop">
+                                <div class="gallery-thumbnails">
+                                    ${images.map((img, idx) => `
+                                    <div class="thumbnail ${idx === 0 ? 'active' : ''}" 
+                                         onmouseover="previewImage_${productId}(${idx})"
+                                         onclick="selectImage_${productId}(${idx})"
+                                         ondblclick="openImageGallery_${productId}(${idx})">
+                                        <img src="${img}" alt="Thumb ${idx + 1}">
+                                    </div>
+                                    `).join('')}
+                                </div>
+                                <div class="gallery-main">
+                                    <img src="${images[0]}" 
+                                         alt="${escapeHtml(product.name)}" 
+                                         style="max-width: 100%; max-height: 400px; border-radius: 12px; cursor: pointer;"
+                                         ondblclick="openImageGallery_${productId}()" id="main-image-${productId}">
+                                    <div class="zoom-hint">🔍 Double-click to view full screen</div>
+                                    <div class="carousel-controls">
+                                        <button class="arrow-button lightbox-arrow lightbox-prev" onclick="prevImage_${productId}()" aria-label="Previous">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <polyline points="15 18 9 12 15 6"></polyline>
+                                            </svg>
+                                        </button>
+                                        <span class="counter" id="counter-${productId}">1 / ${images.length}</span>
+                                        <button class="arrow-button lightbox-arrow lightbox-next" onclick="nextImage_${productId}()" aria-label="Next">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <polyline points="9 18 15 12 9 6"></polyline>
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="mobile-thumbnails">
-                                ${images.map((img, idx) => `
-                                <div class="thumbnail ${idx === 0 ? 'active' : ''}" onclick="selectImage_${productId}(${idx})">
-                                    <img src="${img}" alt="Thumb ${idx + 1}">
+                            
+                            <!-- Mobile: Main + Slider -->
+                            <div class="gallery-mobile">
+                                <div class="mobile-main">
+                                    <img id="main-image-mobile-${productId}" 
+                                         src="${images[0]}" 
+                                         onclick="openImageGallery_${productId}()">
+                                    <div class="zoom-hint">🔍</div>
+                                    <div class="carousel-controls" onclick="event.stopPropagation()">
+                                        <button class="arrow-button lightbox-arrow lightbox-prev" onclick="prevImage_${productId}()" aria-label="Previous">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <polyline points="15 18 9 12 15 6"></polyline>
+                                            </svg>
+                                        </button>
+                                        <span class="counter" id="counter-mobile-${productId}">1 / ${images.length}</span>
+                                        <button class="arrow-button lightbox-arrow lightbox-next" onclick="nextImage_${productId}()" aria-label="Next">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                <polyline points="9 18 15 12 9 6"></polyline>
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </div>
-                                `).join('')}
+                                <div class="mobile-thumbnails">
+                                    ${images.map((img, idx) => `
+                                    <div class="thumbnail ${idx === 0 ? 'active' : ''}" onclick="selectImage_${productId}(${idx})">
+                                        <img src="${img}" alt="Thumb ${idx + 1}">
+                                    </div>
+                                    `).join('')}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    ` : ''}
-                    
-                    <!-- Category Section (SEPARATE) -->
-                    <div class="modal-category-section">
-                        <div class="info-row">
-                            <span class="label">Category 📦</span>
-                            <span class="value">${escapeHtml((product.category || 'General').trim())}</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Price + Rating + Reviews Section (NO Brand/Category) -->
-                    <div class="modal-core-info">
-                        <div class="info-row">
-                            <span class="label">Price 💰</span>
-                            <span class="value">
-                                ${priceFormatted}
-                                ${showDiscount && discountPercent > 0 ? `
-                                    <span class="discount-badge">
-                                        <span class="live-dot" aria-hidden="true"></span>${discountPercent}%
-                                    </span>
-                                ` : ''}
-                            </span>
-                        </div>
-                        ${rating > 0 ? `
-                        <div class="info-row">
-                            <span class="label">Rating ⭐</span>
-                            <span class="value">${rating.toFixed(1)} out of 5 stars</span>
-                        </div>
                         ` : ''}
-                        ${reviewCount > 0 ? `
-                        <div class="info-row">
-                            <span class="label">Reviews 👥</span>
-                            <span class="value">${formatCountFull(reviewCount)} customer reviews</span>
-                        </div>
-                        ` : ''}
-                    </div>
-                    
-                    <!-- Product Details Section (Collapsible) -->
-                    ${product.productDetails && product.productDetails.length > 0 ? `
-                    <div class="modal-section">
-                        <div class="modal-section-header" onclick="toggleSection(this)">
-                            <div class="title">
-                                <span class="emoji">📋</span>
-                                <span>Product Details</span>
+                        
+                        <!-- Category Section (SEPARATE) -->
+                        <div class="modal-category-section">
+                            <div class="info-row">
+                                <span class="label">Category 📦</span>
+                                <span class="value">${escapeHtml((product.category || 'General').trim())}</span>
                             </div>
-                            <span class="toggle-icon">▶</span>
                         </div>
-                        <div class="modal-section-content">
-                            ${product.productDetails.sort((a, b) => (a.priority || 0) - (b.priority || 0)).map(item => {
+                        
+                        <!-- Price + Rating + Reviews Section (NO Brand/Category) -->
+                        <div class="modal-core-info">
+                            <div class="info-row">
+                                <span class="label">Price 💰</span>
+                                <span class="value">
+                                    ${priceFormatted}
+                                    ${showDiscount && discountPercent > 0 ? `
+                                        <span class="discount-badge">
+                                            <span class="live-dot" aria-hidden="true"></span>${discountPercent}%
+                                        </span>
+                                    ` : ''}
+                                </span>
+                            </div>
+                            ${rating > 0 ? `
+                            <div class="info-row">
+                                <span class="label">Rating ⭐</span>
+                                <span class="value">${rating.toFixed(1)} out of 5 stars</span>
+                            </div>
+                            ` : ''}
+                            ${reviewCount > 0 ? `
+                            <div class="info-row">
+                                <span class="label">Reviews 👥</span>
+                                <span class="value">${formatCountFull(reviewCount)} customer reviews</span>
+                            </div>
+                            ` : ''}
+                        </div>
+                        
+                        <!-- Product Details Section (Collapsible) -->
+                        ${product.productDetails && product.productDetails.length > 0 ? `
+                        <div class="modal-section">
+                            <div class="modal-section-header" onclick="toggleSection(this)">
+                                <div class="title">
+                                    <span class="emoji">📋</span>
+                                    <span>Product Details</span>
+                                </div>
+                                <span class="toggle-icon">▶</span>
+                            </div>
+                            <div class="modal-section-content">
+                                ${product.productDetails.sort((a, b) => (a.priority || 0) - (b.priority || 0)).map(item => {
         const emoji = getDetailEmoji(item.key, item.value);
         const label = escapeHtml((item.label || '').trim());
         return `
-                                <div class="detail-row">
-                                    <span class="label">${label} ${emoji}</span>
-                                    <span class="value">${escapeHtml((item.value || '').trim())}</span>
-                                </div>
-                                `;
+                                    <div class="detail-row">
+                                        <span class="label">${label} ${emoji}</span>
+                                        <span class="value">${escapeHtml((item.value || '').trim())}</span>
+                                    </div>
+                                    `;
     }).join('')}
-                        </div>
-                    </div>
-                    ` : ''}
-                    
-                    <!-- Additional Info Section (Collapsible, Collapsed by Default) -->
-                    ${product.additionalInfo && Object.keys(product.additionalInfo).length > 0 ? `
-                    <div class="modal-section">
-                        <div class="modal-section-header" onclick="toggleSection(this)">
-                            <div class="title">
-                                <span class="emoji">ℹ️</span>
-                                <span>Additional Information</span>
                             </div>
-                            <span class="toggle-icon">▶</span>
                         </div>
-                        <div class="modal-section-content">
-                            ${Object.entries(product.additionalInfo)
+                        ` : ''}
+                        
+                        <!-- Additional Info Section (Collapsible, Collapsed by Default) -->
+                        ${product.additionalInfo && Object.keys(product.additionalInfo).length > 0 ? `
+                        <div class="modal-section">
+                            <div class="modal-section-header" onclick="toggleSection(this)">
+                                <div class="title">
+                                    <span class="emoji">ℹ️</span>
+                                    <span>Additional Information</span>
+                                </div>
+                                <span class="toggle-icon">▶</span>
+                            </div>
+                            <div class="modal-section-content">
+                                ${Object.entries(product.additionalInfo)
                 .flatMap(([groupName, items]) => {
                     // Skip Books group for non-book products
                     if (groupName === 'Books' && product.category !== 'Book') return [];
@@ -659,47 +806,56 @@ function showProductModal(productId) {
                     return true;
                 })
                 .map(item => `
-                            <div class="info-row">
-                                <span class="emoji"></span>
-                                <span class="label">${escapeHtml((item.label || '').trim())}</span>
-                                <span class="value">${escapeHtml((item.value || '').trim())}</span>
+                                <div class="info-row">
+                                    <span class="emoji"></span>
+                                    <span class="label">${escapeHtml((item.label || '').trim())}</span>
+                                    <span class="value">${escapeHtml((item.value || '').trim())}</span>
+                                </div>
+                                    `).join('')}
                             </div>
-                                `).join('')}
                         </div>
-                    </div>
-                    ` : ''}
-                    
-                    <!-- Description Section -->
-                    ${description ? `
-                    <div class="modal-description-section">
-                        <div class="modal-section-header" onclick="toggleDescription_${productId}()" style="cursor: pointer;">
-                            <div class="title">
-                                <span class="emoji">📝</span>
-                                <span>Description</span>
+                        ` : ''}
+                        
+                        <!-- Description Section -->
+                        ${description ? `
+                        <div class="modal-description-section">
+                            <div class="modal-section-header" onclick="toggleDescription_${productId}()" style="cursor: pointer;">
+                                <div class="title">
+                                    <span class="emoji">📝</span>
+                                    <span>Description</span>
+                                </div>
+                                <span class="toggle-icon">▼</span>
                             </div>
-                            <span class="toggle-icon">▼</span>
+                            <div class="modal-section-content expanded">
+                                <div class="description-text" id="desc-${productId}" onclick="toggleDescription_${productId}()" style="cursor: pointer;">${escapeHtml(displayDesc)}</div>
+                                ${isDescLong ? `
+                                <button class="read-more-btn" onclick="toggleDescription_${productId}()">Read More ▼</button>
+                                ` : ''}
+                            </div>
                         </div>
-                        <div class="modal-section-content expanded">
-                            <div class="description-text" id="desc-${productId}" onclick="toggleDescription_${productId}()" style="cursor: pointer;">${escapeHtml(displayDesc)}</div>
-                            ${isDescLong ? `
-                            <button class="read-more-btn" onclick="toggleDescription_${productId}()">Read More ▼</button>
-                            ` : ''}
+                        ` : ''}
+                        
+                        <!-- Buy Button -->
+                        <div class="modal-actions">
+                            <button onclick="openAmazonLink('${escapeHtml(product.amazon_short || product.amazon_long || product.source_link || '#')}', '${product.id}')" 
+                                    class="amazon-button">🛒 Buy on Amazon</button>
                         </div>
+                        
                     </div>
-                    ` : ''}
-                    
-                    <!-- Buy Button -->
-                    <div class="modal-actions">
-                        <button onclick="openAmazonLink('${escapeHtml(product.amazon_short || product.amazon_long || product.source_link || '#')}', '${product.id}')" 
-                                class="amazon-button">🛒 Buy on Amazon</button>
-                    </div>
-                    
+                </div>
+
+                <!-- Next Glass Zone -->
+                <div class="glass-zone next-zone" onclick="navigateModal('next')">
+                    <span class="nav-arrow">￫</span>
                 </div>
             </div>
         </div>
     `;
 
     document.body.insertAdjacentHTML('beforeend', modalContent);
+
+    // Attach Navigation Events (Swipe, Drag, Keys)
+    attachModalCarouselNavigation();
 
     // Setup image gallery if MediaLightbox is available
     if (images.length > 0 && typeof MediaLightbox !== 'undefined') {
@@ -872,12 +1028,15 @@ function toggleSection(header) {
  * Close dynamic modal (specific to modals created by showProductModal)
  */
 function closeDynamicModal(event) {
-    event.stopPropagation();
-    const modal = event.target.closest('.dynamic-modal');
-    const button = event.target.closest('button');
+    if (event && event.stopPropagation) event.stopPropagation();
+
+    // If called via navigation, we can find the modal directly
+    const modal = event ? event.target.closest('.dynamic-modal') : document.getElementById('dynamic-modal-overlay');
+    const button = event ? event.target.closest('button') : null;
 
     if (modal) {
-        if (event.target.classList.contains('modal-overlay') || button) {
+        // If no event, we assume direct manual call (e.g. from navigateModal)
+        if (!event || event.target.classList.contains('modal-overlay') || button) {
             // Detect touch device
             const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
