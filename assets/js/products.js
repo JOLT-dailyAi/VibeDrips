@@ -451,8 +451,7 @@ function navigateModal(direction) {
     const nextProduct = modalCarouselState.products[nextIndex];
     if (nextProduct) {
         // Smoothly transition by closing and reopening
-        // We use a small timeout to let the close animation finish if any
-        closeDynamicModal();
+        closeDynamicModals();
         setTimeout(() => {
             showProductModal(nextProduct.id);
         }, 10);
@@ -470,8 +469,11 @@ function attachModalCarouselNavigation() {
 
     // 1. Mouse Drag
     navContainer.onmousedown = (e) => {
-        // Only start drag if not clicking a real interactive element
-        if (e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.tagName === 'A' || e.target.closest('.thumbnail')) return;
+        // IGNORE if starting inside gallery or on interactive elements
+        if (e.target.closest('.modal-image-gallery') || e.target.closest('button') || e.target.closest('a')) {
+            modalCarouselState.isDragging = false;
+            return;
+        }
 
         modalCarouselState.isDragging = true;
         modalCarouselState.startX = e.clientX;
@@ -499,16 +501,25 @@ function attachModalCarouselNavigation() {
     // 2. Touch Swipe
     let touchStartX = 0;
     navContainer.ontouchstart = (e) => {
-        if (e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.tagName === 'A' || e.target.closest('.thumbnail')) return;
+        const gallery = e.target.closest('.modal-image-gallery');
+        const isInteractive = e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.tagName === 'A';
+
+        if (gallery || isInteractive) {
+            touchStartX = 0;
+            return;
+        }
         touchStartX = e.touches[0].clientX;
     };
 
     navContainer.ontouchend = (e) => {
+        if (touchStartX === 0) return; // Abort if start was suppressed
+
         const deltaX = e.changedTouches[0].clientX - touchStartX;
-        if (Math.abs(deltaX) > modalCarouselState.dragThreshold) {
+        if (Math.abs(deltaX) > 70) { // Bumped threshold to 70 for stable mobile
             if (deltaX > 0) navigateModal('prev');
             else navigateModal('next');
         }
+        touchStartX = 0; // Reset
     };
 
     // 3. Keyboard Arrows
@@ -516,40 +527,68 @@ function attachModalCarouselNavigation() {
         if (e.key === 'ArrowLeft') navigateModal('prev');
         else if (e.key === 'ArrowRight') navigateModal('next');
         else if (e.key === 'Escape') {
-            closeDynamicModal();
+            closeDynamicModals();
         }
     };
     document.addEventListener('keydown', handleKeyDown);
 
     // Ensure we clean up keydown when modal closes
     const closeObserver = new MutationObserver((mutations) => {
-        if (!document.getElementById('dynamic-modal-overlay')) {
-            document.removeEventListener('keydown', handleKeyDown);
-            closeObserver.disconnect();
-        }
     });
     closeObserver.observe(document.body, { childList: true });
 }
 
 /**
  * Visual feedback when reaching carousel boundaries
- * @param {string} side - 'left' or 'right'
  */
 function triggerEdgeFlash(side) {
     const container = document.querySelector('.modal-nav-container');
     if (!container) return;
-
     const flashClass = side === 'left' ? 'flash-left' : 'flash-right';
     container.classList.add(flashClass);
-    setTimeout(() => {
-        container.classList.remove(flashClass);
-    }, 400);
+    setTimeout(() => container.classList.remove(flashClass), 400);
+}
+
+/**
+ * Close ALL dynamic modals
+ */
+function closeDynamicModals(event) {
+    if (event && event.stopPropagation) event.stopPropagation();
+
+    // Force cleanup: Remove ALL elements related to dynamic modals
+    const removals = document.querySelectorAll('.dynamic-modal, #dynamic-modal-overlay');
+
+    // If we have an event and it's from a close button, check for touch animation
+    if (event && event.target) {
+        const button = event.target.closest('button');
+        const isOverlay = event.target.classList.contains('modal-overlay');
+
+        if (button || isOverlay) {
+            const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            if (isTouch && button && button.classList.contains('modal-close-button')) {
+                button.classList.add('closing');
+                setTimeout(() => {
+                    removals.forEach(el => el.remove());
+                }, 300);
+                return;
+            }
+        } else {
+            // If click was inside the modal and not a close button, ignored (propagation handled above)
+            return;
+        }
+    }
+
+    // Immediate removal if no event or direct button/overlay click
+    removals.forEach(el => el.remove());
 }
 
 /**
  * Show detailed product modal with enhanced UI
  */
 function showProductModal(productId) {
+    // 0. AGGRESSIVE CLEANUP: Remove ALL dynamic modals to prevent cascading
+    document.querySelectorAll('.dynamic-modal, #dynamic-modal-overlay').forEach(el => el.remove());
+
     const product = VibeDrips.allProducts.find(p => p.id === productId);
     if (!product) {
         console.error('Product not found:', productId);
@@ -612,11 +651,11 @@ function showProductModal(productId) {
 
     // Build modal HTML with navigation wrapper
     const modalContent = `
-        <div id="dynamic-modal-overlay" class="dynamic-modal">
-            <div class="modal-overlay" onclick="closeDynamicModal(event)"></div>
+        <div id="dynamic-modal-overlay" class="dynamic-modal" onclick="closeDynamicModals(event)">
+            <div class="modal-overlay"></div>
             <div class="modal-nav-container">
                 <!-- Prev Glass Zone -->
-                <div class="glass-zone prev-zone" onclick="navigateModal('prev')">
+                <div class="glass-zone prev-zone" onclick="event.stopPropagation(); navigateModal('prev')">
                     <span class="nav-arrow">￩</span>
                 </div>
 
@@ -628,7 +667,7 @@ function showProductModal(productId) {
                             ${isTitleLong ? `onclick="toggleTitle_${productId}()"` : ''}>
                             ${escapeHtml(displayTitle)}
                         </h2>
-                        <button class="modal-close-button" onclick="closeDynamicModal(event)">❌</button>
+                        <button class="modal-close-button" onclick="closeDynamicModals(event)">❌</button>
                     </div>
                     <div class="simple-modal-body">
                         
@@ -642,7 +681,7 @@ function showProductModal(productId) {
                         
                         <!-- Image Gallery Section (BEFORE Category) -->
                         ${images.length > 0 ? `
-                        <div class="modal-image-gallery">
+                        <div class="modal-image-gallery" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()">
                             <!-- Desktop: Split View -->
                             <div class="gallery-desktop">
                                 <div class="gallery-thumbnails">
@@ -1025,38 +1064,8 @@ function toggleSection(header) {
 }
 
 /**
- * Close dynamic modal (specific to modals created by showProductModal)
+ * (Deleted duplicate closeDynamicModals - logic moved above)
  */
-function closeDynamicModal(event) {
-    if (event && event.stopPropagation) event.stopPropagation();
-
-    // If called via navigation, we can find the modal directly
-    const modal = event ? event.target.closest('.dynamic-modal') : document.getElementById('dynamic-modal-overlay');
-    const button = event ? event.target.closest('button') : null;
-
-    if (modal) {
-        // If no event, we assume direct manual call (e.g. from navigateModal)
-        if (!event || event.target.classList.contains('modal-overlay') || button) {
-            // Detect touch device
-            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-
-            if (isTouchDevice && button && button.classList.contains('modal-close-button')) {
-                // Add closing animation class
-                button.classList.add('closing');
-
-                // Delay close to show animation
-                setTimeout(() => {
-                    modal.remove();
-                    // Clean up class (in case button is reused)
-                    button.classList.remove('closing');
-                }, 300); // Match animation duration
-            } else {
-                // Desktop or non-button close: immediate
-                modal.remove();
-            }
-        }
-    }
-}
 
 /**
  * Update statistics display
@@ -1096,4 +1105,5 @@ window.filterProducts = filterProducts;
 window.sortProducts = sortProducts;
 window.openAmazonLink = openAmazonLink;
 window.showProductModal = showProductModal;
+window.closeDynamicModals = closeDynamicModals;
 console.log('Products.js loaded successfully with currency-aware price formatting and text truncation');
