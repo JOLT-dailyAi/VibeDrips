@@ -1,11 +1,8 @@
 /* themes/light-theme.css - Light theme (default state, minimal overrides) */
 
 body.light-theme {
-    background-color: #fce4ec;
-    color: #333333;
-    --accent-glow-color: #9e9e9e;
-    /* Muted grey glow for light mode */
-    --glow-intensity: 0.2;
+    background: #2E1D80;
+    color: #1a202c;
 }
 
 /* Modal Styles for Light Theme */

@@ -3,8 +3,6 @@
 body.dark-theme {
     background: #2E1D80;
     color: #FFFFFF;
-    --accent-glow-color: #5a4bff;
-    --glow-intensity: 0.35;
 }
 
 /* Currency Modal */

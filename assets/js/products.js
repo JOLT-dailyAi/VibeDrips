@@ -414,140 +414,6 @@ function openAmazonLink(link, productId) {
 }
 
 /**
- * Modal Carousel State
- */
-const modalCarouselState = {
-    currentIndex: -1,
-    products: [],
-    startX: 0,
-    startTime: 0,
-    isDragging: false,
-    dragThreshold: 50 // px
-};
-
-/**
- * Navigate to next/prev product in the modal
- * @param {string} direction - 'next' or 'prev'
- */
-function navigateModal(direction) {
-    const total = modalCarouselState.products.length;
-    if (total <= 1) return;
-
-    let nextIndex;
-    if (direction === 'next') {
-        nextIndex = modalCarouselState.currentIndex + 1;
-        if (nextIndex >= total) {
-            triggerEdgeFlash('right');
-            return;
-        }
-    } else {
-        nextIndex = modalCarouselState.currentIndex - 1;
-        if (nextIndex < 0) {
-            triggerEdgeFlash('left');
-            return;
-        }
-    }
-
-    const nextProduct = modalCarouselState.products[nextIndex];
-    if (nextProduct) {
-        // Smoothly transition by closing and reopening
-        // We use a small timeout to let the close animation finish if any
-        closeDynamicModal();
-        setTimeout(() => {
-            showProductModal(nextProduct.id);
-        }, 10);
-    }
-}
-
-/**
- * Trigger red glow flash on modal edges
- */
-function triggerEdgeFlash(side) {
-    const container = document.querySelector('.modal-nav-container');
-    if (!container) return;
-
-    const flashClass = side === 'left' ? 'flash-left' : 'flash-right';
-    container.classList.add(flashClass);
-    setTimeout(() => {
-        container.classList.remove(flashClass);
-    }, 400);
-}
-
-/**
- * Attach carousel-like navigation events (Drag, Swipe, Keys)
- */
-function attachModalCarouselNavigation() {
-    const modalOverlay = document.getElementById('dynamic-modal-overlay');
-    const navContainer = document.querySelector('.modal-nav-container');
-    if (!modalOverlay || !navContainer) return;
-
-    // 1. Mouse Drag
-    navContainer.onmousedown = (e) => {
-        if (e.target.closest('.glass-zone') || e.target.closest('.simple-modal-content')) {
-            // Only start drag if not clicking a real interactive element
-            if (e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.tagName === 'A') return;
-        }
-
-        modalCarouselState.isDragging = true;
-        modalCarouselState.startX = e.clientX;
-        modalCarouselState.startTime = Date.now();
-    };
-
-    window.onmousemove = (e) => {
-        if (!modalCarouselState.isDragging) return;
-        // Optional: Could add visual "pull" effect here later
-    };
-
-    window.onmouseup = (e) => {
-        if (!modalCarouselState.isDragging) return;
-        modalCarouselState.isDragging = false;
-
-        const deltaX = e.clientX - modalCarouselState.startX;
-        const duration = Date.now() - modalCarouselState.startTime;
-
-        // Quick flick or long drag
-        if (Math.abs(deltaX) > modalCarouselState.dragThreshold || (Math.abs(deltaX) > 20 && duration < 200)) {
-            if (deltaX > 0) navigateModal('prev');
-            else navigateModal('next');
-        }
-    };
-
-    // 2. Touch Swipe
-    let touchStartX = 0;
-    navContainer.ontouchstart = (e) => {
-        touchStartX = e.touches[0].clientX;
-    };
-
-    navContainer.ontouchend = (e) => {
-        const deltaX = e.changedTouches[0].clientX - touchStartX;
-        if (Math.abs(deltaX) > modalCarouselState.dragThreshold) {
-            if (deltaX > 0) navigateModal('prev');
-            else navigateModal('next');
-        }
-    };
-
-    // 3. Keyboard Arrows
-    const handleKeyDown = (e) => {
-        if (e.key === 'ArrowLeft') navigateModal('prev');
-        else if (e.key === 'ArrowRight') navigateModal('next');
-        else if (e.key === 'Escape') {
-            closeDynamicModal();
-            document.removeEventListener('keydown', handleKeyDown);
-        }
-    };
-    document.addEventListener('keydown', handleKeyDown);
-
-    // Ensure we clean up keydown when modal closes
-    const closeObserver = new MutationObserver((mutations) => {
-        if (!document.getElementById('dynamic-modal-overlay')) {
-            document.removeEventListener('keydown', handleKeyDown);
-            closeObserver.disconnect();
-        }
-    });
-    closeObserver.observe(document.body, { childList: true });
-}
-
-/**
  * Show detailed product modal with enhanced UI
  */
 function showProductModal(productId) {
@@ -556,13 +422,6 @@ function showProductModal(productId) {
         console.error('Product not found:', productId);
         return;
     }
-
-    // Initialize/Update Modal Carousel State
-    modalCarouselState.products = VibeDrips.filteredProducts && VibeDrips.filteredProducts.length > 0
-        ? VibeDrips.filteredProducts
-        : VibeDrips.allProducts;
-
-    modalCarouselState.currentIndex = modalCarouselState.products.findIndex(p => p.id === productId);
 
     // Helper: Format price with conditional decimals
     const formatPriceFull = (amount, currencyCode, symbol) => {
@@ -590,221 +449,257 @@ function showProductModal(productId) {
     const reviewCount = parseInt(product.review_count) || 0;
     const showDiscount = product.show_discount || false;
     const discountPercent = product.computed_discount || 0;
-    const brand = (product.brand || '').trim();
-    const category = (product.category || '').trim();
-    const subcategory = (product.subcategory || '').trim();
-    const description = (product.description || '').trim();
-    const productTitle = (product.name || '').trim();
 
-    // Prepare Responsive Title
+    // Prepare images for gallery - Use all_images only (no main_image)
+    const images = product.all_images || [];
+
+    // Title truncation - Responsive (35 chars mobile, 80 desktop)
     const isMobile = window.innerWidth <= 768;
-    const maxTitleLen = isMobile ? 35 : 80;
-    const isTitleLong = productTitle.length > maxTitleLen;
-    const displayTitle = isTitleLong ? productTitle.substring(0, maxTitleLen).trim() + '...' : productTitle;
+    const maxTitleLength = isMobile ? 35 : 80;
+    const productTitle = (product.name || 'Product').trim();
+    const isTitleLong = productTitle.length > maxTitleLength;
+    const displayTitle = isTitleLong
+        ? productTitle.substring(0, maxTitleLength).trim() + '...'
+        : productTitle;
 
-    // Prepare Description
-    const isDescLong = description.length > 200;
-    const displayDesc = isDescLong ? description.substring(0, 200).trim() + '...' : description;
+    // Description truncation (200 chars)
+    const maxDescLength = 200;
+    const description = (product.description || '').trim();
+    const isDescLong = description.length > maxDescLength;
+    const displayDesc = isDescLong
+        ? description.substring(0, 200).trim() + '...'
+        : description;
 
-    // Get images
-    const images = Array.isArray(product.all_images) ? product.all_images : [];
-
-    // Header Glow logic
-    const glowStyle = `box-shadow: 0 0 var(--glow-spread) var(--accent-glow-color);`;
-
-    const navContainerHTML = `
-        <div id="dynamic-modal-overlay" class="dynamic-modal">
+    // Build modal HTML
+    const modalContent = `
+        <div class="simple-modal dynamic-modal">
             <div class="modal-overlay" onclick="closeDynamicModal(event)"></div>
-            <div class="modal-nav-container">
-                <!-- Prev Glass Zone -->
-                <div class="glass-zone prev-zone" onclick="navigateModal('prev')">
-                    <span class="nav-arrow">￩</span>
+            <div class="simple-modal-content">
+                <div class="simple-modal-header">
+                    <h2 id="modal-title-${productId}" 
+                        class="${isTitleLong ? 'expandable' : ''}" 
+                        ${isTitleLong ? `onclick="toggleTitle_${productId}()"` : ''}>
+                        ${escapeHtml(displayTitle)}
+                    </h2>
+                    <button class="modal-close-button" onclick="closeDynamicModal(event)">❌</button>
                 </div>
-
-                <!-- Main Modal Content -->
-                <div class="simple-modal-content" onclick="event.stopPropagation()">
-                    <div class="simple-modal-header">
-                        <div class="modal-section-header-ribbon">
-                            <h2 id="modal-title-${productId}" 
-                                class="${isTitleLong ? 'collapsible' : ''}" 
-                                onclick="${isTitleLong ? `toggleTitle_${productId}()` : ''}">
-                                ${escapeHtml(displayTitle)}
-                            </h2>
-                            <button class="modal-close-button" onclick="closeDynamicModal(event)">×</button>
+                <div class="simple-modal-body">
+                    
+                    <!-- Brand Section (SEPARATE) -->
+                    <div class="modal-brand-section">
+                        <div class="info-row">
+                            <span class="label">Brand 🏷️</span>
+                            <span class="value">${escapeHtml((product.brand || 'Unknown').trim())}</span>
                         </div>
                     </div>
-
-                    <div class="simple-modal-body">
-                        <!-- Desktop View: Left (Gallery) | Right (Details) -->
-                        <div class="modal-split-view">
-                            <!-- Left: Image Gallery & Counter -->
-                            <div class="modal-gallery-column">
-                                <div class="modal-main-image-container" onclick="openImageGallery_${productId}()">
-                                    <img src="${images[0] || ''}" id="main-image-${productId}" class="modal-main-image" alt="${escapeHtml(product.name)}">
-                                    <div class="image-zoom-hint">🔍 Tap to Zoom</div>
+                    
+                    <!-- Image Gallery Section (BEFORE Category) -->
+                    ${images.length > 0 ? `
+                    <div class="modal-image-gallery">
+                        <!-- Desktop: Split View -->
+                        <div class="gallery-desktop">
+                            <div class="gallery-thumbnails">
+                                ${images.map((img, idx) => `
+                                <div class="thumbnail ${idx === 0 ? 'active' : ''}" 
+                                     onmouseover="previewImage_${productId}(${idx})"
+                                     onclick="selectImage_${productId}(${idx})"
+                                     ondblclick="openImageGallery_${productId}(${idx})">
+                                    <img src="${img}" alt="Thumb ${idx + 1}">
                                 </div>
-                                <div class="modal-image-counter" id="counter-${productId}">1 / ${images.length}</div>
-                                
-                                <div class="modal-thumbnails">
-                                    ${images.map((img, idx) => `
-                                        <div class="thumbnail ${idx === 0 ? 'active' : ''}" 
-                                             onmouseenter="previewImage_${productId}(${idx})"
-                                             onmouseleave="window['selectImage_${productId}'](window['modalCarouselState_${productId}']?.getCurrentIndex() || 0)"
-                                             onclick="selectImage_${productId}(${idx})">
-                                            <img src="${img}" alt="Thumb ${idx + 1}">
-                                        </div>
-                                    `).join('')}
+                                `).join('')}
+                            </div>
+                            <div class="gallery-main">
+                                <img src="${images[0]}" 
+                                     alt="${escapeHtml(product.name)}" 
+                                     style="max-width: 100%; max-height: 400px; border-radius: 12px; cursor: pointer;"
+                                     ondblclick="openImageGallery_${productId}()" id="main-image-${productId}">
+                                <div class="zoom-hint">🔍 Double-click to view full screen</div>
+                                <div class="carousel-controls">
+                                    <button class="arrow-button lightbox-arrow lightbox-prev" onclick="prevImage_${productId}()" aria-label="Previous">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="15 18 9 12 15 6"></polyline>
+                                        </svg>
+                                    </button>
+                                    <span class="counter" id="counter-${productId}">1 / ${images.length}</span>
+                                    <button class="arrow-button lightbox-arrow lightbox-next" onclick="nextImage_${productId}()" aria-label="Next">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9 18 15 12 9 6"></polyline>
+                                        </svg>
+                                    </button>
                                 </div>
                             </div>
-
-                            <!-- Right: Product Info & Core Specs -->
-                            <div class="modal-details-column">
-                                <!-- Mobile Only Top Section (Swiper Placeholder or Info) -->
-                                <div class="modal-mobile-header">
-                                    <div class="mobile-main-image-container" onclick="openImageGallery_${productId}()">
-                                        <img src="${images[0] || ''}" id="main-image-mobile-${productId}" class="mobile-main-image" alt="${escapeHtml(product.name)}">
-                                    </div>
-                                    <div class="mobile-image-counter" id="counter-mobile-${productId}">1 / ${images.length}</div>
+                        </div>
+                        
+                        <!-- Mobile: Main + Slider -->
+                        <div class="gallery-mobile">
+                            <div class="mobile-main">
+                                <img id="main-image-mobile-${productId}" 
+                                     src="${images[0]}" 
+                                     onclick="openImageGallery_${productId}()">
+                                <div class="zoom-hint">🔍</div>
+                                <div class="carousel-controls" onclick="event.stopPropagation()">
+                                    <button class="arrow-button lightbox-arrow lightbox-prev" onclick="prevImage_${productId}()" aria-label="Previous">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="15 18 9 12 15 6"></polyline>
+                                        </svg>
+                                    </button>
+                                    <span class="counter" id="counter-mobile-${productId}">1 / ${images.length}</span>
+                                    <button class="arrow-button lightbox-arrow lightbox-next" onclick="nextImage_${productId}()" aria-label="Next">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9 18 15 12 9 6"></polyline>
+                                        </svg>
+                                    </button>
                                 </div>
-
-                                <!-- Brand & Category Section -->
-                                <div class="modal-core-header">
-                                    ${brand ? `
-                                    <div class="modal-brand-section">
-                                        <span class="label">Brand</span>
-                                        <span class="value">${escapeHtml(brand)}</span>
-                                    </div>
-                                    ` : ''}
-                                    ${category ? `
-                                    <div class="modal-category-section">
-                                        <span class="label">Category</span>
-                                        <span class="value">${escapeHtml(category)} ${subcategory ? `( ${escapeHtml(subcategory)} )` : ''}</span>
-                                    </div>
-                                    ` : ''}
+                            </div>
+                            <div class="mobile-thumbnails">
+                                ${images.map((img, idx) => `
+                                <div class="thumbnail ${idx === 0 ? 'active' : ''}" onclick="selectImage_${productId}(${idx})">
+                                    <img src="${img}" alt="Thumb ${idx + 1}">
                                 </div>
-
-                                <!-- Price & Rating Action Bar -->
-                                <div class="modal-price-rating-bar">
-                                    <div class="price-container">
-                                        <span class="currency">${currencyCode}</span>
-                                        <span class="amount">${priceFormatted}</span>
-                                        ${showDiscount ? `<span class="discount">-${discountPercent}%</span>` : ''}
-                                    </div>
-                                    <div class="rating-container">
-                                        <span class="stars">⭐ ${rating.toFixed(1)}</span>
-                                        <span class="count">(${formatCountFull(reviewCount)} reviews)</span>
-                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                    ` : ''}
+                    
+                    <!-- Category Section (SEPARATE) -->
+                    <div class="modal-category-section">
+                        <div class="info-row">
+                            <span class="label">Category 📦</span>
+                            <span class="value">${escapeHtml((product.category || 'General').trim())}</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Price + Rating + Reviews Section (NO Brand/Category) -->
+                    <div class="modal-core-info">
+                        <div class="info-row">
+                            <span class="label">Price 💰</span>
+                            <span class="value">
+                                ${priceFormatted}
+                                ${showDiscount && discountPercent > 0 ? `
+                                    <span class="discount-badge">
+                                        <span class="live-dot" aria-hidden="true"></span>${discountPercent}%
+                                    </span>
+                                ` : ''}
+                            </span>
+                        </div>
+                        ${rating > 0 ? `
+                        <div class="info-row">
+                            <span class="label">Rating ⭐</span>
+                            <span class="value">${rating.toFixed(1)} out of 5 stars</span>
+                        </div>
+                        ` : ''}
+                        ${reviewCount > 0 ? `
+                        <div class="info-row">
+                            <span class="label">Reviews 👥</span>
+                            <span class="value">${formatCountFull(reviewCount)} customer reviews</span>
+                        </div>
+                        ` : ''}
+                    </div>
+                    
+                    <!-- Product Details Section (Collapsible) -->
+                    ${product.productDetails && product.productDetails.length > 0 ? `
+                    <div class="modal-section">
+                        <div class="modal-section-header" onclick="toggleSection(this)">
+                            <div class="title">
+                                <span class="emoji">📋</span>
+                                <span>Product Details</span>
+                            </div>
+                            <span class="toggle-icon">▶</span>
+                        </div>
+                        <div class="modal-section-content">
+                            ${product.productDetails.sort((a, b) => (a.priority || 0) - (b.priority || 0)).map(item => {
+        const emoji = getDetailEmoji(item.key, item.value);
+        const label = escapeHtml((item.label || '').trim());
+        return `
+                                <div class="detail-row">
+                                    <span class="label">${label} ${emoji}</span>
+                                    <span class="value">${escapeHtml((item.value || '').trim())}</span>
                                 </div>
-
-                                <!-- Product Details (Collapsible) -->
-                                <div class="modal-section expanded">
-                                    <div class="modal-section-header" onclick="toggleSection(this)">
-                                        <div class="title">
-                                            <span class="emoji">📊</span>
-                                            <span>Product Details</span>
-                                        </div>
-                                        <span class="toggle-icon">▼</span>
-                                    </div>
-                                    <div class="modal-section-content expanded">
-                                        ${Object.entries(product)
-            .filter(([k, v]) => {
-                const key = k.toLowerCase();
-                const skipKeys = [
-                    'id', 'name', 'price', 'currency', 'symbol', 'description',
-                    'all_images', 'image_url', 'source_link', 'amazon_short', 'amazon_long',
-                    'computed_discount', 'show_discount', 'customer_rating', 'review_count',
-                    'brand', 'category', 'subcategory', 'additional_info', 'featured', 'timestamp'
-                ];
-                return !skipKeys.includes(key) && v !== null && v !== undefined && v !== '';
-            })
-            .map(([key, value]) => `
-                                                <div class="detail-row">
-                                                    <span class="emoji">${getDetailEmoji(key, value)}</span>
-                                                    <span class="label">${escapeHtml(key.replace(/_/g, ' '))}</span>
-                                                    <span class="value">${escapeHtml(value.toString())}</span>
-                                                </div>
-                                            `).join('')}
-                                    </div>
-                                </div>
-
-                                <!-- Additional Information (Collapsible) -->
-                                ${product.additional_info && Object.keys(product.additional_info).length > 0 ? `
-                                <div class="modal-section">
-                                    <div class="modal-section-header" onclick="toggleSection(this)">
-                                        <div class="title">
-                                            <span class="emoji">ℹ️</span>
-                                            <span>Additional Information</span>
-                                        </div>
-                                        <span class="toggle-icon">▶</span>
-                                    </div>
-                                    <div class="modal-section-content">
-                                        ${Object.entries(product.additional_info)
-                .filter(([key, value]) => {
-                    const item = { key, value };
-                    // Existing filters
-                    if (item.key === 'Brand' || item.key === 'brand') return false;
-                    if (item.key === 'Category' || item.key === 'category') return false;
+                                `;
+    }).join('')}
+                        </div>
+                    </div>
+                    ` : ''}
+                    
+                    <!-- Additional Info Section (Collapsible, Collapsed by Default) -->
+                    ${product.additionalInfo && Object.keys(product.additionalInfo).length > 0 ? `
+                    <div class="modal-section">
+                        <div class="modal-section-header" onclick="toggleSection(this)">
+                            <div class="title">
+                                <span class="emoji">ℹ️</span>
+                                <span>Additional Information</span>
+                            </div>
+                            <span class="toggle-icon">▶</span>
+                        </div>
+                        <div class="modal-section-content">
+                            ${Object.entries(product.additionalInfo)
+                .flatMap(([groupName, items]) => {
+                    // Skip Books group for non-book products
+                    if (groupName === 'Books' && product.category !== 'Book') return [];
+                    return items || [];
+                })
+                .filter(item => {
+                    // Hide timestamp
+                    if (item.key === 'Timestamp' || item.key === 'timestamp') return false;
+                    // Hide discount (already shown in price badge)
+                    if (item.key === 'Discount' || item.key === 'discount') return false;
+                    // Hide net quantity (usually "1 Count")
+                    if (item.key === 'Net Quantity' || item.key === 'net_quantity') return false;
+                    // Hide generic name (redundant with category)
                     if (item.key === 'Generic Name' || item.key === 'generic_name') return false;
+                    // Hide item weight/dimensions (duplicate of Product Details)
                     if (item.key === 'Item Weight' || item.key === 'item_weight') return false;
                     if (item.key === 'Item Dimensions' || item.key === 'item_dimensions') return false;
                     if (item.key === 'Product Dimensions' || item.key === 'product_dimensions') return false;
+                    // Hide country of origin (moved to Product Details)
                     if (item.key === 'Country of Origin' || item.key === 'country_of_origin') return false;
+                    // Hide packer if same as manufacturer
                     if ((item.key === 'Packer' || item.key === 'packer') && product.manufacturer && item.value === product.manufacturer) return false;
                     return true;
                 })
-                .map(([key, value]) => `
-                                                <div class="info-row">
-                                                    <span class="emoji"></span>
-                                                    <span class="label">${escapeHtml(key.trim())}</span>
-                                                    <span class="value">${escapeHtml(value.toString().trim())}</span>
-                                                </div>
-                                            `).join('')}
-                                    </div>
-                                </div>
-                                ` : ''}
-                                
-                                <!-- Description Section -->
-                                ${description ? `
-                                <div class="modal-description-section">
-                                    <div class="modal-section-header" onclick="toggleDescription_${productId}()" style="cursor: pointer;">
-                                        <div class="title">
-                                            <span class="emoji">📝</span>
-                                            <span>Description</span>
-                                        </div>
-                                        <span class="toggle-icon">▼</span>
-                                    </div>
-                                    <div class="modal-section-content expanded">
-                                        <div class="description-text" id="desc-${productId}" onclick="toggleDescription_${productId}()" style="cursor: pointer;">${escapeHtml(displayDesc)}</div>
-                                        ${isDescLong ? `
-                                        <button class="read-more-btn" onclick="toggleDescription_${productId}()">Read More ▼</button>
-                                        ` : ''}
-                                    </div>
-                                </div>
-                                ` : ''}
-                                
-                                <!-- Buy Button -->
-                                <div class="modal-actions">
-                                    <button onclick="openAmazonLink('${escapeHtml(product.amazon_short || product.amazon_long || product.source_link || '#')}', '${product.id}')" 
-                                            class="amazon-button">🛒 Buy on Amazon</button>
-                                </div>
-                                
+                .map(item => `
+                            <div class="info-row">
+                                <span class="emoji"></span>
+                                <span class="label">${escapeHtml((item.label || '').trim())}</span>
+                                <span class="value">${escapeHtml((item.value || '').trim())}</span>
                             </div>
+                                `).join('')}
                         </div>
                     </div>
-                </div>
-
-                <!-- Next Glass Zone -->
-                <div class="glass-zone next-zone" onclick="navigateModal('next')">
-                    <span class="nav-arrow">￩</span>
+                    ` : ''}
+                    
+                    <!-- Description Section -->
+                    ${description ? `
+                    <div class="modal-description-section">
+                        <div class="modal-section-header" onclick="toggleDescription_${productId}()" style="cursor: pointer;">
+                            <div class="title">
+                                <span class="emoji">📝</span>
+                                <span>Description</span>
+                            </div>
+                            <span class="toggle-icon">▼</span>
+                        </div>
+                        <div class="modal-section-content expanded">
+                            <div class="description-text" id="desc-${productId}" onclick="toggleDescription_${productId}()" style="cursor: pointer;">${escapeHtml(displayDesc)}</div>
+                            ${isDescLong ? `
+                            <button class="read-more-btn" onclick="toggleDescription_${productId}()">Read More ▼</button>
+                            ` : ''}
+                        </div>
+                    </div>
+                    ` : ''}
+                    
+                    <!-- Buy Button -->
+                    <div class="modal-actions">
+                        <button onclick="openAmazonLink('${escapeHtml(product.amazon_short || product.amazon_long || product.source_link || '#')}', '${product.id}')" 
+                                class="amazon-button">🛒 Buy on Amazon</button>
+                    </div>
+                    
                 </div>
             </div>
         </div>
     `;
 
-    document.body.insertAdjacentHTML('beforeend', navContainerHTML);
-
-    // Attach Navigation Events (Swipe, Drag, Keys)
-    attachModalCarouselNavigation();
+    document.body.insertAdjacentHTML('beforeend', modalContent);
 
     // Setup image gallery if MediaLightbox is available
     if (images.length > 0 && typeof MediaLightbox !== 'undefined') {
@@ -819,16 +714,16 @@ function showProductModal(productId) {
         };
     }
 
-    // Setup carousel navigation using CarouselUtils for the gallery
+    // Setup carousel navigation using CarouselUtils
     if (images.length > 0) {
-        // Create carousel controller inside window object for persistence
-        window[`modalCarouselState_${productId}`] = CarouselUtils.createCarousel(productId, images);
+        // Create carousel controller
+        const carousel = CarouselUtils.createCarousel(productId, images);
 
         // Expose navigation functions
-        window[`selectImage_${productId}`] = (index) => window[`modalCarouselState_${productId}`].selectImage(index);
-        window[`previewImage_${productId}`] = (index) => window[`modalCarouselState_${productId}`].previewImage(index);
-        window[`prevImage_${productId}`] = () => window[`modalCarouselState_${productId}`].prev();
-        window[`nextImage_${productId}`] = () => window[`modalCarouselState_${productId}`].next();
+        window[`selectImage_${productId}`] = (index) => carousel.selectImage(index);
+        window[`previewImage_${productId}`] = (index) => carousel.previewImage(index);
+        window[`prevImage_${productId}`] = () => carousel.prev();
+        window[`nextImage_${productId}`] = () => carousel.next();
     }
 
     // Setup title toggle if title is long

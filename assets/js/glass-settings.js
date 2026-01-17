@@ -8,57 +8,50 @@ const GlassSettings = {
     sliders: {},
     autoCloseTimer: null,
     isOpen: false,
-
-    // Default preset values
+    
+// Default preset values
     preset: {
-        blur: 5,
-        refraction: 0.15,
-        depth: 0,
-        saturation: 180,
-        glowEnabled: true,
-        accentColor: '#5a4bff'
+        blur: 0,           // Changed from 8
+        refraction: 0,     // Changed from 0.12
+        depth: 0,          // Same
+        saturation: 110    // Changed from 120
     },
-
+    
     // Current values
     current: {
-        blur: 5,
-        refraction: 0.15,
+        blur: 0,
+        refraction: 0,
         depth: 0,
-        saturation: 180,
-        glowEnabled: true,
-        accentColor: '#5a4bff'
+        saturation: 110
     }
 };
 
 // Initialize glass settings
 function initGlassSettings() {
     console.log('🪟 Initializing glass settings...');
-
+    
     // Get panel element
     GlassSettings.panel = document.getElementById('glass-settings-panel');
-
+    
     if (!GlassSettings.panel) {
         console.error('❌ Glass settings panel not found!');
         return;
     }
-
+    
     // Get slider elements
     GlassSettings.sliders = {
         blur: document.getElementById('glass-blur-slider'),
         refraction: document.getElementById('glass-refraction-slider'),
         depth: document.getElementById('glass-depth-slider'),
-        saturation: document.getElementById('glass-saturation-slider')
+        saturation: document.getElementById('glass-saturation-slider')  /* NEW */
     };
-
-    GlassSettings.glowToggle = document.getElementById('glow-toggle');
-    GlassSettings.glowPalette = document.getElementById('glow-palette');
-
+    
     // Load saved settings or use defaults
     loadGlassSettings();
-
+    
     // Setup event listeners
     setupGlassEventListeners();
-
+    
     console.log('✅ Glass settings initialized');
 }
 
@@ -69,26 +62,26 @@ function setupGlassEventListeners() {
     if (closeBtn) {
         closeBtn.addEventListener('click', closeGlassPanel);
     }
-
+    
     // Reset button (panel title)
     const titleBtn = document.getElementById('glass-panel-title');
     if (titleBtn) {
         titleBtn.addEventListener('click', resetGlassToPreset);
     }
-
+    
     // Slider inputs
     if (GlassSettings.sliders.blur) {
         GlassSettings.sliders.blur.addEventListener('input', (e) => {
             updateGlassValue('blur', parseFloat(e.target.value));
         });
     }
-
+    
     if (GlassSettings.sliders.refraction) {
         GlassSettings.sliders.refraction.addEventListener('input', (e) => {
             updateGlassValue('refraction', parseFloat(e.target.value));
         });
     }
-
+    
     if (GlassSettings.sliders.depth) {
         GlassSettings.sliders.depth.addEventListener('input', (e) => {
             updateGlassValue('depth', parseFloat(e.target.value));
@@ -101,25 +94,7 @@ function setupGlassEventListeners() {
         });
     }
 
-    // Glow Toggle
-    if (GlassSettings.glowToggle) {
-        GlassSettings.glowToggle.addEventListener('change', (e) => {
-            updateGlowToggle(e.target.checked);
-        });
-    }
-
-    // Color Palette
-    if (GlassSettings.glowPalette) {
-        const swatches = GlassSettings.glowPalette.querySelectorAll('.palette-color');
-        swatches.forEach(swatch => {
-            swatch.addEventListener('click', () => {
-                const color = swatch.dataset.color;
-                updateGlowColor(color);
-            });
-        });
-    }
-
-
+    
     // ESC key to close
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && GlassSettings.isOpen) {
@@ -131,12 +106,12 @@ function setupGlassEventListeners() {
 // Open glass settings panel
 function openGlassPanel() {
     if (!GlassSettings.panel) return;
-
+    
     console.log('🪟 Opening glass panel');
-
+    
     GlassSettings.panel.classList.add('visible');
     GlassSettings.isOpen = true;
-
+    
     // Start auto-close timer
     startAutoCloseTimer();
 }
@@ -144,15 +119,15 @@ function openGlassPanel() {
 // Close glass settings panel
 function closeGlassPanel() {
     if (!GlassSettings.panel) return;
-
+    
     console.log('🪟 Closing glass panel');
-
+    
     GlassSettings.panel.classList.remove('visible');
     GlassSettings.isOpen = false;
-
+    
     // Clear auto-close timer
     clearAutoCloseTimer();
-
+    
     // Save settings
     saveGlassSettings();
 }
@@ -160,68 +135,38 @@ function closeGlassPanel() {
 // Update glass value
 function updateGlassValue(property, value) {
     GlassSettings.current[property] = value;
-
+    
     // Update display
     const displayElement = document.getElementById(`glass-${property}-value`);
     if (displayElement) {
         displayElement.textContent = value;
     }
-
+    
     // Update CSS variable
     applyGlassSettings();
-
+    
     // Reset auto-close timer (keeps panel open while adjusting)
     startAutoCloseTimer();
-
+    
     console.log(`🪟 ${property}: ${value}`);
 }
 
 // Apply glass settings to CSS variables
 function applyGlassSettings() {
     const root = document.documentElement;
-
+    
     root.style.setProperty('--glass-blur', `${GlassSettings.current.blur}px`);
     root.style.setProperty('--glass-refraction', GlassSettings.current.refraction);
     root.style.setProperty('--glass-depth', `${GlassSettings.current.depth}px`);
-    root.style.setProperty('--glass-saturation', `${GlassSettings.current.saturation}%`);
-
-    // Glow variables
-    root.style.setProperty('--accent-glow-color', GlassSettings.current.accentColor);
-    root.style.setProperty('--glow-intensity', GlassSettings.current.glowEnabled ? '0.45' : '0');
-    root.style.setProperty('--glow-spread', GlassSettings.current.glowEnabled ? '60px' : '0');
-}
-
-// Update Glow Toggle
-function updateGlowToggle(enabled) {
-    GlassSettings.current.glowEnabled = enabled;
-    applyGlassSettings();
-    saveGlassSettings();
-    console.log(`🪟 Glow Enabled: ${enabled}`);
-}
-
-// Update Glow Color
-function updateGlowColor(color) {
-    GlassSettings.current.accentColor = color;
-
-    // Update active class in palette
-    if (GlassSettings.glowPalette) {
-        const swatches = GlassSettings.glowPalette.querySelectorAll('.palette-color');
-        swatches.forEach(swatch => {
-            swatch.classList.toggle('active', swatch.dataset.color === color);
-        });
-    }
-
-    applyGlassSettings();
-    saveGlassSettings();
-    console.log(`🪟 Accent Color: ${color}`);
+    root.style.setProperty('--glass-saturation', `${GlassSettings.current.saturation}%`);  /* NEW */
 }
 
 // Reset to preset values
 function resetGlassToPreset() {
     console.log('🪟 Resetting to preset');
-
+    
     GlassSettings.current = { ...GlassSettings.preset };
-
+    
     // Update sliders
     if (GlassSettings.sliders.blur) {
         GlassSettings.sliders.blur.value = GlassSettings.preset.blur;
@@ -242,16 +187,10 @@ function resetGlassToPreset() {
     document.getElementById('glass-refraction-value').textContent = GlassSettings.preset.refraction;
     document.getElementById('glass-depth-value').textContent = GlassSettings.preset.depth;
     document.getElementById('glass-saturation-value').textContent = GlassSettings.preset.saturation;
-
+    
     // Apply changes
     applyGlassSettings();
-
-    // Update UI elements that aren't reactive via updateGlassValue
-    if (GlassSettings.glowToggle) {
-        GlassSettings.glowToggle.checked = GlassSettings.preset.glowEnabled;
-    }
-    updateGlowColor(GlassSettings.preset.accentColor);
-
+    
     // Save
     saveGlassSettings();
 }
@@ -270,7 +209,7 @@ function saveGlassSettings() {
 function loadGlassSettings() {
     try {
         const saved = localStorage.getItem('glassSettings');
-
+        
         if (saved) {
             GlassSettings.current = JSON.parse(saved);
             console.log('💾 Glass settings loaded:', GlassSettings.current);
@@ -278,7 +217,7 @@ function loadGlassSettings() {
             GlassSettings.current = { ...GlassSettings.preset };
             console.log('💾 Using default glass settings');
         }
-
+        
         // Update sliders
         if (GlassSettings.sliders.blur) {
             GlassSettings.sliders.blur.value = GlassSettings.current.blur;
@@ -294,12 +233,12 @@ function loadGlassSettings() {
             GlassSettings.sliders.saturation.value = GlassSettings.current.saturation;
         }
 
-
+        
         // Update displays
         const blurDisplay = document.getElementById('glass-blur-value');
         const refractionDisplay = document.getElementById('glass-refraction-value');
         const depthDisplay = document.getElementById('glass-depth-value');
-
+        
         if (blurDisplay) blurDisplay.textContent = GlassSettings.current.blur;
         if (refractionDisplay) refractionDisplay.textContent = GlassSettings.current.refraction;
         if (depthDisplay) depthDisplay.textContent = GlassSettings.current.depth;
@@ -307,18 +246,10 @@ function loadGlassSettings() {
         const saturationDisplay = document.getElementById('glass-saturation-value');
         if (saturationDisplay) saturationDisplay.textContent = GlassSettings.current.saturation;
 
-        // Update Toggle and Palette UI
-        if (GlassSettings.glowToggle) {
-            GlassSettings.glowToggle.checked = GlassSettings.current.glowEnabled || false;
-        }
-
-        if (GlassSettings.current.accentColor) {
-            updateGlowColor(GlassSettings.current.accentColor);
-        }
-
+        
         // Apply settings
         applyGlassSettings();
-
+        
     } catch (error) {
         console.error('❌ Failed to load glass settings:', error);
         GlassSettings.current = { ...GlassSettings.preset };
@@ -328,7 +259,7 @@ function loadGlassSettings() {
 // Start auto-close timer
 function startAutoCloseTimer() {
     clearAutoCloseTimer();
-
+    
     GlassSettings.autoCloseTimer = setTimeout(() => {
         console.log('⏰ Auto-closing glass panel');
         closeGlassPanel();
