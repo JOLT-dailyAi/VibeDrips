@@ -30,7 +30,160 @@
     align-items: center;
     z-index: 1000;
     background: rgba(0, 0, 0, 0.7);
-    /* Dark overlay */
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+/* Modal Navigation Container - Flex parent for content and glass zones */
+.modal-nav-container {
+    display: flex;
+    align-items: stretch;
+    /* DYNAMIC HEIGHT MAGIC */
+    justify-content: center;
+    width: 95%;
+    max-width: 1400px;
+    height: auto;
+    max-height: 85vh;
+    gap: 15px;
+    z-index: 1001;
+    perspective: 1000px;
+}
+
+/* Glass Zone Navigation */
+.glass-zone {
+    width: 60px;
+    min-width: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    background: rgba(255, 255, 255, var(--glass-refraction));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+    color: white;
+    opacity: 0.8;
+}
+
+.glass-zone:hover {
+    width: 80px;
+    min-width: 80px;
+    background: rgba(255, 255, 255, calc(var(--glass-refraction) + 0.1));
+    border-color: var(--accent-glow-color);
+    box-shadow: 0 0 30px var(--accent-glow-color);
+    opacity: 1;
+    transform: scaleX(1.1);
+}
+
+.glass-zone.prev-zone {
+    margin-right: 10px;
+}
+
+.glass-zone.next-zone {
+    margin-left: 10px;
+}
+
+/* Vertical Glow Bar inside Glass Zone */
+.glass-zone::before {
+    content: '';
+    position: absolute;
+    width: 4px;
+    height: 60%;
+    background: var(--accent-glow-color);
+    border-radius: 10px;
+    filter: blur(4px);
+    transition: height 0.4s ease, filter 0.4s ease;
+    opacity: var(--glow-intensity);
+}
+
+.glass-zone:hover::before {
+    height: 80%;
+    filter: blur(8px);
+    opacity: 1;
+}
+
+/* Navigation Arrow Styling */
+.glass-zone .nav-arrow {
+    font-size: 24px;
+    font-weight: 200;
+    transition: transform 0.3s ease;
+    z-index: 2;
+    filter: drop-shadow(0 0 5px var(--accent-glow-color));
+}
+
+.glass-zone.prev-zone:hover .nav-arrow {
+    transform: translateX(-5px) scale(1.2);
+}
+
+.glass-zone.next-zone:hover .nav-arrow {
+    transform: translateX(5px) scale(1.2);
+}
+
+/* Edge Glow Flash Animations */
+@keyframes flash-red-left {
+    0% {
+        box-shadow: inset 50px 0 50px -20px rgba(255, 0, 0, 0);
+    }
+
+    50% {
+        box-shadow: inset 50px 0 50px -20px rgba(255, 0, 0, 0.8);
+    }
+
+    100% {
+        box-shadow: inset 50px 0 50px -20px rgba(255, 0, 0, 0);
+    }
+}
+
+@keyframes flash-red-right {
+    0% {
+        box-shadow: inset -50px 0 50px -20px rgba(255, 0, 0, 0);
+    }
+
+    50% {
+        box-shadow: inset -50px 0 50px -20px rgba(255, 0, 0, 0.8);
+    }
+
+    100% {
+        box-shadow: inset -50px 0 50px -20px rgba(255, 0, 0, 0);
+    }
+}
+
+.flash-left {
+    animation: flash-red-left 0.4s ease-out;
+}
+
+.flash-right {
+    animation: flash-red-right 0.4s ease-out;
+}
+
+/* Responsive Adjustments for Glass Zones */
+@media (max-width: 992px) {
+    .glass-zone {
+        width: 40px;
+        min-width: 40px;
+    }
+
+    .glass-zone:hover {
+        width: 50px;
+        min-width: 50px;
+    }
+}
+
+@media (max-width: 768px) {
+    .glass-zone {
+        display: none;
+        /* Rely on swipe on mobile */
+    }
+
+    .modal-nav-container {
+        width: 100%;
+        gap: 0;
+    }
 }
 
 /* Modal Overlay - Clickable background */
@@ -58,9 +211,9 @@
     overflow-x: hidden;
     /* Eliminate horizontal scrollbar */
     box-shadow:
-        0 20px 60px rgba(0, 0, 0, 0.3),
-        0 0 60px 15px rgba(90, 75, 255, 0.45),
-        0 0 120px 25px rgba(90, 75, 255, 0.3),
+        0 20px 60px rgba(0, 0, 0, 0.4),
+        0 0 var(--glow-spread) calc(var(--glow-intensity) * 30px) var(--accent-glow-color),
+        0 0 calc(var(--glow-spread) * 2) calc(var(--glow-intensity) * 50px) rgba(90, 75, 255, 0.2),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
     margin: 20px;
     padding: 0;
