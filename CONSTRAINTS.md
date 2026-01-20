@@ -31,6 +31,9 @@ Design changes must always respect the 3-theme parity (**Classic**, **Glass**, *
 ### 5. Event Isolation
 The `.modal-image-gallery` and other interactive elements must strictly use `event.stopPropagation()` to prevent unintended modal navigation.
 
+### 6. Button Standardization
+All buttons in the project **must** be sourced from `buttons.css`. If a required button style does not exist, it must be added to `buttons.css` first, then called from there. This ensures consistency, reusability, and maintainability across the entire project.
+
 ---
 
 ## 🏗️ Architecture Summary
