@@ -45,9 +45,13 @@
     border-radius: 24px;
     z-index: 1001;
     /* Above overlay (999) */
-    /* Dimensions set dynamically by JS to match .simple-modal-content */
-    /* Center it like the original modal */
+
+    /* PART 1: Strict Dimensional Parity with original .simple-modal-content */
+    width: 90%;
+    max-width: 1200px;
     margin: 0 auto;
+    max-height: 80vh;
+    /* As requested: the core 80vh constraint */
     display: block;
 
     /* Glow effect moved from .simple-modal-content to wrapper */
@@ -72,14 +76,14 @@
     transition: none !important;
 }
 
-/* Each item inside strip must be 100% of the wrapper's width */
+/* Each item inside strip maintains ORIGINAL look */
 .modal-sliding-strip .simple-modal-content {
     flex: 0 0 100%;
+    /* Fill the wrapper viewport */
     width: 100% !important;
+    /* Forces it to fill the 90%/1200px wrapper */
     max-width: none !important;
-    /* Wrapper already constrains it */
     margin: 0 !important;
-    /* Let wrapper handle margins */
     box-shadow: none !important;
     /* Wrapper handles glow */
     z-index: auto !important;
