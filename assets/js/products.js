@@ -820,12 +820,18 @@ function wrapModalForSliding(centerProductId) {
     // Add strip to container
     navContainer.appendChild(slidingStrip);
 
-    // Replace content in modal
+    // CRITICAL FIX: Insert navContainer AFTER overlay to maintain z-index stacking
+    // The overlay must be BEFORE the content in DOM order for z-index to work
     const overlay = existingModal.querySelector('.modal-overlay');
     const oldContent = existingModal.querySelector('.simple-modal-content');
     if (oldContent) oldContent.remove();
 
-    existingModal.insertBefore(navContainer, overlay.nextSibling);
+    // Insert AFTER overlay (overlay is z-index 999, navContainer is 1001)
+    if (overlay.nextSibling) {
+        existingModal.insertBefore(navContainer, overlay.nextSibling);
+    } else {
+        existingModal.appendChild(navContainer);
+    }
 
     // Setup event listeners for all cached products
     cache.forEach(product => {

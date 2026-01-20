@@ -41,11 +41,17 @@
 .modal-nav-container {
     position: relative;
     display: inline-block;
-    /* Shrink-wrap to content */
     overflow: hidden;
     /* Hide off-screen products */
     border-radius: 24px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    z-index: 1001;
+    /* CRITICAL: Above overlay (999) */
+    /* Match .simple-modal-content dimensions exactly */
+    width: 90%;
+    max-width: 1200px;
+    min-height: 60vh;
+    max-height: 80vh;
 }
 
 /* Sliding Strip (Flex Container) */
