@@ -634,30 +634,43 @@ function generateModalHTML(product) {
                             <span class="toggle-icon">▶</span>
                         </div>
                         <div class="modal-section-content">
-                            ${Object.entries(product.additionalInfo)
-                .flatMap(([groupName, items]) => {
-                    if (groupName === 'Books' && product.category !== 'Book') return [];
-                    return items || [];
-                })
-                .filter(item => {
-                    if (item.key === 'Timestamp' || item.key === 'timestamp') return false;
-                    if (item.key === 'Discount' || item.key === 'discount') return false;
-                    if (item.key === 'Net Quantity' || item.key === 'net_quantity') return false;
-                    if (item.key === 'Generic Name' || item.key === 'generic_name') return false;
-                    if (item.key === 'Item Weight' || item.key === 'item_weight') return false;
-                    if (item.key === 'Item Dimensions' || item.key === 'item_dimensions') return false;
-                    if (item.key === 'Product Dimensions' || item.key === 'product_dimensions') return false;
-                    if (item.key === 'Country of Origin' || item.key === 'country_of_origin') return false;
-                    if ((item.key === 'Packer' || item.key === 'packer') && product.manufacturer && item.value === product.manufacturer) return false;
-                    return true;
-                })
-                .map(item => `
-                            <div class="info-row">
-                                <span class="emoji"></span>
-                                <span class="label">${escapeHtml((item.label || '').trim())}</span>
-                                <span class="value">${escapeHtml((item.value || '').trim())}</span>
-                            </div>
-                                `).join('')}
+                            ${(() => {
+                const flattened = Object.entries(product.additionalInfo)
+                    .flatMap(([groupName, items]) => {
+                        if (groupName === 'Books' && product.category !== 'Book') return [];
+                        return items || [];
+                    })
+                    .filter(item => {
+                        const key = (item.key || '').toLowerCase();
+                        const val = (item.value || '').trim();
+                        if (!val) return false;
+                        if (['timestamp', 'discount', 'net quantity', 'generic name', 'item weight', 'item dimensions', 'product dimensions', 'country of origin'].includes(key)) return false;
+                        return true;
+                    });
+
+                // Group by normalized value to catch duplicates
+                const groups = [];
+                flattened.forEach(item => {
+                    const val = (item.value || '').trim();
+                    const label = (item.label || '').trim();
+                    const existingGroup = groups.find(g => g.value === val);
+                    if (existingGroup) {
+                        if (!existingGroup.labels.includes(label)) {
+                            existingGroup.labels.push(label);
+                        }
+                    } else {
+                        groups.push({ value: val, labels: [label] });
+                    }
+                });
+
+                return groups.map(group => `
+                                    <div class="info-row">
+                                        <span class="emoji"></span>
+                                        <span class="label">${escapeHtml(group.labels.join(' / '))}</span>
+                                        <span class="value">${escapeHtml(group.value)}</span>
+                                    </div>
+                                `).join('');
+            })()}
                         </div>
                     </div>
                     ` : ''}
