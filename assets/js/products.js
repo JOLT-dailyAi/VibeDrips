@@ -413,16 +413,16 @@ function openAmazonLink(link, productId) {
     }
 }
 
-/**
- * Show detailed product modal with enhanced UI
- */
-function showProductModal(productId) {
-    const product = VibeDrips.allProducts.find(p => p.id === productId);
-    if (!product) {
-        console.error('Product not found:', productId);
-        return;
-    }
+// ============================================
+// PHASE_1: Modal Navigation Helper Functions
+// ============================================
 
+/**
+ * PHASE_1: Generate modal HTML for a single product
+ * Extracted from showProductModal - NO LOGIC CHANGES
+ * This is an exact copy of the HTML generation code (lines 426-700 from original)
+ */
+function generateModalHTML(product) {
     // Helper: Format price with conditional decimals
     const formatPriceFull = (amount, currencyCode, symbol) => {
         const hasDecimals = amount % 1 !== 0;
@@ -442,6 +442,7 @@ function showProductModal(productId) {
     };
 
     // Prepare data (TRIM all values)
+    const productId = product.id;
     const currencyCode = product.currency || 'INR';
     const symbol = product.symbol || '₹';
     const priceFormatted = formatPriceFull(product.price || 0, currencyCode, symbol);
@@ -450,10 +451,10 @@ function showProductModal(productId) {
     const showDiscount = product.show_discount || false;
     const discountPercent = product.computed_discount || 0;
 
-    // Prepare images for gallery - Use all_images only (no main_image)
+    // Prepare images for gallery
     const images = product.all_images || [];
 
-    // Title truncation - Responsive (35 chars mobile, 80 desktop)
+    // Title truncation
     const isMobile = window.innerWidth <= 768;
     const maxTitleLength = isMobile ? 35 : 80;
     const productTitle = (product.name || 'Product').trim();
@@ -462,7 +463,7 @@ function showProductModal(productId) {
         ? productTitle.substring(0, maxTitleLength).trim() + '...'
         : productTitle;
 
-    // Description truncation (200 chars)
+    // Description truncation
     const maxDescLength = 200;
     const description = (product.description || '').trim();
     const isDescLong = description.length > maxDescLength;
@@ -470,8 +471,8 @@ function showProductModal(productId) {
         ? description.substring(0, 200).trim() + '...'
         : description;
 
-    // Build modal HTML
-    const modalContent = `
+    // Build modal HTML - EXACT COPY from original showProductModal
+    return `
         <div class="simple-modal dynamic-modal">
             <div class="modal-overlay" onclick="closeDynamicModal(event)"></div>
             <div class="simple-modal-content">
@@ -635,26 +636,18 @@ function showProductModal(productId) {
                         <div class="modal-section-content">
                             ${Object.entries(product.additionalInfo)
                 .flatMap(([groupName, items]) => {
-                    // Skip Books group for non-book products
                     if (groupName === 'Books' && product.category !== 'Book') return [];
                     return items || [];
                 })
                 .filter(item => {
-                    // Hide timestamp
                     if (item.key === 'Timestamp' || item.key === 'timestamp') return false;
-                    // Hide discount (already shown in price badge)
                     if (item.key === 'Discount' || item.key === 'discount') return false;
-                    // Hide net quantity (usually "1 Count")
                     if (item.key === 'Net Quantity' || item.key === 'net_quantity') return false;
-                    // Hide generic name (redundant with category)
                     if (item.key === 'Generic Name' || item.key === 'generic_name') return false;
-                    // Hide item weight/dimensions (duplicate of Product Details)
                     if (item.key === 'Item Weight' || item.key === 'item_weight') return false;
                     if (item.key === 'Item Dimensions' || item.key === 'item_dimensions') return false;
                     if (item.key === 'Product Dimensions' || item.key === 'product_dimensions') return false;
-                    // Hide country of origin (moved to Product Details)
                     if (item.key === 'Country of Origin' || item.key === 'country_of_origin') return false;
-                    // Hide packer if same as manufacturer
                     if ((item.key === 'Packer' || item.key === 'packer') && product.manufacturer && item.value === product.manufacturer) return false;
                     return true;
                 })
@@ -698,10 +691,32 @@ function showProductModal(productId) {
             </div>
         </div>
     `;
+}
 
-    document.body.insertAdjacentHTML('beforeend', modalContent);
+/**
+ * PHASE_1: Build 5-product cache [P-2, P-1, Active, N+1, N+2]
+ */
+function build5ProductCache(centerIndex) {
+    const cache = [];
+    const totalProducts = VibeDrips.filteredProducts.length;
 
-    // Setup image gallery if MediaLightbox is available
+    for (let i = -2; i <= 2; i++) {
+        const idx = (centerIndex + i + totalProducts) % totalProducts;
+        cache.push(VibeDrips.filteredProducts[idx]);
+    }
+
+    return cache;
+}
+
+/**
+ * PHASE_1: Setup interactive functions for a product
+ * Extracted from showProductModal (lines 704-767)
+ */
+function setupProductInteractions(product) {
+    const productId = product.id;
+    const images = product.all_images || [];
+
+    // Setup image gallery
     if (images.length > 0 && typeof MediaLightbox !== 'undefined') {
         window[`openImageGallery_${productId}`] = function () {
             const lightbox = new MediaLightbox({
@@ -714,39 +729,43 @@ function showProductModal(productId) {
         };
     }
 
-    // Setup carousel navigation using CarouselUtils
+    // Setup carousel navigation
     if (images.length > 0) {
-        // Create carousel controller
         const carousel = CarouselUtils.createCarousel(productId, images);
-
-        // Expose navigation functions
         window[`selectImage_${productId}`] = (index) => carousel.selectImage(index);
         window[`previewImage_${productId}`] = (index) => carousel.previewImage(index);
         window[`prevImage_${productId}`] = () => carousel.prev();
         window[`nextImage_${productId}`] = () => carousel.next();
     }
 
-    // Setup title toggle if title is long
+    // Setup title toggle
+    const isMobile = window.innerWidth <= 768;
+    const maxTitleLength = isMobile ? 35 : 80;
+    const productTitle = (product.name || 'Product').trim();
+    const isTitleLong = productTitle.length > maxTitleLength;
+
     if (isTitleLong) {
         window[`toggleTitle_${productId}`] = function () {
             const titleEl = document.getElementById(`modal-title-${productId}`);
             const isExpanded = titleEl.classList.contains('expanded');
 
             if (isExpanded) {
-                // Collapse
                 const isMobile = window.innerWidth <= 768;
                 const maxLen = isMobile ? 35 : 80;
                 titleEl.textContent = productTitle.substring(0, maxLen).trim() + '...';
                 titleEl.classList.remove('expanded');
             } else {
-                // Expand
                 titleEl.textContent = productTitle;
                 titleEl.classList.add('expanded');
             }
         };
     }
 
-    // Setup description toggle if description is long
+    // Setup description toggle
+    const description = (product.description || '').trim();
+    const maxDescLength = 200;
+    const isDescLong = description.length > maxDescLength;
+
     if (isDescLong) {
         window[`toggleDescription_${productId}`] = function () {
             const descEl = document.getElementById(`desc-${productId}`);
@@ -764,6 +783,139 @@ function showProductModal(productId) {
             }
         };
     }
+}
+
+/**
+ * PHASE_1: Wrap existing modal with sliding navigation structure
+ */
+function wrapModalForSliding(centerProductId) {
+    const existingModal = document.querySelector('.dynamic-modal');
+    if (!existingModal) return;
+
+    const centerIndex = VibeDrips.filteredProducts.findIndex(p => p.id === centerProductId);
+    VibeDrips.modalState.currentIndex = centerIndex;
+
+    // Build 5-product cache
+    const cache = build5ProductCache(centerIndex);
+
+    // Create navigation container
+    const navContainer = document.createElement('div');
+    navContainer.className = 'modal-nav-container';
+
+    // Create sliding strip
+    const slidingStrip = document.createElement('div');
+    slidingStrip.className = 'modal-sliding-strip';
+
+    // Generate HTML for all 5 products
+    cache.forEach(product => {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = generateModalHTML(product);
+        const modalContent = tempDiv.querySelector('.simple-modal-content');
+        slidingStrip.appendChild(modalContent);
+    });
+
+    // Center the active product (index 2)
+    slidingStrip.style.transform = 'translateX(-200%)';
+
+    // Add strip to container
+    navContainer.appendChild(slidingStrip);
+
+    // Replace content in modal
+    const overlay = existingModal.querySelector('.modal-overlay');
+    const oldContent = existingModal.querySelector('.simple-modal-content');
+    if (oldContent) oldContent.remove();
+
+    existingModal.insertBefore(navContainer, overlay.nextSibling);
+
+    // Setup event listeners for all cached products
+    cache.forEach(product => {
+        setupProductInteractions(product);
+    });
+}
+
+/**
+ * PHASE_1: Navigate to next/prev product (basic version)
+ */
+function navigateModal(direction) {
+    const totalProducts = VibeDrips.filteredProducts.length;
+    const strip = document.querySelector('.modal-sliding-strip');
+
+    if (!strip || VibeDrips.modalState.isSliding) return;
+
+    VibeDrips.modalState.isSliding = true;
+
+    // Calculate new index
+    if (direction === 'next') {
+        VibeDrips.modalState.currentIndex = (VibeDrips.modalState.currentIndex + 1) % totalProducts;
+    } else {
+        VibeDrips.modalState.currentIndex = (VibeDrips.modalState.currentIndex - 1 + totalProducts) % totalProducts;
+    }
+
+    // Calculate new transform
+    const offset = direction === 'next' ? -100 : 100;
+    const newTransform = -200 + offset;
+
+    // Apply transition
+    strip.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
+    strip.style.transform = `translateX(${newTransform}%)`;
+
+    // On transitionend: Teleport + Re-cache
+    strip.addEventListener('transitionend', function handler() {
+        strip.removeEventListener('transitionend', handler);
+
+        // Instant teleport
+        strip.style.transition = 'none';
+        strip.style.transform = 'translateX(-200%)';
+
+        // Update cache
+        const cache = build5ProductCache(VibeDrips.modalState.currentIndex);
+
+        // Re-render strip
+        strip.innerHTML = '';
+        cache.forEach(product => {
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = generateModalHTML(product);
+            const modalContent = tempDiv.querySelector('.simple-modal-content');
+            strip.appendChild(modalContent);
+        });
+
+        // Setup interactions for new products
+        cache.forEach(product => {
+            setupProductInteractions(product);
+        });
+
+        // Re-enable transition
+        requestAnimationFrame(() => {
+            strip.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
+            VibeDrips.modalState.isSliding = false;
+        });
+    }, { once: true });
+}
+// END_PHASE_1
+
+
+/**
+ * Show detailed product modal with enhanced UI
+ * PHASE_1: Modified to use wrapModalForSliding
+ */
+function showProductModal(productId) {
+    const product = VibeDrips.allProducts.find(p => p.id === productId);
+    if (!product) {
+        console.error('Product not found:', productId);
+        return;
+    }
+
+    // PHASE_1: Generate modal HTML using extracted function
+    const modalContent = generateModalHTML(product);
+
+    // Insert into DOM
+    document.body.insertAdjacentHTML('beforeend', modalContent);
+
+    // PHASE_1: Wrap modal for sliding navigation
+    wrapModalForSliding(productId);
+
+    // Note: setupProductInteractions is now called inside wrapModalForSliding
+    // for all 5 cached products
 }
 
 // Helper: Get emoji for product detail keys
@@ -937,4 +1089,8 @@ window.filterProducts = filterProducts;
 window.sortProducts = sortProducts;
 window.openAmazonLink = openAmazonLink;
 window.showProductModal = showProductModal;
+// PHASE_1: Export navigation functions
+window.navigateModal = navigateModal;
+window.setupProductInteractions = setupProductInteractions;
 console.log('Products.js loaded successfully with currency-aware price formatting and text truncation');
+

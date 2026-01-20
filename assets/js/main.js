@@ -14,10 +14,10 @@ window.VibeDrips = {
         ipApiUrl: 'https://ipapi.co/json/',
         regionToCurrency: {
             'US': 'USD', 'United States': 'USD',
-            'IN': 'INR', 'India': 'INR', 
+            'IN': 'INR', 'India': 'INR',
             'GB': 'GBP', 'United Kingdom': 'GBP', 'UK': 'GBP',
             'DE': 'EUR', 'Germany': 'EUR',
-            'FR': 'EUR', 'France': 'EUR', 
+            'FR': 'EUR', 'France': 'EUR',
             'IT': 'EUR', 'Italy': 'EUR',
             'JP': 'JPY', 'Japan': 'JPY',
             'CA': 'CAD', 'Canada': 'CAD',
@@ -25,13 +25,18 @@ window.VibeDrips = {
         }
     },
     availableCurrencies: [],
-    elements: {}
+    elements: {},
+    // PHASE_1: Modal state management
+    modalState: {
+        currentIndex: 0,
+        isSliding: false
+    }
 };
 
 // Initialize the application
 async function initializeApp() {
     console.log('🎯 Starting VibeDrips initialization...');
-    
+
     try {
         cacheElements();
         setupEventListeners();
@@ -41,9 +46,9 @@ async function initializeApp() {
         await loadProducts(VibeDrips.currentCurrency);
         setupThemeToggle();
         closeSimpleModal();
-        
+
         console.log('✅ VibeDrips initialized successfully!');
-        
+
     } catch (error) {
         console.error('❌ Initialization failed:', error);
         await fallbackInitialization();

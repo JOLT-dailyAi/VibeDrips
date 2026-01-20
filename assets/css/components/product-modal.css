@@ -33,6 +33,45 @@
     /* Dark overlay */
 }
 
+/* ============================================
+   PHASE_1: Modal Navigation & Sliding Strip
+   ============================================ */
+
+/* Modal Navigation Container (Viewport) */
+.modal-nav-container {
+    position: relative;
+    display: inline-block;
+    /* Shrink-wrap to content */
+    overflow: hidden;
+    /* Hide off-screen products */
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* Sliding Strip (Flex Container) */
+.modal-sliding-strip {
+    display: flex;
+    height: 100%;
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: transform;
+    transform: translateX(-200%);
+    /* Center the 3rd product (index 2) */
+}
+
+/* No transition during teleport */
+.modal-sliding-strip.no-transition {
+    transition: none !important;
+}
+
+/* Each modal takes full width */
+.modal-sliding-strip .simple-modal-content {
+    flex: 0 0 100%;
+    min-width: 100%;
+}
+
+/* END_PHASE_1 */
+
+
 /* Modal Overlay - Clickable background */
 .modal-overlay {
     position: fixed;
