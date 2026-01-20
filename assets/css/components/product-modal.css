@@ -65,11 +65,12 @@
 /* Sliding Strip (Flex Container) */
 .modal-sliding-strip {
     display: flex;
+    width: 500%;
+    /* 5 products cached */
     height: 100%;
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    /* FIXED: Material Design smooth */
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
     will-change: transform;
-    /* transform: translateX(-200%) set by JS */
+    /* transform: translateX(-40%) center position set by JS */
 }
 
 /* No transition during teleport */
@@ -77,16 +78,13 @@
     transition: none !important;
 }
 
-/* Each item inside strip maintains ORIGINAL look */
+/* Each item inside strip is exactly 1/5th of the 500% strip */
 .modal-sliding-strip .simple-modal-content {
-    flex: 0 0 100%;
-    /* Fill the wrapper viewport */
-    width: 100% !important;
-    /* Forces it to fill the 90%/1200px wrapper */
-    max-width: none !important;
+    flex: 0 0 20% !important;
+    width: 20% !important;
+    max-width: 20% !important;
     margin: 0 !important;
     box-shadow: none !important;
-    /* Wrapper handles glow */
     z-index: auto !important;
     position: relative;
 }
@@ -128,6 +126,7 @@
     position: relative;
     box-sizing: border-box;
     /* Prevent padding overflow */
+    scrollbar-gutter: stable;
 }
 
 /* Constrain all children to prevent horizontal overflow */

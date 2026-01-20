@@ -827,8 +827,9 @@ function wrapModalForSliding(centerProductId) {
         slidingStrip.appendChild(modalContent);
     });
 
-    // Center the active product (index 2)
-    slidingStrip.style.transform = 'translateX(-200%)';
+    // Center the active product (index 2 in 5-product cache)
+    // Child 0: 0%, Child 1: -20%, Child 2: -40%, Child 3: -60%, Child 4: -80%
+    slidingStrip.style.transform = 'translate3d(-40%, 0, 0)';
 
     // Add strip to container
     navContainer.appendChild(slidingStrip);
@@ -892,48 +893,61 @@ function navigateModal(direction) {
         VibeDrips.modalState.currentIndex = (VibeDrips.modalState.currentIndex - 1 + totalProducts) % totalProducts;
     }
 
-    // Calculate new transform
-    const offset = direction === 'next' ? -100 : 100;
-    const newTransform = -200 + offset;
+    // Explicit math for 500% width strip (each product is 20%)
+    // Center is -40% (2 products left of active)
+    const currentTransform = -40;
+    const offset = direction === 'next' ? -20 : 20;
+    const newTransform = currentTransform + offset;
 
-    // Apply transition - FIXED: Material Design easing (smooth, no bounce)
-    strip.style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-    strip.style.transform = `translateX(${newTransform}%)`;
+    // Apply transition - FIXED: translate3d for maximal GPU stability
+    strip.classList.remove('no-transition');
+    strip.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
+    strip.style.transform = `translate3d(${newTransform}%, 0, 0)`;
 
-    // On transitionend: Teleport + Re-cache
-    strip.addEventListener('transitionend', function handler() {
+    // On transitionend: Atomic Teleport + Re-cache
+    strip.addEventListener('transitionend', function handler(e) {
+        // STRICT CHECK: Only respond to transform transition on the strip itself
+        if (e.target !== strip || e.propertyName !== 'transform') return;
+
         strip.removeEventListener('transitionend', handler);
 
-        // Instant teleport
+        // ATOMIC TELEPORT SEQUENCE START
+        // 1. Kill transition instantly
         strip.style.transition = 'none';
-        strip.style.transform = 'translateX(-200%)';
+        strip.classList.add('no-transition');
 
-        // Update cache
+        // 2. Set teleport target (back to center)
+        strip.style.transform = 'translate3d(-40%, 0, 0)';
+
+        // 3. Update DOM content while transition is dead
         const cache = build5ProductCache(VibeDrips.modalState.currentIndex);
-
-        // Re-render strip
         strip.innerHTML = '';
         cache.forEach(product => {
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = generateModalHTML(product);
             const modalContent = tempDiv.querySelector('.simple-modal-content');
+            modalContent.scrollTop = 0; // Reset scroll position
             strip.appendChild(modalContent);
         });
 
-        // Setup interactions for new products
+        // 4. Update interactions
         cache.forEach(product => {
             setupProductInteractions(product);
         });
 
-        // Re-enable transition - FIXED: Material Design easing
-        requestAnimationFrame(() => {
-            strip.style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
-            VibeDrips.modalState.isSliding = false;
+        // 5. CRITICAL: Force Reflow to ensure browser acknowledges position before re-enabling transition
+        void strip.offsetWidth;
 
-            // PHASE_1: Update glass zone states
-            updateGlassZoneStates();
+        // 6. Re-enable transition for NEXT navigation with double RAF safety
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                strip.classList.remove('no-transition');
+                strip.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
+                VibeDrips.modalState.isSliding = false;
+                updateGlassZoneStates();
+            });
         });
-    }, { once: true });
+    });
 }
 // END_PHASE_1
 
