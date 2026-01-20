@@ -887,10 +887,19 @@ function navigateModal(direction) {
     VibeDrips.modalState.isSliding = true;
 
     // Calculate new index
+    // Calculate new index with boundary clamping (no cycling)
     if (direction === 'next') {
-        VibeDrips.modalState.currentIndex = (VibeDrips.modalState.currentIndex + 1) % totalProducts;
+        if (VibeDrips.modalState.currentIndex >= totalProducts - 1) {
+            VibeDrips.modalState.isSliding = false;
+            return;
+        }
+        VibeDrips.modalState.currentIndex++;
     } else {
-        VibeDrips.modalState.currentIndex = (VibeDrips.modalState.currentIndex - 1 + totalProducts) % totalProducts;
+        if (VibeDrips.modalState.currentIndex <= 0) {
+            VibeDrips.modalState.isSliding = false;
+            return;
+        }
+        VibeDrips.modalState.currentIndex--;
     }
 
     // Explicit math for 500% width strip (each product is 20%)
@@ -963,11 +972,30 @@ function setupModalKeyboardNav() {
         // Only if modal is open
         if (!document.querySelector('.dynamic-modal')) return;
 
+        const currentIndex = VibeDrips.modalState.currentIndex;
+        const totalProducts = VibeDrips.filteredProducts.length;
+
         if (e.key === 'ArrowLeft') {
             e.preventDefault();
+            if (currentIndex === 0) {
+                const leftZone = document.querySelector('.glass-zone.left');
+                if (leftZone) {
+                    leftZone.classList.add('pulse');
+                    setTimeout(() => leftZone.classList.remove('pulse'), 1000);
+                }
+                return;
+            }
             navigateModal('prev');
         } else if (e.key === 'ArrowRight') {
             e.preventDefault();
+            if (currentIndex === totalProducts - 1) {
+                const rightZone = document.querySelector('.glass-zone.right');
+                if (rightZone) {
+                    rightZone.classList.add('pulse');
+                    setTimeout(() => rightZone.classList.remove('pulse'), 1000);
+                }
+                return;
+            }
             navigateModal('next');
         } else if (e.key === 'Escape') {
             const modal = document.querySelector('.dynamic-modal');
