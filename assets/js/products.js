@@ -1092,6 +1092,7 @@ function setupEventIsolation() {
         '.thumbnail',
         '.amazon-button',
         '.read-more-btn',
+        '.modal-close-button',
         '.modal-section-content' // Allow vertical scroll inside sections without horizontal snap
     ];
 
@@ -1126,8 +1127,8 @@ function setupUnifiedModalDrag() {
     const handleStart = (e) => {
         if (VibeDrips.modalState.isSliding) return;
 
-        // Don't drag if we're clicking a collapsible header (handled by toggleSection)
-        if (e.target.closest('.modal-section-header')) return;
+        // Don't drag if we're clicking a collapsible header or the close button
+        if (e.target.closest('.modal-section-header') || e.target.closest('.modal-close-button')) return;
 
         isDragging = true;
         modalBase.classList.add('dragging');
