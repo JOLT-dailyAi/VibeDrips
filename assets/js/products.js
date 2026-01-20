@@ -882,8 +882,9 @@ function wrapModalForSliding(centerProductId) {
     setupGlassZones();
     updateGlassZoneStates();
 
-    // PHASE_2: Setup lever elasticity
-    setupGlassLeverElasticity();
+    // PHASE_2: Setup unified global drag and isolation
+    setupUnifiedModalDrag();
+    setupEventIsolation();
 }
 
 /**
@@ -1081,67 +1082,114 @@ function setupGlassZones() {
 }
 
 /**
- * PHASE_2: Setup Glass Lever Elasticity
- * Pull sidezones like rubber bands to charge navigation
+ * PHASE_2: Setup Event Isolation
+ * Protect internal gallery/buttons from triggering the main modal swipe
  */
-function setupGlassLeverElasticity() {
+function setupEventIsolation() {
+    const protectedSelectors = [
+        '.modal-image-gallery',
+        '.carousel-controls',
+        '.thumbnail',
+        '.amazon-button',
+        '.read-more-btn',
+        '.modal-section-content' // Allow vertical scroll inside sections without horizontal snap
+    ];
+
+    protectedSelectors.forEach(selector => {
+        const elements = document.querySelectorAll(`.dynamic-modal ${selector}`);
+        elements.forEach(el => {
+            // Mousedown/Touchstart isolation
+            el.addEventListener('mousedown', (e) => e.stopPropagation());
+            el.addEventListener('touchstart', (e) => e.stopPropagation(), { passive: true });
+        });
+    });
+}
+
+/**
+ * PHASE_2: Setup Unified Modal Drag
+ * Drag content ANYWHERE to trigger navigation/elasticity
+ */
+function setupUnifiedModalDrag() {
+    const container = document.querySelector('.modal-nav-container');
+    const modalBase = document.querySelector('.dynamic-modal');
     const leftZone = document.querySelector('.glass-zone.left');
     const rightZone = document.querySelector('.glass-zone.right');
-    const container = document.querySelector('.modal-nav-container');
 
-    if (!leftZone || !rightZone || !container) return;
+    if (!container || !modalBase) return;
 
     let isDragging = false;
-    let activeZone = null;
     let startX = 0;
     let currentX = 0;
+    let activeZone = null;
     let activeGlow = null;
 
-    const handleStart = (e, zone) => {
-        if (window.innerWidth < 768) return;
+    const handleStart = (e) => {
         if (VibeDrips.modalState.isSliding) return;
 
+        // Don't drag if we're clicking a collapsible header (handled by toggleSection)
+        if (e.target.closest('.modal-section-header')) return;
+
         isDragging = true;
-        activeZone = zone;
+        modalBase.classList.add('dragging');
         startX = e.type.startsWith('mouse') ? e.clientX : e.touches[0].clientX;
 
-        activeZone.style.transition = 'none';
+        // Reset transitions
+        if (leftZone) leftZone.style.transition = 'none';
+        if (rightZone) rightZone.style.transition = 'none';
 
-        activeGlow = document.querySelector(`.boundary-glow-overlay.${zone.classList.contains('left') ? 'left' : 'right'}`);
-        if (activeGlow) {
-            activeGlow.classList.add('active');
-            activeGlow.style.transition = 'none'; // Lock to cursor
-        }
+        // Reset currentX to stop previous movement reference
+        currentX = startX;
     };
 
     const handleMove = (e) => {
-        if (!isDragging || !activeZone) return;
+        if (!isDragging) return;
+
+        // Prevent vertical page scroll during horizontal product swipe
+        if (e.cancelable) e.preventDefault();
 
         currentX = e.type.startsWith('mouse') ? e.clientX : e.touches[0].clientX;
-        let deltaX = currentX - startX;
+        const deltaX = currentX - startX;
+        const rawPull = Math.abs(deltaX);
 
-        const isLeft = activeZone.classList.contains('left');
-        if (isLeft) {
-            deltaX = Math.max(0, deltaX);
-        } else {
-            deltaX = Math.min(0, deltaX);
+        // Determine which lever we are "pulling"
+        // Swipe Right (deltaX > 0) -> Pulling LEFT Lever
+        // Swipe Left (deltaX < 0) -> Pulling RIGHT Lever
+        const side = deltaX > 0 ? 'left' : 'right';
+
+        // Switch active zone if direction changes mid-drag
+        const zone = (side === 'left') ? leftZone : rightZone;
+        if (zone !== activeZone) {
+            // Reset previous if we crossed the center line
+            if (activeZone) {
+                activeZone.style.setProperty('--lever-x', '0px');
+                activeZone.classList.remove('pulse'); // Safety
+            }
+            if (activeGlow) {
+                activeGlow.classList.remove('active');
+                activeGlow.style.width = '0px';
+            }
+
+            activeZone = zone;
+            activeGlow = document.querySelector(`.boundary-glow-overlay.${side}`);
+            if (activeGlow) {
+                activeGlow.classList.add('active');
+                activeGlow.style.transition = 'none';
+            }
         }
 
-        const rawPull = Math.abs(deltaX);
+        // Apply 0.4x Dampening
         const pull = deltaX * 0.4;
-        activeZone.style.setProperty('--lever-x', `${pull}px`);
+        if (activeZone) {
+            activeZone.style.setProperty('--lever-x', `${pull}px`);
+        }
 
-        // Check if this is an edge-case (red glow) or standard (blue glow)
+        // Color Logic and Width
         const totalProducts = VibeDrips.filteredProducts.length;
-        const isBoundary = (isLeft && VibeDrips.modalState.currentIndex === 0) ||
-            (!isLeft && VibeDrips.modalState.currentIndex === totalProducts - 1);
+        const isBoundary = (side === 'left' && VibeDrips.modalState.currentIndex === 0) ||
+            (side === 'right' && VibeDrips.modalState.currentIndex === totalProducts - 1);
 
-        // Unified Glow: 90, 75, 255 | Edge Case: 255, 50, 50
         const glowColor = isBoundary ? "255, 50, 50" : "90, 75, 255";
-
-        // Intensity scaling
         const intensity = Math.min(rawPull / 150, 1);
-        // Filling width: starts at the lever's natural resting pull (30px margin) + actual lever movement
         const glowWidth = 30 + Math.abs(pull);
 
         if (activeGlow) {
@@ -1152,55 +1200,63 @@ function setupGlassLeverElasticity() {
     };
 
     const handleEnd = () => {
-        if (!isDragging || !activeZone) return;
+        if (!isDragging) return;
         isDragging = false;
+        modalBase.classList.remove('dragging');
 
         const deltaX = currentX - startX;
-        const isLeft = activeZone.classList.contains('left');
+        const absoluteDelta = Math.abs(deltaX);
+        const side = deltaX > 0 ? 'left' : 'right';
 
-        activeZone.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
-        activeZone.style.setProperty('--lever-x', '0px');
+        // Reference captured zone for async cleanup
+        const zoneToClean = activeZone;
+        const glowToClean = activeGlow;
 
-        const thresholdMet = Math.abs(deltaX) > 80;
-        if (thresholdMet) {
-            if (isLeft && VibeDrips.modalState.currentIndex > 0) {
+        // Snap-back Lever
+        if (zoneToClean) {
+            zoneToClean.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
+            zoneToClean.style.setProperty('--lever-x', '0px');
+
+            // Wobble
+            const dirMultiplier = side === 'left' ? 1 : -1;
+            setTimeout(() => {
+                if (zoneToClean) {
+                    zoneToClean.style.setProperty('--wobble-dir', `${-8 * dirMultiplier}px`);
+                    zoneToClean.style.setProperty('--wobble-rebound', `${4 * dirMultiplier}px`);
+                    zoneToClean.style.setProperty('--wobble-settle', `${-2 * dirMultiplier}px`);
+                    zoneToClean.classList.add('wobbling');
+                    setTimeout(() => zoneToClean.classList.remove('wobbling'), 400);
+                }
+            }, 400);
+        }
+
+        // Navigation Trigger (80px Threshold)
+        if (absoluteDelta > 80) {
+            if (side === 'left' && VibeDrips.modalState.currentIndex > 0) {
                 navigateModal('prev');
-            } else if (!isLeft && VibeDrips.modalState.currentIndex < VibeDrips.filteredProducts.length - 1) {
+            } else if (side === 'right' && VibeDrips.modalState.currentIndex < VibeDrips.filteredProducts.length - 1) {
                 navigateModal('next');
-            } else {
-                activeZone.classList.add('pulse');
-                setTimeout(() => activeZone.classList.remove('pulse'), 1000);
+            } else if (zoneToClean) {
+                // Boundary hit feedback
+                zoneToClean.classList.add('pulse');
+                setTimeout(() => zoneToClean.classList.remove('pulse'), 1000);
             }
         }
 
-        setTimeout(() => {
-            if (activeZone) {
-                const wobbleDir = isLeft ? -8 : 8;
-                activeZone.style.setProperty('--wobble-dir', `${wobbleDir}px`);
-                activeZone.style.setProperty('--wobble-rebound', `${-wobbleDir / 2}px`);
-                activeZone.style.setProperty('--wobble-settle', `${wobbleDir / 4}px`);
-
-                activeZone.classList.add('wobbling');
-                setTimeout(() => {
-                    if (activeZone) activeZone.classList.remove('wobbling');
-                }, 400);
-            }
-        }, 400);
-
-        if (activeGlow) {
-            activeGlow.classList.remove('active');
-            activeGlow.style.transition = 'opacity 0.2s ease, width 0.2s ease';
-            activeGlow.style.width = '0%';
+        // Reset Glows
+        if (glowToClean) {
+            glowToClean.style.transition = 'opacity 0.2s ease, width 0.2s ease';
+            glowToClean.classList.remove('active');
+            glowToClean.style.width = '0px';
         }
 
         activeZone = null;
+        activeGlow = null;
     };
 
-    leftZone.addEventListener('mousedown', (e) => handleStart(e, leftZone));
-    leftZone.addEventListener('touchstart', (e) => handleStart(e, leftZone), { passive: true });
-
-    rightZone.addEventListener('mousedown', (e) => handleStart(e, rightZone));
-    rightZone.addEventListener('touchstart', (e) => handleStart(e, rightZone), { passive: true });
+    // Global listeners on container
+    container.addEventListener('mousedown', handleStart);
+    container.addEventListener('touchstart', handleStart, { passive: true });
 
     document.addEventListener('mousemove', handleMove);
     document.addEventListener('touchmove', handleMove, { passive: false });

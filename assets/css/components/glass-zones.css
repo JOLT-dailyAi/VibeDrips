@@ -183,6 +183,8 @@
     z-index: 1002;
     opacity: 0;
     transition: opacity 0.2s ease, width 0.2s ease;
+    /* Ensure visibility on mobile even if .glass-zone is hidden */
+    display: block !important;
 }
 
 .boundary-glow-overlay.left {
@@ -201,6 +203,20 @@
 
 .boundary-glow-overlay.active {
     opacity: 1;
+}
+
+/* Protection: Disable selection during drag */
+.dynamic-modal.dragging {
+    user-select: none !important;
+    -webkit-user-select: none !important;
+}
+
+.modal-nav-container {
+    cursor: grab;
+}
+
+.dynamic-modal.dragging .modal-nav-container {
+    cursor: grabbing;
 }
 
 /* Mobile - Hide Glass Zones */
