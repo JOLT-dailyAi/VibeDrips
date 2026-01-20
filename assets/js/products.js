@@ -846,7 +846,7 @@ function wrapModalForSliding(centerProductId) {
         existingModal.appendChild(navContainer);
     }
 
-    // PHASE_1: Add glass zones HTML - FIXED: Add to navContainer AFTER it's in DOM
+    // PHASE_1: Add glass zones HTML - FIXED: Add to MODAL (not navContainer) so they're outside scrollable content
     const glassZonesHTML = `
         <button class="arrow-button glass-zone left" aria-label="Previous product">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -861,7 +861,8 @@ function wrapModalForSliding(centerProductId) {
             <span class="prohibited-icon" aria-hidden="true">⛔</span>
         </button>
     `;
-    navContainer.insertAdjacentHTML('beforeend', glassZonesHTML);
+    // Add to MODAL, not navContainer
+    existingModal.insertAdjacentHTML('beforeend', glassZonesHTML);
 
     // Setup event listeners for all cached products
     cache.forEach(product => {
