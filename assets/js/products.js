@@ -1108,7 +1108,10 @@ function setupGlassLeverElasticity() {
         activeZone.style.transition = 'none';
 
         activeGlow = document.querySelector(`.boundary-glow-overlay.${zone.classList.contains('left') ? 'left' : 'right'}`);
-        if (activeGlow) activeGlow.classList.add('active');
+        if (activeGlow) {
+            activeGlow.classList.add('active');
+            activeGlow.style.transition = 'none'; // Lock to cursor
+        }
     };
 
     const handleMove = (e) => {
@@ -1124,15 +1127,27 @@ function setupGlassLeverElasticity() {
             deltaX = Math.min(0, deltaX);
         }
 
+        const rawPull = Math.abs(deltaX);
         const pull = deltaX * 0.4;
         activeZone.style.setProperty('--lever-x', `${pull}px`);
 
-        const intensity = Math.min(Math.abs(deltaX) / 150, 1);
-        const glowWidth = Math.min((Math.abs(deltaX) / 300) * 50, 50);
+        // Check if this is an edge-case (red glow) or standard (blue glow)
+        const totalProducts = VibeDrips.filteredProducts.length;
+        const isBoundary = (isLeft && VibeDrips.modalState.currentIndex === 0) ||
+            (!isLeft && VibeDrips.modalState.currentIndex === totalProducts - 1);
+
+        // Unified Glow: 90, 75, 255 | Edge Case: 255, 50, 50
+        const glowColor = isBoundary ? "255, 50, 50" : "90, 75, 255";
+
+        // Intensity scaling
+        const intensity = Math.min(rawPull / 150, 1);
+        // Filling width: starts at the lever's natural resting pull (30px margin) + actual lever movement
+        const glowWidth = 30 + Math.abs(pull);
 
         if (activeGlow) {
+            activeGlow.style.setProperty('--glow-rgb', glowColor);
             activeGlow.style.setProperty('--glow-intensity', intensity);
-            activeGlow.style.width = `${glowWidth}%`;
+            activeGlow.style.width = `${glowWidth}px`;
         }
     };
 
@@ -1174,6 +1189,7 @@ function setupGlassLeverElasticity() {
 
         if (activeGlow) {
             activeGlow.classList.remove('active');
+            activeGlow.style.transition = 'opacity 0.2s ease, width 0.2s ease';
             activeGlow.style.width = '0%';
         }
 

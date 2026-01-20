@@ -187,17 +187,15 @@
 
 .boundary-glow-overlay.left {
     left: 0;
-    background: radial-gradient(ellipse at left center,
-            rgba(255, 50, 50, var(--glow-intensity, 0)) 0%,
-            rgba(255, 50, 50, calc(var(--glow-intensity, 0) * 0.4)) 40%,
+    background: linear-gradient(to right,
+            rgba(var(--glow-rgb, 90, 75, 255), var(--glow-intensity, 0)) 0%,
             transparent 100%);
 }
 
 .boundary-glow-overlay.right {
     right: 0;
-    background: radial-gradient(ellipse at right center,
-            rgba(255, 50, 50, var(--glow-intensity, 0)) 0%,
-            rgba(255, 50, 50, calc(var(--glow-intensity, 0) * 0.4)) 40%,
+    background: linear-gradient(to left,
+            rgba(var(--glow-rgb, 90, 75, 255), var(--glow-intensity, 0)) 0%,
             transparent 100%);
 }
 
