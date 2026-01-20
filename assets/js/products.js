@@ -847,6 +847,14 @@ function wrapModalForSliding(centerProductId) {
         existingModal.appendChild(navContainer);
     }
 
+    // PHASE_2: Add boundary glow overlays
+    const glowHTML = `
+        <div class="boundary-glow-overlay left"></div>
+        <div class="boundary-glow-overlay right"></div>
+    `;
+    // Add to existingModal alongside glass zones
+    existingModal.insertAdjacentHTML('beforeend', glowHTML);
+
     // PHASE_1: Add glass zones HTML - FIXED: Add to MODAL (not navContainer) so they're outside scrollable content
     const glassZonesHTML = `
         <button class="arrow-button glass-zone left" aria-label="Previous product">
@@ -873,6 +881,9 @@ function wrapModalForSliding(centerProductId) {
     // PHASE_1: Setup glass zones and update states
     setupGlassZones();
     updateGlassZoneStates();
+
+    // PHASE_2: Setup lever elasticity
+    setupGlassLeverElasticity();
 }
 
 /**
@@ -1038,9 +1049,6 @@ function updateGlassZoneStates() {
     }
 }
 
-/**
- * PHASE_1: Setup glass zones with event listeners
- */
 function setupGlassZones() {
     const leftZone = document.querySelector('.glass-zone.left');
     const rightZone = document.querySelector('.glass-zone.right');
@@ -1070,6 +1078,119 @@ function setupGlassZones() {
         }
         navigateModal('next');
     });
+}
+
+/**
+ * PHASE_2: Setup Glass Lever Elasticity
+ * Pull sidezones like rubber bands to charge navigation
+ */
+function setupGlassLeverElasticity() {
+    const leftZone = document.querySelector('.glass-zone.left');
+    const rightZone = document.querySelector('.glass-zone.right');
+    const container = document.querySelector('.modal-nav-container');
+
+    if (!leftZone || !rightZone || !container) return;
+
+    let isDragging = false;
+    let activeZone = null;
+    let startX = 0;
+    let currentX = 0;
+    let activeGlow = null;
+
+    const handleStart = (e, zone) => {
+        if (window.innerWidth < 768) return;
+        if (VibeDrips.modalState.isSliding) return;
+
+        isDragging = true;
+        activeZone = zone;
+        startX = e.type.startsWith('mouse') ? e.clientX : e.touches[0].clientX;
+
+        activeZone.style.transition = 'none';
+
+        activeGlow = document.querySelector(`.boundary-glow-overlay.${zone.classList.contains('left') ? 'left' : 'right'}`);
+        if (activeGlow) activeGlow.classList.add('active');
+    };
+
+    const handleMove = (e) => {
+        if (!isDragging || !activeZone) return;
+
+        currentX = e.type.startsWith('mouse') ? e.clientX : e.touches[0].clientX;
+        let deltaX = currentX - startX;
+
+        const isLeft = activeZone.classList.contains('left');
+        if (isLeft) {
+            deltaX = Math.max(0, deltaX);
+        } else {
+            deltaX = Math.min(0, deltaX);
+        }
+
+        const pull = deltaX * 0.4;
+        activeZone.style.setProperty('--lever-x', `${pull}px`);
+
+        const intensity = Math.min(Math.abs(deltaX) / 150, 1);
+        const glowWidth = Math.min((Math.abs(deltaX) / 300) * 50, 50);
+
+        if (activeGlow) {
+            activeGlow.style.setProperty('--glow-intensity', intensity);
+            activeGlow.style.width = `${glowWidth}%`;
+        }
+    };
+
+    const handleEnd = () => {
+        if (!isDragging || !activeZone) return;
+        isDragging = false;
+
+        const deltaX = currentX - startX;
+        const isLeft = activeZone.classList.contains('left');
+
+        activeZone.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
+        activeZone.style.setProperty('--lever-x', '0px');
+
+        const thresholdMet = Math.abs(deltaX) > 80;
+        if (thresholdMet) {
+            if (isLeft && VibeDrips.modalState.currentIndex > 0) {
+                navigateModal('prev');
+            } else if (!isLeft && VibeDrips.modalState.currentIndex < VibeDrips.filteredProducts.length - 1) {
+                navigateModal('next');
+            } else {
+                activeZone.classList.add('pulse');
+                setTimeout(() => activeZone.classList.remove('pulse'), 1000);
+            }
+        }
+
+        setTimeout(() => {
+            if (activeZone) {
+                const wobbleDir = isLeft ? -8 : 8;
+                activeZone.style.setProperty('--wobble-dir', `${wobbleDir}px`);
+                activeZone.style.setProperty('--wobble-rebound', `${-wobbleDir / 2}px`);
+                activeZone.style.setProperty('--wobble-settle', `${wobbleDir / 4}px`);
+
+                activeZone.classList.add('wobbling');
+                setTimeout(() => {
+                    if (activeZone) activeZone.classList.remove('wobbling');
+                }, 400);
+            }
+        }, 400);
+
+        if (activeGlow) {
+            activeGlow.classList.remove('active');
+            activeGlow.style.width = '0%';
+        }
+
+        activeZone = null;
+    };
+
+    leftZone.addEventListener('mousedown', (e) => handleStart(e, leftZone));
+    leftZone.addEventListener('touchstart', (e) => handleStart(e, leftZone), { passive: true });
+
+    rightZone.addEventListener('mousedown', (e) => handleStart(e, rightZone));
+    rightZone.addEventListener('touchstart', (e) => handleStart(e, rightZone), { passive: true });
+
+    document.addEventListener('mousemove', handleMove);
+    document.addEventListener('touchmove', handleMove, { passive: false });
+
+    document.addEventListener('mouseup', handleEnd);
+    document.addEventListener('touchend', handleEnd);
 }
 
 // Initialize keyboard navigation on page load
