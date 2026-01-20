@@ -33,6 +33,61 @@
     /* Dark overlay */
 }
 
+/* ============================================
+   PHASE_1: Modal Navigation & Sliding Strip
+   ============================================ */
+
+/* Modal Navigation Container (Viewport) */
+.modal-nav-container {
+    position: relative;
+    overflow: hidden;
+    /* Hide off-screen products */
+    border-radius: 24px;
+    z-index: 1001;
+    /* Above overlay (999) */
+    /* Dimensions set dynamically by JS to match .simple-modal-content */
+    /* Center it like the original modal */
+    margin: 0 auto;
+    display: block;
+
+    /* Glow effect moved from .simple-modal-content to wrapper */
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        0 0 60px 15px rgba(90, 75, 255, 0.45),
+        0 0 120px 25px rgba(90, 75, 255, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Sliding Strip (Flex Container) */
+.modal-sliding-strip {
+    display: flex;
+    height: 100%;
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: transform;
+    /* transform: translateX(-200%) set by JS */
+}
+
+/* No transition during teleport */
+.modal-sliding-strip.no-transition {
+    transition: none !important;
+}
+
+/* Each item inside strip must be 100% of the wrapper's width */
+.modal-sliding-strip .simple-modal-content {
+    flex: 0 0 100%;
+    width: 100% !important;
+    max-width: none !important;
+    /* Wrapper already constrains it */
+    margin: 0 !important;
+    /* Let wrapper handle margins */
+    box-shadow: none !important;
+    /* Wrapper handles glow */
+    z-index: auto !important;
+    position: relative;
+}
+
+/* END_PHASE_1 */
+
 /* Modal Overlay - Clickable background */
 .modal-overlay {
     position: fixed;
