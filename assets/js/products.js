@@ -911,6 +911,12 @@ function showProductModal(productId) {
         return;
     }
 
+    // CRITICAL FIX: Remove any existing modal first
+    const existingModal = document.querySelector('.dynamic-modal');
+    if (existingModal) {
+        existingModal.remove();
+    }
+
     // PHASE_1: Generate modal HTML using extracted function
     const modalContent = generateModalHTML(product);
 
