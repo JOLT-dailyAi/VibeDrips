@@ -57,8 +57,7 @@
     height: 100%;
     transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
     will-change: transform;
-    transform: translateX(-200%);
-    /* Center the 3rd product (index 2) */
+    /* Initial transform set by JavaScript */
 }
 
 /* No transition during teleport */
@@ -66,13 +65,14 @@
     transition: none !important;
 }
 
-/* Each modal takes full width */
+/* Each modal takes full width of container */
 .modal-sliding-strip .simple-modal-content {
-    flex: 0 0 auto;
-    /* Let content determine size */
-    /* Preserve original dimensions from .simple-modal-content */
-    width: 90%;
-    max-width: 1200px;
+    flex: 0 0 100%;
+    /* Each product takes exactly 100% of container */
+    width: 100%;
+    /* CRITICAL: 100% of .modal-nav-container, not 90% */
+    max-width: none;
+    /* Remove max-width constraint */
     min-height: 60vh;
     max-height: 80vh;
 }
