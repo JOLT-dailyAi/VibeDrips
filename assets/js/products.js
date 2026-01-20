@@ -681,7 +681,7 @@ function generateModalHTML(product) {
                         <div class="modal-section-header" onclick="toggleDescription_${productId}()" style="cursor: pointer;">
                             <div class="title">
                                 <span class="emoji">📝</span>
-                                <span>Description</span>
+                                <span>Description & Reviews</span>
                             </div>
                             <span class="toggle-icon">▼</span>
                         </div>
@@ -1108,8 +1108,16 @@ function updateStats() {
  */
 function escapeHtml(unsafe) {
     if (!unsafe) return '';
-    return unsafe
-        .toString()
+    // First, decode existing entities to prevent double-escaping (&amp; -> &)
+    const decoded = unsafe.toString()
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#039;/g, "'")
+        .replace(/&#39;/g, "'");
+
+    return decoded
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
