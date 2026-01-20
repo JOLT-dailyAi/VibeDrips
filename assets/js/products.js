@@ -833,7 +833,20 @@ function wrapModalForSliding(centerProductId) {
     // Add strip to container
     navContainer.appendChild(slidingStrip);
 
-    // PHASE_1: Add glass zones HTML
+    // CRITICAL FIX: Insert navContainer AFTER overlay to maintain z-index stacking
+    // The overlay must be BEFORE the content in DOM order for z-index to work
+    const overlay = existingModal.querySelector('.modal-overlay');
+    const oldContent = existingModal.querySelector('.simple-modal-content');
+    if (oldContent) oldContent.remove();
+
+    // Insert AFTER overlay (overlay is z-index 999, navContainer is 1001)
+    if (overlay.nextSibling) {
+        existingModal.insertBefore(navContainer, overlay.nextSibling);
+    } else {
+        existingModal.appendChild(navContainer);
+    }
+
+    // PHASE_1: Add glass zones HTML - FIXED: Add to navContainer AFTER it's in DOM
     const glassZonesHTML = `
         <button class="arrow-button glass-zone left" aria-label="Previous product">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -849,19 +862,6 @@ function wrapModalForSliding(centerProductId) {
         </button>
     `;
     navContainer.insertAdjacentHTML('beforeend', glassZonesHTML);
-
-    // CRITICAL FIX: Insert navContainer AFTER overlay to maintain z-index stacking
-    // The overlay must be BEFORE the content in DOM order for z-index to work
-    const overlay = existingModal.querySelector('.modal-overlay');
-    const oldContent = existingModal.querySelector('.simple-modal-content');
-    if (oldContent) oldContent.remove();
-
-    // Insert AFTER overlay (overlay is z-index 999, navContainer is 1001)
-    if (overlay.nextSibling) {
-        existingModal.insertBefore(navContainer, overlay.nextSibling);
-    } else {
-        existingModal.appendChild(navContainer);
-    }
 
     // Setup event listeners for all cached products
     cache.forEach(product => {
@@ -895,8 +895,8 @@ function navigateModal(direction) {
     const offset = direction === 'next' ? -100 : 100;
     const newTransform = -200 + offset;
 
-    // Apply transition
-    strip.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
+    // Apply transition - FIXED: Material Design easing (smooth, no bounce)
+    strip.style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
     strip.style.transform = `translateX(${newTransform}%)`;
 
     // On transitionend: Teleport + Re-cache
@@ -924,9 +924,9 @@ function navigateModal(direction) {
             setupProductInteractions(product);
         });
 
-        // Re-enable transition
+        // Re-enable transition - FIXED: Material Design easing
         requestAnimationFrame(() => {
-            strip.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
+            strip.style.transition = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
             VibeDrips.modalState.isSliding = false;
 
             // PHASE_1: Update glass zone states
