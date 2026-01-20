@@ -40,18 +40,13 @@
 /* Modal Navigation Container (Viewport) */
 .modal-nav-container {
     position: relative;
-    display: inline-block;
     overflow: hidden;
     /* Hide off-screen products */
     border-radius: 24px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     z-index: 1001;
     /* CRITICAL: Above overlay (999) */
-    /* Match .simple-modal-content dimensions exactly */
-    width: 90%;
-    max-width: 1200px;
-    min-height: 60vh;
-    max-height: 80vh;
+    /* NO fixed dimensions - wrapper shrink-wraps to .simple-modal-content */
 }
 
 /* Sliding Strip (Flex Container) */
@@ -71,8 +66,13 @@
 
 /* Each modal takes full width */
 .modal-sliding-strip .simple-modal-content {
-    flex: 0 0 100%;
-    min-width: 100%;
+    flex: 0 0 auto;
+    /* Let content determine size */
+    /* Preserve original dimensions from .simple-modal-content */
+    width: 90%;
+    max-width: 1200px;
+    min-height: 60vh;
+    max-height: 80vh;
 }
 
 /* END_PHASE_1 */
