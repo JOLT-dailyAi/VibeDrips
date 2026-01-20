@@ -1,0 +1,185 @@
+/* ============================================
+   GLASS ZONES - Modal Side Navigation
+   Version: 1.0.0
+   Extends .arrow-button from buttons.css
+   Matches .modal-section-header glow style
+   ============================================ */
+
+/* Glass Zone Base - Extends .arrow-button */
+.glass-zone {
+    /* Override .arrow-button positioning */
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+    /* Override dimensions (rectangular instead of circular) */
+    width: 60px;
+    height: calc(100% - 60px);
+    /* 30px gap from top/bottom */
+    border-radius: 12px;
+    /* Override circular from .arrow-button */
+
+    /* Match .modal-section-header glow */
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.05) 0%,
+            rgba(255, 255, 255, 0.02) 100%) !important;
+    backdrop-filter: blur(var(--glass-blur, 10px)) saturate(180%);
+    -webkit-backdrop-filter: blur(var(--glass-blur, 10px)) saturate(180%);
+
+    /* Section-header matching glow */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: none;
+    /* Remove .arrow-button border */
+
+    /* Blue accent border on sides */
+    z-index: 1003;
+}
+
+.glass-zone.left {
+    left: 30px;
+    border-left: 3px solid rgba(90, 75, 255, 0.6);
+}
+
+.glass-zone.right {
+    right: 30px;
+    border-right: 3px solid rgba(90, 75, 255, 0.6);
+}
+
+/* Icon Styling */
+.glass-zone svg {
+    width: 28px;
+    height: 28px;
+    stroke: rgba(255, 255, 255, 0.9);
+    stroke-width: 2.5;
+    transition: all 0.3s ease;
+}
+
+/* Prohibited Icon (⛔) - Hidden by default */
+.glass-zone .prohibited-icon {
+    display: none;
+    font-size: 28px;
+    transition: all 0.3s ease;
+}
+
+/* Icon Swap at Boundaries */
+.glass-zone.disabled svg {
+    display: none;
+    /* Hide arrow */
+}
+
+.glass-zone.disabled .prohibited-icon {
+    display: block;
+    /* Show prohibited icon */
+}
+
+/* Hover State */
+.glass-zone:hover {
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.08) 0%,
+            rgba(255, 255, 255, 0.04) 100%) !important;
+    transform: translateY(-50%) scale(1.05);
+    box-shadow: 0 4px 12px rgba(90, 75, 255, 0.3);
+}
+
+.glass-zone:hover svg {
+    stroke: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+}
+
+/* Active State */
+.glass-zone:active {
+    transform: translateY(-50%) scale(0.98);
+}
+
+.glass-zone:focus {
+    outline: 2px solid rgba(90, 75, 255, 0.5);
+    outline-offset: 2px;
+}
+
+/* Disabled State - Boundary Indicator */
+.glass-zone.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: all;
+    /* Allow clicks for pulse animation */
+    background: linear-gradient(135deg,
+            rgba(255, 100, 100, 0.08) 0%,
+            rgba(255, 100, 100, 0.04) 100%) !important;
+}
+
+.glass-zone.disabled.left {
+    border-left: 3px solid rgba(255, 100, 100, 0.6);
+}
+
+.glass-zone.disabled.right {
+    border-right: 3px solid rgba(255, 100, 100, 0.6);
+}
+
+.glass-zone.disabled svg {
+    stroke: rgba(255, 100, 100, 0.7);
+}
+
+/* Boundary Pulse on Click */
+@keyframes boundaryPulse {
+
+    0%,
+    100% {
+        box-shadow:
+            0 0 15px rgba(255, 100, 100, 0.3),
+            inset 0 0 10px rgba(255, 100, 100, 0.15);
+    }
+
+    50% {
+        box-shadow:
+            0 0 30px rgba(255, 100, 100, 0.6),
+            inset 0 0 20px rgba(255, 100, 100, 0.3);
+    }
+}
+
+.glass-zone.disabled.pulse {
+    animation: boundaryPulse 1s ease-in-out;
+}
+
+/* Mobile - Hide Glass Zones */
+@media (max-width: 768px) {
+    .glass-zone {
+        display: none;
+    }
+}
+
+/* Tablet - Smaller Glass Zones */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .glass-zone {
+        width: 50px;
+        height: calc(100% - 80px);
+    }
+
+    .glass-zone.left {
+        left: 20px;
+    }
+
+    .glass-zone.right {
+        right: 20px;
+    }
+
+    .glass-zone svg {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+/* Desktop - Optimal Glass Zones */
+@media (min-width: 1025px) {
+    .glass-zone {
+        width: 60px;
+        height: calc(100% - 60px);
+    }
+
+    .glass-zone.left {
+        left: 30px;
+    }
+
+    .glass-zone.right {
+        right: 30px;
+    }
+}

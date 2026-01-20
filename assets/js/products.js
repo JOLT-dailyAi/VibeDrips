@@ -833,6 +833,23 @@ function wrapModalForSliding(centerProductId) {
     // Add strip to container
     navContainer.appendChild(slidingStrip);
 
+    // PHASE_1: Add glass zones HTML
+    const glassZonesHTML = `
+        <button class="arrow-button glass-zone left" aria-label="Previous product">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            <span class="prohibited-icon" aria-hidden="true">⛔</span>
+        </button>
+        <button class="arrow-button glass-zone right" aria-label="Next product">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+            <span class="prohibited-icon" aria-hidden="true">⛔</span>
+        </button>
+    `;
+    navContainer.insertAdjacentHTML('beforeend', glassZonesHTML);
+
     // CRITICAL FIX: Insert navContainer AFTER overlay to maintain z-index stacking
     // The overlay must be BEFORE the content in DOM order for z-index to work
     const overlay = existingModal.querySelector('.modal-overlay');
@@ -850,6 +867,10 @@ function wrapModalForSliding(centerProductId) {
     cache.forEach(product => {
         setupProductInteractions(product);
     });
+
+    // PHASE_1: Setup glass zones and update states
+    setupGlassZones();
+    updateGlassZoneStates();
 }
 
 /**
@@ -907,10 +928,111 @@ function navigateModal(direction) {
         requestAnimationFrame(() => {
             strip.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
             VibeDrips.modalState.isSliding = false;
+
+            // PHASE_1: Update glass zone states
+            updateGlassZoneStates();
         });
     }, { once: true });
 }
 // END_PHASE_1
+
+// ============================================
+// PHASE_1: Keyboard Navigation & Glass Zones
+// ============================================
+
+/**
+ * PHASE_1: Setup keyboard navigation for modal
+ */
+function setupModalKeyboardNav() {
+    document.addEventListener('keydown', (e) => {
+        // Only if modal is open
+        if (!document.querySelector('.dynamic-modal')) return;
+
+        if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            navigateModal('prev');
+        } else if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            navigateModal('next');
+        } else if (e.key === 'Escape') {
+            const modal = document.querySelector('.dynamic-modal');
+            if (modal) {
+                const overlay = modal.querySelector('.modal-overlay');
+                if (overlay) closeDynamicModal({ target: overlay, stopPropagation: () => { } });
+            }
+        }
+    });
+}
+
+/**
+ * PHASE_1: Update glass zone states based on current position
+ */
+function updateGlassZoneStates() {
+    const leftZone = document.querySelector('.glass-zone.left');
+    const rightZone = document.querySelector('.glass-zone.right');
+
+    if (!leftZone || !rightZone) return;
+
+    const currentIndex = VibeDrips.modalState.currentIndex;
+    const totalProducts = VibeDrips.filteredProducts.length;
+
+    // Left zone disabled at first product
+    if (currentIndex === 0) {
+        leftZone.classList.add('disabled');
+        leftZone.setAttribute('aria-disabled', 'true');
+    } else {
+        leftZone.classList.remove('disabled', 'pulse');
+        leftZone.setAttribute('aria-disabled', 'false');
+    }
+
+    // Right zone disabled at last product
+    if (currentIndex === totalProducts - 1) {
+        rightZone.classList.add('disabled');
+        rightZone.setAttribute('aria-disabled', 'true');
+    } else {
+        rightZone.classList.remove('disabled', 'pulse');
+        rightZone.setAttribute('aria-disabled', 'false');
+    }
+}
+
+/**
+ * PHASE_1: Setup glass zones with event listeners
+ */
+function setupGlassZones() {
+    const leftZone = document.querySelector('.glass-zone.left');
+    const rightZone = document.querySelector('.glass-zone.right');
+
+    if (!leftZone || !rightZone) return;
+
+    // Left zone navigation
+    leftZone.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (leftZone.classList.contains('disabled')) {
+            // Trigger pulse animation on boundary click
+            leftZone.classList.add('pulse');
+            setTimeout(() => leftZone.classList.remove('pulse'), 1000);
+            return;
+        }
+        navigateModal('prev');
+    });
+
+    // Right zone navigation
+    rightZone.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (rightZone.classList.contains('disabled')) {
+            // Trigger pulse animation on boundary click
+            rightZone.classList.add('pulse');
+            setTimeout(() => rightZone.classList.remove('pulse'), 1000);
+            return;
+        }
+        navigateModal('next');
+    });
+}
+
+// Initialize keyboard navigation on page load
+setupModalKeyboardNav();
+
+// END_PHASE_1_FUNCTIONS
 
 
 /**
