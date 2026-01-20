@@ -46,7 +46,9 @@
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     z-index: 1001;
     /* CRITICAL: Above overlay (999) */
-    /* NO fixed dimensions - wrapper shrink-wraps to .simple-modal-content */
+    /* Match .simple-modal-content width exactly */
+    width: 90%;
+    max-width: 1200px;
 }
 
 /* Sliding Strip (Flex Container) */
