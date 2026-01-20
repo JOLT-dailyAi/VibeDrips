@@ -152,6 +152,52 @@ const CarouselUtils = {
         };
 
         return controller;
+    },
+
+    /**
+     * Add horizontal swipe/drag detection to an element
+     * @param {HTMLElement} element - Element to watch
+     * @param {Object} callbacks - { onNext: fn, onPrev: fn }
+     * @param {number} threshold - Minimum pixels to trigger swipe (default 50)
+     */
+    addSwipeHandle(element, callbacks, threshold = 50) {
+        if (!element) return;
+
+        let startX = 0;
+        let isDown = false;
+
+        const handleStart = (e) => {
+            isDown = true;
+            startX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
+        };
+
+        const handleMove = (e) => {
+            if (!isDown) return;
+            // Optional: can add pull-preview logic here in future
+        };
+
+        const handleEnd = (e) => {
+            if (!isDown) return;
+            isDown = false;
+
+            const endX = e.type.startsWith('touch') ? e.changedTouches[0].clientX : e.clientX;
+            const deltaX = endX - startX;
+
+            if (Math.abs(deltaX) > threshold) {
+                if (deltaX < 0 && callbacks.onNext) {
+                    callbacks.onNext();
+                } else if (deltaX > 0 && callbacks.onPrev) {
+                    callbacks.onPrev();
+                }
+            }
+        };
+
+        element.addEventListener('touchstart', handleStart, { passive: true });
+        element.addEventListener('touchend', handleEnd, { passive: true });
+
+        // Mouse support for desktop drag
+        element.addEventListener('mousedown', handleStart);
+        element.addEventListener('mouseup', handleEnd);
     }
 };
 

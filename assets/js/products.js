@@ -749,6 +749,21 @@ function setupProductInteractions(product) {
         window[`previewImage_${productId}`] = (index) => carousel.previewImage(index);
         window[`prevImage_${productId}`] = () => carousel.prev();
         window[`nextImage_${productId}`] = () => carousel.next();
+
+        // PHASE_3: Add Swipe/Drag support to the internal gallery containers
+        // We use a small timeout to ensure DOM is ready after modal insertion
+        setTimeout(() => {
+            const desktopGallery = document.querySelector(`#main-image-${productId}`)?.parentElement;
+            const mobileGallery = document.querySelector(`#main-image-mobile-${productId}`)?.parentElement;
+
+            const callbacks = {
+                onNext: () => carousel.next(),
+                onPrev: () => carousel.prev()
+            };
+
+            if (desktopGallery) CarouselUtils.addSwipeHandle(desktopGallery, callbacks);
+            if (mobileGallery) CarouselUtils.addSwipeHandle(mobileGallery, callbacks);
+        }, 100);
     }
 
     // Setup title toggle
