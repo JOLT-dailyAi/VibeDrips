@@ -820,6 +820,17 @@ function wrapModalForSliding(centerProductId) {
     // Add strip to container
     navContainer.appendChild(slidingStrip);
 
+    // CRITICAL: Dynamically set wrapper dimensions to match first .simple-modal-content
+    const firstContent = slidingStrip.querySelector('.simple-modal-content');
+    if (firstContent) {
+        const computedStyle = window.getComputedStyle(firstContent);
+        navContainer.style.width = computedStyle.width;
+        navContainer.style.maxWidth = computedStyle.maxWidth;
+        navContainer.style.minHeight = computedStyle.minHeight;
+        navContainer.style.maxHeight = computedStyle.maxHeight;
+        navContainer.style.height = computedStyle.height;
+    }
+
     // CRITICAL FIX: Insert navContainer AFTER overlay to maintain z-index stacking
     // The overlay must be BEFORE the content in DOM order for z-index to work
     const overlay = existingModal.querySelector('.modal-overlay');
