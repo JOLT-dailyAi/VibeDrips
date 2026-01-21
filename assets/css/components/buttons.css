@@ -269,31 +269,37 @@
     border-radius: var(--glass-border-radius, 20px);
     border: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    padding: 8px 20px;
+    padding: 8px 18px;
+    /* Slightly refined padding */
     color: white;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    transition: opacity 0.2s ease, transform 0.15s ease;
+    /* Snappier container transition */
 }
 
 .carousel-dots {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 12px;
-    padding: 10px 14px;
+    gap: 10px;
+    /* Refined 'Sweet Spot' gap */
+    padding: 8px 12px;
     flex-shrink: 0;
     z-index: 10;
-    transition: all 0.3s ease;
+    transition: all 0.15s ease;
+    /* Snappier */
 }
 
 .dot {
-    width: 9px;
-    height: 9px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.4);
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.1s ease;
+    /* Snappy state change */
     pointer-events: auto;
 }
 
@@ -304,7 +310,8 @@
 
 .dot.active {
     background: white;
-    width: 32px;
+    width: 28px;
+    /* Balanced expansion */
     border-radius: 5px;
 }
 
