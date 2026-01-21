@@ -164,24 +164,34 @@ const CarouselUtils = {
         if (!element) return;
 
         let startX = 0;
+        let startY = 0;
         let isDown = false;
 
         const handleStart = (e) => {
             isDown = true;
-            startX = e.type.startsWith('touch') ? e.touches[0].clientX : e.clientX;
+            const touch = e.type.startsWith('touch') ? e.touches[0] : e;
+            startX = touch.clientX;
+            startY = touch.clientY;
         };
 
         const handleMove = (e) => {
             if (!isDown) return;
-            // Optional: can add pull-preview logic here in future
+            // Native scroll is preserved because we use { passive: true } or no preventDefault
         };
 
         const handleEnd = (e) => {
             if (!isDown) return;
             isDown = false;
 
-            const endX = e.type.startsWith('touch') ? e.changedTouches[0].clientX : e.clientX;
+            const touch = e.type.startsWith('touch') ? e.changedTouches[0] : e;
+            const endX = touch.clientX;
+            const endY = touch.clientY;
+
             const deltaX = endX - startX;
+            const deltaY = endY - startY;
+
+            // Intent detection: ignore if it was primarily a vertical movement
+            if (Math.abs(deltaY) > Math.abs(deltaX)) return;
 
             if (Math.abs(deltaX) > threshold) {
                 if (deltaX < 0 && callbacks.onNext) {
@@ -194,6 +204,7 @@ const CarouselUtils = {
 
         element.addEventListener('touchstart', handleStart, { passive: true });
         element.addEventListener('touchend', handleEnd, { passive: true });
+        element.addEventListener('touchcancel', () => isDown = false, { passive: true });
 
         // Mouse support for desktop drag
         element.addEventListener('mousedown', handleStart);

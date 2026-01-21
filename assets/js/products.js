@@ -1135,7 +1135,9 @@ function setupUnifiedModalDrag() {
 
     let isDragging = false;
     let startX = 0;
+    let startY = 0;
     let currentX = 0;
+    let currentY = 0;
     let activeZone = null;
     let activeGlow = null;
 
@@ -1147,24 +1149,54 @@ function setupUnifiedModalDrag() {
 
         isDragging = true;
         modalBase.classList.add('dragging');
-        startX = e.type.startsWith('mouse') ? e.clientX : e.touches[0].clientX;
+
+        const touch = e.type.startsWith('mouse') ? e : e.touches[0];
+        startX = touch.clientX;
+        startY = touch.clientY;
+        currentX = startX;
+        currentY = startY;
 
         // Reset transitions
         if (leftZone) leftZone.style.transition = 'none';
         if (rightZone) rightZone.style.transition = 'none';
 
-        // Reset currentX to stop previous movement reference
-        currentX = startX;
+        // Add document listeners only while dragging to prevent leaks and conflicts
+        document.addEventListener('mousemove', handleMove);
+        document.addEventListener('touchmove', handleMove, { passive: false });
+        document.addEventListener('mouseup', handleEnd);
+        document.addEventListener('touchend', handleEnd);
+        document.addEventListener('touchcancel', handleEnd);
     };
 
     const handleMove = (e) => {
         if (!isDragging) return;
 
-        // Prevent vertical page scroll during horizontal product swipe
-        if (e.cancelable) e.preventDefault();
+        const touch = e.type.startsWith('mouse') ? e : e.touches[0];
+        currentX = touch.clientX;
+        currentY = touch.clientY;
 
-        currentX = e.type.startsWith('mouse') ? e.clientX : e.touches[0].clientX;
         const deltaX = currentX - startX;
+        const deltaY = currentY - startY;
+        const absX = Math.abs(deltaX);
+        const absY = Math.abs(deltaY);
+
+        // VERTICAL INTENT DETECTION
+        // If the user swiped more than 10px vertically and it's clearly more vertical than horizontal,
+        // cancel the horizontal drag to allow native vertical scrolling.
+        if (absY > absX && absY > 10) {
+            handleEnd();
+            return;
+        }
+
+        // Only prevent default if we've actually moved enough horizontally to be sure it's a drag
+        // This stops the initial slight touch from blocking vertical scroll start
+        if (absX > 10) {
+            if (e.cancelable) e.preventDefault();
+        } else {
+            // Not enough movement yet to commit
+            return;
+        }
+
         const rawPull = Math.abs(deltaX);
 
         // Determine which lever we are "pulling"
@@ -1220,6 +1252,13 @@ function setupUnifiedModalDrag() {
         isDragging = false;
         modalBase.classList.remove('dragging');
 
+        // Clean up document listeners
+        document.removeEventListener('mousemove', handleMove);
+        document.removeEventListener('touchmove', handleMove);
+        document.removeEventListener('mouseup', handleEnd);
+        document.removeEventListener('touchend', handleEnd);
+        document.removeEventListener('touchcancel', handleEnd);
+
         const deltaX = currentX - startX;
         const absoluteDelta = Math.abs(deltaX);
         const side = deltaX > 0 ? 'left' : 'right';
@@ -1270,15 +1309,9 @@ function setupUnifiedModalDrag() {
         activeGlow = null;
     };
 
-    // Global listeners on container
+    // ONLY add start listener to container
     container.addEventListener('mousedown', handleStart);
     container.addEventListener('touchstart', handleStart, { passive: true });
-
-    document.addEventListener('mousemove', handleMove);
-    document.addEventListener('touchmove', handleMove, { passive: false });
-
-    document.addEventListener('mouseup', handleEnd);
-    document.addEventListener('touchend', handleEnd);
 }
 
 // Initialize keyboard navigation on page load
