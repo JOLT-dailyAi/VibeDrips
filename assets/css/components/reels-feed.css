@@ -285,36 +285,15 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 44px;
-  height: 44px;
-  background: linear-gradient(135deg, #ff9900 0%, #ff6600 100%);
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  color: white;
-  font-size: 20px;
-  cursor: pointer;
   z-index: 15;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgba(255, 153, 0, 0.4);
-  pointer-events: auto;
-}
-
-.reels-modal .products-carousel .carousel-nav:hover {
-  background: linear-gradient(135deg, #ffaa00 0%, #ff7700 100%);
-  transform: translateY(-50%) scale(1.15);
-  box-shadow: 0 4px 12px rgba(255, 153, 0, 0.6);
 }
 
 .reels-modal .products-carousel .carousel-nav.prev {
-  left: -15px;
+  left: -5px;
 }
 
 .reels-modal .products-carousel .carousel-nav.next {
-  right: -15px;
+  right: -5px;
 }
 
 @media (max-width: 767px) {

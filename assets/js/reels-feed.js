@@ -238,13 +238,21 @@ function createProductsCarousel(products, reelIndex) {
 
   // Create navigation (arrows)
   const prevBtn = document.createElement('button');
-  prevBtn.className = 'carousel-nav prev';
-  prevBtn.innerHTML = '◄';
+  prevBtn.className = 'carousel-nav prev floating-glass-nav';
+  prevBtn.innerHTML = `
+    <svg viewBox="0 0 24 24">
+      <polyline points="15 18 9 12 15 6"></polyline>
+    </svg>
+  `;
   prevBtn.onclick = () => navigateCarousel(carousel, -1);
 
   const nextBtn = document.createElement('button');
-  nextBtn.className = 'carousel-nav next';
-  nextBtn.innerHTML = '►';
+  nextBtn.className = 'carousel-nav next floating-glass-nav';
+  nextBtn.innerHTML = `
+    <svg viewBox="0 0 24 24">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  `;
   nextBtn.onclick = () => navigateCarousel(carousel, 1);
 
   // Create products grid
