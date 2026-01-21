@@ -27,30 +27,63 @@
     opacity: 1;
 }
 
-/* Close button */
-.lightbox-close {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
+/* Shared control styling (Independent of external CSS) */
+.lightbox-close,
+.lightbox-arrow {
     background: rgba(255, 255, 255, 0.1);
     border: 2px solid rgba(255, 255, 255, 0.3);
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-size: 2rem;
     color: white;
     z-index: 10001;
-    transition: all 0.2s;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    padding: 0;
+    outline: none;
+}
+
+.lightbox-close:hover,
+.lightbox-arrow:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.lightbox-close:active,
+.lightbox-arrow:active {
+    transform: scale(0.95);
+}
+
+/* Close button - Precision centering */
+.lightbox-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    width: 50px;
+    height: 50px;
 }
 
 .lightbox-close:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.5);
     transform: rotate(90deg);
+}
+
+/* Closing Animation Sequence */
+.lightbox-close.closing-animation {
+    animation: lightboxSpinExit 0.3s ease forwards;
+    pointer-events: none;
+}
+
+@keyframes lightboxSpinExit {
+    0% {
+        transform: rotate(0deg) scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: rotate(180deg) scale(1.2);
+        opacity: 0;
+    }
 }
 
 /* Counter */
@@ -73,23 +106,8 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(255, 255, 255, 0.1);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
     width: 50px;
     height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: white;
-    z-index: 10001;
-    transition: all 0.2s;
-}
-
-.lightbox-arrow:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.5);
 }
 
 .lightbox-prev {
@@ -287,6 +305,7 @@
         opacity: 0;
         transform: scale(0.95);
     }
+
     to {
         opacity: 1;
         transform: scale(1);
@@ -296,63 +315,56 @@
 /* Mobile optimizations */
 @media (max-width: 768px) {
     .lightbox-close {
-        top: 0.5rem;
-        right: 0.5rem;
-        width: 36px;
-        height: 36px;
-        font-size: 1.5rem;
+        top: 1rem;
+        right: 1rem;
+        width: 40px;
+        height: 40px;
     }
-    
-    .lightbox-counter {
-        top: 0.5rem;
-        font-size: 0.75rem;
-        padding: 0.375rem 0.75rem;
-    }
-    
+
     .lightbox-arrow {
         width: 40px;
         height: 40px;
     }
-    
+
     .lightbox-prev {
         left: 0.5rem;
     }
-    
+
     .lightbox-next {
         right: 0.5rem;
     }
-    
+
     .lightbox-dots {
         bottom: 1rem;
     }
-    
+
     .lightbox-caption {
         font-size: 0.75rem;
         padding: 0.375rem 0.75rem;
     }
-    
+
     .lightbox-video-placeholder {
         min-width: 300px;
         min-height: 300px;
     }
-    
+
     .video-placeholder-icon {
         font-size: 3rem;
     }
-    
+
     .video-placeholder-text {
         font-size: 1rem;
     }
-    
+
     .lightbox-social-placeholder {
         min-width: 300px;
         min-height: 400px;
     }
-    
+
     .social-placeholder-icon {
         font-size: 3rem;
     }
-    
+
     .social-placeholder-text {
         font-size: 1rem;
         padding: 0 1rem;
@@ -365,7 +377,7 @@
         width: 600px;
         height: 800px;
     }
-    
+
     .lightbox-iframe[src*="youtube.com"] {
         width: 700px;
         height: 394px;
@@ -438,7 +450,7 @@ body:has(.lightbox-overlay.active) {
     .lightbox-overlay {
         background: rgba(0, 0, 0, 0.98);
     }
-    
+
     .lightbox-close,
     .lightbox-arrow {
         border-width: 3px;
@@ -447,6 +459,7 @@ body:has(.lightbox-overlay.active) {
 
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
+
     .lightbox-overlay,
     .lightbox-image,
     .lightbox-video,
@@ -454,7 +467,7 @@ body:has(.lightbox-overlay.active) {
         animation: none;
         transition: none;
     }
-    
+
     .lightbox-close:hover {
         transform: none;
     }
