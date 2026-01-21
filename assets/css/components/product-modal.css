@@ -40,7 +40,8 @@
 /* Modal Navigation Container (Viewport) */
 .modal-nav-container {
     position: relative;
-    overflow: hidden;
+    overflow: hidden !important;
+    isolation: isolate;
     /* Hide off-screen products */
     border-radius: 24px;
     z-index: 1001;
