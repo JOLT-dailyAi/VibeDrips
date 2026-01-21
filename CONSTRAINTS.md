@@ -36,6 +36,21 @@ All buttons in the project **must** be sourced from `buttons.css`. If a required
 
 ---
 
+## 🏗️ Responsive & Safe-Area Constraints
+
+### 1. Global Safety Strategy
+The project uses a centralized Safe-Area strategy in `responsive.css`. All primary content wrappers must use the `.container` class to automatically inherit `env(safe-area-inset)` protection.
+
+### 2. Floating Element Positioning
+New floating or absolute-positioned elements (Close buttons, Floating Menus, Navigation bars) must utilize `env(safe-area-inset-...)` to prevent clipping by the **Notch** or **Dynamic Island**:
+- **Right Alignment**: `calc(OFFSET + env(safe-area-inset-right, 0px))`
+- **Top Alignment**: `calc(OFFSET + env(safe-area-inset-top, 0px))`
+
+### 3. Landscape Density Polish
+Mobile landscape is height-constrained. New components should include scaling overrides in `responsive.css` to reduce font sizes, padding, and gaps when `(orientation: landscape)` is active. This ensures the UI feels proportional and maintains a high information density without feeling "oversized."
+
+---
+
 ## 🏗️ Architecture Summary
 
 ```mermaid
