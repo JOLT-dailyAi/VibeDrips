@@ -192,3 +192,63 @@
         height: 40px;
     }
 }
+
+/* ========================================
+   REUSABLE WHITE CLOSE BUTTON
+   High-fidelity, animated circular close button
+   Used in Lightbox and future modals
+   ======================================== */
+
+.white-close-btn {
+    /* Layout & Base Style */
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    padding: 0;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    flex-shrink: 0;
+}
+
+.white-close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: rotate(90deg);
+}
+
+.white-close-btn:active {
+    transform: scale(0.95);
+}
+
+/* Spin Exit Animation (Requires JS trigger) */
+.white-close-btn.closing-animation {
+    animation: whiteBtnSpinExit 0.3s ease forwards;
+    pointer-events: none;
+}
+
+@keyframes whiteBtnSpinExit {
+    0% {
+        transform: rotate(0deg) scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: rotate(180deg) scale(1.2);
+        opacity: 0;
+    }
+}
+
+/* Responsive Sizing */
+@media (max-width: 768px) {
+    .white-close-btn {
+        width: 40px;
+        height: 40px;
+    }
+}
