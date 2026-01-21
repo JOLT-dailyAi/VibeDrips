@@ -71,6 +71,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    line-height: normal;
+    /* Fix bottom-alignment of text */
     gap: 12px;
     pointer-events: auto;
     transition: opacity 0.3s ease;
