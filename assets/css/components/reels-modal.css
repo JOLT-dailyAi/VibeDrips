@@ -394,3 +394,42 @@
 .reels-modal:not(.hidden) {
   animation: fadeIn 0.3s ease;
 }
+/* ========================================
+   MOBILE LANDSCAPE OPTIMIZATION
+   Maximize space and dodge Dynamic Islands
+   (STRICTLY LANDSCAPE ONLY)
+   ======================================== */
+
+@media (max-width: 950px) and (orientation: landscape) {
+  .reel-content {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    padding: 0 env(safe-area-inset-right, 20px) 0 env(safe-area-inset-left, 20px) !important;
+    gap: 15px !important;
+  }
+
+  .reel-video {
+    flex: 0 0 40% !important;
+    height: 95vh !important;
+    max-height: 95vh !important;
+  }
+
+  .reel-products {
+    flex: 1 !important;
+    height: 95vh !important;
+    max-height: 95vh !important;
+  }
+
+  /* Reposition floating close button for safe areas */
+  .reels-modal .reels-close-btn {
+    top: env(safe-area-inset-top, 15px) !important;
+    right: calc(15px + env(safe-area-inset-right, 0px)) !important;
+  }
+
+  /* Adjust side-nav buttons if they exist */
+  .reels-nav-btn {
+    right: calc(10px + env(safe-area-inset-right, 0px)) !important;
+  }
+}

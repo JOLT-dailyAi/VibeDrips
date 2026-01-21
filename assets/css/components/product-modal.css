@@ -1937,3 +1937,82 @@ body.glass-theme .discount-badge {
     width: 24px;
     height: 24px;
 }
+/* ========================================
+   MOBILE LANDSCAPE OPTIMIZATION
+   Maximize space and dodge Dynamic Islands
+   (STRICTLY LANDSCAPE ONLY)
+   ======================================== */
+
+@media (max-width: 950px) and (orientation: landscape) {
+    /* Maximize container area */
+    .modal-nav-container {
+        width: 98% !important;
+        max-width: 100vw !important;
+        max-height: 92vh !important;
+        border-radius: 12px;
+        margin: 0 auto;
+        /* Dynamic Island / Notch Protection */
+        padding-left: env(safe-area-inset-left, 30px);
+        padding-right: env(safe-area-inset-right, 30px);
+    }
+
+    /* Immersive Body Layout */
+    .simple-modal-body {
+        padding: 10px 15px !important;
+    }
+
+    /* Compact Header */
+    .simple-modal-header {
+        padding: 5px 15px !important;
+        min-height: auto !important;
+    }
+
+    .simple-modal-header h2 {
+        font-size: 14px !important;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 80%;
+    }
+
+    /* Fixed Close Button Positioning */
+    .dynamic-modal .modal-close-button {
+        top: 10px !important;
+        right: calc(10px + env(safe-area-inset-right, 0px)) !important;
+        width: 32px;
+        height: 32px;
+    }
+
+    /* Scale internal UI components */
+    .modal-core-info {
+        padding: 10px !important;
+    }
+
+    .info-row,
+    .detail-row {
+        gap: 8px !important;
+    }
+
+    /* Gallery Adjustments */
+    .gallery-main,
+    .mobile-main {
+        height: 45vh !important;
+        /* Prioritize vertical space usage */
+    }
+
+    .thumbnails-container {
+        height: 60px !important;
+        padding-bottom: 5px !important;
+    }
+
+    .thumbnail {
+        width: 50px !important;
+        height: 50px !important;
+    }
+
+    /* Relocate Indicators slightly higher to avoid home bars */
+    .dynamic-modal .modal-nav-indicator {
+        bottom: 5px !important;
+        transform: translateX(-50%) scale(0.8);
+    }
+}
