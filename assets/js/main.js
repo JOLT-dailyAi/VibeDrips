@@ -29,7 +29,8 @@ window.VibeDrips = {
     // PHASE_1: Modal state management
     modalState: {
         currentIndex: 0,
-        isSliding: false
+        isSliding: false,
+        currentProductList: [] // PHASE_7: Scoped list for context-aware navigation
     }
 };
 

@@ -394,9 +394,12 @@ function createProductCard(product) {
         </button>
     `;
 
-    // Make entire card clickable to open modal
-    card.onclick = () => showProductModal(productId);
+    // Make entire card clickable to open modal - PHASE_7: Pass 'this' for context detection
+    card.onclick = function () { showProductModal(productId, this); };
     card.style.cursor = 'pointer';
+
+    // ✅ PHASE_7: Add ID for DOM-based context extraction
+    card.setAttribute('data-product-id', productId);
 
     return card;
 }
@@ -708,14 +711,18 @@ function generateModalHTML(product) {
 
 /**
  * PHASE_1: Build 5-product cache [P-2, P-1, Active, N+1, N+2]
+ * PHASE_7: Uses currentProductList for context-awareness
  */
 function build5ProductCache(centerIndex) {
     const cache = [];
-    const totalProducts = VibeDrips.filteredProducts.length;
+    const productList = VibeDrips.modalState.currentProductList;
+    const totalProducts = productList.length;
+
+    if (totalProducts === 0) return [];
 
     for (let i = -2; i <= 2; i++) {
         const idx = (centerIndex + i + totalProducts) % totalProducts;
-        cache.push(VibeDrips.filteredProducts[idx]);
+        cache.push(productList[idx]);
     }
 
     return cache;
@@ -820,7 +827,8 @@ function wrapModalForSliding(centerProductId) {
     const existingModal = document.querySelector('.dynamic-modal');
     if (!existingModal) return;
 
-    const centerIndex = VibeDrips.filteredProducts.findIndex(p => p.id === centerProductId);
+    const productList = VibeDrips.modalState.currentProductList;
+    const centerIndex = productList.findIndex(p => p.id === centerProductId);
     VibeDrips.modalState.currentIndex = centerIndex;
 
     // Build 5-product cache
@@ -906,7 +914,8 @@ function wrapModalForSliding(centerProductId) {
  * PHASE_1: Navigate to next/prev product (basic version)
  */
 function navigateModal(direction) {
-    const totalProducts = VibeDrips.filteredProducts.length;
+    const productList = VibeDrips.modalState.currentProductList;
+    const totalProducts = productList.length;
     const strip = document.querySelector('.modal-sliding-strip');
 
     if (!strip || VibeDrips.modalState.isSliding) return;
@@ -1322,14 +1331,39 @@ setupModalKeyboardNav();
 
 /**
  * Show detailed product modal with enhanced UI
- * PHASE_1: Modified to use wrapModalForSliding
+ * PHASE_7: Added triggerElement for context-aware navigation
  */
-function showProductModal(productId) {
+function showProductModal(productId, triggerElement = null) {
     const product = VibeDrips.allProducts.find(p => p.id === productId);
     if (!product) {
         console.error('Product not found:', productId);
         return;
     }
+
+    // ✅ PHASE_7: Scoped Context Detection (Supports Main Grid, Reels, etc.)
+    let scopedProducts = [];
+    if (triggerElement) {
+        // Look for the nearest container that defines a product context
+        const parentGrid = triggerElement.closest('.products-grid');
+        if (parentGrid) {
+            // Extract IDs in current visual order from DOM
+            const siblingCards = parentGrid.querySelectorAll('[data-product-id]');
+            const scopedIds = Array.from(siblingCards).map(card => card.getAttribute('data-product-id'));
+
+            // Map IDs back to full product objects
+            scopedProducts = scopedIds.map(id => VibeDrips.allProducts.find(p => p.id === id)).filter(Boolean);
+            console.log(`🔍 Scoped modal to ${scopedProducts.length} products from container.`);
+        }
+    }
+
+    // Fallback to global list if no context found
+    if (scopedProducts.length === 0) {
+        scopedProducts = [...VibeDrips.filteredProducts];
+        console.log('🔍 No scoped context found, falling back to global filtered list.');
+    }
+
+    // Save context to global state
+    VibeDrips.modalState.currentProductList = scopedProducts;
 
     // CRITICAL FIX: Remove any existing modal first
     const existingModal = document.querySelector('.dynamic-modal');
@@ -1345,9 +1379,6 @@ function showProductModal(productId) {
 
     // PHASE_1: Wrap modal for sliding navigation
     wrapModalForSliding(productId);
-
-    // Note: setupProductInteractions is now called inside wrapModalForSliding
-    // for all 5 cached products
 }
 
 // Helper: Get emoji for product detail keys
