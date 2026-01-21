@@ -1,6 +1,20 @@
-/* utils/responsive.css - Additional responsive utilities */
+/* Global responsive utilities */
 
-/* This file is intentionally minimal as responsive styles */
-/* are included in their respective component files */
+/* ========================================
+   GLOBAL MOBILE LANDSCAPE POLISH
+   Protect content containers from Notch/Dynamic Island
+   ======================================== */
 
-/* Global responsive utilities can go here if needed */
+@media (max-width: 950px) and (orientation: landscape) {
+    .container {
+        padding-left: env(safe-area-inset-left, 20px) !important;
+        padding-right: env(safe-area-inset-right, 20px) !important;
+    }
+
+    /* Ensure specific components that might be outside .container also respect safe areas */
+    .main-header,
+    .main-footer {
+        padding-left: env(safe-area-inset-left, 0px) !important;
+        padding-right: env(safe-area-inset-right, 0px) !important;
+    }
+}
