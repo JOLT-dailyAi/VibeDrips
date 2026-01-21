@@ -433,3 +433,16 @@
     right: calc(10px + env(safe-area-inset-right, 0px)) !important;
   }
 }
+
+/* ========================================
+   GLOBAL SAFE-AREA POLISH
+   Protect UI from Dynamic Island / Notch
+   ======================================== */
+
+.reels-modal {
+  padding-top: env(safe-area-inset-top, 0px) !important;
+}
+
+.reels-modal .reels-close-btn {
+  top: calc(15px + env(safe-area-inset-top, 0px)) !important;
+}
