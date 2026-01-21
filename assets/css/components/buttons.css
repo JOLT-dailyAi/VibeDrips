@@ -270,25 +270,25 @@
     border: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     padding: 8px 18px;
-    /* Slightly refined padding */
+    /* Refined padding */
     color: white;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: opacity 0.2s ease, transform 0.15s ease;
-    /* Snappier container transition */
+    transition: opacity 0.2s ease, transform 0.15s ease-out;
+    /* Snappier & Smoother */
 }
 
 .carousel-dots {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 10px;
-    /* Refined 'Sweet Spot' gap */
+    gap: 9px;
+    /* The True Sweet Spot */
     padding: 8px 12px;
     flex-shrink: 0;
     z-index: 10;
-    transition: all 0.15s ease;
+    transition: all 0.15s ease-out;
     /* Snappier */
 }
 
@@ -298,7 +298,7 @@
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.4);
     cursor: pointer;
-    transition: all 0.1s ease;
+    transition: all 0.1s ease-out;
     /* Snappy state change */
     pointer-events: auto;
 }
@@ -310,8 +310,8 @@
 
 .dot.active {
     background: white;
-    width: 28px;
-    /* Balanced expansion */
+    width: 26px;
+    /* Toned down for optimal weighting */
     border-radius: 5px;
 }
 

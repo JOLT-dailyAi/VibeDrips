@@ -73,9 +73,11 @@
     justify-content: center;
     line-height: normal;
     /* Fix bottom-alignment of text */
-    gap: 12px;
+    gap: 9px;
+    /* Synchronized sweet-spot gap */
     pointer-events: auto;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.2s ease, transform 0.15s ease-out;
+    /* Snappier & Smoother */
 }
 
 /* Dots specific layout inside hybrid indicator */

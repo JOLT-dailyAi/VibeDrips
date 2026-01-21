@@ -964,6 +964,10 @@ function navigateModal(direction) {
         VibeDrips.modalState.currentIndex--;
     }
 
+    // ✅ PHASE_9: Simultaneous Trigger (Timing Sync)
+    // Update indicators at the START of navigation so they move with the slide
+    updateGlassZoneStates();
+
     // Explicit math for 500% width strip (each product is 20%)
     // Center is -40% (2 products left of active)
     const currentTransform = -40;
@@ -1015,7 +1019,7 @@ function navigateModal(direction) {
                 strip.classList.remove('no-transition');
                 strip.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
                 VibeDrips.modalState.isSliding = false;
-                updateGlassZoneStates();
+                // updateGlassZoneStates() moved to start for Timing Sync
             });
         });
     });
