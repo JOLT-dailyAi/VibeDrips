@@ -371,6 +371,47 @@
     }
 }
 
+/* ========================================
+   MOBILE LANDSCAPE OPTIMIZATION
+   Maximize space and dodge Dynamic Islands
+   (STRICTLY LANDSCAPE ONLY)
+   ======================================== */
+
+@media (max-width: 950px) and (orientation: landscape) {
+    .lightbox-close {
+        top: env(safe-area-inset-top, 1rem) !important;
+        right: calc(1rem + env(safe-area-inset-right, 0px)) !important;
+    }
+
+    .lightbox-prev {
+        left: calc(0.5rem + env(safe-area-inset-left, 0px)) !important;
+    }
+
+    .lightbox-next {
+        right: calc(0.5rem + env(safe-area-inset-right, 0px)) !important;
+    }
+
+    .lightbox-counter {
+        top: env(safe-area-inset-top, 1rem) !important;
+    }
+
+    .lightbox-content {
+        max-width: calc(100vw - env(safe-area-inset-left, 20px) - env(safe-area-inset-right, 20px) - 20px) !important;
+        max-height: 95vh !important;
+    }
+
+    .lightbox-media-container,
+    .lightbox-image,
+    .lightbox-video,
+    .lightbox-iframe {
+        max-height: 85vh !important;
+    }
+
+    .lightbox-dots {
+        bottom: env(safe-area-inset-bottom, 1rem) !important;
+    }
+}
+
 /* Tablet optimizations */
 @media (min-width: 769px) and (max-width: 1024px) {
     .lightbox-iframe {
