@@ -862,7 +862,7 @@ function wrapModalForSliding(centerProductId) {
     let indicatorContainer = existingModal.querySelector('.modal-nav-indicator');
     if (!indicatorContainer) {
         indicatorContainer = document.createElement('div');
-        indicatorContainer.className = 'modal-nav-indicator';
+        indicatorContainer.className = 'modal-nav-indicator glass-pill';
         existingModal.appendChild(indicatorContainer);
     }
 

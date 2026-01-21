@@ -14,20 +14,20 @@ const SWIPE_RATIO_VERTICAL = 0.67;  // Vertical intent threshold
 // Render the reels feed (called from modal)
 function renderReelsFeed() {
   console.log('🎬 Rendering reels feed...');
-  
+
   const feedContainer = document.getElementById('reels-feed-container');
-  
+
   if (!feedContainer) {
     console.error('❌ Reels feed container not found');
     return;
   }
-  
+
   // Clear loading state
   feedContainer.innerHTML = '';
-  
+
   // Get products with reel URLs
   const reelsData = getReelsDataFromProducts();
-  
+
   // Check if we have reels
   if (reelsData.length === 0) {
     feedContainer.innerHTML = `
@@ -38,7 +38,7 @@ function renderReelsFeed() {
     `;
     return;
   }
-  
+
   // Create each reel section
   reelsData.forEach((reel, index) => {
     const reelSection = createReelSection(reel, index);
@@ -46,7 +46,7 @@ function renderReelsFeed() {
       feedContainer.appendChild(reelSection);
     }
   });
-  
+
   console.log(`✅ Rendered ${reelsData.length} reel sections`);
 }
 
@@ -56,38 +56,38 @@ function getReelsDataFromProducts() {
     console.warn('⚠️ VibeDrips.allProducts not available');
     return [];
   }
-  
+
   // Filter products with "Product Source Link"
   const productsWithReels = window.VibeDrips.allProducts.filter(p => {
     const sourceLink = p['Product Source Link'] || p.productSourceLink || p.source_link;
     return sourceLink && sourceLink.trim() !== '';
   });
-  
+
   // Group products by reel URL
   const reelsMap = {};
-  
+
   productsWithReels.forEach(product => {
     let reelUrl = product['Product Source Link'] || product.productSourceLink || product.source_link;
-    
+
     // Handle multiple URLs (take first one)
     if (reelUrl.includes(',')) {
       reelUrl = reelUrl.split(',')[0].trim();
     }
-    
+
     // Validate URL (accept any video platform)
-    const isValidVideo = reelUrl.includes('instagram.com') || 
-                        reelUrl.includes('tiktok.com') || 
-                        reelUrl.includes('youtube.com') || 
-                        reelUrl.includes('youtu.be') ||
-                        reelUrl.includes('twitter.com') ||
-                        reelUrl.includes('x.com') ||
-                        reelUrl.match(/\.(mp4|webm|mov|avi)$/);
-    
+    const isValidVideo = reelUrl.includes('instagram.com') ||
+      reelUrl.includes('tiktok.com') ||
+      reelUrl.includes('youtube.com') ||
+      reelUrl.includes('youtu.be') ||
+      reelUrl.includes('twitter.com') ||
+      reelUrl.includes('x.com') ||
+      reelUrl.match(/\.(mp4|webm|mov|avi)$/);
+
     if (!isValidVideo) {
       console.warn('⚠️ Unsupported video URL:', reelUrl);
       return;
     }
-    
+
     // Group by URL
     if (!reelsMap[reelUrl]) {
       reelsMap[reelUrl] = {
@@ -95,10 +95,10 @@ function getReelsDataFromProducts() {
         products: []
       };
     }
-    
+
     reelsMap[reelUrl].products.push(product);
   });
-  
+
   // Convert to array
   return Object.values(reelsMap);
 }
@@ -107,7 +107,7 @@ function getReelsDataFromProducts() {
 function getUniversalVideoEmbedUrl(sourceUrl) {
   try {
     const url = sourceUrl.toLowerCase();
-    
+
     // Instagram Reels/Posts
     if (url.includes('instagram.com')) {
       const match = sourceUrl.match(/\/(p|reel)\/([^\/\?]+)/);
@@ -115,7 +115,7 @@ function getUniversalVideoEmbedUrl(sourceUrl) {
         return `https://www.instagram.com/p/${match[2]}/embed`;
       }
     }
-    
+
     // TikTok Videos
     if (url.includes('tiktok.com')) {
       const match = sourceUrl.match(/\/video\/(\d+)/);
@@ -123,7 +123,7 @@ function getUniversalVideoEmbedUrl(sourceUrl) {
         return `https://www.tiktok.com/embed/v2/${match[1]}`;
       }
     }
-    
+
     // YouTube Videos/Shorts
     if (url.includes('youtube.com') || url.includes('youtu.be')) {
       let videoId = null;
@@ -138,17 +138,17 @@ function getUniversalVideoEmbedUrl(sourceUrl) {
         return `https://www.youtube.com/embed/${videoId}`;
       }
     }
-    
+
     // Twitter/X Videos
     if (url.includes('twitter.com') || url.includes('x.com')) {
       return sourceUrl; // Twitter embeds require different handling
     }
-    
+
     // Direct video files (.mp4, .webm, etc.)
     if (url.match(/\.(mp4|webm|mov|avi|mkv|m4v|ogv)$/)) {
       return sourceUrl; // Return as-is for HTML5 video
     }
-    
+
   } catch (error) {
     console.error('Error parsing video URL:', error);
   }
@@ -158,24 +158,24 @@ function getUniversalVideoEmbedUrl(sourceUrl) {
 // Create a single reel section
 function createReelSection(reelData, index) {
   const embedUrl = getUniversalVideoEmbedUrl(reelData.url);
-  
+
   if (!embedUrl) {
     console.error('❌ Invalid Instagram URL:', reelData.url);
     return null;
   }
-  
+
   const section = document.createElement('div');
   section.className = 'reel-section';
   section.setAttribute('data-reel-index', index);
-  
+
   // Create content wrapper
   const content = document.createElement('div');
   content.className = 'reel-content';
-  
+
   // Create video container
   const videoDiv = document.createElement('div');
   videoDiv.className = 'reel-video';
-  
+
   // Check if it's a direct video file
   if (reelData.url.match(/\.(mp4|webm|mov|avi)$/i)) {
     videoDiv.innerHTML = `
@@ -202,19 +202,19 @@ function createReelSection(reelData, index) {
       </iframe>
     `;
   }
-  
+
   // Create products container with carousel
   const productsDiv = document.createElement('div');
   productsDiv.className = 'reel-products';
-  
+
   const carousel = createProductsCarousel(reelData.products, index);
   productsDiv.appendChild(carousel);
-  
+
   // Assemble section
   content.appendChild(videoDiv);
   content.appendChild(productsDiv);
   section.appendChild(content);
-  
+
   return section;
 }
 
@@ -223,56 +223,56 @@ function createProductsCarousel(products, reelIndex) {
   const carousel = document.createElement('div');
   carousel.className = 'products-carousel';
   carousel.setAttribute('data-reel-index', reelIndex);
-  
+
   // Determine products per page based on screen size AND orientation
   const isMobile = window.innerWidth < 768;
   const isTablet = window.innerWidth >= 768 && window.innerWidth < 1200;
   const isMobileLandscape = isMobile && window.matchMedia('(orientation: landscape)').matches;
-  
+
   // Mobile landscape: 2×2 = 4, Mobile portrait: 1×2 = 2, Tablet: 2×2 = 4, Desktop: 3×2 = 6
   const productsPerPage = isMobileLandscape ? 4 : (isMobile ? 2 : (isTablet ? 4 : 6));
-  
+
   // Calculate total pages
   const totalPages = Math.ceil(products.length / productsPerPage);
   let currentPage = 0;
-  
+
   // Create navigation (arrows)
   const prevBtn = document.createElement('button');
   prevBtn.className = 'carousel-nav prev';
   prevBtn.innerHTML = '◄';
   prevBtn.onclick = () => navigateCarousel(carousel, -1);
-  
+
   const nextBtn = document.createElement('button');
   nextBtn.className = 'carousel-nav next';
   nextBtn.innerHTML = '►';
   nextBtn.onclick = () => navigateCarousel(carousel, 1);
-  
+
   // Create products grid
   const grid = document.createElement('div');
   grid.className = 'products-grid';
-  
+
   // ✅ NEW: Add swipe support to grid
   enableSwipeNavigation(grid, carousel);
-  
+
   // Create dots indicator
   const dotsContainer = document.createElement('div');
-  dotsContainer.className = 'carousel-dots';
-  
+  dotsContainer.className = 'carousel-dots glass-pill';
+
   for (let i = 0; i < totalPages; i++) {
     const dot = document.createElement('span');
     dot.className = i === 0 ? 'dot active' : 'dot';
     dot.onclick = () => goToPage(carousel, i);
     dotsContainer.appendChild(dot);
   }
-  
+
   // Store carousel state
   carousel.dataset.currentPage = '0';
   carousel.dataset.totalPages = totalPages;
   carousel.dataset.productsPerPage = productsPerPage;
-  
+
   // Render initial page
   renderProductsPage(grid, products, 0, productsPerPage);
-  
+
   // Assemble carousel
   if (totalPages > 1) {
     carousel.appendChild(prevBtn);
@@ -282,7 +282,7 @@ function createProductsCarousel(products, reelIndex) {
     carousel.appendChild(nextBtn);
     carousel.appendChild(dotsContainer);
   }
-  
+
   return carousel;
 }
 
@@ -342,10 +342,10 @@ function enableSwipeNavigation(grid, carousel) {
     const ratio = absDeltaX / (absDeltaY || 1);
 
     // ✅ HORIZONTAL INTENT: Navigate carousel
-    if (touchStartX > EDGE_ZONE && 
-        absDeltaX > MIN_SWIPE_DISTANCE && 
-        ratio > SWIPE_RATIO_HORIZONTAL) {
-      
+    if (touchStartX > EDGE_ZONE &&
+      absDeltaX > MIN_SWIPE_DISTANCE &&
+      ratio > SWIPE_RATIO_HORIZONTAL) {
+
       if (deltaX > 0) {
         // Swipe right = previous page
         navigateCarousel(carousel, -1);
@@ -376,11 +376,11 @@ function enableSwipeNavigation(grid, carousel) {
 // Render products for current page
 function renderProductsPage(grid, allProducts, page, perPage) {
   grid.innerHTML = '';
-  
+
   const startIdx = page * perPage;
   const endIdx = Math.min(startIdx + perPage, allProducts.length);
   const pageProducts = allProducts.slice(startIdx, endIdx);
-  
+
   pageProducts.forEach(product => {
     // Use global createProductCard from products.js
     const card = window.createProductCard(product);
@@ -392,13 +392,13 @@ function renderProductsPage(grid, allProducts, page, perPage) {
 function navigateCarousel(carousel, direction) {
   const currentPage = parseInt(carousel.dataset.currentPage);
   const totalPages = parseInt(carousel.dataset.totalPages);
-  
+
   let newPage = currentPage + direction;
-  
+
   // Wrap around
   if (newPage < 0) newPage = totalPages - 1;
   if (newPage >= totalPages) newPage = 0;
-  
+
   goToPage(carousel, newPage);
 }
 
@@ -408,17 +408,17 @@ function goToPage(carousel, page) {
   const dots = carousel.querySelectorAll('.dot');
   const reelIndex = carousel.dataset.reelIndex;
   const productsPerPage = parseInt(carousel.dataset.productsPerPage);
-  
+
   // Get all products for this reel
   const reelsData = getReelsDataFromProducts();
   const products = reelsData[reelIndex].products;
-  
+
   // Update page
   carousel.dataset.currentPage = page;
-  
+
   // Render new page
   renderProductsPage(grid, products, page, productsPerPage);
-  
+
   // Update dots
   dots.forEach((dot, i) => {
     dot.classList.toggle('active', i === page);

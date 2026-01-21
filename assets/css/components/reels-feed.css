@@ -339,12 +339,20 @@
 
 .reels-modal .carousel-dots {
   position: absolute;
-  bottom: 5px;
-  left: 0;
-  right: 0;
-  height: 28px;
-  pointer-events: none;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.4), transparent);
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  height: auto;
+  pointer-events: auto;
+  /* Inherits glass-pill utility if class is added, or we define it here for specificity */
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 20px;
+  padding: 6px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 @media (max-width: 767px) {
@@ -424,6 +432,7 @@
   display: -webkit-box !important;
   -webkit-box-orient: vertical !important;
   -webkit-line-clamp: 2 !important;
+  line-clamp: 2 !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   word-break: break-word !important;
@@ -432,5 +441,6 @@
 @media (max-width: 767px) and (orientation: landscape) {
   .reels-modal .product-card .product-name {
     -webkit-line-clamp: 1 !important;
+    line-clamp: 1 !important;
   }
 }
