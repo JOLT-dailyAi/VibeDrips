@@ -1949,14 +1949,16 @@ body.glass-theme .discount-badge {
 
     /* Maximize container area - Refined balance */
     .modal-nav-container {
-        width: 88% !important;
-        max-width: 1100px !important;
+        width: 80% !important;
+        /* Increased gap for levers */
+        max-width: calc(100vw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px) - 140px) !important;
         max-height: 92vh !important;
         border-radius: 12px;
         margin: 0 auto;
-        /* Dynamic Island / Notch Protection */
-        padding-left: env(safe-area-inset-left, 30px);
-        padding-right: env(safe-area-inset-right, 30px);
+        padding-left: 0 !important;
+        /* Bleeding Fix: No internal padding */
+        padding-right: 0 !important;
+        /* Bleeding Fix: No internal padding */
     }
 
     /* Immersive Body Layout */

@@ -934,6 +934,9 @@ function wrapModalForSliding(centerProductId) {
     // PHASE_2: Setup unified global drag and isolation
     setupUnifiedModalDrag();
     setupEventIsolation();
+
+    // PHASE_10: Dynamic Dimension Sync
+    syncModalDimensions();
 }
 
 /**
@@ -1020,6 +1023,9 @@ function navigateModal(direction) {
                 strip.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
                 VibeDrips.modalState.isSliding = false;
                 // updateGlassZoneStates() moved to start for Timing Sync
+
+                // PHASE_10: Sync dimensions after navigation
+                syncModalDimensions();
             });
         });
     });
@@ -1613,6 +1619,41 @@ function truncateText(text, maxLength) {
     if (text.length <= maxLength) return text;
     return text.substr(0, maxLength) + '...';
 }
+
+/**
+ * PHASE_10: Synchronize modal dimensions to eliminate gaps and bleeding
+ * Measures the active product content and applies it to the navigation container
+ */
+function syncModalDimensions() {
+    const navContainer = document.querySelector('.modal-nav-container');
+    const strip = document.querySelector('.modal-sliding-strip');
+    // Index 2 is always active in our 5-item cache
+    const activeProduct = strip ? strip.children[2] : null;
+
+    if (!navContainer || !activeProduct) return;
+
+    // Use double requestAnimationFrame to ensure the DOM is settled and rendered
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            const productContent = activeProduct;
+            if (productContent) {
+                const width = productContent.offsetWidth;
+                if (width > 0) {
+                    // Apply literal width to container to force flush alignment for levers
+                    navContainer.style.setProperty('width', `${width}px`, 'important');
+                    console.log(`📏 Synced Modal Width: ${width}px`);
+                }
+            }
+        });
+    });
+}
+
+// Global Resize Listener for Dynamic Modal
+window.addEventListener('resize', () => {
+    if (document.querySelector('.dynamic-modal')) {
+        syncModalDimensions();
+    }
+});
 
 // Export functions to global scope
 window.setTimeFilter = setTimeFilter;
