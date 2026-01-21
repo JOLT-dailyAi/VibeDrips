@@ -1949,9 +1949,10 @@ body.glass-theme .discount-badge {
 
     /* Maximize container area - Refined balance */
     .modal-nav-container {
-        width: 80% !important;
-        /* Increased gap for levers */
-        max-width: calc(100vw - env(safe-area-inset-left, 30px) - env(safe-area-inset-right, 30px) - 260px) !important;
+        width: 72% !important;
+        /* Gutter Expansion V6 */
+        /* Increased gap for levers - 300px total clearance */
+        max-width: calc(100vw - env(safe-area-inset-left, 30px) - env(safe-area-inset-right, 30px) - 300px) !important;
         max-height: 92vh !important;
         border-radius: 16px !important;
         /* Radius Sync V2 */
