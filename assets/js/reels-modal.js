@@ -16,10 +16,10 @@ function openReelsModal() {
   // Disable body scroll
   document.body.style.overflow = 'hidden';
 
-    // Render reels feed inside modal
+  // Render reels feed inside modal
   if (window.renderReelsFeed) {
     window.renderReelsFeed();
-    
+
     // ✅ NEW: Restore last position after render
     setTimeout(() => {
       if (window.restoreReelPosition) {
@@ -34,10 +34,10 @@ function openReelsModal() {
   setupModalCloseHandlers();
   // Setup navigation handlers
   setupNavigationHandlers();
-  
+
   // ✅ Initial arrow state update (after render)
   setTimeout(updateNavigationArrows, 100);
-  
+
   console.log('✅ Reels modal opened');
 }
 
@@ -45,18 +45,30 @@ function openReelsModal() {
 function closeReelsModal() {
   console.log('🎬 Closing reels modal...');
   const modal = document.getElementById('reels-modal');
+  const closeBtn = document.querySelector('.reels-close-btn');
   if (!modal) return;
 
-  // Hide modal
-  modal.classList.add('hidden');
-  // Re-enable body scroll
-  document.body.style.overflow = '';
+  // Render high-fidelity exit animation
+  if (closeBtn) {
+    closeBtn.classList.add('closing-animation');
+  }
 
-  // Clean up
-  removeModalCloseHandlers();
-  removeNavigationHandlers();
+  // Delay actual close to allow animation to play
+  setTimeout(() => {
+    // Hide modal
+    modal.classList.add('hidden');
+    // Re-enable body scroll
+    document.body.style.overflow = '';
 
-  console.log('✅ Reels modal closed');
+    // Clean up
+    if (closeBtn) {
+      closeBtn.classList.remove('closing-animation');
+    }
+    removeModalCloseHandlers();
+    removeNavigationHandlers();
+
+    console.log('✅ Reels modal closed');
+  }, 300);
 }
 
 // Setup close event handlers
@@ -131,7 +143,7 @@ function setupNavigationHandlers() {
 // Remove navigation handlers
 function removeNavigationHandlers() {
   document.removeEventListener('keydown', handleArrowKeys);
-  
+
   const upBtn = document.querySelector('.reels-nav-btn.up');
   const downBtn = document.querySelector('.reels-nav-btn.down');
   if (upBtn) upBtn.removeEventListener('click', scrollToPreviousReel);
