@@ -127,7 +127,8 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  overflow-y: auto; /* ✅ KEEP SCROLL - handles resolution variations */
+  overflow-y: auto;
+  /* ✅ KEEP SCROLL - handles resolution variations */
   overflow-x: hidden;
   align-content: start;
   justify-content: center;
@@ -170,15 +171,15 @@
     padding: 10px;
     gap: 15px;
   }
-  
+
   .reels-modal .reel-video {
     flex: 0 0 45%;
   }
-  
+
   .reels-modal .reel-products {
     flex: 1;
   }
-  
+
   .reels-modal .products-grid {
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(2, minmax(min-content, max-content));
@@ -202,21 +203,21 @@
   .reels-modal .reel-section {
     padding: 10px;
   }
-  
+
   .reels-modal .reel-content {
     flex-direction: column;
     gap: 10px;
     padding: 0;
     height: 100%;
   }
-  
+
   .reels-modal .reel-video {
     flex: 0 0 auto;
     height: auto;
     max-height: 45vh;
     border-radius: 8px;
   }
-  
+
   .reels-modal .reel-video iframe {
     width: 100%;
     height: auto;
@@ -224,13 +225,13 @@
     max-height: 45vh;
     border-radius: 8px;
   }
-  
+
   .reels-modal .reel-products {
     flex: 1;
     max-height: none;
     min-height: 0;
   }
-  
+
   .reels-modal .products-grid {
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: minmax(min-content, max-content);
@@ -244,31 +245,31 @@
   .reels-modal .reel-section {
     padding: 8px;
   }
-  
+
   .reels-modal .reel-content {
     flex-direction: row;
     gap: 8px;
     padding: 0;
     height: 92vh;
   }
-  
+
   .reels-modal .reel-video {
     flex: 0 0 38%;
     max-height: 100%;
     border-radius: 8px;
   }
-  
+
   .reels-modal .reel-video iframe {
     width: 100%;
     height: 100%;
     border-radius: 8px;
   }
-  
+
   .reels-modal .reel-products {
     flex: 1;
     max-height: 100%;
   }
-  
+
   .reels-modal .products-grid {
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: minmax(min-content, max-content);
@@ -322,70 +323,33 @@
     height: 36px;
     font-size: 16px;
   }
-  
+
   .reels-modal .products-carousel .carousel-nav.prev {
     left: 2px;
   }
-  
+
   .reels-modal .products-carousel .carousel-nav.next {
     right: 2px;
   }
 }
 
 /* ==============================================================================
-   CAROUSEL DOTS
+   CAROUSEL DOTS - LAYOUT OVERRIDES
    ============================================================================== */
 
 .reels-modal .carousel-dots {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 0;
-  flex-shrink: 0;
   position: absolute;
   bottom: 5px;
   left: 0;
   right: 0;
   height: 28px;
-  z-index: 10;
   pointer-events: none;
   background: linear-gradient(to top, rgba(0, 0, 0, 0.4), transparent);
-}
-
-.reels-modal .dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  pointer-events: auto;
-}
-
-.reels-modal .dot:hover {
-  background: rgba(255, 255, 255, 0.5);
-  transform: scale(1.2);
-}
-
-.reels-modal .dot.active {
-  background: white;
-  width: 24px;
-  border-radius: 4px;
 }
 
 @media (max-width: 767px) {
   .reels-modal .carousel-dots {
     height: 26px;
-  }
-  
-  .reels-modal .dot {
-    width: 6px;
-    height: 6px;
-  }
-  
-  .reels-modal .dot.active {
-    width: 18px;
   }
 }
 
@@ -413,7 +377,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ==============================================================================

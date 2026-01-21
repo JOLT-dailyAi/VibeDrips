@@ -857,6 +857,31 @@ function wrapModalForSliding(centerProductId) {
     // Add strip to container
     navContainer.appendChild(slidingStrip);
 
+    // ✅ PHASE_8: Add Dot Indicators
+    const dotsContainer = document.createElement('div');
+    dotsContainer.className = 'carousel-dots';
+    navContainer.appendChild(dotsContainer);
+
+    // Initial dots render
+    if (window.CarouselUtils) {
+        window.CarouselUtils.enableDots(dotsContainer, productList.length, centerIndex);
+
+        // Add click listeners to dots for direct navigation
+        dotsContainer.addEventListener('click', (e) => {
+            const dot = e.target.closest('.dot');
+            if (!dot) return;
+
+            const targetIndex = parseInt(dot.getAttribute('data-index'));
+            const currentIndex = VibeDrips.modalState.currentIndex;
+
+            if (targetIndex > currentIndex) {
+                // We'd need a multi-step jump for dot clicks, 
+                // but for now, we'll keep it simple: just sync visual state
+                // or eventually implement direct jump logic.
+            }
+        });
+    }
+
     // CRITICAL FIX: Insert navContainer AFTER overlay to maintain z-index stacking
     // The overlay must be BEFORE the content in DOM order for z-index to work
     const overlay = existingModal.querySelector('.modal-overlay');
@@ -1049,11 +1074,18 @@ function setupModalKeyboardNav() {
 function updateGlassZoneStates() {
     const leftZone = document.querySelector('.glass-zone.left');
     const rightZone = document.querySelector('.glass-zone.right');
+    const dotsContainer = document.querySelector('.modal-nav-container .carousel-dots');
 
     if (!leftZone || !rightZone) return;
 
+    const productList = VibeDrips.modalState.currentProductList;
     const currentIndex = VibeDrips.modalState.currentIndex;
-    const totalProducts = VibeDrips.filteredProducts.length;
+    const totalProducts = productList.length;
+
+    // ✅ PHASE_8: Update Dots
+    if (dotsContainer && window.CarouselUtils) {
+        window.CarouselUtils.enableDots(dotsContainer, totalProducts, currentIndex);
+    }
 
     // Left zone disabled at first product
     if (currentIndex === 0) {
@@ -1344,7 +1376,12 @@ function showProductModal(productId, triggerElement = null) {
     let scopedProducts = [];
     if (triggerElement) {
         // Look for the nearest container that defines a product context
-        const parentGrid = triggerElement.closest('.products-grid');
+        // Priority: Smarter semantic containers first, then generic grids
+        const parentGrid = triggerElement.closest('.reel-products') ||
+            triggerElement.closest('#products-container') ||
+            triggerElement.closest('.products-section') ||
+            triggerElement.closest('.products-grid');
+
         if (parentGrid) {
             // Extract IDs in current visual order from DOM
             const siblingCards = parentGrid.querySelectorAll('[data-product-id]');

@@ -252,3 +252,52 @@
         height: 40px;
     }
 }
+
+/* ========================================
+   REUSABLE CAROUSEL DOTS
+   Standard indicators for all carousels
+   ======================================== */
+
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+    flex-shrink: 0;
+    z-index: 10;
+    transition: all 0.3s ease;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    pointer-events: auto;
+}
+
+.dot:hover {
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(1.2);
+}
+
+.dot.active {
+    background: white;
+    width: 24px;
+    border-radius: 4px;
+}
+
+/* Mobile dot variants */
+@media (max-width: 767px) {
+    .dot {
+        width: 6px;
+        height: 6px;
+    }
+
+    .dot.active {
+        width: 18px;
+    }
+}

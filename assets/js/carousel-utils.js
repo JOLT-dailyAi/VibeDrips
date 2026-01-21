@@ -68,6 +68,32 @@ const CarouselUtils = {
     },
 
     /**
+     * Enable and update dot indicators
+     * @param {HTMLElement} container - Dots container element
+     * @param {number} totalItems - Total number of items
+     * @param {number} activeIndex - Index of active item
+     */
+    enableDots(container, totalItems, activeIndex) {
+        if (!container) return;
+
+        // Generate dots if container is empty
+        if (container.children.length === 0) {
+            for (let i = 0; i < totalItems; i++) {
+                const dot = document.createElement('span');
+                dot.className = i === activeIndex ? 'dot active' : 'dot';
+                dot.setAttribute('data-index', i);
+                container.appendChild(dot);
+            }
+        } else {
+            // Update existing dots
+            const dots = container.querySelectorAll('.dot');
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === activeIndex);
+            });
+        }
+    },
+
+    /**
      * Create a carousel controller for a product
      * @param {string} productId - Product ID
      * @param {Array<string>} images - Array of image URLs
