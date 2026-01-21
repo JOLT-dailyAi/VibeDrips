@@ -272,16 +272,17 @@
     .glass-zone {
         display: flex !important;
         /* Force visible */
-        width: 60px !important;
+        width: 40px !important;
+        /* Narrower levers V8 */
         height: calc(100% - 100px) !important;
         /* Slightly more vertical gap */
     }
 
     .glass-zone.left {
-        left: calc(115px + env(safe-area-inset-left, 30px)) !important;
+        left: calc(15px + env(safe-area-inset-left, 20px)) !important;
     }
 
     .glass-zone.right {
-        right: calc(115px + env(safe-area-inset-right, 30px)) !important;
+        right: calc(15px + env(safe-area-inset-right, 20px)) !important;
     }
 }
