@@ -1375,21 +1375,33 @@ function showProductModal(productId, triggerElement = null) {
     // ✅ PHASE_7: Scoped Context Detection (Supports Main Grid, Reels, etc.)
     let scopedProducts = [];
     if (triggerElement) {
-        // Look for the nearest container that defines a product context
-        // Priority: Smarter semantic containers first, then generic grids
-        const parentGrid = triggerElement.closest('.reel-products') ||
-            triggerElement.closest('#products-container') ||
-            triggerElement.closest('.products-section') ||
-            triggerElement.closest('.products-grid');
+        // Special Case: Reels Carousel (which is paginated, so DOM query isn't enough)
+        const reelCarousel = triggerElement.closest('.products-carousel');
+        if (reelCarousel && window.getReelsDataFromProducts) {
+            const reelIndex = parseInt(reelCarousel.getAttribute('data-reel-index'));
+            const reels = window.getReelsDataFromProducts();
+            if (reels[reelIndex]) {
+                scopedProducts = reels[reelIndex].products;
+                console.log(`🎬 Scoped modal to ALL ${scopedProducts.length} products in Reel #${reelIndex}.`);
+            }
+        }
 
-        if (parentGrid) {
-            // Extract IDs in current visual order from DOM
-            const siblingCards = parentGrid.querySelectorAll('[data-product-id]');
-            const scopedIds = Array.from(siblingCards).map(card => card.getAttribute('data-product-id'));
+        // Standard Case: Grid query (for main page or other gridded sections)
+        if (scopedProducts.length === 0) {
+            const parentGrid = triggerElement.closest('.reel-products') ||
+                triggerElement.closest('#products-container') ||
+                triggerElement.closest('.products-section') ||
+                triggerElement.closest('.products-grid');
 
-            // Map IDs back to full product objects
-            scopedProducts = scopedIds.map(id => VibeDrips.allProducts.find(p => p.id === id)).filter(Boolean);
-            console.log(`🔍 Scoped modal to ${scopedProducts.length} products from container.`);
+            if (parentGrid) {
+                // Extract IDs in current visual order from DOM
+                const siblingCards = parentGrid.querySelectorAll('[data-product-id]');
+                const scopedIds = Array.from(siblingCards).map(card => card.getAttribute('data-product-id'));
+
+                // Map IDs back to full product objects
+                scopedProducts = scopedIds.map(id => VibeDrips.allProducts.find(p => p.id === id)).filter(Boolean);
+                console.log(`🔍 Scoped modal to ${scopedProducts.length} products from DOM container.`);
+            }
         }
     }
 

@@ -76,8 +76,17 @@ const CarouselUtils = {
     enableDots(container, totalItems, activeIndex) {
         if (!container) return;
 
-        // Generate dots if container is empty
-        if (container.children.length === 0) {
+        // Hide entirely if only 1 item (matches Lightbox behavior)
+        if (totalItems <= 1) {
+            container.style.display = 'none';
+            return;
+        }
+
+        container.style.display = 'flex';
+
+        // Generate dots if container is empty or item count changed
+        if (container.children.length !== totalItems) {
+            container.innerHTML = '';
             for (let i = 0; i < totalItems; i++) {
                 const dot = document.createElement('span');
                 dot.className = i === activeIndex ? 'dot active' : 'dot';
