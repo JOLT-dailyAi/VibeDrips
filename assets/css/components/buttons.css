@@ -266,7 +266,7 @@
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    padding: 6px 15px;
+    padding: 8px 20px;
     color: white;
 }
 
@@ -274,16 +274,16 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
-    padding: 8px 12px;
+    gap: 12px;
+    padding: 10px 14px;
     flex-shrink: 0;
     z-index: 10;
     transition: all 0.3s ease;
 }
 
 .dot {
-    width: 8px;
-    height: 8px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.4);
     cursor: pointer;
@@ -298,8 +298,8 @@
 
 .dot.active {
     background: white;
-    width: 24px;
-    border-radius: 4px;
+    width: 32px;
+    border-radius: 5px;
 }
 
 /* Mobile dot variants */
