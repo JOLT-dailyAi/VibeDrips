@@ -61,21 +61,33 @@
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-/* Modal Dots - Absolute Position to avoid clipping */
-.modal-nav-container .carousel-dots {
+/* Relocated Indicator - Outside the 80vh content area */
+.dynamic-modal .modal-nav-indicator {
     position: absolute;
-    bottom: 12px;
+    bottom: 3vh;
     left: 50%;
     transform: translateX(-50%);
-    width: auto;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 6px 16px;
-    border-radius: 20px;
-    backdrop-filter: blur(8px);
     z-index: 1010;
     display: flex;
+    align-items: center;
+    justify-content: center;
     gap: 8px;
+    padding: 8px 16px;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    color: white;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 500;
     pointer-events: auto;
+    transition: opacity 0.3s ease;
+}
+
+/* Dots specific layout inside hybrid indicator */
+.modal-nav-indicator .dot {
+    margin: 0;
+    /* Clear any residual margins */
 }
 
 /* Sliding Strip (Flex Container) */

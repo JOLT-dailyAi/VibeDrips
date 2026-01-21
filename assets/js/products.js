@@ -857,30 +857,31 @@ function wrapModalForSliding(centerProductId) {
     // Add strip to container
     navContainer.appendChild(slidingStrip);
 
-    // ✅ PHASE_8: Add Dot Indicators
-    const dotsContainer = document.createElement('div');
-    dotsContainer.className = 'carousel-dots';
-    navContainer.appendChild(dotsContainer);
-
-    // Initial dots render
-    if (window.CarouselUtils) {
-        window.CarouselUtils.enableDots(dotsContainer, productList.length, centerIndex);
-
-        // Add click listeners to dots for direct navigation
-        dotsContainer.addEventListener('click', (e) => {
-            const dot = e.target.closest('.dot');
-            if (!dot) return;
-
-            const targetIndex = parseInt(dot.getAttribute('data-index'));
-            const currentIndex = VibeDrips.modalState.currentIndex;
-
-            if (targetIndex > currentIndex) {
-                // We'd need a multi-step jump for dot clicks, 
-                // but for now, we'll keep it simple: just sync visual state
-                // or eventually implement direct jump logic.
-            }
-        });
+    // ✅ PHASE_9: Relocated Hybrid Indicator (Dots or Counter)
+    // Create indicator container at the modal level, not inside navContainer
+    let indicatorContainer = existingModal.querySelector('.modal-nav-indicator');
+    if (!indicatorContainer) {
+        indicatorContainer = document.createElement('div');
+        indicatorContainer.className = 'modal-nav-indicator';
+        existingModal.appendChild(indicatorContainer);
     }
+
+    // Determine type and update (Dots if <= 10, Counter if > 10)
+    const totalItems = productList.length;
+    if (totalItems <= 10 && window.CarouselUtils) {
+        window.CarouselUtils.enableDots(indicatorContainer, totalItems, centerIndex);
+    } else if (window.CarouselUtils) {
+        window.CarouselUtils.updateCounter(indicatorContainer, centerIndex, totalItems);
+    }
+
+    // Add click listeners to dots if they exist
+    indicatorContainer.addEventListener('click', (e) => {
+        const dot = e.target.closest('.dot');
+        if (dot) {
+            const targetIndex = parseInt(dot.getAttribute('data-index'));
+            // Navigation logic for direct dot jump could be added here
+        }
+    });
 
     // CRITICAL FIX: Insert navContainer AFTER overlay to maintain z-index stacking
     // The overlay must be BEFORE the content in DOM order for z-index to work
@@ -1033,8 +1034,9 @@ function setupModalKeyboardNav() {
         // Only if modal is open
         if (!document.querySelector('.dynamic-modal')) return;
 
+        const productList = VibeDrips.modalState.currentProductList;
         const currentIndex = VibeDrips.modalState.currentIndex;
-        const totalProducts = VibeDrips.filteredProducts.length;
+        const totalProducts = productList.length;
 
         if (e.key === 'ArrowLeft') {
             e.preventDefault();
@@ -1074,7 +1076,6 @@ function setupModalKeyboardNav() {
 function updateGlassZoneStates() {
     const leftZone = document.querySelector('.glass-zone.left');
     const rightZone = document.querySelector('.glass-zone.right');
-    const dotsContainer = document.querySelector('.modal-nav-container .carousel-dots');
 
     if (!leftZone || !rightZone) return;
 
@@ -1082,9 +1083,14 @@ function updateGlassZoneStates() {
     const currentIndex = VibeDrips.modalState.currentIndex;
     const totalProducts = productList.length;
 
-    // ✅ PHASE_8: Update Dots
-    if (dotsContainer && window.CarouselUtils) {
-        window.CarouselUtils.enableDots(dotsContainer, totalProducts, currentIndex);
+    // ✅ PHASE_9: Update Hybrid Indicator
+    const indicator = document.querySelector('.dynamic-modal .modal-nav-indicator');
+    if (indicator && window.CarouselUtils) {
+        if (totalProducts <= 10) {
+            window.CarouselUtils.enableDots(indicator, totalProducts, currentIndex);
+        } else {
+            window.CarouselUtils.updateCounter(indicator, currentIndex, totalProducts);
+        }
     }
 
     // Left zone disabled at first product
@@ -1273,7 +1279,8 @@ function setupUnifiedModalDrag() {
         }
 
         // Color Logic and Width
-        const totalProducts = VibeDrips.filteredProducts.length;
+        const productList = VibeDrips.modalState.currentProductList;
+        const totalProducts = productList.length;
         const isBoundary = (side === 'left' && VibeDrips.modalState.currentIndex === 0) ||
             (side === 'right' && VibeDrips.modalState.currentIndex === totalProducts - 1);
 
