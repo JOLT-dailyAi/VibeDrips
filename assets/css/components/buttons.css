@@ -262,11 +262,11 @@
 .glass-pill {
     /* Harmonized with .modal-section-header but with pill radius */
     background: linear-gradient(135deg,
-            rgba(255, 255, 255, 0.1) 0%,
-            rgba(255, 255, 255, 0.05) 100%);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border-radius: 20px;
+            rgba(255, 255, 255, var(--glass-refraction)) 0%,
+            rgba(255, 255, 255, calc(var(--glass-refraction) / 2)) 100%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    border-radius: var(--glass-border-radius, 20px);
     border: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     padding: 8px 20px;

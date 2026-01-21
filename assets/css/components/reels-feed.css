@@ -345,11 +345,11 @@
   width: auto;
   height: auto;
   pointer-events: auto;
-  /* Inherits glass-pill utility if class is added, or we define it here for specificity */
+  /* Managed by variables for theme unity */
   background: rgba(0, 0, 0, 0.45);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-radius: 20px;
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+  border-radius: var(--glass-border-radius, 20px);
   padding: 6px 12px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);

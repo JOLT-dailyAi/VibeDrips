@@ -2,11 +2,11 @@
 
 /* CSS Variables for dynamic glass control */
 :root {
-    --glass-blur: 5px;
+    --glass-blur: 15px;
     --glass-refraction: 0.15;
     --glass-depth: 0px;
     --glass-saturation: 180%;
-    /* NEW: iOS-like saturation */
+    /* iOS-like saturation */
     --glass-border-radius: 20px;
 }
 
@@ -188,6 +188,7 @@
 /* Vertical slider */
 .glass-slider {
     -webkit-appearance: slider-vertical;
+    appearance: slider-vertical;
     writing-mode: bt-lr;
     width: 8px;
     height: 180px;
