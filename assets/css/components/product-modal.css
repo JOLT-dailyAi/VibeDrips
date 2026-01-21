@@ -1951,15 +1951,13 @@ body.glass-theme .discount-badge {
     .modal-nav-container {
         width: 80% !important;
         /* Increased gap for levers */
-        max-width: calc(100vw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px) - 140px) !important;
+        max-width: calc(100vw - env(safe-area-inset-left, 30px) - env(safe-area-inset-right, 30px) - 260px) !important;
         max-height: 92vh !important;
         border-radius: 16px !important;
         /* Radius Sync V2 */
         margin: 0 auto;
         padding-left: 0 !important;
-        /* Bleeding Fix: No internal padding */
         padding-right: 0 !important;
-        /* Bleeding Fix: No internal padding */
         overflow: hidden !important;
         /* Force content clipping */
     }
@@ -1974,11 +1972,47 @@ body.glass-theme .discount-badge {
     .simple-modal-header {
         border-bottom-left-radius: 0 !important;
         border-bottom-right-radius: 0 !important;
+        padding: 8px 15px !important;
     }
 
     .modal-actions {
         border-top-left-radius: 0 !important;
         border-top-right-radius: 0 !important;
+        padding: 10px !important;
+    }
+
+    /* Gallery Refinements - V4 */
+    .gallery-desktop {
+        display: grid !important;
+        /* Force desktop-style split in landscape */
+        grid-template-columns: 25% 75% !important;
+        gap: 12px !important;
+        min-height: auto !important;
+        padding: 5px !important;
+    }
+
+    .gallery-mobile {
+        display: none !important;
+    }
+
+    .gallery-thumbnails {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 6px !important;
+        padding-right: 4px !important;
+        max-height: 50vh !important;
+    }
+
+    .thumbnail {
+        width: 45px !important;
+        height: 45px !important;
+    }
+
+    .gallery-main {
+        height: 55vh !important;
+    }
+
+    .gallery-main img {
+        max-height: 100% !important;
     }
 
     /* Immersive Body Layout */
@@ -2010,29 +2044,13 @@ body.glass-theme .discount-badge {
 
     /* Scale internal UI components */
     .modal-core-info {
-        padding: 10px !important;
+        padding: 8px 12px !important;
     }
 
     .info-row,
     .detail-row {
-        gap: 8px !important;
-    }
-
-    /* Gallery Adjustments */
-    .gallery-main,
-    .mobile-main {
-        height: 45vh !important;
-        /* Prioritize vertical space usage */
-    }
-
-    .thumbnails-container {
-        height: 60px !important;
-        padding-bottom: 5px !important;
-    }
-
-    .thumbnail {
-        width: 50px !important;
-        height: 50px !important;
+        gap: 6px !important;
+        padding: 2px 0 !important;
     }
 
     /* Relocate Indicators slightly higher to avoid home bars */
