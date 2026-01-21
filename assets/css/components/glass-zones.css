@@ -262,3 +262,26 @@
         right: 30px;
     }
 }
+
+/* ========================================
+   V5 REFINE: MOBILE LANDSCAPE OVERRIDE
+   Prevents Tablet/Desktop rules from clipping 
+   levers on mobile landscape.
+   ======================================== */
+@media (max-width: 950px) and (orientation: landscape) {
+    .glass-zone {
+        display: flex !important;
+        /* Force visible */
+        width: 60px !important;
+        height: calc(100% - 100px) !important;
+        /* Slightly more vertical gap */
+    }
+
+    .glass-zone.left {
+        left: calc(115px + env(safe-area-inset-left, 30px)) !important;
+    }
+
+    .glass-zone.right {
+        right: calc(115px + env(safe-area-inset-right, 30px)) !important;
+    }
+}
