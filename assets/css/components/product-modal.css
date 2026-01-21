@@ -1953,12 +1953,32 @@ body.glass-theme .discount-badge {
         /* Increased gap for levers */
         max-width: calc(100vw - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px) - 140px) !important;
         max-height: 92vh !important;
-        border-radius: 12px;
+        border-radius: 16px !important;
+        /* Radius Sync V2 */
         margin: 0 auto;
         padding-left: 0 !important;
         /* Bleeding Fix: No internal padding */
         padding-right: 0 !important;
         /* Bleeding Fix: No internal padding */
+        overflow: hidden !important;
+        /* Force content clipping */
+    }
+
+    /* Force all sub-components to follow the new 16px radius */
+    .simple-modal-content,
+    .simple-modal-header,
+    .modal-actions {
+        border-radius: 16px !important;
+    }
+
+    .simple-modal-header {
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+    }
+
+    .modal-actions {
+        border-top-left-radius: 0 !important;
+        border-top-right-radius: 0 !important;
     }
 
     /* Immersive Body Layout */
