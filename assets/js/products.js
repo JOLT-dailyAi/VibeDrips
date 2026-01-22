@@ -904,6 +904,24 @@ function wrapModalForSliding(centerProductId) {
     // Add to existingModal alongside glass zones
     existingModal.insertAdjacentHTML('beforeend', glowHTML);
 
+    // ✅ NEW: External Animated Icons (🎬 and 🌎)
+    const externalControls = document.createElement('div');
+    externalControls.className = 'modal-external-controls';
+    externalControls.innerHTML = `
+        <button class="reels-toggle" aria-label="Reels Animation">
+            <span>🎬</span>
+            <span>🎞️</span>
+            <span>📱</span>
+            <span>🎞️</span>
+        </button>
+        <button class="globe-toggle" aria-label="Global Availability">
+            <span>🌎</span>
+            <span>🌍</span>
+            <span>🌏</span>
+        </button>
+    `;
+    existingModal.appendChild(externalControls);
+
     // PHASE_1: Add glass zones HTML - FIXED: Add to MODAL (not navContainer) so they're outside scrollable content
     const glassZonesHTML = `
         <button class="arrow-button glass-zone left" aria-label="Previous product">
