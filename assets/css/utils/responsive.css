@@ -11,11 +11,18 @@
         padding-right: env(safe-area-inset-right, 20px) !important;
     }
 
-    /* Ensure specific components that might be outside .container also respect safe areas */
     .main-header,
     .main-footer {
         padding-left: env(safe-area-inset-left, 0px) !important;
         padding-right: env(safe-area-inset-right, 0px) !important;
+    }
+
+    .social-float {
+        right: calc(15px + env(safe-area-inset-right, 0px)) !important;
+    }
+
+    .media-float {
+        left: calc(15px + env(safe-area-inset-left, 0px)) !important;
     }
 
     /* ========================================
