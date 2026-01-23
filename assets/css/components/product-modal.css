@@ -68,12 +68,12 @@
    ============================================ */
 .modal-external-controls {
     position: absolute;
-    /* Aligned with .modal-nav-container */
+    left: 50%;
+    transform: translateX(-50%);
     width: 90%;
     max-width: 1200px;
-    /* Positioned exactly on top of header area */
-    top: calc(10vh - 65px);
-    /* 10vh is the flex-centering margin approx, 65px is icon + hover buffer */
+    /* Handle Dynamic Island / Notch safety in portrait */
+    top: calc(max(10vh - 60px, env(safe-area-inset-top, 20px) + 5px));
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -82,23 +82,30 @@
     /* Above nav container (1001) */
     pointer-events: none;
     /* Allow clicks through to overlay */
+    /* Align Globe precisely on-top of the close button inside header padding */
+    padding-right: calc(40px - 9px);
+    /* 40px header pad - half icon width difference */
 }
 
 /* Align Globe with the close button area (compensated for container padding) */
 .modal-external-controls .globe-toggle,
 .modal-external-controls .reels-toggle {
     pointer-events: auto;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
     /* Extra pop-out shadow for external visibility */
 }
 
 /* Safe Area Support for external controls */
 @media (max-width: 950px) and (orientation: landscape) {
     .modal-external-controls {
-        top: calc(env(safe-area-inset-top, 0px) + 5px);
+        /* Match modal gap in landscape (approx 4vh) */
+        top: calc(max(4vh - 48px, 5px));
+        /* Synchronize width/max-width with .modal-nav-container landscape overrides */
         width: 85% !important;
-        /* Match updated landscape modal width */
-        max-width: calc(100vw - 120px) !important;
+        max-width: calc(100vw - env(safe-area-inset-left, 30px) - env(safe-area-inset-right, 30px) - 120px) !important;
+        /* Match close button's right: calc(10px + env) override in landscape */
+        padding-right: calc(10px + env(safe-area-inset-right, 0px) - 9px);
+        gap: 15px;
     }
 }
 
