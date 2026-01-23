@@ -2035,24 +2035,25 @@ body.glass-theme .discount-badge {
 @media (max-width: 950px) and (orientation: landscape) {
 
     /* Maximize container area - Refined balance */
+    .modal-layout-wrapper,
+    .modal-nav-container,
+    .modal-sliding-viewport,
+    .simple-modal-content,
+    .simple-modal-header,
+    .modal-actions {
+        border-radius: 16px !important;
+        /* Radius Sync V3 - Universal Force */
+    }
+
     .modal-nav-container {
         width: 100% !important;
         max-width: 100% !important;
         max-height: 92vh !important;
-        border-radius: 16px !important;
-        /* Radius Sync V2 */
         margin: 0 auto;
         padding-left: 0 !important;
         padding-right: 0 !important;
         overflow: hidden !important;
         /* Force content clipping */
-    }
-
-    /* Force all sub-components to follow the new 16px radius */
-    .simple-modal-content,
-    .simple-modal-header,
-    .modal-actions {
-        border-radius: 16px !important;
     }
 
     .simple-modal-header {
