@@ -315,10 +315,14 @@
 /* Mobile optimizations */
 @media (max-width: 768px) {
     .lightbox-close {
-        top: 1rem;
-        right: 1rem;
+        top: calc(1rem + env(safe-area-inset-top, 0px)) !important;
+        right: calc(1rem + env(safe-area-inset-right, 0px)) !important;
         width: 40px;
         height: 40px;
+    }
+
+    .lightbox-counter {
+        top: calc(0.75rem + env(safe-area-inset-top, 0px)) !important;
     }
 
     .lightbox-arrow {
