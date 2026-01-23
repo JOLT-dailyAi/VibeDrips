@@ -337,8 +337,8 @@
     width: 42px;
     height: 42px;
     background: rgba(102, 126, 234, 0.1);
-    border: 1px solid #667eea;
-    /* Thinner border for larger feel */
+    border: 0.5px solid #667eea;
+    /* Ultra-thin border */
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -348,9 +348,10 @@
     transition: all 0.3s ease;
     padding: 0;
     font-size: 26px;
-    /* Larger icon appearance */
     position: relative;
     overflow: hidden;
+    line-height: normal;
+    /* Center emoji purely via flex */
 }
 
 .globe-toggle:hover {
@@ -438,7 +439,7 @@ body.dark-theme .globe-toggle:hover {
     width: 42px;
     height: 42px;
     background: rgba(102, 126, 234, 0.1);
-    border: 1px solid #667eea;
+    border: 0.5px solid #667eea;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -450,6 +451,7 @@ body.dark-theme .globe-toggle:hover {
     font-size: 26px;
     position: relative;
     overflow: hidden;
+    line-height: normal;
 }
 
 .reels-toggle:hover {
