@@ -896,15 +896,8 @@ function wrapModalForSliding(centerProductId) {
         existingModal.appendChild(navContainer);
     }
 
-    // PHASE_2: Add boundary glow overlays
-    const glowHTML = `
-        <div class="boundary-glow-overlay left"></div>
-        <div class="boundary-glow-overlay right"></div>
-    `;
-    // Add to existingModal alongside glass zones
-    existingModal.insertAdjacentHTML('beforeend', glowHTML);
-
     // ✅ NEW: External Animated Icons (🎬 and 🌎)
+    // Now pinned INSIDE the navContainer for perfect structural alignment
     const externalControls = document.createElement('div');
     externalControls.className = 'modal-external-controls';
     externalControls.innerHTML = `
@@ -920,21 +913,21 @@ function wrapModalForSliding(centerProductId) {
             <span>🌏</span>
         </button>
     `;
+    navContainer.appendChild(externalControls);
 
-    // NEW: Modal Layout Wrapper - Unified centering for controls + content
-    const layoutWrapper = document.createElement('div');
-    layoutWrapper.className = 'modal-layout-wrapper';
+    // NEW: Sliding Viewport (clips the strip while icons sit above)
+    const slidingViewport = document.createElement('div');
+    slidingViewport.className = 'modal-sliding-viewport';
+    slidingViewport.appendChild(slidingStrip);
+    navContainer.appendChild(slidingViewport);
 
-    // Add items to wrapper
-    layoutWrapper.appendChild(externalControls);
-    layoutWrapper.appendChild(navContainer);
-
-    // Insert AFTER overlay
-    if (overlay.nextSibling) {
-        existingModal.insertBefore(layoutWrapper, overlay.nextSibling);
-    } else {
-        existingModal.appendChild(layoutWrapper);
-    }
+    // PHASE_2: Add boundary glow overlays
+    const glowHTML = `
+        <div class="boundary-glow-overlay left"></div>
+        <div class="boundary-glow-overlay right"></div>
+    `;
+    // Add to existingModal (outside viewport so they sit on top)
+    existingModal.insertAdjacentHTML('beforeend', glowHTML);
 
     // PHASE_1: Add glass zones HTML - FIXED: Add to MODAL (not navContainer) so they're outside scrollable content
     const glassZonesHTML = `

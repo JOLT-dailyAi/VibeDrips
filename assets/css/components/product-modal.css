@@ -37,37 +37,23 @@
    PHASE_1: Modal Navigation & Sliding Strip
    ============================================ */
 
-/* Modal Layout Wrapper - Unifies External Controls + Nav Container */
-.modal-layout-wrapper {
+/* Modal Navigation Container (THE Main Anchor) */
+.modal-nav-container {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 90%;
     max-width: 1200px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    z-index: 1001;
-    pointer-events: none;
-    /* Block-level safety for Dynamic Island */
-    margin-top: calc(env(safe-area-inset-top, 0px) / 2);
-    /* CRITICAL: Sync right-edge math with modal content (reserves space for scrollbar) */
-    scrollbar-gutter: stable;
-}
-
-/* Modal Navigation Container (Viewport) */
-.modal-nav-container {
-    position: relative;
-    width: 100% !important;
-    /* Expansion synced with wrapper */
-    overflow: hidden !important;
-    isolation: isolate;
-    border-radius: 24px;
     z-index: 1001;
     pointer-events: auto;
     max-height: 80vh;
     display: block;
+    overflow: visible !important;
+    /* Allow icons above the box */
+
+    /* Block-level safety for Dynamic Island in portrait */
+    margin-top: calc(env(safe-area-inset-top, 0px) / 1.5);
 
     box-shadow:
         0 20px 60px rgba(0, 0, 0, 0.3),
@@ -76,22 +62,33 @@
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
+/* Sliding Viewport - Clips the content while keeping container visible */
+.modal-sliding-viewport {
+    width: 100%;
+    height: 100%;
+    overflow: hidden !important;
+    border-radius: 24px;
+    isolation: isolate;
+}
+
+
 /* ============================================
    MODAL EXTERNAL CONTROLS (Globe & Reels)
    Positioned precisely above the header
    ============================================ */
 .modal-external-controls {
-    width: 100%;
+    position: absolute;
+    top: -55px;
+    /* Pinned above the header */
+    right: 40px;
+    /* MIRRORS HEADER PADDING EXACTLY */
     display: flex;
-    justify-content: flex-end;
     align-items: center;
-    gap: 10px;
-    /* Tighter gap between Globe and Reels */
-    margin-bottom: 10px;
-    /* Reduced by half as requested */
+    gap: 12px;
     pointer-events: none;
-    /* Center align with 32px CloseBtn (40px pad). Icon 42px -> 35px pad */
-    padding-right: 35px;
+    /* Container transparent to clicks */
+    /* Visual centering shift: (42px icon - 32px closebtn) / 2 = 5px */
+    transform: translateX(5px);
     transition: all 0.3s ease;
 }
 
@@ -105,49 +102,41 @@
 
 /* Match Header Breakpoints for perfect alignment */
 @media (max-width: 768px) {
-    .modal-layout-wrapper {
+    .modal-nav-container {
         width: 95%;
-        margin-top: calc(env(safe-area-inset-top, 20px) / 2);
     }
 
     .modal-external-controls {
-        /* Tablet sync: 20px header padding -> 15px padding for 42px icon */
-        padding-right: 15px;
-        margin-bottom: 8px;
-        /* Slightly tighter on tablet */
-        gap: 10px;
+        right: 20px;
+        /* Tablet Header Padding */
+        top: -52px;
     }
 }
 
 @media (max-width: 480px) {
-    .modal-layout-wrapper {
+    .modal-nav-container {
         width: 98%;
         margin-top: calc(env(safe-area-inset-top, 20px) / 1.5);
     }
 
     .modal-external-controls {
-        padding-right: 15px;
+        right: 20px;
+        /* Mobile Header Padding */
     }
 }
 
 /* Mobile Landscape Alignment */
 @media (max-width: 950px) and (orientation: landscape) {
-    .modal-layout-wrapper {
+    .modal-nav-container {
         width: 85% !important;
         max-width: calc(100vw - env(safe-area-inset-left, 30px) - env(safe-area-inset-right, 30px) - 120px) !important;
         margin-top: 0;
-        /* Reset for landscape centering */
-    }
-
-    .modal-nav-container {
         max-height: 92vh !important;
     }
 
     .modal-external-controls {
-        /* Landscape: 10+16=26. Icon: 5+21=26. */
-        padding-right: calc(5px + env(safe-area-inset-right, 0px));
-        margin-bottom: 6px;
-        /* High density landscape spacing */
+        right: calc(10px + env(safe-area-inset-right, 0px));
+        top: -50px;
         gap: 8px;
     }
 }
