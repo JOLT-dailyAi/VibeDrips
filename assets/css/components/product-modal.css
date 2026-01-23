@@ -97,14 +97,12 @@
     justify-content: flex-end;
     align-items: center;
     gap: 12px;
-    /* Reintroduced gap as requested */
-    margin-right: 35px;
-    /* Precision offset to center 42px icons over 32px close button (40+16-21) */
+    margin-right: 0;
+    /* Zero offset: Align with outer card edge */
     margin-bottom: 6px;
-    /* Tighter gap to header */
+    /* Tight vertical spacing */
     pointer-events: none;
     transition: all 0.3s ease;
-    /* Removed width: 100% and redundant absolute positioning to rely on parent flex-end alignment */
 }
 
 /* Align Globe with the close button area (compensated for container padding) */
@@ -122,8 +120,7 @@
     }
 
     .modal-external-controls {
-        /* Tablet Sync: 20px Pad + 16px - 21px = 15px */
-        margin-right: 15px;
+        margin-right: 0;
         top: -52px;
     }
 }
@@ -135,8 +132,7 @@
     }
 
     .modal-external-controls {
-        margin-right: 15px;
-        /* Mobile Mirror */
+        margin-right: 0;
     }
 }
 
@@ -150,8 +146,8 @@
     }
 
     .modal-external-controls {
-        /* Landscape Sync: 10px Pad + Safe (16px) - Icon Half (21px) = 5px + Safe */
-        margin-right: calc(5px + env(safe-area-inset-right, 0px));
+        /* Landscape: Mirror safe area inset for perfect edge alignment */
+        margin-right: env(safe-area-inset-right, 0px);
         top: -50px;
         gap: 8px;
     }
