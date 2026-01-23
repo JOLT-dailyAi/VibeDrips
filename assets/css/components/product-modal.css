@@ -133,9 +133,20 @@
     }
 
     .modal-external-controls {
-        /* Landscape: Mirror safe area inset for perfect edge alignment */
-        right: env(safe-area-inset-right, 0px);
+        position: absolute;
+        bottom: calc(100% + 2px);
+        /* Tighten gap for low height */
+        right: 0;
+        /* Align flush with card edge */
+        padding: 2px;
         gap: 8px;
+    }
+
+    .modal-external-controls .globe-toggle,
+    .modal-external-controls .reels-toggle {
+        width: 32px;
+        height: 32px;
+        font-size: 20px;
     }
 }
 
