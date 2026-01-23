@@ -1663,10 +1663,12 @@ function syncModalDimensions() {
             const productContent = activeProduct;
             if (productContent) {
                 const width = productContent.offsetWidth;
-                if (width > 0) {
-                    // Apply literal width to container to force flush alignment for levers
+                const height = productContent.offsetHeight;
+                if (width > 0 && height > 0) {
+                    // Apply literal dimensions to container to force flush alignment and rounded shadow
                     navContainer.style.setProperty('width', `${width}px`, 'important');
-                    console.log(`📏 Synced Modal Width: ${width}px`);
+                    navContainer.style.setProperty('height', `${height}px`, 'important');
+                    console.log(`📏 Synced Modal Dimensions: ${width}x${height}px`);
                 }
             }
         });

@@ -51,6 +51,13 @@
     display: block;
     overflow: visible !important;
     /* Allow icons above the box */
+    border-radius: 24px;
+    /* Essential for rounded shadows/corners */
+    background: transparent !important;
+    /* Prevent opaque corners */
+
+    /* CRITICAL: Sync right-edge math with modal content (reserves space for scrollbar) */
+    scrollbar-gutter: stable;
 
     /* Block-level safety for Dynamic Island in portrait */
     margin-top: calc(env(safe-area-inset-top, 0px) / 1.5);
@@ -79,16 +86,14 @@
 .modal-external-controls {
     position: absolute;
     top: -55px;
-    /* Pinned above the header */
-    right: 40px;
-    /* MIRRORS HEADER PADDING EXACTLY */
+    /* Pinned above the header area */
+    /* Math for Pixel-Perfect alignment with 32px Close Button:
+       Header Pad (40px) + Close Half (16px) - Icon Half (21px) = 35px from edge */
+    right: 35px;
     display: flex;
     align-items: center;
     gap: 12px;
     pointer-events: none;
-    /* Container transparent to clicks */
-    /* Visual centering shift: (42px icon - 32px closebtn) / 2 = 5px */
-    transform: translateX(5px);
     transition: all 0.3s ease;
 }
 
@@ -120,8 +125,8 @@
     }
 
     .modal-external-controls {
-        right: 20px;
-        /* Mobile Header Padding */
+        /* Mobile Sync: 20px Pad + 16px - 21px = 15px */
+        right: 15px;
     }
 }
 
@@ -135,7 +140,8 @@
     }
 
     .modal-external-controls {
-        right: calc(10px + env(safe-area-inset-right, 0px));
+        /* Landscape Sync: 10px Pad + Safe (16px) - Icon Half (21px) = 5px + Safe */
+        right: calc(5px + env(safe-area-inset-right, 0px));
         top: -50px;
         gap: 8px;
     }
