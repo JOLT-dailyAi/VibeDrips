@@ -93,19 +93,18 @@
    Positioned precisely above the header
    ============================================ */
 .modal-external-controls {
-    width: 100%;
-    position: absolute;
-    top: -55px;
-    /* Pinned above the shared anchor */
-    left: 0;
-    right: 0;
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    /* Math: 40px (Header Pad) + 16px (Close Half) - 21px (Icon Half) = 35px padding from edge */
-    padding-right: 35px;
+    gap: 12px;
+    /* Reintroduced gap as requested */
+    margin-right: 35px;
+    /* Precision offset to center 42px icons over 32px close button (40+16-21) */
+    margin-bottom: 6px;
+    /* Tighter gap to header */
     pointer-events: none;
     transition: all 0.3s ease;
+    /* Removed width: 100% and redundant absolute positioning to rely on parent flex-end alignment */
 }
 
 /* Align Globe with the close button area (compensated for container padding) */
@@ -124,7 +123,7 @@
 
     .modal-external-controls {
         /* Tablet Sync: 20px Pad + 16px - 21px = 15px */
-        padding-right: 15px;
+        margin-right: 15px;
         top: -52px;
     }
 }
@@ -136,7 +135,7 @@
     }
 
     .modal-external-controls {
-        padding-right: 15px;
+        margin-right: 15px;
         /* Mobile Mirror */
     }
 }
@@ -152,7 +151,7 @@
 
     .modal-external-controls {
         /* Landscape Sync: 10px Pad + Safe (16px) - Icon Half (21px) = 5px + Safe */
-        padding-right: calc(5px + env(safe-area-inset-right, 0px));
+        margin-right: calc(5px + env(safe-area-inset-right, 0px));
         top: -50px;
         gap: 8px;
     }
