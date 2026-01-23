@@ -336,8 +336,8 @@
     /* Layout & Base Style */
     width: 42px;
     height: 42px;
-    background: rgba(102, 126, 234, 0.1);
-    border: 0.8px solid rgba(102, 126, 234, 0.6);
+    background: rgba(var(--color-primary-rgb), 0.1);
+    border: 0.8px solid rgba(var(--color-primary-rgb), 0.6);
     /* Precise user-requested thickness */
     border-radius: 50%;
     display: flex;
@@ -354,8 +354,8 @@
 
 .globe-toggle:hover {
     transform: scale(1.1);
-    background: #667eea;
-    border-color: #667eea;
+    background: var(--color-primary);
+    border-color: var(--color-primary);
 }
 
 /* Internal Emoji Cycling */
@@ -424,12 +424,24 @@ body.glass-theme .globe-toggle:hover {
 
 /* Dark Theme Override */
 body.dark-theme .globe-toggle {
-    background: rgba(0, 0, 0, 0.8);
-    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(var(--color-black-rgb), 0.8);
+    border-color: rgba(var(--color-white-rgb), 0.3);
 }
 
 body.dark-theme .globe-toggle:hover {
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(var(--color-white-rgb), 0.25);
+}
+
+/* Light Theme Override */
+body.light-theme .globe-toggle {
+    background: var(--color-white);
+    border-color: rgba(var(--color-primary-rgb), 0.3);
+    box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.15);
+}
+
+body.light-theme .globe-toggle:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
 }
 
 /* ========================================
@@ -440,8 +452,8 @@ body.dark-theme .globe-toggle:hover {
     /* Layout & Base Style (Parity with globe-toggle) */
     width: 42px;
     height: 42px;
-    background: rgba(102, 126, 234, 0.1);
-    border: 0.8px solid rgba(102, 126, 234, 0.6);
+    background: rgba(var(--color-primary-rgb), 0.1);
+    border: 0.8px solid rgba(var(--color-primary-rgb), 0.6);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -457,8 +469,8 @@ body.dark-theme .globe-toggle:hover {
 
 .reels-toggle:hover {
     transform: scale(1.1);
-    background: #667eea;
-    border-color: #667eea;
+    background: var(--color-primary);
+    border-color: var(--color-primary);
 }
 
 /* Default state: Internal spans animate immediately */
@@ -528,10 +540,22 @@ body.glass-theme .reels-toggle {
 }
 
 body.dark-theme .reels-toggle {
-    background: rgba(0, 0, 0, 0.8);
-    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(var(--color-black-rgb), 0.8);
+    border-color: rgba(var(--color-white-rgb), 0.3);
 }
 
 body.dark-theme .reels-toggle:hover {
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(var(--color-white-rgb), 0.25);
+}
+
+/* Light Theme Override */
+body.light-theme .reels-toggle {
+    background: var(--color-white);
+    border-color: rgba(var(--color-primary-rgb), 0.3);
+    box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.15);
+}
+
+body.light-theme .reels-toggle:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
 }
