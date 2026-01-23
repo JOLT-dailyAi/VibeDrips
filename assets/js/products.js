@@ -889,15 +889,11 @@ function wrapModalForSliding(centerProductId) {
     const oldContent = existingModal.querySelector('.simple-modal-content');
     if (oldContent) oldContent.remove();
 
-    // Insert AFTER overlay (overlay is z-index 999, navContainer is 1001)
-    if (overlay.nextSibling) {
-        existingModal.insertBefore(navContainer, overlay.nextSibling);
-    } else {
-        existingModal.appendChild(navContainer);
-    }
+    // NEW: Modal Layout Wrapper - The MASTER ANCHOR for alignment
+    const layoutWrapper = document.createElement('div');
+    layoutWrapper.className = 'modal-layout-wrapper';
 
     // ✅ NEW: External Animated Icons (🎬 and 🌎)
-    // Now pinned INSIDE the navContainer for perfect structural alignment
     const externalControls = document.createElement('div');
     externalControls.className = 'modal-external-controls';
     externalControls.innerHTML = `
@@ -913,13 +909,23 @@ function wrapModalForSliding(centerProductId) {
             <span>🌏</span>
         </button>
     `;
-    navContainer.appendChild(externalControls);
 
     // NEW: Sliding Viewport (clips the strip while icons sit above)
     const slidingViewport = document.createElement('div');
     slidingViewport.className = 'modal-sliding-viewport';
     slidingViewport.appendChild(slidingStrip);
     navContainer.appendChild(slidingViewport);
+
+    // Assembly: Nest both siblings in the mirror anchor
+    layoutWrapper.appendChild(externalControls);
+    layoutWrapper.appendChild(navContainer);
+
+    // Insert AFTER overlay (overlay is z-index 999, layoutWrapper is 1001)
+    if (overlay.nextSibling) {
+        existingModal.insertBefore(layoutWrapper, overlay.nextSibling);
+    } else {
+        existingModal.appendChild(layoutWrapper);
+    }
 
     // PHASE_2: Add boundary glow overlays
     const glowHTML = `
@@ -1650,12 +1656,12 @@ function truncateText(text, maxLength) {
  * Measures the active product content and applies it to the navigation container
  */
 function syncModalDimensions() {
-    const navContainer = document.querySelector('.modal-nav-container');
+    const layoutWrapper = document.querySelector('.modal-layout-wrapper');
     const strip = document.querySelector('.modal-sliding-strip');
     // Index 2 is always active in our 5-item cache
     const activeProduct = strip ? strip.children[2] : null;
 
-    if (!navContainer || !activeProduct) return;
+    if (!layoutWrapper || !activeProduct) return;
 
     // Use double requestAnimationFrame to ensure the DOM is settled and rendered
     requestAnimationFrame(() => {
@@ -1665,10 +1671,10 @@ function syncModalDimensions() {
                 const width = productContent.offsetWidth;
                 const height = productContent.offsetHeight;
                 if (width > 0 && height > 0) {
-                    // Apply literal dimensions to container to force flush alignment and rounded shadow
-                    navContainer.style.setProperty('width', `${width}px`, 'important');
-                    navContainer.style.setProperty('height', `${height}px`, 'important');
-                    console.log(`📏 Synced Modal Dimensions: ${width}x${height}px`);
+                    // Apply literal dimensions to the master anchor
+                    layoutWrapper.style.setProperty('width', `${width}px`, 'important');
+                    layoutWrapper.style.setProperty('height', `${height}px`, 'important');
+                    console.log(`📏 Synced Master Anchor: ${width}x${height}px`);
                 }
             }
         });
