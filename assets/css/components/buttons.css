@@ -367,7 +367,7 @@
     width: 100%;
     height: 100%;
     opacity: 0;
-    transform: translate(-14px, -2px) scale(1);
+    transform: translate(-14px, 0) scale(1);
     /* Start from West (Left) */
     transition: all 0.5s ease;
     animation: globeCycle 6s infinite;
@@ -389,21 +389,21 @@
 @keyframes globeCycle {
     0% {
         opacity: 0;
-        transform: translate(-14px, -2px);
+        transform: translate(-14px, 0);
         /* Start: West */
     }
 
     5%,
     33.33% {
         opacity: 1;
-        transform: translate(0, -2px);
+        transform: translate(0, 0);
         /* Resting State: Center */
     }
 
     38.33%,
     100% {
         opacity: 0;
-        transform: translate(14px, -2px);
+        transform: translate(14px, 0);
         /* End: East */
     }
 }
@@ -507,7 +507,7 @@ body.dark-theme .globe-toggle:hover {
     5%,
     25% {
         opacity: 1;
-        transform: translateY(-2px);
+        transform: translateY(0);
         /* Centered resting position */
     }
 
