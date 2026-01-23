@@ -333,11 +333,11 @@
    ======================================== */
 
 .globe-toggle {
-    /* Layout & Base Style (Parity with linktree-button/theme-toggle) */
-    width: 32px;
-    height: 32px;
+    /* Layout & Base Style */
+    width: 38px;
+    height: 38px;
     background: rgba(102, 126, 234, 0.1);
-    border: 2px solid #667eea;
+    border: 2.5px solid #667eea;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -346,8 +346,7 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     transition: all 0.3s ease;
     padding: 0;
-    font-size: 18px;
-    /* Balanced for 32px button */
+    font-size: 20px;
     position: relative;
     overflow: hidden;
 }
@@ -367,7 +366,7 @@
     width: 100%;
     height: 100%;
     opacity: 0;
-    transform: translateX(10px) scale(1);
+    transform: translateX(12px) scale(1);
     transition: all 0.5s ease;
     animation: globeCycle 6s infinite;
 }
@@ -388,7 +387,7 @@
 @keyframes globeCycle {
     0% {
         opacity: 0;
-        transform: translateX(10px);
+        transform: translateX(12px);
     }
 
     5%,
@@ -400,7 +399,7 @@
     38.33%,
     100% {
         opacity: 0;
-        transform: translateX(-10px);
+        transform: translateX(-12px);
     }
 }
 
@@ -410,9 +409,7 @@ body.glass-theme .globe-toggle {
     backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow:
-        0 8px 32px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
 body.glass-theme .globe-toggle:hover {
@@ -436,10 +433,10 @@ body.dark-theme .globe-toggle:hover {
 
 .reels-toggle {
     /* Layout & Base Style (Parity with globe-toggle) */
-    width: 32px;
-    height: 32px;
+    width: 38px;
+    height: 38px;
     background: rgba(102, 126, 234, 0.1);
-    border: 2px solid #667eea;
+    border: 2.5px solid #667eea;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -448,8 +445,7 @@ body.dark-theme .globe-toggle:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     transition: all 0.3s ease;
     padding: 0;
-    font-size: 18px;
-    /* Balanced for 32px button */
+    font-size: 20px;
     position: relative;
     overflow: hidden;
 }
@@ -469,7 +465,7 @@ body.dark-theme .globe-toggle:hover {
     width: 100%;
     height: 100%;
     opacity: 0;
-    transform: translateY(10px) scale(1);
+    transform: translateY(12px) scale(1);
     transition: all 0.5s ease;
     animation: reelsCycle 8s infinite;
 }
@@ -499,7 +495,7 @@ body.dark-theme .globe-toggle:hover {
 @keyframes reelsCycle {
     0% {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(12px);
     }
 
     5%,
@@ -511,7 +507,7 @@ body.dark-theme .globe-toggle:hover {
     30%,
     100% {
         opacity: 0;
-        transform: translateY(-10px);
+        transform: translateY(-12px);
     }
 }
 
@@ -527,4 +523,8 @@ body.glass-theme .reels-toggle {
 body.dark-theme .reels-toggle {
     background: rgba(0, 0, 0, 0.8);
     border-color: rgba(255, 255, 255, 0.3);
+}
+
+body.dark-theme .reels-toggle:hover {
+    background: rgba(255, 255, 255, 0.25);
 }

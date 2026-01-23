@@ -52,6 +52,8 @@
     pointer-events: none;
     /* Block-level safety for Dynamic Island */
     margin-top: calc(env(safe-area-inset-top, 0px) / 2);
+    /* Sync coordinate system with modal content scrollbar reserved space */
+    scrollbar-gutter: stable;
 }
 
 /* Modal Navigation Container (Viewport) */
@@ -84,11 +86,11 @@
     justify-content: flex-end;
     align-items: center;
     gap: 15px;
-    margin-bottom: 15px;
-    /* Spacing above modal top */
+    margin-bottom: 20px;
+    /* Increased to prevent overlap */
     pointer-events: none;
-    padding-right: 40px;
-    /* Sync with .simple-modal-header Desktop padding */
+    /* Sync with .simple-modal-header Desktop padding 40px - visual centering offset (19px center - 16px center = 3px) */
+    padding-right: 37px;
     transition: all 0.3s ease;
 }
 
@@ -108,9 +110,9 @@
     }
 
     .modal-external-controls {
-        padding-right: 20px;
-        /* Sync with Tablet header padding */
-        margin-bottom: 10px;
+        padding-right: 17px;
+        /* 20px header padding - 3px center offset */
+        margin-bottom: 12px;
         gap: 12px;
     }
 }
@@ -122,8 +124,8 @@
     }
 
     .modal-external-controls {
-        padding-right: 20px;
-        /* Sync with Mobile header padding */
+        padding-right: 17px;
+        /* 20px header padding - 3px center offset */
     }
 }
 
@@ -141,10 +143,9 @@
     }
 
     .modal-external-controls {
-        padding-right: calc(10px + env(safe-area-inset-right, 0px));
-        /* Match close button landscape right */
-        margin-bottom: 8px;
-        /* High compaction */
+        padding-right: calc(10px + env(safe-area-inset-right, 0px) - 3px);
+        /* Match close button landscape right (10px + env) with -3px center offset */
+        margin-bottom: 10px;
         gap: 10px;
     }
 }
