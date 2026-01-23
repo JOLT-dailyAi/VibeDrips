@@ -337,8 +337,8 @@
     width: 42px;
     height: 42px;
     background: rgba(102, 126, 234, 0.1);
-    border: 0.5px solid #667eea;
-    /* Ultra-thin border */
+    border: 0.8px solid rgba(102, 126, 234, 0.6);
+    /* Precise user-requested thickness */
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -350,8 +350,6 @@
     font-size: 26px;
     position: relative;
     overflow: hidden;
-    line-height: normal;
-    /* Center emoji purely via flex */
 }
 
 .globe-toggle:hover {
@@ -369,7 +367,8 @@
     width: 100%;
     height: 100%;
     opacity: 0;
-    transform: translateX(14px) scale(1);
+    transform: translate(14px, -2px) scale(1);
+    /* Compensate for emoji baseline shift */
     transition: all 0.5s ease;
     animation: globeCycle 6s infinite;
 }
@@ -390,19 +389,19 @@
 @keyframes globeCycle {
     0% {
         opacity: 0;
-        transform: translateX(14px);
+        transform: translate(14px, -2px);
     }
 
     5%,
     33.33% {
         opacity: 1;
-        transform: translateX(0);
+        transform: translate(0, -2px);
     }
 
     38.33%,
     100% {
         opacity: 0;
-        transform: translateX(-14px);
+        transform: translate(-14px, -2px);
     }
 }
 
@@ -411,7 +410,7 @@ body.glass-theme .globe-toggle {
     background: rgba(255, 255, 255, var(--glass-refraction)) !important;
     backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 0.8px solid rgba(255, 255, 255, 0.4);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
@@ -439,7 +438,7 @@ body.dark-theme .globe-toggle:hover {
     width: 42px;
     height: 42px;
     background: rgba(102, 126, 234, 0.1);
-    border: 0.5px solid #667eea;
+    border: 0.8px solid rgba(102, 126, 234, 0.6);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -451,7 +450,6 @@ body.dark-theme .globe-toggle:hover {
     font-size: 26px;
     position: relative;
     overflow: hidden;
-    line-height: normal;
 }
 
 .reels-toggle:hover {
@@ -469,7 +467,8 @@ body.dark-theme .globe-toggle:hover {
     width: 100%;
     height: 100%;
     opacity: 0;
-    transform: translateY(14px) scale(1);
+    transform: translate(0, 12px) scale(1);
+    /* Adjusted start position */
     transition: all 0.5s ease;
     animation: reelsCycle 8s infinite;
 }
@@ -505,13 +504,14 @@ body.dark-theme .globe-toggle:hover {
     5%,
     25% {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(-2px);
+        /* Centered resting position */
     }
 
     30%,
     100% {
         opacity: 0;
-        transform: translateY(-14px);
+        transform: translateY(-16px);
     }
 }
 
@@ -520,7 +520,7 @@ body.glass-theme .reels-toggle {
     background: rgba(255, 255, 255, var(--glass-refraction)) !important;
     backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 0.8px solid rgba(255, 255, 255, 0.4);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 

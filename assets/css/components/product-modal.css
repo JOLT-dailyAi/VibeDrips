@@ -52,6 +52,8 @@
     pointer-events: none;
     /* Block-level safety for Dynamic Island */
     margin-top: calc(env(safe-area-inset-top, 0px) / 2);
+    /* CRITICAL: Sync right-edge math with modal content (reserves space for scrollbar) */
+    scrollbar-gutter: stable;
 }
 
 /* Modal Navigation Container (Viewport) */
