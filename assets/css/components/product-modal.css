@@ -52,8 +52,6 @@
     pointer-events: none;
     /* Block-level safety for Dynamic Island */
     margin-top: calc(env(safe-area-inset-top, 0px) / 2);
-    /* Sync coordinate system with modal content scrollbar reserved space */
-    scrollbar-gutter: stable;
 }
 
 /* Modal Navigation Container (Viewport) */
@@ -87,10 +85,9 @@
     align-items: center;
     gap: 15px;
     margin-bottom: 20px;
-    /* Increased to prevent overlap */
     pointer-events: none;
-    /* Sync with .simple-modal-header Desktop padding 40px - visual centering offset (19px center - 16px center = 3px) */
-    padding-right: 37px;
+    /* Center align with 32px CloseBtn (40px pad). Icon 42px -> 35px pad */
+    padding-right: 35px;
     transition: all 0.3s ease;
 }
 
@@ -110,8 +107,8 @@
     }
 
     .modal-external-controls {
-        padding-right: 17px;
-        /* 20px header padding - 3px center offset */
+        /* Tablet sync: 20px header padding -> 15px padding for 42px icon */
+        padding-right: 15px;
         margin-bottom: 12px;
         gap: 12px;
     }
@@ -124,8 +121,7 @@
     }
 
     .modal-external-controls {
-        padding-right: 17px;
-        /* 20px header padding - 3px center offset */
+        padding-right: 15px;
     }
 }
 
@@ -143,8 +139,8 @@
     }
 
     .modal-external-controls {
-        padding-right: calc(10px + env(safe-area-inset-right, 0px) - 3px);
-        /* Match close button landscape right (10px + env) with -3px center offset */
+        /* Landscape: 10+16=26. Icon: 5+21=26. */
+        padding-right: calc(5px + env(safe-area-inset-right, 0px));
         margin-bottom: 10px;
         gap: 10px;
     }

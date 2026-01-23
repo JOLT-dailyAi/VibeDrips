@@ -334,10 +334,11 @@
 
 .globe-toggle {
     /* Layout & Base Style */
-    width: 38px;
-    height: 38px;
+    width: 42px;
+    height: 42px;
     background: rgba(102, 126, 234, 0.1);
-    border: 2.5px solid #667eea;
+    border: 1px solid #667eea;
+    /* Thinner border for larger feel */
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -346,7 +347,8 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     transition: all 0.3s ease;
     padding: 0;
-    font-size: 20px;
+    font-size: 26px;
+    /* Larger icon appearance */
     position: relative;
     overflow: hidden;
 }
@@ -366,7 +368,7 @@
     width: 100%;
     height: 100%;
     opacity: 0;
-    transform: translateX(12px) scale(1);
+    transform: translateX(14px) scale(1);
     transition: all 0.5s ease;
     animation: globeCycle 6s infinite;
 }
@@ -387,7 +389,7 @@
 @keyframes globeCycle {
     0% {
         opacity: 0;
-        transform: translateX(12px);
+        transform: translateX(14px);
     }
 
     5%,
@@ -399,7 +401,7 @@
     38.33%,
     100% {
         opacity: 0;
-        transform: translateX(-12px);
+        transform: translateX(-14px);
     }
 }
 
@@ -433,10 +435,10 @@ body.dark-theme .globe-toggle:hover {
 
 .reels-toggle {
     /* Layout & Base Style (Parity with globe-toggle) */
-    width: 38px;
-    height: 38px;
+    width: 42px;
+    height: 42px;
     background: rgba(102, 126, 234, 0.1);
-    border: 2.5px solid #667eea;
+    border: 1px solid #667eea;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -445,7 +447,7 @@ body.dark-theme .globe-toggle:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     transition: all 0.3s ease;
     padding: 0;
-    font-size: 20px;
+    font-size: 26px;
     position: relative;
     overflow: hidden;
 }
@@ -465,7 +467,7 @@ body.dark-theme .globe-toggle:hover {
     width: 100%;
     height: 100%;
     opacity: 0;
-    transform: translateY(12px) scale(1);
+    transform: translateY(14px) scale(1);
     transition: all 0.5s ease;
     animation: reelsCycle 8s infinite;
 }
@@ -495,7 +497,7 @@ body.dark-theme .globe-toggle:hover {
 @keyframes reelsCycle {
     0% {
         opacity: 0;
-        transform: translateY(12px);
+        transform: translateY(14px);
     }
 
     5%,
@@ -507,7 +509,7 @@ body.dark-theme .globe-toggle:hover {
     30%,
     100% {
         opacity: 0;
-        transform: translateY(-12px);
+        transform: translateY(-14px);
     }
 }
 
