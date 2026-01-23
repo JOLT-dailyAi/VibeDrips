@@ -93,14 +93,17 @@
    Positioned precisely above the header
    ============================================ */
 .modal-external-controls {
+    width: 100%;
     position: absolute;
     top: -55px;
     /* Pinned above the shared anchor */
-    /* Math: 40px (Header Pad) + 16px (Close Half) - 21px (Icon Half) = 35px */
-    right: 35px;
+    left: 0;
+    right: 0;
     display: flex;
+    justify-content: flex-end;
     align-items: center;
-    gap: 12px;
+    /* Math: 40px (Header Pad) + 16px (Close Half) - 21px (Icon Half) = 35px padding from edge */
+    padding-right: 35px;
     pointer-events: none;
     transition: all 0.3s ease;
 }
@@ -121,7 +124,7 @@
 
     .modal-external-controls {
         /* Tablet Sync: 20px Pad + 16px - 21px = 15px */
-        right: 15px;
+        padding-right: 15px;
         top: -52px;
     }
 }
@@ -133,7 +136,7 @@
     }
 
     .modal-external-controls {
-        right: 15px;
+        padding-right: 15px;
         /* Mobile Mirror */
     }
 }
@@ -149,7 +152,7 @@
 
     .modal-external-controls {
         /* Landscape Sync: 10px Pad + Safe (16px) - Icon Half (21px) = 5px + Safe */
-        right: calc(5px + env(safe-area-inset-right, 0px));
+        padding-right: calc(5px + env(safe-area-inset-right, 0px));
         top: -50px;
         gap: 8px;
     }
