@@ -54,9 +54,6 @@
     border-radius: 24px;
     /* Unify shadow shape and fix corners */
     overflow: visible;
-
-    /* Block-level safety for Dynamic Island in portrait */
-    margin-top: calc(env(safe-area-inset-top, 0px) / 1.5);
 }
 
 /* Modal Navigation Container (The Content Box) */
@@ -93,16 +90,15 @@
    Positioned precisely above the header
    ============================================ */
 .modal-external-controls {
+    position: absolute;
+    bottom: calc(100% + 6px);
+    /* 6px gap above header */
+    right: 0;
     display: flex;
     justify-content: flex-end;
     align-items: center;
     gap: 12px;
-    margin-right: 0;
-    /* Zero offset: Align with outer card edge */
-    margin-bottom: 6px;
-    /* Tight vertical spacing */
     padding: 6px;
-    border-right: 0.8px solid rgba(255, 255, 255, 0.4);
     pointer-events: none;
     transition: all 0.3s ease;
 }
