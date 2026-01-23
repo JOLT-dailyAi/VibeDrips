@@ -116,21 +116,11 @@
     .modal-layout-wrapper {
         width: 95%;
     }
-
-    .modal-external-controls {
-        margin-right: 0;
-        top: -52px;
-    }
 }
 
 @media (max-width: 480px) {
     .modal-layout-wrapper {
         width: 98%;
-        margin-top: calc(env(safe-area-inset-top, 20px) / 1.5);
-    }
-
-    .modal-external-controls {
-        margin-right: 0;
     }
 }
 
@@ -139,14 +129,12 @@
     .modal-layout-wrapper {
         width: 85% !important;
         max-width: calc(100vw - env(safe-area-inset-left, 30px) - env(safe-area-inset-right, 30px) - 120px) !important;
-        margin-top: 0;
         height: 92vh !important;
     }
 
     .modal-external-controls {
         /* Landscape: Mirror safe area inset for perfect edge alignment */
-        margin-right: env(safe-area-inset-right, 0px);
-        top: -50px;
+        right: env(safe-area-inset-right, 0px);
         gap: 8px;
     }
 }
