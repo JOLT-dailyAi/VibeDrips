@@ -920,7 +920,21 @@ function wrapModalForSliding(centerProductId) {
             <span>🌏</span>
         </button>
     `;
-    existingModal.appendChild(externalControls);
+
+    // NEW: Modal Layout Wrapper - Unified centering for controls + content
+    const layoutWrapper = document.createElement('div');
+    layoutWrapper.className = 'modal-layout-wrapper';
+
+    // Add items to wrapper
+    layoutWrapper.appendChild(externalControls);
+    layoutWrapper.appendChild(navContainer);
+
+    // Insert AFTER overlay
+    if (overlay.nextSibling) {
+        existingModal.insertBefore(layoutWrapper, overlay.nextSibling);
+    } else {
+        existingModal.appendChild(layoutWrapper);
+    }
 
     // PHASE_1: Add glass zones HTML - FIXED: Add to MODAL (not navContainer) so they're outside scrollable content
     const glassZonesHTML = `

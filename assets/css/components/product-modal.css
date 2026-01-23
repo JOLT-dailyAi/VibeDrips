@@ -37,22 +37,34 @@
    PHASE_1: Modal Navigation & Sliding Strip
    ============================================ */
 
+/* Modal Layout Wrapper - Unifies External Controls + Nav Container */
+.modal-layout-wrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    z-index: 1001;
+    pointer-events: none;
+    /* Block-level safety for Dynamic Island */
+    margin-top: calc(env(safe-area-inset-top, 0px) / 2);
+}
+
 /* Modal Navigation Container (Viewport) */
 .modal-nav-container {
     position: relative;
+    width: 100% !important;
+    /* Expansion synced with wrapper */
     overflow: hidden !important;
     isolation: isolate;
-    /* Hide off-screen products */
     border-radius: 24px;
     z-index: 1001;
-    /* Above overlay (999) */
-
-    /* PART 1: Strict Dimensional Parity with original .simple-modal-content */
-    width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
+    pointer-events: auto;
     max-height: 80vh;
-    /* As requested: the core 80vh constraint */
     display: block;
 
     box-shadow:
@@ -64,48 +76,76 @@
 
 /* ============================================
    MODAL EXTERNAL CONTROLS (Globe & Reels)
-   Positioned above the content card
+   Positioned precisely above the header
    ============================================ */
 .modal-external-controls {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 90%;
-    max-width: 1200px;
-    /* Handle Dynamic Island / Notch safety in portrait */
-    top: calc(max(10vh - 60px, env(safe-area-inset-top, 20px) + 5px));
+    width: 100%;
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: 20px;
-    z-index: 1020;
-    /* Above nav container (1001) */
+    gap: 15px;
+    margin-bottom: 15px;
+    /* Spacing above modal top */
     pointer-events: none;
-    /* Allow clicks through to overlay */
-    /* Align Globe precisely on-top of the close button inside header padding */
-    padding-right: calc(40px - 9px);
-    /* 40px header pad - half icon width difference */
+    padding-right: 40px;
+    /* Sync with .simple-modal-header Desktop padding */
+    transition: all 0.3s ease;
 }
 
 /* Align Globe with the close button area (compensated for container padding) */
 .modal-external-controls .globe-toggle,
 .modal-external-controls .reels-toggle {
     pointer-events: auto;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
-    /* Extra pop-out shadow for external visibility */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    flex-shrink: 0;
 }
 
-/* Safe Area Support for external controls */
-@media (max-width: 950px) and (orientation: landscape) {
+/* Match Header Breakpoints for perfect alignment */
+@media (max-width: 768px) {
+    .modal-layout-wrapper {
+        width: 95%;
+        margin-top: calc(env(safe-area-inset-top, 20px) / 2);
+    }
+
     .modal-external-controls {
-        /* Match modal gap in landscape (approx 4vh) */
-        top: calc(max(4vh - 48px, 5px));
-        /* Synchronize width/max-width with .modal-nav-container landscape overrides */
+        padding-right: 20px;
+        /* Sync with Tablet header padding */
+        margin-bottom: 10px;
+        gap: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-layout-wrapper {
+        width: 98%;
+        margin-top: calc(env(safe-area-inset-top, 20px) / 1.5);
+    }
+
+    .modal-external-controls {
+        padding-right: 20px;
+        /* Sync with Mobile header padding */
+    }
+}
+
+/* Mobile Landscape Alignment */
+@media (max-width: 950px) and (orientation: landscape) {
+    .modal-layout-wrapper {
         width: 85% !important;
         max-width: calc(100vw - env(safe-area-inset-left, 30px) - env(safe-area-inset-right, 30px) - 120px) !important;
-        /* Match close button's right: calc(10px + env) override in landscape */
-        padding-right: calc(10px + env(safe-area-inset-right, 0px) - 9px);
-        gap: 15px;
+        margin-top: 0;
+        /* Reset for landscape centering */
+    }
+
+    .modal-nav-container {
+        max-height: 92vh !important;
+    }
+
+    .modal-external-controls {
+        padding-right: calc(10px + env(safe-area-inset-right, 0px));
+        /* Match close button landscape right */
+        margin-bottom: 8px;
+        /* High compaction */
+        gap: 10px;
     }
 }
 
@@ -1996,10 +2036,8 @@ body.glass-theme .discount-badge {
 
     /* Maximize container area - Refined balance */
     .modal-nav-container {
-        width: 85% !important;
-        /* Gutter Expansion V9 - Widened to 85% */
-        /* Tightened gap for levers - 120px total clearance (60px per side) */
-        max-width: calc(100vw - env(safe-area-inset-left, 30px) - env(safe-area-inset-right, 30px) - 120px) !important;
+        width: 100% !important;
+        max-width: 100% !important;
         max-height: 92vh !important;
         border-radius: 16px !important;
         /* Radius Sync V2 */
