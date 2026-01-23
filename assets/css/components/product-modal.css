@@ -101,6 +101,8 @@
     /* Zero offset: Align with outer card edge */
     margin-bottom: 6px;
     /* Tight vertical spacing */
+    padding: 6px;
+    border-right: 0.8px solid rgba(255, 255, 255, 0.4);
     pointer-events: none;
     transition: all 0.3s ease;
 }
