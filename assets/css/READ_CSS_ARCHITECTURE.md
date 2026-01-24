@@ -34,4 +34,32 @@ To maintain a consistent "Vibe," all circular toggle buttons (Reels, Globe, Curr
 
 Theme-specific overrides are located in `assets/css/themes/`. 
 - **Rule**: Theme files are imported **last** in `main.css`.
-- **Practice**: Use high-specificity selectors (e.g., `body.dark-theme .selector`) combined with `!important` in these files to guarantee parity across different components that might have their own base styles.
+- **Practice**: Use high-specificity selectors (e.g., `body.dark-theme .selector`) combined with `!important` in these files to guarantee parity across diverse components that might have their own base styles.
+
+## 4. The 2px "Weighted" Design Standard
+
+To achieve a "Premium" aesthetic, VibeDrips has transitioned from thin 1px borders to a **2px weighted standard** for all primary containers and interactive elements.
+
+### Effected Elements
+- Product Cards, Modals, Stat Items, Filter Controls, Time Categories.
+- Carousel Arrows, Counters, and Center Badges (Share/Install).
+
+### Justification
+The 2px weight provides a strong visual "anchor" for elements, making them feel more substantial (bolstered) and coherent with the weighted icons and bold typography used in the branding.
+
+## 5. Component Portability (Independence)
+
+When building UI components, we distinguish between **Integrated** and **Standalone** styling.
+
+### Integrated Components (Theme-Dependent)
+*Examples: .product-card, .stat-item, .carousel-controls*
+- **Strategy**: Styles are defined in theme files (`dark-theme.css`, `light-theme.css`).
+- **Benefit**: Elements change color dynamically based on the site-wide theme toggle.
+
+### Standalone Components (Portable)
+*Example: .media-lightbox*
+- **Strategy**: Premium styles (translucent black, 2px border, glass blur) are **hardcoded** directly in the component's CSS (`lightbox.css`).
+- **Benefit**: The component can be copy-pasted into another project without external CSS dependencies or variables, while maintaining its "signature" premium look.
+
+> [!TIP]
+> Use Standalone styling for generic utilities intended for reuse in other repositories. Use Integrated styling for elements that must react to the project's specific theme toggling logic.
