@@ -5,6 +5,12 @@ body.dark-theme {
     color: #FFFFFF;
 }
 
+/* Global Glass Parity */
+body.dark-theme .glass,
+body.dark-theme .glass-pill {
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+}
+
 /* Currency Modal */
 body.dark-theme .currency-content {
     background: rgba(0, 0, 0, 0.9);
@@ -86,9 +92,8 @@ body.dark-theme .stat-label {
 /* Product Cards */
 body.dark-theme .product-card {
     background: rgba(0, 0, 0, 0.9);
-    /* ← Remove !important */
     color: #FFFFFF;
-    /* ← Remove !important */
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
 }
 
 body.dark-theme .product-card:hover {
@@ -179,6 +184,7 @@ body.dark-theme .no-products a:hover {
 /* Modals */
 body.dark-theme .simple-modal-content {
     background: rgba(0, 0, 0, 0.9);
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
 }
 
 /* Header border removed - uses purple ribbon */
