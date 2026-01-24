@@ -367,8 +367,9 @@
     width: 100%;
     height: 100%;
     opacity: 0;
-    transform: translate(-14px, 0) scale(1);
-    /* Start from West (Left) */
+    transform: translate(-14px, -1px) scale(1);
+    /* Start from West (Left) - Added -1px vertical compensation */
+    line-height: 1;
     transition: all 0.5s ease;
     animation: globeCycle 6s infinite;
 }
@@ -389,21 +390,21 @@
 @keyframes globeCycle {
     0% {
         opacity: 0;
-        transform: translate(-14px, 0);
+        transform: translate(-14px, -1px);
         /* Start: West */
     }
 
     5%,
     33.33% {
         opacity: 1;
-        transform: translate(0, 0);
-        /* Resting State: Center */
+        transform: translate(0, -1px);
+        /* Resting State: Center (Compensated) */
     }
 
     38.33%,
     100% {
         opacity: 0;
-        transform: translate(14px, 0);
+        transform: translate(14px, -1px);
         /* End: East */
     }
 }
@@ -482,8 +483,9 @@ body.light-theme .globe-toggle:hover {
     width: 100%;
     height: 100%;
     opacity: 0;
-    transform: translate(0, 12px) scale(1);
-    /* Adjusted start position */
+    transform: translate(0, 11px) scale(1);
+    /* Start position adjusted for alignment */
+    line-height: 1;
     transition: all 0.5s ease;
     animation: reelsCycle 8s infinite;
 }
@@ -513,20 +515,20 @@ body.light-theme .globe-toggle:hover {
 @keyframes reelsCycle {
     0% {
         opacity: 0;
-        transform: translateY(14px);
+        transform: translateY(13px);
     }
 
     5%,
     25% {
         opacity: 1;
-        transform: translateY(0);
-        /* Centered resting position */
+        transform: translateY(-1px);
+        /* Centered resting position (Compensated) */
     }
 
     30%,
     100% {
         opacity: 0;
-        transform: translateY(-16px);
+        transform: translateY(-17px);
     }
 }
 
