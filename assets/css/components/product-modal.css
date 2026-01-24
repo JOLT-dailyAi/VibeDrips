@@ -987,9 +987,9 @@ body.glass-theme .discount-badge {
 /* Desktop Gallery */
 .gallery-desktop {
     display: grid;
-    grid-template-columns: 35% 65%;
-    /* THE SWEET SPOT - BALANCED FILL */
-    gap: 16px;
+    grid-template-columns: 40% 60%;
+    /* BEEFY 2-COLUMN SPLIT */
+    gap: 20px;
     min-height: 400px;
     padding: 16px;
 }
@@ -997,9 +997,8 @@ body.glass-theme .discount-badge {
 .gallery-thumbnails {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    /* KEEP 2 COLUMNS */
-    gap: 8px;
-    /* REVERTED INTERNAL GAP */
+    gap: 12px;
+    /* MORE BREATHING ROOM FOR LARGER THUMBS */
     max-height: 400px;
     overflow-y: auto;
     padding-right: 8px;
