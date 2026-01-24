@@ -209,7 +209,7 @@ body.dark-theme .simple-modal-body p strong {
 /* Modal External Controls Parity */
 body.dark-theme .modal-external-controls .globe-toggle,
 body.dark-theme .modal-external-controls .reels-toggle {
-    background: rgba(0, 0, 0, 0.8) !important;
+    background: #000000 !important;
     backdrop-filter: blur(var(--glass-blur)) saturate(150%) !important;
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%) !important;
     border: 2px solid rgba(255, 255, 255, 0.35) !important;
