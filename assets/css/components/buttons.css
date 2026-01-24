@@ -425,8 +425,8 @@ body.glass-theme .globe-toggle:hover {
 
 /* Dark Theme Override */
 body.dark-theme .globe-toggle {
-    background: rgba(0, 0, 0, 0.8);
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.8) !important;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
 }
 
 body.dark-theme .globe-toggle:hover {
@@ -542,8 +542,8 @@ body.glass-theme .reels-toggle {
 }
 
 body.dark-theme .reels-toggle {
-    background: rgba(0, 0, 0, 0.8);
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.8) !important;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
 }
 
 body.dark-theme .reels-toggle:hover {
