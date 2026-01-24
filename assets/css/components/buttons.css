@@ -423,17 +423,9 @@ body.glass-theme .globe-toggle:hover {
     border-color: rgba(255, 255, 255, 0.5);
 }
 
-/* Dark Theme Override */
-body.dark-theme .globe-toggle {
-    background: rgba(0, 0, 0, 0.45) !important;
-    backdrop-filter: blur(var(--glass-blur)) saturate(150%) !important;
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%) !important;
-    border: 2px solid rgba(255, 255, 255, 0.35) !important;
-}
 
-body.dark-theme .globe-toggle:hover {
-    background: rgba(var(--color-white-rgb), 0.25);
-}
+
+
 
 /* Light Theme Override */
 body.light-theme .globe-toggle {
@@ -543,16 +535,9 @@ body.glass-theme .reels-toggle {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 
-body.dark-theme .reels-toggle {
-    background: rgba(0, 0, 0, 0.45) !important;
-    backdrop-filter: blur(var(--glass-blur)) saturate(150%) !important;
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%) !important;
-    border: 2px solid rgba(255, 255, 255, 0.35) !important;
-}
 
-body.dark-theme .reels-toggle:hover {
-    background: rgba(var(--color-white-rgb), 0.25);
-}
+
+
 
 /* Light Theme Override */
 body.light-theme .reels-toggle {

@@ -107,7 +107,6 @@
 .modal-external-controls .globe-toggle,
 .modal-external-controls .reels-toggle {
     pointer-events: auto;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
     flex-shrink: 0;
 }
 

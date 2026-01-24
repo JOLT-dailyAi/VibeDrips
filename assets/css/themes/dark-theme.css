@@ -205,3 +205,18 @@ body.dark-theme .simple-modal-body p {
 body.dark-theme .simple-modal-body p strong {
     color: #667EEA;
 }
+
+/* Modal External Controls Parity */
+body.dark-theme .modal-external-controls .globe-toggle,
+body.dark-theme .modal-external-controls .reels-toggle {
+    background: rgba(0, 0, 0, 0.8) !important;
+    backdrop-filter: blur(var(--glass-blur)) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%) !important;
+    border: 2px solid rgba(255, 255, 255, 0.35) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+body.dark-theme .modal-external-controls .globe-toggle:hover,
+body.dark-theme .modal-external-controls .reels-toggle:hover {
+    background: rgba(255, 255, 255, 0.25) !important;
+}
