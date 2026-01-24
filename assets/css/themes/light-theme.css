@@ -58,3 +58,19 @@ body.light-theme .modal-category-section {
 body.light-theme .modal-section {
     border-bottom-color: rgba(45, 55, 72, 0.1);
 }
+
+/* Modal External Controls Parity - White Style */
+body.light-theme .modal-external-controls .globe-toggle,
+body.light-theme .modal-external-controls .reels-toggle {
+    background: #FFFFFF !important;
+    border: 2px solid #667eea !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    z-index: 2000 !important;
+    color: #333 !important;
+}
+
+body.light-theme .modal-external-controls .globe-toggle:hover,
+body.light-theme .modal-external-controls .reels-toggle:hover {
+    background: #667eea !important;
+    color: white !important;
+}
