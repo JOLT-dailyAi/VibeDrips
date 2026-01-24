@@ -5,9 +5,10 @@ body.dark-theme {
     color: #FFFFFF;
 }
 
-/* Global Glass Parity */
+/* Global Glass & Badge Parity */
 body.dark-theme .glass,
-body.dark-theme .glass-pill {
+body.dark-theme .glass-pill,
+body.dark-theme .center-badge {
     border: 2px solid rgba(255, 255, 255, 0.3) !important;
 }
 
@@ -39,6 +40,7 @@ body.dark-theme .currency-select:focus {
 body.dark-theme .time-category {
     background: rgba(0, 0, 0, 0.9);
     color: #FFFFFF;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
 }
 
 body.dark-theme .time-category:hover {
@@ -52,13 +54,14 @@ body.dark-theme .time-category.active {
 
 body.dark-theme .filter-controls {
     background: rgba(0, 0, 0, 0.9);
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
 }
 
 body.dark-theme .filter-group input,
 body.dark-theme .filter-group select {
     background: #333333;
     color: #FFFFFF;
-    border-color: #555555;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
 }
 
 body.dark-theme .filter-group input:focus,
@@ -79,6 +82,7 @@ body.dark-theme .stats-bar {
 
 body.dark-theme .stat-item {
     background: rgba(0, 0, 0, 0.9);
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
 }
 
 body.dark-theme .stat-number {

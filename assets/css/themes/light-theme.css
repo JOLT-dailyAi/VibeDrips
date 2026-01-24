@@ -5,15 +5,26 @@ body.light-theme {
     color: #1a202c;
 }
 
-/* Global Glass Parity */
+/* Global Glass & Badge Parity */
 body.light-theme .glass,
-body.light-theme .glass-pill {
+body.light-theme .glass-pill,
+body.light-theme .center-badge {
     border: 2px solid var(--color-primary) !important;
 }
 
-/* Product Card Parity */
-body.light-theme .product-card {
+/* Base Components Parity */
+body.light-theme .product-card,
+body.light-theme .stat-item,
+body.light-theme .filter-controls,
+body.light-theme .time-category {
     border: 2px solid var(--color-primary) !important;
+}
+
+/* Input Parity */
+body.light-theme .filter-group input,
+body.light-theme .filter-group select {
+    border-width: 2px !important;
+    border-color: var(--color-primary) !important;
 }
 
 /* Modal Styles for Light Theme */
