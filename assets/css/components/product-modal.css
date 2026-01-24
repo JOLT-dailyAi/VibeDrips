@@ -2112,25 +2112,38 @@ body.glass-theme .discount-badge {
         padding: 10px !important;
     }
 
-    /* Landscape Parity: Use horizontal strip instead of sidebar */
+    /* Landscape Polish: 10/90 Sidebar Split */
     .gallery-desktop {
-        display: none !important;
+        display: grid !important;
+        grid-template-columns: 10% 90% !important;
+        /* 10/90 RATIO */
+        gap: 10px !important;
+        padding: 5px !important;
+        min-height: auto !important;
     }
 
     .gallery-mobile {
-        display: block !important;
-        padding: 5px !important;
+        display: none !important;
     }
 
-    .mobile-main img {
-        max-height: 50vh !important;
-        /* PREVENT OVERFLOW */
+    .gallery-thumbnails {
+        grid-template-columns: 1fr !important;
+        /* FORCE 1 COLUMN */
+        gap: 8px !important;
+        max-height: 60vh !important;
+        padding-right: 0 !important;
+    }
+
+    .mobile-main img,
+    .gallery-main img {
+        max-height: 70vh !important;
         width: auto !important;
+        object-fit: contain !important;
     }
 
-    .mobile-thumbnails .thumbnail {
-        width: 60px !important;
-        height: 60px !important;
+    .thumbnail {
+        width: 100% !important;
+        aspect-ratio: 1 !important;
     }
 
     /* Immersive Body Layout */
