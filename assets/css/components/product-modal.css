@@ -987,10 +987,9 @@ body.glass-theme .discount-badge {
 /* Desktop Gallery */
 .gallery-desktop {
     display: grid;
-    grid-template-columns: 30% 70%;
-    /* REVERTED RATIO */
+    grid-template-columns: 35% 65%;
+    /* THE SWEET SPOT - BALANCED FILL */
     gap: 16px;
-    /* REVERTED GAP */
     min-height: 400px;
     padding: 16px;
 }
