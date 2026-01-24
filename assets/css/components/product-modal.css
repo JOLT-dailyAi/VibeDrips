@@ -987,9 +987,9 @@ body.glass-theme .discount-badge {
 /* Desktop Gallery */
 .gallery-desktop {
     display: grid;
-    grid-template-columns: 40% 60%;
-    /* BEEFY 2-COLUMN SPLIT */
-    gap: 20px;
+    grid-template-columns: 20% 80%;
+    /* 20/80 SPLIT FOR COMPACT THUMBNAILS */
+    gap: 16px;
     min-height: 400px;
     padding: 16px;
 }
@@ -997,8 +997,8 @@ body.glass-theme .discount-badge {
 .gallery-thumbnails {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    /* MORE BREATHING ROOM FOR LARGER THUMBS */
+    gap: 8px;
+    /* BALANCED GAP FOR 20% WIDTH */
     max-height: 400px;
     overflow-y: auto;
     padding-right: 8px;
