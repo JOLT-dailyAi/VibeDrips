@@ -16,7 +16,11 @@ body.light-theme .center-badge {
 body.light-theme .product-card,
 body.light-theme .stat-item,
 body.light-theme .filter-controls,
-body.light-theme .time-category {
+body.light-theme .time-category,
+body.light-theme .carousel-controls button,
+body.light-theme .carousel-prev,
+body.light-theme .carousel-next,
+body.light-theme .carousel-counter {
     border: 2px solid var(--color-primary) !important;
 }
 
@@ -84,11 +88,19 @@ body.light-theme .modal-section {
 
 /* Modal External Controls Parity - White Style */
 body.light-theme .modal-external-controls .globe-toggle,
-body.light-theme .modal-external-controls .reels-toggle {
+body.light-theme .modal-external-controls .reels-toggle,
+body.light-theme .carousel-controls button,
+body.light-theme .carousel-prev,
+body.light-theme .carousel-next {
     background: #FFFFFF !important;
     border: 2px solid #667eea !important;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
     z-index: 2000 !important;
+    color: #333 !important;
+}
+
+body.light-theme .carousel-counter {
+    background: #FFFFFF !important;
     color: #333 !important;
 }
 

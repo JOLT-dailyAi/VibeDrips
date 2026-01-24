@@ -30,7 +30,7 @@
 /* Shared control styling (Independent of external CSS) */
 .lightbox-close,
 .lightbox-arrow {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.8);
     border: 2px solid rgba(255, 255, 255, 0.3);
     border-radius: 50%;
     display: flex;
@@ -42,6 +42,8 @@
     transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
     padding: 0;
     outline: none;
+    backdrop-filter: blur(10px) saturate(150%);
+    -webkit-backdrop-filter: blur(10px) saturate(150%);
 }
 
 .lightbox-close:hover,
@@ -92,12 +94,15 @@
     top: 1rem;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     color: white;
     padding: 0.5rem 1rem;
-    border-radius: 1rem;
+    border-radius: 2rem;
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: 600;
     z-index: 10001;
 }
 

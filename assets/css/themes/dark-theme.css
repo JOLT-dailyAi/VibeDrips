@@ -218,11 +218,15 @@ body.dark-theme .simple-modal-body p strong {
 
 /* Modal External Controls Parity */
 body.dark-theme .modal-external-controls .globe-toggle,
-body.dark-theme .modal-external-controls .reels-toggle {
+body.dark-theme .modal-external-controls .reels-toggle,
+body.dark-theme .carousel-controls button,
+body.dark-theme .carousel-prev,
+body.dark-theme .carousel-next,
+body.dark-theme .carousel-counter {
     background: rgba(0, 0, 0, 0.8) !important;
     backdrop-filter: blur(var(--glass-blur)) saturate(150%) !important;
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%) !important;
-    border: 2px solid rgba(255, 255, 255, 0.35) !important;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
     z-index: 2000 !important;
 }
