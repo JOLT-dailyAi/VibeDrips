@@ -367,8 +367,8 @@
     width: 100%;
     height: 100%;
     opacity: 0;
-    transform: translate(-14px, -0.0625px) scale(1);
-    /* Start from West (Left) - Added -0.0625px vertical compensation */
+    transform: translate(-14px, 0.5px) scale(1);
+    /* Start from West (Left) - Adjusted slightly DOWN (+0.5px) for geometric centering */
     line-height: 1;
     transition: all 0.5s ease;
     animation: globeCycle 6s infinite;
@@ -390,21 +390,21 @@
 @keyframes globeCycle {
     0% {
         opacity: 0;
-        transform: translate(-14px, -0.0625px);
+        transform: translate(-14px, 0.5px);
         /* Start: West */
     }
 
     5%,
     33.33% {
         opacity: 1;
-        transform: translate(0, -0.0625px);
-        /* Resting State: Center (Compensated) */
+        transform: translate(0, 0.5px);
+        /* Resting State: Center (Geometric Adjustment) */
     }
 
     38.33%,
     100% {
         opacity: 0;
-        transform: translate(14px, -0.0625px);
+        transform: translate(14px, 0.5px);
         /* End: East */
     }
 }
@@ -483,8 +483,8 @@ body.light-theme .globe-toggle:hover {
     width: 100%;
     height: 100%;
     opacity: 0;
-    transform: translate(0, 11.9375px) scale(1);
-    /* Start position adjusted for alignment (-0.0625px shift) */
+    transform: translate(0, 12.5px) scale(1);
+    /* Start position adjusted for alignment (+0.5px shift) */
     line-height: 1;
     transition: all 0.5s ease;
     animation: reelsCycle 8s infinite;
@@ -515,20 +515,20 @@ body.light-theme .globe-toggle:hover {
 @keyframes reelsCycle {
     0% {
         opacity: 0;
-        transform: translateY(13.9375px);
+        transform: translateY(14.5px);
     }
 
     5%,
     25% {
         opacity: 1;
-        transform: translateY(-0.0625px);
-        /* Centered resting position (Compensated) */
+        transform: translateY(0.5px);
+        /* Centered resting position (Geometric Adjustment) */
     }
 
     30%,
     100% {
         opacity: 0;
-        transform: translateY(-16.0625px);
+        transform: translateY(-15.5px);
     }
 }
 
