@@ -1113,10 +1113,8 @@ body.glass-theme .discount-badge {
 }
 
 .carousel-controls .counter {
-    font-size: 14px;
-    opacity: 0.9;
-    min-width: 60px;
-    text-align: center;
+    display: none !important;
+    /* DISABLED AS PER REQUEST */
 }
 
 /* Mobile Gallery */
