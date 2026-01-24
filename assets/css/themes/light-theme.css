@@ -20,7 +20,8 @@ body.light-theme .time-category,
 body.light-theme .carousel-controls button,
 body.light-theme .carousel-prev,
 body.light-theme .carousel-next,
-body.light-theme .carousel-counter {
+body.light-theme .carousel-counter,
+body.light-theme .carousel-controls .counter {
     border: 2px solid var(--color-primary) !important;
 }
 
@@ -99,7 +100,8 @@ body.light-theme .carousel-next {
     color: #333 !important;
 }
 
-body.light-theme .carousel-counter {
+body.light-theme .carousel-counter,
+body.light-theme .carousel-controls .counter {
     background: #FFFFFF !important;
     color: #333 !important;
 }

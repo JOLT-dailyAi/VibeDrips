@@ -308,6 +308,17 @@ body.glass-theme .simple-modal-body p {
     color: rgba(255, 255, 255, 0.95);
 }
 
+/* Base Counter Parity for Glass Theme (3rd Theme) */
+body.glass-theme .carousel-counter,
+body.glass-theme .carousel-controls .counter {
+    background: rgba(0, 0, 0, 0.8) !important;
+    backdrop-filter: blur(10px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(10px) saturate(150%) !important;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+    color: white !important;
+    padding: 6px 14px !important;
+}
+
 body.glass-theme .simple-modal-body p strong {
     color: white;
     font-weight: 700;

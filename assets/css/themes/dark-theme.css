@@ -222,7 +222,8 @@ body.dark-theme .modal-external-controls .reels-toggle,
 body.dark-theme .carousel-controls button,
 body.dark-theme .carousel-prev,
 body.dark-theme .carousel-next,
-body.dark-theme .carousel-counter {
+body.dark-theme .carousel-counter,
+body.dark-theme .carousel-controls .counter {
     background: rgba(0, 0, 0, 0.8) !important;
     backdrop-filter: blur(var(--glass-blur)) saturate(150%) !important;
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%) !important;
