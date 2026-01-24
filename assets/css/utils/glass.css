@@ -200,10 +200,12 @@
     writing-mode: bt-lr;
     width: 8px;
     height: 180px;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(90, 75, 255, 0.2);
+    /* Unified glow base */
     border-radius: 4px;
     outline: none;
     cursor: pointer;
+    accent-color: rgb(90, 75, 255);
 }
 
 /* Webkit browsers (Chrome, Safari, Edge) */
@@ -213,10 +215,13 @@
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    background: white;
+    background: rgb(90, 75, 255);
+    /* Unified glow color */
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     transition: all 0.2s;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    /* Added for better definition on glass */
 }
 
 .glass-slider::-webkit-slider-thumb:hover {
@@ -229,9 +234,9 @@
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    background: white;
+    background: rgb(90, 75, 255);
     cursor: pointer;
-    border: none;
+    border: 2px solid rgba(255, 255, 255, 0.5);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     transition: all 0.2s;
 }
@@ -243,7 +248,7 @@
 
 /* Firefox track */
 .glass-slider::-moz-range-track {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(90, 75, 255, 0.2);
     border-radius: 4px;
 }
 
