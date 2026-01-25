@@ -1011,8 +1011,12 @@ function navigateModal(direction) {
     const newTransform = currentTransform + offset;
 
     // Apply transition
-    strip.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
-    strip.style.transform = `translateX(${newTransform}%)`;
+    // ✅ PHASE_9: RAF De-coupling (Start-Frame Priority)
+    // Ensures indicator logic finishes before the slide starts
+    requestAnimationFrame(() => {
+        strip.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
+        strip.style.transform = `translateX(${newTransform}%)`;
+    });
 
     // On transitionend: Atomic Teleport + Surgical Node Rotation
     strip.addEventListener('transitionend', function handler(e) {
@@ -1168,8 +1172,27 @@ function updateGlassZoneStates() {
 function setupGlassZones() {
     const leftZone = document.querySelector('.glass-zone.left');
     const rightZone = document.querySelector('.glass-zone.right');
+    const strip = document.querySelector('.modal-sliding-strip');
 
     if (!leftZone || !rightZone) return;
+
+    // ✅ PHASE_9: Interactivity Warmup (Cold-Start Click Fix)
+    // Forces pre-allocation of the graphics layer BEFORE the click event fires
+    const warmup = () => {
+        if (!strip || VibeDrips.modalState.isSliding) return;
+        // Prime the transform with a sub-pixel offset to trigger layerization
+        strip.style.willChange = 'transform';
+        // Applying a literal 0.01px translateX ensures Constraint 2.2 compliance
+        if (strip.style.transform === 'translateX(-40%)' || !strip.style.transform) {
+            strip.style.transform = 'translateX(-40.01%)';
+        }
+    };
+
+    // Warmup on press
+    [leftZone, rightZone].forEach(zone => {
+        zone.addEventListener('mousedown', warmup);
+        zone.addEventListener('touchstart', warmup, { passive: true });
+    });
 
     // Left zone navigation
     leftZone.addEventListener('click', (e) => {

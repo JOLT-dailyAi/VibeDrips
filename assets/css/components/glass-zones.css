@@ -94,7 +94,8 @@
 
 /* Active State */
 .glass-zone:active {
-    transform: translate3d(var(--lever-x, 0), -50%, 0) scale(0.98);
+    /* Dimensional scale removed to prevent layout contention during navigation start */
+    transform: translateX(var(--lever-x, 0)) translateY(-50%);
 }
 
 .glass-zone:focus {
