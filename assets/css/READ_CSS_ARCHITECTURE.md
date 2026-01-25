@@ -63,3 +63,22 @@ When building UI components, we distinguish between **Integrated** and **Standal
 
 > [!TIP]
 > Use Standalone styling for generic utilities intended for reuse in other repositories. Use Integrated styling for elements that must react to the project's specific theme toggling logic.
+
+## 6. Gallery & Thumbnail "Pinned Sync" Design
+
+To achieve high-end gallery interaction, we implement **Selection-Hover Parity**.
+
+### Visual Parity
+- **The Rule**: The `.thumbnail.active` (Pinned) and `.thumbnail:hover` states must look identical.
+- **Effects**: `translateY(-10px)`, `scale(1.05)`, Purple Glow, and `1.15x` internal image zoom.
+- **Why**: This provides immediate visual feedback that the "pinned" image is just as interactive as a hovered one.
+
+### Exclusive Focus (Context-Awareness)
+When an user hovers over a thumbnail while another is already pinned, we use the `.is-previewing` class on the container to signal a focus shift.
+- **CSS Logic**: `.is-previewing .thumbnail.active:not(:hover)` drops the pinned elevation.
+- **Result**: Only **one** thumbnail is ever elevated at a time, preventing visual "clutter" in the gallery.
+
+### Hardware Acceleration (The "Butter-Smooth" Slide)
+As per the carousing stability plan:
+- **GPU Hardening**: All sliding containers (`.modal-sliding-strip`) must use `backface-visibility: hidden` and `transform-style: preserve-3d`.
+- **Why**: This forces the browser to treat the modal content as a single graphics layer, eliminating jitter on mobile devices.
