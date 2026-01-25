@@ -183,6 +183,11 @@
     transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
     will-change: transform;
     /* transform: translateX(-40%) center position set by JS */
+
+    /* GPU HARDENING: Prevents jitter and layout recalculation on mobile */
+    backface-visibility: hidden;
+    perspective: 1000;
+    transform-style: preserve-3d;
 }
 
 /* No transition during teleport */
@@ -199,6 +204,11 @@
     box-shadow: none !important;
     z-index: auto !important;
     position: relative;
+
+    /* GPU ISO: Ensures content animates as a single layer */
+    backface-visibility: hidden;
+    transform: translate3d(0, 0, 0);
+    overflow-x: hidden;
 }
 
 /* END_PHASE_1 */

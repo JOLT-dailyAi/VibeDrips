@@ -1015,7 +1015,7 @@ function navigateModal(direction) {
     strip.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
     strip.style.transform = `translate3d(${newTransform}%, 0, 0)`;
 
-    // On transitionend: Atomic Teleport + Re-cache
+    // On transitionend: Atomic Teleport + Surgical Node Rotation
     strip.addEventListener('transitionend', function handler(e) {
         // STRICT CHECK: Only respond to transform transition on the strip itself
         if (e.target !== strip || e.propertyName !== 'transform') return;
@@ -1030,32 +1030,43 @@ function navigateModal(direction) {
         // 2. Set teleport target (back to center)
         strip.style.transform = 'translate3d(-40%, 0, 0)';
 
-        // 3. Update DOM content while transition is dead
+        // 3. SURGICAL NODE ROTATION (Zero-Flash)
+        // Instead of innerHTML = '', rotate nodes so Active stays in DOM
         const cache = build5ProductCache(VibeDrips.modalState.currentIndex);
-        strip.innerHTML = '';
-        cache.forEach(product => {
+
+        if (direction === 'next') {
+            // Remove first (oldest), Append new N+2
+            const first = strip.firstElementChild;
+            if (first) strip.removeChild(first);
+
+            const newProduct = cache[4]; // The new N+2
             const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = generateModalHTML(product);
+            tempDiv.innerHTML = generateModalHTML(newProduct);
             const modalContent = tempDiv.querySelector('.simple-modal-content');
-            modalContent.scrollTop = 0; // Reset scroll position
             strip.appendChild(modalContent);
-        });
+            setupProductInteractions(newProduct);
+        } else {
+            // Remove last (oldest), Prepend new P-2
+            const last = strip.lastElementChild;
+            if (last) strip.removeChild(last);
 
-        // 4. Update interactions
-        cache.forEach(product => {
-            setupProductInteractions(product);
-        });
+            const newProduct = cache[0]; // The new P-2
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = generateModalHTML(newProduct);
+            const modalContent = tempDiv.querySelector('.simple-modal-content');
+            strip.insertBefore(modalContent, strip.firstChild);
+            setupProductInteractions(newProduct);
+        }
 
-        // 5. CRITICAL: Force Reflow to ensure browser acknowledges position before re-enabling transition
+        // 4. CRITICAL: Force Reflow to ensure browser acknowledges position before re-enabling transition
         void strip.offsetWidth;
 
-        // 6. Re-enable transition for NEXT navigation with double RAF safety
+        // 5. Re-enable transition for NEXT navigation with double RAF safety
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 strip.classList.remove('no-transition');
                 strip.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
                 VibeDrips.modalState.isSliding = false;
-                // updateGlassZoneStates() moved to start for Timing Sync
 
                 // PHASE_10: Sync dimensions after navigation
                 syncModalDimensions();
