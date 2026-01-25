@@ -2148,7 +2148,10 @@ body.glass-theme .discount-badge {
         grid-template-columns: 1fr !important;
         /* FORCE 1 COLUMN */
         gap: 8px !important;
-        max-height: 60vh !important;
+        height: 100% !important;
+        /* UTILIZE ALL SPACE */
+        max-height: 70vh !important;
+        /* SYNC WITH MAIN IMAGE AREA */
         padding-right: 0 !important;
     }
 
