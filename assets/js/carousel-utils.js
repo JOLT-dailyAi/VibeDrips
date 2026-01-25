@@ -158,13 +158,16 @@ const CarouselUtils = {
             previewImage(index) {
                 // Find main image with ID (guaranteed scoped)
                 const mainImg = document.getElementById(`main-image-${productId}`);
-                CarouselUtils.updateImage(mainImg, images[index]);
-
                 const mobileImg = document.getElementById(`main-image-mobile-${productId}`);
-                CarouselUtils.updateImage(mobileImg, images[index]);
+
+                if (mainImg) CarouselUtils.updateImage(mainImg, images[index]);
+                if (mobileImg) CarouselUtils.updateImage(mobileImg, images[index]);
 
                 // Signal CSS to shift focus: Target ALL thumbnail containers ONLY in this modal
-                const modal = mainImg?.closest('.dynamic-modal');
+                // ROBUST SCOPING: Find modal from whichever image element exists (Desktop or Mobile)
+                const contextElement = mainImg || mobileImg;
+                const modal = contextElement?.closest('.dynamic-modal');
+
                 const containers = modal?.querySelectorAll('.gallery-thumbnails, .mobile-thumbnails');
                 containers?.forEach(c => c.classList.add('is-previewing'));
             },
