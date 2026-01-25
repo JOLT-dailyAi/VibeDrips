@@ -157,6 +157,11 @@ const CarouselUtils = {
 
                     const mobileImg = document.getElementById(`main-image-mobile-${productId}`);
                     CarouselUtils.updateImage(mobileImg, images[index]);
+
+                    // Signal CSS to shift focus to the hover target
+                    const modal = document.querySelector('.dynamic-modal');
+                    const thumbContainer = modal?.querySelector('.gallery-thumbnails');
+                    thumbContainer?.classList.add('is-previewing');
                 }
             },
 
@@ -182,6 +187,10 @@ const CarouselUtils = {
 
                 // Update thumbnails (find in modal)
                 const modal = document.querySelector('.dynamic-modal');
+                const thumbContainer = modal?.querySelector('.gallery-thumbnails');
+
+                // Clear preview state and sync selection
+                thumbContainer?.classList.remove('is-previewing');
                 CarouselUtils.updateThumbnails(modal, currentIndex);
             }
         };

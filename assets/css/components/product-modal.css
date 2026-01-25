@@ -1041,21 +1041,23 @@ body.glass-theme .discount-badge {
     isolation: isolate;
 }
 
-.thumbnail.active {
+/* Unified State: Active or Hovered */
+.thumbnail.active,
+.thumbnail:hover {
     border-color: #5A4BFF;
     box-shadow:
-        0 0 20px rgba(90, 75, 255, 0.6),
-        0 0 40px rgba(90, 75, 255, 0.3);
-    transform: scale(1.05);
-    z-index: 2;
+        0 8px 25px rgba(90, 75, 255, 0.45),
+        0 0 40px rgba(90, 75, 255, 0.25);
+    transform: translateY(-6px) scale(1.04);
+    z-index: 5;
 }
 
-.thumbnail:hover {
-    border-color: rgba(90, 75, 255, 0.6);
-    transform: translateY(-4px);
-    /* ORGANIC LIFT */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-    z-index: 2;
+/* Exclusive Focus: When hovering, the static 'active' thumbnail steps back */
+.gallery-thumbnails.is-previewing .thumbnail.active:not(:hover) {
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: none;
+    transform: translateY(0) scale(1);
+    z-index: 1;
 }
 
 .thumbnail img {
@@ -1065,13 +1067,15 @@ body.glass-theme .discount-badge {
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Sync internal zoom for both states */
+.thumbnail.active img,
 .thumbnail:hover img {
     transform: scale(1.15);
-    /* INTERNAL ZOOM */
 }
 
-.thumbnail.active img {
-    transform: scale(1.1);
+/* Exclusive Focus: Image zoom also reverts when another thumbnail is hovered */
+.gallery-thumbnails.is-previewing .thumbnail.active:not(:hover) img {
+    transform: scale(1);
 }
 
 .gallery-main {
