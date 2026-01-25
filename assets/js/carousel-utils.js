@@ -176,31 +176,31 @@ const CarouselUtils = {
              * Update all carousel elements (images, counters, thumbnails)
              */
             updateAll() {
-                // Update desktop main image
+                // Update images
                 const mainImg = document.getElementById(`main-image-${productId}`);
-                CarouselUtils.updateImage(mainImg, images[currentIndex]);
-
-                // Update mobile main image
                 const mobileImg = document.getElementById(`main-image-mobile-${productId}`);
-                CarouselUtils.updateImage(mobileImg, images[currentIndex]);
 
-                // Update desktop counter
+                if (mainImg) CarouselUtils.updateImage(mainImg, images[currentIndex]);
+                if (mobileImg) CarouselUtils.updateImage(mobileImg, images[currentIndex]);
+
+                // Update counters
                 const counter = document.getElementById(`counter-${productId}`);
-                CarouselUtils.updateCounter(counter, currentIndex, images.length);
-
-                // Update mobile counter
                 const mobileCounter = document.getElementById(`counter-mobile-${productId}`);
-                CarouselUtils.updateCounter(mobileCounter, currentIndex, images.length);
 
-                // Update thumbnails (find in OWN modal only)
-                // (mainImg declared above is already scoped to this productId)
-                const modal = mainImg?.closest('.dynamic-modal');
+                if (counter) CarouselUtils.updateCounter(counter, currentIndex, images.length);
+                if (mobileCounter) CarouselUtils.updateCounter(mobileCounter, currentIndex, images.length);
+
+                // Update thumbnails (scoped to THIS modal)
+                const contextElement = mainImg || mobileImg;
+                const modal = contextElement?.closest('.dynamic-modal');
 
                 // Clear preview state from containers in THIS modal
                 const containers = modal?.querySelectorAll('.gallery-thumbnails, .mobile-thumbnails');
                 containers?.forEach(c => c.classList.remove('is-previewing'));
 
-                CarouselUtils.updateThumbnails(modal, currentIndex);
+                if (modal) {
+                    CarouselUtils.updateThumbnails(modal, currentIndex);
+                }
             }
         };
 

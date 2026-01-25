@@ -1046,10 +1046,11 @@ body.glass-theme .discount-badge {
 .thumbnail:hover {
     border-color: #5A4BFF;
     box-shadow:
-        0 8px 30px rgba(90, 75, 255, 0.5),
-        0 0 45px rgba(90, 75, 255, 0.3);
-    transform: translateY(-8px) scale(1.05);
-    z-index: 10;
+        0 10px 35px rgba(90, 75, 255, 0.55),
+        0 0 50px rgba(90, 75, 255, 0.35);
+    transform: translateY(-10px) scale(1.05);
+    /* DRAMATIZED LIFT */
+    z-index: 20;
 }
 
 /* Exclusive Focus: When hovering, the static 'active' thumbnail steps back */
