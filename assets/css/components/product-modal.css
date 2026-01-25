@@ -1067,7 +1067,7 @@ body.glass-theme .discount-badge {
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Sync internal zoom for both states */
+/* Sync internal image zoom (1.15x) for both Pinned and Hovered states */
 .thumbnail.active img,
 .thumbnail:hover img {
     transform: scale(1.15);

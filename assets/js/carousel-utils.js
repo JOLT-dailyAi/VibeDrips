@@ -63,7 +63,13 @@ const CarouselUtils = {
 
         const thumbnails = container.querySelectorAll('.thumbnail');
         thumbnails.forEach((thumb, index) => {
-            thumb.classList.toggle('active', index === activeIndex);
+            const isActive = index === activeIndex;
+            thumb.classList.toggle('active', isActive);
+
+            // MAGNETIC HIGHLIGHT: Auto-scroll the active thumbnail into view
+            if (isActive) {
+                thumb.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
         });
     },
 
@@ -150,19 +156,19 @@ const CarouselUtils = {
              * @param {number} index - Image index to preview
              */
             previewImage(index) {
-                if (window.innerWidth > 768) {
-                    // Update images without updating counter
-                    const mainImg = document.getElementById(`main-image-${productId}`);
-                    CarouselUtils.updateImage(mainImg, images[index]);
+                // POINTER-AGNOSTIC: Support hover regardless of resolution (mouse/trackpad users on all screens)
 
-                    const mobileImg = document.getElementById(`main-image-mobile-${productId}`);
-                    CarouselUtils.updateImage(mobileImg, images[index]);
+                // Update images without updating counter
+                const mainImg = document.getElementById(`main-image-${productId}`);
+                CarouselUtils.updateImage(mainImg, images[index]);
 
-                    // Signal CSS to shift focus to the hover target
-                    const modal = document.querySelector('.dynamic-modal');
-                    const thumbContainer = modal?.querySelector('.gallery-thumbnails');
-                    thumbContainer?.classList.add('is-previewing');
-                }
+                const mobileImg = document.getElementById(`main-image-mobile-${productId}`);
+                CarouselUtils.updateImage(mobileImg, images[index]);
+
+                // Signal CSS to shift focus to the hover target
+                const modal = document.querySelector('.dynamic-modal');
+                const thumbContainer = modal?.querySelector('.gallery-thumbnails');
+                thumbContainer?.classList.add('is-previewing');
             },
 
             /**
