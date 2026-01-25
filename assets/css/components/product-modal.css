@@ -1096,8 +1096,9 @@ body.glass-theme .discount-badge {
 
 @media (min-width: 769px) {
     .gallery-desktop .carousel-controls {
-        display: none !important;
-        /* REMOVE DEAD SPACE ON DESKTOP */
+        display: flex !important;
+        /* RESTORED BUTTONS BUT KEPT COUNTER HIDDEN */
+        margin-top: 10px;
     }
 }
 
@@ -2138,8 +2139,9 @@ body.glass-theme .discount-badge {
     }
 
     .carousel-controls {
-        display: none !important;
-        /* REMOVE DEAD SPACE IN LANDSCAPE */
+        display: flex !important;
+        /* RESTORED BUTTONS IN LANDSCAPE */
+        gap: 12px !important;
     }
 
     .gallery-thumbnails {
