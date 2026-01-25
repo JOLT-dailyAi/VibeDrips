@@ -506,6 +506,7 @@ function generateModalHTML(product) {
                                 ${images.map((img, idx) => `
                                 <div class="thumbnail ${idx === 0 ? 'active' : ''}" 
                                      onmouseover="previewImage_${productId}(${idx})"
+                                     onmouseout="revertImage_${productId}()"
                                      onclick="selectImage_${productId}(${idx})"
                                      ondblclick="openImageGallery_${productId}(${idx})">
                                     <img src="${img}" alt="Thumb ${idx + 1}">
@@ -754,6 +755,7 @@ function setupProductInteractions(product) {
         const carousel = CarouselUtils.createCarousel(productId, images);
         window[`selectImage_${productId}`] = (index) => carousel.selectImage(index);
         window[`previewImage_${productId}`] = (index) => carousel.previewImage(index);
+        window[`revertImage_${productId}`] = () => carousel.updateAll();
         window[`prevImage_${productId}`] = () => carousel.prev();
         window[`nextImage_${productId}`] = () => carousel.next();
 
