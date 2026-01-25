@@ -186,7 +186,6 @@
 
     /* GPU HARDENING: Prevents jitter and layout recalculation on mobile */
     backface-visibility: hidden;
-    perspective: 1000;
     transform-style: preserve-3d;
 }
 
@@ -204,11 +203,10 @@
     box-shadow: none !important;
     z-index: auto !important;
     position: relative;
-
-    /* GPU ISO: Ensures content animates as a single layer */
-    backface-visibility: hidden;
-    transform: translate3d(0, 0, 0);
     overflow-x: hidden;
+
+    /* LAYER OPTIMIZATION: Removed redundant child GPU layers to restore FPS */
+    /* Only the strip itself should be hardware-accelerated for max performance */
 }
 
 /* END_PHASE_1 */

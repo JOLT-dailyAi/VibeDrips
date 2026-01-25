@@ -1010,10 +1010,9 @@ function navigateModal(direction) {
     const offset = direction === 'next' ? -20 : 20;
     const newTransform = currentTransform + offset;
 
-    // Apply transition - FIXED: translate3d for maximal GPU stability
-    strip.classList.remove('no-transition');
+    // Apply transition
     strip.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
-    strip.style.transform = `translate3d(${newTransform}%, 0, 0)`;
+    strip.style.transform = `translateX(${newTransform}%)`;
 
     // On transitionend: Atomic Teleport + Surgical Node Rotation
     strip.addEventListener('transitionend', function handler(e) {
@@ -1028,7 +1027,7 @@ function navigateModal(direction) {
         strip.classList.add('no-transition');
 
         // 2. Set teleport target (back to center)
-        strip.style.transform = 'translate3d(-40%, 0, 0)';
+        strip.style.transform = 'translateX(-40%)';
 
         // 3. SURGICAL NODE ROTATION (Zero-Flash)
         // Instead of innerHTML = '', rotate nodes so Active stays in DOM
