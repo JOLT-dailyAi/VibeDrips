@@ -2151,6 +2151,15 @@ body.glass-theme .discount-badge {
         display: none !important;
     }
 
+    .gallery-main,
+    .mobile-main {
+        height: auto !important;
+        /* Ghost Space Fix: Allow container to shrink */
+        max-height: 70vh !important;
+        background: transparent !important;
+        /* Clear background to ensure no ghost bounds */
+    }
+
     .carousel-controls {
         display: flex !important;
         /* RESTORED BUTTONS IN LANDSCAPE */
@@ -2162,9 +2171,8 @@ body.glass-theme .discount-badge {
         /* FORCE 1 COLUMN */
         gap: 8px !important;
         height: 100% !important;
-        /* UTILIZE ALL SPACE */
+        /* SYNC: Matches the height of the auto-calculated main area */
         max-height: 70vh !important;
-        /* SYNC WITH MAIN IMAGE AREA */
         padding-right: 0 !important;
     }
 
