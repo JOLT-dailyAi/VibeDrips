@@ -82,3 +82,21 @@ When an user hovers over a thumbnail while another is already pinned, we use the
 As per the carousing stability plan:
 - **GPU Hardening**: All sliding containers (`.modal-sliding-strip`) must use `backface-visibility: hidden` and `transform-style: preserve-3d`.
 - **Why**: This forces the browser to treat the modal content as a single graphics layer, eliminating jitter on mobile devices.
+
+## 7. Interactivity & Performance Parity (Click vs Drag)
+
+To ensure "Butter-Smooth" navigation across all input methods, we handle "Cold Start" clicks surgically.
+
+### The patterns
+- **Compositor Priming**: Clicks are inherently "cold" (0% CPU/GPU state). We use `mousedown` to trigger a `0.01px` translateX. This "primes" the GPU layer ~100ms before the transition starts.
+- **Layer Contention Removal**: We avoid heavy animations (like `scale()`) on the interaction levers (side zones) at the exact moment the product transition begins.
+- **RAF Sync**: Complex indicator logic (Dots/Counters) is de-coupled from the transition start via `requestAnimationFrame` to prevent frame hitches.
+
+## 8. Mobile Landscape Space Economy
+
+Mobile landscape is a height-constrained environment. We prioritize **Vertical Scarcity**.
+
+### The Pattern: "The Shrink-Wrap"
+- **The Rule**: Never use fixed `height` (px) for gallery containers in landscape.
+- **Practice**: Use `height: auto` and `max-height: 70vh`.
+- **The "Ghost Space" Fix**: When elements (like the carousel counter) are hidden, the container must be allowed to shrink vertically to hug the image. This prevents "Ghost Space" from pushing product details off-screen.

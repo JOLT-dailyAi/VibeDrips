@@ -19,8 +19,10 @@ VibeDrips uses a custom-built navigation engine designed for mobile-first speed.
 
 ### 3. GPU-First Rendering
 To ensure "Butter-Smooth" transitions on mobile devices:
-- We exclusively use `translate3d` for movement.
+- We exclusively use `translateX` and `translate3d` for movement.
 - **GPU Hardening**: All carousing containers use `backface-visibility: hidden` and `transform-style: preserve-3d` to force graphics-layer acceleration.
+- **Interactivity Warmup**: To prevent "Cold-Start" hitching during clicks, we use `mousedown`/`touchstart` to pre-prime the graphics layer with a micro-offset (0.01px). This ensures the compositor is already warm before the animation begins.
+- **Layer Lean Strategy**: Only the primary moving container is layerized; redundant child GPU layers are avoided to prevent memory pressure and composition stalls ("Layer Inflation").
 
 ---
 
@@ -65,6 +67,7 @@ VibeDrips utilizes a **Glass-Morphic Theme** that is fully reactive.
 
 - **Safe-Area Awareness**: All floating elements dodge the "Notch" and "Home Bar" using `env(safe-area-inset)`.
 - **Landscape Tuning**: Custom adjustments in `responsive.css` ensure the UI remains usable at high information density in landscape mode.
+- **Dynamic Height Economy**: We use `height: auto` combined with relative `max-height` (e.g., `70vh`) in landscape view. This ensures containers shrink to fit their content, eliminating "Ghost Space" left by hidden UI elements like counters.
 - **PWA Ready**: manifest-driven splash screens and home-screen icon support.
 
 ---
