@@ -61,11 +61,15 @@ const CarouselUtils = {
     updateThumbnails(container, activeIndex) {
         if (!container) return;
 
-        // Find all thumbnail containers within THIS specific modal/product context
-        const thumbnails = container.querySelectorAll('.thumbnail');
-        thumbnails.forEach((thumb, index) => {
-            const isActive = index === activeIndex;
-            thumb.classList.toggle('active', isActive);
+        // Find all thumbnail-style containers (could be desktop or mobile set)
+        const thumbnailSets = container.querySelectorAll('.gallery-thumbnails, .mobile-thumbnails');
+
+        thumbnailSets.forEach(set => {
+            const thumbnails = set.querySelectorAll('.thumbnail');
+            thumbnails.forEach((thumb, index) => {
+                const isActive = index === activeIndex;
+                thumb.classList.toggle('active', isActive);
+            });
         });
     },
 
@@ -186,7 +190,7 @@ const CarouselUtils = {
                 CarouselUtils.updateCounter(mobileCounter, currentIndex, images.length);
 
                 // Update thumbnails (find in OWN modal only)
-                // (Reusing mainImg declared on line 173)
+                // (mainImg declared above is already scoped to this productId)
                 const modal = mainImg?.closest('.dynamic-modal');
 
                 // Clear preview state from containers in THIS modal
