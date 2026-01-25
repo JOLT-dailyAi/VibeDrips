@@ -515,7 +515,7 @@ function generateModalHTML(product) {
                             <div class="gallery-main">
                                 <img src="${images[0]}" 
                                      alt="${escapeHtml(product.name)}" 
-                                     style="max-width: 100%; max-height: 400px; border-radius: 12px; cursor: pointer;"
+                                     style="max-width: 100%; max-height: 450px; border-radius: 12px; cursor: pointer;"
                                      ondblclick="openImageGallery_${productId}()" id="main-image-${productId}">
                                 <div class="zoom-hint">🔍 Double-click to view full screen</div>
                                 <div class="carousel-controls">

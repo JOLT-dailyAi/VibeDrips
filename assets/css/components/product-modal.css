@@ -997,9 +997,13 @@ body.glass-theme .discount-badge {
 .gallery-thumbnails {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
+    /* KEEP 2 COLUMNS */
     gap: 8px;
-    /* BALANCED GAP FOR 20% WIDTH */
-    max-height: 400px;
+    /* RESTORED FOR BALANCE */
+    height: 100%;
+    /* FILL VERTICAL SPACE */
+    max-height: 480px;
+    /* SYNC WITH MAIN IMAGE AREA */
     overflow-y: auto;
     padding-right: 8px;
     /* Hide scrollbar by default, show on hover */
@@ -1088,6 +1092,13 @@ body.glass-theme .discount-badge {
 
 .gallery-main img:hover {
     transform: scale(1.02);
+}
+
+@media (min-width: 769px) {
+    .gallery-desktop .carousel-controls {
+        display: none !important;
+        /* REMOVE DEAD SPACE ON DESKTOP */
+    }
 }
 
 .carousel-controls {
@@ -2124,6 +2135,11 @@ body.glass-theme .discount-badge {
 
     .gallery-mobile {
         display: none !important;
+    }
+
+    .carousel-controls {
+        display: none !important;
+        /* REMOVE DEAD SPACE IN LANDSCAPE */
     }
 
     .gallery-thumbnails {
