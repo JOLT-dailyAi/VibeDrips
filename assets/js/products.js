@@ -914,9 +914,9 @@ function wrapModalForSliding(centerProductId) {
             <span>🎞️</span>
         </button>
         <button class="globe-toggle" aria-label="Global Availability">
-            <span>🌎</span>
-            <span>🌍</span>
             <span>🌏</span>
+            <span>🌍</span>
+            <span>🌎</span>
         </button>
     `;
 
