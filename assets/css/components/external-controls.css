@@ -66,18 +66,25 @@ body.light-theme .ticker-content {
     pointer-events: none;
 }
 
-/* Unified Glow for Active State - High specificity to override theme !important */
-body .modal-external-controls .reels-toggle.active,
-body .modal-external-controls .globe-toggle.active {
+/* Unified Glow for Active State - ULTRA high specificity to crush theme !important */
+html body .modal-external-controls .reels-toggle.active,
+html body .modal-external-controls .globe-toggle.active,
+body.light-theme .modal-external-controls .reels-toggle.active,
+body.light-theme .modal-external-controls .globe-toggle.active,
+body.dark-theme .modal-external-controls .reels-toggle.active,
+body.dark-theme .modal-external-controls .globe-toggle.active,
+body.glass-theme .modal-external-controls .reels-toggle.active,
+body.glass-theme .modal-external-controls .globe-toggle.active {
     background: var(--color-primary, #5A4BFF) !important;
     border: 2px solid var(--color-primary, #5A4BFF) !important;
     color: white !important;
     box-shadow:
-        0 0 15px 2px rgba(90, 75, 255, 0.6),
-        0 4px 12px rgba(0, 0, 0, 0.3) !important;
-    transform: scale(1.05);
+        0 0 20px 4px rgba(90, 75, 255, 0.7),
+        0 0 10px 1px rgba(90, 75, 255, 0.4),
+        0 4px 12px rgba(0, 0, 0, 0.4) !important;
+    transform: scale(1.08) !important;
     pointer-events: auto !important;
-    /* redundant but safe */
+    opacity: 1 !important;
 }
 
 /* Ensure buttons are clickable despite container's pointer-events: none */
