@@ -899,6 +899,7 @@ function wrapModalForSliding(centerProductId) {
     const externalControls = document.createElement('div');
     externalControls.className = 'modal-external-controls';
     externalControls.innerHTML = `
+        ${(window.VibeDrips && VibeDrips.ExternalControls) ? VibeDrips.ExternalControls.createBubbleHTML() : ''}
         <button class="reels-toggle" aria-label="Reels Animation">
             <span>🎬</span>
             <span>🎞️</span>
@@ -970,6 +971,11 @@ function wrapModalForSliding(centerProductId) {
 
     // PHASE_10: Dynamic Dimension Sync
     syncModalDimensions();
+
+    // PHASE_12: External Controls Logic
+    if (window.VibeDrips && VibeDrips.ExternalControls) {
+        VibeDrips.ExternalControls.init();
+    }
 }
 
 /**
