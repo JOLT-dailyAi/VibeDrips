@@ -979,9 +979,11 @@ function wrapModalForSliding(centerProductId) {
     // PHASE_10: Dynamic Dimension Sync
     syncModalDimensions();
 
-    // PHASE_12: External Controls Logic
+    // PHASE_12: External Controls Logic with Safety Delay
     if (window.VibeDrips && VibeDrips.ExternalControls) {
-        VibeDrips.ExternalControls.init();
+        setTimeout(() => {
+            VibeDrips.ExternalControls.init();
+        }, 50);
     }
 }
 
