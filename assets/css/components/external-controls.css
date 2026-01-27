@@ -65,9 +65,9 @@ body.light-theme .ticker-content {
     pointer-events: none;
 }
 
-/* Unified Glow for Active State - Added to existing button styles */
-.reels-toggle.active,
-.globe-toggle.active {
+/* Unified Glow for Active State - High specificity to override theme !important */
+body .modal-external-controls .reels-toggle.active,
+body .modal-external-controls .globe-toggle.active {
     background: var(--color-primary, #5A4BFF) !important;
     border: 2px solid var(--color-primary, #5A4BFF) !important;
     color: white !important;
@@ -75,6 +75,15 @@ body.light-theme .ticker-content {
         0 0 15px 2px rgba(90, 75, 255, 0.6),
         0 4px 12px rgba(0, 0, 0, 0.3) !important;
     transform: scale(1.05);
+    pointer-events: auto !important;
+    /* redundant but safe */
+}
+
+/* Ensure buttons are clickable despite container's pointer-events: none */
+.reels-toggle,
+.globe-toggle {
+    pointer-events: auto !important;
+    cursor: pointer;
 }
 
 /* Glass tail/pointer pointing to the icons */

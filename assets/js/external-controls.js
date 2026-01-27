@@ -39,32 +39,38 @@ window.VibeDrips.ExternalControls = (function () {
         bubble.classList.remove('hidden');
 
         // REELS TOGGLE CLICK
-        reelsBtn.onclick = (e) => {
+        reelsBtn.addEventListener('click', (e) => {
+            e.preventDefault();
             e.stopPropagation();
+            console.log('🎬 ExternalControls: REELS CLICK DETECTED');
+
             const isActive = reelsBtn.classList.toggle('active');
-            console.log('🎬 ExternalControls: Reels toggled:', isActive);
+            console.log('🎬 ExternalControls: Reels active state:', isActive);
 
             if (isActive) {
-                // Mutual Exclusion: Turn Globe OFF
                 globeBtn.classList.remove('active');
+                console.log('🎬 ExternalControls: Globe deactivated via mutual exclusion');
             }
 
             syncBubbleState(reelsBtn, globeBtn, bubble);
-        };
+        });
 
         // GLOBE TOGGLE CLICK
-        globeBtn.onclick = (e) => {
+        globeBtn.addEventListener('click', (e) => {
+            e.preventDefault();
             e.stopPropagation();
+            console.log('🌍 ExternalControls: GLOBE CLICK DETECTED');
+
             const isActive = globeBtn.classList.toggle('active');
-            console.log('🌍 ExternalControls: Globe toggled:', isActive);
+            console.log('🌍 ExternalControls: Globe active state:', isActive);
 
             if (isActive) {
-                // Mutual Exclusion: Turn Reels OFF
                 reelsBtn.classList.remove('active');
+                console.log('🌍 ExternalControls: Reels deactivated via mutual exclusion');
             }
 
             syncBubbleState(reelsBtn, globeBtn, bubble);
-        };
+        });
     }
 
     /**
