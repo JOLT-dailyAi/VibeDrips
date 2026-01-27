@@ -18,56 +18,77 @@
 
 /* The Bubble Container */
 .control-bubble {
-    height: 42px !important;
-    min-width: 312px !important;
-    /* Viewport 280 + Padding 32 */
-    padding: 0 16px !important;
-    background: rgba(30, 30, 30, 0.8) !important;
-    /* Darker fallback for transparency */
-    backdrop-filter: blur(15px) saturate(1.5) !important;
-    -webkit-backdrop-filter: blur(15px) saturate(1.5) !important;
-    border: 1.5px solid rgba(255, 255, 255, 0.4) !important;
-    border-radius: 21px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    position: relative !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    transition: opacity 0.4s ease, transform 0.4s ease;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
-    pointer-events: auto !important;
-    z-index: 1060 !important;
-    flex-shrink: 0 !important;
-    outline: 2px solid magenta;
-    /* TEMP TEST BORDER */
+    height: 42px;
+    padding: 0 16px;
+    background: rgba(255, 255, 255, var(--glass-refraction, 0.15));
+    backdrop-filter: blur(var(--glass-blur, 15px)) saturate(1.8);
+    -webkit-backdrop-filter: blur(var(--glass-blur, 15px)) saturate(1.8);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 21px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    opacity: 1;
+    visibility: visible;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    pointer-events: auto;
+    z-index: 1050;
+    overflow: visible;
+}
+
+/* Theme Awareness: Light Theme */
+body.light-theme .control-bubble {
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid var(--color-primary, #5A4BFF);
+    box-shadow: 0 4px 15px rgba(90, 75, 255, 0.15);
+}
+
+body.light-theme .ticker-content {
+    color: #2D3748;
+    font-weight: 600;
+}
+
+/* Theme Awareness: Dark Theme */
+body.dark-theme .control-bubble {
+    background: rgba(0, 0, 0, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Theme Awareness: Glass Theme */
+body.glass-theme .control-bubble {
+    background: rgba(255, 255, 255, var(--glass-refraction, 0.15));
+    backdrop-filter: blur(var(--glass-blur, 15px)) saturate(var(--glass-saturation, 180%));
+    -webkit-backdrop-filter: blur(var(--glass-blur, 15px)) saturate(var(--glass-saturation, 180%));
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+body.glass-theme .reels-toggle,
+body.glass-theme .globe-toggle {
+    background: rgba(255, 255, 255, var(--glass-refraction, 0.1));
+    backdrop-filter: blur(var(--glass-blur, 10px));
+    -webkit-backdrop-filter: blur(var(--glass-blur, 10px));
 }
 
 /* Hidden state when toggles are ON */
 .control-bubble.hidden {
-    opacity: 0;
-    transform: translateX(10px);
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transform: translateX(12px) scale(0.95);
     pointer-events: none;
-    visibility: hidden;
-    /* Ensure it's truly gone */
 }
 
-/* Visual Active States for Toggles (Mutual Exclusion Feedback) */
+/* Visual Active States for Toggles (Unified Glow) */
 .reels-toggle.active,
 .globe-toggle.active {
     background: var(--color-primary, #5A4BFF) !important;
-    border-color: var(--color-primary, #5A4BFF) !important;
+    border: 2px solid var(--color-primary, #5A4BFF) !important;
     color: white !important;
     box-shadow:
-        0 4px 15px rgba(90, 75, 255, 0.4),
-        0 0 20px rgba(90, 75, 255, 0.2);
-}
-
-.reels-toggle.active span {
-    animation: none;
-    /* Stop rotation when selected? No, user might still want animation. Actually user didn't specify. I'll keep it for now. */
-    opacity: 1 !important;
-    transform: translateY(0.5px) !important;
+        0 0 15px 2px rgba(90, 75, 255, 0.6),
+        0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    transform: scale(1.05);
 }
 
 /* Glass tail/pointer pointing to the icons */
@@ -81,19 +102,24 @@
     height: 0;
     border-top: 6px solid transparent;
     border-bottom: 6px solid transparent;
-    border-left: 8px solid rgba(255, 255, 255, 0.15);
-    /* Match glass edge */
-    filter: drop-shadow(2px 0 2px rgba(0, 0, 0, 0.1));
+    border-left: 8px solid rgba(255, 255, 255, 0.3);
+}
+
+body.light-theme .control-bubble::after {
+    border-left-color: var(--color-primary, #5A4BFF);
+}
+
+body.dark-theme .control-bubble::after {
+    border-left-color: rgba(255, 255, 255, 0.15);
 }
 
 /* News Ticker Viewport */
 .ticker-viewport {
     width: 280px;
-    /* Fixed width for the "Headlines" screen */
     overflow: hidden;
     white-space: nowrap;
-    mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
-    -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
 }
 
 /* Ticker Content */
@@ -114,17 +140,7 @@
     display: block;
 }
 
-/* Theme Awareness Override */
-body.light-theme .ticker-content {
-    color: var(--color-primary, #5A4BFF);
-}
-
-body.light-theme .control-bubble {
-    background: rgba(255, 255, 255, 0.85);
-    border-color: rgba(90, 75, 255, 0.2);
-}
-
-/* The Ticker Animation: Right to Left (Seamless Loop) */
+/* The Ticker Animation: Seamless Loop */
 @keyframes externalTicker {
     0% {
         transform: translateX(0);
@@ -132,7 +148,6 @@ body.light-theme .control-bubble {
 
     100% {
         transform: translateX(-50%);
-        /* Move half the double-content width */
     }
 }
 
