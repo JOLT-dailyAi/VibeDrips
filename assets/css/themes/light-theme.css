@@ -88,6 +88,8 @@ body.light-theme .modal-section {
 }
 
 /* Modal External Controls Parity - White Style */
+body.light-theme .modal-external-controls .globe-toggle,
+body.light-theme .modal-external-controls .reels-toggle,
 body.light-theme .carousel-controls button,
 body.light-theme .carousel-prev,
 body.light-theme .carousel-next {

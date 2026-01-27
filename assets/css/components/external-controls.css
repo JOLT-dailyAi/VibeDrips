@@ -38,37 +38,23 @@
     overflow: visible;
 }
 
-/* Theme Awareness: Light Theme */
+/* Theme Awareness: Light Theme Bubble */
 body.light-theme .control-bubble {
     background: rgba(255, 255, 255, 0.95);
     border: 2px solid var(--color-primary, #5A4BFF);
     box-shadow: 0 4px 15px rgba(90, 75, 255, 0.15);
 }
 
-body.light-theme .ticker-content {
-    color: #2D3748;
-    font-weight: 600;
-}
-
-/* Theme Awareness: Dark Theme */
+/* Theme Awareness: Dark Theme Bubble */
 body.dark-theme .control-bubble {
     background: rgba(0, 0, 0, 0.75);
     border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-/* Theme Awareness: Glass Theme */
-body.glass-theme .control-bubble {
-    background: rgba(255, 255, 255, var(--glass-refraction, 0.15));
-    backdrop-filter: blur(var(--glass-blur, 15px)) saturate(var(--glass-saturation, 180%));
-    -webkit-backdrop-filter: blur(var(--glass-blur, 15px)) saturate(var(--glass-saturation, 180%));
-    border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-body.glass-theme .reels-toggle,
-body.glass-theme .globe-toggle {
-    background: rgba(255, 255, 255, var(--glass-refraction, 0.1));
-    backdrop-filter: blur(var(--glass-blur, 10px));
-    -webkit-backdrop-filter: blur(var(--glass-blur, 10px));
+/* Theme Awareness Override for Ticker Content only */
+body.light-theme .ticker-content {
+    color: #2D3748;
+    font-weight: 600;
 }
 
 /* Hidden state when toggles are ON */
@@ -79,7 +65,7 @@ body.glass-theme .globe-toggle {
     pointer-events: none;
 }
 
-/* Visual Active States for Toggles (Unified Glow) */
+/* Unified Glow for Active State - Added to existing button styles */
 .reels-toggle.active,
 .globe-toggle.active {
     background: var(--color-primary, #5A4BFF) !important;
@@ -89,6 +75,13 @@ body.glass-theme .globe-toggle {
         0 0 15px 2px rgba(90, 75, 255, 0.6),
         0 4px 12px rgba(0, 0, 0, 0.3) !important;
     transform: scale(1.05);
+}
+
+/* Restore Light Theme Hover (to match established patterns) */
+body.light-theme .reels-toggle:hover,
+body.light-theme .globe-toggle:hover {
+    background: #667eea !important;
+    color: white !important;
 }
 
 /* Glass tail/pointer pointing to the icons */
