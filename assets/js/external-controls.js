@@ -15,7 +15,7 @@ window.VibeDrips.ExternalControls = (function () {
      * Called after the modal structure is injected into the DOM
      */
     function init() {
-        const modal = document.getElementById('product-nav-modal');
+        const modal = document.querySelector('.dynamic-modal');
         if (!modal) return;
 
         const reelsBtn = modal.querySelector('.reels-toggle');
@@ -71,26 +71,8 @@ window.VibeDrips.ExternalControls = (function () {
         }
     }
 
-    /**
-     * Generate the HTML markup for the informational bubble
-     */
-    function createBubbleHTML() {
-        const text = "🎬 Reference Media Content for this Product | 🌍 Available in Multiple Regions";
-        return `
-            <div class="control-bubble">
-                <div class="ticker-viewport">
-                    <div class="ticker-content">
-                        <span>${text} &nbsp; | &nbsp; </span>
-                        <span>${text} &nbsp; | &nbsp; </span>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-
     return {
-        init: init,
-        createBubbleHTML: createBubbleHTML
+        init: init
     };
 
 })();

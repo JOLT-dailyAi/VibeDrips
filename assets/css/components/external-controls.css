@@ -18,25 +18,29 @@
 
 /* The Bubble Container */
 .control-bubble {
-    height: 42px;
-    padding: 0 16px;
-    background: rgba(255, 255, 255, var(--glass-refraction, 0.1));
-    backdrop-filter: blur(var(--glass-blur, 15px)) saturate(1.5);
-    -webkit-backdrop-filter: blur(var(--glass-blur, 15px)) saturate(1.5);
-    border: 0.8px solid rgba(255, 255, 255, 0.2);
-    border-radius: 21px;
-    /* Pill shape */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    opacity: 1;
-    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow:
-        0 8px 32px rgba(0, 0, 0, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    pointer-events: auto;
-    overflow: visible;
+    height: 42px !important;
+    min-width: 312px !important;
+    /* Viewport 280 + Padding 32 */
+    padding: 0 16px !important;
+    background: rgba(30, 30, 30, 0.8) !important;
+    /* Darker fallback for transparency */
+    backdrop-filter: blur(15px) saturate(1.5) !important;
+    -webkit-backdrop-filter: blur(15px) saturate(1.5) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.4) !important;
+    border-radius: 21px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+    pointer-events: auto !important;
+    z-index: 1060 !important;
+    flex-shrink: 0 !important;
+    outline: 2px solid magenta;
+    /* TEMP TEST BORDER */
 }
 
 /* Hidden state when toggles are ON */

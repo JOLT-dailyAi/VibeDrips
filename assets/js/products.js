@@ -899,7 +899,14 @@ function wrapModalForSliding(centerProductId) {
     const externalControls = document.createElement('div');
     externalControls.className = 'modal-external-controls';
     externalControls.innerHTML = `
-        ${(window.VibeDrips && VibeDrips.ExternalControls) ? VibeDrips.ExternalControls.createBubbleHTML() : ''}
+        <div class="control-bubble">
+            <div class="ticker-viewport">
+                <div class="ticker-content">
+                    <span>🎬 Reference Media Content for this Product | 🌍 Available in Multiple Regions &nbsp; | &nbsp; </span>
+                    <span>🎬 Reference Media Content for this Product | 🌍 Available in Multiple Regions &nbsp; | &nbsp; </span>
+                </div>
+            </div>
+        </div>
         <button class="reels-toggle" aria-label="Reels Animation">
             <span>🎬</span>
             <span>🎞️</span>
