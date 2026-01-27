@@ -595,26 +595,17 @@ class MediaLightbox {
         dotsContainer.style.display = 'flex';
         dotsContainer.innerHTML = '';
 
-        const maxDots = this.options.maxDots;
-        const showDots = totalMedia > maxDots;
-
-        if (showDots) {
-            const dots = Math.min(totalMedia, maxDots);
-            for (let i = 0; i < dots; i++) {
-                const dot = document.createElement('span');
-                dot.className = 'lightbox-dot';
-                dotsContainer.appendChild(dot);
-            }
-        } else {
-            for (let i = 0; i < totalMedia; i++) {
-                const dot = document.createElement('span');
-                dot.className = 'lightbox-dot';
-                dot.addEventListener('click', () => {
-                    this.currentIndex = i;
-                    this.showMedia(i);
-                });
-                dotsContainer.appendChild(dot);
-            }
+        for (let i = 0; i < totalMedia; i++) {
+            const dot = document.createElement('span');
+            dot.className = 'lightbox-dot';
+            dot.addEventListener('click', () => {
+                const active = MediaLightbox.activeInstance;
+                if (active) {
+                    active.currentIndex = i;
+                    active.showMedia(i);
+                }
+            });
+            dotsContainer.appendChild(dot);
         }
 
         this.updateDots(this.currentIndex);
