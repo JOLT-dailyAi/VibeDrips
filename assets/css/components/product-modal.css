@@ -45,7 +45,7 @@
     transform: translate(-50%, -50%);
     width: 90%;
     max-width: 1200px;
-    z-index: 1001;
+    z-index: 3000;
     pointer-events: none;
     display: flex;
     flex-direction: column;

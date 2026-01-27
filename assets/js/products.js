@@ -920,6 +920,34 @@ function wrapModalForSliding(centerProductId) {
         </button>
     `;
 
+    // ⚡ Logic: Inline State Management to prevent race conditions
+    const reelsBtn = externalControls.querySelector('.reels-toggle');
+    const globeBtn = externalControls.querySelector('.globe-toggle');
+    const bubble = externalControls.querySelector('.control-bubble');
+
+    const syncState = () => {
+        const anyActive = reelsBtn.classList.contains('active') || globeBtn.classList.contains('active');
+        if (anyActive) {
+            bubble.classList.add('hidden');
+        } else {
+            bubble.classList.remove('hidden');
+        }
+    };
+
+    reelsBtn.onclick = (e) => {
+        e.stopPropagation();
+        const active = reelsBtn.classList.toggle('active');
+        if (active) globeBtn.classList.remove('active');
+        syncState();
+    };
+
+    globeBtn.onclick = (e) => {
+        e.stopPropagation();
+        const active = globeBtn.classList.toggle('active');
+        if (active) reelsBtn.classList.remove('active');
+        syncState();
+    };
+
     // NEW: Sliding Viewport (clips the strip while icons sit above)
     const slidingViewport = document.createElement('div');
     slidingViewport.className = 'modal-sliding-viewport';
