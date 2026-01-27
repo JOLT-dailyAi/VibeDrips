@@ -15,6 +15,8 @@
  */
 
 class MediaLightbox {
+    static activeInstance = null;
+
     constructor(options = {}) {
         this.options = {
             enableSwipe: true,
@@ -101,26 +103,36 @@ class MediaLightbox {
         const nextBtn = overlay.querySelector('.lightbox-next');
 
         closeBtn.addEventListener('click', () => {
+            const active = MediaLightbox.activeInstance;
+            if (!active) return;
             closeBtn.classList.add('closing-animation');
             setTimeout(() => {
-                this.close();
+                active.close();
                 closeBtn.classList.remove('closing-animation');
             }, 300);
         });
 
         overlay.addEventListener('click', (e) => {
-            if (e.target === overlay) this.close();
+            const active = MediaLightbox.activeInstance;
+            if (active && e.target === overlay) active.close();
         });
 
-        prevBtn.addEventListener('click', () => this.prev());
-        nextBtn.addEventListener('click', () => this.next());
+        prevBtn.addEventListener('click', () => {
+            const active = MediaLightbox.activeInstance;
+            if (active) active.prev();
+        });
+        nextBtn.addEventListener('click', () => {
+            const active = MediaLightbox.activeInstance;
+            if (active) active.next();
+        });
 
         if (this.options.enableKeyboard) {
             document.addEventListener('keydown', (e) => {
-                if (!this.isOpen) return;
-                if (e.key === 'Escape') this.close();
-                if (e.key === 'ArrowLeft') this.prev();
-                if (e.key === 'ArrowRight') this.next();
+                const active = MediaLightbox.activeInstance;
+                if (!active || !active.isOpen) return;
+                if (e.key === 'Escape') active.close();
+                if (e.key === 'ArrowLeft') active.prev();
+                if (e.key === 'ArrowRight') active.next();
             });
         }
 
@@ -129,34 +141,38 @@ class MediaLightbox {
             const mediaContainer = overlay.querySelector('.lightbox-media-container');
 
             const handleStart = (e) => {
+                const active = MediaLightbox.activeInstance;
+                if (!active) return;
+
                 const touch = e.type.startsWith('touch') ? e.touches[0] : e;
-                this.touchStartX = touch.clientX;
-                this.touchStartY = touch.clientY;
-                this.isDragging = true;
-                this.dragDirection = null;
+                active.touchStartX = touch.clientX;
+                active.touchStartY = touch.clientY;
+                active.isDragging = true;
+                active.dragDirection = null;
 
                 // Reset container transition for 1:1 tracking
                 mediaContainer.style.transition = 'none';
             };
 
             const handleMove = (e) => {
-                if (!this.isDragging) return;
+                const active = MediaLightbox.activeInstance;
+                if (!active || !active.isDragging) return;
 
                 const touch = e.type.startsWith('touch') ? e.touches[0] : e;
-                this.touchMoveX = touch.clientX;
-                this.touchMoveY = touch.clientY;
+                active.touchMoveX = touch.clientX;
+                active.touchMoveY = touch.clientY;
 
-                const deltaX = this.touchMoveX - this.touchStartX;
-                const deltaY = this.touchMoveY - this.touchStartY;
+                const deltaX = active.touchMoveX - active.touchStartX;
+                const deltaY = active.touchMoveY - active.touchStartY;
                 const absX = Math.abs(deltaX);
                 const absY = Math.abs(deltaY);
 
                 // Detect Intent after 10px
-                if (!this.dragDirection && Math.max(absX, absY) > 10) {
-                    this.dragDirection = absY > absX ? 'v' : 'h';
+                if (!active.dragDirection && Math.max(absX, absY) > 10) {
+                    active.dragDirection = absY > absX ? 'v' : 'h';
                 }
 
-                if (this.dragDirection === 'v' && deltaY > 0) {
+                if (active.dragDirection === 'v' && deltaY > 0) {
                     // Gravity Pull Feedback
                     const progress = Math.min(deltaY / 400, 1); // Max fade at 400px
                     mediaContainer.style.transform = `translate3d(0, ${deltaY}px, 0)`;
@@ -168,34 +184,35 @@ class MediaLightbox {
             };
 
             const handleEnd = (e) => {
-                if (!this.isDragging) return;
-                this.isDragging = false;
+                const active = MediaLightbox.activeInstance;
+                if (!active || !active.isDragging) return;
+                active.isDragging = false;
 
                 const touch = e.type.startsWith('touch') ? e.changedTouches[0] : e;
                 const finalX = touch.clientX;
                 const finalY = touch.clientY;
-                const deltaX = finalX - this.touchStartX;
-                const deltaY = finalY - this.touchStartY;
+                const deltaX = finalX - active.touchStartX;
+                const deltaY = finalY - active.touchStartY;
 
                 // Restore transitions
                 mediaContainer.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease';
 
-                if (this.dragDirection === 'v') {
+                if (active.dragDirection === 'v') {
                     if (deltaY > 100) {
-                        this.close();
+                        active.close();
                     } else {
                         // Snap back
                         mediaContainer.style.transform = 'translate3d(0, 0, 0)';
                         mediaContainer.style.opacity = '1';
                     }
-                } else if (this.dragDirection === 'h') {
+                } else if (active.dragDirection === 'h') {
                     if (Math.abs(deltaX) > 50) {
-                        if (deltaX < 0) this.next();
-                        else this.prev();
+                        if (deltaX < 0) active.next();
+                        else active.prev();
                     }
                 }
 
-                this.dragDirection = null;
+                active.dragDirection = null;
             };
 
             content.addEventListener('touchstart', handleStart, { passive: true });
@@ -216,7 +233,8 @@ class MediaLightbox {
             return;
         }
 
-        const overlay = document.getElementById('mediaLightbox');
+        // Set this instance as the active one
+        MediaLightbox.activeInstance = this;
         const mediaContainer = overlay.querySelector('.lightbox-media-container');
 
         // Reset container state for new open
@@ -241,6 +259,7 @@ class MediaLightbox {
         document.body.style.overflow = '';
 
         this.isOpen = false;
+        MediaLightbox.activeInstance = null;
 
         const video = overlay.querySelector('.lightbox-video');
         if (video) {
