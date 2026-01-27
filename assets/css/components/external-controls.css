@@ -181,3 +181,28 @@ body.dark-theme .control-bubble::after {
         border-left-width: 6px;
     }
 }
+
+/* ============================================================
+   MOBILE PORTRAIT CONSTRAINTS
+   Prevents bubble from hitting the left edge of the modal
+   ============================================================ */
+@media (max-width: 480px) and (orientation: portrait) {
+    .ticker-viewport {
+        width: 180px !important;
+        /* Narrower ticker for portrait */
+    }
+
+    .ticker-content {
+        font-size: 11px !important;
+    }
+
+    .control-bubble {
+        padding: 0 10px !important;
+        height: 38px !important;
+    }
+
+    .modal-external-controls {
+        gap: 8px !important;
+        /* Tighten gap to save horizontal space */
+    }
+}
