@@ -114,26 +114,26 @@
 @media (max-width: 768px) and (orientation: portrait) {
     .modal-layout-wrapper {
         width: 95%;
-        top: 54%;
-        /* Shift down to clear Dynamic Island */
+        top: 51%;
+        /* Subtle 1% shift to clear Dynamic Island */
     }
 
     .dynamic-modal .modal-nav-indicator {
-        bottom: 1.5vh;
-        /* Tighten gap to compensate for shift */
+        bottom: 2vh;
+        /* Balanced gap to prevent overlap */
     }
 }
 
 @media (max-width: 480px) and (orientation: portrait) {
     .modal-layout-wrapper {
         width: 98%;
-        top: 55%;
-        /* Slightly more shift for smaller screens */
+        top: 51%;
+        /* Consistent 1% shift for small screens */
     }
 
     .dynamic-modal .modal-nav-indicator {
-        bottom: 1vh;
-        /* Mimimum gap for small screens */
+        bottom: 2vh;
+        /* Consistent spacing */
     }
 }
 
