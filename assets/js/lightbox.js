@@ -235,6 +235,10 @@ class MediaLightbox {
 
         // Set this instance as the active one
         MediaLightbox.activeInstance = this;
+
+        const overlay = document.getElementById('mediaLightbox');
+        if (!overlay) return;
+
         const mediaContainer = overlay.querySelector('.lightbox-media-container');
 
         // Reset container state for new open
