@@ -77,13 +77,6 @@ body.light-theme .ticker-content {
     transform: scale(1.05);
 }
 
-/* Restore Light Theme Hover (to match established patterns) */
-body.light-theme .reels-toggle:hover,
-body.light-theme .globe-toggle:hover {
-    background: #667eea !important;
-    color: white !important;
-}
-
 /* Glass tail/pointer pointing to the icons */
 .control-bubble::after {
     content: '';
