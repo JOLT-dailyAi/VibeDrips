@@ -6,10 +6,12 @@
 
 .modal-external-controls {
     display: flex;
+    justify-content: flex-end;
     align-items: center;
     position: absolute;
     bottom: calc(100% + 6px);
-    right: 0;
+    left: 0;
+    width: 100%;
     gap: 12px;
     padding: 4px;
     z-index: 3000 !important;
