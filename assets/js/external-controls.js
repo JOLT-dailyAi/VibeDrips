@@ -8,16 +8,19 @@
 
 window.VibeDrips = window.VibeDrips || {};
 
-VibeDrips.ExternalControls = (function () {
+window.VibeDrips.ExternalControls = (function () {
 
     /**
      * Initialize the external controls logic
      * Called after the modal structure is injected into the DOM
      */
     function init() {
-        const reelsBtn = document.querySelector('.reels-toggle');
-        const globeBtn = document.querySelector('.globe-toggle');
-        const bubble = document.querySelector('.control-bubble');
+        const modal = document.getElementById('product-nav-modal');
+        if (!modal) return;
+
+        const reelsBtn = modal.querySelector('.reels-toggle');
+        const globeBtn = modal.querySelector('.globe-toggle');
+        const bubble = modal.querySelector('.control-bubble');
 
         if (!reelsBtn || !globeBtn || !bubble) return;
 
@@ -72,12 +75,13 @@ VibeDrips.ExternalControls = (function () {
      * Generate the HTML markup for the informational bubble
      */
     function createBubbleHTML() {
+        const text = "🎬 Reference Media Content for this Product | 🌍 Available in Multiple Regions";
         return `
             <div class="control-bubble">
                 <div class="ticker-viewport">
                     <div class="ticker-content">
-                        🎬 Reference Media Content for this Product | 🌍 Available in Multiple Regions | &nbsp; &nbsp; &nbsp;
-                        🎬 Reference Media Content for this Product | 🌍 Available in Multiple Regions
+                        <span>${text} &nbsp; | &nbsp; </span>
+                        <span>${text} &nbsp; | &nbsp; </span>
                     </div>
                 </div>
             </div>
