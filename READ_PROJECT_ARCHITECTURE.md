@@ -72,5 +72,22 @@ VibeDrips utilizes a **Glass-Morphic Theme** that is fully reactive.
 
 ---
 
+## 🛰️ External Controls & Contextual Intelligence
+
+Adjacent to the product modal, we maintain a floating control layer that provides secondary interaction and product context.
+
+### 1. The News Ticker (Informational Awareness)
+- **Concept**: A hardware-accelerated marquee that provides non-stop informational context (e.g., region availability, media references).
+- **Behavior**: The ticker bubble is context-aware; it programmatically hides when a primary tool (like Reels or Globe Map) is selected, ensuring the user's focus remains on the active secondary interface.
+
+### 2. Toggle State Machine
+- **Mutual Exclusion**: We implement a "One-Focus" rule. Activating one external toggle (Reels or Globe) automatically deactivates the other.
+- **State Persistence**: Hovering and Selection states use high-specificity CSS to ensure theme-parity branding (Unified Purple Glow) is maintained across Light, Dark, and Glass themes.
+
+### 3. DOM Injection Strategy
+- **Layer Isolation**: These controls are injected into the `.modal-layout-wrapper` as a peer to the `.modal-nav-container`. This allows them to bypass established navigation "No-Touch" rules while remaining perfectly aligned with the modal's center-point.
+
+---
+
 > [!IMPORTANT]
 > When modifying this codebase, always refer to `CONSTRAINTS.md` and `assets/css/READ_CSS_ARCHITECTURE.md` to ensure your changes align with these established patterns.

@@ -100,3 +100,22 @@ Mobile landscape is a height-constrained environment. We prioritize **Vertical S
 - **The Rule**: Never use fixed `height` (px) for gallery containers in landscape.
 - **Practice**: Use `height: auto` and `max-height: 70vh`.
 - **The "Ghost Space" Fix**: When elements (like the carousel counter) are hidden, the container must be allowed to shrink vertically to hug the image. This prevents "Ghost Space" from pushing product details off-screen.
+
+## 9. External Modal Controls (Floating Toolset)
+
+To provide secondary interaction without cluttering the product modal, we use a high-elevation floating control layer.
+
+### The Container (`.modal-external-controls`)
+- **Positioning**: `absolute`, anchored above the layout wrapper (`bottom: calc(100% + 6px)`).
+- **Stacking**: `z-index: 3000` (Master Layer) to clear all modal box-shadow and glow effects.
+- **Pass-Through**: `pointer-events: none` on the container ensures clicking the "gap" between buttons doesn't block the modal; `pointer-events: auto` is restored on buttons and bubbles.
+
+### News Ticker Bubble (`.control-bubble`)
+- **The Viewport**: A fixed-width window (280px Desktop / 180px Portrait) with a linear alpha mask (`mask-image`) for soft-edge fading.
+- **Marquee Engine**: A seamless infinite loop achieved by twin `<span>` elements cycling at 15s via `translateX(-50%)`.
+- **Auto-Hiding**: Managed by the `.hidden` class; the bubble vanishes when any toggle is active to focus the user on the secondary tool.
+
+### Toggle Buttons (`.reels-toggle`, `.globe-toggle`)
+- **Theme Parity**: Shared 42px circular footprint with brand purple (`#5A4BFF`) selection glow across all themes.
+- **Landscape Economy**: Icons shrink to **32px** in mobile landscape to preserve vertical visibility.
+- **Safe-Area Portrait**: Tightened `gap: 8px` and 180px ticker width in mobile portrait to prevent edge overflow.
