@@ -137,7 +137,6 @@ class MediaLightbox {
         }
 
         if (this.options.enableSwipe) {
-            const content = overlay.querySelector('.lightbox-content');
             const mediaContainer = overlay.querySelector('.lightbox-media-container');
 
             const handleStart = (e) => {
@@ -215,13 +214,14 @@ class MediaLightbox {
                 active.dragDirection = null;
             };
 
-            content.addEventListener('touchstart', handleStart, { passive: true });
-            content.addEventListener('touchmove', handleMove, { passive: false });
-            content.addEventListener('touchend', handleEnd, { passive: true });
-            content.addEventListener('touchcancel', handleEnd, { passive: true });
+            // Expanded swipe area: Attach to overlay instead of content
+            overlay.addEventListener('touchstart', handleStart, { passive: true });
+            overlay.addEventListener('touchmove', handleMove, { passive: false });
+            overlay.addEventListener('touchend', handleEnd, { passive: true });
+            overlay.addEventListener('touchcancel', handleEnd, { passive: true });
 
-            // Mouse support for completeness
-            content.addEventListener('mousedown', handleStart);
+            // Mouse support for completeness (on overlay)
+            overlay.addEventListener('mousedown', handleStart);
             window.addEventListener('mousemove', handleMove);
             window.addEventListener('mouseup', handleEnd);
         }
@@ -332,9 +332,18 @@ class MediaLightbox {
         // Update dots
         this.updateDots(index);
 
-        // Show/hide navigation arrows
-        prevBtn.style.display = (index === 0) ? 'none' : 'flex';
-        nextBtn.style.display = (index === this.mediaArray.length - 1) ? 'none' : 'flex';
+        // Show/hide navigation arrows based on device and boundary
+        const isSmallScreen = window.innerWidth < 768; // Mobile Phones
+        const hasFinePointer = window.matchMedia('(pointer: fine)').matches;
+        const hideArrows = isSmallScreen && !hasFinePointer;
+
+        if (hideArrows) {
+            prevBtn.style.display = 'none';
+            nextBtn.style.display = 'none';
+        } else {
+            prevBtn.style.display = (index === 0) ? 'none' : 'flex';
+            nextBtn.style.display = (index === this.mediaArray.length - 1) ? 'none' : 'flex';
+        }
 
         // Load media based on type
         this.loadMedia(mediaType, url, {
