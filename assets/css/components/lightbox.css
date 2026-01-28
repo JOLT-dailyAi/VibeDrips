@@ -253,6 +253,10 @@
         display: none;
     }
 
+    .lightbox-counter {
+        top: calc(1rem + env(safe-area-inset-top, 0px)) !important;
+    }
+
     .lightbox-dots {
         bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px)) !important;
     }
