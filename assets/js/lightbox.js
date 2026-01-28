@@ -151,7 +151,11 @@ class MediaLightbox {
             document.addEventListener('keydown', (e) => {
                 const active = MediaLightbox.activeInstance;
                 if (!active || !active.isOpen) return;
-                if (e.key === 'Escape') active.close();
+
+                // Any key press wakes the UI
+                active.resetIdleTimer();
+
+                if (e.key === 'Escape') closeBtn.click();
                 if (e.key === 'ArrowLeft') active.prev();
                 if (e.key === 'ArrowRight') active.next();
             });
