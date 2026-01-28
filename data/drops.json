@@ -25,13 +25,168 @@
       "priority": 4
     }
   },
-  "last_updated": "2026-01-28T04:31:48.730Z",
+  "last_updated": "2026-01-28T05:20:07.749Z",
   "drops_by_category": {
     "creator-picks": {
       "label": "Creator Picks",
       "emoji": "🎬",
       "subtitle": "Featured by content creators",
       "priority": 1,
+      "productCount": 23,
+      "products": [
+        {
+          "asin": "B0F2MLPWTG",
+          "currency": "AUD",
+          "influencer": "HouseFresh",
+          "release_date": "2025-10-15T00:00:00.000Z"
+        },
+        {
+          "asin": "B0FVXJ52W6",
+          "currency": "AUD",
+          "influencer": "HouseFresh",
+          "release_date": "2025-10-07T00:00:00.000Z"
+        },
+        {
+          "asin": "B0F9FJS3VW",
+          "currency": "AUD",
+          "influencer": "HouseFresh",
+          "release_date": "2025-09-23T00:00:00.000Z"
+        },
+        {
+          "asin": "B0DT4F8T4L",
+          "currency": "AUD",
+          "influencer": "HouseFresh",
+          "release_date": "2025-01-15T00:00:00.000Z"
+        },
+        {
+          "asin": "B0FJ5R8JN7",
+          "currency": "INR",
+          "influencer": "Food Pharmer",
+          "release_date": "2025-01-01T00:00:00.000Z"
+        },
+        {
+          "asin": "B0F1MR9W8R",
+          "currency": "INR",
+          "influencer": null,
+          "release_date": "2024-01-01T00:00:00.000Z"
+        },
+        {
+          "asin": "B0CG1N11DV",
+          "currency": "INR",
+          "influencer": "Food Pharmer",
+          "release_date": "2024-01-01T00:00:00.000Z"
+        },
+        {
+          "asin": "B0DF6NBJDW",
+          "currency": "INR",
+          "influencer": null,
+          "release_date": "2024-01-01T00:00:00.000Z"
+        },
+        {
+          "asin": "1529902401",
+          "currency": "AUD",
+          "influencer": null,
+          "release_date": "2023-08-01T00:00:00.000Z"
+        },
+        {
+          "asin": "B0CQ2MVRXR",
+          "currency": "INR",
+          "influencer": null,
+          "release_date": "2023-01-01T00:00:00.000Z"
+        },
+        {
+          "asin": "B094DRK41G",
+          "currency": "AUD",
+          "influencer": "HouseFresh",
+          "release_date": "2022-10-05T00:00:00.000Z"
+        },
+        {
+          "asin": "B0BGRHMQ7C",
+          "currency": "AUD",
+          "influencer": "HouseFresh",
+          "release_date": "2022-09-29T00:00:00.000Z"
+        },
+        {
+          "asin": "B0BCC8KZHK",
+          "currency": "INR",
+          "influencer": null,
+          "release_date": "2022-01-01T00:00:00.000Z"
+        },
+        {
+          "asin": "B0BDX9ZN46",
+          "currency": "INR",
+          "influencer": "Food Pharmer",
+          "release_date": "2022-01-01T00:00:00.000Z"
+        },
+        {
+          "asin": "B08NYTLNQ9",
+          "currency": "AUD",
+          "influencer": "HouseFresh",
+          "release_date": "2020-11-21T00:00:00.000Z"
+        },
+        {
+          "asin": "B07PNJQMK6",
+          "currency": "AUD",
+          "influencer": "HouseFresh",
+          "release_date": "2019-03-13T00:00:00.000Z"
+        },
+        {
+          "asin": "178633089X",
+          "currency": "AUD",
+          "influencer": null,
+          "release_date": "2017-09-18T00:00:00.000Z"
+        },
+        {
+          "asin": "9388550315",
+          "currency": "INR",
+          "influencer": null,
+          "release_date": null
+        },
+        {
+          "asin": "B0DHGFCG6P",
+          "currency": "INR",
+          "influencer": "Food Pharmer",
+          "release_date": null
+        },
+        {
+          "asin": "9388550072",
+          "currency": "INR",
+          "influencer": null,
+          "release_date": null
+        },
+        {
+          "asin": "B076HP91MN",
+          "currency": "INR",
+          "influencer": "Food Pharmer",
+          "release_date": null
+        },
+        {
+          "asin": "9355995008",
+          "currency": "INR",
+          "influencer": null,
+          "release_date": null
+        },
+        {
+          "asin": "9355991479",
+          "currency": "INR",
+          "influencer": null,
+          "release_date": null
+        }
+      ]
+    },
+    "global-drops": {
+      "label": "Global Drops",
+      "emoji": "🌍",
+      "subtitle": "Available across regions",
+      "priority": 2,
+      "productCount": 0,
+      "products": []
+    },
+    "viral-reels": {
+      "label": "Viral Reels",
+      "emoji": "📱",
+      "subtitle": "Trending on social platforms",
+      "priority": 3,
       "productCount": 7,
       "products": [
         {
@@ -77,22 +232,6 @@
           "release_date": null
         }
       ]
-    },
-    "global-drops": {
-      "label": "Global Drops",
-      "emoji": "🌍",
-      "subtitle": "Available across regions",
-      "priority": 2,
-      "productCount": 0,
-      "products": []
-    },
-    "viral-reels": {
-      "label": "Viral Reels",
-      "emoji": "📱",
-      "subtitle": "Trending on social platforms",
-      "priority": 3,
-      "productCount": 0,
-      "products": []
     },
     "new-releases": {
       "label": "New Releases",

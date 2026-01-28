@@ -1,7 +1,7 @@
 {
   "summary": {
     "total_influencers": 2,
-    "last_updated": "2026-01-28T04:31:48.731Z"
+    "last_updated": "2026-01-28T05:20:07.750Z"
   },
   "influencers": {
     "HouseFresh": {
@@ -15,42 +15,58 @@
         {
           "asin": "B0F2MLPWTG",
           "currency": "AUD",
-          "drop_categories": []
+          "drop_categories": [
+            "creator-picks"
+          ]
         },
         {
           "asin": "B0BGRHMQ7C",
           "currency": "AUD",
-          "drop_categories": []
+          "drop_categories": [
+            "creator-picks"
+          ]
         },
         {
           "asin": "B08NYTLNQ9",
           "currency": "AUD",
-          "drop_categories": []
+          "drop_categories": [
+            "creator-picks"
+          ]
         },
         {
           "asin": "B0DT4F8T4L",
           "currency": "AUD",
-          "drop_categories": []
+          "drop_categories": [
+            "creator-picks"
+          ]
         },
         {
           "asin": "B07PNJQMK6",
           "currency": "AUD",
-          "drop_categories": []
+          "drop_categories": [
+            "creator-picks"
+          ]
         },
         {
           "asin": "B094DRK41G",
           "currency": "AUD",
-          "drop_categories": []
+          "drop_categories": [
+            "creator-picks"
+          ]
         },
         {
           "asin": "B0FVXJ52W6",
           "currency": "AUD",
-          "drop_categories": []
+          "drop_categories": [
+            "creator-picks"
+          ]
         },
         {
           "asin": "B0F9FJS3VW",
           "currency": "AUD",
-          "drop_categories": []
+          "drop_categories": [
+            "creator-picks"
+          ]
         }
       ]
     },
@@ -65,27 +81,37 @@
         {
           "asin": "B0FJ5R8JN7",
           "currency": "INR",
-          "drop_categories": []
+          "drop_categories": [
+            "creator-picks"
+          ]
         },
         {
           "asin": "B0DHGFCG6P",
           "currency": "INR",
-          "drop_categories": []
+          "drop_categories": [
+            "creator-picks"
+          ]
         },
         {
           "asin": "B0CG1N11DV",
           "currency": "INR",
-          "drop_categories": []
+          "drop_categories": [
+            "creator-picks"
+          ]
         },
         {
           "asin": "B0BDX9ZN46",
           "currency": "INR",
-          "drop_categories": []
+          "drop_categories": [
+            "creator-picks"
+          ]
         },
         {
           "asin": "B076HP91MN",
           "currency": "INR",
-          "drop_categories": []
+          "drop_categories": [
+            "creator-picks"
+          ]
         }
       ]
     }
