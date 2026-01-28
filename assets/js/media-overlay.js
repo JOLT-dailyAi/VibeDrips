@@ -106,102 +106,52 @@ class MediaOverlay {
         this.strip.style.transform = `translateX(${percentage}%)`;
     }
 
-    renderGridHTML(product, isActive) {
-        const media = Array.isArray(product.reference_media) ? product.reference_media : [];
+    renderGridHTML(product) {
+        const media = Array.isArray(product.reference_media) ? [...product.reference_media] : [];
         if (media.length === 0) return `<div class="golden-spiral-grid empty-grid">No Media Available</div>`;
 
-        const itemCount = this.initialMediaCount || media.length;
-        // 🧱 BREATHING SPACE: Use +1 to stabilize grid density
-        const stableCount = itemCount + 1;
-
-        // Tiers: 1-4 (standard), 5-6 (subtile-1), 7-8 (subtile-2)
+        // 🧱 MASTER GRID: Use a baseline density logic but fixed architecture
+        const itemCount = media.length;
         let tierClass = 'tier-1';
-        if (stableCount >= 5 && stableCount <= 6) tierClass = 'tier-2';
-        else if (stableCount >= 7) tierClass = 'tier-3';
+        if (itemCount >= 5 && itemCount <= 6) tierClass = 'tier-2';
+        else if (itemCount >= 7) tierClass = 'tier-3';
 
         return `
             <div class="golden-spiral-grid ${tierClass}">
                 <div class="spiral-tile tile-large active-player">
-                    ${isActive ? this.getPlayerHTML(media[0]) : ''}
+                    ${this.getPlayerHTML(media[0])}
                 </div>
-                ${this.renderTiles(media, isActive)}
+                ${this.renderTiles(media)}
             </div>
         `;
     }
 
     renderTiles(media) {
         let html = '';
-        const itemCount = this.initialMediaCount || media.length;
-        const stableCount = itemCount + 1;
+        // MASTER GRID: Always render 8 thumbnail slots (thumb-1 to thumb-8)
+        // This ensures the structural layout (Golden Spiral) is FIXED
+        for (let i = 1; i <= 8; i++) {
+            const item = media[i];
+            const isEmpty = !item;
 
-        // Tile 1 (3x3 area)
-        if (stableCount >= 5) {
-            // Adaptive sub-grid for high density
-            html += `<div class="spiral-tile tile-1 sub-grid">`;
-            for (let i = 1; i <= 4; i++) {
-                if (media[i]) {
-                    html += `
-                        <div class="sub-tile ${this.currentIndex === i ? 'active-thumb' : ''}" onclick="window.mediaOverlay.swapMedia(${i}, this)">
-                            <img src="${this.getThumbnail(media[i])}">
-                        </div>
-                    `;
-                }
-            }
-            html += `</div>`;
-        } else if (media[1]) {
+            // Tier-based visibility logic (Master classes)
+            let tierClass = '';
+            if (i >= 5) tierClass = 'tier-3-only'; // Hide if not in tier 3 density
+
             html += `
-                <div class="spiral-tile tile-1 ${this.currentIndex === 1 ? 'active-thumb' : ''}" onclick="window.mediaOverlay.swapMedia(1, this)">
-                    <img src="${this.getThumbnail(media[1])}">
+                <div class="spiral-tile thumb-${i} ${isEmpty ? 'empty-slot' : ''}" 
+                     data-index="${i}"
+                     onclick="window.mediaOverlay.swapMedia(${i}, this)">
+                    ${!isEmpty ? `<img src="${this.getThumbnail(item)}">` : ''}
                 </div>
             `;
         }
-
-        // Tile 2 (2x2 area)
-        if (stableCount >= 7) {
-            // Further subdivision for tier 3
-            html += `<div class="spiral-tile tile-2 sub-grid">`;
-            for (let i = 5; i <= 8; i++) {
-                if (media[i]) {
-                    html += `
-                        <div class="sub-tile ${this.currentIndex === i ? 'active-thumb' : ''}" onclick="window.mediaOverlay.swapMedia(${i}, this)">
-                            <img src="${this.getThumbnail(media[i])}">
-                        </div>
-                    `;
-                }
-            }
-            html += `</div>`;
-        } else if (media[2]) {
-            html += `
-                <div class="spiral-tile tile-2 ${this.currentIndex === 2 ? 'active-thumb' : ''}" onclick="window.mediaOverlay.swapMedia(2, this)">
-                    <img src="${this.getThumbnail(media[2])}">
-                </div>
-            `;
-        }
-
-        // Tile 3 & 4 (Special Case: only show if not sub-gridded)
-        if (stableCount < 7) {
-            if (media[3]) {
-                html += `
-                    <div class="spiral-tile tile-3 stagger-in ${this.currentIndex === 3 ? 'active-thumb' : ''}" onclick="window.mediaOverlay.swapMedia(3, this)">
-                        <img src="${this.getThumbnail(media[3])}">
-                    </div>
-                `;
-            }
-            if (media[4] && stableCount < 5) {
-                html += `
-                    <div class="spiral-tile tile-4 ${this.currentIndex === 4 ? 'active-thumb' : ''}" onclick="window.mediaOverlay.swapMedia(4, this)">
-                        <img src="${this.getThumbnail(media[4])}">
-                    </div>
-                `;
-            }
-        }
-
         return html;
     }
 
     getPlayerHTML(url) {
         if (!url) return '';
-        const embedUrl = typeof window.getUniversalVideoEmbedUrl === 'function' ? window.getUniversalVideoEmbedUrl(url) : url;
+        const embedUrl = this.getUniversalVideoEmbedUrl ? this.getUniversalVideoEmbedUrl(url) : url;
 
         let player = '';
         if (url.match(/\.(mp4|webm|mov|avi)$/i)) {
@@ -230,22 +180,22 @@ class MediaOverlay {
         // 1. Capture State
         const clickedItem = this.mediaItems[index];
         const oldLive = this.mediaItems[0];
-        if (!clickedItem) return;
+        if (!clickedItem || !oldLive) return;
 
         // 🎬 SNAIL-SHIFT Stage 1: Trigger Exit Animation on thumbnails
         const gridTiles = activeGrid.querySelector('.golden-spiral-grid');
-        if (gridTiles) gridTiles.classList.add('snail-moving');
+        if (gridTiles) {
+            gridTiles.classList.add('snail-moving');
+        }
 
         // 2. Perform Any-OUT-Last-IN Array Rotation
-        // clickedItem becomes the new head, oldLive goes to the end, rest stay in order
+        // [Clicked] -> [Rest of Original Queue excl. Clicked & Live] -> [Old Live]
         const rest = this.mediaItems.filter((_, i) => i !== 0 && i !== index);
         this.mediaItems = [clickedItem, ...rest, oldLive];
 
-        // 🎬 Stage 2: Staggered Re-render
+        // 🎬 Stage 2: CONTENT FLOW (Update Stable Nodes)
         setTimeout(() => {
-            this.currentIndex = 0;
-
-            // Update Live Player (Immediate swap)
+            // A. Update Live Player
             const playerSlot = activeGrid.querySelector('.active-player');
             if (playerSlot) {
                 playerSlot.innerHTML = this.getPlayerHTML(clickedItem);
@@ -253,23 +203,26 @@ class MediaOverlay {
                 playerSlot.style.pointerEvents = 'auto';
             }
 
-            // Atomic Thumbnail Update (Staggered Entry)
-            if (gridTiles) {
-                const tilesHtml = this.renderTiles(this.mediaItems);
+            // B. Update Thumbnails (Stable Node Flow)
+            for (let i = 1; i <= 8; i++) {
+                const thumbSlot = activeGrid.querySelector(`.thumb-${i}`);
+                const newItem = this.mediaItems[i];
 
-                // Selective sibling replacement to preserve the player slot's transition state
-                activeGrid.querySelectorAll('.spiral-tile:not(.active-player)').forEach(el => el.remove());
-
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = tilesHtml;
-
-                // Append with animation triggers
-                while (tempDiv.firstChild) {
-                    const child = tempDiv.firstChild;
-                    if (child.nodeType === 1) child.classList.add('stagger-in');
-                    activeGrid.appendChild(child);
+                if (thumbSlot) {
+                    if (newItem) {
+                        thumbSlot.classList.remove('empty-slot', 'stagger-in');
+                        thumbSlot.innerHTML = `<img src="${this.getThumbnail(newItem)}">`;
+                        // Force a reflow for stagger animation
+                        void thumbSlot.offsetWidth;
+                        thumbSlot.classList.add('stagger-in');
+                    } else {
+                        thumbSlot.classList.add('empty-slot');
+                        thumbSlot.innerHTML = '';
+                    }
                 }
+            }
 
+            if (gridTiles) {
                 gridTiles.classList.remove('snail-moving');
             }
         }, 150);

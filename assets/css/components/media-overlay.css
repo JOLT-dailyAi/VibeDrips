@@ -87,62 +87,107 @@ body.view-reels-mode .reels-toggle.active::before {
     position: relative;
 }
 
-/* Orientation: Landscape (8x5) */
+/* Orientation: Landscape (8x5) - MASTER GRID */
 @media (min-aspect-ratio: 1/1) {
     .golden-spiral-grid {
         grid-template-columns: repeat(8, 1fr);
         grid-template-rows: repeat(5, 1fr);
+        aspect-ratio: 8/5;
+        /* 🧱 FIX: Preserve architectural proportions */
     }
 
     .tile-large {
         grid-area: 1 / 1 / 6 / 6;
-        aspect-ratio: 1/1;
         z-index: 10;
     }
 
-    .tile-1 {
+    .thumb-1 {
         grid-area: 1 / 6 / 4 / 9;
     }
 
-    .tile-2 {
+    .thumb-2 {
         grid-area: 4 / 6 / 6 / 8;
     }
 
-    .tile-3 {
+    .thumb-3 {
         grid-area: 4 / 8 / 5 / 9;
     }
 
-    .tile-4 {
+    .thumb-4 {
         grid-area: 5 / 8 / 6 / 9;
+    }
+
+    /* Extended Slots for Tier 2/3 (6-8 items) */
+    .thumb-5 {
+        grid-area: 1 / 6 / 2.5 / 7.5;
+        display: none;
+    }
+
+    .thumb-6 {
+        grid-area: 1 / 7.5 / 2.5 / 9;
+        display: none;
+    }
+
+    .thumb-7 {
+        grid-area: 2.5 / 6 / 4 / 7.5;
+        display: none;
+    }
+
+    .thumb-8 {
+        grid-area: 2.5 / 7.5 / 4 / 9;
+        display: none;
     }
 }
 
-/* Orientation: Portrait (5x8) */
+/* Orientation: Portrait (5x8) - MASTER GRID */
 @media (max-aspect-ratio: 1/1) {
     .golden-spiral-grid {
         grid-template-columns: repeat(5, 1fr);
         grid-template-rows: repeat(8, 1fr);
+        aspect-ratio: 5/8;
     }
 
     .tile-large {
         grid-area: 1 / 1 / 6 / 6;
     }
 
-    .tile-1 {
+    .thumb-1 {
         grid-area: 6 / 1 / 9 / 4;
     }
 
-    .tile-2 {
+    .thumb-2 {
         grid-area: 6 / 4 / 8 / 6;
     }
 
-    .tile-3 {
+    .thumb-3 {
         grid-area: 8 / 4 / 9 / 5;
     }
 
-    .tile-4 {
+    .thumb-4 {
         grid-area: 8 / 5 / 9 / 6;
     }
+
+    .thumb-5 {
+        display: none;
+    }
+
+    .thumb-6 {
+        display: none;
+    }
+
+    .thumb-7 {
+        display: none;
+    }
+
+    .thumb-8 {
+        display: none;
+    }
+}
+
+/* 🧱 ARCHITECTURAL STABILITY */
+.spiral-tile.active-player {
+    overflow: visible !important;
+    /* Prevent clipping of Fullscreen button */
 }
 
 .spiral-tile {
@@ -152,7 +197,7 @@ body.view-reels-mode .reels-toggle.active::before {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     cursor: pointer;
-    transition: transform 0.2s ease, border-color 0.2s ease, opacity 0.2s ease, filter 0.2s ease;
+    transition: transform 0.2s cubic-bezier(0.2, 0, 0.2, 1), border-color 0.2s ease, opacity 0.2s ease, filter 0.2s ease;
 }
 
 /* 🐚 SNAIL SHIFT: Animation Logic */
@@ -199,9 +244,9 @@ body.view-reels-mode .reels-toggle.active::before {
 
 .spiral-tile.active-thumb {
     border: 3px solid #E53E3E;
-    /* High contrast thumb */
-    box-shadow: 0 0 20px rgba(229, 62, 62, 0.5);
+    box-shadow: 0 0 25px rgba(229, 62, 62, 0.6);
     transform: scale(1.02);
+    z-index: 20;
 }
 
 .spiral-tile.empty-slot {
@@ -257,14 +302,16 @@ body.view-reels-mode .reels-toggle.active::before {
 /* The Live Player Controls Overlay */
 .live-player-hub {
     position: absolute;
-    bottom: 0;
-    left: 0;
+    bottom: -10px;
+    /* Offset slightly to prevent inner clipping */
+    right: 0;
     width: 100%;
     padding: 15px;
     background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
     display: flex;
     justify-content: flex-end;
     pointer-events: none;
+    z-index: 100;
 }
 
 .zoom-btn {
