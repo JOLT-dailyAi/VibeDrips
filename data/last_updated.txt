@@ -1,5 +1,5 @@
 VibeDrips Data Processing Summary
-Generated: 2026-01-28T04:31:48.733Z
+Generated: 2026-01-28T05:24:25.302Z
 
 📊 STATISTICS
 - Total Rows Processed: 23
@@ -48,9 +48,9 @@ Generated: 2026-01-28T04:31:48.733Z
 - Top error types: DISCOUNT_MISMATCH (2), INVALID_ORIGINAL (1)
 
 🎬 DROPS
-- 🎬 Creator Picks: 7 products
+- 🎬 Creator Picks: 23 products
 - 🌍 Global Drops: 0 products
-- 📱 Viral Reels: 0 products
+- 📱 Viral Reels: 7 products
 - 🆕 New Releases: 0 products
 
 📁 FILES BEFORE DELETION

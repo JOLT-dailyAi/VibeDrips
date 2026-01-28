@@ -13,7 +13,6 @@
     "Error-Reason": "",
     "Error-Fields": [
       "Amazon marketplace domain",
-      "Reference Media for similar products ",
       "countryOfOrigin",
       "item_model_number",
       "particle_retention_size",
@@ -43,10 +42,13 @@
     "review_count": 4,
     "source_link": "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
     "referenceMedia": [
-      "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd"
+      "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
+      "https://youtu.be/p712twUbKGA?si=8_4gWDhsXKd3CiGE"
     ],
-    "regional_availability": 0,
-    "regional_variants": {},
+    "regional_availability": 1,
+    "regional_variants": {
+      "AUD": "B0F9FJS3VW"
+    },
     "amazon_short": "https://amzn.to/4q46SfP",
     "amazon_long": "https://www.amazon.in/HIVE-Advanced-Allergens-Real-Time-App-Controlled/dp/B0FJ5R8JN7?crid=7PDUGGXYJ7AK&dib=eyJ2IjoiMSJ9.WzRWHAE7n_7gxOy9QRfWvx-VyFC946kSJf0c_QU2uGuWvay12Uw0_iYycb090CsJUyeVG0MPp0JKj_3eXNidZ4PHVbxcJN7pGVJlI1x_AaC-XdY64szSbPqNbTqaWdSkSsh_8s7XSgJNy9Vh_O9KhiRatjo61Gnmdgy80AB8fJMv4ZfQkC-ZPBc8cec2w9ZIHr0NJKLf5rqXwsuoe_14uzMRUMwLE2goAdbYwDK-g7I.BxaeT_g-MzLJZXfcHpljaME2JJvRdM2edVopZsvgf4I&dib_tag=se&keywords=praan+hive+air+purifier&qid=1766085330&sprefix=praan+hive+air+purifier%2Caps%2C197&sr=8-3&linkCode=ll1&tag=vibedrips-21&linkId=f28292f686a16c4f44b809a95118c388&language=en_IN&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/4q46SfP",
@@ -193,17 +195,21 @@
       ]
     },
     "drop_signals": {
-      "has_reference_media": false,
-      "media_count": 1,
-      "regional_availability": false,
-      "available_regions": [],
+      "has_reference_media": true,
+      "media_count": 2,
+      "regional_availability": true,
+      "available_regions": [
+        "AUD"
+      ],
       "influencer_presence": false,
       "is_global": false,
-      "is_high_visibility": false,
+      "is_high_visibility": true,
       "is_social_proof": false,
       "is_new_release": false,
       "product_age_days": 392,
-      "drop_categories": []
+      "drop_categories": [
+        "creator-picks"
+      ]
     }
   },
   {
@@ -220,7 +226,6 @@
     "Error-Reason": "",
     "Error-Fields": [
       "Amazon marketplace domain",
-      "Reference Media for similar products ",
       "countryOfOrigin",
       "generic_name",
       "country_of_origin"
@@ -246,10 +251,13 @@
     "review_count": 1,
     "source_link": "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
     "referenceMedia": [
-      "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd"
+      "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
+      "https://youtu.be/p712twUbKGA?si=8_4gWDhsXKd3CiGE"
     ],
-    "regional_availability": 0,
-    "regional_variants": {},
+    "regional_availability": 1,
+    "regional_variants": {
+      "AUD": "B0F9FJS3VW"
+    },
     "amazon_short": "https://amzn.to/4jf44JZ",
     "amazon_long": "https://www.amazon.in/uBreathe-Purifier-Plant-based-Filtration-pollutants/dp/B0F1MR9W8R?crid=826JKP9KWA5J&dib=eyJ2IjoiMSJ9.mWwCe4d9zdQ6o-K0WTMhqwiSOqXRaGyHzWBIXFr5pOrGjHj071QN20LucGBJIEps.af-GL5NoRKrUebUJ7TwAKILQOQ7pD0ZPcvtPL3kXFjQ&dib_tag=se&keywords=ubreathe+life+air+purifier&qid=1766089908&refinements=p_n_availability%3A1318485031%2Cp_72%3A1318476031%2Cp_123%3A1449711&rnid=91049095031&sprefix=ubreathe+life+air+purifier%2Caps%2C175&sr=8-1&linkCode=ll1&tag=vibedrips-21&linkId=0b38cb58a305e8486f936f398f371bb0&language=en_IN&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/4jf44JZ",
@@ -362,17 +370,21 @@
       ]
     },
     "drop_signals": {
-      "has_reference_media": false,
-      "media_count": 1,
-      "regional_availability": false,
-      "available_regions": [],
+      "has_reference_media": true,
+      "media_count": 2,
+      "regional_availability": true,
+      "available_regions": [
+        "AUD"
+      ],
       "influencer_presence": false,
       "is_global": false,
-      "is_high_visibility": false,
+      "is_high_visibility": true,
       "is_social_proof": false,
       "is_new_release": false,
       "product_age_days": 758,
-      "drop_categories": []
+      "drop_categories": [
+        "creator-picks"
+      ]
     }
   },
   {
@@ -389,7 +401,6 @@
     "Error-Reason": "",
     "Error-Fields": [
       "Amazon marketplace domain",
-      "Reference Media for similar products ",
       "publisher",
       "manufacturer",
       "packer",
@@ -426,10 +437,13 @@
     "review_count": 88860,
     "source_link": "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
     "referenceMedia": [
-      "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd"
+      "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
+      "https://youtu.be/p712twUbKGA?si=8_4gWDhsXKd3CiGE"
     ],
-    "regional_availability": 0,
-    "regional_variants": {},
+    "regional_availability": 1,
+    "regional_variants": {
+      "AUD": "B0F9FJS3VW"
+    },
     "amazon_short": "https://amzn.to/48PBAD1",
     "amazon_long": "https://www.amazon.in/LEVOIT-Core-Mini-Fragrance-Frenshener/dp/B0CG1N11DV?pd_rd_w=4zOPW&content-id=amzn1.sym.7ccbe032-5929-4c88-ab39-4923842061df&pf_rd_p=7ccbe032-5929-4c88-ab39-4923842061df&pf_rd_r=H2R87GF1T082JTXFJA7G&pd_rd_wg=AkPYP&pd_rd_r=fc82ac2a-46d8-4e75-a525-54cfaa260119&pd_rd_i=B0CG1N11DV&th=1&linkCode=ll1&tag=vibedrips-21&linkId=bf10776160f3c9da9c75de03f5e1bd27&language=en_IN&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/48PBAD1",
@@ -530,17 +544,21 @@
       ]
     },
     "drop_signals": {
-      "has_reference_media": false,
-      "media_count": 1,
-      "regional_availability": false,
-      "available_regions": [],
+      "has_reference_media": true,
+      "media_count": 2,
+      "regional_availability": true,
+      "available_regions": [
+        "AUD"
+      ],
       "influencer_presence": false,
       "is_global": false,
-      "is_high_visibility": false,
+      "is_high_visibility": true,
       "is_social_proof": false,
       "is_new_release": false,
       "product_age_days": 758,
-      "drop_categories": []
+      "drop_categories": [
+        "creator-picks"
+      ]
     }
   },
   {
@@ -557,7 +575,6 @@
     "Error-Reason": "",
     "Error-Fields": [
       "Amazon marketplace domain",
-      "Reference Media for similar products ",
       "publisher",
       "manufacturer",
       "color",
@@ -591,10 +608,14 @@
     "review_count": 580,
     "source_link": "https://youtu.be/jZfzeppym-I?si=iZEIvtUK9bKepQ2k",
     "referenceMedia": [
-      "https://youtu.be/jZfzeppym-I?si=iZEIvtUK9bKepQ2k"
+      "https://youtu.be/jZfzeppym-I?si=iZEIvtUK9bKepQ2k",
+      "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
+      "https://youtu.be/p712twUbKGA?si=8_4gWDhsXKd3CiGE"
     ],
-    "regional_availability": 0,
-    "regional_variants": {},
+    "regional_availability": 1,
+    "regional_variants": {
+      "AUD": "B0F9FJS3VW"
+    },
     "amazon_short": "https://amzn.to/4p7Vb6m",
     "amazon_long": "https://www.amazon.in/Dreo-Humidifier-Humidifiers-Self-Cleaning-White/dp/B0DF6NBJDW?crid=1CI9J21LNMENK&dib=eyJ2IjoiMSJ9.zwOzmNu2SIy4UxR8QeAt1aFUZJAFC9a4Oo_LmkZuI-xijvYPNCuoV9LBeWoUhalRz7DwrbNQEMBUD2_sDPSOSijyQIYvv06JZnhqiehpWh9vAWFepGp9FfGAWaBc0ifrL0zKhwPyL3NRgMgwoSlHCHgws2BarjHYW7CF0cxi_2i4q2InMYneONwbY6in3A5sMGXfllreuIYjF1WXECm2n_0DaA1WthqFgGebFeMAy6w.VB3aXrhHLmDeVJi7TuPWvnXo9B99XhcSxEfTHwPgcH8&dib_tag=se&keywords=humidifier%2Bfor%2Bhome%2Bdreo%2BHM735S&qid=1766402533&s=kitchen&sprefix=humidifier%2Bfor%2Bhome%2Bdreo%2Bhm735s%2Ckitchen%2C164&sr=1-4&th=1&linkCode=ll1&tag=vibedrips-21&linkId=d9d2f664e2abb3d291853e6830a21a58&language=en_IN&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/4p7Vb6m",
@@ -705,17 +726,21 @@
       ]
     },
     "drop_signals": {
-      "has_reference_media": false,
-      "media_count": 1,
-      "regional_availability": false,
-      "available_regions": [],
+      "has_reference_media": true,
+      "media_count": 3,
+      "regional_availability": true,
+      "available_regions": [
+        "AUD"
+      ],
       "influencer_presence": false,
       "is_global": false,
-      "is_high_visibility": false,
+      "is_high_visibility": true,
       "is_social_proof": false,
       "is_new_release": false,
       "product_age_days": 758,
-      "drop_categories": []
+      "drop_categories": [
+        "creator-picks"
+      ]
     }
   },
   {
@@ -732,7 +757,6 @@
     "Error-Reason": "",
     "Error-Fields": [
       "Amazon marketplace domain",
-      "Reference Media for similar products ",
       "particle_retention_size",
       "generic_name"
     ],
@@ -758,10 +782,13 @@
     "review_count": 34,
     "source_link": "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
     "referenceMedia": [
-      "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd"
+      "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
+      "https://youtu.be/p712twUbKGA?si=8_4gWDhsXKd3CiGE"
     ],
-    "regional_availability": 0,
-    "regional_variants": {},
+    "regional_availability": 1,
+    "regional_variants": {
+      "AUD": "B0F9FJS3VW"
+    },
     "amazon_short": "https://amzn.to/3KHxW53",
     "amazon_long": "https://www.amazon.in/UBreathe-Purifying-Filtration-Removing-Pollutants/dp/B0CQ2MVRXR?pd_rd_w=9xdiR&content-id=amzn1.sym.38ab170c-68e6-4e35-87b8-c345099a6660&pf_rd_p=38ab170c-68e6-4e35-87b8-c345099a6660&pf_rd_r=R6GTDES5PX0XJQYMTYDG&pd_rd_wg=lfwcJ&pd_rd_r=f51a545f-bfe9-4cb9-8c09-80a05c9d1d03&pd_rd_i=B0CQ2MVRXR&psc=1&linkCode=ll1&tag=vibedrips-21&linkId=66e17de4ece247747066671e2c2816ca&language=en_IN&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/3KHxW53",
@@ -916,17 +943,21 @@
       ]
     },
     "drop_signals": {
-      "has_reference_media": false,
-      "media_count": 1,
-      "regional_availability": false,
-      "available_regions": [],
+      "has_reference_media": true,
+      "media_count": 2,
+      "regional_availability": true,
+      "available_regions": [
+        "AUD"
+      ],
       "influencer_presence": false,
       "is_global": false,
-      "is_high_visibility": false,
+      "is_high_visibility": true,
       "is_social_proof": false,
       "is_new_release": false,
       "product_age_days": 1123,
-      "drop_categories": []
+      "drop_categories": [
+        "creator-picks"
+      ]
     }
   },
   {
@@ -944,7 +975,6 @@
     "Error-Fields": [
       "originalPrice",
       "Amazon marketplace domain",
-      "Reference Media for similar products ",
       "publisher",
       "manufacturer",
       "particle_retention_size",
@@ -972,10 +1002,14 @@
     "review_count": 727,
     "source_link": "https://youtube.com/shorts/Ndo7UTmyKFY?si=sTnWqVQpNDUIHGyh",
     "referenceMedia": [
-      "https://youtube.com/shorts/Ndo7UTmyKFY?si=sTnWqVQpNDUIHGyh"
+      "https://youtube.com/shorts/Ndo7UTmyKFY?si=sTnWqVQpNDUIHGyh",
+      "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
+      "https://youtu.be/p712twUbKGA?si=8_4gWDhsXKd3CiGE"
     ],
-    "regional_availability": 0,
-    "regional_variants": {},
+    "regional_availability": 1,
+    "regional_variants": {
+      "AUD": "B0F9FJS3VW"
+    },
     "amazon_short": "https://amzn.to/4pdv5iw",
     "amazon_long": "https://www.amazon.in/OxyPure-ZERO-Smart-Air-Purifier/dp/B0BCC8KZHK?crid=1DBDX66EZWAI&dib=eyJ2IjoiMSJ9.rjAYrxaBAKvKSZN74dFmh6kLpFreR-UE09WLHMbu13zVtYm-0-PpCdU21JcwvFK1x_tD5AddgVTHTsgQ-UW_gVGz6ydK-YeC9qM6rJlM4njLJFaPIciRs32VwKHphamIvZT7YGu-Ntuq4qbXzQ7NH8mbpgiJrKnQer-l5wzSfLfLarHyCeylurSjFRWlI0fPdQKS6-J_JhbWbGfu0v8hpZRp0GtP2Re5kk6rt0OGvSw.r5dwBPXYniVJ_j06oEGa30J5K_Nq9z6TWvXePj3brIo&dib_tag=se&keywords=air+purifier&qid=1766082427&refinements=p_72%3A1318476031&rnid=1318475031&sprefix=Air+pur%2Caps%2C228&sr=8-4&linkCode=ll1&tag=vibedrips-21&linkId=539511099fc2081f4b299b3f3ba7f577&language=en_IN&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/4pdv5iw",
@@ -1122,18 +1156,21 @@
       ]
     },
     "drop_signals": {
-      "has_reference_media": false,
-      "media_count": 1,
-      "regional_availability": false,
-      "available_regions": [],
+      "has_reference_media": true,
+      "media_count": 3,
+      "regional_availability": true,
+      "available_regions": [
+        "AUD"
+      ],
       "influencer_presence": true,
       "is_global": false,
-      "is_high_visibility": false,
+      "is_high_visibility": true,
       "is_social_proof": true,
       "is_new_release": false,
       "product_age_days": 1488,
       "drop_categories": [
-        "creator-picks"
+        "creator-picks",
+        "viral-reels"
       ]
     }
   },
@@ -1151,7 +1188,6 @@
     "Error-Reason": "",
     "Error-Fields": [
       "Amazon marketplace domain",
-      "Reference Media for similar products ",
       "controller_type",
       "particle_retention_size",
       "generic_name"
@@ -1178,10 +1214,13 @@
     "review_count": 20,
     "source_link": "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
     "referenceMedia": [
-      "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd"
+      "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
+      "https://youtu.be/p712twUbKGA?si=8_4gWDhsXKd3CiGE"
     ],
-    "regional_availability": 0,
-    "regional_variants": {},
+    "regional_availability": 1,
+    "regional_variants": {
+      "AUD": "B0F9FJS3VW"
+    },
     "amazon_short": "https://amzn.to/4qf6cUh",
     "amazon_long": "https://www.amazon.in/Purifier-Personal-Accessory-Activated-Customised/dp/B0BDX9ZN46?pd_rd_w=9xdiR&content-id=amzn1.sym.38ab170c-68e6-4e35-87b8-c345099a6660&pf_rd_p=38ab170c-68e6-4e35-87b8-c345099a6660&pf_rd_r=R6GTDES5PX0XJQYMTYDG&pd_rd_wg=lfwcJ&pd_rd_r=f51a545f-bfe9-4cb9-8c09-80a05c9d1d03&pd_rd_i=B0BDX9ZN46&psc=1&linkCode=ll1&tag=vibedrips-21&linkId=5c916aa6efa9e9311d8d80b336bcea25&language=en_IN&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/4qf6cUh",
@@ -1324,17 +1363,21 @@
       ]
     },
     "drop_signals": {
-      "has_reference_media": false,
-      "media_count": 1,
-      "regional_availability": false,
-      "available_regions": [],
+      "has_reference_media": true,
+      "media_count": 2,
+      "regional_availability": true,
+      "available_regions": [
+        "AUD"
+      ],
       "influencer_presence": false,
       "is_global": false,
-      "is_high_visibility": false,
+      "is_high_visibility": true,
       "is_social_proof": false,
       "is_new_release": false,
       "product_age_days": 1488,
-      "drop_categories": []
+      "drop_categories": [
+        "creator-picks"
+      ]
     }
   },
   {
@@ -1351,7 +1394,6 @@
     "Error-Reason": "",
     "Error-Fields": [
       "Amazon marketplace domain",
-      "Reference Media for similar products ",
       "language",
       "generic_name"
     ],
@@ -1377,7 +1419,8 @@
     "review_count": 2868,
     "source_link": "https://youtube.com/shorts/iDrWd2I_ZA8?si=ETOPQ2lu22RvWZ0o",
     "referenceMedia": [
-      "https://youtube.com/shorts/iDrWd2I_ZA8?si=ETOPQ2lu22RvWZ0o"
+      "https://youtube.com/shorts/iDrWd2I_ZA8?si=ETOPQ2lu22RvWZ0o",
+      "https://youtube.com/shorts/3nxh-GeJrSs?si=GYQJefZOq7hwTaTK"
     ],
     "regional_availability": 1,
     "regional_variants": {
@@ -1519,20 +1562,21 @@
       ]
     },
     "drop_signals": {
-      "has_reference_media": false,
-      "media_count": 1,
+      "has_reference_media": true,
+      "media_count": 2,
       "regional_availability": true,
       "available_regions": [
         "AUD"
       ],
       "influencer_presence": true,
       "is_global": false,
-      "is_high_visibility": false,
+      "is_high_visibility": true,
       "is_social_proof": true,
       "is_new_release": false,
       "product_age_days": null,
       "drop_categories": [
-        "creator-picks"
+        "creator-picks",
+        "viral-reels"
       ]
     }
   },
@@ -1550,7 +1594,6 @@
     "Error-Reason": "",
     "Error-Fields": [
       "Amazon marketplace domain",
-      "Reference Media for similar products ",
       "color",
       "generic_name"
     ],
@@ -1576,10 +1619,13 @@
     "review_count": 139,
     "source_link": "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
     "referenceMedia": [
-      "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd"
+      "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
+      "https://youtu.be/p712twUbKGA?si=8_4gWDhsXKd3CiGE"
     ],
-    "regional_availability": 0,
-    "regional_variants": {},
+    "regional_availability": 1,
+    "regional_variants": {
+      "AUD": "B0F9FJS3VW"
+    },
     "amazon_short": "https://amzn.to/48KIWaZ",
     "amazon_long": "https://www.amazon.in/Qubo-Filtration-Technology-Pre-filter-Activated/dp/B0DHGFCG6P?crid=TCT3DAWVIGYK&dib=eyJ2IjoiMSJ9.oiXJFm1eOltK900oi2ZigB3aWCdr331LGmvEyhCNomnz6C0odZ1TWNs4S8l-Ep4U1ESGLbXmUhH-1USLO4_B-Aga1-TuqLxi2h3SkrDAgBPsWb2sH57kLFVFrVPV4uXJ3RXEiBMC78DWAwjiRR5lrQ.Vl_vHwdJJoh1HF4latUHpmel8tFLZWwNelNKYS42oiw&dib_tag=se&keywords=qubo+car+air+purifier+pro&nsdOptOutParam=true&qid=1766086868&refinements=p_n_availability%3A1318485031%2Cp_123%3A369904&rnid=91049095031&sprefix=qubo+car+air+purifier%2Caps%2C204&sr=8-3&linkCode=ll1&tag=vibedrips-21&linkId=dcf86334a1ce3e4fd80008978ce65b23&language=en_IN&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/48KIWaZ",
@@ -1692,17 +1738,21 @@
       ]
     },
     "drop_signals": {
-      "has_reference_media": false,
-      "media_count": 1,
-      "regional_availability": false,
-      "available_regions": [],
+      "has_reference_media": true,
+      "media_count": 2,
+      "regional_availability": true,
+      "available_regions": [
+        "AUD"
+      ],
       "influencer_presence": false,
       "is_global": false,
-      "is_high_visibility": false,
+      "is_high_visibility": true,
       "is_social_proof": false,
       "is_new_release": false,
       "product_age_days": null,
-      "drop_categories": []
+      "drop_categories": [
+        "creator-picks"
+      ]
     }
   },
   {
@@ -1719,7 +1769,6 @@
     "Error-Reason": "",
     "Error-Fields": [
       "Amazon marketplace domain",
-      "Reference Media for similar products ",
       "language",
       "generic_name"
     ],
@@ -1744,7 +1793,8 @@
     "review_count": 2868,
     "source_link": "https://youtube.com/shorts/iDrWd2I_ZA8?si=ETOPQ2lu22RvWZ0o",
     "referenceMedia": [
-      "https://youtube.com/shorts/iDrWd2I_ZA8?si=ETOPQ2lu22RvWZ0o"
+      "https://youtube.com/shorts/iDrWd2I_ZA8?si=ETOPQ2lu22RvWZ0o",
+      "https://youtube.com/shorts/3nxh-GeJrSs?si=GYQJefZOq7hwTaTK"
     ],
     "regional_availability": 1,
     "regional_variants": {
@@ -1886,20 +1936,21 @@
       ]
     },
     "drop_signals": {
-      "has_reference_media": false,
-      "media_count": 1,
+      "has_reference_media": true,
+      "media_count": 2,
       "regional_availability": true,
       "available_regions": [
         "AUD"
       ],
       "influencer_presence": true,
       "is_global": false,
-      "is_high_visibility": false,
+      "is_high_visibility": true,
       "is_social_proof": true,
       "is_new_release": false,
       "product_age_days": null,
       "drop_categories": [
-        "creator-picks"
+        "creator-picks",
+        "viral-reels"
       ]
     }
   },
@@ -1917,7 +1968,6 @@
     "Error-Reason": "",
     "Error-Fields": [
       "Amazon marketplace domain",
-      "Reference Media for similar products ",
       "includedComponents",
       "item_model_number",
       "generic_name",
@@ -1945,10 +1995,13 @@
     "review_count": 10968,
     "source_link": "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
     "referenceMedia": [
-      "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd"
+      "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
+      "https://youtu.be/p712twUbKGA?si=8_4gWDhsXKd3CiGE"
     ],
-    "regional_availability": 0,
-    "regional_variants": {},
+    "regional_availability": 1,
+    "regional_variants": {
+      "AUD": "B0F9FJS3VW"
+    },
     "amazon_short": "https://amzn.to/4904RK9",
     "amazon_long": "https://www.amazon.in/Honeywell-V4-Purifier-Activated-Anti-Bacterial/dp/B076HP91MN?dib=eyJ2IjoiMSJ9.DMNpznGUul9T6izLGaRrS_7SLa_2uJzE5u1xQFYfsXdTIr_r7QH5FgkpY-h7s0GdqUL7CpLXQBzc09WvpnubiTWq752GRhdC6bW6H8D1OwzJDS-y80ZPaAh7TG-WGptzUn2dDDO2IB5lGr7QTxBjht1Kz10h7u4tu_sCyiD-qtdJ4ueJw-9jl4MSDpIov8_kblOY9go2imuY8xscV_XRkSgabiKvaKbS4Jrod35pa-k.fDxOIBLElqu6AKefZYY0JG1xnu8gFQjJrLiAMuRHwvM&dib_tag=se&keywords=dyson%2Bgen1%2Btp%2B10%2Bcool%2Bair%2Bpurifier&qid=1766091295&sr=8-1-spons&aref=Py6BCgwo24&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&th=1&linkCode=ll1&tag=vibedrips-21&linkId=fa3cb3cfddb63901df0018c7a72e87d7&language=en_IN&ref_=as_li_ss_tl",
     "affiliate_link": "https://amzn.to/4904RK9",
@@ -2041,17 +2094,21 @@
       ]
     },
     "drop_signals": {
-      "has_reference_media": false,
-      "media_count": 1,
-      "regional_availability": false,
-      "available_regions": [],
+      "has_reference_media": true,
+      "media_count": 2,
+      "regional_availability": true,
+      "available_regions": [
+        "AUD"
+      ],
       "influencer_presence": false,
       "is_global": false,
-      "is_high_visibility": false,
+      "is_high_visibility": true,
       "is_social_proof": false,
       "is_new_release": false,
       "product_age_days": null,
-      "drop_categories": []
+      "drop_categories": [
+        "creator-picks"
+      ]
     }
   },
   {
@@ -2067,8 +2124,7 @@
     "Error-Flag": 1,
     "Error-Reason": "",
     "Error-Fields": [
-      "Amazon marketplace domain",
-      "Reference Media for similar products "
+      "Amazon marketplace domain"
     ],
     "currency": "INR",
     "symbol": "₹",
@@ -2090,7 +2146,8 @@
     "review_count": 1742,
     "source_link": "https://youtube.com/shorts/iDrWd2I_ZA8?si=ETOPQ2lu22RvWZ0o",
     "referenceMedia": [
-      "https://youtube.com/shorts/iDrWd2I_ZA8?si=ETOPQ2lu22RvWZ0o"
+      "https://youtube.com/shorts/iDrWd2I_ZA8?si=ETOPQ2lu22RvWZ0o",
+      "https://youtube.com/shorts/3nxh-GeJrSs?si=GYQJefZOq7hwTaTK"
     ],
     "regional_availability": 1,
     "regional_variants": {
@@ -2214,20 +2271,21 @@
       ]
     },
     "drop_signals": {
-      "has_reference_media": false,
-      "media_count": 1,
+      "has_reference_media": true,
+      "media_count": 2,
       "regional_availability": true,
       "available_regions": [
         "AUD"
       ],
       "influencer_presence": true,
       "is_global": false,
-      "is_high_visibility": false,
+      "is_high_visibility": true,
       "is_social_proof": true,
       "is_new_release": false,
       "product_age_days": null,
       "drop_categories": [
-        "creator-picks"
+        "creator-picks",
+        "viral-reels"
       ]
     }
   },
@@ -2245,7 +2303,6 @@
     "Error-Reason": "",
     "Error-Fields": [
       "Amazon marketplace domain",
-      "Reference Media for similar products ",
       "language",
       "generic_name"
     ],
@@ -2269,7 +2326,8 @@
     "review_count": 1742,
     "source_link": "https://youtube.com/shorts/iDrWd2I_ZA8?si=ETOPQ2lu22RvWZ0o",
     "referenceMedia": [
-      "https://youtube.com/shorts/iDrWd2I_ZA8?si=ETOPQ2lu22RvWZ0o"
+      "https://youtube.com/shorts/iDrWd2I_ZA8?si=ETOPQ2lu22RvWZ0o",
+      "https://youtube.com/shorts/3nxh-GeJrSs?si=GYQJefZOq7hwTaTK"
     ],
     "regional_availability": 1,
     "regional_variants": {
@@ -2387,20 +2445,21 @@
       ]
     },
     "drop_signals": {
-      "has_reference_media": false,
-      "media_count": 1,
+      "has_reference_media": true,
+      "media_count": 2,
       "regional_availability": true,
       "available_regions": [
         "AUD"
       ],
       "influencer_presence": true,
       "is_global": false,
-      "is_high_visibility": false,
+      "is_high_visibility": true,
       "is_social_proof": true,
       "is_new_release": false,
       "product_age_days": null,
       "drop_categories": [
-        "creator-picks"
+        "creator-picks",
+        "viral-reels"
       ]
     }
   }
