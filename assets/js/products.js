@@ -932,12 +932,20 @@ function wrapModalForSliding(centerProductId) {
         } else {
             bubble.classList.remove('hidden');
         }
+
+        // Trigger Media Overlay
+        if (reelsBtn.classList.contains('active')) {
+            const currentItem = VibeDrips.modalState.currentProductList[VibeDrips.modalState.currentIndex];
+            if (window.mediaOverlay) window.mediaOverlay.open(currentItem);
+        } else {
+            if (window.mediaOverlay) window.mediaOverlay.container.classList.remove('active');
+        }
     };
 
     reelsBtn.onclick = (e) => {
         e.stopPropagation();
-        const active = reelsBtn.classList.toggle('active');
-        if (active) globeBtn.classList.remove('active');
+        reelsBtn.classList.toggle('active');
+        if (reelsBtn.classList.contains('active')) globeBtn.classList.remove('active');
         syncState();
     };
 

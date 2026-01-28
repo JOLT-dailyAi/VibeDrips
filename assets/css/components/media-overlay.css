@@ -1,0 +1,189 @@
+/* components/media-overlay.css - Golden Spiral Layout */
+
+.media-overlay-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 100;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    padding: 20px;
+    box-sizing: border-box;
+    align-items: center;
+    justify-content: center;
+}
+
+.media-overlay-container.active {
+    display: flex;
+    opacity: 1;
+}
+
+.media-overlay-content {
+    width: 100%;
+    max-width: 1000px;
+    height: 100%;
+    max-height: 700px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Close Button Positioning with Safe Area */
+.media-overlay-content .white-close-btn {
+    position: absolute;
+    top: calc(-10px - env(safe-area-inset-top, 0px));
+    right: calc(-10px - env(safe-area-inset-right, 0px));
+    z-index: 110;
+}
+
+/* Golden Spiral Grid */
+.golden-spiral-grid {
+    display: grid;
+    gap: 10px;
+    width: 100%;
+    height: 100%;
+    flex: 1;
+}
+
+/* Orientation: Landscape (8x5) */
+@media (min-aspect-ratio: 1/1) {
+    .golden-spiral-grid {
+        grid-template-columns: repeat(8, 1fr);
+        grid-template-rows: repeat(5, 1fr);
+    }
+
+    .tile-large {
+        grid-area: 1 / 1 / 6 / 6;
+    }
+
+    /* 5x5 */
+    .tile-1 {
+        grid-area: 1 / 6 / 4 / 9;
+    }
+
+    /* 3x3 */
+    .tile-2 {
+        grid-area: 4 / 6 / 6 / 8;
+    }
+
+    /* 2x2 */
+    .tile-3 {
+        grid-area: 4 / 8 / 5 / 9;
+    }
+
+    /* 1x1 */
+    .tile-4 {
+        grid-area: 5 / 8 / 6 / 9;
+    }
+
+    /* 1x1 */
+}
+
+/* Orientation: Portrait (5x8) */
+@media (max-aspect-ratio: 1/1) {
+    .golden-spiral-grid {
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: repeat(8, 1fr);
+    }
+
+    .tile-large {
+        grid-area: 1 / 1 / 6 / 6;
+    }
+
+    /* 5x5 */
+    .tile-1 {
+        grid-area: 6 / 1 / 9 / 4;
+    }
+
+    /* 3x3 (below) */
+    .tile-2 {
+        grid-area: 6 / 4 / 8 / 6;
+    }
+
+    /* 2x2 */
+    .tile-3 {
+        grid-area: 8 / 4 / 9 / 5;
+    }
+
+    /* 1x1 */
+    .tile-4 {
+        grid-area: 8 / 5 / 9 / 6;
+    }
+
+    /* 1x1 */
+}
+
+.spiral-tile {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.spiral-tile:hover {
+    transform: scale(1.02);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.spiral-tile.active-thumb {
+    border: 2px solid #667eea;
+    box-shadow: 0 0 15px rgba(102, 126, 234, 0.4);
+}
+
+.spiral-tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.spiral-tile iframe,
+.spiral-tile video {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* The Live Player Controls Overlay */
+.live-player-hub {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+    display: flex;
+    justify-content: flex-end;
+    pointer-events: none;
+}
+
+.zoom-btn {
+    pointer-events: auto;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.zoom-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}

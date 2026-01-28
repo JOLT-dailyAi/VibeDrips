@@ -135,6 +135,8 @@ function processProductData(product) {
         display_original: originalPrice, // For internal use only (not rendered in UI)
         computed_discount: discountPercent, // Discount percentage as number
         show_discount: showDiscount, // Boolean flag for badge visibility
+        source_link: product.source_link || product.productSourceLink || product['Product Source Link'] || '',
+        reference_media: Array.isArray(product.referenceMedia) ? product.referenceMedia : [],
 
         main_image: product.main_image || product.MainImage || '',
         all_images: (() => {
