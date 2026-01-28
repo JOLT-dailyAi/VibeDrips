@@ -1091,6 +1091,11 @@ function navigateModal(direction) {
     requestAnimationFrame(() => {
         strip.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
         strip.style.transform = `translateX(${newTransform}%)`;
+
+        // 🎬 Mirrored Media Sync
+        if (window.mediaOverlay && window.mediaOverlay.container.classList.contains('active')) {
+            window.mediaOverlay.syncSlide(newTransform);
+        }
     });
 
     // On transitionend: Atomic Teleport + Surgical Node Rotation
@@ -1108,6 +1113,12 @@ function navigateModal(direction) {
         // 2. Set teleport target (back to center)
         strip.style.transform = 'translateX(-40%)';
 
+        // 🎬 Mirrored Media Teleport
+        if (window.mediaOverlay && window.mediaOverlay.container.classList.contains('active')) {
+            window.mediaOverlay.strip.style.transition = 'none';
+            window.mediaOverlay.strip.style.transform = 'translateX(-40%)';
+        }
+
         // 3. SURGICAL NODE ROTATION (Zero-Flash)
         // Instead of innerHTML = '', rotate nodes so Active stays in DOM
         const cache = build5ProductCache(VibeDrips.modalState.currentIndex);
@@ -1123,6 +1134,17 @@ function navigateModal(direction) {
             const modalContent = tempDiv.querySelector('.simple-modal-content');
             strip.appendChild(modalContent);
             setupProductInteractions(newProduct);
+
+            // 🎬 Mirrored Media Rotation
+            if (window.mediaOverlay && window.mediaOverlay.container.classList.contains('active')) {
+                const mFirst = window.mediaOverlay.strip.firstElementChild;
+                if (mFirst) window.mediaOverlay.strip.removeChild(mFirst);
+
+                const mGrid = document.createElement('div');
+                mGrid.className = 'media-grid-wrapper';
+                mGrid.innerHTML = window.mediaOverlay.renderGridHTML(newProduct, false);
+                window.mediaOverlay.strip.appendChild(mGrid);
+            }
         } else {
             // Remove last (oldest), Prepend new P-2
             const last = strip.lastElementChild;
@@ -1134,16 +1156,47 @@ function navigateModal(direction) {
             const modalContent = tempDiv.querySelector('.simple-modal-content');
             strip.insertBefore(modalContent, strip.firstChild);
             setupProductInteractions(newProduct);
+
+            // 🎬 Mirrored Media Rotation
+            if (window.mediaOverlay && window.mediaOverlay.container.classList.contains('active')) {
+                const mLast = window.mediaOverlay.strip.lastElementChild;
+                if (mLast) window.mediaOverlay.strip.removeChild(mLast);
+
+                const mGrid = document.createElement('div');
+                mGrid.className = 'media-grid-wrapper';
+                mGrid.innerHTML = window.mediaOverlay.renderGridHTML(newProduct, false);
+                window.mediaOverlay.strip.insertBefore(mGrid, window.mediaOverlay.strip.firstChild);
+            }
+        }
+
+        // 🎬 Sync active media state after rotation
+        if (window.mediaOverlay && window.mediaOverlay.container.classList.contains('active')) {
+            const activeProduct = list[VibeDrips.modalState.currentIndex];
+            window.mediaOverlay.mediaItems = Array.isArray(activeProduct.reference_media) ? activeProduct.reference_media : [];
+            window.mediaOverlay.currentIndex = 0;
+
+            // Re-render only the active player in the center grid
+            const activeGrid = window.mediaOverlay.strip.children[2];
+            const playerSlot = activeGrid.querySelector('.active-player');
+            if (playerSlot) playerSlot.innerHTML = window.mediaOverlay.getPlayerHTML(window.mediaOverlay.mediaItems[0]);
         }
 
         // 4. CRITICAL: Force Reflow to ensure browser acknowledges position before re-enabling transition
         void strip.offsetWidth;
+        if (window.mediaOverlay && window.mediaOverlay.container.classList.contains('active')) {
+            void window.mediaOverlay.strip.offsetWidth;
+        }
 
         // 5. Re-enable transition for NEXT navigation with double RAF safety
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 strip.classList.remove('no-transition');
                 strip.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
+
+                if (window.mediaOverlay && window.mediaOverlay.container.classList.contains('active')) {
+                    window.mediaOverlay.strip.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
+                }
+
                 VibeDrips.modalState.isSliding = false;
 
                 // PHASE_10: Sync dimensions after navigation
