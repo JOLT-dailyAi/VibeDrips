@@ -1358,7 +1358,9 @@ function convertCsvToJson() {
   console.log('🔄 PASS 1: Building category candidates...');
 
   fs.createReadStream(csvFilePath)
-    .pipe(csv())
+    .pipe(csv({
+      mapHeaders: ({ header }) => header.trim()
+    }))
     .on('data', (row) => {
       const record = (val) => {
         if (!val) return;
@@ -1488,7 +1490,9 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
     fs.writeFileSync(path.join(dataDir, 'last_updated.txt'), lastUpdatedContent);
 
     fs.createReadStream(csvFilePath)
-      .pipe(csv())
+      .pipe(csv({
+        mapHeaders: ({ header }) => header.trim()
+      }))
       .on('data', (data) => {
         processingStats.total++;
 
