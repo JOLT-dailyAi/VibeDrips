@@ -237,8 +237,8 @@
 
     .lightbox-nav-hub {
         top: calc(1rem + env(safe-area-inset-top, 0px)) !important;
-        /* Nudged 1px further left from the edge for perfect portrait balance */
-        right: calc(1rem + 1px + env(safe-area-inset-right, 0px)) !important;
+        /* Robust 2rem buffer for zero clipping on all mobile handsets */
+        right: calc(2rem + env(safe-area-inset-right, 0px)) !important;
         gap: 1rem;
     }
 
@@ -261,7 +261,7 @@
 /* 📱 Mobile Landscape */
 @media (max-width: 950px) and (orientation: landscape) {
     .lightbox-nav-hub {
-        top: env(safe-area-inset-top, 1rem) !important;
+        top: calc(1rem + env(safe-area-inset-top, 0px)) !important;
         right: calc(1rem + env(safe-area-inset-right, 0px)) !important;
         flex-direction: row;
         gap: 0.75rem;
@@ -299,9 +299,11 @@
     }
 
     .lightbox-counter {
+        position: fixed !important;
+        /* Synced horizontally with nav-hub (close btn) for clean landscape top-bar */
         top: calc(1rem + env(safe-area-inset-top, 0px)) !important;
-        left: calc(1.5rem + env(safe-area-inset-left, 0px)) !important;
-        transform: none;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
         z-index: 10002;
     }
 }
