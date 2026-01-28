@@ -87,7 +87,7 @@ class MediaLightbox {
                         <!-- Iframe Shield: Invisible layer to capture "Wake" movements & Swipes -->
                         <div class="lightbox-iframe-shield"></div>
 
-                        <div class="lightbox-loader">Loading...</div>
+                        <div class="lightbox-loader"></div>
                     </div>
                 </div>
                 
