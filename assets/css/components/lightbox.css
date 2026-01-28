@@ -1,9 +1,10 @@
 /**
  * MediaLightbox Styles
- * Version: 2.0.0
+ * Version: 2.1.0
  * Author: VibeDrips
  * 
  * Supports: Images, Videos, Instagram, TikTok, YouTube, Twitter/X
+ * Features: Ergonomic Hub, Smart Auto-Hide, True Fullscreen (Desktop), Native Polish (Mobile)
  */
 
 /* Overlay */
@@ -19,7 +20,7 @@
     align-items: center;
     justify-content: center;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.5s ease;
 }
 
 .lightbox-overlay.active {
@@ -27,23 +28,51 @@
     opacity: 1;
 }
 
-/* Shared control styling (Independent of external CSS) */
+/* 🏗️ Nav Hub - Vertical Tray on Right (Desktop/Cursor) */
+.lightbox-nav-hub {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: center;
+    z-index: 10001;
+    transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s ease;
+}
+
+/* 🔘 Shared Button Base */
 .lightbox-close,
 .lightbox-arrow {
-    background: rgba(0, 0, 0, 0.8);
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.2);
     border-radius: 50%;
+    width: 60px;
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     color: white;
-    z-index: 10001;
     transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-    padding: 0;
-    outline: none;
     backdrop-filter: blur(10px) saturate(150%);
     -webkit-backdrop-filter: blur(10px) saturate(150%);
+    outline: none;
+    padding: 0;
+    margin: 0;
+}
+
+.lightbox-close {
+    order: -1;
+    /* Close button always at top of hub */
+}
+
+.lightbox-close:hover {
+    transform: rotate(90deg) scale(1.1);
+}
+
+.lightbox-arrow:hover {
+    transform: scale(1.1);
 }
 
 .lightbox-close:hover,
@@ -57,70 +86,24 @@
     transform: scale(0.95);
 }
 
-/* Close button - Precision centering */
-.lightbox-close {
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    width: 50px;
-    height: 50px;
-}
-
-.lightbox-close:hover {
-    transform: rotate(90deg);
-}
-
-/* Closing Animation Sequence */
-.lightbox-close.closing-animation {
-    animation: lightboxSpinExit 0.3s ease forwards;
-    pointer-events: none;
-}
-
-@keyframes lightboxSpinExit {
-    0% {
-        transform: rotate(0deg) scale(1);
-        opacity: 1;
-    }
-
-    100% {
-        transform: rotate(180deg) scale(1.2);
-        opacity: 0;
-    }
-}
-
-/* Counter */
+/* 🏷️ Counter */
 .lightbox-counter {
     position: absolute;
-    top: 1rem;
+    top: 1.5rem;
     left: 50%;
     transform: translateX(-50%);
     background: rgba(0, 0, 0, 0.6);
     color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 1rem;
+    padding: 0.5rem 1.25rem;
+    border-radius: 2rem;
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: 600;
     z-index: 10001;
+    transition: opacity 0.5s ease;
+    backdrop-filter: blur(5px);
 }
 
-/* Navigation arrows */
-.lightbox-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 50px;
-    height: 50px;
-}
-
-.lightbox-prev {
-    left: 1rem;
-}
-
-.lightbox-next {
-    right: 1rem;
-}
-
-/* Content area */
+/* 🖼️ Content Area */
 .lightbox-content {
     max-width: 90vw;
     max-height: 90vh;
@@ -140,8 +123,8 @@
     max-height: calc(90vh - 80px);
 }
 
-/* Image */
-.lightbox-image {
+.lightbox-image,
+.lightbox-video {
     max-width: 100%;
     max-height: calc(90vh - 80px);
     object-fit: contain;
@@ -149,72 +132,17 @@
     animation: fadeIn 0.3s ease;
 }
 
-/* Video */
-.lightbox-video {
-    max-width: 100%;
-    max-height: calc(90vh - 80px);
-    border-radius: 0.25rem;
-    animation: fadeIn 0.3s ease;
-}
-
-/* Iframe (Instagram, TikTok, YouTube) */
 .lightbox-iframe {
-    width: 100%;
-    max-width: 500px;
+    width: 500px;
     height: 700px;
+    max-width: 100%;
     max-height: calc(90vh - 80px);
     border-radius: 0.5rem;
     background: #000;
     animation: fadeIn 0.3s ease;
 }
 
-/* Responsive iframe sizing */
-@media (max-width: 768px) {
-    .lightbox-iframe {
-        width: 90vw;
-        max-width: 90vw;
-        height: 80vh;
-        max-height: 80vh;
-    }
-}
-
-/* YouTube specific - 16:9 aspect ratio */
-.lightbox-iframe[src*="youtube.com"] {
-    width: 800px;
-    height: 450px;
-    max-width: 90vw;
-}
-
-@media (max-width: 768px) {
-    .lightbox-iframe[src*="youtube.com"] {
-        width: 90vw;
-        height: calc(90vw * 9 / 16);
-    }
-}
-
-/* Loader */
-.lightbox-loader {
-    color: white;
-    font-size: 1rem;
-    padding: 2rem;
-}
-
-/* Caption */
-.lightbox-caption {
-    color: white;
-    font-size: 0.875rem;
-    margin-top: 1rem;
-    padding: 0.5rem 1rem;
-    background: rgba(0, 0, 0, 0.6);
-    border-radius: 0.25rem;
-    max-width: 90vw;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    text-align: center;
-}
-
-/* Dots indicator */
+/* 🔹 Navigation Dots */
 .lightbox-dots {
     position: absolute;
     bottom: 2rem;
@@ -227,20 +155,16 @@
     width: 100%;
     max-width: 80vw;
     z-index: 10001;
+    transition: opacity 0.5s ease;
 }
 
 .lightbox-dot {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.3);
     cursor: pointer;
     transition: all 0.2s;
-}
-
-.lightbox-dot:hover {
-    background: rgba(255, 255, 255, 0.6);
-    transform: scale(1.2);
 }
 
 .lightbox-dot.active {
@@ -249,76 +173,16 @@
     border-radius: 4px;
 }
 
-/* Video placeholder */
-.lightbox-video-placeholder {
-    width: 100%;
-    height: 100%;
-    min-width: 400px;
-    min-height: 400px;
-    background: #1F2937;
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border-radius: 0.5rem;
+/* 🌑 Smart Auto-Hide Logic */
+.lightbox-overlay.controls-hidden .lightbox-nav-hub,
+.lightbox-overlay.controls-hidden .lightbox-dots,
+.lightbox-overlay.controls-hidden .lightbox-counter {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
 }
 
-.video-placeholder-icon {
-    font-size: 5rem;
-    color: white;
-    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    margin-bottom: 1rem;
-}
-
-.video-placeholder-text {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 1.25rem;
-    font-weight: 500;
-}
-
-/* Social media placeholder (Instagram, TikTok, etc.) */
-.lightbox-social-placeholder {
-    width: 100%;
-    height: 100%;
-    min-width: 400px;
-    min-height: 500px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border-radius: 0.5rem;
-}
-
-.social-placeholder-icon {
-    font-size: 5rem;
-    color: white;
-    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    margin-bottom: 1rem;
-}
-
-.social-placeholder-text {
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 1.25rem;
-    font-weight: 500;
-    text-align: center;
-    padding: 0 2rem;
-}
-
-/* Animations */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-/* Mobile optimizations */
+/* 📱 Mobile "Native Polish" Optimizations */
 @media (max-width: 768px) {
     .lightbox-content {
         max-width: 100vw !important;
@@ -329,7 +193,6 @@
     .lightbox-media-container {
         max-width: 100vw !important;
         max-height: 85vh !important;
-        /* Gutter for notch/controls */
         width: 100%;
     }
 
@@ -339,199 +202,48 @@
         width: 100vw !important;
         max-width: 100vw !important;
         border-radius: 0;
-        /* Flush edge-to-edge */
         object-fit: contain;
     }
 
-    /* Iframe specific overrides for native feel */
-    .lightbox-iframe[src*="youtube.com"],
-    .lightbox-iframe[src*="instagram.com"],
-    .lightbox-iframe[src*="tiktok.com"] {
-        height: 60vh !important;
-        /* Balanced native height */
-        max-height: 75vh !important;
-    }
-
-    .lightbox-close {
+    .lightbox-nav-hub {
         top: calc(1rem + env(safe-area-inset-top, 0px)) !important;
         right: calc(1rem + env(safe-area-inset-right, 0px)) !important;
-        width: 44px;
-        /* Slightly larger for easier tap */
-        height: 44px;
-        background: rgba(0, 0, 0, 0.5);
+        gap: 1rem;
     }
 
-    .lightbox-counter {
-        top: calc(0.75rem + env(safe-area-inset-top, 0px)) !important;
-    }
-
+    .lightbox-close,
     .lightbox-arrow {
-        width: 40px;
-        height: 40px;
-        background: rgba(0, 0, 0, 0.3);
+        width: 44px;
+        height: 44px;
+    }
+
+    /* Hide arrows on mobile touch - only swipes */
+    .lightbox-arrow {
+        display: none;
     }
 
     .lightbox-dots {
         bottom: calc(1.5rem + env(safe-area-inset-bottom, 0px)) !important;
     }
-
-    .lightbox-caption {
-        font-size: 0.75rem;
-        padding: 0.5rem 1rem;
-        background: rgba(0, 0, 0, 0.4);
-        margin-top: 0.5rem;
-    }
 }
 
-/* ========================================
-   MOBILE LANDSCAPE OPTIMIZATION
-   Maximize space and dodge Dynamic Islands
-   (STRICTLY LANDSCAPE ONLY)
-   ======================================== */
-
+/* 📱 Mobile Landscape */
 @media (max-width: 950px) and (orientation: landscape) {
-    .lightbox-close {
+    .lightbox-nav-hub {
         top: env(safe-area-inset-top, 1rem) !important;
         right: calc(1rem + env(safe-area-inset-right, 0px)) !important;
-    }
-
-    .lightbox-prev {
-        left: calc(0.5rem + env(safe-area-inset-left, 0px)) !important;
-    }
-
-    .lightbox-next {
-        right: calc(0.5rem + env(safe-area-inset-right, 0px)) !important;
-    }
-
-    .lightbox-counter {
-        top: env(safe-area-inset-top, 1rem) !important;
+        flex-direction: row;
+        /* Horizontal hub fits height better */
+        gap: 0.75rem;
     }
 
     .lightbox-content {
-        max-width: calc(100vw - env(safe-area-inset-left, 20px) - env(safe-area-inset-right, 20px) - 20px) !important;
+        max-width: calc(100vw - 120px) !important;
         max-height: 95vh !important;
     }
-
-    .lightbox-media-container,
-    .lightbox-image,
-    .lightbox-video,
-    .lightbox-iframe {
-        max-height: 85vh !important;
-    }
-
-    .lightbox-dots {
-        bottom: env(safe-area-inset-bottom, 1rem) !important;
-    }
 }
 
-/* Tablet optimizations */
-@media (min-width: 769px) and (max-width: 1024px) {
-    .lightbox-iframe {
-        width: 600px;
-        height: 800px;
-    }
-
-    .lightbox-iframe[src*="youtube.com"] {
-        width: 700px;
-        height: 394px;
-    }
-}
-
-/* Disable body scroll when lightbox is open */
-body:has(.lightbox-overlay.active) {
-    overflow: hidden;
-}
-
-/* Loading spinner animation (optional enhancement) */
-.lightbox-loader::after {
-    content: '';
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    border-top-color: white;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin-left: 0.5rem;
-    vertical-align: middle;
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-/* Instagram specific optimizations */
-.lightbox-iframe[src*="instagram.com"] {
-    width: 400px;
-    height: 600px;
-    max-width: 90vw;
-}
-
-@media (max-width: 768px) {
-    .lightbox-iframe[src*="instagram.com"] {
-        width: 90vw;
-        height: 70vh;
-    }
-}
-
-/* TikTok specific optimizations */
-.lightbox-iframe[src*="tiktok.com"] {
-    width: 325px;
-    height: 730px;
-    max-width: 90vw;
-}
-
-@media (max-width: 768px) {
-    .lightbox-iframe[src*="tiktok.com"] {
-        width: 90vw;
-        height: 80vh;
-    }
-}
-
-/* Accessibility improvements */
-.lightbox-close:focus,
-.lightbox-arrow:focus,
-.lightbox-dot:focus {
-    outline: 2px solid white;
-    outline-offset: 2px;
-}
-
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-    .lightbox-overlay {
-        background: rgba(0, 0, 0, 0.98);
-    }
-
-    .lightbox-close,
-    .lightbox-arrow {
-        border-width: 3px;
-    }
-}
-
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-
-    .lightbox-overlay,
-    .lightbox-image,
-    .lightbox-video,
-    .lightbox-iframe {
-        animation: none;
-        transition: none;
-    }
-
-    .lightbox-close:hover {
-        transform: none;
-    }
-}
-
-/* ========================================
-   DESKTOP FULLSCREEN OPTIMIZATION
-   (STRICTLY 1025px+ ONLY)
-   Fills 100% viewport width and height
-   ======================================== */
-
+/* 🖥️ Desktop Fullscreen Optimization */
 @media (min-width: 1025px) {
     .lightbox-content {
         max-width: 100vw !important;
@@ -548,57 +260,61 @@ body:has(.lightbox-overlay.active) {
     }
 
     .lightbox-image,
-    .lightbox-video {
-        width: 100%;
-        height: 100% !important;
-        max-height: 100vh !important;
-        border-radius: 0;
-        object-fit: contain;
-        /* Fills screen but preserves content ratio */
-    }
-
-    /* Force all iframes (YT, IG, TT) to fill screen */
+    .lightbox-video,
     .lightbox-iframe {
         width: 100% !important;
         height: 100% !important;
-        max-width: 100vw !important;
         max-height: 100vh !important;
         border-radius: 0;
     }
+}
 
-    .lightbox-iframe[src*="youtube.com"],
-    .lightbox-iframe[src*="instagram.com"],
+/* Social Platfrom Specifics */
+.lightbox-iframe[src*="youtube.com"] {
+    width: 800px;
+    height: 450px;
+}
+
+.lightbox-iframe[src*="instagram.com"] {
+    width: 400px;
+    height: 600px;
+}
+
+.lightbox-iframe[src*="tiktok.com"] {
+    width: 325px;
+    height: 730px;
+}
+
+@media (max-width: 768px) {
+    .lightbox-iframe[src*="youtube.com"] {
+        height: calc(100vw * 9 / 16) !important;
+    }
+
+    .lightbox-iframe[src*="instagram.com"] {
+        height: 70vh !important;
+    }
+
     .lightbox-iframe[src*="tiktok.com"] {
-        width: 100% !important;
-        height: 100% !important;
+        height: 80vh !important;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
     }
 
-    /* UI Layering Refinement */
-    .lightbox-close {
-        top: calc(2rem + env(safe-area-inset-top, 0px)) !important;
-        right: calc(2rem + env(safe-area-inset-right, 0px)) !important;
-        background: rgba(0, 0, 0, 0.4);
-        /* Subtler background on large screen */
+    to {
+        opacity: 1;
+        transform: scale(1);
     }
+}
 
-    .lightbox-arrow {
-        width: 60px;
-        height: 60px;
-        background: rgba(0, 0, 0, 0.4);
-    }
-
-    .lightbox-prev {
-        left: calc(2rem + env(safe-area-inset-left, 0px)) !important;
-    }
-
-    .lightbox-next {
-        right: calc(2rem + env(safe-area-inset-right, 0px)) !important;
-    }
-
-    .lightbox-caption {
-        position: absolute;
-        bottom: 5rem;
-        background: rgba(0, 0, 0, 0.4);
-        backdrop-filter: blur(5px);
-    }
+/* Accessibility */
+.lightbox-close:focus,
+.lightbox-arrow:focus,
+.lightbox-dot:focus {
+    outline: 2px solid white;
+    outline-offset: 2px;
 }

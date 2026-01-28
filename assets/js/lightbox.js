@@ -51,19 +51,29 @@ class MediaLightbox {
     createLightboxDOM() {
         const lightboxHTML = `
             <div id="mediaLightbox" class="lightbox-overlay">
-                <button class="lightbox-close" aria-label="Close">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                </button>
+                <!-- Grouped Nav Hub (Right Side Stack) -->
+                <div class="lightbox-nav-hub">
+                    <button class="lightbox-close" aria-label="Close">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                    
+                    <button class="lightbox-arrow lightbox-prev" aria-label="Previous">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+                    
+                    <button class="lightbox-arrow lightbox-next" aria-label="Next">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                </div>
+
                 <div class="lightbox-counter"></div>
-                
-                <button class="lightbox-arrow lightbox-prev" aria-label="Previous">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="15 18 9 12 15 6"></polyline>
-                    </svg>
-                </button>
                 
                 <div class="lightbox-content">
                     <div class="lightbox-media-container">
@@ -82,12 +92,6 @@ class MediaLightbox {
                     </div>
                     <div class="lightbox-caption"></div>
                 </div>
-                
-                <button class="lightbox-arrow lightbox-next" aria-label="Next">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="9 18 15 12 9 6"></polyline>
-                    </svg>
-                </button>
                 
                 <div class="lightbox-dots"></div>
             </div>
@@ -115,6 +119,13 @@ class MediaLightbox {
         overlay.addEventListener('click', (e) => {
             const active = MediaLightbox.activeInstance;
             if (active && e.target === overlay) active.close();
+            // User click counts as activity
+            if (active) active.resetIdleTimer();
+        });
+
+        overlay.addEventListener('mousemove', () => {
+            const active = MediaLightbox.activeInstance;
+            if (active) active.resetIdleTimer();
         });
 
         prevBtn.addEventListener('click', () => {
@@ -253,19 +264,47 @@ class MediaLightbox {
         overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
 
-        this.renderDots();
+        this.initIdleTimer();
         this.showMedia(this.currentIndex);
     }
 
     close() {
         const overlay = document.getElementById('mediaLightbox');
         overlay.classList.remove('active');
+        overlay.classList.remove('controls-hidden');
         document.body.style.overflow = '';
 
         this.isOpen = false;
         MediaLightbox.activeInstance = null;
 
+        if (this._idleTimer) {
+            clearTimeout(this._idleTimer);
+            this._idleTimer = null;
+        }
+
         this.stopMedia();
+    }
+
+    /**
+     * Auto-Hide Interface Logic
+     */
+    initIdleTimer() {
+        this.resetIdleTimer();
+    }
+
+    resetIdleTimer() {
+        const overlay = document.getElementById('mediaLightbox');
+        if (!overlay || !this.isOpen) return;
+
+        overlay.classList.remove('controls-hidden');
+
+        if (this._idleTimer) clearTimeout(this._idleTimer);
+
+        this._idleTimer = setTimeout(() => {
+            if (this.isOpen) {
+                overlay.classList.add('controls-hidden');
+            }
+        }, 3000); // 3 seconds of peace
     }
 
     /**
