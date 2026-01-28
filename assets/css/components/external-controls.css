@@ -161,19 +161,6 @@ body.dark-theme .control-bubble::after {
    ============================================================ */
 @media (max-width: 950px) and (orientation: landscape) {
 
-    /* Phase 5: Shift entire container down to prevent clipping at the top */
-    .modal-external-controls {
-        top: 2rem !important;
-        bottom: auto !important;
-    }
-
-    /* Ground toggles inside the now-top-anchored container */
-    html body .modal-external-controls .reels-toggle.active,
-    html body .modal-external-controls .globe-toggle.active {
-        transform: none !important;
-        top: 0 !important;
-    }
-
     .control-bubble {
         height: 32px;
         padding: 0 12px;
