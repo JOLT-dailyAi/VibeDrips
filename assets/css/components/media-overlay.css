@@ -97,6 +97,7 @@ body.view-reels-mode .reels-toggle.active::before {
     .tile-large {
         grid-area: 1 / 1 / 6 / 6;
         aspect-ratio: 1/1;
+        z-index: 10;
     }
 
     .tile-1 {
@@ -156,15 +157,51 @@ body.view-reels-mode .reels-toggle.active::before {
 
 /* 🐚 SNAIL SHIFT: Animation Logic */
 .golden-spiral-grid.snail-moving .spiral-tile:not(.active-player) {
-    transform: scale(0.95);
-    opacity: 0.6;
-    filter: blur(2px);
+    transform: scale(0.95) translate(10px, 10px);
+    opacity: 0.4;
+    filter: blur(4px);
+    transition: all 0.15s ease-out;
+}
+
+/* Staggered Entry Animation for new thumbs */
+.spiral-tile.stagger-in {
+    animation: snailFadeIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    opacity: 0;
+    transform: scale(0.8) translate(-20px, -20px);
+}
+
+@keyframes snailFadeIn {
+    to {
+        opacity: 1;
+        transform: scale(1) translate(0, 0);
+    }
+}
+
+.spiral-tile.stagger-in:nth-child(2) {
+    animation-delay: 0.05s;
+}
+
+.spiral-tile.stagger-in:nth-child(3) {
+    animation-delay: 0.1s;
+}
+
+.spiral-tile.stagger-in:nth-child(4) {
+    animation-delay: 0.15s;
+}
+
+.spiral-tile.stagger-in:nth-child(5) {
+    animation-delay: 0.2s;
+}
+
+.spiral-tile.stagger-in:nth-child(6) {
+    animation-delay: 0.25s;
 }
 
 .spiral-tile.active-thumb {
     border: 3px solid #E53E3E;
     /* High contrast thumb */
     box-shadow: 0 0 20px rgba(229, 62, 62, 0.5);
+    transform: scale(1.02);
 }
 
 .spiral-tile.empty-slot {

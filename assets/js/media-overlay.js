@@ -89,7 +89,8 @@ class MediaOverlay {
 
             // If it's the active one, set current items
             if (i === 2) {
-                this.mediaItems = Array.isArray(product.reference_media) ? product.reference_media : [];
+                this.mediaItems = Array.isArray(product.reference_media) ? [...product.reference_media] : [];
+                this.initialMediaCount = this.mediaItems.length; // 🧱 Stable baseline
                 this.currentIndex = 0;
             }
         });
@@ -109,11 +110,14 @@ class MediaOverlay {
         const media = Array.isArray(product.reference_media) ? product.reference_media : [];
         if (media.length === 0) return `<div class="golden-spiral-grid empty-grid">No Media Available</div>`;
 
-        const itemCount = media.length;
+        const itemCount = this.initialMediaCount || media.length;
+        // 🧱 BREATHING SPACE: Use +1 to stabilize grid density
+        const stableCount = itemCount + 1;
+
         // Tiers: 1-4 (standard), 5-6 (subtile-1), 7-8 (subtile-2)
         let tierClass = 'tier-1';
-        if (itemCount >= 5 && itemCount <= 6) tierClass = 'tier-2';
-        else if (itemCount >= 7) tierClass = 'tier-3';
+        if (stableCount >= 5 && stableCount <= 6) tierClass = 'tier-2';
+        else if (stableCount >= 7) tierClass = 'tier-3';
 
         return `
             <div class="golden-spiral-grid ${tierClass}">
@@ -127,10 +131,11 @@ class MediaOverlay {
 
     renderTiles(media) {
         let html = '';
-        const itemCount = media.length;
+        const itemCount = this.initialMediaCount || media.length;
+        const stableCount = itemCount + 1;
 
         // Tile 1 (3x3 area)
-        if (itemCount >= 5) {
+        if (stableCount >= 5) {
             // Adaptive sub-grid for high density
             html += `<div class="spiral-tile tile-1 sub-grid">`;
             for (let i = 1; i <= 4; i++) {
@@ -152,7 +157,7 @@ class MediaOverlay {
         }
 
         // Tile 2 (2x2 area)
-        if (itemCount >= 7) {
+        if (stableCount >= 7) {
             // Further subdivision for tier 3
             html += `<div class="spiral-tile tile-2 sub-grid">`;
             for (let i = 5; i <= 8; i++) {
@@ -174,15 +179,15 @@ class MediaOverlay {
         }
 
         // Tile 3 & 4 (Special Case: only show if not sub-gridded)
-        if (itemCount < 7) {
+        if (stableCount < 7) {
             if (media[3]) {
                 html += `
-                    <div class="spiral-tile tile-3 ${this.currentIndex === 3 ? 'active-thumb' : ''}" onclick="window.mediaOverlay.swapMedia(3, this)">
+                    <div class="spiral-tile tile-3 stagger-in ${this.currentIndex === 3 ? 'active-thumb' : ''}" onclick="window.mediaOverlay.swapMedia(3, this)">
                         <img src="${this.getThumbnail(media[3])}">
                     </div>
                 `;
             }
-            if (media[4] && itemCount < 5) {
+            if (media[4] && stableCount < 5) {
                 html += `
                     <div class="spiral-tile tile-4 ${this.currentIndex === 4 ? 'active-thumb' : ''}" onclick="window.mediaOverlay.swapMedia(4, this)">
                         <img src="${this.getThumbnail(media[4])}">
@@ -218,63 +223,56 @@ class MediaOverlay {
         `;
     }
 
-    swapMedia(index, element) {
+    swapMedia(index) {
         const activeGrid = this.strip.children[2];
         if (!activeGrid) return;
 
-        // 1. Capture State before swap
+        // 1. Capture State
         const clickedItem = this.mediaItems[index];
+        const oldLive = this.mediaItems[0];
         if (!clickedItem) return;
 
-        // 🎬 SNAIL-SHIFT Stage 1: Trigger Animation
+        // 🎬 SNAIL-SHIFT Stage 1: Trigger Exit Animation on thumbnails
         const gridTiles = activeGrid.querySelector('.golden-spiral-grid');
         if (gridTiles) gridTiles.classList.add('snail-moving');
 
         // 2. Perform Any-OUT-Last-IN Array Rotation
-        const prevLive = this.mediaItems[0];
+        // clickedItem becomes the new head, oldLive goes to the end, rest stay in order
+        const rest = this.mediaItems.filter((_, i) => i !== 0 && i !== index);
+        this.mediaItems = [clickedItem, ...rest, oldLive];
 
-        // Remove clicked item from its position
-        this.mediaItems.splice(index, 1);
-
-        // Add old Live to the end
-        this.mediaItems.push(prevLive);
-
-        // Remove old Live from front
-        this.mediaItems.shift();
-
-        // Add new Live to front
-        this.mediaItems.unshift(clickedItem);
-
-        // 🎬 Stage 2: Atomic Update after brief delay for animation
+        // 🎬 Stage 2: Staggered Re-render
         setTimeout(() => {
             this.currentIndex = 0;
 
-            // Update Live Player
+            // Update Live Player (Immediate swap)
             const playerSlot = activeGrid.querySelector('.active-player');
-            if (playerSlot) playerSlot.innerHTML = this.getPlayerHTML(clickedItem);
-
-            // Update Hub Visibility (Ad-safe)
             if (playerSlot) {
+                playerSlot.innerHTML = this.getPlayerHTML(clickedItem);
                 playerSlot.style.visibility = 'visible';
                 playerSlot.style.pointerEvents = 'auto';
             }
 
-            // Full Rerender of the Grid UI (Ensures no gaps)
-            const spiralGrid = activeGrid.querySelector('.golden-spiral-grid');
-            if (spiralGrid) {
-                // Keep only player Slot, replace siblings
+            // Atomic Thumbnail Update (Staggered Entry)
+            if (gridTiles) {
                 const tilesHtml = this.renderTiles(this.mediaItems);
+
+                // Selective sibling replacement to preserve the player slot's transition state
                 activeGrid.querySelectorAll('.spiral-tile:not(.active-player)').forEach(el => el.remove());
 
                 const tempDiv = document.createElement('div');
                 tempDiv.innerHTML = tilesHtml;
+
+                // Append with animation triggers
                 while (tempDiv.firstChild) {
-                    activeGrid.appendChild(tempDiv.firstChild);
+                    const child = tempDiv.firstChild;
+                    if (child.nodeType === 1) child.classList.add('stagger-in');
+                    activeGrid.appendChild(child);
                 }
 
-                spiralGrid.classList.remove('snail-moving');
+                gridTiles.classList.remove('snail-moving');
             }
-        }, 150); // Snappy 150ms shift duration
+        }, 150);
     }
 
     openFullscreen() {
