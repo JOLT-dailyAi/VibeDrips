@@ -1169,11 +1169,11 @@ function navigateModal(direction) {
 
             // 🎬 Sync active media state after rotation
             if (window.mediaOverlay && window.mediaOverlay.container && window.mediaOverlay.container.classList.contains('active')) {
-                const activeProduct = productList[VibeDrips.modalState.currentIndex]; // Changed 'list' to 'productList'
+                const activeProduct = productList[VibeDrips.modalState.currentIndex];
                 window.mediaOverlay.mediaItems = Array.isArray(activeProduct.reference_media) ? activeProduct.reference_media : [];
                 window.mediaOverlay.currentIndex = 0;
 
-                const activeGrid = window.mediaOverlay.strip.children[2];
+                const activeGrid = window.mediaOverlay.strip?.children[2];
                 const playerSlot = activeGrid?.querySelector('.active-player');
                 if (playerSlot) playerSlot.innerHTML = window.mediaOverlay.getPlayerHTML(window.mediaOverlay.mediaItems[0]);
             }

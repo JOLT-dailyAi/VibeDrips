@@ -31,6 +31,8 @@
     height: 100%;
     transform: translateX(-40%);
     /* Center item */
+    flex-shrink: 0;
+    /* CRITICAL: Prevent container from squashing the strip */
 }
 
 /* Individual Grid Wrapper */
@@ -46,15 +48,34 @@
     box-sizing: border-box;
 }
 
-.media-overlay-content {
-    width: 100%;
-    max-width: 1000px;
-    height: 100%;
-    max-height: 700px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+/* Standardized Reels Toggle Transformation (Close Mode) */
+body.view-reels-mode .reels-toggle.active {
+    width: 42px !important;
+    height: 42px !important;
+    background: rgba(229, 62, 62, 0.15) !important;
+    border: 2px solid #E53E3E !important;
+    color: #E53E3E !important;
+    border-radius: 50% !important;
+    box-shadow: 0 4px 15px rgba(229, 62, 62, 0.3) !important;
+    z-index: 6000 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+body.view-reels-mode .reels-toggle.active span {
+    display: none !important;
+    /* Hide emojis */
+}
+
+body.view-reels-mode .reels-toggle.active::before {
+    content: '❌';
+    /* Red close emoji */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
 }
 
 /* Golden Spiral Grid */
@@ -143,9 +164,8 @@
 }
 
 .spiral-tile.empty-slot {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px dashed rgba(255, 255, 255, 0.1);
-    cursor: default;
+    display: none;
+    /* Hide if empty */
 }
 
 /* Sub-grid for higher density (Tiers 2 & 3) */

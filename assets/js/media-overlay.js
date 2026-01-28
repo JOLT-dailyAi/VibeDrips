@@ -131,51 +131,65 @@ class MediaOverlay {
 
         // Tile 1 (3x3 area)
         if (itemCount >= 5) {
-            html += `<div class="spiral-tile tile-1 sub-grid">
-                ${[1, 2, 3, 4].map(idx => media[idx] ? `
-                    <div class="sub-tile" onclick="window.mediaOverlay.swapMedia(${idx}, this)">
-                        <img src="${this.getThumbnail(media[idx])}">
-                    </div>
-                ` : '').join('')}
-            </div>`;
+            // Adaptive sub-grid for high density
+            html += `<div class="spiral-tile tile-1 sub-grid">`;
+            for (let i = 1; i <= 4; i++) {
+                if (media[i]) {
+                    html += `
+                        <div class="sub-tile ${this.currentIndex === i ? 'active-thumb' : ''}" onclick="window.mediaOverlay.swapMedia(${i}, this)">
+                            <img src="${this.getThumbnail(media[i])}">
+                        </div>
+                    `;
+                }
+            }
+            html += `</div>`;
         } else if (media[1]) {
-            html += `<div class="spiral-tile tile-1" onclick="window.mediaOverlay.swapMedia(1, this)">
-                <img src="${this.getThumbnail(media[1])}">
-            </div>`;
-        } else {
-            html += `<div class="spiral-tile tile-1 empty-slot"></div>`;
+            html += `
+                <div class="spiral-tile tile-1 ${this.currentIndex === 1 ? 'active-thumb' : ''}" onclick="window.mediaOverlay.swapMedia(1, this)">
+                    <img src="${this.getThumbnail(media[1])}">
+                </div>
+            `;
         }
 
         // Tile 2 (2x2 area)
         if (itemCount >= 7) {
-            html += `<div class="spiral-tile tile-2 sub-grid">
-                ${[5, 6, 7, 8].map(idx => media[idx] ? `
-                    <div class="sub-tile" onclick="window.mediaOverlay.swapMedia(${idx}, this)">
-                        <img src="${this.getThumbnail(media[idx])}">
-                    </div>
-                ` : '').join('')}
-            </div>`;
+            // Further subdivision for tier 3
+            html += `<div class="spiral-tile tile-2 sub-grid">`;
+            for (let i = 5; i <= 8; i++) {
+                if (media[i]) {
+                    html += `
+                        <div class="sub-tile ${this.currentIndex === i ? 'active-thumb' : ''}" onclick="window.mediaOverlay.swapMedia(${i}, this)">
+                            <img src="${this.getThumbnail(media[i])}">
+                        </div>
+                    `;
+                }
+            }
+            html += `</div>`;
         } else if (media[2]) {
-            html += `<div class="spiral-tile tile-2" onclick="window.mediaOverlay.swapMedia(2, this)">
-                <img src="${this.getThumbnail(media[2])}">
-            </div>`;
-        } else {
-            html += `<div class="spiral-tile tile-2 empty-slot"></div>`;
+            html += `
+                <div class="spiral-tile tile-2 ${this.currentIndex === 2 ? 'active-thumb' : ''}" onclick="window.mediaOverlay.swapMedia(2, this)">
+                    <img src="${this.getThumbnail(media[2])}">
+                </div>
+            `;
         }
 
-        // Tile 3 (1x1 area)
-        html += media[3] ? `
-            <div class="spiral-tile tile-3" onclick="window.mediaOverlay.swapMedia(3, this)">
-                <img src="${this.getThumbnail(media[3])}">
-            </div>
-        ` : `<div class="spiral-tile tile-3 empty-slot"></div>`;
-
-        // Tile 4 (1x1 area)
-        html += media[4] && itemCount < 5 ? `
-            <div class="spiral-tile tile-4" onclick="window.mediaOverlay.swapMedia(4, this)">
-                <img src="${this.getThumbnail(media[4])}">
-            </div>
-        ` : `<div class="spiral-tile tile-4 empty-slot"></div>`;
+        // Tile 3 & 4 (Special Case: only show if not sub-gridded)
+        if (itemCount < 7) {
+            if (media[3]) {
+                html += `
+                    <div class="spiral-tile tile-3 ${this.currentIndex === 3 ? 'active-thumb' : ''}" onclick="window.mediaOverlay.swapMedia(3, this)">
+                        <img src="${this.getThumbnail(media[3])}">
+                    </div>
+                `;
+            }
+            if (media[4] && itemCount < 5) {
+                html += `
+                    <div class="spiral-tile tile-4 ${this.currentIndex === 4 ? 'active-thumb' : ''}" onclick="window.mediaOverlay.swapMedia(4, this)">
+                        <img src="${this.getThumbnail(media[4])}">
+                    </div>
+                `;
+            }
+        }
 
         return html;
     }
