@@ -10,8 +10,8 @@ class MediaOverlay {
     }
 
     init() {
-        // Create container if it doesn't exist
-        if (!document.getElementById('mediaOverlay')) {
+        // Create container if it doesn't exist in memory
+        if (!this.container) {
             this.container = document.createElement('div');
             this.container.id = 'mediaOverlay';
             this.container.className = 'media-overlay-container';
@@ -20,18 +20,20 @@ class MediaOverlay {
             this.container.onclick = (e) => {
                 if (e.target === this.container) this.close();
             };
-
-            const navContainer = document.querySelector('.modal-nav-container');
-            if (navContainer) {
-                navContainer.appendChild(this.container);
-            }
-        } else {
-            this.container = document.getElementById('mediaOverlay');
         }
     }
 
     open(product) {
+        console.log('🎬 MediaOverlay: open() called with product:', product?.asin || 'unknown');
         if (!product) return;
+
+        // Ensure container is in the right place in the DOM
+        const navContainer = document.querySelector('.modal-nav-container');
+        console.log('🎬 MediaOverlay: modal-nav-container found:', !!navContainer);
+        if (navContainer && !navContainer.contains(this.container)) {
+            navContainer.appendChild(this.container);
+            console.log('🎬 MediaOverlay: container appended to DOM');
+        }
 
         // Prepare media items: source_link + reference_media
         this.mediaItems = [];
@@ -106,8 +108,11 @@ class MediaOverlay {
 
     swapMedia(index) {
         this.currentIndex = index;
-        const mainSlot = document.getElementById('main-player-slot');
-        if (!mainSlot) return;
+        const mainSlot = this.container.querySelector('#main-player-slot');
+        if (!mainSlot) {
+            console.error('🎬 MediaOverlay: main-player-slot NOT FOUND in container');
+            return;
+        }
 
         const url = this.mediaItems[index];
         const embedUrl = typeof window.getUniversalVideoEmbedUrl === 'function'

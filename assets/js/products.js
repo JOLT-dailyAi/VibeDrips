@@ -936,9 +936,17 @@ function wrapModalForSliding(centerProductId) {
         // Trigger Media Overlay
         if (reelsBtn.classList.contains('active')) {
             const currentItem = VibeDrips.modalState.currentProductList[VibeDrips.modalState.currentIndex];
-            if (window.mediaOverlay) window.mediaOverlay.open(currentItem);
+            console.log('🎬 Reels toggled ON. Items:', currentItem?.asin);
+            if (window.mediaOverlay) {
+                window.mediaOverlay.open(currentItem);
+            } else {
+                console.error('❌ mediaOverlay not found on window');
+            }
         } else {
-            if (window.mediaOverlay) window.mediaOverlay.container.classList.remove('active');
+            console.log('🎬 Reels toggled OFF');
+            if (window.mediaOverlay && window.mediaOverlay.container) {
+                window.mediaOverlay.container.classList.remove('active');
+            }
         }
     };
 
