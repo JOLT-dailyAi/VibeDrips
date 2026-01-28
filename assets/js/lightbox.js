@@ -344,7 +344,7 @@ class MediaLightbox {
         ];
 
         strip.style.transition = 'none';
-        strip.style.transform = 'translateX(-200%)'; // Center is always 3rd item
+        strip.style.transform = 'translate3d(-200%, 0, 0)'; // GPU Accelerated
         strip.innerHTML = '';
 
         windowIndices.forEach((wIdx, i) => {
@@ -385,9 +385,19 @@ class MediaLightbox {
     }
 
     getUniversalEmbedUrl(type, url, isActive) {
-        if (type === 'youtube') return this.getYouTubeEmbedUrl(url) + (isActive ? '&autoplay=1&mute=1' : '&autoplay=0&mute=1');
-        if (type === 'instagram') return this.getInstagramEmbedUrl(url);
-        if (type === 'tiktok') return this.getTikTokEmbedUrl(url);
+        if (type === 'youtube') {
+            return this.getYouTubeEmbedUrl(url) + (isActive ? '&autoplay=1&mute=1' : '&autoplay=0&mute=1');
+        }
+        if (type === 'instagram') {
+            const embed = this.getInstagramEmbedUrl(url);
+            // Instagram doesn't support autoplay param well, so we rely on isActive to trigger unmuting pulse later
+            return embed;
+        }
+        if (type === 'tiktok') {
+            const embed = this.getTikTokEmbedUrl(url);
+            // TikTok often autoplays by default if visible, so we ensure visibility logic handles it
+            return embed;
+        }
         return url;
     }
 

@@ -131,9 +131,7 @@
     max-height: calc(100vh - 120px);
     overflow: hidden;
     /* Viewport for the sliding strip */
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: #000;
 }
 
 /* 🎞️ Sliding Strip */
@@ -153,8 +151,16 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    padding: 0 20px;
+    padding: 0;
     box-sizing: border-box;
+    opacity: 0;
+    /* Hidden by default to prevent bleed */
+    transition: opacity 0.3s ease;
+}
+
+.lightbox-media-wrapper.center-slot {
+    opacity: 1;
+    /* Only show active slot */
 }
 
 /* 🛡️ Iframe Shield: Invisible catcher for wake events & mobile gestures */
