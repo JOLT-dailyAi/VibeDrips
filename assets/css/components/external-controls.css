@@ -157,17 +157,29 @@ body.dark-theme .control-bubble::after {
 }
 
 /* ============================================================
-   MOBILE LANDSCAPE SCALING & PHASE 6 REFINED
+   MOBILE LANDSCAPE SCALING & PHASE 7 ABSOLUTE SIZE LOCK
    ============================================================ */
 @media (max-width: 950px) and (orientation: landscape) {
 
-    /* Phase 6 REFINED: Sync controls to original bottom-anchor */
+    /* Sync controls to original bottom-anchor */
     .modal-external-controls {
         top: auto !important;
         bottom: calc(100% + 6px) !important;
     }
 
-    /* Phase 6 REFINED: Strict Physical Size Lock for landscape Active State */
+    /* Phase 7 ABSOLUTE: Force uniform 32px size for BOTH inactive and active states */
+    /* Matches the control-bubble height perfectly */
+    .reels-toggle,
+    .globe-toggle {
+        width: 32px !important;
+        height: 32px !important;
+        min-width: 32px !important;
+        min-height: 32px !important;
+        font-size: 20px !important;
+        /* Smaller emoji for smaller button */
+    }
+
+    /* Phase 7 ABSOLUTE: Strict Physical Size Lock for active state */
     /* Must match "Ultimate Glow" specificity to lock down dimensions */
     html body .modal-external-controls .reels-toggle.active,
     html body .modal-external-controls .globe-toggle.active,
@@ -177,11 +189,15 @@ body.dark-theme .control-bubble::after {
     body.dark-theme .modal-external-controls .globe-toggle.active,
     body.glass-theme .modal-external-controls .reels-toggle.active,
     body.glass-theme .modal-external-controls .globe-toggle.active {
+        width: 32px !important;
+        height: 32px !important;
         transform: none !important;
-        /* Killer: Remove scale(1.08) expansion */
+        /* Killer: No scale(1.08) expansion */
         border-width: 0.8px !important;
         /* Killer: Match inactive thickness */
         top: 0 !important;
+        font-size: 18px !important;
+        /* Specific emoji sync for active Red X */
     }
 
     /* Disable hover expansion in landscape to prevent potential clipping */
