@@ -265,25 +265,49 @@ class MediaLightbox {
         this.isOpen = false;
         MediaLightbox.activeInstance = null;
 
+        this.stopMedia();
+    }
+
+    /**
+     * Stop Media - Silences any currently playing media in the lightbox
+     */
+    stopMedia() {
+        const overlay = document.getElementById('mediaLightbox');
+        if (!overlay) return;
+
+        // Clear any active pulse intervals
+        if (this._pulseInterval) {
+            clearInterval(this._pulseInterval);
+            this._pulseInterval = null;
+        }
+
         const video = overlay.querySelector('.lightbox-video');
         if (video) {
             video.pause();
             video.src = '';
         }
 
+        const iframe = overlay.querySelector('.lightbox-iframe');
+        if (iframe) {
+            if (iframe.contentWindow) {
+                // Pulse stop signals
+                iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'pauseVideo', args: '' }), '*');
+                iframe.contentWindow.postMessage(JSON.stringify({ method: 'pause' }), '*');
+                iframe.contentWindow.postMessage('pause', '*');
+                iframe.contentWindow.postMessage(JSON.stringify({ type: 'player:pause' }), '*');
+            }
+            iframe.src = '';
+        }
+
         const img = overlay.querySelector('.lightbox-image');
         if (img) {
             img.src = '';
-        }
-
-        const iframe = overlay.querySelector('.lightbox-iframe');
-        if (iframe) {
-            iframe.src = '';
         }
     }
 
     next() {
         if (this.currentIndex < this.mediaArray.length - 1) {
+            this.stopMedia();
             this.currentIndex++;
             this.showMedia(this.currentIndex);
         }
@@ -291,6 +315,7 @@ class MediaLightbox {
 
     prev() {
         if (this.currentIndex > 0) {
+            this.stopMedia();
             this.currentIndex--;
             this.showMedia(this.currentIndex);
         }
@@ -478,6 +503,25 @@ class MediaLightbox {
             iframe.onload = () => {
                 loader.style.display = 'none';
                 iframe.style.display = 'block';
+
+                // 🔊 Successive Pulse: Ensure unmuted & 20% volume
+                const sendAudioPulse = () => {
+                    if (!this.isOpen || !iframe.contentWindow) return;
+                    iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
+                    iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [20] }), '*');
+                    iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*');
+
+                    // Shotgun signals
+                    iframe.contentWindow.postMessage('unmute', '*');
+                    iframe.contentWindow.postMessage(JSON.stringify({ event: 'unmute' }), '*');
+                };
+
+                sendAudioPulse();
+                let pulseCount = 0;
+                this._pulseInterval = setInterval(() => {
+                    sendAudioPulse();
+                    if (++pulseCount >= 4 || !this.isOpen) clearInterval(this._pulseInterval);
+                }, 500);
             };
             iframe.onerror = () => {
                 loader.style.display = 'none';
@@ -513,7 +557,13 @@ class MediaLightbox {
             video.style.display = 'block';
 
             if (this.options.autoPlayVideo) {
-                video.play().catch(e => console.warn('Autoplay failed:', e));
+                video.muted = false; // 🔊 Start unmuted @ 20%
+                video.volume = 0.2;
+                video.play().catch(e => {
+                    // Safety Catch: muted fallback
+                    video.muted = true;
+                    video.play().catch(e2 => console.warn('Still blocked:', e2));
+                });
             }
         };
 
@@ -584,7 +634,7 @@ class MediaLightbox {
         }
 
         if (videoId) {
-            return `https://www.youtube.com/embed/${videoId}`;
+            return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=1&mute=0&rel=0`;
         }
 
         return null;
