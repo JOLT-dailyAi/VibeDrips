@@ -96,6 +96,7 @@ body.view-reels-mode .reels-toggle.active::before {
 
     .tile-large {
         grid-area: 1 / 1 / 6 / 6;
+        aspect-ratio: 1/1;
     }
 
     .tile-1 {
@@ -150,17 +151,20 @@ body.view-reels-mode .reels-toggle.active::before {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     cursor: pointer;
-    transition: transform 0.2s ease, border-color 0.2s ease;
+    transition: transform 0.2s ease, border-color 0.2s ease, opacity 0.2s ease, filter 0.2s ease;
 }
 
-.spiral-tile:hover {
-    transform: scale(1.02);
-    border-color: rgba(255, 255, 255, 0.3);
+/* 🐚 SNAIL SHIFT: Animation Logic */
+.golden-spiral-grid.snail-moving .spiral-tile:not(.active-player) {
+    transform: scale(0.95);
+    opacity: 0.6;
+    filter: blur(2px);
 }
 
 .spiral-tile.active-thumb {
-    border: 2px solid #E53E3E;
-    box-shadow: 0 0 15px rgba(229, 62, 62, 0.4);
+    border: 3px solid #E53E3E;
+    /* High contrast thumb */
+    box-shadow: 0 0 20px rgba(229, 62, 62, 0.5);
 }
 
 .spiral-tile.empty-slot {

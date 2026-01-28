@@ -46,10 +46,10 @@ function closeDynamicModal(event) {
 
     if (clickedOverlay || clickedCloseButton) {
         // ✅ TIERED CLOSURE: Stage 1 - Media Overlay
-        if (window.mediaOverlay && window.mediaOverlay.container &&
-            window.mediaOverlay.container.classList.contains('active')) {
-            console.log('🎬 Stage 1 Close: Closing Media Overlay');
-            window.mediaOverlay.close();
+        const reelsBtn = document.querySelector('.reels-toggle.active');
+        if (reelsBtn) {
+            console.log('🎬 Stage 1 Close: Clicking Reels Toggle');
+            reelsBtn.click();
             return; // 🛑 Stage 1 complete
         }
 

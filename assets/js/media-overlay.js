@@ -219,51 +219,62 @@ class MediaOverlay {
     }
 
     swapMedia(index, element) {
-        const activeGrid = this.strip.children[2]; // Index 2 is always center/active in 5-cache
+        const activeGrid = this.strip.children[2];
         if (!activeGrid) return;
 
-        // 🔄 ANY-OUT-LAST-IN Strategy
-        // 1. Extract the clicked item
+        // 1. Capture State before swap
         const clickedItem = this.mediaItems[index];
         if (!clickedItem) return;
 
-        // 2. Extract current Live (Head)
-        const prevLive = this.mediaItems.shift();
+        // 🎬 SNAIL-SHIFT Stage 1: Trigger Animation
+        const gridTiles = activeGrid.querySelector('.golden-spiral-grid');
+        if (gridTiles) gridTiles.classList.add('snail-moving');
 
-        // 3. Remove clicked item from its intermediate position
-        // Since we shifted, indices change. Let's find index again.
-        const newIndex = this.mediaItems.indexOf(clickedItem);
-        if (newIndex !== -1) {
-            this.mediaItems.splice(newIndex, 1);
-        }
+        // 2. Perform Any-OUT-Last-IN Array Rotation
+        const prevLive = this.mediaItems[0];
 
-        // 4. Re-assemble: Selected -> [Rest] -> Old Live
-        this.mediaItems.unshift(clickedItem);
+        // Remove clicked item from its position
+        this.mediaItems.splice(index, 1);
+
+        // Add old Live to the end
         this.mediaItems.push(prevLive);
 
-        // 5. Atomic Re-render (Ensures Thumbnail 1 is always the new 2, etc)
-        this.currentIndex = 0; // The selected item is now always at index 0 (Live)
+        // Remove old Live from front
+        this.mediaItems.shift();
 
-        // Update Live Player
-        const playerSlot = activeGrid.querySelector('.active-player');
-        if (playerSlot) playerSlot.innerHTML = this.getPlayerHTML(clickedItem);
+        // Add new Live to front
+        this.mediaItems.unshift(clickedItem);
 
-        // Update Thumbnails (Atomic Grid update)
-        const gridTiles = activeGrid.querySelector('.golden-spiral-grid');
-        if (gridTiles) {
-            // Keep the .active-player slot, update only the sibling thumbnails
-            const tilesHtml = this.renderTiles(this.mediaItems);
+        // 🎬 Stage 2: Atomic Update after brief delay for animation
+        setTimeout(() => {
+            this.currentIndex = 0;
 
-            // Selective Update: Remove all .spiral-tile siblings except .active-player
-            activeGrid.querySelectorAll('.spiral-tile:not(.active-player)').forEach(el => el.remove());
+            // Update Live Player
+            const playerSlot = activeGrid.querySelector('.active-player');
+            if (playerSlot) playerSlot.innerHTML = this.getPlayerHTML(clickedItem);
 
-            // Append new calculated tiles
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = tilesHtml;
-            while (tempDiv.firstChild) {
-                activeGrid.appendChild(tempDiv.firstChild);
+            // Update Hub Visibility (Ad-safe)
+            if (playerSlot) {
+                playerSlot.style.visibility = 'visible';
+                playerSlot.style.pointerEvents = 'auto';
             }
-        }
+
+            // Full Rerender of the Grid UI (Ensures no gaps)
+            const spiralGrid = activeGrid.querySelector('.golden-spiral-grid');
+            if (spiralGrid) {
+                // Keep only player Slot, replace siblings
+                const tilesHtml = this.renderTiles(this.mediaItems);
+                activeGrid.querySelectorAll('.spiral-tile:not(.active-player)').forEach(el => el.remove());
+
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = tilesHtml;
+                while (tempDiv.firstChild) {
+                    activeGrid.appendChild(tempDiv.firstChild);
+                }
+
+                spiralGrid.classList.remove('snail-moving');
+            }
+        }, 150); // Snappy 150ms shift duration
     }
 
     openFullscreen() {
