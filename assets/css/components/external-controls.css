@@ -89,22 +89,6 @@ body.glass-theme .modal-external-controls .globe-toggle.active {
     opacity: 1 !important;
 }
 
-/* Grounding toggles and stripping active highlights in landscape */
-@media (max-width: 950px) and (orientation: landscape) {
-
-    html body .modal-external-controls .reels-toggle.active,
-    html body .modal-external-controls .globe-toggle.active {
-        transform: none !important;
-        top: 0 !important;
-    }
-}
-
-/* Ensure buttons are clickable despite container's pointer-events: none */
-.reels-toggle,
-.globe-toggle {
-    pointer-events: auto !important;
-    cursor: pointer;
-}
 
 /* Glass tail/pointer pointing to the icons */
 .control-bubble::after {
