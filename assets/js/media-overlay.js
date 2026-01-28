@@ -84,14 +84,19 @@ class MediaOverlay {
             const product = list[idx];
             const gridWrapper = document.createElement('div');
             gridWrapper.className = 'media-grid-wrapper';
-            gridWrapper.innerHTML = this.renderGridHTML(product, i === 2); // i===2 is center active
+            gridWrapper.innerHTML = this.renderGridHTML(product);
             this.strip.appendChild(gridWrapper);
 
             // If it's the active one, set current items
             if (i === 2) {
                 this.mediaItems = Array.isArray(product.reference_media) ? [...product.reference_media] : [];
-                this.initialMediaCount = this.mediaItems.length; // 🧱 Stable baseline
+                this.initialMediaCount = this.mediaItems.length;
                 this.currentIndex = 0;
+            }
+
+            // 🏎️ EFFICIENCY: Pre-connect & Preload Adjacent (i=1, 2, 3)
+            if (i >= 1 && i <= 3) {
+                this.optimizePerformance(product);
             }
         });
 
@@ -99,6 +104,46 @@ class MediaOverlay {
         requestAnimationFrame(() => {
             this.strip.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
         });
+    }
+
+    /**
+     * Selective Pre-connect & Preload logic
+     */
+    optimizePerformance(product) {
+        if (!product || !product.reference_media) return;
+        const media = Array.isArray(product.reference_media) ? product.reference_media : [];
+
+        media.forEach(url => {
+            if (!url) return;
+
+            // 1. Domain Pre-connect (Fast Handshake)
+            if (url.includes('youtube.com') || url.includes('youtu.be')) this.preconnect('https://www.youtube.com');
+            if (url.includes('instagram.com')) this.preconnect('https://www.instagram.com');
+            if (url.includes('tiktok.com')) this.preconnect('https://v.tiktok.com');
+
+            // 2. Buffered Adjacent (Native .mp4 preloading)
+            if (url.match(/\.(mp4|webm|mov|avi)$/i)) {
+                // Check if already preloaded
+                if (document.querySelector(`link[href="${url}"]`)) return;
+
+                const link = document.createElement('link');
+                link.rel = 'preload';
+                link.as = 'video';
+                link.href = url;
+                document.head.appendChild(link);
+            }
+        });
+    }
+
+    preconnect(url) {
+        if (window._preconnectedDomains?.has(url)) return;
+        if (!window._preconnectedDomains) window._preconnectedDomains = new Set();
+
+        const link = document.createElement('link');
+        link.rel = 'preconnect';
+        link.href = url;
+        document.head.appendChild(link);
+        window._preconnectedDomains.add(url);
     }
 
     syncSlide(percentage) {
@@ -252,26 +297,60 @@ class MediaOverlay {
         const video = activeGrid.querySelector('.main-video-player');
         const iframe = activeGrid.querySelector('.main-iframe-player');
 
-        // Layer 3: CSS Suspension (Physical Audio Halt)
+        // Layer 3: Visibility & Pointer State
         if (playerSlot) {
             playerSlot.style.visibility = play ? 'visible' : 'hidden';
             playerSlot.style.pointerEvents = play ? 'auto' : 'none';
         }
 
         if (video) {
-            play ? video.play().catch(() => { }) : video.pause();
+            if (play) {
+                video.muted = false; // 🔊 Attempt Unmute
+                video.volume = 0.2;  // 🔉 Target 20%
+                video.play().catch(() => {
+                    // Fallback: stay muted if browser blocks sound
+                    video.muted = true;
+                    video.play();
+                });
+            } else {
+                video.pause();
+            }
         }
 
         if (iframe && iframe.contentWindow) {
-            // Layer 1: Specialized APIs
-            const cmd = play ? 'playVideo' : 'pauseVideo';
-            iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: cmd, args: '' }), '*');
-            iframe.contentWindow.postMessage(JSON.stringify({ method: play ? 'play' : 'pause' }), '*');
+            const sendAudioCommands = () => {
+                if (!play || !this.container.classList.contains('active')) return;
+                // YouTube PostMessage Protocol
+                iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
+                iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [20] }), '*');
+                iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*');
 
-            // Layer 2: Protocol Shotgun (Universal signals)
-            const shotgun = play ? 'pause' : 'play'; // Corrected order if needed, but usually 'pause' is safe
-            iframe.contentWindow.postMessage(play ? 'play' : 'pause', '*');
-            iframe.contentWindow.postMessage(JSON.stringify({ type: 'player:' + (play ? 'play' : 'pause') }), '*');
+                // Vimeo PostMessage Protocol
+                iframe.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 0.2 }), '*');
+                iframe.contentWindow.postMessage(JSON.stringify({ method: 'play' }), '*');
+
+                // Protocol Shotgun (Universal)
+                iframe.contentWindow.postMessage('unmute', '*');
+                iframe.contentWindow.postMessage(JSON.stringify({ event: 'unmute' }), '*');
+            };
+
+            if (play) {
+                // Initial burst
+                sendAudioCommands();
+                // 🔊 SUCCESSIVE PULSE: Pulse every 500ms for 2 seconds to ensure API is ready
+                let pulses = 0;
+                const interval = setInterval(() => {
+                    sendAudioCommands();
+                    if (++pulses >= 4 || !this.container.classList.contains('active')) {
+                        clearInterval(interval);
+                    }
+                }, 500);
+            } else {
+                iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'pauseVideo', args: '' }), '*');
+                iframe.contentWindow.postMessage(JSON.stringify({ method: 'pause' }), '*');
+                iframe.contentWindow.postMessage('pause', '*');
+                iframe.contentWindow.postMessage(JSON.stringify({ type: 'player:pause' }), '*');
+            }
         }
     }
 
