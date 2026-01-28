@@ -151,7 +151,7 @@ class MediaOverlay {
 
     getPlayerHTML(url) {
         if (!url) return '';
-        const embedUrl = this.getUniversalVideoEmbedUrl ? this.getUniversalVideoEmbedUrl(url) : url;
+        const embedUrl = this.getUniversalVideoEmbedUrl(url);
 
         let player = '';
         if (url.match(/\.(mp4|webm|mov|avi)$/i)) {
@@ -283,6 +283,49 @@ class MediaOverlay {
         }
         if (url.includes('instagram.com')) return 'https://www.instagram.com/static/images/ico/favicon-192.png/b405f6e8902d.png';
         return 'assets/images/placeholder-video.jpg';
+    }
+
+    /**
+     * Universal Video Embed URL Generator
+     * Converts standard platform links to embeddable ones
+     */
+    getUniversalVideoEmbedUrl(sourceUrl) {
+        if (!sourceUrl) return '';
+        try {
+            const url = sourceUrl.toLowerCase();
+
+            // Instagram
+            if (url.includes('instagram.com')) {
+                const match = sourceUrl.match(/\/(p|reel)\/([^\/\?]+)/);
+                if (match && match[2]) return `https://www.instagram.com/p/${match[2]}/embed`;
+            }
+
+            // TikTok
+            if (url.includes('tiktok.com')) {
+                const match = sourceUrl.match(/\/video\/(\d+)/);
+                if (match && match[1]) return `https://www.tiktok.com/embed/v2/${match[1]}`;
+            }
+
+            // YouTube (Long, Short, Shorts)
+            if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                let videoId = null;
+                if (url.includes('youtu.be/')) {
+                    videoId = sourceUrl.match(/youtu\.be\/([^?]+)/)?.[1];
+                } else if (url.includes('youtube.com/watch')) {
+                    videoId = new URL(sourceUrl).searchParams.get('v');
+                } else if (url.includes('youtube.com/shorts/')) {
+                    videoId = sourceUrl.match(/shorts\/([^?]+)/)?.[1];
+                }
+                if (videoId) return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=1&mute=1`;
+            }
+
+            // Direct Video
+            if (url.match(/\.(mp4|webm|mov|avi)$/)) return sourceUrl;
+
+        } catch (error) {
+            console.error('🎬 Embed Parser Error:', error);
+        }
+        return sourceUrl;
     }
 }
 
