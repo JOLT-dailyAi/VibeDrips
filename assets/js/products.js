@@ -944,8 +944,8 @@ function wrapModalForSliding(centerProductId) {
             }
         } else {
             console.log('🎬 Reels toggled OFF');
-            if (window.mediaOverlay && window.mediaOverlay.container) {
-                window.mediaOverlay.container.classList.remove('active');
+            if (window.mediaOverlay) {
+                window.mediaOverlay.close();
             }
         }
     };

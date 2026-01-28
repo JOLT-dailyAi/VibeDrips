@@ -136,7 +136,15 @@ function processProductData(product) {
         computed_discount: discountPercent, // Discount percentage as number
         show_discount: showDiscount, // Boolean flag for badge visibility
         source_link: product.source_link || product.productSourceLink || product['Product Source Link'] || '',
-        reference_media: Array.isArray(product.referenceMedia) ? product.referenceMedia : [],
+        reference_media: (() => {
+            const raw = product.reference_media || product.referenceMedia || product['Reference Media for similar products'] || product.reference_links || [];
+            if (Array.isArray(raw)) return raw;
+            if (typeof raw === 'string' && raw.trim()) {
+                const sep = raw.includes('|') ? '|' : (raw.includes(';') ? ';' : ',');
+                return raw.split(sep).map(url => url.trim()).filter(Boolean);
+            }
+            return [];
+        })(),
 
         main_image: product.main_image || product.MainImage || '',
         all_images: (() => {

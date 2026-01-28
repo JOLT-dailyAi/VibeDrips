@@ -53,37 +53,31 @@ class MediaOverlay {
         this.currentIndex = 0;
         this.render();
         this.container.classList.add('active');
+
+        // Add global state class to parent wrapper for button transformation
+        const wrapper = document.querySelector('.modal-layout-wrapper');
+        if (wrapper) wrapper.classList.add('view-reels-mode');
+
         document.body.style.overflow = 'hidden';
     }
 
     close() {
-        const closeBtn = this.container.querySelector('.white-close-btn');
-        if (closeBtn) {
-            closeBtn.classList.add('closing-animation');
-            setTimeout(() => {
-                this.container.classList.remove('active');
-                closeBtn.classList.remove('closing-animation');
-                document.body.style.overflow = '';
-                // Sync the reels-toggle button if it exists
-                const reelsBtn = document.querySelector('.reels-toggle.active');
-                if (reelsBtn) reelsBtn.classList.remove('active');
-            }, 300);
-        } else {
-            this.container.classList.remove('active');
-            document.body.style.overflow = '';
-        }
+        this.container.classList.remove('active');
+
+        const wrapper = document.querySelector('.modal-layout-wrapper');
+        if (wrapper) wrapper.classList.remove('view-reels-mode');
+
+        document.body.style.overflow = '';
+
+        // Sync the reels-toggle button if it exists
+        const reelsBtn = document.querySelector('.reels-toggle.active');
+        if (reelsBtn) reelsBtn.classList.remove('active');
     }
 
     render() {
         const media = this.mediaItems;
         this.container.innerHTML = `
             <div class="media-overlay-content">
-                <button class="white-close-btn" aria-label="Close Overlay">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                </button>
                 <div class="golden-spiral-grid">
                     <div class="spiral-tile tile-large" id="main-player-slot">
                         <!-- Live Player Injected Here -->
@@ -96,12 +90,6 @@ class MediaOverlay {
                 </div>
             </div>
         `;
-
-        // Handle Close Button Click
-        this.container.querySelector('.white-close-btn').onclick = (e) => {
-            e.stopPropagation();
-            this.close();
-        };
 
         this.swapMedia(0);
     }

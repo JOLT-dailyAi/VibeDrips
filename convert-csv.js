@@ -1544,7 +1544,7 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
           }
 
           const referenceMedia = parseReferenceMedia(
-            data.reference_media || data['Reference Media for similar products'],
+            data.reference_media || data.referenceMedia || data['Reference Media for similar products'],
             data['Product Source Link']
           );
 

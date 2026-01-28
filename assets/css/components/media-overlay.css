@@ -38,12 +38,42 @@
     gap: 20px;
 }
 
-/* Close Button Positioning with Safe Area */
-.media-overlay-content .white-close-btn {
+/* Close Button is handled by reels-toggle in products.js */
+.view-reels-mode .reels-toggle.active {
+    width: 50px !important;
+    height: 50px !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+    color: white !important;
+    border-radius: 50% !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1) !important;
+    z-index: 6000 !important;
+    /* Above everything */
+    transform: rotate(0deg);
+    /* Counteract products.js hover transform if any */
+}
+
+.view-reels-mode .reels-toggle.active:hover {
+    transform: rotate(90deg) scale(1.1) !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.view-reels-mode .reels-toggle.active span {
+    display: none !important;
+    /* Hide emojis */
+}
+
+.view-reels-mode .reels-toggle.active::before {
+    content: '✕';
     position: absolute;
-    top: calc(-10px - env(safe-area-inset-top, 0px));
-    right: calc(-10px - env(safe-area-inset-right, 0px));
-    z-index: 110;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
 }
 
 /* Golden Spiral Grid */
