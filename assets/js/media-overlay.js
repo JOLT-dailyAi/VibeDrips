@@ -146,8 +146,31 @@ class MediaOverlay {
         window._preconnectedDomains.add(url);
     }
 
+    /**
+     * Total Strip Silence
+     * Pauses every video and iframe in the 5-product strip
+     */
+    stopAllMedia() {
+        if (!this.strip) return;
+        const allVideos = this.strip.querySelectorAll('video');
+        const allIframes = this.strip.querySelectorAll('iframe');
+
+        allVideos.forEach(v => v.pause());
+        allIframes.forEach(iframe => {
+            if (iframe.contentWindow) {
+                // Universal Pause Pulse
+                iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'pauseVideo', args: '' }), '*');
+                iframe.contentWindow.postMessage(JSON.stringify({ method: 'pause' }), '*');
+                iframe.contentWindow.postMessage('pause', '*');
+                iframe.contentWindow.postMessage(JSON.stringify({ type: 'player:pause' }), '*');
+            }
+        });
+    }
+
     syncSlide(percentage) {
         if (!this.strip) return;
+        // Silence everything before a major move
+        this.stopAllMedia();
         this.strip.style.transform = `translateX(${percentage}%)`;
     }
 
@@ -221,6 +244,9 @@ class MediaOverlay {
     swapMedia(index) {
         const activeGrid = this.strip.children[2];
         if (!activeGrid) return;
+
+        // Silence everything before content shift
+        this.stopAllMedia();
 
         // 1. Capture State
         const clickedItem = this.mediaItems[index];
@@ -305,10 +331,10 @@ class MediaOverlay {
 
         if (video) {
             if (play) {
-                video.muted = false; // 🔊 Attempt Unmute
-                video.volume = 0.2;  // 🔉 Target 20%
+                video.muted = false; // 🔊 Start Unmuted @ 20%
+                video.volume = 0.2;
                 video.play().catch(() => {
-                    // Fallback: stay muted if browser blocks sound
+                    // 🛡️ Fallback: Browser blocked unmuted autoplay
                     video.muted = true;
                     video.play();
                 });
@@ -320,18 +346,21 @@ class MediaOverlay {
         if (iframe && iframe.contentWindow) {
             const sendAudioCommands = () => {
                 if (!play || !this.container.classList.contains('active')) return;
-                // YouTube PostMessage Protocol
+
+                // 1. YouTube specialized (API mode)
                 iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
                 iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [20] }), '*');
                 iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*');
 
-                // Vimeo PostMessage Protocol
+                // 2. Vimeo specialized
                 iframe.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 0.2 }), '*');
                 iframe.contentWindow.postMessage(JSON.stringify({ method: 'play' }), '*');
 
-                // Protocol Shotgun (Universal)
+                // 3. Protocol Shotgun (Universal fallback for ANY platform)
                 iframe.contentWindow.postMessage('unmute', '*');
                 iframe.contentWindow.postMessage(JSON.stringify({ event: 'unmute' }), '*');
+                iframe.contentWindow.postMessage(JSON.stringify({ event: 'volume', value: 0.2 }), '*');
+                iframe.contentWindow.postMessage('play', '*');
             };
 
             if (play) {
@@ -346,6 +375,7 @@ class MediaOverlay {
                     }
                 }, 500);
             } else {
+                // Global Stop Signal
                 iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'pauseVideo', args: '' }), '*');
                 iframe.contentWindow.postMessage(JSON.stringify({ method: 'pause' }), '*');
                 iframe.contentWindow.postMessage('pause', '*');
@@ -395,7 +425,7 @@ class MediaOverlay {
                 } else if (url.includes('youtube.com/shorts/')) {
                     videoId = sourceUrl.match(/shorts\/([^?]+)/)?.[1];
                 }
-                if (videoId) return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=1&mute=1`;
+                if (videoId) return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=1&mute=0&rel=0`;
             }
 
             // Direct Video
