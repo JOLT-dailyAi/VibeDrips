@@ -265,6 +265,7 @@ class MediaLightbox {
         document.body.style.overflow = 'hidden';
 
         this.initIdleTimer();
+        this.renderDots();
         this.showMedia(this.currentIndex);
     }
 
@@ -682,7 +683,9 @@ class MediaLightbox {
     renderDots() {
         if (!this.options.showDots) return;
 
-        const dotsContainer = document.querySelector('.lightbox-dots');
+        const overlay = document.getElementById('mediaLightbox');
+        if (!overlay) return;
+        const dotsContainer = overlay.querySelector('.lightbox-dots');
         const totalMedia = this.mediaArray.length;
 
         if (totalMedia <= 1) {
@@ -712,7 +715,9 @@ class MediaLightbox {
     updateDots(index) {
         if (!this.options.showDots) return;
 
-        const dots = document.querySelectorAll('.lightbox-dot');
+        const overlay = document.getElementById('mediaLightbox');
+        if (!overlay) return;
+        const dots = overlay.querySelectorAll('.lightbox-dot');
         dots.forEach((dot, i) => {
             dot.classList.toggle('active', i === index);
         });

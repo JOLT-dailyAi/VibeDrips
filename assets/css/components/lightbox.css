@@ -31,13 +31,18 @@
 /* 🏗️ Nav Hub - Vertical Tray on Right (Desktop/Cursor) */
 .lightbox-nav-hub {
     position: absolute;
-    top: 2rem;
+    top: 0;
+    bottom: 0;
     right: 2rem;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    /* Centers navigation arrows vertically */
     gap: 1.5rem;
     align-items: center;
     z-index: 10001;
+    pointer-events: none;
+    /* Allow clicks through to media except on buttons */
     transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s ease;
 }
 
@@ -60,10 +65,14 @@
     outline: none;
     padding: 0;
     margin: 0;
+    pointer-events: auto;
+    /* Enable clicks on buttons */
 }
 
 .lightbox-close {
-    order: -1;
+    position: absolute;
+    top: 2rem;
+    /* Pinned to top within the hub */
     /* Close button always at top of hub */
 }
 
