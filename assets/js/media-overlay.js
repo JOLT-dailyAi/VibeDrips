@@ -35,15 +35,8 @@ class MediaOverlay {
             console.log('🎬 MediaOverlay: container appended to DOM');
         }
 
-        // Prepare media items: source_link + reference_media
-        this.mediaItems = [];
-        if (product.source_link) this.mediaItems.push(product.source_link);
-        if (product.reference_media && Array.isArray(product.reference_media)) {
-            // Avoid duplicates
-            product.reference_media.forEach(link => {
-                if (link !== product.source_link) this.mediaItems.push(link);
-            });
-        }
+        // Prepare media items: use reference_media which already contains source_link
+        this.mediaItems = Array.isArray(product.reference_media) ? product.reference_media : [];
 
         if (this.mediaItems.length === 0) {
             console.warn('MediaOverlay: No media to display');
