@@ -1755,10 +1755,12 @@ function closeDynamicModal(event) {
             // Restore body scroll
             document.body.style.overflow = '';
 
-            // Cleanup any active sub-overlays
+            // ✅ TIERED CLOSURE: Stage 1 - Media Overlay
             if (window.mediaOverlay && window.mediaOverlay.container &&
                 window.mediaOverlay.container.classList.contains('active')) {
+                console.log('🎬 Stage 1 Close: Closing Media Overlay');
                 window.mediaOverlay.close();
+                return; // 🛑 Stop here - stage 1 complete
             }
 
             // Detect touch device

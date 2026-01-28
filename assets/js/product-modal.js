@@ -7,7 +7,7 @@ function showSimpleModal() {
         console.error('❌ Product modal not found!');
         return;
     }
-    
+
     console.log('✅ Opening product modal');
     modal.classList.remove('hidden');
 }
@@ -16,7 +16,7 @@ function showSimpleModal() {
 function closeSimpleModal() {
     const modal = document.getElementById('static-modal');
     if (!modal) return;
-    
+
     console.log('❌ Closing simple modal');
     modal.classList.add('hidden');
 }
@@ -24,27 +24,35 @@ function closeSimpleModal() {
 // Close dynamic modal (for dynamically generated product modals)
 function closeDynamicModal(event) {
     console.log('🖱️ Close dynamic modal triggered');
-    
+
     // Find the closest modal parent
     const modal = event.target.closest('.simple-modal');
-    
+
     if (!modal) {
         console.error('❌ Could not find modal to close');
         return;
     }
-    
+
     // Check if clicking on overlay or close button (not modal content)
     const clickedOverlay = event.target.classList.contains('modal-overlay');
     const clickedCloseButton = event.target.tagName === 'BUTTON';
-    
+
     console.log('🖱️ Click details:', {
         clickedOverlay,
         clickedCloseButton,
         targetClass: event.target.className,
         targetTag: event.target.tagName
     });
-    
+
     if (clickedOverlay || clickedCloseButton) {
+        // ✅ TIERED CLOSURE: Stage 1 - Media Overlay
+        if (window.mediaOverlay && window.mediaOverlay.container &&
+            window.mediaOverlay.container.classList.contains('active')) {
+            console.log('🎬 Stage 1 Close: Closing Media Overlay');
+            window.mediaOverlay.close();
+            return; // 🛑 Stage 1 complete
+        }
+
         console.log('💥 Closing modal...');
         modal.remove(); // Remove dynamically created modal from DOM
     }

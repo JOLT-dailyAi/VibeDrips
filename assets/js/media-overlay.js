@@ -125,7 +125,7 @@ class MediaOverlay {
         `;
     }
 
-    renderTiles(media, isActive) {
+    renderTiles(media) {
         let html = '';
         const itemCount = media.length;
 
@@ -222,16 +222,48 @@ class MediaOverlay {
         const activeGrid = this.strip.children[2]; // Index 2 is always center/active in 5-cache
         if (!activeGrid) return;
 
+        // 🔄 ANY-OUT-LAST-IN Strategy
+        // 1. Extract the clicked item
+        const clickedItem = this.mediaItems[index];
+        if (!clickedItem) return;
+
+        // 2. Extract current Live (Head)
+        const prevLive = this.mediaItems.shift();
+
+        // 3. Remove clicked item from its intermediate position
+        // Since we shifted, indices change. Let's find index again.
+        const newIndex = this.mediaItems.indexOf(clickedItem);
+        if (newIndex !== -1) {
+            this.mediaItems.splice(newIndex, 1);
+        }
+
+        // 4. Re-assemble: Selected -> [Rest] -> Old Live
+        this.mediaItems.unshift(clickedItem);
+        this.mediaItems.push(prevLive);
+
+        // 5. Atomic Re-render (Ensures Thumbnail 1 is always the new 2, etc)
+        this.currentIndex = 0; // The selected item is now always at index 0 (Live)
+
+        // Update Live Player
         const playerSlot = activeGrid.querySelector('.active-player');
-        const url = this.mediaItems[index];
-        if (!playerSlot || !url) return;
+        if (playerSlot) playerSlot.innerHTML = this.getPlayerHTML(clickedItem);
 
-        this.currentIndex = index;
-        playerSlot.innerHTML = this.getPlayerHTML(url);
+        // Update Thumbnails (Atomic Grid update)
+        const gridTiles = activeGrid.querySelector('.golden-spiral-grid');
+        if (gridTiles) {
+            // Keep the .active-player slot, update only the sibling thumbnails
+            const tilesHtml = this.renderTiles(this.mediaItems);
 
-        // UI Highlights
-        activeGrid.querySelectorAll('.spiral-tile, .sub-tile').forEach(el => el.classList.remove('active-thumb'));
-        if (element) element.classList.add('active-thumb');
+            // Selective Update: Remove all .spiral-tile siblings except .active-player
+            activeGrid.querySelectorAll('.spiral-tile:not(.active-player)').forEach(el => el.remove());
+
+            // Append new calculated tiles
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = tilesHtml;
+            while (tempDiv.firstChild) {
+                activeGrid.appendChild(tempDiv.firstChild);
+            }
+        }
     }
 
     openFullscreen() {
