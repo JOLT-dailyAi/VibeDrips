@@ -97,14 +97,6 @@ body.glass-theme .modal-external-controls .globe-toggle.active {
         transform: none !important;
         top: 0 !important;
     }
-
-    /* Remove highlight from Reels toggle when it's the Red X */
-    html body .modal-external-controls .reels-toggle.active {
-        background: rgba(255, 255, 255, var(--glass-refraction, 0.15)) !important;
-        border: 1px solid rgba(255, 255, 255, 0.3) !important;
-        box-shadow: none !important;
-        color: inherit !important;
-    }
 }
 
 /* Ensure buttons are clickable despite container's pointer-events: none */
