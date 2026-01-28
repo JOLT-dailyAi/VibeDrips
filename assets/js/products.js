@@ -906,6 +906,12 @@ function wrapModalForSliding(centerProductId) {
                     <span>🎬 Reference Media Content for this Product | 🌍 Available in Multiple Regions &nbsp; | &nbsp; </span>
                 </div>
             </div>
+            <button class="zoom-btn-mirror" style="display:none;" onclick="event.stopPropagation(); window.mediaOverlay.openFullscreen()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                </svg>
+                Fullscreen Gallery
+            </button>
         </div>
         <button class="reels-toggle" aria-label="Reels Animation">
             <span>🎬</span>
@@ -924,13 +930,23 @@ function wrapModalForSliding(centerProductId) {
     const reelsBtn = externalControls.querySelector('.reels-toggle');
     const globeBtn = externalControls.querySelector('.globe-toggle');
     const bubble = externalControls.querySelector('.control-bubble');
+    const ticker = bubble.querySelector('.ticker-viewport');
+    const zoomBtnMirror = bubble.querySelector('.zoom-btn-mirror');
 
     const syncState = () => {
         const anyActive = reelsBtn.classList.contains('active') || globeBtn.classList.contains('active');
-        if (anyActive) {
+        const isReels = reelsBtn.classList.contains('active');
+
+        if (isReels) {
+            bubble.classList.remove('hidden');
+            ticker.style.display = 'none';
+            zoomBtnMirror.style.display = 'flex';
+        } else if (anyActive) {
             bubble.classList.add('hidden');
         } else {
             bubble.classList.remove('hidden');
+            ticker.style.display = 'block';
+            zoomBtnMirror.style.display = 'none';
         }
 
         // Trigger Media Overlay

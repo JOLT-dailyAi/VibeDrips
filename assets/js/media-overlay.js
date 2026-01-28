@@ -57,6 +57,7 @@ class MediaOverlay {
 
     close() {
         console.log('🎬 MediaOverlay: close() called');
+        this.togglePlayback(false);
         this.container.classList.remove('active');
 
         const wrapper = document.querySelector('.modal-layout-wrapper');
@@ -69,11 +70,8 @@ class MediaOverlay {
     }
 
     render() {
-        // We want to show the current item in the large slot, 
-        // and the REMAINING items in the 4 small slots (tile-1 to tile-4).
-        const currentMedia = this.mediaItems[this.currentIndex];
-        const otherMedia = this.mediaItems.filter((_, idx) => idx !== this.currentIndex);
-
+        // STABLE GRID: Thumbnails are fixed to indices 0-3 of the mediaItems list
+        // tile-large is the "Live Player" slot
         this.container.innerHTML = `
             <div class="media-overlay-content">
                 <div class="golden-spiral-grid">
@@ -81,14 +79,12 @@ class MediaOverlay {
                         <!-- Live Player Injected Here -->
                     </div>
                     ${[0, 1, 2, 3].map(i => {
-            const item = otherMedia[i];
+            const item = this.mediaItems[i];
             if (!item) return `<div class="spiral-tile tile-${i + 1} empty-slot"></div>`;
 
-            // Need the real index in this.mediaItems
-            const realIndex = this.mediaItems.indexOf(item);
             return `
-                            <div class="spiral-tile tile-${i + 1}" data-index="${realIndex}" onclick="window.mediaOverlay.swapMedia(${realIndex})">
-                                <img src="${this.getThumbnail(item)}" alt="Media ${realIndex + 1}">
+                            <div class="spiral-tile tile-${i + 1}" data-index="${i}" onclick="window.mediaOverlay.swapMedia(${i})">
+                                <img src="${this.getThumbnail(item)}" alt="Media ${i + 1}">
                             </div>
                         `;
         }).join('')}
@@ -102,10 +98,7 @@ class MediaOverlay {
     swapMedia(index) {
         this.currentIndex = index;
         const mainSlot = this.container.querySelector('#main-player-slot');
-        if (!mainSlot) {
-            console.error('🎬 MediaOverlay: main-player-slot NOT FOUND in container');
-            return;
-        }
+        if (!mainSlot) return;
 
         const url = this.mediaItems[index];
         const embedUrl = typeof window.getUniversalVideoEmbedUrl === 'function'
@@ -115,13 +108,13 @@ class MediaOverlay {
         // Render Live Player
         if (url.match(/\.(mp4|webm|mov|avi)$/i)) {
             mainSlot.innerHTML = `
-                <video controls playsinline autoplay muted>
+                <video controls playsinline autoplay muted class="main-video-player">
                     <source src="${url}" type="video/mp4">
                 </video>
             `;
         } else {
             mainSlot.innerHTML = `
-                <iframe src="${embedUrl}" scrolling="no" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"></iframe>
+                <iframe src="${embedUrl}" class="main-iframe-player" scrolling="no" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"></iframe>
             `;
         }
 
@@ -148,9 +141,46 @@ class MediaOverlay {
     }
 
     openFullscreen() {
+        // Pause local video/iframe
+        this.togglePlayback(false);
+
         if (typeof MediaLightbox !== 'undefined') {
             const lightbox = new MediaLightbox();
             lightbox.open(this.mediaItems, this.currentIndex);
+
+            // Resumption Logic: Check when lightbox is closed
+            const checkClosed = setInterval(() => {
+                const overlay = document.getElementById('mediaLightbox');
+                if (!overlay || !overlay.classList.contains('active')) {
+                    clearInterval(checkClosed);
+                    this.togglePlayback(true);
+                }
+            }, 500);
+        }
+    }
+
+    togglePlayback(play = true) {
+        const video = this.container.querySelector('.main-video-player');
+        const iframe = this.container.querySelector('.main-iframe-player');
+
+        if (video) {
+            if (play) video.play().catch(() => { });
+            else video.pause();
+        }
+
+        if (iframe) {
+            // For iframes (YT/Vimeo/etc), we use postMessage if possible, 
+            // but simplest is just refreshing/clearing src or setting style
+            // Better: just resume if it's already playing? 
+            // In many cases we can't easily resume where left off without specialized APIs.
+            // For now, if we pause, we just set pointer-events: none to avoid noise or similar.
+            if (!play) {
+                this._iframeSrc = iframe.src;
+                iframe.src = 'about:blank';
+            } else if (this._iframeSrc) {
+                iframe.src = this._iframeSrc;
+                this._iframeSrc = null;
+            }
         }
     }
 
