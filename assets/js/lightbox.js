@@ -41,6 +41,11 @@ class MediaLightbox {
         this.init();
     }
 
+    isMobileOrTablet() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+            (window.innerWidth < 1024 && 'ontouchstart' in window);
+    }
+
     init() {
         if (!document.getElementById('mediaLightbox')) {
             this.createLightboxDOM();
@@ -524,15 +529,40 @@ class MediaLightbox {
         }
     }
 
+    /**
+     * Fresh Player Injection (Mobile Optimization)
+     * Replaces the target element with a fresh one to reset browser autoplay state
+     */
+    refreshPlayer(type, container, url, attributes = {}) {
+        if (type === 'iframe') {
+            const attrStr = Object.entries(attributes).map(([k, v]) => `${k}="${v}"`).join(' ');
+            container.innerHTML = `<iframe class="lightbox-iframe" frameborder="0" allowfullscreen allow="autoplay; encrypted-media" src="${url}" ${attrStr} style="display: block;"></iframe>`;
+            return container.querySelector('iframe');
+        } else if (type === 'video') {
+            const attrStr = Object.entries(attributes).map(([k, v]) => `${k}="${v}"`).join(' ');
+            container.innerHTML = `<video class="lightbox-video" controls autoplay muted playsinline src="${url}" ${attrStr} style="display: block;"></video>`;
+            return container.querySelector('video');
+        }
+        return null;
+    }
+
     loadInstagram(url, iframe, placeholder, loader, caption, filename) {
         const embedUrl = this.getInstagramEmbedUrl(url);
+        const isMobile = this.isMobileOrTablet();
 
         if (embedUrl) {
-            iframe.src = embedUrl;
-            iframe.onload = () => {
+            if (isMobile) {
+                const container = iframe.parentElement;
+                iframe = this.refreshPlayer('iframe', container, embedUrl);
                 loader.style.display = 'none';
-                iframe.style.display = 'block';
-            };
+            } else {
+                iframe.src = embedUrl;
+                iframe.onload = () => {
+                    loader.style.display = 'none';
+                    iframe.style.display = 'block';
+                };
+            }
+
             iframe.onerror = () => {
                 loader.style.display = 'none';
                 placeholder.style.display = 'flex';
@@ -555,13 +585,21 @@ class MediaLightbox {
 
     loadTikTok(url, iframe, placeholder, loader, caption, filename) {
         const embedUrl = this.getTikTokEmbedUrl(url);
+        const isMobile = this.isMobileOrTablet();
 
         if (embedUrl) {
-            iframe.src = embedUrl;
-            iframe.onload = () => {
+            if (isMobile) {
+                const container = iframe.parentElement;
+                iframe = this.refreshPlayer('iframe', container, embedUrl);
                 loader.style.display = 'none';
-                iframe.style.display = 'block';
-            };
+            } else {
+                iframe.src = embedUrl;
+                iframe.onload = () => {
+                    loader.style.display = 'none';
+                    iframe.style.display = 'block';
+                };
+            }
+
             iframe.onerror = () => {
                 loader.style.display = 'none';
                 placeholder.style.display = 'flex';
@@ -583,10 +621,10 @@ class MediaLightbox {
 
     loadYouTube(url, iframe, placeholder, loader, caption, filename) {
         const embedUrl = this.getYouTubeEmbedUrl(url);
+        const isMobile = this.isMobileOrTablet();
 
         if (embedUrl) {
-            iframe.src = embedUrl;
-            iframe.onload = () => {
+            const onMediaReady = () => {
                 loader.style.display = 'none';
                 iframe.style.display = 'block';
 
@@ -609,6 +647,17 @@ class MediaLightbox {
                     if (++pulseCount >= 4 || !this.isOpen) clearInterval(this._pulseInterval);
                 }, 500);
             };
+
+            if (isMobile) {
+                const container = iframe.parentElement;
+                iframe = this.refreshPlayer('iframe', container, embedUrl);
+                // On mobile, just fire the pulses immediately since we don't have a reliable onload synchronization that keeps the gesture active
+                onMediaReady();
+            } else {
+                iframe.src = embedUrl;
+                iframe.onload = onMediaReady;
+            }
+
             iframe.onerror = () => {
                 loader.style.display = 'none';
                 placeholder.style.display = 'flex';
@@ -636,9 +685,9 @@ class MediaLightbox {
     }
 
     loadVideo(url, video, placeholder, loader, caption, filename) {
-        video.src = url;
+        const isMobile = this.isMobileOrTablet();
 
-        video.onloadeddata = () => {
+        const onVideoReady = () => {
             loader.style.display = 'none';
             video.style.display = 'block';
 
@@ -655,6 +704,16 @@ class MediaLightbox {
                 });
             }
         };
+
+        if (isMobile) {
+            const container = video.parentElement;
+            video = this.refreshPlayer('video', container, url);
+            // On mobile, native videos often play better if we trigger immediately
+            onVideoReady();
+        } else {
+            video.src = url;
+            video.onloadeddata = onVideoReady;
+        }
 
         video.onerror = () => {
             loader.style.display = 'none';
