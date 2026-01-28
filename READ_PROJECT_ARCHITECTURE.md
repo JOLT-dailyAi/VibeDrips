@@ -84,8 +84,32 @@ Adjacent to the product modal, we maintain a floating control layer that provide
 - **Mutual Exclusion**: We implement a "One-Focus" rule. Activating one external toggle (Reels or Globe) automatically deactivates the other.
 - **State Persistence**: Hovering and Selection states use high-specificity CSS to ensure theme-parity branding (Unified Purple Glow) is maintained across Light, Dark, and Glass themes.
 
-### 3. DOM Injection Strategy
 - **Layer Isolation**: These controls are injected into the `.modal-layout-wrapper` as a peer to the `.modal-nav-container`. This allows them to bypass established navigation "No-Touch" rules while remaining perfectly aligned with the modal's center-point.
+
+---
+
+## 🎭 Advanced Media Architecture (Phases 8-10)
+
+### 1. Sliding Media Engine (v2)
+Implemented in `MediaLightbox`, this engine extends the "Zero-Flash" philosophy to social media embeds.
+- **5-Slot Preloading**: We maintain a sliding window of 5 slides. This allows the system to preload high-weight iframes (YouTube/TikTok) before the user even considers swiping to them.
+- **Active Selection**: Only the slot at the absolute center (3rd slot, `-200%` translation) is permitted to output audio or receive autoplay parameters (`autoplay=1`).
+- **Memory Garbage Collection**: Media that exits the 5-item window is physically purged from the DOM to prevent memory leaks during long browsing sessions.
+
+### 2. The Unified Gesture Layer (Sensitive Shield)
+On mobile, the struggle between "Video Interaction" and "Gallery Navigation" is solved via the **Sensitive Shield**.
+- **The Concept**: A global invisible listener layer that sits **above** the media but **below** the UI controls.
+- **Input Routing**:
+    - **Horizontal Drag**: Intercepted by the shield and converted to slide movements.
+    - **Fast Tap**: Programmatically forwarded (Proxied) to the hidden media element to trigger unmuting/play pulses.
+- **Why?**: This prevents "Tap-to-Mute" controls in iframes from "stalling" the user's attempt to swipe to the next product.
+
+---
+
+## 📱 Mobile-First Design Refinements (Phase 11)
+
+- **The "No-Text" Loader**: Transitioned from hardcoded "Loading..." indicators to silent CSS spinners to maintain a premium, cinematic feel.
+- **Landscape Strictness**: Absolute 32px footprint for toggles to ensure perfect alignment with the navigation hub without clipping on notch-constrained devices.
 
 ---
 

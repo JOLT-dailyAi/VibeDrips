@@ -119,3 +119,24 @@ To provide secondary interaction without cluttering the product modal, we use a 
 - **Theme Parity**: Shared 42px circular footprint with brand purple (`#5A4BFF`) selection glow across all themes.
 - **Landscape Economy**: Icons shrink to **32px** in mobile landscape to preserve vertical visibility.
 - **Safe-Area Portrait**: Tightened `gap: 8px` and 180px ticker width in mobile portrait to prevent edge overflow.
+
+---
+
+## 10. Lightbox Sliding Geometry (100% Geometry)
+
+To support the infinite-preloading strip in the Lightbox, we use a **Triple-Zero Bleed** strategy.
+
+### The Layout
+- **Container**: `overflow: hidden` with absolute black background.
+- **Sliding Strip**: A `flex` container with 5 slots, each exactly `100%` width of the viewport.
+- **Center Alignment**: Active media is always at `translate3d(-200%, 0, 0)`.
+
+### Bleed Prevention (Landscape Isolation)
+In landscape mode, even 1px of "Bleed" from an adjacent slide is visible.
+- **Opacity Shielding**: `.lightbox-media-wrapper` has `opacity: 0` by default. Only the `.center-slot` receives `opacity: 1`. 
+- **Transition**: Uses a `0.3s ease` opacity fade combined with the `0.4s` slide to hide loading/buffering artifacts from the user's peripheral vision.
+
+### GPU-Hardened Geometry
+- **Transform**: Exclusively use `translate3d` for the strip to ensure it stays on the graphics layer, essential for maintaining sensitive swipe response over high-weight media like 4K videos or TikTok embeds.
+
+---

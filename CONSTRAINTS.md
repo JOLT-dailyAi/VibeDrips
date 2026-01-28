@@ -51,13 +51,37 @@ Mobile landscape is height-constrained. New components should include scaling ov
 
 ---
 
-## 🏗️ Architecture Summary
+
+### 7. Global Gesture & Intercept Logic
+- **The Sensitive Shield**: On mobile/iPad, the `.lightbox-iframe-shield` MUST be `pointer-events: auto` to prevent cross-domain iframes (YouTube, TikTok) from stealing swipe gestures.
+- **Tap Proxying**: Clicks on the shield must be handled via a "Tap Proxy" that forwards unmuting/playback commands to the underlying media, ensuring high sensitivity for both swiping and interaction.
+
+---
+
+## 🏗️ Mobile-First Media & Performance Constraints
+
+### 1. The "Fresh Injection" Rule (Autoplay)
+To preserve the "User Activation" privilege on mobile (iOS/Android), media elements (iframes/videos) should be injected via `innerHTML` or fresh node creation rather than updating `.src`. This ensures the browser treats the media as part of the initial gesture window.
+
+### 2. 5-Media Sliding Strip (Buffer Architecture)
+The Lightbox MUST utilize a 5-product sliding window `[P-2, P-1, Active, N+1, N+2]` for performance. 
+- **Preloading**: Synchronously load/buffer the 1-2 neighbors to provide instant swiping.
+- **Media Discipline (Unload)**: Any media beyond the 5-item buffer must be explicitly unloaded (src = "") and paused to minimize memory pressure and data usage.
+
+### 3. Absolute 32px Lock (Landscape Toggles)
+Mobile landscape toggles (`.reels-toggle`, `.globe-toggle`) must maintain an **absolute** 32px width and height. 
+- **No Expansion**: Forbid `scale()` or `border-width` growth on selection to prevent overlapping nearby icons or causing layout "bloat."
+- **Specificity**: Use body-theme scoped selectors to override all global styles and enforce this lock.
+
+---
+
+## 🏗️ Architecture Summary (Updated)
 
 ```mermaid
 graph TD
-    Overlay["#dynamic-modal-overlay"] --> NavContainer[".modal-nav-container"]
-    NavContainer --> SlidingStrip[".modal-sliding-strip"]
-    NavContainer --> Glow["Boundary Glow"]
-    NavContainer --> Zones["Glass Zones"]
-    SlidingStrip --> Window["5-Product Cache"]
+    Overlay["#mediaLightbox"] --> MediaContainer[".lightbox-media-container"]
+    MediaContainer --> SlidingStrip[".lightbox-sliding-strip"]
+    SlidingStrip --> Wrapper["5-Media Buffer [P-2...N+2]"]
+    MediaContainer --> Shield[".lightbox-iframe-shield (Gesture Catcher)"]
+    Shield --> TapProxy["Tap Proxy (Unmute/Play)"]
 ```
