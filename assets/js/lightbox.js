@@ -128,6 +128,16 @@ class MediaLightbox {
             if (active) active.resetIdleTimer();
         });
 
+        overlay.addEventListener('pointermove', () => {
+            const active = MediaLightbox.activeInstance;
+            if (active) active.resetIdleTimer();
+        });
+
+        overlay.addEventListener('touchstart', () => {
+            const active = MediaLightbox.activeInstance;
+            if (active) active.resetIdleTimer();
+        }, { passive: true });
+
         prevBtn.addEventListener('click', () => {
             const active = MediaLightbox.activeInstance;
             if (active) active.prev();
@@ -305,7 +315,7 @@ class MediaLightbox {
             if (this.isOpen) {
                 overlay.classList.add('controls-hidden');
             }
-        }, 3000); // 3 seconds of peace
+        }, 2000); // Snappier hide: 2 seconds of peace
     }
 
     /**
