@@ -157,21 +157,37 @@ body.dark-theme .control-bubble::after {
 }
 
 /* ============================================================
-   MOBILE LANDSCAPE SCALING & PHASE 6 SIZE-LOCK
+   MOBILE LANDSCAPE SCALING & PHASE 6 REFINED
    ============================================================ */
 @media (max-width: 950px) and (orientation: landscape) {
 
-    /* Phase 6: Sync controls to original bottom-anchor */
+    /* Phase 6 REFINED: Sync controls to original bottom-anchor */
     .modal-external-controls {
         top: auto !important;
         bottom: calc(100% + 6px) !important;
     }
 
-    /* Phase 6: Lock scale to 1 to prevent clipping from size-bloat while keeping glow */
+    /* Phase 6 REFINED: Strict Physical Size Lock for landscape Active State */
+    /* Must match "Ultimate Glow" specificity to lock down dimensions */
     html body .modal-external-controls .reels-toggle.active,
-    html body .modal-external-controls .globe-toggle.active {
-        transform: scale(1) !important;
+    html body .modal-external-controls .globe-toggle.active,
+    body.light-theme .modal-external-controls .reels-toggle.active,
+    body.light-theme .modal-external-controls .globe-toggle.active,
+    body.dark-theme .modal-external-controls .reels-toggle.active,
+    body.dark-theme .modal-external-controls .globe-toggle.active,
+    body.glass-theme .modal-external-controls .reels-toggle.active,
+    body.glass-theme .modal-external-controls .globe-toggle.active {
+        transform: none !important;
+        /* Killer: Remove scale(1.08) expansion */
+        border-width: 0.8px !important;
+        /* Killer: Match inactive thickness */
         top: 0 !important;
+    }
+
+    /* Disable hover expansion in landscape to prevent potential clipping */
+    .reels-toggle:hover,
+    .globe-toggle:hover {
+        transform: none !important;
     }
 
     .control-bubble {
