@@ -399,15 +399,24 @@ class MediaLightbox {
 
         // Show/hide navigation arrows based on device and boundary
         const isSmallScreen = window.innerWidth < 768; // Mobile Phones
-        const hasFinePointer = window.matchMedia('(pointer: fine)').matches;
-        const hideArrows = isSmallScreen && !hasFinePointer;
-
-        if (hideArrows) {
+        if (isSmallScreen) {
             prevBtn.style.display = 'none';
             nextBtn.style.display = 'none';
         } else {
-            prevBtn.style.display = (index === 0) ? 'none' : 'flex';
-            nextBtn.style.display = (index === this.mediaArray.length - 1) ? 'none' : 'flex';
+            prevBtn.style.display = 'flex';
+            nextBtn.style.display = 'flex';
+
+            // Lock positions by using visibility/pointer-events instead of display
+            const isFirst = index === 0;
+            const isLast = index === this.mediaArray.length - 1;
+
+            prevBtn.style.visibility = isFirst ? 'hidden' : 'visible';
+            prevBtn.style.pointerEvents = isFirst ? 'none' : 'auto';
+            prevBtn.style.opacity = isFirst ? '0' : '1';
+
+            nextBtn.style.visibility = isLast ? 'hidden' : 'visible';
+            nextBtn.style.pointerEvents = isLast ? 'none' : 'auto';
+            nextBtn.style.opacity = isLast ? '0' : '1';
         }
 
         // Load media based on type
