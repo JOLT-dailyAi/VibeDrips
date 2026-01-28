@@ -132,6 +132,27 @@
     max-height: calc(90vh - 80px);
 }
 
+/* 🛡️ Iframe Shield: Invisible catcher for wake events */
+.lightbox-iframe-shield {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    /* Just below controls, but over iframe */
+    pointer-events: none;
+    /* Default: allows clicking video */
+    background: transparent;
+}
+
+/* When hidden, shield becomes active to catch any mouse move to wake UI */
+.lightbox-overlay.controls-hidden .lightbox-iframe-shield {
+    pointer-events: auto;
+    cursor: none;
+    /* Hide cursor while idle/hidden for immersion */
+}
+
 .lightbox-image,
 .lightbox-video {
     max-width: 100%;

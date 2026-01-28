@@ -80,6 +80,10 @@ class MediaLightbox {
                         <img class="lightbox-image" alt="" style="display:none">
                         <video class="lightbox-video" controls style="display:none"></video>
                         <iframe class="lightbox-iframe" frameborder="0" allowfullscreen allow="autoplay; encrypted-media" style="display:none"></iframe>
+                        
+                        <!-- Iframe Shield: Invisible layer to capture "Wake" movements over videos -->
+                        <div class="lightbox-iframe-shield"></div>
+
                         <div class="lightbox-video-placeholder" style="display:none">
                             <div class="video-placeholder-icon">🎬</div>
                             <div class="video-placeholder-text">Video</div>
@@ -116,12 +120,26 @@ class MediaLightbox {
             }, 300);
         });
 
+        const shield = overlay.querySelector('.lightbox-iframe-shield');
+
         overlay.addEventListener('click', (e) => {
             const active = MediaLightbox.activeInstance;
             if (active && e.target === overlay) active.close();
             // User click counts as activity
             if (active) active.resetIdleTimer();
         });
+
+        // Shield catches activity when iframe is covered (UI hidden state)
+        if (shield) {
+            shield.addEventListener('mousemove', () => {
+                const active = MediaLightbox.activeInstance;
+                if (active) active.resetIdleTimer();
+            });
+            shield.addEventListener('pointermove', () => {
+                const active = MediaLightbox.activeInstance;
+                if (active) active.resetIdleTimer();
+            });
+        }
 
         overlay.addEventListener('mousemove', () => {
             const active = MediaLightbox.activeInstance;
@@ -148,17 +166,22 @@ class MediaLightbox {
         });
 
         if (this.options.enableKeyboard) {
-            document.addEventListener('keydown', (e) => {
+            // Use window level with capture to grab events before iframes
+            window.addEventListener('keydown', (e) => {
                 const active = MediaLightbox.activeInstance;
                 if (!active || !active.isOpen) return;
 
                 // Any key press wakes the UI
                 active.resetIdleTimer();
 
-                if (e.key === 'Escape') closeBtn.click();
+                if (e.key === 'Escape') {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    closeBtn.click();
+                }
                 if (e.key === 'ArrowLeft') active.prev();
                 if (e.key === 'ArrowRight') active.next();
-            });
+            }, true); // Capture phase
         }
 
         if (this.options.enableSwipe) {
