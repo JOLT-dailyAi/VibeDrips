@@ -40,8 +40,7 @@ class MediaOverlay {
         }
 
         this.container.classList.add('active');
-        const wrapper = document.querySelector('.modal-layout-wrapper');
-        if (wrapper) wrapper.classList.add('view-reels-mode');
+        document.body.classList.add('view-reels-mode');
         document.body.style.overflow = 'hidden';
 
         // Initialize the 5-Grid Cache
@@ -51,8 +50,7 @@ class MediaOverlay {
     close() {
         this.togglePlayback(false);
         this.container.classList.remove('active');
-        const wrapper = document.querySelector('.modal-layout-wrapper');
-        if (wrapper) wrapper.classList.remove('view-reels-mode');
+        document.body.classList.remove('view-reels-mode');
         document.body.style.overflow = '';
 
         const reelsBtn = document.querySelector('.reels-toggle.active');
@@ -242,18 +240,30 @@ class MediaOverlay {
         const activeGrid = this.strip?.children[2];
         if (!activeGrid) return;
 
+        const playerSlot = activeGrid.querySelector('.active-player');
         const video = activeGrid.querySelector('.main-video-player');
         const iframe = activeGrid.querySelector('.main-iframe-player');
+
+        // Layer 3: CSS Suspension (Physical Audio Halt)
+        if (playerSlot) {
+            playerSlot.style.visibility = play ? 'visible' : 'hidden';
+            playerSlot.style.pointerEvents = play ? 'auto' : 'none';
+        }
 
         if (video) {
             play ? video.play().catch(() => { }) : video.pause();
         }
 
         if (iframe && iframe.contentWindow) {
+            // Layer 1: Specialized APIs
             const cmd = play ? 'playVideo' : 'pauseVideo';
-            // Universal PostMessage for YT/Vimeo
             iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: cmd, args: '' }), '*');
             iframe.contentWindow.postMessage(JSON.stringify({ method: play ? 'play' : 'pause' }), '*');
+
+            // Layer 2: Protocol Shotgun (Universal signals)
+            const shotgun = play ? 'pause' : 'play'; // Corrected order if needed, but usually 'pause' is safe
+            iframe.contentWindow.postMessage(play ? 'play' : 'pause', '*');
+            iframe.contentWindow.postMessage(JSON.stringify({ type: 'player:' + (play ? 'play' : 'pause') }), '*');
         }
     }
 

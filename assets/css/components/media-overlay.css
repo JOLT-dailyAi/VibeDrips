@@ -35,8 +35,9 @@
 
 /* Individual Grid Wrapper */
 .media-grid-wrapper {
+    flex: 0 0 20%;
+    /* CRITICAL: Prevent squashing */
     width: 20%;
-    /* 1/5th of 500% */
     height: 100%;
     display: flex;
     align-items: center;
@@ -228,9 +229,9 @@
 }
 
 /* Rotating Reels Toggle (Close Button mode) */
-.view-reels-mode .reels-toggle.active {
-    width: 50px !important;
-    height: 50px !important;
+body.view-reels-mode .reels-toggle.active {
+    width: 42px !important;
+    height: 42px !important;
     background: rgba(229, 62, 62, 0.15) !important;
     border: 2px solid #E53E3E !important;
     color: #E53E3E !important;
@@ -239,7 +240,11 @@
     z-index: 6000 !important;
 }
 
-.view-reels-mode .reels-toggle.active::before {
+body.view-reels-mode .reels-toggle.active span {
+    display: none !important;
+}
+
+body.view-reels-mode .reels-toggle.active::before {
     content: '❌';
     position: absolute;
     top: 50%;
