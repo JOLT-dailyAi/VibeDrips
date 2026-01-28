@@ -1684,6 +1684,15 @@ function closeDynamicModal(event) {
 
     if (modal) {
         if (event.target.classList.contains('modal-overlay') || button) {
+            // Restore body scroll
+            document.body.style.overflow = '';
+
+            // Cleanup any active sub-overlays
+            if (window.mediaOverlay && window.mediaOverlay.container &&
+                window.mediaOverlay.container.classList.contains('active')) {
+                window.mediaOverlay.close();
+            }
+
             // Detect touch device
             const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 

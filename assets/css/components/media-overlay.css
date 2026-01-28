@@ -22,6 +22,11 @@
     pointer-events: auto;
 }
 
+/* Guard: Prevent click from propagating to the modal-overlay behind it */
+.media-overlay-container * {
+    pointer-events: auto;
+}
+
 .media-overlay-container.active {
     display: flex;
     opacity: 1;
@@ -42,22 +47,36 @@
 .view-reels-mode .reels-toggle.active {
     width: 50px !important;
     height: 50px !important;
-    background: rgba(255, 255, 255, 0.1) !important;
-    border: 2px solid rgba(255, 255, 255, 0.3) !important;
-    color: white !important;
+    background: rgba(229, 62, 62, 0.15) !important;
+    /* Red tint */
+    border: 2px solid #E53E3E !important;
+    /* Red border */
+    color: #E53E3E !important;
+    /* Red text */
     border-radius: 50% !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+    box-shadow: 0 4px 15px rgba(229, 62, 62, 0.3) !important;
     transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1) !important;
     z-index: 6000 !important;
     /* Above everything */
-    transform: rotate(0deg);
-    /* Counteract products.js hover transform if any */
+    animation: reelsToggleRotate 3s linear infinite !important;
+    /* Infinite rotation */
+}
+
+@keyframes reelsToggleRotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .view-reels-mode .reels-toggle.active:hover {
-    transform: rotate(90deg) scale(1.1) !important;
-    background: rgba(255, 255, 255, 0.2) !important;
-    border-color: rgba(255, 255, 255, 0.5) !important;
+    background: rgba(229, 62, 62, 0.25) !important;
+    border-color: #C53030 !important;
+    transform: scale(1.1) !important;
+    /* Maintain scale on hover, rotation handled by keyframes */
 }
 
 .view-reels-mode .reels-toggle.active span {
@@ -66,14 +85,13 @@
 }
 
 .view-reels-mode .reels-toggle.active::before {
-    content: '✕';
+    content: '❌';
+    /* Red close emoji as requested */
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 20px;
-    font-weight: bold;
-    font-family: Arial, sans-serif;
 }
 
 /* Golden Spiral Grid */
@@ -169,8 +187,15 @@
 }
 
 .spiral-tile.active-thumb {
-    border: 2px solid #667eea;
-    box-shadow: 0 0 15px rgba(102, 126, 234, 0.4);
+    border: 2px solid #E53E3E;
+    /* Match red theme */
+    box-shadow: 0 0 15px rgba(229, 62, 62, 0.4);
+}
+
+.spiral-tile.empty-slot {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    cursor: default;
 }
 
 .spiral-tile img {
