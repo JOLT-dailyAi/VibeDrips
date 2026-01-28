@@ -82,24 +82,13 @@ class MediaLightbox {
                 
                 <div class="lightbox-content">
                     <div class="lightbox-media-container">
-                        <img class="lightbox-image" alt="" style="display:none">
-                        <video class="lightbox-video" controls autoplay muted playsinline style="display:none"></video>
-                        <iframe class="lightbox-iframe" frameborder="0" allowfullscreen allow="autoplay; encrypted-media" style="display:none"></iframe>
+                        <div class="lightbox-sliding-strip"></div>
                         
-                        <!-- Iframe Shield: Invisible layer to capture "Wake" movements over videos -->
+                        <!-- Iframe Shield: Invisible layer to capture "Wake" movements & Swipes -->
                         <div class="lightbox-iframe-shield"></div>
 
-                        <div class="lightbox-video-placeholder" style="display:none">
-                            <div class="video-placeholder-icon">🎬</div>
-                            <div class="video-placeholder-text">Video</div>
-                        </div>
-                        <div class="lightbox-social-placeholder" style="display:none">
-                            <div class="social-placeholder-icon">📱</div>
-                            <div class="social-placeholder-text">Social Media Content</div>
-                        </div>
                         <div class="lightbox-loader">Loading...</div>
                     </div>
-                    <div class="lightbox-caption"></div>
                 </div>
                 
                 <div class="lightbox-dots"></div>
@@ -136,11 +125,34 @@ class MediaLightbox {
 
         // Shield catches activity when iframe is covered (UI hidden state)
         if (shield) {
-            shield.addEventListener('mousemove', () => {
+            // Tap Proxy for mobile unmuting through shield
+            shield.addEventListener('click', (e) => {
                 const active = MediaLightbox.activeInstance;
-                if (active) active.resetIdleTimer();
+                if (!active) return;
+
+                // If it's a mobile swipe, don't trigger tap
+                if (Math.abs(active.touchMoveX - active.touchStartX) > 10) return;
+
+                const centerMedia = overlay.querySelector('.lightbox-media-wrapper.center-slot');
+                if (centerMedia) {
+                    const video = centerMedia.querySelector('video');
+                    const iframe = centerMedia.querySelector('iframe');
+
+                    if (video) {
+                        video.muted = false;
+                        video.volume = 0.5;
+                        video.play().catch(() => { });
+                    }
+                    if (iframe && iframe.contentWindow) {
+                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
+                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [50] }), '*');
+                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*');
+                    }
+                }
+                active.resetIdleTimer();
             });
-            shield.addEventListener('pointermove', () => {
+
+            shield.addEventListener('mousemove', () => {
                 const active = MediaLightbox.activeInstance;
                 if (active) active.resetIdleTimer();
             });
@@ -303,12 +315,103 @@ class MediaLightbox {
         this.currentIndex = startIndex;
         this.isOpen = true;
 
+        this.isOpen = true;
+
         overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
 
         this.initIdleTimer();
         this.renderDots();
-        this.showMedia(this.currentIndex);
+        this.refreshStrip();
+    }
+
+    refreshStrip() {
+        if (!this.isOpen) return;
+        const overlay = document.getElementById('mediaLightbox');
+        const strip = overlay.querySelector('.lightbox-sliding-strip');
+        if (!strip) return;
+
+        const total = this.mediaArray.length;
+        const idx = this.currentIndex;
+
+        // Calculate 5-item window (Preload Center + 2 each side)
+        const windowIndices = [
+            idx - 2,
+            idx - 1,
+            idx,
+            idx + 1,
+            idx + 2
+        ];
+
+        strip.style.transition = 'none';
+        strip.style.transform = 'translateX(-200%)'; // Center is always 3rd item
+        strip.innerHTML = '';
+
+        windowIndices.forEach((wIdx, i) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'lightbox-media-wrapper';
+            if (i === 2) wrapper.classList.add('center-slot');
+
+            if (wIdx >= 0 && wIdx < total) {
+                const url = this.mediaArray[wIdx];
+                const type = this.detectMediaType(url);
+                wrapper.innerHTML = this.getMediaHTML(type, url, i === 2);
+            } else {
+                wrapper.innerHTML = ''; // Empty slot
+            }
+            strip.appendChild(wrapper);
+        });
+
+        // Force reflow
+        void strip.offsetWidth;
+        strip.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
+
+        this.updateCounter();
+        this.updateDots(idx);
+        this.updateNavButtons();
+    }
+
+    getMediaHTML(type, url, isActive = false) {
+        if (type === 'video') {
+            const autoplay = isActive ? 'autoplay' : '';
+            const muted = isActive ? 'muted' : '';
+            return `<video class="lightbox-video" controls ${autoplay} ${muted} playsinline src="${url}"></video>`;
+        } else if (['youtube', 'instagram', 'tiktok'].includes(type)) {
+            const embedUrl = this.getUniversalEmbedUrl(type, url, isActive);
+            return `<iframe class="lightbox-iframe" frameborder="0" allowfullscreen allow="autoplay; encrypted-media" src="${embedUrl}"></iframe>`;
+        } else {
+            return `<img class="lightbox-image" src="${url}" alt="">`;
+        }
+    }
+
+    getUniversalEmbedUrl(type, url, isActive) {
+        if (type === 'youtube') return this.getYouTubeEmbedUrl(url) + (isActive ? '&autoplay=1&mute=1' : '&autoplay=0&mute=1');
+        if (type === 'instagram') return this.getInstagramEmbedUrl(url);
+        if (type === 'tiktok') return this.getTikTokEmbedUrl(url);
+        return url;
+    }
+
+    updateCounter() {
+        const overlay = document.getElementById('mediaLightbox');
+        const counter = overlay.querySelector('.lightbox-counter');
+        if (counter) counter.textContent = `${this.currentIndex + 1} / ${this.mediaArray.length}`;
+    }
+
+    updateNavButtons() {
+        const overlay = document.getElementById('mediaLightbox');
+        const prevBtn = overlay.querySelector('.lightbox-prev');
+        const nextBtn = overlay.querySelector('.lightbox-next');
+        const isSmallScreen = window.innerWidth < 1024;
+
+        if (isSmallScreen) {
+            prevBtn.style.display = 'none';
+            nextBtn.style.display = 'none';
+        } else {
+            const isFirst = this.currentIndex === 0;
+            const isLast = this.currentIndex === this.mediaArray.length - 1;
+            prevBtn.style.visibility = isFirst ? 'hidden' : 'visible';
+            nextBtn.style.visibility = isLast ? 'hidden' : 'visible';
+        }
     }
 
     close() {
@@ -389,17 +492,15 @@ class MediaLightbox {
 
     next() {
         if (this.currentIndex < this.mediaArray.length - 1) {
-            this.stopMedia();
             this.currentIndex++;
-            this.showMedia(this.currentIndex);
+            this.refreshStrip();
         }
     }
 
     prev() {
         if (this.currentIndex > 0) {
-            this.stopMedia();
             this.currentIndex--;
-            this.showMedia(this.currentIndex);
+            this.refreshStrip();
         }
     }
 

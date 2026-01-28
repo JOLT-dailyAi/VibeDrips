@@ -125,25 +125,57 @@
 
 .lightbox-media-container {
     position: relative;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: calc(100vh - 120px);
+    overflow: hidden;
+    /* Viewport for the sliding strip */
     display: flex;
     align-items: center;
     justify-content: center;
-    max-width: 100%;
-    max-height: calc(90vh - 80px);
 }
 
-/* 🛡️ Iframe Shield: Invisible catcher for wake events */
+/* 🎞️ Sliding Strip */
+.lightbox-sliding-strip {
+    display: flex;
+    height: 100%;
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: transform;
+}
+
+/* 🖼️ Media Wrapper (One slide) */
+.lightbox-media-wrapper {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+/* 🛡️ Iframe Shield: Invisible catcher for wake events & mobile gestures */
 .lightbox-iframe-shield {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 10000;
-    /* Just below controls, but over iframe */
-    pointer-events: none;
-    /* Default: allows clicking video */
+    z-index: 10010;
+    /* Above media, but below nav */
     background: transparent;
+    pointer-events: none;
+    /* Default PC: allows clicking video */
+}
+
+/* 📱 Mobile: Sensitive Shield ALWAYS catches gestures */
+@media (max-width: 1024px) {
+    .lightbox-iframe-shield {
+        pointer-events: auto !important;
+    }
 }
 
 /* When hidden, shield becomes active to catch any mouse move to wake UI */
@@ -154,22 +186,21 @@
 }
 
 .lightbox-image,
-.lightbox-video {
+.lightbox-video,
+.lightbox-iframe {
     max-width: 100%;
-    max-height: calc(90vh - 80px);
+    max-height: 100%;
+    width: auto;
+    height: auto;
     object-fit: contain;
-    border-radius: 0.25rem;
+    border-radius: 0.5rem;
     animation: fadeIn 0.3s ease;
+    background: #000;
 }
 
 .lightbox-iframe {
-    width: 500px;
-    height: 700px;
-    max-width: 100%;
-    max-height: calc(90vh - 80px);
-    border-radius: 0.5rem;
-    background: #000;
-    animation: fadeIn 0.3s ease;
+    width: 800px;
+    aspect-ratio: 16/9;
 }
 
 /* 🔹 Navigation Dots */
