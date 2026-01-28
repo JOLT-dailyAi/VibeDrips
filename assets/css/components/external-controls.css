@@ -89,56 +89,6 @@ body.glass-theme .modal-external-controls .globe-toggle.active {
     opacity: 1 !important;
 }
 
-/* Grounding toggles and stripping active highlights in landscape */
-@media (max-width: 950px) and (orientation: landscape) {
-
-    html body .modal-external-controls .reels-toggle.active,
-    html body .modal-external-controls .globe-toggle.active {
-        transform: none !important;
-        top: 0 !important;
-    }
-
-    /* ULTRA OVERRIDE: Remove highlight from Reels toggle when it's the Red X in landscape */
-    /* Must match the "Ultimate Glow" selector set exactly to win specificity */
-    html body .modal-external-controls .reels-toggle.active,
-    body.light-theme .modal-external-controls .reels-toggle.active,
-    body.dark-theme .modal-external-controls .reels-toggle.active,
-    body.glass-theme .modal-external-controls .reels-toggle.active {
-        background: rgba(255, 255, 255, var(--glass-refraction, 0.15)) !important;
-        border: 1px solid rgba(255, 255, 255, 0.3) !important;
-        box-shadow: none !important;
-        color: inherit !important;
-        transform: none !important;
-        /* Force scale reset here too */
-    }
-
-    /* Shifting controls down and restoring glow in landscape */
-    html body .modal-external-controls .reels-toggle,
-    html body .modal-external-controls .globe-toggle {
-        top: 12px !important;
-    }
-
-    html body .modal-external-controls .reels-toggle.active,
-    html body .modal-external-controls .globe-toggle.active,
-    body.light-theme .modal-external-controls .reels-toggle.active,
-    body.light-theme .modal-external-controls .globe-toggle.active,
-    body.dark-theme .modal-external-controls .reels-toggle.active,
-    body.dark-theme .modal-external-controls .globe-toggle.active,
-    body.glass-theme .modal-external-controls .reels-toggle.active,
-    body.glass-theme .modal-external-controls .globe-toggle.active {
-        background: var(--color-primary, #5A4BFF) !important;
-        border: 2px solid var(--color-primary, #5A4BFF) !important;
-        color: white !important;
-        box-shadow:
-            0 0 20px 4px rgba(90, 75, 255, 0.7),
-            0 0 10px 1px rgba(90, 75, 255, 0.4),
-            0 4px 12px rgba(0, 0, 0, 0.4) !important;
-        transform: scale(1.08) !important;
-        pointer-events: auto !important;
-        opacity: 1 !important;
-    }
-}
-
 /* Ensure buttons are clickable despite container's pointer-events: none */
 .reels-toggle,
 .globe-toggle {
@@ -207,9 +157,23 @@ body.dark-theme .control-bubble::after {
 }
 
 /* ============================================================
-   MOBILE LANDSCAPE SCALING (32px PARITY)
+   MOBILE LANDSCAPE SCALING & PHASE 5 FIX
    ============================================================ */
 @media (max-width: 950px) and (orientation: landscape) {
+
+    /* Phase 5: Shift entire container down to prevent clipping at the top */
+    .modal-external-controls {
+        top: 2rem !important;
+        bottom: auto !important;
+    }
+
+    /* Ground toggles inside the now-top-anchored container */
+    html body .modal-external-controls .reels-toggle.active,
+    html body .modal-external-controls .globe-toggle.active {
+        transform: none !important;
+        top: 0 !important;
+    }
+
     .control-bubble {
         height: 32px;
         padding: 0 12px;
