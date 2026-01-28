@@ -84,7 +84,8 @@ class MediaOverlay {
             const product = list[idx];
             const gridWrapper = document.createElement('div');
             gridWrapper.className = 'media-grid-wrapper';
-            gridWrapper.innerHTML = this.renderGridHTML(product);
+            // ONLY the center product (i=2) gets autoplay
+            gridWrapper.innerHTML = this.renderGridHTML(product, i === 2);
             this.strip.appendChild(gridWrapper);
 
             // If it's the active one, set current items
@@ -174,7 +175,7 @@ class MediaOverlay {
         this.strip.style.transform = `translateX(${percentage}%)`;
     }
 
-    renderGridHTML(product) {
+    renderGridHTML(product, isActive = false) {
         const media = Array.isArray(product.reference_media) ? [...product.reference_media] : [];
         if (media.length === 0) return `<div class="golden-spiral-grid empty-grid">No Media Available</div>`;
 
@@ -187,7 +188,7 @@ class MediaOverlay {
         return `
             <div class="golden-spiral-grid ${tierClass}">
                 <div class="spiral-tile tile-large active-player">
-                    ${this.getPlayerHTML(media[0])}
+                    ${this.getPlayerHTML(media[0], isActive)}
                 </div>
                 ${this.renderTiles(media)}
             </div>
@@ -217,13 +218,15 @@ class MediaOverlay {
         return html;
     }
 
-    getPlayerHTML(url) {
+    getPlayerHTML(url, isAutoplay = true) {
         if (!url) return '';
-        const embedUrl = this.getUniversalVideoEmbedUrl(url);
+        const embedUrl = this.getUniversalVideoEmbedUrl(url, isAutoplay);
 
         let player = '';
         if (url.match(/\.(mp4|webm|mov|avi)$/i)) {
-            player = `<video controls playsinline autoplay muted class="main-video-player"><source src="${url}" type="video/mp4"></video>`;
+            // Native Video: Conditionally add autoplay but ALWAYS unmute
+            const autoplayAttr = isAutoplay ? 'autoplay' : '';
+            player = `<video controls playsinline ${autoplayAttr} class="main-video-player"><source src="${url}" type="video/mp4"></video>`;
         } else {
             player = `<iframe src="${embedUrl}" class="main-iframe-player" scrolling="no" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"></iframe>`;
         }
@@ -398,10 +401,11 @@ class MediaOverlay {
      * Universal Video Embed URL Generator
      * Converts standard platform links to embeddable ones
      */
-    getUniversalVideoEmbedUrl(sourceUrl) {
+    getUniversalVideoEmbedUrl(sourceUrl, isAutoplay = true) {
         if (!sourceUrl) return '';
         try {
             const url = sourceUrl.toLowerCase();
+            const autoplayVal = isAutoplay ? '1' : '0';
 
             // Instagram
             if (url.includes('instagram.com')) {
@@ -425,7 +429,8 @@ class MediaOverlay {
                 } else if (url.includes('youtube.com/shorts/')) {
                     videoId = sourceUrl.match(/shorts\/([^?]+)/)?.[1];
                 }
-                if (videoId) return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=1&mute=0&rel=0`;
+                // mute=0 for unmuted start, autoplay is dynamic
+                if (videoId) return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${autoplayVal}&mute=0&rel=0`;
             }
 
             // Direct Video
