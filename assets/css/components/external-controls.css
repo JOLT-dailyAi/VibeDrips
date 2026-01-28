@@ -157,9 +157,22 @@ body.dark-theme .control-bubble::after {
 }
 
 /* ============================================================
-   MOBILE LANDSCAPE SCALING & PHASE 5 FIX
+   MOBILE LANDSCAPE SCALING & PHASE 6 SIZE-LOCK
    ============================================================ */
 @media (max-width: 950px) and (orientation: landscape) {
+
+    /* Phase 6: Sync controls to original bottom-anchor */
+    .modal-external-controls {
+        top: auto !important;
+        bottom: calc(100% + 6px) !important;
+    }
+
+    /* Phase 6: Lock scale to 1 to prevent clipping from size-bloat while keeping glow */
+    html body .modal-external-controls .reels-toggle.active,
+    html body .modal-external-controls .globe-toggle.active {
+        transform: scale(1) !important;
+        top: 0 !important;
+    }
 
     .control-bubble {
         height: 32px;
