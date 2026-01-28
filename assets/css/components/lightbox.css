@@ -237,7 +237,8 @@
 
     .lightbox-nav-hub {
         top: calc(1rem + env(safe-area-inset-top, 0px)) !important;
-        right: calc(1rem + env(safe-area-inset-right, 0px)) !important;
+        /* Nudged 1px further left from the edge for perfect portrait balance */
+        right: calc(1rem + 1px + env(safe-area-inset-right, 0px)) !important;
         gap: 1rem;
     }
 
@@ -263,13 +264,45 @@
         top: env(safe-area-inset-top, 1rem) !important;
         right: calc(1rem + env(safe-area-inset-right, 0px)) !important;
         flex-direction: row;
-        /* Horizontal hub fits height better */
         gap: 0.75rem;
+        /* Ensure controls stay within clickable zone despite media covering background */
+        z-index: 10002;
     }
 
     .lightbox-content {
-        max-width: calc(100vw - 120px) !important;
-        max-height: 95vh !important;
+        max-width: 100vw !important;
+        max-height: 100vh !important;
+        width: 100vw;
+        height: 100vh;
+    }
+
+    .lightbox-media-container {
+        width: 100% !important;
+        height: 100% !important;
+        max-width: 100vw !important;
+        max-height: 100vh !important;
+    }
+
+    .lightbox-image,
+    .lightbox-video,
+    .lightbox-iframe {
+        width: 100% !important;
+        height: 100% !important;
+        max-width: 100vw !important;
+        max-height: 100vh !important;
+        object-fit: contain;
+    }
+
+    .lightbox-dots {
+        bottom: calc(1rem + env(safe-area-inset-bottom, 0px)) !important;
+        z-index: 10002;
+    }
+
+    .lightbox-counter {
+        top: calc(1rem + env(safe-area-inset-top, 0px)) !important;
+        left: calc(1.5rem + env(safe-area-inset-left, 0px)) !important;
+        transform: none;
+        z-index: 10002;
     }
 }
 

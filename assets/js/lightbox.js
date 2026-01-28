@@ -78,7 +78,7 @@ class MediaLightbox {
                 <div class="lightbox-content">
                     <div class="lightbox-media-container">
                         <img class="lightbox-image" alt="" style="display:none">
-                        <video class="lightbox-video" controls style="display:none"></video>
+                        <video class="lightbox-video" controls autoplay muted playsinline style="display:none"></video>
                         <iframe class="lightbox-iframe" frameborder="0" allowfullscreen allow="autoplay; encrypted-media" style="display:none"></iframe>
                         
                         <!-- Iframe Shield: Invisible layer to capture "Wake" movements over videos -->
@@ -643,12 +643,15 @@ class MediaLightbox {
             video.style.display = 'block';
 
             if (this.options.autoPlayVideo) {
-                video.muted = false; // 🔊 Start unmuted @ 20%
+                video.muted = false; // 🔊 Initial attempt: Unmuted @ 20%
                 video.volume = 0.2;
+                video.setAttribute('playsinline', '');
+
                 video.play().catch(e => {
-                    // Safety Catch: muted fallback
+                    // 🛡️ Mobile Autoplay Bridge: If unmuted is blocked, start muted
+                    console.log('🎬 Mobile: Unmuted autoplay blocked, falling back to muted.');
                     video.muted = true;
-                    video.play().catch(e2 => console.warn('Still blocked:', e2));
+                    video.play().catch(e2 => console.warn('🎬 Mobile: Total autoplay blockage:', e2));
                 });
             }
         };
@@ -720,7 +723,9 @@ class MediaLightbox {
         }
 
         if (videoId) {
-            return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=1&mute=0&rel=0`;
+            // 🛡️ Mobile Strategy: Start muted (mute=1) to guarantee autoplay, 
+            // then let the Protocol Shotgun Pulse unmute it if browser allows.
+            return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=1&mute=1&rel=0`;
         }
 
         return null;

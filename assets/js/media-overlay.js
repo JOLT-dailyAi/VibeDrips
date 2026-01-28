@@ -226,7 +226,7 @@ class MediaOverlay {
         if (url.match(/\.(mp4|webm|mov|avi)$/i)) {
             // Native Video: Conditionally add autoplay but ALWAYS unmute
             const autoplayAttr = isAutoplay ? 'autoplay' : '';
-            player = `<video controls playsinline ${autoplayAttr} class="main-video-player"><source src="${url}" type="video/mp4"></video>`;
+            player = `<video controls playsinline muted ${autoplayAttr} class="main-video-player"><source src="${url}" type="video/mp4"></video>`;
         } else {
             player = `<iframe src="${embedUrl}" class="main-iframe-player" scrolling="no" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"></iframe>`;
         }
@@ -430,7 +430,8 @@ class MediaOverlay {
                     videoId = sourceUrl.match(/shorts\/([^?]+)/)?.[1];
                 }
                 // mute=0 for unmuted start, autoplay is dynamic
-                if (videoId) return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${autoplayVal}&mute=0&rel=0`;
+                // 🛡️ Mobile Strategy: mute=1 to guarantee autoplay
+                if (videoId) return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${autoplayVal}&mute=1&rel=0`;
             }
 
             // Direct Video
