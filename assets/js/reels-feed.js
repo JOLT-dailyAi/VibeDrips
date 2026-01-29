@@ -279,7 +279,9 @@ function getUniversalVideoEmbedUrlForReels(sourceUrl, isActive) {
     else if (url.includes('youtube.com/watch')) videoId = new URL(sourceUrl).searchParams.get('v');
     else if (url.includes('youtube.com/shorts/')) videoId = sourceUrl.match(/shorts\/([^?]+)/)?.[1];
 
-    if (videoId) return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${autoplay}&mute=1`;
+    // 🛡️ Optimistic Autoplay: Start unmuted (mute=0) on ALL devices.
+    // Shotgun Pulse will handle unmuting if the browser blocks the initial unmuted start.
+    if (videoId) return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${autoplay}&mute=0`;
   }
   return sourceUrl;
 }

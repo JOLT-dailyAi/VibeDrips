@@ -437,9 +437,9 @@ class MediaOverlay {
                 } else if (url.includes('youtube.com/shorts/')) {
                     videoId = sourceUrl.match(/shorts\/([^?]+)/)?.[1];
                 }
-                // 🛡️ Desktop vs Mobile Strategy
-                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-                const muteVal = (isAutoplay && !isMobile) ? '0' : '1';
+                // 🛡️ Unified Optimistic Strategy: Always attempt unmuted (mute=0) for active items.
+                // Shotgun pulse handles mobile unmuting if blocked.
+                const muteVal = isAutoplay ? '0' : '1';
 
                 if (videoId) return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${autoplayVal}&mute=${muteVal}&rel=0`;
             }

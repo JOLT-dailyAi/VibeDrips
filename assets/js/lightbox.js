@@ -386,8 +386,8 @@ class MediaLightbox {
 
     getUniversalEmbedUrl(type, url, isActive) {
         if (type === 'youtube') {
-            const isMobile = this.isMobileOrTablet();
-            const muteVal = (isActive && !isMobile) ? '0' : '1';
+            // 🛡️ Unified Optimistic Strategy: Always attempt unmuted (mute=0)
+            const muteVal = isActive ? '0' : '1';
             const autoplayVal = isActive ? '1' : '0';
             return this.getYouTubeEmbedUrl(url, autoplayVal, muteVal);
         }
@@ -654,9 +654,8 @@ class MediaLightbox {
             return container.querySelector('iframe');
         } else if (type === 'video') {
             const attrStr = Object.entries(attributes).map(([k, v]) => `${k}="${v}"`).join(' ');
-            const isMobile = this.isMobileOrTablet();
-            // 🛡️ Desktop Ideal: Unmute if it's a fresh injection (usually on user click or manual trigger)
-            const muteAttr = isMobile ? 'muted' : '';
+            // 🛡️ Unified Optimistic Strategy: Always attempt unmuted start.
+            const muteAttr = '';
             container.innerHTML = `<video class="lightbox-video" controls autoplay ${muteAttr} playsinline src="${url}" ${attrStr} style="display: block;"></video>`;
             return container.querySelector('video');
         }
