@@ -71,10 +71,14 @@ function initReelsObserver() {
   REELS_SECTIONS_CACHE.length = 0;
   document.querySelectorAll('.reel-section').forEach(s => REELS_SECTIONS_CACHE.push(s));
 
+  // 🛡️ RESET SHIELDS ON SCROLL: Re-protect vertical swipe intent
+  container.addEventListener('scroll', () => {
+    document.querySelectorAll('.reel-video-shield').forEach(s => s.style.pointerEvents = 'auto');
+  }, { passive: true });
+
   const options = {
     root: container,
-    rootMargin: '200px 0px', // 🔋 EARLY BUFFER: Trigger load before it enters view
-    threshold: [0.1, 0.5, 0.9] // Multiple thresholds for smoother detection
+    threshold: [0.05, 0.5, 0.95] // Soft detection for handover
   };
 
   const observer = new IntersectionObserver((entries) => {
@@ -83,13 +87,27 @@ function initReelsObserver() {
     let maxRatio = -1;
 
     entries.forEach(e => {
+      // Manage individual visibility (Soft Handover)
+      const idx = parseInt(e.target.dataset.reelIndex);
+      const videoContainer = e.target.querySelector('.reel-video');
+
+      if (videoContainer) {
+        if (e.intersectionRatio < 0.05) {
+          // 💀 GONE: Kill when fully off-screen
+          killMedia(videoContainer);
+        } else if (e.intersectionRatio > 0.4) {
+          // 🎯 APPROACHING CENTER: Activate early
+          activateMedia(videoContainer, e.intersectionRatio > 0.7);
+        }
+      }
+
       if (e.isIntersecting && e.intersectionRatio > maxRatio) {
         maxRatio = e.intersectionRatio;
         bestEntry = e;
       }
     });
 
-    if (bestEntry) {
+    if (bestEntry && maxRatio > 0.7) {
       const activeIdx = parseInt(bestEntry.target.dataset.reelIndex);
       if (activeIdx !== lastActiveIdx) {
         lastActiveIdx = activeIdx;
@@ -111,8 +129,8 @@ function manageMediaLifecycle(activeIdx, sections) {
       // 🎯 ACTIVE: Landed!
       activateMedia(videoContainer, true);
     } else {
-      // 💀 KILL: Everything else (Zero Buffering for stability)
-      killMedia(videoContainer);
+      // 💀 Aggressive kill is now handled per-entry in the observer 
+      // to allow "Soft Handover" during active transition.
     }
   });
 }
@@ -129,22 +147,35 @@ function activateMedia(container, shouldPlay) {
     if (media) {
       media.dataset.loaded = 'true';
 
-      // 🛡️ REELS TAP PROXY: Capture clicks to unmute
+      // 🛡️ SMART SHIELD HANDOVER
       const shield = document.createElement('div');
       shield.className = 'reel-video-shield';
-      shield.onclick = () => {
+      shield.onclick = (e) => {
+        e.stopPropagation();
         triggerShotgunPulse(media);
-        // Briefly disable shield to allow direct interaction
+
+        // Native Toggle (Play/Pause)
+        if (media.tagName === 'VIDEO') {
+          if (media.paused) media.play().catch(() => { });
+          else media.pause();
+        }
+
+        // UNLOCK IFRAME: Disable shield until next scroll
         shield.style.pointerEvents = 'none';
-        setTimeout(() => { shield.style.pointerEvents = ''; }, 2000);
       };
       container.appendChild(shield);
     }
   }
 
-  // 2. Immediate Autoplay pulse
+  // 2. Immediate Autoplay pulse (with Readiness Delay)
   if (shouldPlay && media) {
-    triggerShotgunPulse(media);
+    if (media.dataset.pulsing !== 'true') {
+      media.dataset.pulsing = 'true';
+      setTimeout(() => {
+        triggerShotgunPulse(media);
+        media.dataset.pulsing = 'false';
+      }, 300);
+    }
   }
 }
 
