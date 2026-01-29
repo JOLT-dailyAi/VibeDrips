@@ -57,27 +57,45 @@ function renderReelsFeed() {
  * PHASE 14: Reels Media Observer
  * Manages Preloading, Autoplay (Shotgun), and Memory Cleanup
  */
+const REELS_SECTIONS_CACHE = [];
+let activeShotgunPulses = new Map();
+
 function initReelsObserver() {
+  const container = document.querySelector('.reels-scroll-container');
+  if (!container) return;
+
+  // Cache sections once
+  REELS_SECTIONS_CACHE.length = 0;
+  document.querySelectorAll('.reel-section').forEach(s => REELS_SECTIONS_CACHE.push(s));
+
   const options = {
-    root: document.querySelector('.reels-scroll-container'),
-    threshold: 0.5
+    root: container,
+    threshold: 0.3 // More sensitive to catch fast scrolls
   };
 
   const observer = new IntersectionObserver((entries) => {
-    const sections = document.querySelectorAll('.reel-section');
-    const activeEntry = entries.find(e => e.isIntersecting);
+    // Find the one closest to center
+    let bestEntry = null;
+    let maxRatio = -1;
 
-    if (activeEntry) {
-      const activeIdx = parseInt(activeEntry.target.dataset.reelIndex);
-      manageMediaLifecycle(activeIdx, sections);
+    entries.forEach(e => {
+      if (e.isIntersecting && e.intersectionRatio > maxRatio) {
+        maxRatio = e.intersectionRatio;
+        bestEntry = e;
+      }
+    });
+
+    if (bestEntry) {
+      const activeIdx = parseInt(bestEntry.target.dataset.reelIndex);
+      manageMediaLifecycle(activeIdx, REELS_SECTIONS_CACHE);
     }
   }, options);
 
-  document.querySelectorAll('.reel-section').forEach(section => observer.observe(section));
+  REELS_SECTIONS_CACHE.forEach(section => observer.observe(section));
 }
 
 function manageMediaLifecycle(activeIdx, sections) {
-  const bufferRange = 2; // Preload +/- 2 items
+  const bufferRange = 1; // AGGRESSIVE: Only preload +/- 1 item
 
   sections.forEach((section, idx) => {
     const videoContainer = section.querySelector('.reel-video');
@@ -144,13 +162,26 @@ function activateMedia(container, shouldPlay) {
 function killMedia(container) {
   const media = container.querySelector('video, iframe');
   if (media) {
+    // Clear any active pulses
+    if (activeShotgunPulses.has(media)) {
+      clearInterval(activeShotgunPulses.get(media));
+      activeShotgunPulses.delete(media);
+    }
+
     media.src = '';
+    media.removeAttribute('src'); // Force deeper cleanup
+    media.load?.(); // Stop video buffer
     media.dataset.loaded = 'false';
     container.innerHTML = '<div class="reel-video-placeholder">🎬</div>';
   }
 }
 
 function triggerShotgunPulse(media) {
+  // Clear previous pulses for THIS media
+  if (activeShotgunPulses.has(media)) {
+    clearInterval(activeShotgunPulses.get(media));
+  }
+
   if (media.tagName === 'VIDEO') {
     media.muted = false;
     media.volume = 0.2;
@@ -158,23 +189,30 @@ function triggerShotgunPulse(media) {
       media.muted = true;
       media.play();
     });
-  } else {
-    const shotgun = () => {
-      // YouTube / Generic
-      media.contentWindow?.postMessage(JSON.stringify({ event: 'command', func: 'unMute' }), '*');
-      media.contentWindow?.postMessage(JSON.stringify({ event: 'command', func: 'playVideo' }), '*');
-      // Successive pulses
-      media.contentWindow?.postMessage('unmute', '*');
-      media.contentWindow?.postMessage('play', '*');
-    };
-
-    shotgun();
-    let pulses = 0;
-    const interval = setInterval(() => {
-      shotgun();
-      if (++pulses >= 4) clearInterval(interval);
-    }, 500);
+    return;
   }
+
+  const shotgun = () => {
+    if (!media.contentWindow) return;
+    // YouTube / Generic
+    media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute' }), '*');
+    media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo' }), '*');
+    // Successive pulses
+    media.contentWindow.postMessage('unmute', '*');
+    media.contentWindow.postMessage('play', '*');
+  };
+
+  shotgun();
+  let pulses = 0;
+  const interval = setInterval(() => {
+    shotgun();
+    if (++pulses >= 4) {
+      clearInterval(interval);
+      activeShotgunPulses.delete(media);
+    }
+  }, 500);
+
+  activeShotgunPulses.set(media, interval);
 }
 
 function getMediaHTML(type, url, isActive) {
