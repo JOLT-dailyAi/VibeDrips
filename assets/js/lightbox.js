@@ -107,6 +107,10 @@ class MediaLightbox {
         closeBtn.addEventListener('click', () => {
             const active = MediaLightbox.activeInstance;
             if (!active) return;
+
+            // 🔇 SILENCE FIRST: Stop all media before the animation starts
+            active.stopMedia();
+
             closeBtn.classList.add('closing-animation');
             setTimeout(() => {
                 active.close();
