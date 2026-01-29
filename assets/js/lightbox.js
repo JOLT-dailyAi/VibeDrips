@@ -374,7 +374,7 @@ class MediaLightbox {
     getMediaHTML(type, url, isActive = false) {
         if (type === 'video') {
             const autoplay = isActive ? 'autoplay' : '';
-            const muted = isActive ? 'muted' : '';
+            const muted = isActive ? '' : 'muted';
             return `<video class="lightbox-video" controls ${autoplay} ${muted} playsinline src="${url}"></video>`;
         } else if (['youtube', 'instagram', 'tiktok'].includes(type)) {
             const embedUrl = this.getUniversalEmbedUrl(type, url, isActive);
@@ -386,7 +386,9 @@ class MediaLightbox {
 
     getUniversalEmbedUrl(type, url, isActive) {
         if (type === 'youtube') {
-            return this.getYouTubeEmbedUrl(url) + (isActive ? '&autoplay=1&mute=1' : '&autoplay=0&mute=1');
+            const isMobile = this.isMobileOrTablet();
+            const muteVal = (isActive && !isMobile) ? '0' : '1';
+            return this.getYouTubeEmbedUrl(url) + (isActive ? `&autoplay=1&mute=${muteVal}` : `&autoplay=0&mute=1`);
         }
         if (type === 'instagram') {
             const embed = this.getInstagramEmbedUrl(url);
@@ -755,8 +757,8 @@ class MediaLightbox {
                 let pulseCount = 0;
                 this._pulseInterval = setInterval(() => {
                     sendAudioPulse();
-                    if (++pulseCount >= 4 || !this.isOpen) clearInterval(this._pulseInterval);
-                }, 500);
+                    if (++pulseCount >= 7 || !this.isOpen) clearInterval(this._pulseInterval);
+                }, 400); // Enhanced Persistence (Golden Spiral Style)
             };
 
             if (isMobile) {

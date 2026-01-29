@@ -224,9 +224,10 @@ class MediaOverlay {
 
         let player = '';
         if (url.match(/\.(mp4|webm|mov|avi)$/i)) {
-            // Native Video: Conditionally add autoplay but ALWAYS unmute
+            // Native Video: Conditionally add autoplay and UNMUTE for active ones
             const autoplayAttr = isAutoplay ? 'autoplay' : '';
-            player = `<video controls playsinline muted ${autoplayAttr} class="main-video-player"><source src="${url}" type="video/mp4"></video>`;
+            const mutedAttr = isAutoplay ? '' : 'muted';
+            player = `<video controls playsinline ${mutedAttr} ${autoplayAttr} class="main-video-player"><source src="${url}" type="video/mp4"></video>`;
         } else {
             player = `<iframe src="${embedUrl}" class="main-iframe-player" scrolling="no" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"></iframe>`;
         }
@@ -334,13 +335,20 @@ class MediaOverlay {
 
         if (video) {
             if (play) {
-                video.muted = false; // 🔊 Start Unmuted @ 20%
+                video.muted = false; // 🔊 Unmute for Active
                 video.volume = 0.2;
                 video.play().catch(() => {
-                    // 🛡️ Fallback: Browser blocked unmuted autoplay
+                    // 🛡️ Fallback: Browser blocked unmuted autoplay (Mobile)
                     video.muted = true;
                     video.play();
                 });
+                // PERSISTENCE: Pulse native video too (some browsers re-mute on transition)
+                let nativePulses = 0;
+                const vInterval = setInterval(() => {
+                    if (video.paused) video.play().catch(() => { });
+                    if (!video.muted) video.volume = 0.2;
+                    if (++nativePulses >= 4) clearInterval(vInterval);
+                }, 500);
             } else {
                 video.pause();
             }
@@ -369,14 +377,14 @@ class MediaOverlay {
             if (play) {
                 // Initial burst
                 sendAudioCommands();
-                // 🔊 SUCCESSIVE PULSE: Pulse every 500ms for 2 seconds to ensure API is ready
+                // 🔊 SUCCESSIVE PULSE: Pulse every 400ms for 3 seconds (Enhanced Persistence)
                 let pulses = 0;
                 const interval = setInterval(() => {
                     sendAudioCommands();
-                    if (++pulses >= 4 || !this.container.classList.contains('active')) {
+                    if (++pulses >= 7 || !this.container.classList.contains('active')) {
                         clearInterval(interval);
                     }
-                }, 500);
+                }, 400);
             } else {
                 // Global Stop Signal
                 iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'pauseVideo', args: '' }), '*');
@@ -429,9 +437,11 @@ class MediaOverlay {
                 } else if (url.includes('youtube.com/shorts/')) {
                     videoId = sourceUrl.match(/shorts\/([^?]+)/)?.[1];
                 }
-                // mute=0 for unmuted start, autoplay is dynamic
-                // 🛡️ Mobile Strategy: mute=1 to guarantee autoplay
-                if (videoId) return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${autoplayVal}&mute=1&rel=0`;
+                // 🛡️ Desktop vs Mobile Strategy
+                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                const muteVal = (isAutoplay && !isMobile) ? '0' : '1';
+
+                if (videoId) return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${autoplayVal}&mute=${muteVal}&rel=0`;
             }
 
             // Direct Video
