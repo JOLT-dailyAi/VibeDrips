@@ -101,14 +101,14 @@ function manageMediaLifecycle(activeIdx, sections) {
 function activateMedia(container, shouldPlay) {
   const url = container.dataset.url;
   const type = container.dataset.type;
-  const currentMedia = container.querySelector('video, iframe');
+  let media = container.querySelector('video, iframe');
 
   // 1. Fresh Injection if not present or needs reset
-  if (!currentMedia || currentMedia.dataset.loaded !== 'true') {
+  if (!media || media.dataset.loaded !== 'true') {
     container.innerHTML = getMediaHTML(type, url, shouldPlay);
-    const newMedia = container.querySelector('video, iframe');
-    if (newMedia) {
-      newMedia.dataset.loaded = 'true';
+    media = container.querySelector('video, iframe');
+    if (media) {
+      media.dataset.loaded = 'true';
       // Also inject the "Sensitive Shield" for gestures
       if (!container.querySelector('.reel-video-shield')) {
         const shield = document.createElement('div');
@@ -118,10 +118,26 @@ function activateMedia(container, shouldPlay) {
     }
   }
 
-  // 2. Shotgun Pulse (for unmuting)
+  // 2. Active vs Buffer State Management
   if (shouldPlay) {
-    const media = container.querySelector('video, iframe');
-    if (media) triggerShotgunPulse(media);
+    if (media) {
+      triggerShotgunPulse(media);
+      if (media.tagName === 'VIDEO') media.play().catch(() => { });
+    }
+  } else {
+    // 🔇 BUFFERED: Mute and Pause
+    if (media) {
+      if (media.tagName === 'VIDEO') {
+        media.muted = true;
+        media.pause();
+      } else {
+        // Shotgun Mute/Pause Signal for Iframes
+        media.contentWindow?.postMessage(JSON.stringify({ event: 'command', func: 'mute' }), '*');
+        media.contentWindow?.postMessage(JSON.stringify({ event: 'command', func: 'pauseVideo' }), '*');
+        media.contentWindow?.postMessage('mute', '*');
+        media.contentWindow?.postMessage('pause', '*');
+      }
+    }
   }
 }
 
@@ -165,7 +181,10 @@ function getMediaHTML(type, url, isActive) {
   const embedUrl = getUniversalVideoEmbedUrlForReels(url, isActive);
 
   if (type === 'video') {
-    return `<video controls playsinline autoplay muted src="${url}" style="width:100%;height:100%;object-fit:cover;"></video>`;
+    // Buffered items should be muted and NOT autoplaying to be safe
+    const autoplay = isActive ? 'autoplay' : '';
+    const muted = isActive ? '' : 'muted';
+    return `<video controls playsinline ${autoplay} ${muted} preload="auto" src="${url}" style="width:100%;height:100%;object-fit:cover;"></video>`;
   } else {
     return `<iframe src="${embedUrl}" frameborder="0" scrolling="no" allowtransparency="true" allowfullscreen="true" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
   }
