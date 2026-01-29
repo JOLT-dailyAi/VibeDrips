@@ -171,6 +171,7 @@ function activateMedia(container, shouldPlay) {
   if (shouldPlay && media) {
     if (media.dataset.pulsing !== 'true') {
       media.dataset.pulsing = 'true';
+      // Golden Spiral Style Handover Delay (Settling)
       setTimeout(() => {
         triggerShotgunPulse(media);
         media.dataset.pulsing = 'false';
@@ -197,35 +198,46 @@ function killMedia(container) {
 }
 
 function triggerShotgunPulse(media) {
+  if (!media) return;
+
   // Clear previous pulses for THIS media
   if (activeShotgunPulses.has(media)) {
     clearInterval(activeShotgunPulses.get(media));
   }
 
-  if (media.tagName === 'VIDEO') {
-    media.muted = false;
-    media.volume = 0.2;
-    media.play().catch(() => {
-      media.muted = true;
-      media.play();
-    });
-    return;
-  }
+  const sendPulse = () => {
+    if (media.tagName === 'VIDEO') {
+      media.muted = false;
+      media.volume = 0.2;
+      media.play().catch(() => {
+        media.muted = true;
+        media.play();
+      });
+    } else if (media.contentWindow) {
+      // 1. YouTube specialized (API mode)
+      media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
+      media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [20] }), '*');
+      media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*');
 
-  const shotgun = () => {
-    if (!media.contentWindow) return;
-    // YouTube / Generic
-    media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute' }), '*');
-    media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo' }), '*');
-    // Successive pulses
-    media.contentWindow.postMessage('unmute', '*');
-    media.contentWindow.postMessage('play', '*');
+      // 2. Vimeo specialized
+      media.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 0.2 }), '*');
+      media.contentWindow.postMessage(JSON.stringify({ method: 'play' }), '*');
+
+      // 3. Protocol Shotgun (Universal fallback for ANY platform)
+      media.contentWindow.postMessage('unmute', '*');
+      media.contentWindow.postMessage(JSON.stringify({ event: 'unmute' }), '*');
+      media.contentWindow.postMessage(JSON.stringify({ event: 'volume', value: 0.2 }), '*');
+      media.contentWindow.postMessage('play', '*');
+    }
   };
 
-  shotgun();
+  // Initial burst
+  sendPulse();
+
+  // 🔊 SUCCESSIVE PULSE: Pulse every 500ms for 2 seconds (Golden Spiral Precision)
   let pulses = 0;
   const interval = setInterval(() => {
-    shotgun();
+    sendPulse();
     if (++pulses >= 4) {
       clearInterval(interval);
       activeShotgunPulses.delete(media);
