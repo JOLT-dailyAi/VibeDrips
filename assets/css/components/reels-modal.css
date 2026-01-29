@@ -80,7 +80,9 @@
 
 /* HIDE arrows when at boundaries (controlled by JS) */
 .reels-nav-btn.hidden {
-  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 /* Mobile Polish */
