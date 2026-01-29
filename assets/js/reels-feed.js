@@ -48,6 +48,151 @@ function renderReelsFeed() {
   });
 
   console.log(`✅ Rendered ${reelsData.length} reel sections`);
+
+  // Initialize Media Lifecycle (Intersection Observer)
+  initReelsObserver();
+}
+
+/**
+ * PHASE 14: Reels Media Observer
+ * Manages Preloading, Autoplay (Shotgun), and Memory Cleanup
+ */
+function initReelsObserver() {
+  const options = {
+    root: document.querySelector('.reels-scroll-container'),
+    threshold: 0.5
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    const sections = document.querySelectorAll('.reel-section');
+    const activeEntry = entries.find(e => e.isIntersecting);
+
+    if (activeEntry) {
+      const activeIdx = parseInt(activeEntry.target.dataset.reelIndex);
+      manageMediaLifecycle(activeIdx, sections);
+    }
+  }, options);
+
+  document.querySelectorAll('.reel-section').forEach(section => observer.observe(section));
+}
+
+function manageMediaLifecycle(activeIdx, sections) {
+  const bufferRange = 2; // Preload +/- 2 items
+
+  sections.forEach((section, idx) => {
+    const videoContainer = section.querySelector('.reel-video');
+    if (!videoContainer) return;
+
+    const diff = Math.abs(idx - activeIdx);
+
+    if (diff === 0) {
+      // 🎯 ACTIVE: Shotgun Autoplay
+      activateMedia(videoContainer, true);
+    } else if (diff <= bufferRange) {
+      // 🔋 BUFFER: Preload (Muted/Silent)
+      activateMedia(videoContainer, false);
+    } else {
+      // 💀 KILL: Unload to save memory
+      killMedia(videoContainer);
+    }
+  });
+}
+
+function activateMedia(container, shouldPlay) {
+  const url = container.dataset.url;
+  const type = container.dataset.type;
+  const currentMedia = container.querySelector('video, iframe');
+
+  // 1. Fresh Injection if not present or needs reset
+  if (!currentMedia || currentMedia.dataset.loaded !== 'true') {
+    container.innerHTML = getMediaHTML(type, url, shouldPlay);
+    const newMedia = container.querySelector('video, iframe');
+    if (newMedia) {
+      newMedia.dataset.loaded = 'true';
+      // Also inject the "Sensitive Shield" for gestures
+      if (!container.querySelector('.reel-video-shield')) {
+        const shield = document.createElement('div');
+        shield.className = 'reel-video-shield';
+        container.appendChild(shield);
+      }
+    }
+  }
+
+  // 2. Shotgun Pulse (for unmuting)
+  if (shouldPlay) {
+    const media = container.querySelector('video, iframe');
+    if (media) triggerShotgunPulse(media);
+  }
+}
+
+function killMedia(container) {
+  const media = container.querySelector('video, iframe');
+  if (media) {
+    media.src = '';
+    media.dataset.loaded = 'false';
+    container.innerHTML = '<div class="reel-video-placeholder">🎬</div>';
+  }
+}
+
+function triggerShotgunPulse(media) {
+  if (media.tagName === 'VIDEO') {
+    media.muted = false;
+    media.volume = 0.2;
+    media.play().catch(() => {
+      media.muted = true;
+      media.play();
+    });
+  } else {
+    const shotgun = () => {
+      // YouTube / Generic
+      media.contentWindow?.postMessage(JSON.stringify({ event: 'command', func: 'unMute' }), '*');
+      media.contentWindow?.postMessage(JSON.stringify({ event: 'command', func: 'playVideo' }), '*');
+      // Successive pulses
+      media.contentWindow?.postMessage('unmute', '*');
+      media.contentWindow?.postMessage('play', '*');
+    };
+
+    shotgun();
+    let pulses = 0;
+    const interval = setInterval(() => {
+      shotgun();
+      if (++pulses >= 4) clearInterval(interval);
+    }, 500);
+  }
+}
+
+function getMediaHTML(type, url, isActive) {
+  const embedUrl = getUniversalVideoEmbedUrlForReels(url, isActive);
+
+  if (type === 'video') {
+    return `<video controls playsinline autoplay muted src="${url}" style="width:100%;height:100%;object-fit:cover;"></video>`;
+  } else {
+    return `<iframe src="${embedUrl}" frameborder="0" scrolling="no" allowtransparency="true" allowfullscreen="true" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
+  }
+}
+
+// Optimized URL generator for Reels lifecycle
+function getUniversalVideoEmbedUrlForReels(sourceUrl, isActive) {
+  const url = sourceUrl.toLowerCase();
+  const autoplay = isActive ? '1' : '0';
+
+  if (url.includes('instagram.com')) {
+    const match = sourceUrl.match(/\/(p|reel)\/([^\/\?]+)/);
+    return match ? `https://www.instagram.com/p/${match[2]}/embed` : sourceUrl;
+  }
+  if (url.includes('tiktok.com')) {
+    const match = sourceUrl.match(/\/video\/(\d+)/);
+    return match ? `https://www.tiktok.com/embed/v2/${match[1]}` : sourceUrl;
+  }
+  if (url.includes('youtube.com') || url.includes('youtu.be')) {
+    let videoId = null;
+    if (url.includes('youtu.be/')) videoId = sourceUrl.match(/youtu\.be\/([^?]+)/)?.[1];
+    else if (url.includes('youtube.com/watch')) videoId = new URL(sourceUrl).searchParams.get('v');
+    else if (url.includes('youtube.com/shorts/')) videoId = sourceUrl.match(/shorts\/([^?]+)/)?.[1];
+
+    if (videoId) return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${autoplay}&mute=1`;
+  }
+  return sourceUrl;
 }
 
 // Get reels data from products CSV
