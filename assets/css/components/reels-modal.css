@@ -17,48 +17,69 @@
   display: none;
 }
 
-/* Close Button - Floating Position */
-.reels-close-btn {
-  position: fixed;
-  top: 20px;
-  right: 20px;
+/* 🏗️ Navigation Hub - Vertical Stack on Right */
+.reels-nav-hub {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.5rem;
+  align-items: center;
   z-index: 1002;
+  pointer-events: none;
 }
 
-/* Navigation Arrows - Up/Down */
+/* 🔘 Shared Button Base */
+.reels-close-btn,
 .reels-nav-btn {
-  position: fixed;
-  right: 40px;
-  width: 40px;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.2);
   border-radius: 50%;
-  color: white;
-  font-size: 20px;
-  font-weight: 300;
-  cursor: pointer;
-  z-index: 1002;
+  width: 60px;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
-  line-height: 1;
+  cursor: pointer;
+  color: white;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  pointer-events: auto;
+  backdrop-filter: blur(10px);
   padding: 0;
 }
 
+.reels-close-btn:hover,
 .reels-nav-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
   transform: scale(1.1);
 }
 
-.reels-nav-btn.up {
-  top: 25vh;
+.reels-close-btn:active,
+.reels-nav-btn:active {
+  transform: scale(0.95);
 }
 
-.reels-nav-btn.down {
-  top: 75vh;
+/* Close Button stays at the top of the hub if desired, 
+   but user wants vertical alignment like lightbox. 
+   In lightbox, close is usually outside or part of the hub.
+   Let's keep them all in the hub for perfect alignment. 
+*/
+.reels-close-btn {
+  margin-bottom: 2rem;
+  /* Give close some space from nav */
+  position: relative;
+  top: auto;
+  right: auto;
+}
+
+/* Navigation Arrows */
+.reels-nav-btn {
+  font-size: 20px;
+  line-height: 1;
 }
 
 /* HIDE arrows when at boundaries (controlled by JS) */
@@ -66,10 +87,21 @@
   display: none !important;
 }
 
-/* Hide nav buttons on mobile */
+/* Mobile Polish */
 @media (max-width: 767px) {
+  .reels-nav-hub {
+    right: 1rem;
+    gap: 1rem;
+  }
+
+  .reels-close-btn,
   .reels-nav-btn {
-    display: none;
+    width: 44px;
+    height: 44px;
+  }
+
+  .reels-close-btn {
+    margin-bottom: 1rem;
   }
 }
 
@@ -394,6 +426,7 @@
 .reels-modal:not(.hidden) {
   animation: fadeIn 0.3s ease;
 }
+
 /* ========================================
    MOBILE LANDSCAPE OPTIMIZATION
    Maximize space and dodge Dynamic Islands
@@ -443,6 +476,7 @@
   padding-top: env(safe-area-inset-top, 0px) !important;
 }
 
+/* No longer needed fixed positions */
 .reels-modal .reels-close-btn {
-  top: calc(15px + env(safe-area-inset-top, 0px)) !important;
+  top: auto !important;
 }
