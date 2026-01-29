@@ -471,7 +471,7 @@ class MediaLightbox {
     }
 
     /**
-     * Stop Media - Silences any currently playing media in the lightbox
+     * Stop Media - Silences and KILL everything in the lightbox
      */
     stopMedia() {
         const overlay = document.getElementById('mediaLightbox');
@@ -483,28 +483,41 @@ class MediaLightbox {
             this._pulseInterval = null;
         }
 
-        const video = overlay.querySelector('.lightbox-video');
-        if (video) {
-            video.pause();
-            video.src = '';
-        }
-
-        const iframe = overlay.querySelector('.lightbox-iframe');
-        if (iframe) {
-            if (iframe.contentWindow) {
-                // Pulse stop signals
-                iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'pauseVideo', args: '' }), '*');
-                iframe.contentWindow.postMessage(JSON.stringify({ method: 'pause' }), '*');
-                iframe.contentWindow.postMessage('pause', '*');
-                iframe.contentWindow.postMessage(JSON.stringify({ type: 'player:pause' }), '*');
+        // Nuclear Purge: Find ALL media wrappers in the strip
+        const wrappers = overlay.querySelectorAll('.lightbox-media-wrapper');
+        wrappers.forEach(wrapper => {
+            const video = wrapper.querySelector('video');
+            if (video) {
+                video.pause();
+                video.src = '';
+                video.load(); // Force release
+                video.remove();
             }
-            iframe.src = '';
-        }
 
-        const img = overlay.querySelector('.lightbox-image');
-        if (img) {
-            img.src = '';
-        }
+            const iframe = wrapper.querySelector('iframe');
+            if (iframe) {
+                if (iframe.contentWindow) {
+                    // Try to send stop commands before killing
+                    try {
+                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'pauseVideo', args: '' }), '*');
+                        iframe.contentWindow.postMessage(JSON.stringify({ method: 'pause' }), '*');
+                        iframe.contentWindow.postMessage('pause', '*');
+                    } catch (e) { }
+                }
+                iframe.src = '';
+                iframe.remove();
+            }
+
+            const img = wrapper.querySelector('img');
+            if (img) {
+                img.src = '';
+                img.remove();
+            }
+        });
+
+        // Finally, wipe the strip to be absolutely sure
+        const strip = overlay.querySelector('.lightbox-sliding-strip');
+        if (strip) strip.innerHTML = '';
     }
 
     next() {
