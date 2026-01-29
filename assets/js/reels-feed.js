@@ -107,22 +107,15 @@ function initReelsObserver() {
 }
 
 function manageMediaLifecycle(activeIdx, sections) {
-  const bufferRange = 1; // AGGRESSIVE: Only preload +/- 1 item
-
   sections.forEach((section, idx) => {
     const videoContainer = section.querySelector('.reel-video');
     if (!videoContainer) return;
 
-    const diff = Math.abs(idx - activeIdx);
-
-    if (diff === 0) {
+    if (idx === activeIdx) {
       // 🎯 ACTIVE: Shotgun Autoplay
       activateMedia(videoContainer, true);
-    } else if (diff <= bufferRange) {
-      // 🔋 BUFFER: Preload (Muted/Silent)
-      activateMedia(videoContainer, false);
     } else {
-      // 💀 KILL: Unload to save memory
+      // 💀 KILL: Everything else (No Buffering)
       killMedia(videoContainer);
     }
   });
