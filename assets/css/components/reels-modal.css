@@ -17,17 +17,14 @@
   display: none;
 }
 
-/* 🏗️ Navigation Hub - Vertical Stack on Right */
+/* 🏗️ Navigation Hub - Vertical Hub on Right (Full Height) */
 .reels-nav-hub {
   position: absolute;
   top: 0;
   bottom: 0;
   right: 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 1.5rem;
-  align-items: center;
+  width: 60px;
+  /* Match button width */
   z-index: 1002;
   pointer-events: none;
 }
@@ -72,10 +69,37 @@
   z-index: 1003;
 }
 
-/* Navigation Arrows */
+/* Navigation Arrows - FIXED VERTICAL SLOTS */
 .reels-nav-btn {
+  position: absolute;
+  left: 0;
   font-size: 20px;
   line-height: 1;
+}
+
+.reels-nav-btn.up {
+  top: calc(50% - 0.75rem);
+  transform: translateY(-100%);
+  /* Bottom of button at center - gap/2 */
+}
+
+.reels-nav-btn.down {
+  top: calc(50% + 0.75rem);
+  /* Top of button at center + gap/2 */
+}
+
+.reels-nav-btn:hover {
+  transform: scale(1.1) translateY(var(--tw-translate-y, 0));
+  /* Preserving offset if needed, but let's simplify */
+}
+
+/* Specific Hover Fixes for transformed buttons */
+.reels-nav-btn.up:hover {
+  transform: translateY(-100%) scale(1.1);
+}
+
+.reels-nav-btn.down:hover {
+  transform: scale(1.1);
 }
 
 /* HIDE arrows when at boundaries (controlled by JS) */
@@ -89,7 +113,7 @@
 @media (max-width: 767px) {
   .reels-nav-hub {
     right: 1rem;
-    gap: 1rem;
+    width: 44px;
   }
 
   .reels-close-btn,
@@ -100,6 +124,19 @@
 
   .reels-close-btn {
     top: 1rem;
+  }
+
+  .reels-nav-btn.up {
+    top: calc(50% - 0.5rem);
+    transform: translateY(-100%);
+  }
+
+  .reels-nav-btn.down {
+    top: calc(50% + 0.5rem);
+  }
+
+  .reels-nav-btn.up:hover {
+    transform: translateY(-100%) scale(1.1);
   }
 }
 
