@@ -388,7 +388,8 @@ class MediaLightbox {
         if (type === 'youtube') {
             const isMobile = this.isMobileOrTablet();
             const muteVal = (isActive && !isMobile) ? '0' : '1';
-            return this.getYouTubeEmbedUrl(url) + (isActive ? `&autoplay=1&mute=${muteVal}` : `&autoplay=0&mute=1`);
+            const autoplayVal = isActive ? '1' : '0';
+            return this.getYouTubeEmbedUrl(url, autoplayVal, muteVal);
         }
         if (type === 'instagram') {
             const embed = this.getInstagramEmbedUrl(url);
@@ -653,7 +654,10 @@ class MediaLightbox {
             return container.querySelector('iframe');
         } else if (type === 'video') {
             const attrStr = Object.entries(attributes).map(([k, v]) => `${k}="${v}"`).join(' ');
-            container.innerHTML = `<video class="lightbox-video" controls autoplay muted playsinline src="${url}" ${attrStr} style="display: block;"></video>`;
+            const isMobile = this.isMobileOrTablet();
+            // 🛡️ Desktop Ideal: Unmute if it's a fresh injection (usually on user click or manual trigger)
+            const muteAttr = isMobile ? 'muted' : '';
+            container.innerHTML = `<video class="lightbox-video" controls autoplay ${muteAttr} playsinline src="${url}" ${attrStr} style="display: block;"></video>`;
             return container.querySelector('video');
         }
         return null;
@@ -873,33 +877,21 @@ class MediaLightbox {
         return null;
     }
 
-    getYouTubeEmbedUrl(url) {
+    getYouTubeEmbedUrl(url, autoplay = '1', mute = '1') {
         let videoId = null;
 
-        // Standard watch URL
         const watchMatch = url.match(/youtube\.com\/watch\?v=([^&]+)/);
-        if (watchMatch) {
-            videoId = watchMatch[1];
-        }
+        if (watchMatch) videoId = watchMatch[1];
 
-        // Short URL
         const shortMatch = url.match(/youtu\.be\/([^?]+)/);
-        if (shortMatch) {
-            videoId = shortMatch[1];
-        }
+        if (shortMatch) videoId = shortMatch[1];
 
-        // Shorts
         const shortsMatch = url.match(/youtube\.com\/shorts\/([^?]+)/);
-        if (shortsMatch) {
-            videoId = shortsMatch[1];
-        }
+        if (shortsMatch) videoId = shortsMatch[1];
 
         if (videoId) {
-            // 🛡️ Mobile Strategy: Start muted (mute=1) to guarantee autoplay, 
-            // then let the Protocol Shotgun Pulse unmute it if browser allows.
-            return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=1&mute=1&rel=0`;
+            return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${autoplay}&mute=${mute}&rel=0`;
         }
-
         return null;
     }
 
