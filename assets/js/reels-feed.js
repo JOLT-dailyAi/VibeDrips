@@ -60,6 +60,9 @@ function renderReelsFeed() {
 const REELS_SECTIONS_CACHE = [];
 let activeShotgunPulses = new Map();
 
+let lastActiveIdx = -1;
+let lifecycleDebounceTimer = null;
+
 function initReelsObserver() {
   const container = document.querySelector('.reels-scroll-container');
   if (!container) return;
@@ -70,11 +73,12 @@ function initReelsObserver() {
 
   const options = {
     root: container,
-    threshold: 0.3 // More sensitive to catch fast scrolls
+    rootMargin: '200px 0px', // 🔋 EARLY BUFFER: Trigger load before it enters view
+    threshold: [0.1, 0.5, 0.9] // Multiple thresholds for smoother detection
   };
 
   const observer = new IntersectionObserver((entries) => {
-    // Find the one closest to center
+    // Collect all intersecting entries to find the "Center-most"
     let bestEntry = null;
     let maxRatio = -1;
 
@@ -87,7 +91,15 @@ function initReelsObserver() {
 
     if (bestEntry) {
       const activeIdx = parseInt(bestEntry.target.dataset.reelIndex);
-      manageMediaLifecycle(activeIdx, REELS_SECTIONS_CACHE);
+      if (activeIdx !== lastActiveIdx) {
+        lastActiveIdx = activeIdx;
+
+        // 🚀 SETTLE-THEN-LOAD: Debounce heavy work during fast scroll
+        clearTimeout(lifecycleDebounceTimer);
+        lifecycleDebounceTimer = setTimeout(() => {
+          manageMediaLifecycle(activeIdx, REELS_SECTIONS_CACHE);
+        }, 50); // 50ms silence window allows skipping zip-past reels
+      }
     }
   }, options);
 
