@@ -93,12 +93,8 @@ function initReelsObserver() {
       const activeIdx = parseInt(bestEntry.target.dataset.reelIndex);
       if (activeIdx !== lastActiveIdx) {
         lastActiveIdx = activeIdx;
-
-        // 🚀 SETTLE-THEN-LOAD: Debounce heavy work during fast scroll
-        clearTimeout(lifecycleDebounceTimer);
-        lifecycleDebounceTimer = setTimeout(() => {
-          manageMediaLifecycle(activeIdx, REELS_SECTIONS_CACHE);
-        }, 50); // 50ms silence window allows skipping zip-past reels
+        // ⚡️ IMMEDIATE: No debounce, no buffering
+        manageMediaLifecycle(activeIdx, REELS_SECTIONS_CACHE);
       }
     }
   }, options);
@@ -112,10 +108,10 @@ function manageMediaLifecycle(activeIdx, sections) {
     if (!videoContainer) return;
 
     if (idx === activeIdx) {
-      // 🎯 ACTIVE: Shotgun Autoplay
+      // 🎯 ACTIVE: Landed!
       activateMedia(videoContainer, true);
     } else {
-      // 💀 KILL: Everything else (No Buffering)
+      // 💀 KILL: Everything else (Zero Buffering for stability)
       killMedia(videoContainer);
     }
   });
@@ -126,41 +122,29 @@ function activateMedia(container, shouldPlay) {
   const type = container.dataset.type;
   let media = container.querySelector('video, iframe');
 
-  // 1. Fresh Injection if not present or needs reset
+  // 1. Fresh Injection
   if (!media || media.dataset.loaded !== 'true') {
     container.innerHTML = getMediaHTML(type, url, shouldPlay);
     media = container.querySelector('video, iframe');
     if (media) {
       media.dataset.loaded = 'true';
-      // Also inject the "Sensitive Shield" for gestures
-      if (!container.querySelector('.reel-video-shield')) {
-        const shield = document.createElement('div');
-        shield.className = 'reel-video-shield';
-        container.appendChild(shield);
-      }
+
+      // 🛡️ REELS TAP PROXY: Capture clicks to unmute
+      const shield = document.createElement('div');
+      shield.className = 'reel-video-shield';
+      shield.onclick = () => {
+        triggerShotgunPulse(media);
+        // Briefly disable shield to allow direct interaction
+        shield.style.pointerEvents = 'none';
+        setTimeout(() => { shield.style.pointerEvents = ''; }, 2000);
+      };
+      container.appendChild(shield);
     }
   }
 
-  // 2. Active vs Buffer State Management
-  if (shouldPlay) {
-    if (media) {
-      triggerShotgunPulse(media);
-      if (media.tagName === 'VIDEO') media.play().catch(() => { });
-    }
-  } else {
-    // 🔇 BUFFERED: Mute and Pause
-    if (media) {
-      if (media.tagName === 'VIDEO') {
-        media.muted = true;
-        media.pause();
-      } else {
-        // Shotgun Mute/Pause Signal for Iframes
-        media.contentWindow?.postMessage(JSON.stringify({ event: 'command', func: 'mute' }), '*');
-        media.contentWindow?.postMessage(JSON.stringify({ event: 'command', func: 'pauseVideo' }), '*');
-        media.contentWindow?.postMessage('mute', '*');
-        media.contentWindow?.postMessage('pause', '*');
-      }
-    }
+  // 2. Immediate Autoplay pulse
+  if (shouldPlay && media) {
+    triggerShotgunPulse(media);
   }
 }
 
