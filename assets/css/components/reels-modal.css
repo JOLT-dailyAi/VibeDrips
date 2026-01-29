@@ -63,17 +63,13 @@
   transform: scale(0.95);
 }
 
-/* Close Button stays at the top of the hub if desired, 
-   but user wants vertical alignment like lightbox. 
-   In lightbox, close is usually outside or part of the hub.
-   Let's keep them all in the hub for perfect alignment. 
-*/
+/* 🔝 Close Button - FIXED at Top */
 .reels-close-btn {
-  margin-bottom: 2rem;
-  /* Give close some space from nav */
-  position: relative;
-  top: auto;
-  right: auto;
+  position: absolute;
+  top: 2rem;
+  right: 0;
+  /* Align to hub edge */
+  z-index: 1003;
 }
 
 /* Navigation Arrows */
@@ -101,7 +97,7 @@
   }
 
   .reels-close-btn {
-    margin-bottom: 1rem;
+    top: 1rem;
   }
 }
 
@@ -476,7 +472,7 @@
   padding-top: env(safe-area-inset-top, 0px) !important;
 }
 
-/* No longer needed fixed positions */
-.reels-modal .reels-close-btn {
-  top: auto !important;
+/* Handle Close button with safe areas */
+.reels-close-btn {
+  top: calc(2rem + env(safe-area-inset-top, 0px)) !important;
 }
