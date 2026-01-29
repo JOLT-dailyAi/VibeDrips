@@ -175,33 +175,11 @@ function createReelSection(reelData, index) {
   // Create video container
   const videoDiv = document.createElement('div');
   videoDiv.className = 'reel-video';
+  videoDiv.dataset.url = reelData.url;
+  videoDiv.dataset.type = reelData.url.match(/\.(mp4|webm|mov|avi)$/i) ? 'video' : 'iframe';
 
-  // Check if it's a direct video file
-  if (reelData.url.match(/\.(mp4|webm|mov|avi)$/i)) {
-    videoDiv.innerHTML = `
-      <video 
-        controls 
-        playsinline 
-        preload="metadata"
-        style="width: 100%; height: 100%; object-fit: cover;">
-        <source src="${embedUrl}" type="video/mp4">
-        Your browser does not support the video tag.
-      </video>
-    `;
-  } else {
-    // Use iframe for embedded content (Instagram, TikTok, YouTube, Twitter)
-    videoDiv.innerHTML = `
-      <iframe 
-        src="${embedUrl}" 
-        frameborder="0" 
-        scrolling="no" 
-        allowtransparency="true" 
-        allowfullscreen="true"
-        loading="lazy"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture">
-      </iframe>
-    `;
-  }
+  // Initial placeholder (Lazy Injection)
+  videoDiv.innerHTML = '<div class="reel-video-placeholder">🎬</div>';
 
   // Create products container with carousel
   const productsDiv = document.createElement('div');
