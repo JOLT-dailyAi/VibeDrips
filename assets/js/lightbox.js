@@ -45,6 +45,7 @@ class MediaLightbox {
         this.dragDirection = null; // 'h' or 'v'
 
         this.init();
+        this._pulseInterval = null; // Track pulses for cleanup
     }
 
     isMobileOrTablet() {
@@ -153,27 +154,11 @@ class MediaLightbox {
                 // 🛡️ SWIPE GUARD: If user is swiping, don't trigger the tap-unmute
                 if (Math.abs(active.touchMoveX - active.touchStartX) > 20) return;
 
-                // If it's a dedicated swipe move (handled elsewhere), don't trigger here
-                // but for simple taps/touches, we claim it.
+                // 🔊 Unlock Session
+                if (window.MediaState) window.MediaState.setUnmuted();
 
-                const centerMedia = overlay.querySelector('.lightbox-media-wrapper.center-slot');
-                if (centerMedia) {
-                    const video = centerMedia.querySelector('video');
-                    const iframe = centerMedia.querySelector('iframe');
-
-                    // 🔊 Unlock Session
-                    if (window.MediaState) window.MediaState.setUnmuted();
-
-                    if (video) {
-                        video.muted = false;
-                        video.volume = 0.5;
-                        video.play().catch(() => { });
-                    }
-                    if (iframe && iframe.contentWindow) {
-                        // Trigger the unmuting shotgun logic
-                        active.showMedia(active.currentIndex);
-                    }
-                }
+                // 🎯 Trigger Pulses for the active center slot
+                active.triggerPulsesForCenterSlot();
 
                 // 🛡️ RELEASE: First tap gives control to underlying player
                 shield.style.pointerEvents = 'none';
@@ -211,10 +196,15 @@ class MediaLightbox {
         overlay.addEventListener('touchstart', (e) => {
             const active = MediaLightbox.activeInstance;
             if (active && active.isOpen) {
-                e.stopImmediatePropagation();
+                // e.stopImmediatePropagation(); // ❌ REMOVED: This was killing internal gestures (Shield/Swipe)
                 active.resetIdleTimer();
             }
         }, { capture: true, passive: true });
+
+        // 🛡️ BUBBLE PROTECTION: Prevent site background from seeing the touch
+        overlay.addEventListener('touchstart', (e) => {
+            e.stopPropagation();
+        });
 
         prevBtn.addEventListener('click', (e) => {
             e.stopImmediatePropagation();
@@ -439,13 +429,49 @@ class MediaLightbox {
         this.updateCounter();
         this.updateDots(idx);
         this.updateNavButtons();
+
+        // 🛡️ SHIELD & PILL CONTROL: Adaptive visibility for the new strip
+        const strategy = window.Device?.getStrategy() || 'muted';
+        const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
+        const isHighTrust = (strategy === 'unmuted' || isUnmutedSession);
+
+        const shield = overlay.querySelector('.lightbox-iframe-shield');
+        const pill = overlay.querySelector('.engagement-pill');
+
+        if (isHighTrust) {
+            if (shield) {
+                shield.style.pointerEvents = 'none';
+                shield.style.display = 'none';
+            }
+            if (pill) pill.classList.remove('active');
+
+            // 🔊 AUTO-PULSE: If already unmuted, trigger pulses for the new center media
+            if (isUnmutedSession) {
+                this.triggerPulsesForCenterSlot();
+            }
+        } else {
+            if (shield) {
+                shield.style.pointerEvents = 'auto';
+                shield.style.display = 'block';
+            }
+            if (pill) pill.classList.add('active');
+        }
     }
 
     getMediaHTML(type, url, isActive = false) {
         if (type === 'video') {
-            const autoplay = isActive ? 'autoplay' : '';
-            const muted = isActive ? '' : 'muted';
-            return `<video class="lightbox-video" controls ${autoplay} ${muted} playsinline src="${url}"></video>`;
+            // 🛡️ DEVICE STRATEGY: Check if we can start unmuted (Desktop/PWA)
+            const strategy = window.Device?.getStrategy() || 'muted';
+            const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
+
+            // - If not active slot: ALWAYS muted
+            // - If Active + Desktop/PWA: Unmuted
+            // - If Active + Mobile Browser: Muted unless site-wide unmuted
+            const shouldBeMuted = (!isActive) || (strategy === 'muted' && !isUnmutedSession);
+
+            const autoplayAttr = isActive ? 'autoplay' : '';
+            const muteAttr = shouldBeMuted ? 'muted' : '';
+            return `<video class="lightbox-video" controls ${autoplayAttr} ${muteAttr} playsinline src="${url}"></video>`;
         } else if (['youtube', 'instagram', 'tiktok'].includes(type)) {
             const embedUrl = this.getUniversalEmbedUrl(type, url, isActive);
             return `<iframe class="lightbox-iframe" frameborder="0" allowfullscreen allow="autoplay; encrypted-media" src="${embedUrl}"></iframe>`;
@@ -609,6 +635,47 @@ class MediaLightbox {
         if (this.currentIndex > 0) {
             this.currentIndex--;
             this.refreshStrip();
+        }
+    }
+
+    /**
+     * Triggers unmuting pulses for the media element in the center slot
+     */
+    triggerPulsesForCenterSlot() {
+        if (!this.isOpen) return;
+        const overlay = document.getElementById('mediaLightbox');
+        const centerSlot = overlay.querySelector('.center-slot');
+        if (!centerSlot) return;
+
+        const video = centerSlot.querySelector('video');
+        const iframe = centerSlot.querySelector('iframe');
+
+        if (video) {
+            video.muted = false;
+            video.volume = 0.5;
+            video.play().catch(() => { });
+        }
+
+        if (iframe) {
+            // Target the specialized loadYouTube/loadInstagram logic or direct shotgun
+            // Since iframes are already loaded, we trigger a fresh pulse burst
+            const sendPulse = () => {
+                if (!this.isOpen || !iframe.contentWindow) return;
+                iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
+                iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [20] }), '*');
+                iframe.contentWindow.postMessage('unmute', '*');
+                iframe.contentWindow.postMessage(JSON.stringify({ event: 'unmute' }), '*');
+                iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*');
+            };
+
+            if (this._pulseInterval) clearInterval(this._pulseInterval);
+
+            sendPulse();
+            let pulses = 0;
+            this._pulseInterval = setInterval(() => {
+                sendPulse();
+                if (++pulses >= 10 || !this.isOpen) clearInterval(this._pulseInterval);
+            }, 400);
         }
     }
 
