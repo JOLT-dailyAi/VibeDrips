@@ -142,17 +142,22 @@ class MediaLightbox {
                     const video = centerMedia.querySelector('video');
                     const iframe = centerMedia.querySelector('iframe');
 
+                    // 🔊 Unlock Session
+                    if (window.MediaState) window.MediaState.setUnmuted();
+
                     if (video) {
                         video.muted = false;
                         video.volume = 0.5;
                         video.play().catch(() => { });
                     }
                     if (iframe && iframe.contentWindow) {
-                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
-                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [50] }), '*');
-                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*');
+                        // Trigger the unmuting shotgun logic
+                        active.showMedia(active.currentIndex);
                     }
                 }
+
+                // 🛡️ RELEASE: First tap gives control to underlying player
+                shield.style.pointerEvents = 'none';
                 active.resetIdleTimer();
             });
 
@@ -180,12 +185,28 @@ class MediaLightbox {
 
         prevBtn.addEventListener('click', () => {
             const active = MediaLightbox.activeInstance;
-            if (active) active.prev();
+            if (active) {
+                // 🔊 Unlock Session if first interaction
+                if (window.MediaState) window.MediaState.setUnmuted();
+                active.prev();
+            }
         });
         nextBtn.addEventListener('click', () => {
             const active = MediaLightbox.activeInstance;
-            if (active) active.next();
+            if (active) {
+                // 🔊 Unlock Session if first interaction
+                if (window.MediaState) window.MediaState.setUnmuted();
+                active.next();
+            }
         });
+
+        // Navigation dots should also participate in unmuting
+        const dotsContainer = overlay.querySelector('.lightbox-dots');
+        if (dotsContainer) {
+            dotsContainer.addEventListener('click', () => {
+                if (window.MediaState) window.MediaState.setUnmuted();
+            });
+        }
 
         if (this.options.enableKeyboard) {
             // Use window level with capture to grab events before iframes

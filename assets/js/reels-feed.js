@@ -77,7 +77,10 @@ function initReelsObserver() {
       const shield = section.querySelector('.reel-video-shield');
       // Only restore shield if we ARE NOT in a global unmuted session
       // OR if we want to protect swipe for iframes always
-      if (shield) shield.style.pointerEvents = 'auto';
+      if (shield) {
+        shield.style.pointerEvents = 'auto';
+        shield.classList.remove('released'); // 🆕 Track release state
+      }
     });
   }, { passive: true });
 
@@ -174,24 +177,37 @@ function activateMedia(container, shouldPlay) {
 
         // Native Toggle (Play/Pause)
         if (media.tagName === 'VIDEO') {
-          if (media.paused) media.play().catch(() => { });
-          else media.pause();
+          if (media.paused) {
+            media.muted = false; // Force unmute on manual play tap
+            media.play().catch(() => { });
+          } else {
+            media.pause();
+          }
+        } else if (media.tagName === 'IFRAME') {
+          // Force play command for iframes on manual tap
+          media.contentWindow?.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*');
         }
 
-        // UNLOCK IFRAME: Disable shield until next scroll
+        // UNLOCK PLAYER: Disable shield permanently for this reel until scroll
         shield.style.pointerEvents = 'none';
+        shield.classList.add('released');
       };
       container.appendChild(shield);
     }
   }
 
-  // 2. Immediate Autoplay pulse (with Readiness Delay & State Awareness)
+  // 2. Immediate Autoplay pulse (with Readiness Delay & Explicit Play Bridge)
   if (shouldPlay && media) {
     if (media.dataset.pulsing !== 'true') {
       media.dataset.pulsing = 'true';
+
+      // Explicit Play Bridge for native videos (iOS Fix)
+      if (media.tagName === 'VIDEO' && media.paused) {
+        media.play().catch(e => console.warn('🎬 Reels: Initial play blocked:', e));
+      }
+
       // Golden Spiral Style Handover Delay (Settling)
       setTimeout(() => {
-        // If session is already unmuted, we can attempt direct unmuted start
         triggerShotgunPulse(media);
         media.dataset.pulsing = 'false';
       }, 300);

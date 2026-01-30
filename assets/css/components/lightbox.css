@@ -180,7 +180,7 @@
 /* 📱 Mobile: Sensitive Shield ALWAYS catches gestures */
 @media (max-width: 1024px) {
     .lightbox-iframe-shield {
-        pointer-events: auto !important;
+        pointer-events: auto;
     }
 }
 

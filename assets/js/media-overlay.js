@@ -239,15 +239,24 @@ class MediaOverlay {
             player = `<iframe src="${embedUrl}" class="main-iframe-player" scrolling="no" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"></iframe>`;
         }
 
+        // 🛡️ GESTURE SHIELD: Catch the first tap for unmuting intent
+        const shield = `<div class="media-shield" 
+                             style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:10;background:transparent;cursor:pointer;" 
+                             onclick="event.stopPropagation(); if(window.MediaState) window.MediaState.setUnmuted(); window.mediaOverlay.togglePlayback(true); this.style.pointerEvents='none'; this.style.display='none';">
+                        </div>`;
+
         return `
-            ${player}
-            <div class="live-player-hub">
-                <button class="zoom-btn" onclick="event.stopPropagation(); window.mediaOverlay.openFullscreen()">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
-                    </svg>
-                    Fullscreen Gallery
-                </button>
+            <div class="active-player-wrapper" style="position:relative;width:100%;height:100%;">
+                ${player}
+                ${shield}
+                <div class="live-player-hub">
+                    <button class="zoom-btn" onclick="event.stopPropagation(); window.mediaOverlay.openFullscreen()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                        </svg>
+                        Fullscreen Gallery
+                    </button>
+                </div>
             </div>
         `;
     }

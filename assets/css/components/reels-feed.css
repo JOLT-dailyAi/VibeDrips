@@ -97,7 +97,7 @@
 
 @media (max-width: 1024px) {
   .reel-video-shield {
-    pointer-events: auto !important;
+    pointer-events: auto;
     /* Catch swipes on mobile */
   }
 }
