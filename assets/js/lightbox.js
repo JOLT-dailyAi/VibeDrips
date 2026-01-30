@@ -162,9 +162,10 @@ class MediaLightbox {
             });
         }
 
-        overlay.addEventListener('mousemove', () => {
+        // Wake UI on any window-level movement (Desktop Fix for Iframes)
+        window.addEventListener('mousemove', () => {
             const active = MediaLightbox.activeInstance;
-            if (active) active.resetIdleTimer();
+            if (active && active.isOpen) active.resetIdleTimer();
         });
 
         overlay.addEventListener('pointermove', () => {
@@ -247,6 +248,14 @@ class MediaLightbox {
                     mediaContainer.style.opacity = 1 - (progress * 0.7);
 
                     // Stop browser scroll/pull-to-refresh if we own the gesture
+                    if (e.cancelable) e.preventDefault();
+                } else if (active.dragDirection === 'h') {
+                    // 📏 1:1 Strip Tracking (Horizontal)
+                    const strip = overlay.querySelector('.lightbox-sliding-strip');
+                    if (strip) {
+                        strip.style.transition = 'none'; // Instant tracking
+                        strip.style.transform = `translate3d(calc(-200% + ${deltaX}px), 0, 0)`;
+                    }
                     if (e.cancelable) e.preventDefault();
                 }
             };
@@ -418,16 +427,28 @@ class MediaLightbox {
         const overlay = document.getElementById('mediaLightbox');
         const prevBtn = overlay.querySelector('.lightbox-prev');
         const nextBtn = overlay.querySelector('.lightbox-next');
-        const isSmallScreen = window.innerWidth < 1024;
+        const isMobile = window.innerWidth < 768;
 
-        if (isSmallScreen) {
+        if (isMobile) {
+            // Mobile: Swipes are primary, hide arrows to clear space
             prevBtn.style.display = 'none';
             nextBtn.style.display = 'none';
         } else {
+            // Desktop: Show arrows for ergonomic navigation
+            prevBtn.style.display = 'flex';
+            nextBtn.style.display = 'flex';
+
             const isFirst = this.currentIndex === 0;
             const isLast = this.currentIndex === this.mediaArray.length - 1;
+
+            // Use visibility/opacity to participate in auto-hide while maintaining layout
             prevBtn.style.visibility = isFirst ? 'hidden' : 'visible';
+            prevBtn.style.opacity = isFirst ? '0' : '1';
+            prevBtn.style.pointerEvents = isFirst ? 'none' : 'auto';
+
             nextBtn.style.visibility = isLast ? 'hidden' : 'visible';
+            nextBtn.style.opacity = isLast ? '0' : '1';
+            nextBtn.style.pointerEvents = isLast ? 'none' : 'auto';
         }
     }
 
