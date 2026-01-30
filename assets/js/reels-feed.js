@@ -63,7 +63,12 @@ let activeShotgunPulses = new Map();
 let lastActiveIdx = -1;
 let lifecycleDebounceTimer = null;
 
+// 🛡️ REVEAL GUARD: Delay observer start until modal is fully open
 function initReelsObserver() {
+  setTimeout(_initReelsObserverInternal, 500);
+}
+
+function _initReelsObserverInternal() {
   const container = document.querySelector('.reels-scroll-container');
   if (!container) return;
 
@@ -104,7 +109,7 @@ function initReelsObserver() {
 
   const options = {
     root: container,
-    threshold: [0.05, 0.5, 0.95] // Soft detection for handover
+    threshold: [0.01, 0.5, 0.95] // 🎯 DETECT EARLY: Detect as soon as a single pixel shows up
   };
 
   const observer = new IntersectionObserver((entries) => {
@@ -264,26 +269,27 @@ function triggerShotgunPulse(media) {
     const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
 
     if (media.tagName === 'VIDEO') {
-      if (isUnmutedSession) {
-        media.muted = false;
-        media.volume = 0.2;
-      } else {
+      media.play().then(() => {
+        // 🔊 SAFE UNMUTE: Only unmute AFTER playback has actually started
+        if (isUnmutedSession) {
+          media.muted = false;
+          media.volume = 0.2;
+        }
+      }).catch(() => {
         media.muted = true;
-      }
-      media.play().catch(() => { });
+        media.play().catch(() => { });
+      });
     } else if (media.contentWindow) {
       if (isUnmutedSession) {
-        // 1. YouTube specialized (API mode)
-        media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
-        media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [20] }), '*');
-
-        // 2. Vimeo specialized
-        media.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 0.2 }), '*');
-
-        // 3. Protocol Shotgun fallbacks
-        media.contentWindow.postMessage('unmute', '*');
-        media.contentWindow.postMessage(JSON.stringify({ event: 'unmute' }), '*');
-        media.contentWindow.postMessage(JSON.stringify({ event: 'volume', value: 0.2 }), '*');
+        // 🛡️ WARMUP DELAY: Give iframe 1s to stabilize before sound pulses
+        setTimeout(() => {
+          media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
+          media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [20] }), '*');
+          media.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 0.2 }), '*');
+          media.contentWindow.postMessage('unmute', '*');
+          media.contentWindow.postMessage(JSON.stringify({ event: 'unmute' }), '*');
+          media.contentWindow.postMessage(JSON.stringify({ event: 'volume', value: 0.2 }), '*');
+        }, 1000);
       }
 
       media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*');

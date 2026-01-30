@@ -134,6 +134,9 @@ class MediaLightbox {
                 const active = MediaLightbox.activeInstance;
                 if (!active) return;
 
+                // 🛡️ SWIPE GUARD: If user is swiping, don't trigger the tap-unmute
+                if (Math.abs(active.touchMoveX - active.touchStartX) > 20) return;
+
                 // If it's a dedicated swipe move (handled elsewhere), don't trigger here
                 // but for simple taps/touches, we claim it.
 
@@ -810,17 +813,18 @@ class MediaLightbox {
                 const sendAudioPulse = () => {
                     if (!this.isOpen || !iframe.contentWindow) return;
 
-                    // 🛡️ THE PULSE GUARD: Only attempt to unmute if the session is already active.
-                    // This prevents "Illegal Unmuting" which causes mobile browsers to abort autoplay.
+                    // 🛡️ THE PULSE GUARD: Only unmute AFTER a short warmup period
+                    // and only if the session is active.
                     const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
 
                     if (isUnmutedSession) {
-                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
-                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [20] }), '*');
-
-                        // Shotgun signals
-                        iframe.contentWindow.postMessage('unmute', '*');
-                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'unmute' }), '*');
+                        setTimeout(() => {
+                            if (!this.isOpen || !iframe.contentWindow) return;
+                            iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
+                            iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [20] }), '*');
+                            iframe.contentWindow.postMessage('unmute', '*');
+                            iframe.contentWindow.postMessage(JSON.stringify({ event: 'unmute' }), '*');
+                        }, 1000);
                     }
 
                     iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*');
@@ -877,33 +881,21 @@ class MediaLightbox {
             loader.style.display = 'none';
             video.style.display = 'block';
 
-            if (this.options.autoPlayVideo) {
-                // 🛡️ MOBILE PROTOCOL: Always start MUTED to guarantee autoplay permission.
+            // 🛡️ MOBILE PROTOCOL: Always start MUTED
+            video.muted = true;
+            video.volume = 0.2;
+            video.setAttribute('playsinline', '');
+
+            video.play().then(() => {
+                // 🔊 SAFE UNMUTE: Only unmute AFTER confirmed playback
+                if (window.MediaState?.isUnmuted()) {
+                    video.muted = false;
+                    video.volume = 0.5;
+                }
+            }).catch(() => {
                 video.muted = true;
-                video.volume = 0.2;
-                video.setAttribute('playsinline', '');
-
-                video.play().catch(() => {
-                    // One last attempt
-                    video.play().catch(() => { });
-                });
-
-                // 🔊 Successive Pulse (The Pulse Guard for Native Video)
-                let nativePulses = 0;
-                const vInterval = setInterval(() => {
-                    if (video.paused) video.play().catch(() => { });
-
-                    // 🛡️ THE PULSE GUARD: Only unmute if session has been unlocked by user
-                    if (window.MediaState?.isUnmuted()) {
-                        video.muted = false;
-                        video.volume = 0.2;
-                    } else {
-                        video.muted = true;
-                    }
-
-                    if (++nativePulses >= 8 || !this.isOpen) clearInterval(vInterval);
-                }, 500);
-            }
+                video.play().catch(() => { });
+            });
         };
 
         if (isMobile) {
