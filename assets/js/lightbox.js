@@ -852,7 +852,9 @@ class MediaLightbox {
             video.style.display = 'block';
 
             if (this.options.autoPlayVideo) {
-                video.muted = false; // 🔊 Initial attempt: Unmuted @ 20%
+                // 🛡️ MOBILE PROTOCOL: Always start MUTED to guarantee autoplay permission.
+                // Shotgun pulse handles the unmuting session-wide.
+                video.muted = true;
                 video.volume = 0.2;
                 video.setAttribute('playsinline', '');
 
@@ -935,8 +937,9 @@ class MediaLightbox {
         if (shortsMatch) videoId = shortsMatch[1];
 
         if (videoId) {
-            // 🛡️ State Awareness: If session is already unmuted, attempt unmuted start immediately
-            const initialMute = window.MediaState?.isUnmuted() ? '0' : '1';
+            // 🛡️ MOBILE PROTOCOL: Always start MUTED (mute=1) to guarantee autoplay permission.
+            // Shotgun pulse handles the unmuting based on MediaState once session is unlocked.
+            const initialMute = '1';
             return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${autoplay}&mute=${initialMute}&rel=0`;
         }
         return null;

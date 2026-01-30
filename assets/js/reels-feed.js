@@ -274,10 +274,10 @@ function getMediaHTML(type, url, isActive) {
   const embedUrl = getUniversalVideoEmbedUrlForReels(url, isActive);
 
   if (type === 'video') {
-    // Buffered items should be muted and NOT autoplaying to be safe
+    // 🛡️ MOBILE PROTOCOL: Always start MUTED to guarantee autoplay permission.
+    // Shotgun pulse handles the unmuting based on MediaState.
     const autoplay = isActive ? 'autoplay' : '';
-    const muted = isActive ? '' : 'muted';
-    return `<video controls playsinline ${autoplay} ${muted} preload="auto" src="${url}" style="width:100%;height:100%;object-fit:cover;"></video>`;
+    return `<video controls playsinline ${autoplay} muted preload="auto" src="${url}" style="width:100%;height:100%;object-fit:cover;"></video>`;
   } else {
     return `<iframe src="${embedUrl}" frameborder="0" scrolling="no" allowtransparency="true" allowfullscreen="true" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
   }
@@ -302,9 +302,9 @@ function getUniversalVideoEmbedUrlForReels(sourceUrl, isActive) {
     else if (url.includes('youtube.com/watch')) videoId = new URL(sourceUrl).searchParams.get('v');
     else if (url.includes('youtube.com/shorts/')) videoId = sourceUrl.match(/shorts\/([^?]+)/)?.[1];
 
-    // 🛡️ Optimistic Autoplay: Start unmuted (mute=0) on ALL devices.
-    // Shotgun Pulse will handle unmuting if the browser blocks the initial unmuted start.
-    if (videoId) return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${autoplay}&mute=0`;
+    // 🛡️ MOBILE PROTOCOL: Always start MUTED (mute=1) to guarantee autoplay permission.
+    // Shotgun pulse handles the unmuting based on MediaState once session is unlocked.
+    if (videoId) return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${autoplay}&mute=1&rel=0`;
   }
   return sourceUrl;
 }
