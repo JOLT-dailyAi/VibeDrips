@@ -75,6 +75,7 @@ function _initReelsObserverInternal() {
 
   // 🛡️ CLEANUP: Stop any previous observer from fighting this one
   if (REELS_OBSERVER) {
+    console.log('💀 Killing old Reels Observer ghosts...');
     REELS_OBSERVER.disconnect();
     REELS_OBSERVER = null;
   }
@@ -267,19 +268,38 @@ function activateMedia(container, shouldPlay) {
 }
 
 function killMedia(container) {
-  const media = container.querySelector('video, iframe');
-  if (media) {
-    // Clear any active pulses
-    if (activeShotgunPulses.has(media)) {
-      clearInterval(activeShotgunPulses.get(media));
-      activeShotgunPulses.delete(media);
-    }
+  if (!container || container.dataset.isKilling === 'true') return;
+  container.dataset.isKilling = 'true';
 
-    media.src = '';
-    media.removeAttribute('src'); // Force deeper cleanup
-    media.load?.(); // Stop video buffer
-    media.dataset.loaded = 'false';
-    container.innerHTML = '<div class="reel-video-placeholder">🎬</div>';
+  try {
+    const media = container.querySelector('video, iframe');
+    if (media) {
+      // Clear any active pulses
+      if (activeShotgunPulses.has(media)) {
+        clearInterval(activeShotgunPulses.get(media));
+        activeShotgunPulses.delete(media);
+      }
+
+      if (media.tagName === 'VIDEO') {
+        media.pause();
+        media.removeAttribute('src'); // Release resource
+        media.load();
+      } else if (media.contentWindow) {
+        try {
+          media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'pauseVideo', args: '' }), '*');
+          media.contentWindow.postMessage(JSON.stringify({ method: 'pause' }), '*');
+        } catch (e) { }
+      }
+
+      // 💀 NUCLEAR PURGE: Direct DOM removal is the only way to be 100% sure on Mobile Safari
+      while (container.firstChild) {
+        container.removeChild(container.firstChild);
+      }
+
+      container.dataset.loaded = 'false';
+    }
+  } finally {
+    delete container.dataset.isKilling;
   }
 }
 

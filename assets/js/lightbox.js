@@ -16,8 +16,14 @@
 
 class MediaLightbox {
     static activeInstance = null;
+    static _instance = null;
 
     constructor(options = {}) {
+        // 🛡️ TRUE SINGLETON: Ensure only one instance ever exists
+        if (MediaLightbox._instance) {
+            return MediaLightbox._instance;
+        }
+        MediaLightbox._instance = this;
         this.options = {
             enableSwipe: true,
             enableKeyboard: true,
@@ -165,87 +171,90 @@ class MediaLightbox {
             };
 
             shield.addEventListener('touchstart', (e) => {
-                e.stopPropagation(); // 🛡️ TOUCH ISOLATION
+                e.stopImmediatePropagation(); // 🛡️ CAPTURE DOMINANCE
                 handleUnmuteGesture(e);
-            }, { passive: true });
+            }, { capture: true, passive: true });
             shield.addEventListener('click', (e) => {
-                e.stopPropagation(); // 🛡️ TOUCH ISOLATION
+                e.stopImmediatePropagation(); // 🛡️ CAPTURE DOMINANCE
                 handleUnmuteGesture(e);
-            });
+            }, { capture: true });
 
-            shield.addEventListener('mousemove', () => {
+            shield.addEventListener('mousemove', (e) => {
+                e.stopImmediatePropagation();
                 const active = MediaLightbox.activeInstance;
                 if (active) active.resetIdleTimer();
-            });
+            }, { capture: true });
         }
 
         // Wake UI on any window-level movement (Desktop Fix for Iframes)
-        window.addEventListener('mousemove', () => {
+        window.addEventListener('mousemove', (e) => {
             const active = MediaLightbox.activeInstance;
             if (active && active.isOpen) active.resetIdleTimer();
-        });
+        }, { capture: true });
 
-        overlay.addEventListener('pointermove', () => {
+        overlay.addEventListener('pointermove', (e) => {
+            e.stopImmediatePropagation();
             const active = MediaLightbox.activeInstance;
             if (active) active.resetIdleTimer();
-        });
+        }, { capture: true });
 
-        overlay.addEventListener('touchstart', () => {
+        overlay.addEventListener('touchstart', (e) => {
+            e.stopImmediatePropagation();
             const active = MediaLightbox.activeInstance;
             if (active) active.resetIdleTimer();
-        }, { passive: true });
+        }, { capture: true, passive: true });
 
-        prevBtn.addEventListener('click', () => {
+        prevBtn.addEventListener('click', (e) => {
+            e.stopImmediatePropagation();
             const active = MediaLightbox.activeInstance;
             if (active) {
-                // 🔊 Unlock Session if first interaction
                 if (window.MediaState) window.MediaState.setUnmuted();
                 active.prev();
             }
-        });
-        nextBtn.addEventListener('click', () => {
+        }, { capture: true });
+        nextBtn.addEventListener('click', (e) => {
+            e.stopImmediatePropagation();
             const active = MediaLightbox.activeInstance;
             if (active) {
-                // 🔊 Unlock Session if first interaction
                 if (window.MediaState) window.MediaState.setUnmuted();
                 active.next();
             }
-        });
+        }, { capture: true });
 
         // Navigation dots should also participate in unmuting
         const dotsContainer = overlay.querySelector('.lightbox-dots');
         if (dotsContainer) {
-            dotsContainer.addEventListener('click', () => {
+            dotsContainer.addEventListener('click', (e) => {
+                e.stopImmediatePropagation();
                 if (window.MediaState) window.MediaState.setUnmuted();
-            });
+            }, { capture: true });
         }
 
         if (this.options.enableKeyboard) {
-            // Use window level with capture to grab events before iframes
             window.addEventListener('keydown', (e) => {
                 const active = MediaLightbox.activeInstance;
                 if (!active || !active.isOpen) return;
 
-                // Any key press wakes the UI
                 active.resetIdleTimer();
 
                 if (e.key === 'Escape') {
                     e.preventDefault();
-                    e.stopPropagation();
+                    e.stopImmediatePropagation();
                     closeBtn.click();
                 }
                 if (e.key === 'ArrowLeft') active.prev();
                 if (e.key === 'ArrowRight') active.next();
-            }, true); // Capture phase
+            }, { capture: true });
         }
 
         if (this.options.enableSwipe) {
             const mediaContainer = overlay.querySelector('.lightbox-media-container');
 
             const handleStart = (e) => {
-                e.stopPropagation(); // 🛡️ TOUCH ISOLATION
+                e.stopImmediatePropagation(); // 🛡️ CAPTURE DOMINANCE
                 const active = MediaLightbox.activeInstance;
                 if (!active) return;
+                active.resetIdleTimer();
 
                 const touch = e.type.startsWith('touch') ? e.touches[0] : e;
                 active.touchStartX = touch.clientX;
@@ -261,6 +270,7 @@ class MediaLightbox {
                 e.stopPropagation(); // 🛡️ TOUCH ISOLATION
                 const active = MediaLightbox.activeInstance;
                 if (!active || !active.touchStartX) return; // Only track if a start event was registered
+                if (!active.isDragging) return;
 
                 const touch = e.type.startsWith('touch') ? e.touches[0] : e;
                 active.touchMoveX = touch.clientX;
@@ -296,7 +306,7 @@ class MediaLightbox {
             };
 
             const handleEnd = (e) => {
-                e.stopPropagation(); // 🛡️ TOUCH ISOLATION
+                e.stopImmediatePropagation(); // 🛡️ CAPTURE DOMINANCE
                 const active = MediaLightbox.activeInstance;
                 if (!active || !active.isDragging) return;
                 active.isDragging = false;
@@ -329,15 +339,12 @@ class MediaLightbox {
             };
 
             // Expanded swipe area: Attach to overlay instead of content
-            overlay.addEventListener('touchstart', handleStart, { passive: true });
-            overlay.addEventListener('touchmove', handleMove, { passive: false });
-            overlay.addEventListener('touchend', handleEnd, { passive: true });
-            overlay.addEventListener('touchcancel', handleEnd, { passive: true });
-
-            // Mouse support for completeness (on overlay)
-            overlay.addEventListener('mousedown', handleStart);
-            window.addEventListener('mousemove', handleMove);
-            window.addEventListener('mouseup', handleEnd);
+            mediaContainer.addEventListener('touchstart', handleStart, { capture: true, passive: true });
+            mediaContainer.addEventListener('mousedown', handleStart, { capture: true });
+            window.addEventListener('touchmove', handleMove, { capture: true, passive: false });
+            window.addEventListener('mousemove', handleMove, { capture: true });
+            window.addEventListener('touchend', handleEnd, { capture: true });
+            window.addEventListener('mouseup', handleEnd, { capture: true });
         }
     }
 

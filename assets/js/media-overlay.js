@@ -180,18 +180,31 @@ class MediaOverlay {
      */
     stopAllMedia() {
         if (!this.strip) return;
-        const allVideos = this.strip.querySelectorAll('video');
-        const allIframes = this.strip.querySelectorAll('iframe');
 
-        allVideos.forEach(v => v.pause());
-        allIframes.forEach(iframe => {
-            if (iframe.contentWindow) {
-                // Universal Pause Pulse
-                iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'pauseVideo', args: '' }), '*');
-                iframe.contentWindow.postMessage(JSON.stringify({ method: 'pause' }), '*');
-                iframe.contentWindow.postMessage('pause', '*');
-                iframe.contentWindow.postMessage(JSON.stringify({ type: 'player:pause' }), '*');
+        // 💀 NUCLEAR PURGE: Find all media wrappers except the active center (if applicable)
+        // or just kill everything if we're doing a total silence
+        const wrappers = this.strip.querySelectorAll('.media-grid-wrapper');
+        wrappers.forEach(wrapper => {
+            const video = wrapper.querySelector('video');
+            const iframe = wrapper.querySelector('iframe');
+
+            if (video) {
+                video.pause();
+                video.removeAttribute('src');
+                video.load();
             }
+
+            if (iframe && iframe.contentWindow) {
+                try {
+                    iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'pauseVideo', args: '' }), '*');
+                } catch (e) { }
+            }
+
+            // Absolute destruction of secondary media containers
+            const secondaryPlayers = wrapper.querySelectorAll('.active-player-wrapper');
+            secondaryPlayers.forEach(p => {
+                while (p.firstChild) p.removeChild(p.firstChild);
+            });
         });
     }
 
