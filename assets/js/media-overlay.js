@@ -236,9 +236,9 @@ class MediaOverlay {
 
         let player = '';
         if (url.match(/\.(mp4|webm|mov|avi)$/i)) {
-            // 🛡️ MOBILE PROTOCOL: Always start MUTED in HTML.
-            // Explicit playback is triggered via JS after transitions.
-            player = `<video controls playsinline muted class="main-video-player"><source src="${url}" type="video/mp4"></video>`;
+            // 🛡️ BELT & SUSPENDERS: Use HTML attributes for instant motion
+            const autoplayAttr = isAutoplay ? 'autoplay muted' : '';
+            player = `<video controls playsinline ${autoplayAttr} class="main-video-player"><source src="${url}" type="video/mp4"></video>`;
         } else {
             player = `<iframe src="${embedUrl}" class="main-iframe-player" scrolling="no" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"></iframe>`;
         }
@@ -366,15 +366,21 @@ class MediaOverlay {
 
         if (video) {
             if (play) {
-                // 🛡️ THE BRIDGE: Always play MUTED first to guarantee success
+                // 🛡️ THE BRIDGE: Always play MUTED first
                 video.muted = true;
-                video.play().then(() => {
-                    // 🔊 FLIP SOUND: Only once playback is confirmed
-                    if (window.MediaState && window.MediaState.isUnmuted()) {
-                        video.muted = false;
-                        video.volume = 0.2;
-                    }
-                }).catch(err => {
+
+                // ✅ NATIVE BRIDGE: Flip sound instantly on motion
+                if (!video.dataset.bridgeSet) {
+                    video.dataset.bridgeSet = 'true';
+                    video.addEventListener('playing', () => {
+                        if (window.MediaState && window.MediaState.isUnmuted()) {
+                            video.muted = false;
+                            video.volume = 0.2;
+                        }
+                    }, { once: true });
+                }
+
+                video.play().catch(err => {
                     console.warn('🎬 Modal: Transition play blocked:', err);
                     video.muted = true;
                     video.play().catch(() => { });

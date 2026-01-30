@@ -893,10 +893,23 @@ class MediaLightbox {
             loader.style.display = 'none';
             video.style.display = 'block';
 
-            // 🛡️ MOBILE PROTOCOL: Always start MUTED
+            // 🛡️ BELT & SUSPENDERS: HTML attributes + JS Fallback
             video.muted = true;
             video.volume = 0.2;
             video.setAttribute('playsinline', '');
+            video.setAttribute('autoplay', '');
+            video.setAttribute('muted', '');
+
+            // ✅ NATIVE BRIDGE: Flip sound as soon as motion starts
+            if (!video.dataset.bridgeSet) {
+                video.dataset.bridgeSet = 'true';
+                video.addEventListener('playing', () => {
+                    if (window.MediaState && window.MediaState.isUnmuted()) {
+                        video.muted = false;
+                        video.volume = 0.5;
+                    }
+                }, { once: true });
+            }
 
             video.play().then(() => {
                 // 🔊 SAFE UNMUTE: Only unmute AFTER confirmed playback

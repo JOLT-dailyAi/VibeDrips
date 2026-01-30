@@ -62,6 +62,7 @@ let activeShotgunPulses = new Map();
 
 let lastActiveIdx = -1;
 let lifecycleDebounceTimer = null;
+let REELS_OBSERVER = null; // 🛡️ SINGLETON: Prevent observer leaks
 
 // 🛡️ REVEAL GUARD: Delay observer start until modal is fully open
 function initReelsObserver() {
@@ -71,6 +72,12 @@ function initReelsObserver() {
 function _initReelsObserverInternal() {
   const container = document.querySelector('.reels-scroll-container');
   if (!container) return;
+
+  // 🛡️ CLEANUP: Stop any previous observer from fighting this one
+  if (REELS_OBSERVER) {
+    REELS_OBSERVER.disconnect();
+    REELS_OBSERVER = null;
+  }
 
   // Cache sections once
   REELS_SECTIONS_CACHE.length = 0;
@@ -148,6 +155,7 @@ function _initReelsObserverInternal() {
     }
   }, options);
 
+  REELS_OBSERVER = observer; // Save to singleton
   REELS_SECTIONS_CACHE.forEach(section => observer.observe(section));
 }
 
@@ -272,13 +280,19 @@ function triggerShotgunPulse(media) {
     if (media.tagName === 'VIDEO') {
       // 🛡️ THE BRIDGE: Always set muted=true BEFORE calling play to guarantee permission
       media.muted = true;
-      media.play().then(() => {
-        // 🔊 FLIP SOUND: Only once playback is confirmed active
-        if (isUnmutedSession) {
-          media.muted = false;
-          media.volume = 0.2;
-        }
-      }).catch(() => {
+
+      // ✅ NATIVE BRIDGE: Flip sound as soon as the video actually starts moving
+      if (!media.dataset.bridgeSet) {
+        media.dataset.bridgeSet = 'true';
+        media.addEventListener('playing', () => {
+          if (window.MediaState && window.MediaState.isUnmuted()) {
+            media.muted = false;
+            media.volume = 0.2;
+          }
+        }, { once: true });
+      }
+
+      media.play().catch(() => {
         media.muted = true;
         media.play().catch(() => { });
       });
@@ -325,10 +339,9 @@ function getMediaHTML(type, url, isActive) {
   const embedUrl = getUniversalVideoEmbedUrlForReels(url, isActive);
 
   if (type === 'video') {
-    // 🛡️ MOBILE PROTOCOL: Always start MUTED to guarantee autoplay permission.
-    // Shotgun pulse handles the unmuting based on MediaState.
-    const autoplay = isActive ? 'autoplay' : '';
-    return `<video controls playsinline ${autoplay} muted preload="auto" src="${url}" style="width:100%;height:100%;object-fit:cover;"></video>`;
+    // 🛡️ BELT & SUSPENDERS: Use both HTML attributes AND JS fallback
+    const autoplayAttr = isActive ? 'autoplay muted' : '';
+    return `<video controls playsinline ${autoplayAttr} preload="auto" src="${url}" style="width:100%;height:100%;object-fit:cover;"></video>`;
   } else {
     return `<iframe src="${embedUrl}" frameborder="0" scrolling="no" allowtransparency="true" allowfullscreen="true" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
   }
@@ -357,7 +370,10 @@ function getUniversalVideoEmbedUrlForReels(sourceUrl, isActive) {
     // UNLESS: The session is already unmuted globally.
     const initialMute = (window.MediaState && window.MediaState.isUnmuted()) ? '0' : '1';
 
-    if (videoId) return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${autoplay}&mute=${initialMute}&rel=0`;
+    // 🔥 FORCE ACTIVE: If we are active, we MUST have autoplay=1
+    const forcedAutoplay = isActive ? '1' : '0';
+
+    if (videoId) return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${forcedAutoplay}&mute=${initialMute}&rel=0`;
   }
   return sourceUrl;
 }
