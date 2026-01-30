@@ -7,6 +7,7 @@ class MediaOverlay {
         this.activeMedia = null;
         this.mediaItems = []; // For the active product
         this.currentIndex = 0; // For the active product
+        this.pulseInterval = null; // 🔊 Tracking pulses to prevent leaks
         this.init();
     }
 
@@ -493,25 +494,40 @@ class MediaOverlay {
                     return;
                 }
 
+                // 🛡️ CLEANUP: Stop any existing pulse loop
+                if (this.pulseInterval) {
+                    clearInterval(this.pulseInterval);
+                    this.pulseInterval = null;
+                }
+
                 // Initial burst
                 sendAudioCommands();
 
                 // 🔊 SUCCESSIVE PULSE: Pulse every 400ms for 4 seconds (Pulse Overdrive)
                 let pulses = 0;
-                const interval = setInterval(() => {
+                this.pulseInterval = setInterval(() => {
                     // Re-check intent inside interval
                     if (video?.dataset.userMuted === 'true' || video?.dataset.userPaused === 'true' ||
-                        iframe?.dataset.userMuted === 'true' || iframe?.dataset.userPaused === 'true') {
-                        clearInterval(interval);
+                        iframe?.dataset.userMuted === 'true' || iframe?.dataset.userPaused === 'true' ||
+                        !this.container.classList.contains('active')) {
+                        clearInterval(this.pulseInterval);
+                        this.pulseInterval = null;
                         return;
                     }
 
                     sendAudioCommands();
-                    if (++pulses >= 10 || !this.container.classList.contains('active')) {
-                        clearInterval(interval);
+                    if (++pulses >= 10) {
+                        clearInterval(this.pulseInterval);
+                        this.pulseInterval = null;
                     }
                 }, 400);
             } else {
+                // 🛡️ CLEANUP: Kill the pulse loop instantly
+                if (this.pulseInterval) {
+                    clearInterval(this.pulseInterval);
+                    this.pulseInterval = null;
+                }
+
                 // Global Stop Signal
                 iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'pauseVideo', args: '' }), '*');
                 iframe.contentWindow.postMessage(JSON.stringify({ method: 'pause' }), '*');
