@@ -164,8 +164,14 @@ class MediaLightbox {
                 active.resetIdleTimer();
             };
 
-            shield.addEventListener('touchstart', handleUnmuteGesture, { passive: true });
-            shield.addEventListener('click', handleUnmuteGesture);
+            shield.addEventListener('touchstart', (e) => {
+                e.stopPropagation(); // 🛡️ TOUCH ISOLATION
+                handleUnmuteGesture(e);
+            }, { passive: true });
+            shield.addEventListener('click', (e) => {
+                e.stopPropagation(); // 🛡️ TOUCH ISOLATION
+                handleUnmuteGesture(e);
+            });
 
             shield.addEventListener('mousemove', () => {
                 const active = MediaLightbox.activeInstance;
@@ -237,6 +243,7 @@ class MediaLightbox {
             const mediaContainer = overlay.querySelector('.lightbox-media-container');
 
             const handleStart = (e) => {
+                e.stopPropagation(); // 🛡️ TOUCH ISOLATION
                 const active = MediaLightbox.activeInstance;
                 if (!active) return;
 
@@ -251,8 +258,9 @@ class MediaLightbox {
             };
 
             const handleMove = (e) => {
+                e.stopPropagation(); // 🛡️ TOUCH ISOLATION
                 const active = MediaLightbox.activeInstance;
-                if (!active || !active.isDragging) return;
+                if (!active || !active.touchStartX) return; // Only track if a start event was registered
 
                 const touch = e.type.startsWith('touch') ? e.touches[0] : e;
                 active.touchMoveX = touch.clientX;
@@ -288,6 +296,7 @@ class MediaLightbox {
             };
 
             const handleEnd = (e) => {
+                e.stopPropagation(); // 🛡️ TOUCH ISOLATION
                 const active = MediaLightbox.activeInstance;
                 if (!active || !active.isDragging) return;
                 active.isDragging = false;
@@ -911,16 +920,35 @@ class MediaLightbox {
                 }, { once: true });
             }
 
+            // ✅ USER INTENT SOVEREIGNTY: Back off if user manually interacted
+            if (video.dataset.userMuted === 'true' || video.dataset.userPaused === 'true') {
+                return;
+            }
+
             video.play().then(() => {
                 // 🔊 SAFE UNMUTE: Only unmute AFTER confirmed playback
-                if (window.MediaState?.isUnmuted()) {
+                // AND only if the user hasn't explicitly muted it already
+                if (window.MediaState && window.MediaState.isUnmuted() && video.dataset.userMuted !== 'true') {
                     video.muted = false;
                     video.volume = 0.5;
                 }
-            }).catch(() => {
+            }).catch(error => {
+                console.warn("🎬 Lightbox: Autoplay blocked:", error);
                 video.muted = true;
                 video.play().catch(() => { });
             });
+
+            // Track Intent
+            if (!video.dataset.intentBound) {
+                video.dataset.intentBound = 'true';
+                video.addEventListener('volumechange', () => {
+                    if (video.muted) video.dataset.userMuted = 'true';
+                    else video.dataset.userMuted = 'false';
+                });
+                video.addEventListener('pause', () => {
+                    video.dataset.userPaused = 'true';
+                });
+            }
         };
 
         if (isMobile) {

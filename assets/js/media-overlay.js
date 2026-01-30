@@ -96,12 +96,27 @@ class MediaOverlay {
             const product = list[idx];
             const gridWrapper = document.createElement('div');
             gridWrapper.className = 'media-grid-wrapper';
-            // ONLY the center product (i=2) gets autoplay
-            gridWrapper.innerHTML = this.renderGridHTML(product, i === 2);
+
+            // 🛡️ ACTIVE-ONLY PLAYBACK: Neighbors (i != 2) are buffered but MUST be paused/muted
+            const isCenterSlot = (i === 2);
+            gridWrapper.innerHTML = this.renderGridHTML(product, isCenterSlot);
             this.strip.appendChild(gridWrapper);
 
+            // If it's a neighbor, force immediate silence/pause
+            if (!isCenterSlot) {
+                const neighborMedia = gridWrapper.querySelectorAll('video, iframe');
+                neighborMedia.forEach(m => {
+                    if (m.tagName === 'VIDEO') {
+                        m.pause();
+                        m.muted = true;
+                    } else if (m.contentWindow) {
+                        m.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'pauseVideo', args: '' }), '*');
+                    }
+                });
+            }
+
             // If it's the active one, set current items
-            if (i === 2) {
+            if (isCenterSlot) {
                 this.mediaItems = Array.isArray(product.reference_media) ? [...product.reference_media] : [];
                 this.initialMediaCount = this.mediaItems.length;
                 this.currentIndex = 0;
@@ -255,10 +270,12 @@ class MediaOverlay {
                              onclick="event.stopPropagation(); if(window.MediaState) window.MediaState.setUnmuted(); window.mediaOverlay.togglePlayback(true); this.style.pointerEvents='none'; this.style.display='none';">
                         </div>`;
 
-        return `
-            <div class="active-player-wrapper" style="position:relative;width:100%;height:100%;">
-                ${player}
-                ${shield}
+        const activeWrapper = document.createElement('div');
+        activeWrapper.className = 'active-player-wrapper';
+        activeWrapper.style.position = 'relative';
+        activeWrapper.style.width = '100%';
+        activeWrapper.style.height = '100%';
+        activeWrapper.innerHTML = `${player}${shield}
                 <div class="live-player-hub">
                     <button class="zoom-btn" onclick="event.stopPropagation(); window.mediaOverlay.openFullscreen()">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -267,8 +284,21 @@ class MediaOverlay {
                         Fullscreen Gallery
                     </button>
                 </div>
-            </div>
-        `;
+            `;
+
+        // ✅ USER INTENT SOVEREIGNTY: Track manual mutes/pauses
+        const mediaElem = activeWrapper.querySelector('video');
+        if (mediaElem) {
+            mediaElem.addEventListener('volumechange', () => {
+                if (mediaElem.muted) mediaElem.dataset.userMuted = 'true';
+                else mediaElem.dataset.userMuted = 'false';
+            });
+            mediaElem.addEventListener('pause', () => {
+                mediaElem.dataset.userPaused = 'true';
+            });
+        }
+
+        return activeWrapper.outerHTML;
     }
 
     swapMedia(index) {
@@ -419,12 +449,27 @@ class MediaOverlay {
             };
 
             if (play) {
+                // 🛡️ USER INTENT SOVEREIGNTY: Back off if user manually interacted
+                if (video?.dataset.userMuted === 'true' || video?.dataset.userPaused === 'true') {
+                    return;
+                }
+                if (iframe?.dataset.userMuted === 'true' || iframe?.dataset.userPaused === 'true') {
+                    return;
+                }
+
                 // Initial burst
                 sendAudioCommands();
 
                 // 🔊 SUCCESSIVE PULSE: Pulse every 400ms for 4 seconds (Pulse Overdrive)
                 let pulses = 0;
                 const interval = setInterval(() => {
+                    // Re-check intent inside interval
+                    if (video?.dataset.userMuted === 'true' || video?.dataset.userPaused === 'true' ||
+                        iframe?.dataset.userMuted === 'true' || iframe?.dataset.userPaused === 'true') {
+                        clearInterval(interval);
+                        return;
+                    }
+
                     sendAudioCommands();
                     if (++pulses >= 10 || !this.container.classList.contains('active')) {
                         clearInterval(interval);

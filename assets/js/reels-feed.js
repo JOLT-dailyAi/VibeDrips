@@ -168,8 +168,9 @@ function manageMediaLifecycle(activeIdx, sections) {
       // 🎯 ACTIVE: Landed!
       activateMedia(videoContainer, true);
     } else {
-      // 💀 Aggressive kill is now handled per-entry in the observer 
-      // to allow "Soft Handover" during active transition.
+      // 💀 ABSOLUTE LOCKDOWN: Forcibly kill everything else
+      // This eliminates "Zombie Audio" and duplicate playback immediately
+      killMedia(videoContainer);
     }
   });
 }
@@ -227,6 +228,24 @@ function activateMedia(container, shouldPlay) {
       shield.addEventListener('touchstart', handleHandover, { passive: true });
       shield.addEventListener('click', handleHandover);
 
+      // ✅ USER INTENT SOVEREIGNTY: Detect if user manually mutes/pauses
+      media.addEventListener('volumechange', () => {
+        if (media.muted) {
+          media.dataset.userMuted = 'true';
+          // Stop heartbeat if user explicitly mutes
+          if (activeShotgunPulses.has(media)) {
+            clearInterval(activeShotgunPulses.get(media));
+            activeShotgunPulses.delete(media);
+          }
+        } else {
+          media.dataset.userMuted = 'false';
+        }
+      });
+
+      media.addEventListener('pause', () => {
+        media.dataset.userPaused = 'true';
+      });
+
       container.appendChild(shield);
     }
   }
@@ -273,8 +292,15 @@ function triggerShotgunPulse(media) {
   }
 
   const sendPulse = () => {
-    // 🛡️ THE PULSE GUARD: Only attempt to unmute if the session is already active.
-    // This prevents "Illegal Unmuting" which causes mobile browsers to abort autoplay.
+    // 🛡️ USER INTENT SOVEREIGNTY: Back off if user manually interacted
+    if (media.dataset.userMuted === 'true' || media.dataset.userPaused === 'true') {
+      if (activeShotgunPulses.has(media)) {
+        clearInterval(activeShotgunPulses.get(media));
+        activeShotgunPulses.delete(media);
+      }
+      return;
+    }
+
     const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
 
     if (media.tagName === 'VIDEO') {
@@ -286,8 +312,11 @@ function triggerShotgunPulse(media) {
         media.dataset.bridgeSet = 'true';
         media.addEventListener('playing', () => {
           if (window.MediaState && window.MediaState.isUnmuted()) {
-            media.muted = false;
-            media.volume = 0.2;
+            // Re-check intent inside event
+            if (media.dataset.userMuted !== 'true') {
+              media.muted = false;
+              media.volume = 0.2;
+            }
           }
         }, { once: true });
       }
@@ -298,14 +327,15 @@ function triggerShotgunPulse(media) {
       });
     } else if (media.contentWindow) {
       if (isUnmutedSession) {
-        // 🛡️ WARMUP DELAY: Give iframe 300ms to stabilize before sound pulses
+        // 🛡️ WARMUP DELAY: Give iframe 1s to stabilize before sound pulses
         setTimeout(() => {
-          media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
-          media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [20] }), '*');
-          media.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 0.2 }), '*');
-          media.contentWindow.postMessage('unmute', '*');
-          media.contentWindow.postMessage(JSON.stringify({ event: 'unmute' }), '*');
-          media.contentWindow.postMessage(JSON.stringify({ event: 'volume', value: 0.2 }), '*');
+          // Re-check intent before unmuting iframe
+          if (media.dataset.userMuted !== 'true' && media.dataset.userPaused !== 'true') {
+            media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
+            media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [20] }), '*');
+            media.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 0.2 }), '*');
+            media.contentWindow.postMessage('unmute', '*');
+          }
         }, 1000);
       }
 

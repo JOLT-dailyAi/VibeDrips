@@ -64,9 +64,14 @@ Mobile landscape is height-constrained. New components should include scaling ov
 To preserve the "User Activation" privilege on mobile (iOS/Android), media elements (iframes/videos) should be injected via `innerHTML` or fresh node creation rather than updating `.src`. This ensures the browser treats the media as part of the initial gesture window.
 
 ### 2. 5-Media Sliding Strip (Buffer Architecture)
-The Lightbox MUST utilize a 5-product sliding window `[P-2, P-1, Active, N+1, N+2]` for performance. 
+The Product Modal and Lightbox MUST utilize a 5-product sliding window `[P-2, P-1, Active, N+1, N+2]` for performance. 
+- **Active-Only Playback**: **CRITICAL.** Only the center (`Active`) element is permitted to play. All adjacent buffered items MUST be paused and muted.
 - **Preloading**: Synchronously load/buffer the 1-2 neighbors to provide instant swiping.
-- **Media Discipline (Unload)**: Any media beyond the 5-item buffer must be explicitly unloaded (src = "") and paused to minimize memory pressure and data usage.
+- **Media Discipline (Unload)**: Any media beyond the 5-item buffer must be explicitly unloaded (`src = ""`) and paused to minimize memory pressure.
+
+### 3. User Intent Sovereignty (Sound)
+- **Manual Mute Rule**: If a user explicitly mutes a video via native controls, the global unmuting script MUST cease all unmuting attempts for the remainder of that specific media's lifecycle.
+- **Persistence vs. Intent**: Global `MediaState.isUnmuted()` indicates permission to *attempt* unmuting, but it must never override an active `userMuted` state on a specific element.
 
 ### 3. Absolute 32px Lock (Landscape Toggles)
 Mobile landscape toggles (`.reels-toggle`, `.globe-toggle`) must maintain an **absolute** 32px width and height. 
