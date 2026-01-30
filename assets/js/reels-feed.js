@@ -340,17 +340,19 @@ function triggerShotgunPulse(media) {
     }
 
     const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
+    const strategy = window.Device?.getStrategy() || 'muted';
+    const isHighTrust = (strategy === 'unmuted' || isUnmutedSession);
 
     // Phase 1: Pill control
     const pill = media.parentElement?.querySelector('.engagement-pill');
     if (pill) {
-      if (isUnmutedSession) pill.classList.remove('active');
+      if (isHighTrust) pill.classList.remove('active');
       else pill.classList.add('active');
     }
 
     if (media.tagName === 'VIDEO') {
-      // 🛡️ THE BRIDGE: Always set muted=true BEFORE calling play to guarantee permission
-      media.muted = true;
+      // 🛡️ THE BRIDGE: Always set muted=true BEFORE calling play unless high trust
+      media.muted = !isHighTrust;
 
       // ✅ NATIVE BRIDGE: Flip sound as soon as the video actually starts moving
       if (!media.dataset.bridgeSet) {
@@ -371,7 +373,7 @@ function triggerShotgunPulse(media) {
         media.play().catch(() => { });
       });
     } else if (media.contentWindow) {
-      if (isUnmutedSession) {
+      if (isHighTrust) {
         // 🛡️ WARMUP DELAY: Give iframe 1s to stabilize before sound pulses
         setTimeout(() => {
           // Re-check intent before unmuting iframe
@@ -414,8 +416,12 @@ function getMediaHTML(type, url, isActive) {
   const embedUrl = getUniversalVideoEmbedUrlForReels(url, isActive);
 
   if (type === 'video') {
-    // 🛡️ BELT & SUSPENDERS: Use both HTML attributes AND JS fallback
-    const autoplayAttr = isActive ? 'autoplay muted' : '';
+    // 🛡️ DEVICE STRATEGY: Check if we can start unmuted (Desktop/PWA)
+    const strategy = window.Device?.getStrategy() || 'muted';
+    const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
+    const shouldBeMuted = (strategy === 'muted' && !isUnmutedSession);
+
+    const autoplayAttr = isActive ? `autoplay ${shouldBeMuted ? 'muted' : ''}` : '';
     return `<video controls playsinline ${autoplayAttr} preload="auto" src="${url}" style="width:100%;height:100%;object-fit:cover;"></video>`;
   } else {
     return `<iframe src="${embedUrl}" frameborder="0" scrolling="no" allowtransparency="true" allowfullscreen="true" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;

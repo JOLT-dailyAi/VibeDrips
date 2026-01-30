@@ -284,8 +284,12 @@ class MediaOverlay {
 
         let player = '';
         if (url.match(/\.(mp4|webm|mov|avi)$/i)) {
-            // 🛡️ BELT & SUSPENDERS: Use HTML attributes for instant motion
-            const autoplayAttr = isAutoplay ? 'autoplay muted' : '';
+            // 🛡️ DEVICE STRATEGY: Check if we can start unmuted (Desktop/PWA)
+            const strategy = window.Device?.getStrategy() || 'muted';
+            const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
+            const shouldBeMuted = (strategy === 'muted' && !isUnmutedSession);
+
+            const autoplayAttr = isAutoplay ? `autoplay ${shouldBeMuted ? 'muted' : ''}` : '';
             player = `<video controls playsinline ${autoplayAttr} class="main-video-player"><source src="${url}" type="video/mp4"></video>`;
         } else {
             player = `<iframe src="${embedUrl}" class="main-iframe-player" scrolling="no" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"></iframe>`;
@@ -429,8 +433,9 @@ class MediaOverlay {
 
         if (video) {
             if (play) {
-                // 🛡️ THE BRIDGE: Always play MUTED first
-                video.muted = true;
+                // 🛡️ THE BRIDGE: Always play MUTED first unless we have explicit permission
+                const strategy = window.Device?.getStrategy() || 'muted';
+                video.muted = (strategy === 'muted' && !window.MediaState?.isUnmuted());
 
                 // ✅ NATIVE BRIDGE: Flip sound instantly on motion
                 if (!video.dataset.bridgeSet) {
@@ -459,15 +464,17 @@ class MediaOverlay {
 
                 // 🛡️ THE PULSE GUARD: Baseline hardening
                 const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
+                const strategy = window.Device?.getStrategy() || 'muted';
+                const isHighTrust = (strategy === 'unmuted' || isUnmutedSession);
 
                 // Phase 2: Show engagement pill if muted
-                if (play && !isUnmutedSession && this.engagementPill) {
+                if (play && !isHighTrust && this.engagementPill) {
                     this.engagementPill.classList.add('active');
                 } else if (this.engagementPill) {
                     this.engagementPill.classList.remove('active');
                 }
 
-                if (isUnmutedSession) {
+                if (isHighTrust) {
                     setTimeout(() => {
                         // 1. YouTube specialized (API mode)
                         iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');

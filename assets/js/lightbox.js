@@ -633,7 +633,10 @@ class MediaLightbox {
         const shield = overlay.querySelector('.lightbox-iframe-shield');
         if (shield) {
             const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
-            if (isUnmutedSession) {
+            const strategy = window.Device?.getStrategy() || 'muted';
+            const isHighTrust = (strategy === 'unmuted' || isUnmutedSession);
+
+            if (isHighTrust) {
                 shield.style.pointerEvents = 'none';
                 shield.style.display = 'none';
                 if (pill) pill.classList.remove('active');
@@ -761,8 +764,12 @@ class MediaLightbox {
             return container.querySelector('iframe');
         } else if (type === 'video') {
             const attrStr = Object.entries(attributes).map(([k, v]) => `${k}="${v}"`).join(' ');
-            // 🛡️ Unified Optimistic Strategy: Always attempt unmuted start.
-            const muteAttr = '';
+            // 🛡️ DEVICE STRATEGY: Check if we can start unmuted (Desktop/PWA)
+            const strategy = window.Device?.getStrategy() || 'muted';
+            const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
+            const shouldBeMuted = (strategy === 'muted' && !isUnmutedSession);
+
+            const muteAttr = shouldBeMuted ? 'muted' : '';
             container.innerHTML = `<video class="lightbox-video" controls autoplay ${muteAttr} playsinline src="${url}" ${attrStr} style="display: block;"></video>`;
             return container.querySelector('video');
         }
@@ -857,8 +864,10 @@ class MediaLightbox {
 
                     // 🛡️ THE PULSE GUARD: Wait for warmup (300ms), then flip sound
                     const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
+                    const strategy = window.Device?.getStrategy() || 'muted';
+                    const isHighTrust = (strategy === 'unmuted' || isUnmutedSession);
 
-                    if (isUnmutedSession) {
+                    if (isHighTrust) {
                         setTimeout(() => {
                             if (!this.isOpen || !iframe.contentWindow) return;
                             iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
@@ -948,7 +957,10 @@ class MediaLightbox {
             video.play().then(() => {
                 // 🔊 SAFE UNMUTE: Only unmute AFTER confirmed playback
                 // AND only if the user hasn't explicitly muted it already
-                if (window.MediaState && window.MediaState.isUnmuted() && video.dataset.userMuted !== 'true') {
+                const strategy = window.Device?.getStrategy() || 'muted';
+                const isHighTrust = (strategy === 'unmuted' || (window.MediaState && window.MediaState.isUnmuted()));
+
+                if (isHighTrust && video.dataset.userMuted !== 'true') {
                     video.muted = false;
                     video.volume = 0.5;
                 }
