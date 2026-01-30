@@ -108,6 +108,10 @@ function _initReelsObserverInternal() {
 
   // 🔊 GLOBAL UNMUTE LISTENER: React when another component triggers sound
   window.addEventListener('vibedrips-media-unmute', () => {
+    // 🛡️ FOCUS GUARD: Only wake up if Lightbox isn't covering us
+    const isLightboxActive = window.MediaLightbox && window.MediaLightbox.activeInstance && window.MediaLightbox.activeInstance.isOpen;
+    if (isLightboxActive) return;
+
     const activeSection = REELS_SECTIONS_CACHE[lastActiveIdx];
     if (activeSection) {
       const media = activeSection.querySelector('video, iframe');

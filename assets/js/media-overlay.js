@@ -19,7 +19,10 @@ class MediaOverlay {
 
             // 🔊 LISTEN FOR GLOBAL UNMUTE
             window.addEventListener('vibedrips-media-unmute', () => {
-                if (this.container.classList.contains('active')) {
+                // 🛡️ FOCUS GUARD: Only wake up if Lightbox isn't covering us
+                const isLightboxOpen = window.MediaLightbox && window.MediaLightbox.activeInstance && window.MediaLightbox.activeInstance.isOpen;
+
+                if (this.container.classList.contains('active') && !isLightboxOpen) {
                     this.togglePlayback(true);
                 }
                 if (this.engagementPill) {
