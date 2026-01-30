@@ -201,16 +201,20 @@ function activateMedia(container, shouldPlay) {
     if (media.dataset.pulsing !== 'true') {
       media.dataset.pulsing = 'true';
 
-      // Explicit Play Bridge for native videos (iOS Fix)
-      if (media.tagName === 'VIDEO' && media.paused) {
-        media.play().catch(e => console.warn('🎬 Reels: Initial play blocked:', e));
-      }
-
-      // Golden Spiral Style Handover Delay (Settling)
+      // 🛡️ SETTLING DELAY: Give mobile browser 250ms to finish layout
       setTimeout(() => {
-        triggerShotgunPulse(media);
+        if (media.tagName === 'VIDEO' && media.paused) {
+          media.muted = true;
+          media.play().then(() => {
+            triggerShotgunPulse(media);
+          }).catch(() => {
+            media.play().catch(() => { });
+          });
+        } else {
+          triggerShotgunPulse(media);
+        }
         media.dataset.pulsing = 'false';
-      }, 300);
+      }, 250);
     }
   }
 }

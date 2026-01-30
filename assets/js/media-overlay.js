@@ -469,8 +469,8 @@ class MediaOverlay {
                     videoId = sourceUrl.match(/shorts\/([^?]+)/)?.[1];
                 }
                 // 🛡️ MOBILE PROTOCOL: Always start MUTED (mute=1) to guarantee autoplay permission.
-                // Shotgun pulse handles the unmuting based on MediaState once session is unlocked.
-                const initialMute = '1';
+                // UNLESS: The session is already unmuted globally.
+                const initialMute = (window.MediaState && window.MediaState.isUnmuted()) ? '0' : '1';
 
                 if (videoId) return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${autoplayVal}&mute=${initialMute}&rel=0`;
             }

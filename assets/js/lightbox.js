@@ -129,13 +129,13 @@ class MediaLightbox {
 
         // Shield catches activity when iframe is covered (UI hidden state)
         if (shield) {
-            // Tap Proxy for mobile unmuting through shield
-            shield.addEventListener('click', (e) => {
+            // ⚡️ TOUCH-FIRST: Catch the gesture instantly for unmuting intent
+            const handleUnmuteGesture = (e) => {
                 const active = MediaLightbox.activeInstance;
                 if (!active) return;
 
-                // If it's a mobile swipe, don't trigger tap
-                if (Math.abs(active.touchMoveX - active.touchStartX) > 10) return;
+                // If it's a dedicated swipe move (handled elsewhere), don't trigger here
+                // but for simple taps/touches, we claim it.
 
                 const centerMedia = overlay.querySelector('.lightbox-media-wrapper.center-slot');
                 if (centerMedia) {
@@ -159,7 +159,10 @@ class MediaLightbox {
                 // 🛡️ RELEASE: First tap gives control to underlying player
                 shield.style.pointerEvents = 'none';
                 active.resetIdleTimer();
-            });
+            };
+
+            shield.addEventListener('touchstart', handleUnmuteGesture, { passive: true });
+            shield.addEventListener('click', handleUnmuteGesture);
 
             shield.addEventListener('mousemove', () => {
                 const active = MediaLightbox.activeInstance;
