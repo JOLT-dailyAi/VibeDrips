@@ -810,18 +810,20 @@ class MediaLightbox {
                 const sendAudioPulse = () => {
                     if (!this.isOpen || !iframe.contentWindow) return;
 
-                    // 🔊 Update Global State (if unmuting happens here)
-                    if (window.MediaState && !window.MediaState.isUnmuted()) {
-                        window.MediaState.setUnmuted();
+                    // 🛡️ THE PULSE GUARD: Only attempt to unmute if the session is already active.
+                    // This prevents "Illegal Unmuting" which causes mobile browsers to abort autoplay.
+                    const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
+
+                    if (isUnmutedSession) {
+                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
+                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [20] }), '*');
+
+                        // Shotgun signals
+                        iframe.contentWindow.postMessage('unmute', '*');
+                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'unmute' }), '*');
                     }
 
-                    iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
-                    iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [20] }), '*');
                     iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*');
-
-                    // Shotgun signals
-                    iframe.contentWindow.postMessage('unmute', '*');
-                    iframe.contentWindow.postMessage(JSON.stringify({ event: 'unmute' }), '*');
                 };
 
                 sendAudioPulse();
@@ -877,19 +879,30 @@ class MediaLightbox {
 
             if (this.options.autoPlayVideo) {
                 // 🛡️ MOBILE PROTOCOL: Always start MUTED to guarantee autoplay permission.
-                // Shotgun pulse handles the unmuting session-wide.
                 video.muted = true;
                 video.volume = 0.2;
                 video.setAttribute('playsinline', '');
 
-                video.play().catch(e => {
-                    // 🛡️ Mobile Autoplay Bridge: If unmuted is blocked, start muted
-                    console.log('🎬 Mobile: Unmuted autoplay blocked, falling back to muted.');
-                    if (!window.MediaState?.isUnmuted()) {
+                video.play().catch(() => {
+                    // One last attempt
+                    video.play().catch(() => { });
+                });
+
+                // 🔊 Successive Pulse (The Pulse Guard for Native Video)
+                let nativePulses = 0;
+                const vInterval = setInterval(() => {
+                    if (video.paused) video.play().catch(() => { });
+
+                    // 🛡️ THE PULSE GUARD: Only unmute if session has been unlocked by user
+                    if (window.MediaState?.isUnmuted()) {
+                        video.muted = false;
+                        video.volume = 0.2;
+                    } else {
                         video.muted = true;
                     }
-                    video.play().catch(e2 => console.warn('🎬 Mobile: Total autoplay blockage:', e2));
-                });
+
+                    if (++nativePulses >= 8 || !this.isOpen) clearInterval(vInterval);
+                }, 500);
             }
         };
 
@@ -962,8 +975,9 @@ class MediaLightbox {
 
         if (videoId) {
             // 🛡️ MOBILE PROTOCOL: Always start MUTED (mute=1) to guarantee autoplay permission.
-            // Shotgun pulse handles the unmuting based on MediaState once session is unlocked.
-            const initialMute = '1';
+            // UNLESS: The session is already unmuted globally.
+            const initialMute = (window.MediaState && window.MediaState.isUnmuted()) ? '0' : '1';
+
             return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${autoplay}&mute=${initialMute}&rel=0`;
         }
         return null;

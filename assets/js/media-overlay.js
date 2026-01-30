@@ -242,6 +242,7 @@ class MediaOverlay {
         // 🛡️ GESTURE SHIELD: Catch the first tap for unmuting intent
         const shield = `<div class="media-shield" 
                              style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:10;background:transparent;cursor:pointer;" 
+                             ontouchstart="event.stopPropagation(); if(window.MediaState) window.MediaState.setUnmuted(); window.mediaOverlay.togglePlayback(true); this.style.pointerEvents='none'; this.style.display='none';"
                              onclick="event.stopPropagation(); if(window.MediaState) window.MediaState.setUnmuted(); window.mediaOverlay.togglePlayback(true); this.style.pointerEvents='none'; this.style.display='none';">
                         </div>`;
 
@@ -366,10 +367,12 @@ class MediaOverlay {
                 const vInterval = setInterval(() => {
                     if (video.paused) video.play().catch(() => { });
 
-                    // Upgrade value if unmuted session is active
+                    // 🛡️ THE PULSE GUARD: Only unmute if session has been unlocked by user
                     if (window.MediaState?.isUnmuted()) {
                         video.muted = false;
                         video.volume = 0.2;
+                    } else {
+                        video.muted = true;
                     }
 
                     if (++nativePulses >= 8) clearInterval(vInterval);
@@ -383,24 +386,26 @@ class MediaOverlay {
             const sendAudioCommands = () => {
                 if (!play || !this.container.classList.contains('active')) return;
 
-                // 🔊 Update Global State (if unmuting happens here)
-                if (window.MediaState && !window.MediaState.isUnmuted()) {
-                    window.MediaState.setUnmuted();
+                // 🛡️ THE PULSE GUARD: Only attempt to unmute if the session is already active.
+                // This prevents "Illegal Unmuting" which causes mobile browsers to abort autoplay.
+                const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
+
+                if (isUnmutedSession) {
+                    // 1. YouTube specialized (API mode)
+                    iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
+                    iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [20] }), '*');
+
+                    // 2. Vimeo specialized
+                    iframe.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 0.2 }), '*');
+
+                    // 3. Protocol Shotgun Fallbacks
+                    iframe.contentWindow.postMessage('unmute', '*');
+                    iframe.contentWindow.postMessage(JSON.stringify({ event: 'unmute' }), '*');
+                    iframe.contentWindow.postMessage(JSON.stringify({ event: 'volume', value: 0.2 }), '*');
                 }
 
-                // 1. YouTube specialized (API mode)
-                iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
-                iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [20] }), '*');
                 iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*');
-
-                // 2. Vimeo specialized
-                iframe.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 0.2 }), '*');
                 iframe.contentWindow.postMessage(JSON.stringify({ method: 'play' }), '*');
-
-                // 3. Protocol Shotgun (Universal fallback for ANY platform)
-                iframe.contentWindow.postMessage('unmute', '*');
-                iframe.contentWindow.postMessage(JSON.stringify({ event: 'unmute' }), '*');
-                iframe.contentWindow.postMessage(JSON.stringify({ event: 'volume', value: 0.2 }), '*');
                 iframe.contentWindow.postMessage('play', '*');
             };
 

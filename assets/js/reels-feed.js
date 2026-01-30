@@ -71,17 +71,26 @@ function initReelsObserver() {
   REELS_SECTIONS_CACHE.length = 0;
   document.querySelectorAll('.reel-section').forEach(s => REELS_SECTIONS_CACHE.push(s));
 
-  // 🛡️ RESET SHIELDS ON SCROLL: Re-protect vertical swipe intent
+  // 🛡️ RESET SHIELDS ON SCROLL: Only if we've moved significantly
+  let lastScrollPos = container.scrollTop;
   container.addEventListener('scroll', () => {
-    REELS_SECTIONS_CACHE.forEach(section => {
-      const shield = section.querySelector('.reel-video-shield');
-      // Only restore shield if we ARE NOT in a global unmuted session
-      // OR if we want to protect swipe for iframes always
-      if (shield) {
-        shield.style.pointerEvents = 'auto';
-        shield.classList.remove('released'); // 🆕 Track release state
-      }
-    });
+    const currentScroll = container.scrollTop;
+    const scrollDelta = Math.abs(currentScroll - lastScrollPos);
+
+    // Only reset if we've scrolled significantly (prevent flicker on micro-swipes)
+    if (scrollDelta > 100) {
+      REELS_SECTIONS_CACHE.forEach((section, idx) => {
+        // ONLY reset shields for items that ARE NOT the current active one
+        if (idx !== lastActiveIdx) {
+          const shield = section.querySelector('.reel-video-shield');
+          if (shield) {
+            shield.style.pointerEvents = 'auto';
+            shield.classList.remove('released');
+          }
+        }
+      });
+      lastScrollPos = currentScroll;
+    }
   }, { passive: true });
 
   // 🔊 GLOBAL UNMUTE LISTENER: React when another component triggers sound
@@ -164,10 +173,11 @@ function activateMedia(container, shouldPlay) {
     if (media) {
       media.dataset.loaded = 'true';
 
-      // 🛡️ SMART SHIELD HANDOVER
+      // 🛡️ SMART SHIELD HANDOVER (Touch-First)
       const shield = document.createElement('div');
       shield.className = 'reel-video-shield';
-      shield.onclick = (e) => {
+
+      const handleHandover = (e) => {
         e.stopPropagation();
 
         // 🔊 SET GLOBAL STATE: First tap unlocks sound forever
@@ -192,6 +202,10 @@ function activateMedia(container, shouldPlay) {
         shield.style.pointerEvents = 'none';
         shield.classList.add('released');
       };
+
+      shield.addEventListener('touchstart', handleHandover, { passive: true });
+      shield.addEventListener('click', handleHandover);
+
       container.appendChild(shield);
     }
   }
@@ -245,27 +259,35 @@ function triggerShotgunPulse(media) {
   }
 
   const sendPulse = () => {
+    // 🛡️ THE PULSE GUARD: Only attempt to unmute if the session is already active.
+    // This prevents "Illegal Unmuting" which causes mobile browsers to abort autoplay.
+    const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
+
     if (media.tagName === 'VIDEO') {
-      media.muted = false;
-      media.volume = 0.2;
-      media.play().catch(() => {
+      if (isUnmutedSession) {
+        media.muted = false;
+        media.volume = 0.2;
+      } else {
         media.muted = true;
-        media.play();
-      });
+      }
+      media.play().catch(() => { });
     } else if (media.contentWindow) {
-      // 1. YouTube specialized (API mode)
-      media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
-      media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [20] }), '*');
+      if (isUnmutedSession) {
+        // 1. YouTube specialized (API mode)
+        media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
+        media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [20] }), '*');
+
+        // 2. Vimeo specialized
+        media.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 0.2 }), '*');
+
+        // 3. Protocol Shotgun fallbacks
+        media.contentWindow.postMessage('unmute', '*');
+        media.contentWindow.postMessage(JSON.stringify({ event: 'unmute' }), '*');
+        media.contentWindow.postMessage(JSON.stringify({ event: 'volume', value: 0.2 }), '*');
+      }
+
       media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*');
-
-      // 2. Vimeo specialized
-      media.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 0.2 }), '*');
       media.contentWindow.postMessage(JSON.stringify({ method: 'play' }), '*');
-
-      // 3. Protocol Shotgun (Universal fallback for ANY platform)
-      media.contentWindow.postMessage('unmute', '*');
-      media.contentWindow.postMessage(JSON.stringify({ event: 'unmute' }), '*');
-      media.contentWindow.postMessage(JSON.stringify({ event: 'volume', value: 0.2 }), '*');
       media.contentWindow.postMessage('play', '*');
     }
   };
@@ -323,8 +345,10 @@ function getUniversalVideoEmbedUrlForReels(sourceUrl, isActive) {
     else if (url.includes('youtube.com/shorts/')) videoId = sourceUrl.match(/shorts\/([^?]+)/)?.[1];
 
     // 🛡️ MOBILE PROTOCOL: Always start MUTED (mute=1) to guarantee autoplay permission.
-    // Shotgun pulse handles the unmuting based on MediaState once session is unlocked.
-    if (videoId) return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${autoplay}&mute=1&rel=0`;
+    // UNLESS: The session is already unmuted globally.
+    const initialMute = (window.MediaState && window.MediaState.isUnmuted()) ? '0' : '1';
+
+    if (videoId) return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${autoplay}&mute=${initialMute}&rel=0`;
   }
   return sourceUrl;
 }
