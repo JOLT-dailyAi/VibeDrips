@@ -73,8 +73,22 @@ function initReelsObserver() {
 
   // 🛡️ RESET SHIELDS ON SCROLL: Re-protect vertical swipe intent
   container.addEventListener('scroll', () => {
-    document.querySelectorAll('.reel-video-shield').forEach(s => s.style.pointerEvents = 'auto');
+    REELS_SECTIONS_CACHE.forEach(section => {
+      const shield = section.querySelector('.reel-video-shield');
+      // Only restore shield if we ARE NOT in a global unmuted session
+      // OR if we want to protect swipe for iframes always
+      if (shield) shield.style.pointerEvents = 'auto';
+    });
   }, { passive: true });
+
+  // 🔊 GLOBAL UNMUTE LISTENER: React when another component triggers sound
+  window.addEventListener('vibedrips-media-unmute', () => {
+    const activeSection = REELS_SECTIONS_CACHE[lastActiveIdx];
+    if (activeSection) {
+      const media = activeSection.querySelector('video, iframe');
+      if (media) triggerShotgunPulse(media);
+    }
+  });
 
   const options = {
     root: container,
@@ -152,6 +166,10 @@ function activateMedia(container, shouldPlay) {
       shield.className = 'reel-video-shield';
       shield.onclick = (e) => {
         e.stopPropagation();
+
+        // 🔊 SET GLOBAL STATE: First tap unlocks sound forever
+        if (window.MediaState) window.MediaState.setUnmuted();
+
         triggerShotgunPulse(media);
 
         // Native Toggle (Play/Pause)
@@ -167,12 +185,13 @@ function activateMedia(container, shouldPlay) {
     }
   }
 
-  // 2. Immediate Autoplay pulse (with Readiness Delay)
+  // 2. Immediate Autoplay pulse (with Readiness Delay & State Awareness)
   if (shouldPlay && media) {
     if (media.dataset.pulsing !== 'true') {
       media.dataset.pulsing = 'true';
       // Golden Spiral Style Handover Delay (Settling)
       setTimeout(() => {
+        // If session is already unmuted, we can attempt direct unmuted start
         triggerShotgunPulse(media);
         media.dataset.pulsing = 'false';
       }, 300);
@@ -234,15 +253,19 @@ function triggerShotgunPulse(media) {
   // Initial burst
   sendPulse();
 
-  // 🔊 SUCCESSIVE PULSE: Pulse every 500ms for 2 seconds (Golden Spiral Precision)
+  // 🔊 SUCCESSIVE PULSE: Pulse every 400ms for 4 seconds (Pulse Overdrive)
   let pulses = 0;
   const interval = setInterval(() => {
     sendPulse();
-    if (++pulses >= 4) {
+    // 🛡️ Check if we are still the active reel
+    const activeSection = REELS_SECTIONS_CACHE[lastActiveIdx];
+    const isActive = activeSection && activeSection.contains(media);
+
+    if (++pulses >= 10 || !isActive) {
       clearInterval(interval);
       activeShotgunPulses.delete(media);
     }
-  }, 500);
+  }, 400);
 
   activeShotgunPulses.set(media, interval);
 }

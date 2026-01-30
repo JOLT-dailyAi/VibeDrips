@@ -16,6 +16,13 @@ class MediaOverlay {
             this.container.id = 'mediaOverlay';
             this.container.className = 'media-overlay-container';
 
+            // 🔊 LISTEN FOR GLOBAL UNMUTE
+            window.addEventListener('vibedrips-media-unmute', () => {
+                if (this.container.classList.contains('active')) {
+                    this.togglePlayback(true);
+                }
+            });
+
             // Sliding Strip for 5-product mirror
             this.strip = document.createElement('div');
             this.strip.className = 'media-sliding-strip';
@@ -339,15 +346,24 @@ class MediaOverlay {
                 video.volume = 0.2;
                 video.play().catch(() => {
                     // 🛡️ Fallback: Browser blocked unmuted autoplay (Mobile)
-                    video.muted = true;
+                    if (!window.MediaState?.isUnmuted()) {
+                        video.muted = true;
+                    }
                     video.play();
                 });
+
                 // PERSISTENCE: Pulse native video too (some browsers re-mute on transition)
                 let nativePulses = 0;
                 const vInterval = setInterval(() => {
                     if (video.paused) video.play().catch(() => { });
-                    if (!video.muted) video.volume = 0.2;
-                    if (++nativePulses >= 4) clearInterval(vInterval);
+
+                    // Upgrade value if unmuted session is active
+                    if (window.MediaState?.isUnmuted()) {
+                        video.muted = false;
+                        video.volume = 0.2;
+                    }
+
+                    if (++nativePulses >= 8) clearInterval(vInterval);
                 }, 500);
             } else {
                 video.pause();
@@ -357,6 +373,11 @@ class MediaOverlay {
         if (iframe && iframe.contentWindow) {
             const sendAudioCommands = () => {
                 if (!play || !this.container.classList.contains('active')) return;
+
+                // 🔊 Update Global State (if unmuting happens here)
+                if (window.MediaState && !window.MediaState.isUnmuted()) {
+                    window.MediaState.setUnmuted();
+                }
 
                 // 1. YouTube specialized (API mode)
                 iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
@@ -377,11 +398,12 @@ class MediaOverlay {
             if (play) {
                 // Initial burst
                 sendAudioCommands();
-                // 🔊 SUCCESSIVE PULSE: Pulse every 400ms for 3 seconds (Enhanced Persistence)
+
+                // 🔊 SUCCESSIVE PULSE: Pulse every 400ms for 4 seconds (Pulse Overdrive)
                 let pulses = 0;
                 const interval = setInterval(() => {
                     sendAudioCommands();
-                    if (++pulses >= 7 || !this.container.classList.contains('active')) {
+                    if (++pulses >= 10 || !this.container.classList.contains('active')) {
                         clearInterval(interval);
                     }
                 }, 400);

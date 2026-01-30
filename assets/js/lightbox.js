@@ -785,6 +785,12 @@ class MediaLightbox {
                 // 🔊 Successive Pulse: Ensure unmuted & 20% volume
                 const sendAudioPulse = () => {
                     if (!this.isOpen || !iframe.contentWindow) return;
+
+                    // 🔊 Update Global State (if unmuting happens here)
+                    if (window.MediaState && !window.MediaState.isUnmuted()) {
+                        window.MediaState.setUnmuted();
+                    }
+
                     iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
                     iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [20] }), '*');
                     iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*');
@@ -798,8 +804,8 @@ class MediaLightbox {
                 let pulseCount = 0;
                 this._pulseInterval = setInterval(() => {
                     sendAudioPulse();
-                    if (++pulseCount >= 7 || !this.isOpen) clearInterval(this._pulseInterval);
-                }, 400); // Enhanced Persistence (Golden Spiral Style)
+                    if (++pulseCount >= 10 || !this.isOpen) clearInterval(this._pulseInterval);
+                }, 400); // 🔊 Pulse Overdrive (Global Standard)
             };
 
             if (isMobile) {
@@ -853,7 +859,9 @@ class MediaLightbox {
                 video.play().catch(e => {
                     // 🛡️ Mobile Autoplay Bridge: If unmuted is blocked, start muted
                     console.log('🎬 Mobile: Unmuted autoplay blocked, falling back to muted.');
-                    video.muted = true;
+                    if (!window.MediaState?.isUnmuted()) {
+                        video.muted = true;
+                    }
                     video.play().catch(e2 => console.warn('🎬 Mobile: Total autoplay blockage:', e2));
                 });
             }
@@ -927,7 +935,9 @@ class MediaLightbox {
         if (shortsMatch) videoId = shortsMatch[1];
 
         if (videoId) {
-            return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${autoplay}&mute=${mute}&rel=0`;
+            // 🛡️ State Awareness: If session is already unmuted, attempt unmuted start immediately
+            const initialMute = window.MediaState?.isUnmuted() ? '0' : '1';
+            return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${autoplay}&mute=${initialMute}&rel=0`;
         }
         return null;
     }
