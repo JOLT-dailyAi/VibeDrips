@@ -602,6 +602,19 @@ class MediaLightbox {
         videoPlaceholder.style.display = 'none';
         socialPlaceholder.style.display = 'none';
 
+        // 🛡️ AUTO-RELEASE: No shield barrier if sound is already unlocked
+        const shield = overlay.querySelector('.lightbox-iframe-shield');
+        if (shield) {
+            const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
+            if (isUnmutedSession) {
+                shield.style.pointerEvents = 'none';
+                shield.style.display = 'none';
+            } else {
+                shield.style.pointerEvents = 'auto';
+                shield.style.display = 'block';
+            }
+        }
+
         const url = this.mediaArray[index];
         const mediaType = this.detectMediaType(url);
         const filename = this.getFilenameFromUrl(url);

@@ -109,7 +109,7 @@ function _initReelsObserverInternal() {
 
   const options = {
     root: container,
-    threshold: [0.01, 0.5, 0.95] // 🎯 DETECT EARLY: Detect as soon as a single pixel shows up
+    threshold: [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0] // 🎯 GRANULAR: Detect every 10% movement
   };
 
   const observer = new IntersectionObserver((entries) => {
@@ -181,6 +181,14 @@ function activateMedia(container, shouldPlay) {
       // 🛡️ SMART SHIELD HANDOVER (Touch-First)
       const shield = document.createElement('div');
       shield.className = 'reel-video-shield';
+
+      // 🛡️ AUTO-RELEASE: If session is already unmuted, drop the barrier immediately
+      const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
+      if (isUnmutedSession) {
+        shield.style.pointerEvents = 'none';
+        shield.classList.add('released');
+        shield.style.display = 'none';
+      }
 
       const handleHandover = (e) => {
         e.stopPropagation();
@@ -262,8 +270,10 @@ function triggerShotgunPulse(media) {
     const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
 
     if (media.tagName === 'VIDEO') {
+      // 🛡️ THE BRIDGE: Always set muted=true BEFORE calling play to guarantee permission
+      media.muted = true;
       media.play().then(() => {
-        // 🔊 SAFE UNMUTE: Only unmute AFTER playback has actually started
+        // 🔊 FLIP SOUND: Only once playback is confirmed active
         if (isUnmutedSession) {
           media.muted = false;
           media.volume = 0.2;

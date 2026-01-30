@@ -243,9 +243,14 @@ class MediaOverlay {
             player = `<iframe src="${embedUrl}" class="main-iframe-player" scrolling="no" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"></iframe>`;
         }
 
-        // 🛡️ GESTURE SHIELD: Catch the first tap for unmuting intent
+        // 🛡️ AUTO-RELEASE: No shield barrier if sound is already unlocked
+        const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
+        const shieldStyle = isUnmutedSession
+            ? 'pointer-events:none; display:none;'
+            : 'pointer-events:auto; display:block;';
+
         const shield = `<div class="media-shield" 
-                             style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:10;background:transparent;cursor:pointer;" 
+                             style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:10;background:transparent;cursor:pointer; ${shieldStyle}" 
                              ontouchstart="event.stopPropagation(); if(window.MediaState) window.MediaState.setUnmuted(); window.mediaOverlay.togglePlayback(true); this.style.pointerEvents='none'; this.style.display='none';"
                              onclick="event.stopPropagation(); if(window.MediaState) window.MediaState.setUnmuted(); window.mediaOverlay.togglePlayback(true); this.style.pointerEvents='none'; this.style.display='none';">
                         </div>`;
