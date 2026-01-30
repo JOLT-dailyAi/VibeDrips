@@ -209,9 +209,11 @@ class MediaLightbox {
         }, { capture: true });
 
         overlay.addEventListener('touchstart', (e) => {
-            e.stopImmediatePropagation();
             const active = MediaLightbox.activeInstance;
-            if (active) active.resetIdleTimer();
+            if (active && active.isOpen) {
+                e.stopImmediatePropagation();
+                active.resetIdleTimer();
+            }
         }, { capture: true, passive: true });
 
         prevBtn.addEventListener('click', (e) => {
@@ -277,10 +279,11 @@ class MediaLightbox {
             };
 
             const handleMove = (e) => {
-                e.stopPropagation(); // 🛡️ TOUCH ISOLATION
                 const active = MediaLightbox.activeInstance;
-                if (!active || !active.touchStartX) return; // Only track if a start event was registered
-                if (!active.isDragging) return;
+                if (!active || !active.touchStartX || !active.isDragging) return;
+
+                e.stopPropagation(); // 🛡️ TOUCH ISOLATION - Only stop if we are actually dragging
+                active.resetIdleTimer();
 
                 const touch = e.type.startsWith('touch') ? e.touches[0] : e;
                 active.touchMoveX = touch.clientX;
@@ -316,9 +319,10 @@ class MediaLightbox {
             };
 
             const handleEnd = (e) => {
-                e.stopImmediatePropagation(); // 🛡️ CAPTURE DOMINANCE
                 const active = MediaLightbox.activeInstance;
                 if (!active || !active.isDragging) return;
+
+                e.stopImmediatePropagation(); // 🛡️ CAPTURE DOMINANCE - Only stop if we were dragging
                 active.isDragging = false;
 
                 const touch = e.type.startsWith('touch') ? e.changedTouches[0] : e;
