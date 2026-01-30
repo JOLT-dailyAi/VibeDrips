@@ -253,7 +253,7 @@ class MediaLightbox {
             const mediaContainer = overlay.querySelector('.lightbox-media-container');
 
             const handleStart = (e) => {
-                e.stopImmediatePropagation(); // 🛡️ CAPTURE DOMINANCE
+                // e.stopImmediatePropagation(); // ❌ REMOVED: Allow child (Shield) to receive capture-phase events
                 const active = MediaLightbox.activeInstance;
                 if (!active) return;
                 active.resetIdleTimer();
@@ -261,6 +261,8 @@ class MediaLightbox {
                 const touch = e.type.startsWith('touch') ? e.touches[0] : e;
                 active.touchStartX = touch.clientX;
                 active.touchStartY = touch.clientY;
+                active.touchMoveX = touch.clientX; // 🎯 Initialize to pass swipe guard in handleUnmuteGesture
+                active.touchMoveY = touch.clientY;
                 active.isDragging = true;
                 active.dragDirection = null;
 
@@ -270,7 +272,7 @@ class MediaLightbox {
 
             const handleMove = (e) => {
                 const active = MediaLightbox.activeInstance;
-                if (!active || !active.touchStartX || !active.isDragging) return;
+                if (!active || !active.isDragging) return;
 
                 e.stopPropagation(); // 🛡️ TOUCH ISOLATION - Only stop if we are actually dragging
                 active.resetIdleTimer();
