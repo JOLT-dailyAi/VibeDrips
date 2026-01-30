@@ -19,6 +19,13 @@ const MediaState = {
         localStorage.setItem(UNMUTE_STORAGE_KEY, 'true');
         console.log('🔊 Global Media State: Session Unmuted');
 
+        // Phase 3: Site-wide release
+        document.querySelectorAll('.media-shield, .reel-video-shield, .lightbox-iframe-shield').forEach(s => {
+            s.style.pointerEvents = 'none';
+            s.style.display = 'none';
+        });
+        document.querySelectorAll('.engagement-pill').forEach(p => p.classList.remove('active'));
+
         // Dispatch event for components to listen and react immediately
         window.dispatchEvent(new CustomEvent('vibedrips-media-unmute'));
     },

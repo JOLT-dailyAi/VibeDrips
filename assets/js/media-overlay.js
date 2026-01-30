@@ -21,7 +21,23 @@ class MediaOverlay {
                 if (this.container.classList.contains('active')) {
                     this.togglePlayback(true);
                 }
+                if (this.engagementPill) {
+                    this.engagementPill.classList.remove('active');
+                }
             });
+
+            // Phase 1: Engagement Pill (Tap for Sound)
+            this.engagementPill = document.createElement('div');
+            this.engagementPill.className = 'engagement-pill';
+            this.engagementPill.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                </svg>
+                Tap for sound
+            `;
+            this.container.appendChild(this.engagementPill);
 
             // Sliding Strip for 5-product mirror
             this.strip = document.createElement('div');
@@ -279,8 +295,8 @@ class MediaOverlay {
 
         const shield = `<div class="media-shield" 
                              style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:10;background:transparent;cursor:pointer; ${shieldStyle}" 
-                             ontouchstart="event.stopPropagation(); if(window.MediaState) window.MediaState.setUnmuted(); window.mediaOverlay.togglePlayback(true); this.style.pointerEvents='none'; this.style.display='none';"
-                             onclick="event.stopPropagation(); if(window.MediaState) window.MediaState.setUnmuted(); window.mediaOverlay.togglePlayback(true); this.style.pointerEvents='none'; this.style.display='none';">
+                             ontouchstart="event.stopPropagation(); if(window.MediaState) window.MediaState.setUnmuted(); this.style.pointerEvents='none'; this.style.display='none';"
+                             onclick="event.stopPropagation(); if(window.MediaState) window.MediaState.setUnmuted(); this.style.pointerEvents='none'; this.style.display='none';">
                         </div>`;
 
         const activeWrapper = document.createElement('div');
@@ -437,8 +453,15 @@ class MediaOverlay {
             const sendAudioCommands = () => {
                 if (!play || !this.container.classList.contains('active')) return;
 
-                // 🛡️ THE PULSE GUARD: Wait for warmup (300ms), then flip sound
+                // 🛡️ THE PULSE GUARD: Baseline hardening
                 const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
+
+                // Phase 2: Show engagement pill if muted
+                if (play && !isUnmutedSession && this.engagementPill) {
+                    this.engagementPill.classList.add('active');
+                } else if (this.engagementPill) {
+                    this.engagementPill.classList.remove('active');
+                }
 
                 if (isUnmutedSession) {
                     setTimeout(() => {

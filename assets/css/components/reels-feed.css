@@ -455,3 +455,37 @@
     line-clamp: 1 !important;
   }
 }
+/* Phase 35B: Engagement Pill */
+.engagement-pill {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    white-space: nowrap;
+}
+
+.engagement-pill.active {
+    opacity: 1;
+}
+
+.engagement-pill svg {
+    color: #E53E3E;
+    width: 16px;
+    height: 16px;
+}

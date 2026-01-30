@@ -95,6 +95,16 @@ class MediaLightbox {
 
                         <div class="lightbox-loader"></div>
                     </div>
+
+                    <!-- Phase 1: Engagement Pill -->
+                    <div class="engagement-pill">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+                            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                        </svg>
+                        Tap for sound
+                    </div>
                 </div>
                 
                 <div class="lightbox-dots"></div>
@@ -607,6 +617,7 @@ class MediaLightbox {
         const socialPlaceholder = overlay.querySelector('.lightbox-social-placeholder');
         const loader = overlay.querySelector('.lightbox-loader');
         const caption = overlay.querySelector('.lightbox-caption');
+        const pill = overlay.querySelector('.engagement-pill');
         const prevBtn = overlay.querySelector('.lightbox-prev');
         const nextBtn = overlay.querySelector('.lightbox-next');
 
@@ -625,9 +636,11 @@ class MediaLightbox {
             if (isUnmutedSession) {
                 shield.style.pointerEvents = 'none';
                 shield.style.display = 'none';
+                if (pill) pill.classList.remove('active');
             } else {
                 shield.style.pointerEvents = 'auto';
                 shield.style.display = 'block';
+                if (pill) pill.classList.add('active');
             }
         }
 
