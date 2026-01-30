@@ -344,9 +344,17 @@ class MediaLightbox {
                 active.dragDirection = null;
             };
 
-            // Expanded swipe area: Attach to overlay instead of content
-            mediaContainer.addEventListener('touchstart', handleStart, { capture: true, passive: true });
-            mediaContainer.addEventListener('mousedown', handleStart, { capture: true });
+            // Expanded swipe area: Attach to overlay for universal screen responsiveness
+            overlay.addEventListener('touchstart', (e) => {
+                if (e.target.closest('button')) return;
+                handleStart(e);
+            }, { capture: true, passive: true });
+
+            overlay.addEventListener('mousedown', (e) => {
+                if (e.target.closest('button')) return;
+                handleStart(e);
+            }, { capture: true });
+
             window.addEventListener('touchmove', handleMove, { capture: true, passive: false });
             window.addEventListener('mousemove', handleMove, { capture: true });
             window.addEventListener('touchend', handleEnd, { capture: true });
@@ -442,8 +450,20 @@ class MediaLightbox {
 
         if (isHighTrust) {
             if (shield) {
-                shield.style.pointerEvents = 'none';
-                shield.style.display = 'none';
+                // 📱 MOBILE SMART SHIELD: 
+                // Native videos bubble touch events, so we can hide the shield to allow native controls.
+                // Cross-origin iframes (YouTube/TikTok) BLOCK bubbling, so shield MUST stay to capture swipes.
+                const isMobile = this.isMobileOrTablet();
+                const currentUrl = this.mediaArray[this.currentIndex];
+                const isIframe = ['youtube', 'instagram', 'tiktok'].includes(this.detectMediaType(currentUrl));
+
+                if (isMobile && isIframe) {
+                    shield.style.pointerEvents = 'auto';
+                    shield.style.display = 'block';
+                } else {
+                    shield.style.pointerEvents = 'none';
+                    shield.style.display = 'none';
+                }
             }
             if (pill) pill.classList.remove('active');
 
