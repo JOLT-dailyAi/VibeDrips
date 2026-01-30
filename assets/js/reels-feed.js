@@ -126,9 +126,9 @@ function _initReelsObserverInternal() {
         if (e.intersectionRatio < 0.05) {
           // 💀 GONE: Kill when fully off-screen
           killMedia(videoContainer);
-        } else if (e.intersectionRatio > 0.4) {
-          // 🎯 APPROACHING CENTER: Activate early
-          activateMedia(videoContainer, e.intersectionRatio > 0.7);
+        } else if (e.intersectionRatio > 0.3) {
+          // 🎯 APPROACHING CENTER: Activate much earlier for instant movement
+          activateMedia(videoContainer, e.intersectionRatio > 0.6);
         }
       }
 
@@ -215,23 +215,16 @@ function activateMedia(container, shouldPlay) {
     }
   }
 
-  // 2. Immediate Autoplay pulse (with Readiness Delay & Explicit Play Bridge)
+  // 2. Immediate Autoplay pulse (Unified Shotgun Activation)
   if (shouldPlay && media) {
     if (media.dataset.pulsing !== 'true') {
       media.dataset.pulsing = 'true';
 
       // 🛡️ SETTLING DELAY: Give mobile browser 250ms to finish layout
       setTimeout(() => {
-        if (media.tagName === 'VIDEO' && media.paused) {
-          media.muted = true;
-          media.play().then(() => {
-            triggerShotgunPulse(media);
-          }).catch(() => {
-            media.play().catch(() => { });
-          });
-        } else {
-          triggerShotgunPulse(media);
-        }
+        // 🎯 ABSOLUTE STABILIZATION: Trigger shotgun directly
+        // The shotgun handles the "Muted-First" bridge for native videos
+        triggerShotgunPulse(media);
         media.dataset.pulsing = 'false';
       }, 250);
     }
@@ -281,7 +274,7 @@ function triggerShotgunPulse(media) {
       });
     } else if (media.contentWindow) {
       if (isUnmutedSession) {
-        // 🛡️ WARMUP DELAY: Give iframe 1s to stabilize before sound pulses
+        // 🛡️ WARMUP DELAY: Give iframe 300ms to stabilize before sound pulses
         setTimeout(() => {
           media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
           media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [20] }), '*');

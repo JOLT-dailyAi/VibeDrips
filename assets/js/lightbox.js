@@ -813,8 +813,7 @@ class MediaLightbox {
                 const sendAudioPulse = () => {
                     if (!this.isOpen || !iframe.contentWindow) return;
 
-                    // 🛡️ THE PULSE GUARD: Only unmute AFTER a short warmup period
-                    // and only if the session is active.
+                    // 🛡️ THE PULSE GUARD: Wait for warmup (300ms), then flip sound
                     const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
 
                     if (isUnmutedSession) {
@@ -824,7 +823,7 @@ class MediaLightbox {
                             iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [20] }), '*');
                             iframe.contentWindow.postMessage('unmute', '*');
                             iframe.contentWindow.postMessage(JSON.stringify({ event: 'unmute' }), '*');
-                        }, 1000);
+                        }, 300);
                     }
 
                     iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*');

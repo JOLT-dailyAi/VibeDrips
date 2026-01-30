@@ -361,31 +361,19 @@ class MediaOverlay {
 
         if (video) {
             if (play) {
-                video.muted = false; // 🔊 Unmute for Active
-                video.volume = 0.2;
-                video.play().catch(() => {
-                    // 🛡️ Fallback: Browser blocked unmuted autoplay (Mobile)
-                    if (!window.MediaState?.isUnmuted()) {
-                        video.muted = true;
-                    }
-                    video.play();
-                });
-
-                // PERSISTENCE: Pulse native video too (some browsers re-mute on transition)
-                let nativePulses = 0;
-                const vInterval = setInterval(() => {
-                    if (video.paused) video.play().catch(() => { });
-
-                    // 🛡️ THE PULSE GUARD: Only unmute if session has been unlocked by user
-                    if (window.MediaState?.isUnmuted()) {
+                // 🛡️ THE BRIDGE: Always play MUTED first to guarantee success
+                video.muted = true;
+                video.play().then(() => {
+                    // 🔊 FLIP SOUND: Only once playback is confirmed
+                    if (window.MediaState && window.MediaState.isUnmuted()) {
                         video.muted = false;
                         video.volume = 0.2;
-                    } else {
-                        video.muted = true;
                     }
-
-                    if (++nativePulses >= 8) clearInterval(vInterval);
-                }, 500);
+                }).catch(err => {
+                    console.warn('🎬 Modal: Transition play blocked:', err);
+                    video.muted = true;
+                    video.play().catch(() => { });
+                });
             } else {
                 video.pause();
             }
@@ -395,22 +383,23 @@ class MediaOverlay {
             const sendAudioCommands = () => {
                 if (!play || !this.container.classList.contains('active')) return;
 
-                // 🛡️ THE PULSE GUARD: Only attempt to unmute if the session is already active.
-                // This prevents "Illegal Unmuting" which causes mobile browsers to abort autoplay.
+                // 🛡️ THE PULSE GUARD: Wait for warmup (300ms), then flip sound
                 const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
 
                 if (isUnmutedSession) {
-                    // 1. YouTube specialized (API mode)
-                    iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
-                    iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [20] }), '*');
+                    setTimeout(() => {
+                        // 1. YouTube specialized (API mode)
+                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
+                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [20] }), '*');
 
-                    // 2. Vimeo specialized
-                    iframe.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 0.2 }), '*');
+                        // 2. Vimeo specialized
+                        iframe.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 0.2 }), '*');
 
-                    // 3. Protocol Shotgun Fallbacks
-                    iframe.contentWindow.postMessage('unmute', '*');
-                    iframe.contentWindow.postMessage(JSON.stringify({ event: 'unmute' }), '*');
-                    iframe.contentWindow.postMessage(JSON.stringify({ event: 'volume', value: 0.2 }), '*');
+                        // 3. Protocol Shotgun Fallbacks
+                        iframe.contentWindow.postMessage('unmute', '*');
+                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'unmute' }), '*');
+                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'volume', value: 0.2 }), '*');
+                    }, 300);
                 }
 
                 iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*');
