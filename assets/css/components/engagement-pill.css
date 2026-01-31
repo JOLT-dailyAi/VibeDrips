@@ -1,0 +1,89 @@
+/* assets/css/components/engagement-pill.css */
+
+.engagement-pill {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 11000;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    white-space: nowrap;
+    /* Prevent selection and flickering */
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* Smart Cycling Animation */
+/* Cycle: 2s Fade In, 3s Steady, 2s Fade Out, 15s Wait = 22s Total */
+.engagement-pill.smart-cycling {
+    animation: pill-smart-cycle 22s infinite;
+}
+
+/* Force hide instantly when unmuted */
+.engagement-pill.instantly-hidden {
+    display: none !important;
+    animation: none !important;
+    opacity: 0 !important;
+}
+
+@keyframes pill-smart-cycle {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(10px);
+    }
+
+    /* 2s Fade In (2/22 ≈ 9.09%) */
+    9.09% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    /* 3s Steady (5/22 ≈ 22.72%) */
+    22.72% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    /* 2s Fade Out (7/22 ≈ 31.81%) */
+    31.81% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-10px);
+    }
+
+    /* 15s Wait (100%) */
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Component Specific Overrides */
+
+/* Reels Feed positioning */
+.reel-video .engagement-pill {
+    top: 20px;
+}
+
+/* Lightbox positioning */
+.lightbox-media-container .engagement-pill {
+    top: 40px;
+    /* Higher priority in lightbox */
+}
+
+/* Media Overlay (Golden Spiral) */
+.media-overlay-container .engagement-pill {
+    top: 20px;
+}

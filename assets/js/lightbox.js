@@ -98,14 +98,7 @@ class MediaLightbox {
                     </div>
 
                     <!-- Phase 1: Engagement Pill -->
-                    <div class="engagement-pill">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-                            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                        </svg>
-                        Tap for sound
-                    </div>
+                    <div class="engagement-pill ${window.MediaState && !window.MediaState.isUnmuted() ? 'smart-cycling' : 'instantly-hidden'}">Tap 🔊 for sound</div>
                 </div>
                 
                 <div class="lightbox-dots"></div>
@@ -471,7 +464,10 @@ class MediaLightbox {
                 shield.style.pointerEvents = 'auto';
                 shield.style.display = 'block';
             }
-            if (pill) pill.classList.add('active');
+            if (pill) {
+                pill.classList.remove('instantly-hidden');
+                pill.classList.add('smart-cycling');
+            }
         }
         // 🤖 ANDROID / DESKTOP: Only show pill if intent hasn't been established
         else {
@@ -480,13 +476,19 @@ class MediaLightbox {
                     shield.style.pointerEvents = 'auto';
                     shield.style.display = 'block';
                 }
-                if (pill) pill.classList.add('active');
+                if (pill) {
+                    pill.classList.remove('instantly-hidden');
+                    pill.classList.add('smart-cycling');
+                }
             } else {
                 if (shield) {
                     shield.style.pointerEvents = 'none';
                     shield.style.display = 'none';
                 }
-                if (pill) pill.classList.remove('active');
+                if (pill) {
+                    pill.classList.add('instantly-hidden');
+                    pill.classList.remove('smart-cycling');
+                }
 
                 // 🔊 AUTO-PULSE: Intent already established, trigger sound immediately
                 this.triggerPulsesForCenterSlot();
@@ -808,11 +810,17 @@ class MediaLightbox {
             if (isHighTrust) {
                 shield.style.pointerEvents = 'none';
                 shield.style.display = 'none';
-                if (pill) pill.classList.remove('active');
+                if (pill) {
+                    pill.classList.add('instantly-hidden');
+                    pill.classList.remove('smart-cycling');
+                }
             } else {
                 shield.style.pointerEvents = 'auto';
                 shield.style.display = 'block';
-                if (pill) pill.classList.add('active');
+                if (pill) {
+                    pill.classList.remove('instantly-hidden');
+                    pill.classList.add('smart-cycling');
+                }
             }
         }
 

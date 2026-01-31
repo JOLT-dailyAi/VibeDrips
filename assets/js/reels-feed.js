@@ -123,7 +123,10 @@ function _initReelsObserverInternal() {
         media.dataset.userPaused = 'false';
         triggerShotgunPulse(media);
       }
-      if (pill) pill.classList.remove('active');
+      if (pill) {
+        pill.classList.add('instantly-hidden');
+        pill.classList.remove('smart-cycling');
+      }
     }
   });
 
@@ -228,16 +231,10 @@ function activateMedia(container, shouldPlay) {
       // Phase 1: Engagement Pill
       const pill = document.createElement('div');
       pill.className = 'engagement-pill';
-      pill.innerHTML = `
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-        </svg>
-        Tap for sound
-      `;
+      pill.innerHTML = `Tap 🔊 for sound`;
+
       const isUnmuted = window.MediaState?.isUnmuted();
-      if (isUnmuted) pill.classList.remove('active');
+      if (!isUnmuted) pill.classList.add('smart-cycling');
       container.appendChild(pill);
 
       const handleHandover = (e) => {
@@ -369,8 +366,13 @@ function triggerShotgunPulse(media) {
   // Phase 1: Pill control (iOS always shows it on EVERY reel; Android only if muted)
   const pill = media.parentElement?.querySelector('.engagement-pill');
   if (pill) {
-    if (isIOS || shouldMute) pill.classList.add('active');
-    else pill.classList.remove('active');
+    if (isIOS || shouldMute) {
+      pill.classList.remove('instantly-hidden');
+      pill.classList.add('smart-cycling');
+    } else {
+      pill.classList.add('instantly-hidden');
+      pill.classList.remove('smart-cycling');
+    }
   }
 
   // 🔊 SILENT PRIMING: Set volume once, separate from play pulse logic

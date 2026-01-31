@@ -25,6 +25,7 @@
 @import url('./components/external-controls.css');
 @import url('./components/inline-carousel.css');
 @import url('./components/lightbox.css');
+@import url('./components/engagement-pill.css');
 
 /* States */
 @import url('./states/loading.css');

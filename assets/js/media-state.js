@@ -56,11 +56,10 @@ const MediaState = {
             detail: { isIOS: isIOS }
         }));
 
-        // Universal UI cleanup for the ACTIVE element
-        document.querySelectorAll('.engagement-pill.active').forEach(p => {
-            // On iOS, we only hide the pill for the video that was actually tapped
-            // For now, we allow the pill to hide on tap, but it will reappear on next video
-            p.classList.remove('active');
+        // 💊 SMART PILL CLEANUP: Unified UI cleanup for ALL pills once unmuted intent is registered
+        document.querySelectorAll('.engagement-pill').forEach(p => {
+            p.classList.add('instantly-hidden');
+            p.classList.remove('smart-cycling');
         });
     },
 
@@ -100,6 +99,11 @@ const MediaState = {
             console.warn(`守 MediaState: Blocked suspicious birth-revert to 0.2. Restoring ${_cachedVolume}`);
             vol = _cachedVolume;
             forceSync = true; // 📣 MANDATORY: Force align the component that tried to reset
+        }
+
+        // 🔊 INTENT BRIDGE: If the user manually turns up the volume, register unmuted intent
+        if (isManual && vol > 0 && !this.isUnmuted()) {
+            this.setUnmuted();
         }
 
         // Only trigger if value actually changed (unless we are forcing sync)
