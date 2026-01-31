@@ -714,7 +714,7 @@ class MediaLightbox {
                     if (!latestShouldMute && video.dataset.userPaused !== 'true') {
                         video.dataset.scriptTriggeredVolume = 'true';
                         video.muted = false;
-                        video.volume = window.MediaState?.getVolume() || 0.2;
+                        video.volume = window.MediaState?.getVolume();
                         setTimeout(() => video.dataset.scriptTriggeredVolume = 'false', 100);
                     }
                 };
@@ -737,7 +737,7 @@ class MediaLightbox {
                 if (!video.paused && video.currentTime > 0) tryUnmute();
             }
 
-            const preferredVolume = window.MediaState?.getVolume() || 0.2;
+            const preferredVolume = window.MediaState?.getVolume();
             video.dataset.scriptTriggeredVolume = 'true';
             video.volume = preferredVolume; // 🔊 SILENT PRIMING: Set volume even if muted
             video.muted = shouldMute;
@@ -761,7 +761,7 @@ class MediaLightbox {
 
             // 🔊 ONE-SHOT INITIALIZATION: Set volume and unmute bridge BEFORE pulses start
             if (!shouldMute) {
-                const preferredVolume = window.MediaState?.getVolume() || 0.2;
+                const preferredVolume = window.MediaState?.getVolume();
                 const youtubeVol = Math.round(preferredVolume * 100);
 
                 iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
@@ -1041,7 +1041,7 @@ class MediaLightbox {
                 const isHighTrust = (strategy === 'unmuted' || isUnmutedSession);
 
                 if (isHighTrust) {
-                    const preferredVolume = window.MediaState?.getVolume() || 0.2;
+                    const preferredVolume = window.MediaState?.getVolume();
                     const youtubeVol = Math.round(preferredVolume * 100);
 
                     setTimeout(() => {
@@ -1106,7 +1106,7 @@ class MediaLightbox {
 
             // 🛡️ BELT & SUSPENDERS: HTML attributes + JS Fallback
             video.muted = true;
-            video.volume = 0.2;
+            video.volume = window.MediaState?.getVolume();
             video.setAttribute('playsinline', '');
             video.setAttribute('autoplay', '');
             video.setAttribute('muted', '');

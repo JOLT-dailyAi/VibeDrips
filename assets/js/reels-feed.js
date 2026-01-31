@@ -356,7 +356,7 @@ function triggerShotgunPulse(media) {
 
   const isIOS = window.Device?.isIOS();
   const shouldMute = window.MediaState?.shouldStartMuted();
-  const preferredVolume = window.MediaState?.getVolume() || 0.2;
+  const preferredVolume = window.MediaState?.getVolume();
 
   // Phase 1: Pill control (iOS always shows it on EVERY reel; Android only if muted)
   const pill = media.parentElement?.querySelector('.engagement-pill');
@@ -399,7 +399,7 @@ function triggerShotgunPulse(media) {
           if (media.dataset.userMuted !== 'true') {
             media.dataset.scriptTriggeredVolume = 'true';
             media.muted = false;
-            media.volume = window.MediaState?.getVolume() || 0.2;
+            media.volume = window.MediaState?.getVolume();
             setTimeout(() => media.dataset.scriptTriggeredVolume = 'false', 100);
           }
         }

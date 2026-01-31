@@ -445,7 +445,7 @@ class MediaOverlay {
             if (play) {
                 // 🛡️ ASYMMETRIC MUTE: Use platform-aware state
                 const shouldMute = window.MediaState?.shouldStartMuted();
-                const preferredVolume = window.MediaState?.getVolume() || 0.2;
+                const preferredVolume = window.MediaState?.getVolume();
                 // 🔊 ONE-SHOT SETUP: Set volume once, separate from play pulse logic
                 video.dataset.scriptTriggeredVolume = 'true';
                 video.muted = shouldMute;
@@ -461,7 +461,7 @@ class MediaOverlay {
                             if (video.dataset.userMuted !== 'true') {
                                 video.dataset.scriptTriggeredVolume = 'true';
                                 video.muted = false;
-                                video.volume = window.MediaState?.getVolume() || 0.2;
+                                video.volume = window.MediaState?.getVolume();
                                 setTimeout(() => video.dataset.scriptTriggeredVolume = 'false', 100);
                             }
                         }
@@ -522,7 +522,7 @@ class MediaOverlay {
 
             // 🔊 ONE-SHOT INITIALIZATION: Set volume and unmute bridge BEFORE pulses start
             if (play && !shouldMute) {
-                const preferredVolume = window.MediaState?.getVolume() || 0.2;
+                const preferredVolume = window.MediaState?.getVolume();
                 const youtubeVol = Math.round(preferredVolume * 100);
 
                 setTimeout(() => {
