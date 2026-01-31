@@ -229,6 +229,10 @@ class MediaLightbox {
             dotsContainer.addEventListener('click', (e) => {
                 e.stopImmediatePropagation();
                 if (window.MediaState) window.MediaState.setUnmuted();
+
+                // ✅ NAVIGATION RESET: When clicking dots, we assume intent to play
+                const centerVideo = overlay.querySelector('.center-slot video');
+                if (centerVideo) centerVideo.dataset.userPaused = 'false';
             }, { capture: true });
         }
 
@@ -430,6 +434,20 @@ class MediaLightbox {
                 wrapper.innerHTML = ''; // Empty slot
             }
             strip.appendChild(wrapper);
+
+            // ✅ USER INTENT SOVEREIGNTY: Track manual pauses for the active center slot
+            if (i === 2) {
+                const video = wrapper.querySelector('video');
+                if (video) {
+                    video.addEventListener('pause', () => {
+                        // Only register manual pause if the video was actually playing
+                        // (Prevents browser autoplay blocks from setting userPaused=true)
+                        if (video.currentTime > 0.1) {
+                            video.dataset.userPaused = 'true';
+                        }
+                    });
+                }
+            }
         });
 
         // Force reflow
@@ -481,8 +499,12 @@ class MediaLightbox {
             // 🛡️ ASYMMETRIC MUTE: Initial attribute based on platform trust
             const shouldStartMuted = window.MediaState?.shouldStartMuted();
             const autoplayAttr = isActive ? `autoplay ${shouldStartMuted ? 'muted' : ''}` : '';
-            return `<video controls playsinline ${autoplayAttr} src="${url}" class="lightbox-video"></video>`;
-        } else if (['youtube', 'instagram', 'tiktok'].includes(type)) {
+
+            // ✅ NATIVE RESET: Ensure new elements start with clean intent
+            const videoHTML = `<video controls playsinline ${autoplayAttr} src="${url}" class="lightbox-video" data-user-paused="false" data-user-muted="false"></video>`;
+            return videoHTML;
+        }
+        else if (['youtube', 'instagram', 'tiktok'].includes(type)) {
             const embedUrl = this.getUniversalEmbedUrl(type, url, isActive);
             return `<iframe class="lightbox-iframe" frameborder="0" allowfullscreen allow="autoplay; encrypted-media" src="${embedUrl}"></iframe>`;
         } else {
@@ -637,6 +659,11 @@ class MediaLightbox {
     next() {
         if (this.currentIndex < this.mediaArray.length - 1) {
             this.currentIndex++;
+
+            // ✅ NAVIGATION RESET: Force intent to play on next
+            const currentVideo = document.querySelector('#mediaLightbox .center-slot video');
+            if (currentVideo) currentVideo.dataset.userPaused = 'false';
+
             this.refreshStrip();
         }
     }
@@ -644,6 +671,11 @@ class MediaLightbox {
     prev() {
         if (this.currentIndex > 0) {
             this.currentIndex--;
+
+            // ✅ NAVIGATION RESET: Force intent to play on prev
+            const currentVideo = document.querySelector('#mediaLightbox .center-slot video');
+            if (currentVideo) currentVideo.dataset.userPaused = 'false';
+
             this.refreshStrip();
         }
     }
@@ -659,6 +691,15 @@ class MediaLightbox {
 
         const video = centerSlot.querySelector('video');
         const iframe = centerSlot.querySelector('iframe');
+
+        // 🛡️ USER INTENT SOVEREIGNTY: Back off if user manually paused
+        if (video?.dataset.userPaused === 'true') {
+            if (this._pulseInterval) {
+                clearInterval(this._pulseInterval);
+                this._pulseInterval = null;
+            }
+            return;
+        }
 
         // 🛡️ GUARD: Only unmute if intent is established OR it's a pulse after manual tap
         const shouldMute = window.MediaState?.shouldStartMuted();

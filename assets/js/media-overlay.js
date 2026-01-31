@@ -23,6 +23,10 @@ class MediaOverlay {
                 const isLightboxOpen = window.MediaLightbox && window.MediaLightbox.activeInstance && window.MediaLightbox.activeInstance.isOpen;
 
                 if (this.container.classList.contains('active') && !isLightboxOpen) {
+                    // ✅ NAVIGATION RESET: When unmuting globally, we want to play the current video
+                    const video = this.container.querySelector('.main-video-player');
+                    if (video) video.dataset.userPaused = 'false';
+
                     this.togglePlayback(true);
                 }
                 if (this.engagementPill) {
@@ -330,7 +334,11 @@ class MediaOverlay {
                 else mediaElem.dataset.userMuted = 'false';
             });
             mediaElem.addEventListener('pause', () => {
-                mediaElem.dataset.userPaused = 'true';
+                // Only register manual pause if the video was actually playing
+                // (Prevents browser autoplay blocks from setting userPaused=true)
+                if (mediaElem.currentTime > 0.1) {
+                    mediaElem.dataset.userPaused = 'true';
+                }
             });
         }
 

@@ -116,7 +116,13 @@ function _initReelsObserverInternal() {
     if (activeSection) {
       const media = activeSection.querySelector('video, iframe');
       const pill = activeSection.querySelector('.engagement-pill');
-      if (media) triggerShotgunPulse(media);
+
+      // ✅ NAVIGATION RESET: When unmuting globally, we want to play the current active reel
+      // even if it was previously paused.
+      if (media) {
+        media.dataset.userPaused = 'false';
+        triggerShotgunPulse(media);
+      }
       if (pill) pill.classList.remove('active');
     }
   });
@@ -269,7 +275,11 @@ function activateMedia(container, shouldPlay) {
       });
 
       media.addEventListener('pause', () => {
-        media.dataset.userPaused = 'true';
+        // Only register manual pause if the video was actually playing
+        // (Prevents browser autoplay blocks from setting userPaused=true)
+        if (media.currentTime > 0.1) {
+          media.dataset.userPaused = 'true';
+        }
       });
 
       container.appendChild(shield);
@@ -422,12 +432,9 @@ function getMediaHTML(type, url, isActive) {
   const embedUrl = getUniversalVideoEmbedUrlForReels(url, isActive);
 
   if (type === 'video') {
-    // 🛡️ DEVICE STRATEGY: Check if we can start unmuted (Desktop/PWA)
-    const strategy = window.Device?.getStrategy() || 'muted';
-    const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
-    const shouldBeMuted = (strategy === 'muted' && !isUnmutedSession);
-
-    const autoplayAttr = isActive ? `autoplay ${shouldBeMuted ? 'muted' : ''}` : '';
+    // 🛡️ ASYMMETRIC MUTE: Use platform-aware state
+    const shouldStartMuted = window.MediaState?.shouldStartMuted();
+    const autoplayAttr = isActive ? `autoplay ${shouldStartMuted ? 'muted' : ''}` : '';
     return `<video controls playsinline ${autoplayAttr} preload="auto" src="${url}" style="width:100%;height:100%;object-fit:cover;"></video>`;
   } else {
     return `<iframe src="${embedUrl}" frameborder="0" scrolling="no" allowtransparency="true" allowfullscreen="true" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
