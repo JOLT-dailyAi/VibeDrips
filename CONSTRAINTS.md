@@ -83,7 +83,18 @@ Mobile landscape toggles (`.reels-toggle`, `.globe-toggle`) must maintain an **a
 - **Constraint**: `MediaState.js` acts as the "State Police". It MUST intercept volume changes and, if the change matches the suspicious `0.2` revert and is NOT marked as a `manual` user interaction, it MUST forcibly restore the user's cached volume preference.
 - **Manual Sovereignty**: User-initiated volume changes (passed with `isManual: true`) are the ONLY changes permitted to update the global cached volume.
 
-### 6. Known Architectural Gaps (Volume Sync)
-- **Problem: Reels Isolation**: Because Reels are pre-injected into the DOM, they often "miss" volume changes that occur after they are created. This results in inconsistent volume levels between adjacent Reels.
-- **Problem: Inter-Modal Reset**: Switching between `MediaLightbox` and `MediaOverlay` often triggers a browser-default `0.2` reset on the new element. The current event-based policing fails to catch this "silent" reset because the new media hasn't started "talking" to the global state yet.
-- **Problem: One-Way Slider Binding**: The header volume slider (Music Control) propagates its value to media, but media changes (e.g., native volume adjustments) do not reflect back to the slider because local property updates do not dispatch global sync events.
+### 6. Unified Media Handover (The "One-Stream" Rule)
+- **Reporting Requirement**: All foreground media components (Reels, Lightbox, Modals) MUST report their playback via `MediaState.reportMediaPlay(senderId)`.
+- **Handover Listener**: Every media-active component MUST listen for `vibedrips-media-play` and pause itself if the `senderId` does not match its own identifier.
+- **Single Source of Truth**: `MediaState.js` is the central dispatcher for site-wide media synchronization.
+
+### 7. Smart Engagement Pill Standards
+- **Cycle Duration**: MUST maintain a **22s loop** (2s In, 3s Stay, 2s Out, 15s Wait).
+- **Z-Index Lock**: MUST be pinned at `z-index: 11000`.
+- **Icon Requirement**: MUST use the red speaker SVG (VibeDrips Red: `#E53E3E`) to ensure accessibility and visibility across heavy background motion.
+
+---
+
+## 🏗️ Known Architectural Gaps (Waitlist)
+- **One-Way Slider Binding**: The header volume slider (Music Control) propagates its value to media, but media changes (e.g., native volume adjustments) do not reflect back to the slider.
+- **Muted Asymmetry**: The system allows volume persistence but intentionally enforces *Muted-First* behavior on iOS to comply with hardware policies, which can result in perceived state "mismatch" for users moving between platforms.

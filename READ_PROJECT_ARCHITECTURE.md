@@ -104,8 +104,15 @@ On mobile, the struggle between "Video Interaction" and "Gallery Navigation" is 
     - **Fast Tap**: Programmatically forwarded (Proxied) to the hidden media element to trigger unmuting/play pulses.
 - **Why?**: This prevents "Tap-to-Mute" controls in iframes from "stalling" the user's attempt to swipe to the next product.
 
-### 4. Known Media Sync Issues (Waitlist)
-Despite the "Hard State Policing," the following patterns remain **broken** in the current event-driven architecture:
-- **Media Isolation**: Pre-loaded elements in Reels or Lightbox retain their "Birth Volume" and do not listen for live updates from other components.
-- **Inter-Modal Handover**: The transition between modals often results in a `0.2` volume dip as the browser resets the new `<iframe>` or `<video>` before the sync logic can take hold.
-- **Backward Binding**: The global slider does not react to native volume changes on specific video elements (One-Way binding).
+### 3. Unified Media Handover (The "One-Stream" Rule)
+To prevent audio chaos, the project implements a global handover system:
+- **Identifier-Based Sync**: Components like `ReelsFeed`, `MediaOverlay`, and `MediaLightbox` report their playback via `MediaState.reportMediaPlay(senderId)`.
+- **Automatic Pause**: When a component detects a `vibedrips-media-play` event from a *different* `senderId`, it immediately pauses its own media. This ensures that only one primary media source plays audio at any time.
+- **Background Music**: Background music (Music Control) listens to all play events and pauses automatically, but remains as the fallback when all foreground media stops.
+
+---
+
+## 💎 Known Architectural Gaps (Waitlist)
+Despite recent advancements, some patterns remain in the tracking phase:
+- **One-Way Slider Binding**: The header volume slider propagates its value to media, but media changes (e.g., native adjustments) do not reflect back to the slider.
+- **Cross-Component Persistence**: Volume preference is perfectly synced, but the *Muted State* is intentionally asymmetric to support platform-specific rules (iOS strictly Muted-First).

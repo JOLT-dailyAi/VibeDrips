@@ -140,3 +140,12 @@ In landscape mode, even 1px of "Bleed" from an adjacent slide is visible.
 - **Transform**: Exclusively use `translate3d` for the strip to ensure it stays on the graphics layer, essential for maintaining sensitive swipe response over high-weight media like 4K videos or TikTok embeds.
 
 ---
+
+## 11. Smart Engagement Pill (The "Pulse" Prompt)
+
+To encourage unmuting without annoying the user, we use a "Smart Cycling" pill.
+- **Lifecycle**: A fixed 22-second loop (2s In, 3s Stay, 2s Out, 15s Wait) to prevent visual fatigue.
+- **Z-Index Master**: `z-index: 11000` to ensure it clears all shields, navigation layers, and overlays.
+- **Visibility**: Uses **VibeDrips Red (#E53E3E)** for the speaker icon to ensure it "stands out" as a clear call-to-action against high-motion video backgrounds.
+
+---
