@@ -200,14 +200,27 @@ function activateMedia(container, shouldPlay) {
     if (media) {
       media.dataset.loaded = 'true';
 
-      // 🔊 SYNCHRONOUS INITIALIZATION: Lock volume BEFORE browser can report 100% default
-      if (media.tagName === 'VIDEO' && window.MediaState) {
+      // 🔊 SYNCHRONOUS INITIALIZATION: Lock volume BEFORE browser/API can report defaults
+      if (window.MediaState) {
         const startVol = window.MediaState.getVolume();
-        media.dataset.scriptTriggeredVolume = 'true';
-        media.volume = startVol;
-        console.log(`🎬 Reels Feed: Initializing new video at ${startVol} (Sync Lock)`);
-        // Reset guard after short delay
-        setTimeout(() => { if (media) media.dataset.scriptTriggeredVolume = 'false'; }, 150);
+
+        if (media.tagName === 'VIDEO') {
+          media.dataset.scriptTriggeredVolume = 'true';
+          media.volume = startVol;
+          console.log(`🎬 Reels Feed: Initializing new video at ${startVol} (Sync Lock)`);
+          setTimeout(() => { if (media) media.dataset.scriptTriggeredVolume = 'false'; }, 150);
+        }
+        else if (media.tagName === 'IFRAME') {
+          console.log(`🎬 Reels Feed: Queueing birth-sync for iframe at ${startVol}`);
+          media.addEventListener('load', () => {
+            const youtubeVol = Math.round(startVol * 100);
+            console.log(`🎬 Reels Feed: Iframe Loaded. Applying volume ${youtubeVol}`);
+            if (media.contentWindow) {
+              media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [youtubeVol] }), '*');
+              media.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: startVol }), '*');
+            }
+          }, { once: true });
+        }
       }
 
       // 🛡️ SMART SHIELD HANDOVER (Touch-First)
