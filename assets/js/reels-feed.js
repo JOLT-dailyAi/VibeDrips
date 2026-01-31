@@ -368,8 +368,9 @@ function triggerShotgunPulse(media) {
 
     if (media.tagName === 'VIDEO') {
       // 🛡️ ASYMMETRIC MUTE: Use platform-aware state
+      const preferredVolume = window.MediaState?.getVolume() || 0.2;
       media.muted = shouldMute;
-      if (!shouldMute) media.volume = 0.2;
+      media.volume = preferredVolume; // 🔊 SILENT PRIMING: Set volume even if muted
 
       // ✅ NATIVE BRIDGE: Flip sound as soon as the video actually starts moving
       if (!media.dataset.bridgeSet) {
@@ -380,7 +381,7 @@ function triggerShotgunPulse(media) {
             // Re-check intent inside event/check
             if (media.dataset.userMuted !== 'true') {
               media.muted = false;
-              media.volume = 0.2;
+              media.volume = window.MediaState?.getVolume() || 0.2;
             }
           }
         };
@@ -397,13 +398,16 @@ function triggerShotgunPulse(media) {
       });
     } else if (media.contentWindow) {
       if (!shouldMute) {
+        const preferredVolume = window.MediaState?.getVolume() || 0.2;
+        const youtubeVol = Math.round(preferredVolume * 100);
+
         // 🛡️ WARMUP DELAY: Reduced to 300ms for snappy parity with LIVE Slot
         setTimeout(() => {
           // Re-check intent before unmuting iframe
           if (media.dataset.userMuted !== 'true' && media.dataset.userPaused !== 'true') {
             media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
-            media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [20] }), '*');
-            media.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 0.2 }), '*');
+            media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [youtubeVol] }), '*');
+            media.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: preferredVolume }), '*');
             media.contentWindow.postMessage('unmute', '*');
           }
         }, 300);

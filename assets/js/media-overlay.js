@@ -445,8 +445,10 @@ class MediaOverlay {
             if (play) {
                 // 🛡️ ASYMMETRIC MUTE: Use platform-aware state
                 const shouldMute = window.MediaState?.shouldStartMuted();
+                const preferredVolume = window.MediaState?.getVolume() || 0.2;
+
                 video.muted = shouldMute;
-                if (!shouldMute) video.volume = 0.2;
+                video.volume = preferredVolume; // 🔊 SILENT PRIMING: Set volume even if muted
 
                 // ✅ NATIVE BRIDGE: Flip sound as soon as the video actually starts moving
                 if (!video.dataset.bridgeSet) {
@@ -456,7 +458,7 @@ class MediaOverlay {
                         if (window.MediaState && window.MediaState.isUnmuted()) {
                             if (video.dataset.userMuted !== 'true') {
                                 video.muted = false;
-                                video.volume = 0.2;
+                                video.volume = window.MediaState?.getVolume() || 0.2;
                             }
                         }
                     };
@@ -493,18 +495,21 @@ class MediaOverlay {
                 }
 
                 if (!shouldMute) {
+                    const preferredVolume = window.MediaState?.getVolume() || 0.2;
+                    const youtubeVol = Math.round(preferredVolume * 100);
+
                     setTimeout(() => {
                         // 1. YouTube specialized (API mode)
                         iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
-                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [20] }), '*');
+                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [youtubeVol] }), '*');
 
                         // 2. Vimeo specialized
-                        iframe.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 0.2 }), '*');
+                        iframe.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: preferredVolume }), '*');
 
                         // 3. Protocol Shotgun Fallbacks
                         iframe.contentWindow.postMessage('unmute', '*');
                         iframe.contentWindow.postMessage(JSON.stringify({ event: 'unmute' }), '*');
-                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'volume', value: 0.2 }), '*');
+                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'volume', value: preferredVolume }), '*');
                     }, 300);
                 }
 

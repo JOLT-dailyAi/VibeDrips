@@ -1,6 +1,8 @@
 // assets/js/media-state.js - Global Media State Manager (Asymmetric Strategy)
 
 const UNMUTE_STORAGE_KEY = 'vibedrips-unmute-intent-active';
+const VOLUME_STORAGE_KEY = 'vibedrips-volume-level';
+const DEFAULT_VOLUME = 0.2;
 
 const MediaState = {
     /**
@@ -60,7 +62,26 @@ const MediaState = {
      * Get the preferred volume level
      */
     getVolume() {
-        return 0.2;
+        const stored = localStorage.getItem(VOLUME_STORAGE_KEY);
+        if (stored !== null) {
+            const parsed = parseFloat(stored);
+            return isNaN(parsed) ? DEFAULT_VOLUME : parsed;
+        }
+        return DEFAULT_VOLUME;
+    },
+
+    /**
+     * Set the preferred volume level
+     * @param {number} level - 0.0 to 1.0
+     */
+    setVolume(level) {
+        const vol = Math.max(0, Math.min(1, level));
+        localStorage.setItem(VOLUME_STORAGE_KEY, vol.toString());
+        console.log(`🔊 Global Media State: Volume set to ${vol}`);
+
+        window.dispatchEvent(new CustomEvent('vibedrips-media-volume', {
+            detail: { volume: vol }
+        }));
     }
 };
 
