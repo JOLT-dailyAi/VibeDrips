@@ -75,6 +75,7 @@ const MediaState = {
         }
 
         _cachedVolume = DEFAULT_VOLUME;
+        console.log(`🔊 MediaState: Using default volume ${DEFAULT_VOLUME}`);
         return _cachedVolume;
     },
 
@@ -94,6 +95,7 @@ const MediaState = {
         console.log(`🔊 Global Media State: Volume updated to ${vol}`);
 
         if (!silent) {
+            console.log(`🔊 MediaState: Dispatching volume sync event: ${vol}`);
             window.dispatchEvent(new CustomEvent('vibedrips-media-volume', {
                 detail: { volume: vol }
             }));

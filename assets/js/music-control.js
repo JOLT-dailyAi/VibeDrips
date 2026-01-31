@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     🔊
                 </button>
                 <input type="range" id="volume-slider" class="volume-slider" 
-                       min="0" max="1" step="0.01" value="0.5">
+                       min="0" max="1" step="0.01" value="${window.MediaState?.getVolume() || 0.2}">
             </div>
         `;
     }

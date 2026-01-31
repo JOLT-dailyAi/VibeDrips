@@ -367,6 +367,7 @@ function triggerShotgunPulse(media) {
 
   // 🔊 SILENT PRIMING: Set volume once, separate from play pulse logic
   if (media.tagName === 'VIDEO') {
+    console.log(`🎬 Reels Shotgun: Priming native video to ${preferredVolume}`);
     media.dataset.scriptTriggeredVolume = 'true';
     media.volume = preferredVolume;
     media.muted = shouldMute;
@@ -459,9 +460,10 @@ function triggerShotgunPulse(media) {
 // 🔊 GLOBAL VOLUME SYNC: Update all active reels if volume changes elsewhere
 window.addEventListener('vibedrips-media-volume', (e) => {
   const vol = e.detail.volume;
+  console.log(`🎬 Reels Feed: Received global volume sync event: ${vol}`);
 
   // Update all native videos that haven't been manually muted
-  document.querySelectorAll('.reels-modal video').forEach(video => {
+  document.querySelectorAll('.reels-modal video, .reel-section video').forEach(video => {
     if (video.dataset.userMuted !== 'true') {
       video.dataset.scriptTriggeredVolume = 'true';
       video.volume = vol;
@@ -470,7 +472,7 @@ window.addEventListener('vibedrips-media-volume', (e) => {
   });
 
   // Update all iframes
-  document.querySelectorAll('.reels-modal iframe').forEach(iframe => {
+  document.querySelectorAll('.reels-modal iframe, .reel-section iframe').forEach(iframe => {
     if (iframe.contentWindow && iframe.dataset.userMuted !== 'true') {
       const youtubeVol = Math.round(vol * 100);
       iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [youtubeVol] }), '*');
