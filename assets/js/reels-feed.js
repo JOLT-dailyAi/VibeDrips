@@ -369,19 +369,26 @@ function triggerShotgunPulse(media) {
     if (media.tagName === 'VIDEO') {
       // 🛡️ ASYMMETRIC MUTE: Use platform-aware state
       media.muted = shouldMute;
+      if (!shouldMute) media.volume = 0.2;
 
       // ✅ NATIVE BRIDGE: Flip sound as soon as the video actually starts moving
       if (!media.dataset.bridgeSet) {
         media.dataset.bridgeSet = 'true';
-        media.addEventListener('playing', () => {
+
+        const tryUnmute = () => {
           if (window.MediaState && window.MediaState.isUnmuted()) {
-            // Re-check intent inside event
+            // Re-check intent inside event/check
             if (media.dataset.userMuted !== 'true') {
               media.muted = false;
               media.volume = 0.2;
             }
           }
-        }, { once: true });
+        };
+
+        media.addEventListener('playing', tryUnmute, { once: true });
+
+        // 🔄 RACE CONDITION: If already playing, trigger now
+        if (!media.paused && media.currentTime > 0) tryUnmute();
       }
 
       media.play().catch(() => {
@@ -390,7 +397,7 @@ function triggerShotgunPulse(media) {
       });
     } else if (media.contentWindow) {
       if (!shouldMute) {
-        // 🛡️ WARMUP DELAY: Give iframe 1s to stabilize before sound pulses
+        // 🛡️ WARMUP DELAY: Reduced to 300ms for snappy parity with LIVE Slot
         setTimeout(() => {
           // Re-check intent before unmuting iframe
           if (media.dataset.userMuted !== 'true' && media.dataset.userPaused !== 'true') {
@@ -399,7 +406,7 @@ function triggerShotgunPulse(media) {
             media.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 0.2 }), '*');
             media.contentWindow.postMessage('unmute', '*');
           }
-        }, 1000);
+        }, 300);
       }
 
       media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*');

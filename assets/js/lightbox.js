@@ -705,13 +705,36 @@ class MediaLightbox {
         const shouldMute = window.MediaState?.shouldStartMuted();
 
         if (video) {
+            // ✅ NATIVE BRIDGE: Flip sound as soon as the video actually starts moving
+            if (!video.dataset.bridgeSet) {
+                video.dataset.bridgeSet = 'true';
+
+                const tryUnmute = () => {
+                    const latestShouldMute = window.MediaState?.shouldStartMuted();
+                    if (!latestShouldMute && video.dataset.userPaused !== 'true') {
+                        video.muted = false;
+                        video.volume = 0.2; // 🔊 Standard 20%
+                    }
+                };
+
+                video.addEventListener('playing', tryUnmute, { once: true });
+
+                // 🔄 RACE CONDITION: If already playing, trigger now
+                if (!video.paused && video.currentTime > 0) tryUnmute();
+            }
+
             if (!shouldMute) {
                 video.muted = false;
-                video.volume = 0.5;
+                video.volume = 0.2; // 🔊 Standard 20%
             } else {
                 video.muted = true;
             }
-            video.play().catch(() => { });
+
+            video.play().catch(err => {
+                console.warn('🎬 Lightbox: Autoplay blocked, falling back to muted:', err);
+                video.muted = true;
+                video.play().catch(() => { });
+            });
         }
 
         if (iframe) {
@@ -726,6 +749,7 @@ class MediaLightbox {
 
                 iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
                 iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [20] }), '*');
+                iframe.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: 0.2 }), '*');
                 iframe.contentWindow.postMessage('unmute', '*');
                 iframe.contentWindow.postMessage(JSON.stringify({ event: 'unmute' }), '*');
                 iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*');

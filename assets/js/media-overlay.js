@@ -441,17 +441,27 @@ class MediaOverlay {
         if (video) {
             if (play) {
                 // 🛡️ ASYMMETRIC MUTE: Use platform-aware state
-                video.muted = window.MediaState?.shouldStartMuted();
+                const shouldMute = window.MediaState?.shouldStartMuted();
+                video.muted = shouldMute;
+                if (!shouldMute) video.volume = 0.2;
 
-                // ✅ NATIVE BRIDGE: Flip sound instantly on motion
+                // ✅ NATIVE BRIDGE: Flip sound as soon as the video actually starts moving
                 if (!video.dataset.bridgeSet) {
                     video.dataset.bridgeSet = 'true';
-                    video.addEventListener('playing', () => {
+
+                    const tryUnmute = () => {
                         if (window.MediaState && window.MediaState.isUnmuted()) {
-                            video.muted = false;
-                            video.volume = 0.2;
+                            if (video.dataset.userMuted !== 'true') {
+                                video.muted = false;
+                                video.volume = 0.2;
+                            }
                         }
-                    }, { once: true });
+                    };
+
+                    video.addEventListener('playing', tryUnmute, { once: true });
+
+                    // 🔄 RACE CONDITION: If already playing, trigger now
+                    if (!video.paused && video.currentTime > 0) tryUnmute();
                 }
 
                 video.play().catch(err => {
