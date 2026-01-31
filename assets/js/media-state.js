@@ -100,6 +100,14 @@ const MediaState = {
                 detail: { volume: vol }
             }));
         }
+    },
+
+    /**
+     * Report that media (Reels/Lightbox) has started playing.
+     * This signals the background music to pause.
+     */
+    reportMediaPlay() {
+        window.dispatchEvent(new CustomEvent('vibedrips-media-play'));
     }
 };
 

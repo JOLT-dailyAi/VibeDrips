@@ -485,7 +485,9 @@ class MediaOverlay {
                     if (!video.paused && video.currentTime > 0) tryUnmute();
                 }
 
-                video.play().catch(err => {
+                video.play().then(() => {
+                    if (window.MediaState) window.MediaState.reportMediaPlay();
+                }).catch(err => {
                     console.warn('🎬 Modal: Transition play blocked:', err);
                     video.muted = true;
                     video.play().catch(() => { });
@@ -557,6 +559,7 @@ class MediaOverlay {
 
                 // Initial burst
                 sendPulse();
+                if (window.MediaState) window.MediaState.reportMediaPlay();
 
                 // 🔊 SUCCESSIVE PULSE: Pulse every 400ms for 1.6 seconds (One-Shot Safe)
                 let pulses = 0;

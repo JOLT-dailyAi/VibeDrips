@@ -1050,6 +1050,8 @@ class MediaLightbox {
                         iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [youtubeVol] }), '*');
                         iframe.contentWindow.postMessage('unmute', '*');
                         iframe.contentWindow.postMessage(JSON.stringify({ event: 'unmute' }), '*');
+                        // 🔇 AUTO-PAUSE: Notify background music to stop
+                        if (window.MediaState) window.MediaState.reportMediaPlay();
                     }, 300);
                 }
 
@@ -1128,6 +1130,9 @@ class MediaLightbox {
             }
 
             video.play().then(() => {
+                // 🔇 AUTO-PAUSE: Notify background music to stop
+                if (window.MediaState) window.MediaState.reportMediaPlay();
+
                 // 🔊 SAFE UNMUTE: Only unmute AFTER confirmed playback
                 // AND only if the user hasn't explicitly muted it already
                 const strategy = window.Device?.getStrategy() || 'muted';
@@ -1135,7 +1140,7 @@ class MediaLightbox {
 
                 if (isHighTrust && video.dataset.userMuted !== 'true') {
                     video.muted = false;
-                    video.volume = 0.5;
+                    video.volume = window.MediaState?.getVolume() || 0.5;
                 }
             }).catch(error => {
                 console.warn("🎬 Lightbox: Autoplay blocked:", error);

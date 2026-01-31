@@ -408,11 +408,14 @@ function triggerShotgunPulse(media) {
     }
 
     if (media.tagName === 'VIDEO') {
-      media.play().catch(() => {
+      media.play().then(() => {
+        if (window.MediaState) window.MediaState.reportMediaPlay();
+      }).catch(() => {
         media.muted = true;
         media.play().catch(() => { });
       });
     } else if (media.contentWindow) {
+      if (window.MediaState) window.MediaState.reportMediaPlay();
       media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*');
       media.contentWindow.postMessage(JSON.stringify({ method: 'play' }), '*');
       media.contentWindow.postMessage('play', '*');
@@ -636,7 +639,7 @@ function getUniversalVideoEmbedUrl(sourceUrl) {
         videoId = sourceUrl.match(/shorts\/([^?]+)/)?.[1];
       }
       if (videoId) {
-        return `https://www.youtube.com/embed/${videoId}`;
+        return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=1&mute=1&rel=0`;
       }
     }
 

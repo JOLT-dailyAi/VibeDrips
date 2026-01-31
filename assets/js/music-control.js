@@ -327,6 +327,20 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
 
+        // 🔇 AUTO-PAUSE: Stop background music when foreground media (Reels, Lightbox) starts
+        window.addEventListener('vibedrips-media-play', () => {
+            if (!audio.paused) {
+                audio.pause();
+                const toggle = document.getElementById('music-toggle');
+                if (toggle) {
+                    toggle.innerHTML = '▶️';
+                    toggle.title = 'Play music';
+                }
+                updateCenterBadge();
+                console.log('🔇 Background music auto-paused for foreground media');
+            }
+        });
+
         musicWrapper.addEventListener('mouseenter', function () {
             showVolumePanel();
         });
