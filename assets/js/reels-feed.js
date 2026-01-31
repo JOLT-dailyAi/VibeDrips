@@ -128,9 +128,11 @@ function _initReelsObserverInternal() {
   });
 
   window.addEventListener('vibedrips-media-unmute', () => {
-    // 🛡️ FOCUS GUARD: Only wake up if Lightbox or Product Modal isn't covering us
+    // 🛡️ FOCUS GUARD: Only wake up if Lightbox or Product Modal isn't covering us (Mobile Only)
+    if (window.Device && !window.Device.isMobile()) return;
+
     const isLightboxActive = window.MediaLightbox && window.MediaLightbox.activeInstance && window.MediaLightbox.activeInstance.isOpen;
-    const isProductModalActive = document.querySelector('.simple-modal');
+    const isProductModalActive = document.querySelector('.simple-modal:not(.hidden)');
     const isMediaOverlayActive = window.mediaOverlay && window.mediaOverlay.container && window.mediaOverlay.container.classList.contains('active');
 
     if (isLightboxActive || isProductModalActive || isMediaOverlayActive) return;
@@ -378,12 +380,14 @@ function triggerShotgunPulse(media) {
   if (!media) return;
 
   // 🛡️ CONTEXT GUARD: Never pulse if backgrounded by a higher-priority modal or overlay
-  const isProductModalActive = document.querySelector('.simple-modal');
+  const isProductModalActive = document.querySelector('.simple-modal:not(.hidden)');
   const isMediaOverlayActive = window.mediaOverlay && window.mediaOverlay.container && window.mediaOverlay.container.classList.contains('active');
 
-  if (isProductModalActive || isMediaOverlayActive) {
-    console.log('🛡️ Reels Feed: Shotgun Pulse blocked - backgrounded by Modal/Overlay');
-    return;
+  if (window.Device && window.Device.isMobile()) {
+    if (isProductModalActive || isMediaOverlayActive) {
+      console.log('🛡️ Reels Feed: Shotgun Pulse blocked - backgrounded by Modal/Overlay');
+      return;
+    }
   }
 
   // Clear previous pulses for THIS media
