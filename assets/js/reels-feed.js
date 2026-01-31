@@ -128,9 +128,12 @@ function _initReelsObserverInternal() {
   });
 
   window.addEventListener('vibedrips-media-unmute', () => {
-    // 🛡️ FOCUS GUARD: Only wake up if Lightbox isn't covering us
+    // 🛡️ FOCUS GUARD: Only wake up if Lightbox or Product Modal isn't covering us
     const isLightboxActive = window.MediaLightbox && window.MediaLightbox.activeInstance && window.MediaLightbox.activeInstance.isOpen;
-    if (isLightboxActive) return;
+    const isProductModalActive = document.querySelector('.simple-modal');
+    const isMediaOverlayActive = window.mediaOverlay && window.mediaOverlay.container && window.mediaOverlay.container.classList.contains('active');
+
+    if (isLightboxActive || isProductModalActive || isMediaOverlayActive) return;
 
     const activeSection = REELS_SECTIONS_CACHE[lastActiveIdx];
     if (activeSection) {
@@ -373,6 +376,15 @@ function killMedia(container) {
 
 function triggerShotgunPulse(media) {
   if (!media) return;
+
+  // 🛡️ CONTEXT GUARD: Never pulse if backgrounded by a higher-priority modal or overlay
+  const isProductModalActive = document.querySelector('.simple-modal');
+  const isMediaOverlayActive = window.mediaOverlay && window.mediaOverlay.container && window.mediaOverlay.container.classList.contains('active');
+
+  if (isProductModalActive || isMediaOverlayActive) {
+    console.log('🛡️ Reels Feed: Shotgun Pulse blocked - backgrounded by Modal/Overlay');
+    return;
+  }
 
   // Clear previous pulses for THIS media
   if (activeShotgunPulses.has(media)) {

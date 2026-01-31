@@ -38,7 +38,7 @@ class MediaOverlay {
             // 🔇 HANDOVER STOP: Pause if another foreground media starts
             window.addEventListener('vibedrips-media-play', (e) => {
                 const senderId = e.detail?.senderId;
-                if (senderId && senderId !== 'reels-modal') {
+                if (senderId && senderId !== 'reels-modal' && senderId !== 'reels-feed') {
                     if (this.container.classList.contains('active')) {
                         console.log('🔇 Reels Modal: Pausing for handover to', senderId);
                         this.togglePlayback(false);
