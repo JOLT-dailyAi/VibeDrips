@@ -149,3 +149,16 @@ To encourage unmuting without annoying the user, we use a "Smart Cycling" pill.
 - **Visibility**: Uses **VibeDrips Red (#E53E3E)** for the speaker icon to ensure it "stands out" as a clear call-to-action against high-motion video backgrounds.
 
 ---
+
+## 12. Visual Context Guards (Visibility-Aware Selectors)
+
+To prevent hidden DOM elements from interfering with active media logic, the system relies on highly specific "Activity Selectors."
+
+### The Rule: "Not Hidden"
+- **Pattern**: Never use a bare class selector (e.g., `.simple-modal`) to detect if a component is "Active."
+- **Standard**: Always use visibility-aware pseudo-classes: `.simple-modal:not(.hidden)`.
+
+### Justification: "Base Template Pollution"
+The VibeDrips `index.html` contains several hidden static modal roots (`#static-modal`) used for initialization. A generic selector mistakenly identifies these as "True" even when they are hidden, causing background scripts (like the Reels Feed) to think the user is in a modal when they are actually on the home page. This leads to severe "Backgrounding" regressions where media pulses are permanently blocked.
+
+---

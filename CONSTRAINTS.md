@@ -93,6 +93,15 @@ Mobile landscape toggles (`.reels-toggle`, `.globe-toggle`) must maintain an **a
 - **Z-Index Lock**: MUST be pinned at `z-index: 11000`.
 - **Icon Requirement**: MUST use the red speaker SVG (VibeDrips Red: `#E53E3E`) to ensure accessibility and visibility across heavy background motion.
 
+### 8. Context Guard Selectors (The "Visibility" Rule)
+- **Constraint**: Detection logic for foreground components MUST use visibility-aware CSS selectors.
+- **Standard**: `document.querySelector('.simple-modal:not(.hidden)')` is the required pattern. 
+- **Danger**: Generic selectors like `.simple-modal` are FORBIDDEN for focus detection as they match hidden static roots in `index.html`, leading to permanent autoplay blocks (The "Desktop Regression").
+
+### 9. Asymmetric Platform Guards
+- **Constraint**: Major media "Focus Guards" (intended to solve mobile audio hijacking) MUST be restricted via `Device.isMobile()` if they negatively impact desktop autoplay.
+- **Why**: Desktop browsers do not suffer from the same aggressive background-audio-stealing bugs as iOS/Android; imposing mobile-strict focus rules on desktop constitutes a regression.
+
 ---
 
 ## 🏗️ Known Architectural Gaps (Waitlist)

@@ -110,6 +110,13 @@ To prevent audio chaos, the project implements a global handover system:
 - **Automatic Pause**: When a component detects a `vibedrips-media-play` event from a *different* `senderId`, it immediately pauses its own media. This ensures that only one primary media source plays audio at any time.
 - **Background Music**: Background music (Music Control) listens to all play events and pauses automatically, but remains as the fallback when all foreground media stops.
 
+### 4. Asymmetric Media Strategy (Mobile-First Focus)
+
+To balance performance on restricted mobile browsers with high-speed autoplay on desktop, the project implements platform-aware context guarding.
+- **Mobile Logic**: Background components (like `ReelsFeed`) implement strict **Focus Guards**. They actively scan for active foreground components (Media Overlay, Lightbox) before unmuting or pulsing media. This prevents "Foreground Displacement," where background reels hijack the audio channel from the user's active view.
+- **Desktop Logic**: Guards are bypassed (`!Device.isMobile()`) to allow full autoplay capabilities. Desktop browsers have less restrictive audio-focus policies and higher processing budgets, making restrictive guards unnecessary and obstructive.
+- **Context Guarding**: Background services must check both visibility and activity (e.g., `isMediaOverlayActive` and `isProductModalActive`) before executing high-priority media pulses.
+
 ---
 
 ## 💎 Known Architectural Gaps (Waitlist)
