@@ -88,20 +88,20 @@ const MediaState = {
      * Set the preferred volume level
      * @param {number} level - 0.0 to 1.0
      * @param {boolean} silent - If true, don't dispatch event (prevents loops)
+     * @param {boolean} isManual - If true, this is a human interaction (bypass police)
      */
-    setVolume(level, silent = false) {
-        const vol = Math.max(0, Math.min(1, level));
+    setVolume(level, silent = false, isManual = false) {
+        let vol = Math.max(0, Math.min(1, level));
 
-        // 🛡️ FEEDBACK SILENCER: Reverts to 0.2 (20%) are almost always browser-birth artifacts
-        // If we just locked the volume recently, ignore any "reset" to 0.2
-        const now = Date.now();
-        if (vol === 0.2 && _cachedVolume !== 0.2 && (now - _lastLockTime < 2000)) {
-            console.warn('🔊 MediaState: Feedback Silencer blocked a suspicious revert to 0.2');
-            return;
+        // 👮 STATE POLICE: Reverts to 0.2 (20%) are usually browser artifacts
+        // Only block if it's NOT a manual user interaction
+        if (!isManual && _cachedVolume !== null && _cachedVolume !== 0.2 && vol === 0.2) {
+            console.warn(`守 MediaState: Blocked suspicious birth-revert to 0.2. Restoring ${_cachedVolume}`);
+            vol = _cachedVolume;
         }
 
         // Only trigger if value actually changed
-        if (vol === _cachedVolume) return;
+        if (vol === _cachedVolume && _cachedVolume !== null) return;
 
         _cachedVolume = vol;
         localStorage.setItem(VOLUME_STORAGE_KEY, vol.toString());

@@ -200,8 +200,12 @@ function activateMedia(container, shouldPlay) {
     if (media) {
       media.dataset.loaded = 'true';
 
-      // 🔊 SYNCHRONOUS INITIALIZATION: Lock volume BEFORE browser/API can report defaults
-      if (window.MediaState) {
+      const media = container.querySelector('video, iframe');
+      const birthVol = container.dataset.birthVolume || (window.MediaState ? window.MediaState.getVolume() : 0.2);
+
+      if (media && window.MediaState) {
+        // Sync the newly born media with its container's current target
+        media.dataset.birthVolume = birthVol;
         window.MediaState.lockVolume(media);
       }
 
@@ -426,11 +430,17 @@ function triggerShotgunPulse(media) {
   activeShotgunPulses.set(media, interval);
 }
 
-// 🔊 GLOBAL VOLUME SYNC: Update all active reels if volume changes elsewhere
+// 🔊 GLOBAL VOLUME SYNC: Update all containers and active media
 window.addEventListener('vibedrips-media-volume', (e) => {
   if (!window.MediaState) return;
-  document.querySelectorAll('.reels-modal video, .reel-section video, .reels-modal iframe, .reel-section iframe').forEach(media => {
-    if (media.dataset.userMuted !== 'true') {
+  const vol = e.detail.volume;
+
+  // 🚪 BROADCAST TO ALL APARTMENT DOORS (Containers)
+  // This ensures that "Killed" reels hear the change and apply it when they are reborn.
+  REELS_SECTIONS_CACHE.forEach(section => {
+    section.dataset.birthVolume = vol;
+    const media = section.querySelector('video, iframe');
+    if (media && media.dataset.userMuted !== 'true') {
       window.MediaState.lockVolume(media);
     }
   });

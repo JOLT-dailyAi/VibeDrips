@@ -283,7 +283,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.innerHTML = audio.volume < 0.5 ? '🔉' : '🔊';
 
                 // Sync to global state if unmuting background music
-                if (window.MediaState) window.MediaState.setVolume(audio.volume);
+                if (window.MediaState) window.MediaState.setVolume(audio.volume, false, true);
             }
             showVolumePanel();
         });
@@ -293,8 +293,8 @@ document.addEventListener('DOMContentLoaded', function () {
             const vol = parseFloat(this.value);
             audio.volume = vol;
 
-            // 🔊 GLOBAL SYNC: Update MediaState while dragging
-            if (window.MediaState) window.MediaState.setVolume(vol);
+            // 🔊 GLOBAL SYNC: Update MediaState while dragging (Passed as Manual)
+            if (window.MediaState) window.MediaState.setVolume(vol, false, true);
 
             if (vol == 0) {
                 btn.innerHTML = '🔇';

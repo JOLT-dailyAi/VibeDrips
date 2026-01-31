@@ -1152,8 +1152,18 @@ class MediaLightbox {
             if (!video.dataset.intentBound) {
                 video.dataset.intentBound = 'true';
                 video.addEventListener('volumechange', () => {
-                    if (video.muted) video.dataset.userMuted = 'true';
-                    else video.dataset.userMuted = 'false';
+                    // 🛡️ SYNC GUARD: Ignore volume changes triggered by our own script
+                    if (video.dataset.scriptTriggeredVolume === 'true') return;
+
+                    if (video.muted) {
+                        video.dataset.userMuted = 'true';
+                    } else {
+                        video.dataset.userMuted = 'false';
+                        if (video.volume > 0) {
+                            // 👮 NO MANUAL FLAG: Let MediaState police this change
+                            if (window.MediaState) window.MediaState.setVolume(video.volume, false, false);
+                        }
+                    }
                 });
                 video.addEventListener('pause', () => {
                     video.dataset.userPaused = 'true';

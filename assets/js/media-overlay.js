@@ -471,7 +471,8 @@ class MediaOverlay {
                         if (video.dataset.scriptTriggeredVolume === 'true') return;
 
                         if (!video.muted && video.volume > 0) {
-                            if (window.MediaState) window.MediaState.setVolume(video.volume);
+                            // 👮 NO MANUAL FLAG: Let MediaState police this change
+                            if (window.MediaState) window.MediaState.setVolume(video.volume, false, false);
                             video.dataset.userMuted = 'false';
                         }
                         if (video.muted) video.dataset.userMuted = 'true';
