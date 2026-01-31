@@ -439,10 +439,14 @@ function getMediaHTML(type, url, isActive) {
   const embedUrl = getUniversalVideoEmbedUrlForReels(url, isActive);
 
   if (type === 'video') {
-    // 🛡️ BROWSER STABILITY: Always include 'muted' in HTML string to guarantee autoplay.
-    // We flip to unmuted in JS (triggerShotgunPulse) if trust is established.
-    const autoplayAttr = isActive ? 'autoplay muted' : '';
-    return `<video controls playsinline ${autoplayAttr} preload="auto" src="${url}" style="width:100%;height:100%;object-fit:cover;"></video>`;
+    // 🛡️ ASYMMETRIC MUTE: Use platform-aware state
+    const shouldStartMuted = window.MediaState?.shouldStartMuted();
+    const autoplayAttr = isActive ? `autoplay ${shouldStartMuted ? 'muted' : ''}` : '';
+
+    // ✅ NATIVE RESET: Ensure new elements start with clean intent
+    return `<video controls playsinline ${autoplayAttr} preload="auto" src="${url}" 
+              data-user-paused="false" data-user-muted="false"
+              style="width:100%;height:100%;object-fit:cover;"></video>`;
   } else {
     return `<iframe src="${embedUrl}" frameborder="0" scrolling="no" allowtransparency="true" allowfullscreen="true" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
   }

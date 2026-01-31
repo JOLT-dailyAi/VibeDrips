@@ -288,10 +288,13 @@ class MediaOverlay {
 
         let player = '';
         if (url.match(/\.(mp4|webm|mov|avi)$/i)) {
-            // 🛡️ BROWSER STABILITY: Always include 'muted' in HTML string to guarantee autoplay success.
-            // We flip to unmuted in JS immediately after if trust is established.
-            const autoplayAttr = isAutoplay ? 'autoplay muted' : '';
-            player = `<video controls playsinline ${autoplayAttr} class="main-video-player"><source src="${url}" type="video/mp4"></video>`;
+            // 🛡️ ASYMMETRIC MUTE: Use platform-aware state
+            const shouldStartMuted = window.MediaState?.shouldStartMuted();
+            const autoplayAttr = isAutoplay ? `autoplay ${shouldStartMuted ? 'muted' : ''}` : '';
+            player = `<video controls playsinline ${autoplayAttr} class="main-video-player" 
+                             data-user-paused="false" data-user-muted="false">
+                        <source src="${url}" type="video/mp4">
+                      </video>`;
         } else {
             player = `<iframe src="${embedUrl}" class="main-iframe-player" scrolling="no" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"></iframe>`;
         }

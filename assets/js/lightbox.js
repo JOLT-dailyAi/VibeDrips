@@ -496,13 +496,13 @@ class MediaLightbox {
 
     getMediaHTML(type, url, isActive = false) {
         if (type === 'video') {
-            // 🛡️ BROWSER STABILITY: Always include 'muted' in HTML string to guarantee autoplay success.
-            // We flip to unmuted in JS immediately after if trust is established.
-            const autoplayAttr = isActive ? 'autoplay muted' : '';
+            // 🛡️ ASYMMETRIC MUTE: Use platform-aware state
+            const shouldStartMuted = window.MediaState?.shouldStartMuted();
+            const autoplayAttr = isActive ? `autoplay ${shouldStartMuted ? 'muted' : ''}` : '';
 
             // ✅ NATIVE RESET: Ensure new elements start with clean intent
-            const videoHTML = `<video controls playsinline ${autoplayAttr} src="${url}" class="lightbox-video" data-user-paused="false" data-user-muted="false"></video>`;
-            return videoHTML;
+            return `<video controls playsinline ${autoplayAttr} src="${url}" 
+                          class="lightbox-video" data-user-paused="false" data-user-muted="false"></video>`;
         }
         else if (['youtube', 'instagram', 'tiktok'].includes(type)) {
             const embedUrl = this.getUniversalEmbedUrl(type, url, isActive);
@@ -918,15 +918,14 @@ class MediaLightbox {
     refreshPlayer(type, container, url, attributes = {}) {
         if (type === 'iframe') {
             const attrStr = Object.entries(attributes).map(([k, v]) => `${k}="${v}"`).join(' ');
-            // 🛡️ BROWSER STABILITY: Always include 'autoplay' and 'muted' in HTML string for iframes to guarantee autoplay success.
-            // We flip to unmuted in JS immediately after if trust is established.
             container.innerHTML = `<iframe class="lightbox-iframe" frameborder="0" allowfullscreen allow="autoplay; encrypted-media" src="${url}" ${attrStr} style="display: block;"></iframe>`;
             return container.querySelector('iframe');
         } else if (type === 'video') {
             const attrStr = Object.entries(attributes).map(([k, v]) => `${k}="${v}"`).join(' ');
-            // 🛡️ BROWSER STABILITY: Always include 'autoplay' and 'muted' in HTML string for videos to guarantee autoplay success.
-            // We flip to unmuted in JS immediately after if trust is established.
-            container.innerHTML = `<video class="lightbox-video" controls autoplay muted playsinline src="${url}" ${attrStr} style="display: block;"></video>`;
+            // 🛡️ ASYMMETRIC MUTE: Initial attribute based on platform trust
+            const shouldStartMuted = window.MediaState?.shouldStartMuted();
+            const muteAttr = shouldStartMuted ? 'muted' : '';
+            container.innerHTML = `<video class="lightbox-video" controls autoplay ${muteAttr} playsinline src="${url}" ${attrStr} style="display: block;"></video>`;
             return container.querySelector('video');
         }
         return null;
