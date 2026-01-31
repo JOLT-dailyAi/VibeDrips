@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 🔊
             </button>
             <input type="range" id="volume-slider" class="volume-slider" 
-                   min="0" max="1" step="0.01" value="${window.MediaState?.getVolume() || 0.2}">
+                   min="0" max="1" step="0.01" value="${window.MediaState?.getVolume() || window.MediaState?.DEFAULT_VOLUME || 0.2}">
         </div>
     `;
 
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const volumePanel = document.querySelector('.volume-panel');
 
-    audio.volume = window.MediaState?.getVolume() || 0.5;
+    audio.volume = window.MediaState?.getVolume() || window.MediaState?.DEFAULT_VOLUME || 0.2;
 
     // Update center badge based on music state
     function updateCenterBadge() {

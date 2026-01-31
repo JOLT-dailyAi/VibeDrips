@@ -2,12 +2,14 @@
 
 const UNMUTE_STORAGE_KEY = 'vibedrips-unmute-intent-active';
 const VOLUME_STORAGE_KEY = 'vibedrips-volume-level';
-const DEFAULT_VOLUME = 0.2;
-
-// 🔊 GLOBAL CACHE: Single source of truth to prevent loop overhead
+// 🔊 GLOBAL CACHE: Single source of truth. 
 let _cachedVolume = null;
 
 const MediaState = {
+    // 🎯 DYNAMIC DEFAULT: Replaced static 0.2 with a logic-driven getter
+    get DEFAULT_VOLUME() {
+        return _cachedVolume !== null ? _cachedVolume : 0.2;
+    },
     /**
      * Determines if the media should start muted based on OS and user intent.
      * @returns {boolean}
@@ -63,20 +65,22 @@ const MediaState = {
 
     /**
      * Get the preferred volume level
+     * 🔊 DYNAMIC INHERITANCE: The "Default" is now the "Last Known Setting".
      */
     getVolume() {
+        // 1. High-Priority: Session Cache
         if (_cachedVolume !== null) return _cachedVolume;
 
+        // 2. Medium-Priority: Disk Memory
         const stored = localStorage.getItem(VOLUME_STORAGE_KEY);
         if (stored !== null) {
             const parsed = parseFloat(stored);
-            _cachedVolume = isNaN(parsed) ? DEFAULT_VOLUME : parsed;
+            _cachedVolume = isNaN(parsed) ? this.DEFAULT_VOLUME : parsed;
             return _cachedVolume;
         }
 
-        _cachedVolume = DEFAULT_VOLUME;
-        console.log(`🔊 MediaState: Using default volume ${DEFAULT_VOLUME}`);
-        return _cachedVolume;
+        // 3. Fallback: Factory Default (Only for brand new users)
+        return this.DEFAULT_VOLUME;
     },
 
     /**
