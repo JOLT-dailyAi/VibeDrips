@@ -200,10 +200,9 @@ function activateMedia(container, shouldPlay) {
     if (media) {
       media.dataset.loaded = 'true';
 
-      const media = container.querySelector('video, iframe');
       const birthVol = container.dataset.birthVolume || (window.MediaState ? window.MediaState.getVolume() : 0.2);
 
-      if (media && window.MediaState) {
+      if (window.MediaState) {
         // Sync the newly born media with its container's current target
         media.dataset.birthVolume = birthVol;
         window.MediaState.lockVolume(media);
@@ -394,6 +393,8 @@ function triggerShotgunPulse(media) {
       media.play().then(() => {
         if (window.MediaState) window.MediaState.reportMediaPlay();
       }).catch(() => {
+        // 💊 PILL RESCUE: If unmuted play fails, restore the pill so user can fix it
+        if (pill) pill.classList.add('active');
         media.muted = true;
         media.play().catch(() => { });
       });

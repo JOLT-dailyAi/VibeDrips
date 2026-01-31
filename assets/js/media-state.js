@@ -92,25 +92,27 @@ const MediaState = {
      */
     setVolume(level, silent = false, isManual = false) {
         let vol = Math.max(0, Math.min(1, level));
+        let forceSync = false;
 
         // 👮 STATE POLICE: Reverts to 0.2 (20%) are usually browser artifacts
         // Only block if it's NOT a manual user interaction
         if (!isManual && _cachedVolume !== null && _cachedVolume !== 0.2 && vol === 0.2) {
             console.warn(`守 MediaState: Blocked suspicious birth-revert to 0.2. Restoring ${_cachedVolume}`);
             vol = _cachedVolume;
+            forceSync = true; // 📣 MANDATORY: Force align the component that tried to reset
         }
 
-        // Only trigger if value actually changed
-        if (vol === _cachedVolume && _cachedVolume !== null) return;
+        // Only trigger if value actually changed (unless we are forcing sync)
+        if (!forceSync && vol === _cachedVolume && _cachedVolume !== null) return;
 
         _cachedVolume = vol;
         localStorage.setItem(VOLUME_STORAGE_KEY, vol.toString());
-        console.log(`🔊 Global Media State: Volume updated to ${vol}`);
+        console.log(`🔊 Global Media State: Volume updated to ${vol} (Manual: ${isManual})`);
 
-        if (!silent) {
+        if (!silent || forceSync) {
             console.log(`🔊 MediaState: Dispatching volume sync event: ${vol}`);
             window.dispatchEvent(new CustomEvent('vibedrips-media-volume', {
-                detail: { volume: vol }
+                detail: { volume: vol, isManual: isManual }
             }));
         }
     },

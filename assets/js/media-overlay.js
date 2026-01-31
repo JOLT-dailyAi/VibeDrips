@@ -486,6 +486,8 @@ class MediaOverlay {
                     if (window.MediaState) window.MediaState.reportMediaPlay();
                 }).catch(err => {
                     console.warn('🎬 Modal: Transition play blocked:', err);
+                    // 💊 PILL RESCUE: If unmuted play fails, restore the pill
+                    if (this.engagementPill) this.engagementPill.classList.add('active');
                     video.muted = true;
                     video.play().catch(() => { });
                 });
