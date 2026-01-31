@@ -27,6 +27,21 @@
     -webkit-user-select: none;
 }
 
+.engagement-pill .pill-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #E53E3E;
+    /* VibeDrips Red */
+    width: 18px;
+    height: 18px;
+}
+
+.engagement-pill svg {
+    width: 100%;
+    height: 100%;
+}
+
 /* Smart Cycling Animation */
 /* Cycle: 2s Fade In, 3s Steady, 2s Fade Out, 15s Wait = 22s Total */
 .engagement-pill.smart-cycling {
