@@ -440,60 +440,48 @@ class MediaLightbox {
         this.updateDots(idx);
         this.updateNavButtons();
 
-        // 🛡️ SHIELD & PILL CONTROL: Adaptive visibility for the new strip
-        const strategy = window.Device?.getStrategy() || 'muted';
-        const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
-        const isHighTrust = (strategy === 'unmuted' || isUnmutedSession);
+        // 🛡️ SHIELD & PILLING CONTROL: Asymmetric OS Logic
+        const isIOS = window.Device?.isIOS();
+        const shouldMute = window.MediaState?.shouldStartMuted();
 
         const shield = overlay.querySelector('.lightbox-iframe-shield');
         const pill = overlay.querySelector('.engagement-pill');
 
-        if (isHighTrust) {
-            if (shield) {
-                // 📱 MOBILE SMART SHIELD: 
-                // Native videos bubble touch events, so we can hide the shield to allow native controls.
-                // Cross-origin iframes (YouTube/TikTok) BLOCK bubbling, so shield MUST stay to capture swipes.
-                const isMobile = this.isMobileOrTablet();
-                const currentUrl = this.mediaArray[this.currentIndex];
-                const isIframe = ['youtube', 'instagram', 'tiktok'].includes(this.detectMediaType(currentUrl));
-
-                if (isMobile && isIframe) {
-                    shield.style.pointerEvents = 'auto';
-                    shield.style.display = 'block';
-                } else {
-                    shield.style.pointerEvents = 'none';
-                    shield.style.display = 'none';
-                }
-            }
-            if (pill) pill.classList.remove('active');
-
-            // 🔊 AUTO-PULSE: If already unmuted, trigger pulses for the new center media
-            if (isUnmutedSession) {
-                this.triggerPulsesForCenterSlot();
-            }
-        } else {
+        // 🍎 iOS: Every swipe resets the pill and muted state
+        if (isIOS) {
             if (shield) {
                 shield.style.pointerEvents = 'auto';
                 shield.style.display = 'block';
             }
             if (pill) pill.classList.add('active');
         }
+        // 🤖 ANDROID / DESKTOP: Only show pill if intent hasn't been established
+        else {
+            if (shouldMute) {
+                if (shield) {
+                    shield.style.pointerEvents = 'auto';
+                    shield.style.display = 'block';
+                }
+                if (pill) pill.classList.add('active');
+            } else {
+                if (shield) {
+                    shield.style.pointerEvents = 'none';
+                    shield.style.display = 'none';
+                }
+                if (pill) pill.classList.remove('active');
+
+                // 🔊 AUTO-PULSE: Intent already established, trigger sound immediately
+                this.triggerPulsesForCenterSlot();
+            }
+        }
     }
 
     getMediaHTML(type, url, isActive = false) {
         if (type === 'video') {
-            // 🛡️ DEVICE STRATEGY: Check if we can start unmuted (Desktop/PWA)
-            const strategy = window.Device?.getStrategy() || 'muted';
-            const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
-
-            // - If not active slot: ALWAYS muted
-            // - If Active + Desktop/PWA: Unmuted
-            // - If Active + Mobile Browser: Muted unless site-wide unmuted
-            const shouldBeMuted = (!isActive) || (strategy === 'muted' && !isUnmutedSession);
-
-            const autoplayAttr = isActive ? 'autoplay' : '';
-            const muteAttr = shouldBeMuted ? 'muted' : '';
-            return `<video class="lightbox-video" controls ${autoplayAttr} ${muteAttr} playsinline src="${url}"></video>`;
+            // 🛡️ ASYMMETRIC MUTE: Initial attribute based on platform trust
+            const shouldStartMuted = window.MediaState?.shouldStartMuted();
+            const autoplayAttr = isActive ? `autoplay ${shouldStartMuted ? 'muted' : ''}` : '';
+            return `<video controls playsinline ${autoplayAttr} src="${url}" class="lightbox-video"></video>`;
         } else if (['youtube', 'instagram', 'tiktok'].includes(type)) {
             const embedUrl = this.getUniversalEmbedUrl(type, url, isActive);
             return `<iframe class="lightbox-iframe" frameborder="0" allowfullscreen allow="autoplay; encrypted-media" src="${embedUrl}"></iframe>`;
@@ -672,17 +660,29 @@ class MediaLightbox {
         const video = centerSlot.querySelector('video');
         const iframe = centerSlot.querySelector('iframe');
 
+        // 🛡️ GUARD: Only unmute if intent is established OR it's a pulse after manual tap
+        const shouldMute = window.MediaState?.shouldStartMuted();
+
         if (video) {
-            video.muted = false;
-            video.volume = 0.5;
+            if (!shouldMute) {
+                video.muted = false;
+                video.volume = 0.5;
+            } else {
+                video.muted = true;
+            }
             video.play().catch(() => { });
         }
 
         if (iframe) {
-            // Target the specialized loadYouTube/loadInstagram logic or direct shotgun
-            // Since iframes are already loaded, we trigger a fresh pulse burst
             const sendPulse = () => {
                 if (!this.isOpen || !iframe.contentWindow) return;
+
+                // If we should be muted (iOS or 1st Android), only send Play command, keep muted
+                if (shouldMute) {
+                    iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*');
+                    return;
+                }
+
                 iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
                 iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [20] }), '*');
                 iframe.contentWindow.postMessage('unmute', '*');
@@ -857,12 +857,9 @@ class MediaLightbox {
             return container.querySelector('iframe');
         } else if (type === 'video') {
             const attrStr = Object.entries(attributes).map(([k, v]) => `${k}="${v}"`).join(' ');
-            // 🛡️ DEVICE STRATEGY: Check if we can start unmuted (Desktop/PWA)
-            const strategy = window.Device?.getStrategy() || 'muted';
-            const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
-            const shouldBeMuted = (strategy === 'muted' && !isUnmutedSession);
-
-            const muteAttr = shouldBeMuted ? 'muted' : '';
+            // 🛡️ ASYMMETRIC MUTE: Initial attribute based on platform trust
+            const shouldStartMuted = window.MediaState?.shouldStartMuted();
+            const muteAttr = shouldStartMuted ? 'muted' : '';
             container.innerHTML = `<video class="lightbox-video" controls autoplay ${muteAttr} playsinline src="${url}" ${attrStr} style="display: block;"></video>`;
             return container.querySelector('video');
         }

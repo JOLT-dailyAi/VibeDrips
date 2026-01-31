@@ -115,7 +115,9 @@ function _initReelsObserverInternal() {
     const activeSection = REELS_SECTIONS_CACHE[lastActiveIdx];
     if (activeSection) {
       const media = activeSection.querySelector('video, iframe');
+      const pill = activeSection.querySelector('.engagement-pill');
       if (media) triggerShotgunPulse(media);
+      if (pill) pill.classList.remove('active');
     }
   });
 
@@ -196,9 +198,14 @@ function activateMedia(container, shouldPlay) {
       const shield = document.createElement('div');
       shield.className = 'reel-video-shield';
 
-      // 🛡️ AUTO-RELEASE: If session is already unmuted, drop the barrier immediately
-      const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
-      if (isUnmutedSession) {
+      // 🛡️ ASYMMETRIC SHIELD: iOS always shows shield; Android/Desktop only if muted
+      const isIOS = window.Device?.isIOS();
+      const shouldMute = window.MediaState?.shouldStartMuted();
+
+      if (isIOS || shouldMute) {
+        shield.style.pointerEvents = 'auto';
+        shield.style.display = 'block';
+      } else {
         shield.style.pointerEvents = 'none';
         shield.classList.add('released');
         shield.style.display = 'none';
@@ -339,20 +346,19 @@ function triggerShotgunPulse(media) {
       return;
     }
 
-    const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
-    const strategy = window.Device?.getStrategy() || 'muted';
-    const isHighTrust = (strategy === 'unmuted' || isUnmutedSession);
+    const isIOS = window.Device?.isIOS();
+    const shouldMute = window.MediaState?.shouldStartMuted();
 
-    // Phase 1: Pill control
+    // Phase 1: Pill control (iOS always shows it on EVERY reel; Android only if muted)
     const pill = media.parentElement?.querySelector('.engagement-pill');
     if (pill) {
-      if (isHighTrust) pill.classList.remove('active');
-      else pill.classList.add('active');
+      if (isIOS || shouldMute) pill.classList.add('active');
+      else pill.classList.remove('active');
     }
 
     if (media.tagName === 'VIDEO') {
-      // 🛡️ THE BRIDGE: Always set muted=true BEFORE calling play unless high trust
-      media.muted = !isHighTrust;
+      // 🛡️ ASYMMETRIC MUTE: Use platform-aware state
+      media.muted = shouldMute;
 
       // ✅ NATIVE BRIDGE: Flip sound as soon as the video actually starts moving
       if (!media.dataset.bridgeSet) {
@@ -447,9 +453,8 @@ function getUniversalVideoEmbedUrlForReels(sourceUrl, isActive) {
     else if (url.includes('youtube.com/watch')) videoId = new URL(sourceUrl).searchParams.get('v');
     else if (url.includes('youtube.com/shorts/')) videoId = sourceUrl.match(/shorts\/([^?]+)/)?.[1];
 
-    // 🛡️ MOBILE PROTOCOL: Always start MUTED (mute=1) to guarantee autoplay permission.
-    // UNLESS: The session is already unmuted globally.
-    const initialMute = (window.MediaState && window.MediaState.isUnmuted()) ? '0' : '1';
+    // 🛡️ ASYMMETRIC MUTE: Initial attribute based on platform trust
+    const initialMute = window.MediaState?.shouldStartMuted() ? '1' : '0';
 
     // 🔥 FORCE ACTIVE: If we are active, we MUST have autoplay=1
     const forcedAutoplay = isActive ? '1' : '0';

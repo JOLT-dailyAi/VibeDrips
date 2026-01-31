@@ -284,22 +284,21 @@ class MediaOverlay {
 
         let player = '';
         if (url.match(/\.(mp4|webm|mov|avi)$/i)) {
-            // 🛡️ DEVICE STRATEGY: Check if we can start unmuted (Desktop/PWA)
-            const strategy = window.Device?.getStrategy() || 'muted';
-            const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
-            const shouldBeMuted = (strategy === 'muted' && !isUnmutedSession);
-
-            const autoplayAttr = isAutoplay ? `autoplay ${shouldBeMuted ? 'muted' : ''}` : '';
+            // 🛡️ ASYMMETRIC MUTE: Initial attribute based on platform trust
+            const shouldStartMuted = window.MediaState?.shouldStartMuted();
+            const autoplayAttr = isAutoplay ? `autoplay ${shouldStartMuted ? 'muted' : ''}` : '';
             player = `<video controls playsinline ${autoplayAttr} class="main-video-player"><source src="${url}" type="video/mp4"></video>`;
         } else {
             player = `<iframe src="${embedUrl}" class="main-iframe-player" scrolling="no" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"></iframe>`;
         }
 
-        // 🛡️ AUTO-RELEASE: No shield barrier if sound is already unlocked
-        const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
-        const shieldStyle = isUnmutedSession
-            ? 'pointer-events:none; display:none;'
-            : 'pointer-events:auto; display:block;';
+        // 🛡️ ASYMMETRIC SHIELD: iOS always shows shield; Android/Desktop only if muted
+        const isIOS = window.Device?.isIOS();
+        const shouldStartMuted = window.MediaState?.shouldStartMuted();
+
+        const shieldStyle = (isIOS || shouldStartMuted)
+            ? 'pointer-events:auto; display:block;'
+            : 'pointer-events:none; display:none;';
 
         const shield = `<div class="media-shield" 
                              style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:10;background:transparent;cursor:pointer; ${shieldStyle}" 
@@ -433,9 +432,8 @@ class MediaOverlay {
 
         if (video) {
             if (play) {
-                // 🛡️ THE BRIDGE: Always play MUTED first unless we have explicit permission
-                const strategy = window.Device?.getStrategy() || 'muted';
-                video.muted = (strategy === 'muted' && !window.MediaState?.isUnmuted());
+                // 🛡️ ASYMMETRIC MUTE: Use platform-aware state
+                video.muted = window.MediaState?.shouldStartMuted();
 
                 // ✅ NATIVE BRIDGE: Flip sound instantly on motion
                 if (!video.dataset.bridgeSet) {
@@ -462,19 +460,18 @@ class MediaOverlay {
             const sendAudioCommands = () => {
                 if (!play || !this.container.classList.contains('active')) return;
 
-                // 🛡️ THE PULSE GUARD: Baseline hardening
-                const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
-                const strategy = window.Device?.getStrategy() || 'muted';
-                const isHighTrust = (strategy === 'unmuted' || isUnmutedSession);
+                // 🛡️ PULSE GUARD: Asymmetric Pulse Logic
+                const isIOS = window.Device?.isIOS();
+                const shouldMute = window.MediaState?.shouldStartMuted();
 
-                // Phase 2: Show engagement pill if muted
-                if (play && !isHighTrust && this.engagementPill) {
+                // Phase 2: Pill control (iOS always shows it; Android only if muted)
+                if (play && (isIOS || shouldMute) && this.engagementPill) {
                     this.engagementPill.classList.add('active');
                 } else if (this.engagementPill) {
                     this.engagementPill.classList.remove('active');
                 }
 
-                if (isHighTrust) {
+                if (!shouldMute) {
                     setTimeout(() => {
                         // 1. YouTube specialized (API mode)
                         iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
@@ -589,9 +586,8 @@ class MediaOverlay {
                 } else if (url.includes('youtube.com/shorts/')) {
                     videoId = sourceUrl.match(/shorts\/([^?]+)/)?.[1];
                 }
-                // 🛡️ MOBILE PROTOCOL: Always start MUTED (mute=1) to guarantee autoplay permission.
-                // UNLESS: The session is already unmuted globally.
-                const initialMute = (window.MediaState && window.MediaState.isUnmuted()) ? '0' : '1';
+                // 🛡️ MOBILE PROTOCOL: Always start MUTED on initial load.
+                const initialMute = window.MediaState?.shouldStartMuted() ? '1' : '0';
 
                 if (videoId) return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${autoplayVal}&mute=${initialMute}&rel=0`;
             }

@@ -1,43 +1,69 @@
-// assets/js/media-state.js - Global Media State Manager (Unmuting persistence)
+// assets/js/media-state.js - Global Media State Manager (Asymmetric Strategy)
 
-const UNMUTE_STORAGE_KEY = 'vibedrips-unmute-session-active';
+const UNMUTE_STORAGE_KEY = 'vibedrips-unmute-intent-active';
 
 const MediaState = {
     /**
-     * Check if the user has previously unmuted in this session (or permanently)
+     * Determines if the media should start muted based on OS and user intent.
+     * @returns {boolean}
+     */
+    shouldStartMuted() {
+        const strategy = window.Device?.getStrategy() || 'muted';
+
+        // 🍎 iOS: Strictly muted-first for EVERY video.
+        if (strategy === 'ios') return true;
+
+        // 🤖 Android/Desktop: Persistent trust after the first tap.
+        const hasUnmutedIntent = localStorage.getItem(UNMUTE_STORAGE_KEY) === 'true';
+        return !hasUnmutedIntent;
+    },
+
+    /**
+     * Check if the session is currently considered unmuted (for UI pulsing/auto-unmute).
      * @returns {boolean}
      */
     isUnmuted() {
+        const strategy = window.Device?.getStrategy() || 'muted';
+        if (strategy === 'ios') return false; // iOS never pre-unmutes; requires fresh per-video tap
         return localStorage.getItem(UNMUTE_STORAGE_KEY) === 'true';
     },
 
     /**
-     * Set the global unmuted state to TRUE
-     * Called after the first successful user interaction (Shield Tap)
+     * Register a user's intent to unmute.
+     * On Android/Desktop, this persists across videos and sessions.
+     * On iOS, this is strictly for analytics/internal state but doesn't override muted-first rule.
      */
     setUnmuted() {
-        localStorage.setItem(UNMUTE_STORAGE_KEY, 'true');
-        console.log('🔊 Global Media State: Session Unmuted');
+        const isIOS = window.Device?.isIOS();
 
-        // Phase 3: Site-wide release
-        document.querySelectorAll('.media-shield, .reel-video-shield, .lightbox-iframe-shield').forEach(s => {
-            s.style.pointerEvents = 'none';
-            s.style.display = 'none';
+        if (!isIOS) {
+            localStorage.setItem(UNMUTE_STORAGE_KEY, 'true');
+            console.log('🔊 Global Media State: Persistent Unmute Enabled');
+        } else {
+            console.log('🔊 Global Media State: iOS Feedback Pulse');
+        }
+
+        // Phase 3: Site-wide release (Notify components)
+        window.dispatchEvent(new CustomEvent('vibedrips-media-unmute', {
+            detail: { isIOS: isIOS }
+        }));
+
+        // Universal UI cleanup for the ACTIVE element
+        document.querySelectorAll('.engagement-pill.active').forEach(p => {
+            // On iOS, we only hide the pill for the video that was actually tapped
+            // For now, we allow the pill to hide on tap, but it will reappear on next video
+            p.classList.remove('active');
         });
-        document.querySelectorAll('.engagement-pill').forEach(p => p.classList.remove('active'));
-
-        // Dispatch event for components to listen and react immediately
-        window.dispatchEvent(new CustomEvent('vibedrips-media-unmute'));
     },
 
     /**
-     * Get the preferred volume level for unmuted media
+     * Get the preferred volume level
      */
     getVolume() {
-        return 0.2; // 20% Sweet Spot
+        return 0.2;
     }
 };
 
 // Export to window
 window.MediaState = MediaState;
-console.log('🔊 Media State Manager Loaded');
+console.log('🔊 Media State Manager Loaded (Asymmetric Mode)');
