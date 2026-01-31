@@ -754,12 +754,13 @@ class MediaLightbox {
             const sendPulse = () => {
                 if (!this.isOpen || !iframe.contentWindow) return;
 
-                // If we should be muted (iOS or 1st Android), only send Play command, keep muted
-                if (shouldMute) {
-                    iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*');
-                    return;
-                }
+                iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*');
+                iframe.contentWindow.postMessage(JSON.stringify({ method: 'play' }), '*');
+                iframe.contentWindow.postMessage('play', '*');
+            };
 
+            // 🔊 ONE-SHOT INITIALIZATION: Set volume and unmute bridge BEFORE pulses start
+            if (!shouldMute) {
                 const preferredVolume = window.MediaState?.getVolume() || 0.2;
                 const youtubeVol = Math.round(preferredVolume * 100);
 
@@ -768,8 +769,7 @@ class MediaLightbox {
                 iframe.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: preferredVolume }), '*');
                 iframe.contentWindow.postMessage('unmute', '*');
                 iframe.contentWindow.postMessage(JSON.stringify({ event: 'unmute' }), '*');
-                iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*');
-            };
+            }
 
             if (this._pulseInterval) clearInterval(this._pulseInterval);
 
@@ -1029,34 +1029,36 @@ class MediaLightbox {
                 loader.style.display = 'none';
                 iframe.style.display = 'block';
 
-                // 🔊 Successive Pulse: Ensure unmuted & 20% volume
-                const sendAudioPulse = () => {
+                // 🔊 Successive Pulse: Ensure playback ONLY
+                const sendPlayPulse = () => {
                     if (!this.isOpen || !iframe.contentWindow) return;
-
-                    // 🛡️ THE PULSE GUARD: Wait for warmup (300ms), then flip sound
-                    const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
-                    const strategy = window.Device?.getStrategy() || 'muted';
-                    const isHighTrust = (strategy === 'unmuted' || isUnmutedSession);
-
-                    if (isHighTrust) {
-                        setTimeout(() => {
-                            if (!this.isOpen || !iframe.contentWindow) return;
-                            iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
-                            iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [20] }), '*');
-                            iframe.contentWindow.postMessage('unmute', '*');
-                            iframe.contentWindow.postMessage(JSON.stringify({ event: 'unmute' }), '*');
-                        }, 300);
-                    }
-
                     iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*');
                 };
 
-                sendAudioPulse();
+                // 🔊 ONE-SHOT INITIALIZATION: Set volume and unmute bridge BEFORE pulses start
+                const isUnmutedSession = window.MediaState && window.MediaState.isUnmuted();
+                const strategy = window.Device?.getStrategy() || 'muted';
+                const isHighTrust = (strategy === 'unmuted' || isUnmutedSession);
+
+                if (isHighTrust) {
+                    const preferredVolume = window.MediaState?.getVolume() || 0.2;
+                    const youtubeVol = Math.round(preferredVolume * 100);
+
+                    setTimeout(() => {
+                        if (!this.isOpen || !iframe.contentWindow) return;
+                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
+                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [youtubeVol] }), '*');
+                        iframe.contentWindow.postMessage('unmute', '*');
+                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'unmute' }), '*');
+                    }, 300);
+                }
+
+                sendPlayPulse();
                 let pulseCount = 0;
                 this._pulseInterval = setInterval(() => {
-                    sendAudioPulse();
-                    if (++pulseCount >= 10 || !this.isOpen) clearInterval(this._pulseInterval);
-                }, 400); // 🔊 Pulse Overdrive (Global Standard)
+                    sendPlayPulse();
+                    if (++pulseCount >= 4 || !this.isOpen) clearInterval(this._pulseInterval);
+                }, 400); // 🔊 Pulse Overdrive (Now Volume-Safe)
             };
 
             if (isMobile) {

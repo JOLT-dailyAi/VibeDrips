@@ -496,43 +496,49 @@ class MediaOverlay {
         }
 
         if (iframe && iframe.contentWindow) {
-            const sendAudioCommands = () => {
+            const sendPulse = () => {
                 if (!play || !this.container.classList.contains('active')) return;
 
-                // 🛡️ PULSE GUARD: Asymmetric Pulse Logic
-                const isIOS = window.Device?.isIOS();
-                const shouldMute = window.MediaState?.shouldStartMuted();
-
-                // Phase 2: Pill control (iOS always shows it; Android only if muted)
-                if (play && (isIOS || shouldMute) && this.engagementPill) {
-                    this.engagementPill.classList.add('active');
-                } else if (this.engagementPill) {
-                    this.engagementPill.classList.remove('active');
-                }
-
-                if (!shouldMute) {
-                    const preferredVolume = window.MediaState?.getVolume() || 0.2;
-                    const youtubeVol = Math.round(preferredVolume * 100);
-
-                    setTimeout(() => {
-                        // 1. YouTube specialized (API mode)
-                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
-                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [youtubeVol] }), '*');
-
-                        // 2. Vimeo specialized
-                        iframe.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: preferredVolume }), '*');
-
-                        // 3. Protocol Shotgun Fallbacks
-                        iframe.contentWindow.postMessage('unmute', '*');
-                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'unmute' }), '*');
-                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'volume', value: preferredVolume }), '*');
-                    }, 300);
-                }
-
+                // Initial Play Pulse (Hammering Technique)
+                // 1. YouTube specialized (API mode)
                 iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*');
+
+                // 2. Vimeo specialized
                 iframe.contentWindow.postMessage(JSON.stringify({ method: 'play' }), '*');
+
+                // 3. Protocol Shotgun Fallbacks
                 iframe.contentWindow.postMessage('play', '*');
+                iframe.contentWindow.postMessage(JSON.stringify({ event: 'play' }), '*');
             };
+
+            // ⚠️ PILL CONTROL: Move to One-Shot logic
+            const isIOS = window.Device?.isIOS();
+            const shouldMute = window.MediaState?.shouldStartMuted();
+            if (play && (isIOS || shouldMute) && this.engagementPill) {
+                this.engagementPill.classList.add('active');
+            } else if (this.engagementPill) {
+                this.engagementPill.classList.remove('active');
+            }
+
+            // 🔊 ONE-SHOT INITIALIZATION: Set volume and unmute bridge BEFORE pulses start
+            if (play && !shouldMute) {
+                const preferredVolume = window.MediaState?.getVolume() || 0.2;
+                const youtubeVol = Math.round(preferredVolume * 100);
+
+                setTimeout(() => {
+                    if (!iframe.contentWindow) return;
+                    // 1. YouTube specialized (API mode)
+                    iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
+                    iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [youtubeVol] }), '*');
+
+                    // 2. Vimeo specialized
+                    iframe.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: preferredVolume }), '*');
+
+                    // 3. Protocol Shotgun Fallbacks
+                    iframe.contentWindow.postMessage('unmute', '*');
+                    iframe.contentWindow.postMessage(JSON.stringify({ event: 'unmute' }), '*');
+                }, 300);
+            }
 
             if (play) {
                 // 🛡️ USER INTENT SOVEREIGNTY: Back off if user manually interacted
@@ -550,9 +556,9 @@ class MediaOverlay {
                 }
 
                 // Initial burst
-                sendAudioCommands();
+                sendPulse();
 
-                // 🔊 SUCCESSIVE PULSE: Pulse every 400ms for 4 seconds (Pulse Overdrive)
+                // 🔊 SUCCESSIVE PULSE: Pulse every 400ms for 1.6 seconds (One-Shot Safe)
                 let pulses = 0;
                 this.pulseInterval = setInterval(() => {
                     // Re-check intent inside interval
@@ -564,8 +570,8 @@ class MediaOverlay {
                         return;
                     }
 
-                    sendAudioCommands();
-                    if (++pulses >= 10) {
+                    sendPulse();
+                    if (++pulses >= 4) {
                         clearInterval(this.pulseInterval);
                         this.pulseInterval = null;
                     }

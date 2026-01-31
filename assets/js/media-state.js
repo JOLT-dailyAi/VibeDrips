@@ -103,4 +103,8 @@ const MediaState = {
 
 // Export to window
 window.MediaState = MediaState;
+
+// 🏁 IMMEDIATE INITIALIZATION: Prevent "randomness" on first load
+MediaState.getVolume();
+
 console.log('🔊 Media State Manager Loaded (Asymmetric Mode)');

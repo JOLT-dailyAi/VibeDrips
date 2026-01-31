@@ -365,14 +365,6 @@ function triggerShotgunPulse(media) {
     else pill.classList.remove('active');
   }
 
-  // 🔊 ONE-SHOT SETUP: Set volume once, separate from play pulse
-  if (media.tagName === 'VIDEO') {
-    media.dataset.scriptTriggeredVolume = 'true';
-    media.volume = preferredVolume;
-    media.muted = shouldMute;
-    setTimeout(() => media.dataset.scriptTriggeredVolume = 'false', 100);
-  }
-
   const sendPulse = () => {
     // 🛡️ USER INTENT SOVEREIGNTY: Back off if user manually interacted
     if (media.dataset.userMuted === 'true' || media.dataset.userPaused === 'true') {
@@ -384,58 +376,62 @@ function triggerShotgunPulse(media) {
     }
 
     if (media.tagName === 'VIDEO') {
-      // ✅ NATIVE BRIDGE: Flip sound as soon as the video actually starts moving
-      if (!media.dataset.bridgeSet) {
-        media.dataset.bridgeSet = 'true';
-
-        const tryUnmute = () => {
-          if (window.MediaState && window.MediaState.isUnmuted()) {
-            // Re-check intent inside event/check
-            if (media.dataset.userMuted !== 'true') {
-              media.dataset.scriptTriggeredVolume = 'true';
-              media.muted = false;
-              media.volume = window.MediaState?.getVolume() || 0.2;
-              setTimeout(() => media.dataset.scriptTriggeredVolume = 'false', 100);
-            }
-          }
-        };
-
-        media.addEventListener('playing', tryUnmute, { once: true });
-
-        // 🔄 RACE CONDITION: If already playing, trigger now
-        if (!media.paused && media.currentTime > 0) tryUnmute();
-      }
-
       media.play().catch(() => {
         media.muted = true;
         media.play().catch(() => { });
       });
     } else if (media.contentWindow) {
-      if (!shouldMute) {
-        const youtubeVol = Math.round(preferredVolume * 100);
-
-        // 🛡️ WARMUP DELAY: Reduced to 300ms for snappy parity with LIVE Slot
-        setTimeout(() => {
-          // Re-check intent before unmuting iframe
-          if (media.dataset.userMuted !== 'true' && media.dataset.userPaused !== 'true') {
-            media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
-            media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [youtubeVol] }), '*');
-            media.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: preferredVolume }), '*');
-            media.contentWindow.postMessage('unmute', '*');
-          }
-        }, 300);
-      }
-
       media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*');
       media.contentWindow.postMessage(JSON.stringify({ method: 'play' }), '*');
       media.contentWindow.postMessage('play', '*');
     }
   };
 
+  // 🔊 ONE-SHOT INITIALIZATION: Set volume and unmute bridge BEFORE pulses start
+  if (media.tagName === 'VIDEO') {
+    // ✅ NATIVE BRIDGE: Flip sound as soon as the video actually starts moving
+    if (!media.dataset.bridgeSet) {
+      media.dataset.bridgeSet = 'true';
+
+      const tryUnmute = () => {
+        if (window.MediaState && window.MediaState.isUnmuted()) {
+          // Re-check intent inside event/check
+          if (media.dataset.userMuted !== 'true') {
+            media.dataset.scriptTriggeredVolume = 'true';
+            media.muted = false;
+            media.volume = window.MediaState?.getVolume() || 0.2;
+            setTimeout(() => media.dataset.scriptTriggeredVolume = 'false', 100);
+          }
+        }
+      };
+
+      media.addEventListener('playing', tryUnmute, { once: true });
+
+      // 🔄 RACE CONDITION: If already playing, trigger now
+      if (!media.paused && media.currentTime > 0) tryUnmute();
+    }
+  } else if (media.contentWindow) {
+    if (!shouldMute) {
+      const youtubeVol = Math.round(preferredVolume * 100);
+
+      // 🛡️ WARMUP DELAY: Reduced to 300ms for snappy parity with LIVE Slot
+      setTimeout(() => {
+        if (!media.contentWindow) return;
+        // Re-check intent before unmuting iframe
+        if (media.dataset.userMuted !== 'true' && media.dataset.userPaused !== 'true') {
+          media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
+          media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [youtubeVol] }), '*');
+          media.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: preferredVolume }), '*');
+          media.contentWindow.postMessage('unmute', '*');
+        }
+      }, 300);
+    }
+  }
+
   // Initial burst
   sendPulse();
 
-  // 🔊 SUCCESSIVE PULSE: Pulse every 400ms for 4 seconds (Pulse Overdrive)
+  // 🔊 SUCCESSIVE PULSE: Pulse every 400ms for 1.6 seconds (One-Shot Safe)
   let pulses = 0;
   const interval = setInterval(() => {
     sendPulse();
