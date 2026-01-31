@@ -445,12 +445,8 @@ class MediaOverlay {
             if (play) {
                 // 🛡️ ASYMMETRIC MUTE: Use platform-aware state
                 const shouldMute = window.MediaState?.shouldStartMuted();
-                const preferredVolume = window.MediaState?.getVolume();
-                // 🔊 ONE-SHOT SETUP: Set volume once, separate from play pulse logic
-                video.dataset.scriptTriggeredVolume = 'true';
+                if (window.MediaState) window.MediaState.lockVolume(video);
                 video.muted = shouldMute;
-                video.volume = preferredVolume;
-                setTimeout(() => video.dataset.scriptTriggeredVolume = 'false', 100);
 
                 // ✅ NATIVE BRIDGE: Flip sound as soon as the video actually starts moving
                 if (!video.dataset.bridgeSet) {
@@ -459,10 +455,8 @@ class MediaOverlay {
                     const tryUnmute = () => {
                         if (window.MediaState && window.MediaState.isUnmuted()) {
                             if (video.dataset.userMuted !== 'true') {
-                                video.dataset.scriptTriggeredVolume = 'true';
+                                window.MediaState.lockVolume(video);
                                 video.muted = false;
-                                video.volume = window.MediaState?.getVolume();
-                                setTimeout(() => video.dataset.scriptTriggeredVolume = 'false', 100);
                             }
                         }
                     };
@@ -664,14 +658,10 @@ window.addEventListener('vibedrips-media-volume', (e) => {
     const iframe = window.mediaOverlay.container.querySelector('iframe');
 
     if (video && video.dataset.userMuted !== 'true') {
-        video.dataset.scriptTriggeredVolume = 'true';
-        video.volume = vol;
-        setTimeout(() => video.dataset.scriptTriggeredVolume = 'false', 100);
+        if (window.MediaState) window.MediaState.lockVolume(video);
     }
 
     if (iframe && iframe.contentWindow && iframe.dataset.userMuted !== 'true') {
-        const youtubeVol = Math.round(vol * 100);
-        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [youtubeVol] }), '*');
-        iframe.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: vol }), '*');
+        if (window.MediaState) window.MediaState.lockVolume(iframe);
     }
 });

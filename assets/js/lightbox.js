@@ -712,10 +712,8 @@ class MediaLightbox {
                 const tryUnmute = () => {
                     const latestShouldMute = window.MediaState?.shouldStartMuted();
                     if (!latestShouldMute && video.dataset.userPaused !== 'true') {
-                        video.dataset.scriptTriggeredVolume = 'true';
+                        if (window.MediaState) window.MediaState.lockVolume(video);
                         video.muted = false;
-                        video.volume = window.MediaState?.getVolume();
-                        setTimeout(() => video.dataset.scriptTriggeredVolume = 'false', 100);
                     }
                 };
 
@@ -737,11 +735,8 @@ class MediaLightbox {
                 if (!video.paused && video.currentTime > 0) tryUnmute();
             }
 
-            const preferredVolume = window.MediaState?.getVolume();
-            video.dataset.scriptTriggeredVolume = 'true';
-            video.volume = preferredVolume; // 🔊 SILENT PRIMING: Set volume even if muted
+            if (window.MediaState) window.MediaState.lockVolume(video);
             video.muted = shouldMute;
-            setTimeout(() => video.dataset.scriptTriggeredVolume = 'false', 100);
 
             video.play().catch(err => {
                 console.warn('🎬 Lightbox: Autoplay blocked, falling back to muted:', err);
@@ -1047,11 +1042,13 @@ class MediaLightbox {
                     setTimeout(() => {
                         if (!this.isOpen || !iframe.contentWindow) return;
                         iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
-                        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [youtubeVol] }), '*');
                         iframe.contentWindow.postMessage('unmute', '*');
                         iframe.contentWindow.postMessage(JSON.stringify({ event: 'unmute' }), '*');
-                        // 🔇 AUTO-PAUSE: Notify background music to stop
-                        if (window.MediaState) window.MediaState.reportMediaPlay();
+
+                        if (window.MediaState) {
+                            window.MediaState.lockVolume(iframe);
+                            window.MediaState.reportMediaPlay();
+                        }
                     }, 300);
                 }
 
@@ -1108,7 +1105,7 @@ class MediaLightbox {
 
             // 🛡️ BELT & SUSPENDERS: HTML attributes + JS Fallback
             video.muted = true;
-            video.volume = window.MediaState?.getVolume();
+            if (window.MediaState) window.MediaState.lockVolume(video);
             video.setAttribute('playsinline', '');
             video.setAttribute('autoplay', '');
             video.setAttribute('muted', '');
@@ -1118,8 +1115,10 @@ class MediaLightbox {
                 video.dataset.bridgeSet = 'true';
                 video.addEventListener('playing', () => {
                     if (window.MediaState && window.MediaState.isUnmuted()) {
-                        video.muted = false;
-                        video.volume = 0.5;
+                        if (video.dataset.userMuted !== 'true') {
+                            window.MediaState.lockVolume(video);
+                            video.muted = false;
+                        }
                     }
                 }, { once: true });
             }
@@ -1140,7 +1139,7 @@ class MediaLightbox {
 
                 if (isHighTrust && video.dataset.userMuted !== 'true') {
                     video.muted = false;
-                    video.volume = window.MediaState?.getVolume() || 0.5;
+                    if (window.MediaState) window.MediaState.lockVolume(video);
                 }
             }).catch(error => {
                 console.warn("🎬 Lightbox: Autoplay blocked:", error);
@@ -1325,17 +1324,7 @@ window.addEventListener('vibedrips-media-volume', (e) => {
 
     if (!media) return;
 
-    if (media.tagName === 'VIDEO') {
-        if (media.dataset.userMuted !== 'true') {
-            media.dataset.scriptTriggeredVolume = 'true';
-            media.volume = vol;
-            setTimeout(() => media.dataset.scriptTriggeredVolume = 'false', 100);
-        }
-    } else if (media.tagName === 'IFRAME' && media.contentWindow) {
-        if (media.dataset.userMuted !== 'true') {
-            const youtubeVol = Math.round(vol * 100);
-            media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [youtubeVol] }), '*');
-            media.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: vol }), '*');
-        }
+    if (media.dataset.userMuted !== 'true') {
+        if (window.MediaState) window.MediaState.lockVolume(media);
     }
 });

@@ -108,6 +108,42 @@ const MediaState = {
      */
     reportMediaPlay() {
         window.dispatchEvent(new CustomEvent('vibedrips-media-play'));
+    },
+
+    /**
+     * Safely applies the current global volume to a media element.
+     * Prevents the volumechange event from triggering a feedback loop.
+     */
+    lockVolume(media, forceUnmute = false) {
+        if (!media) return;
+        const vol = this.getVolume();
+        const shouldUnmute = forceUnmute || this.isUnmuted();
+
+        if (media.tagName === 'VIDEO') {
+            media.dataset.scriptTriggeredVolume = 'true';
+            media.volume = vol;
+            if (shouldUnmute && media.dataset.userMuted !== 'true') media.muted = false;
+            // 🛡️ Guard release
+            setTimeout(() => { if (media) media.dataset.scriptTriggeredVolume = 'false'; }, 200);
+        } else if (media.tagName === 'IFRAME' && media.contentWindow) {
+            const ytVol = Math.round(vol * 100);
+            const trySend = () => {
+                if (!media.contentWindow) return;
+                // 🔊 Volume
+                media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [ytVol] }), '*');
+                media.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: vol }), '*');
+                // 🔇 Unmute if requested
+                if (shouldUnmute) {
+                    media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'unMute', args: '' }), '*');
+                    media.contentWindow.postMessage('unmute', '*');
+                }
+            };
+            trySend();
+            // YouTube birth-race: Send again in 400ms, 1000ms, and 2500ms
+            setTimeout(trySend, 400);
+            setTimeout(trySend, 1000);
+            setTimeout(trySend, 2500);
+        }
     }
 };
 
