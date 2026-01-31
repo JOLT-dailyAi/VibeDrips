@@ -104,14 +104,8 @@ On mobile, the struggle between "Video Interaction" and "Gallery Navigation" is 
     - **Fast Tap**: Programmatically forwarded (Proxied) to the hidden media element to trigger unmuting/play pulses.
 - **Why?**: This prevents "Tap-to-Mute" controls in iframes from "stalling" the user's attempt to swipe to the next product.
 
----
-
-## 📱 Mobile-First Design Refinements (Phase 11)
-
-- **The "No-Text" Loader**: Transitioned from hardcoded "Loading..." indicators to silent CSS spinners to maintain a premium, cinematic feel.
-- **Landscape Strictness**: Absolute 32px footprint for toggles to ensure perfect alignment with the navigation hub without clipping on notch-constrained devices.
-
----
-
-> [!IMPORTANT]
-> When modifying this codebase, always refer to `CONSTRAINTS.md` and `assets/css/READ_CSS_ARCHITECTURE.md` to ensure your changes align with these established patterns.
+### 4. Known Media Sync Issues (Waitlist)
+Despite the "Hard State Policing," the following patterns remain **broken** in the current event-driven architecture:
+- **Media Isolation**: Pre-loaded elements in Reels or Lightbox retain their "Birth Volume" and do not listen for live updates from other components.
+- **Inter-Modal Handover**: The transition between modals often results in a `0.2` volume dip as the browser resets the new `<iframe>` or `<video>` before the sync logic can take hold.
+- **Backward Binding**: The global slider does not react to native volume changes on specific video elements (One-Way binding).

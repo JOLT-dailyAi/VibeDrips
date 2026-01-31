@@ -78,15 +78,12 @@ Mobile landscape toggles (`.reels-toggle`, `.globe-toggle`) must maintain an **a
 - **No Expansion**: Forbid `scale()` or `border-width` growth on selection to prevent overlapping nearby icons or causing layout "bloat."
 - **Specificity**: Use body-theme scoped selectors to override all global styles and enforce this lock.
 
----
+### 4. Hard State Policing (The "Anti-Revert" Rule)
+- **Problem**: Browsers occasionally reset unmuted video volume to `0.2` (20%) upon birth/activation.
+- **Constraint**: `MediaState.js` acts as the "State Police". It MUST intercept volume changes and, if the change matches the suspicious `0.2` revert and is NOT marked as a `manual` user interaction, it MUST forcibly restore the user's cached volume preference.
+- **Manual Sovereignty**: User-initiated volume changes (passed with `isManual: true`) are the ONLY changes permitted to update the global cached volume.
 
-## 🏗️ Architecture Summary (Updated)
-
-```mermaid
-graph TD
-    Overlay["#mediaLightbox"] --> MediaContainer[".lightbox-media-container"]
-    MediaContainer --> SlidingStrip[".lightbox-sliding-strip"]
-    SlidingStrip --> Wrapper["5-Media Buffer [P-2...N+2]"]
-    MediaContainer --> Shield[".lightbox-iframe-shield (Gesture Catcher)"]
-    Shield --> TapProxy["Tap Proxy (Unmute/Play)"]
-```
+### 6. Known Architectural Gaps (Volume Sync)
+- **Problem: Reels Isolation**: Because Reels are pre-injected into the DOM, they often "miss" volume changes that occur after they are created. This results in inconsistent volume levels between adjacent Reels.
+- **Problem: Inter-Modal Reset**: Switching between `MediaLightbox` and `MediaOverlay` often triggers a browser-default `0.2` reset on the new element. The current event-based policing fails to catch this "silent" reset because the new media hasn't started "talking" to the global state yet.
+- **Problem: One-Way Slider Binding**: The header volume slider (Music Control) propagates its value to media, but media changes (e.g., native volume adjustments) do not reflect back to the slider because local property updates do not dispatch global sync events.
