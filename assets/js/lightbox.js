@@ -719,6 +719,15 @@ class MediaLightbox {
 
                 video.addEventListener('playing', tryUnmute, { once: true });
 
+                // 🔊 GLOBAL SYNC: If the user adjusts volume, save it site-wide
+                video.addEventListener('volumechange', () => {
+                    if (!video.muted && video.volume > 0) {
+                        if (window.MediaState) window.MediaState.setVolume(video.volume);
+                        video.dataset.userMuted = 'false';
+                    }
+                    if (video.muted) video.dataset.userMuted = 'true';
+                });
+
                 // 🔄 RACE CONDITION: If already playing, trigger now
                 if (!video.paused && video.currentTime > 0) tryUnmute();
             }

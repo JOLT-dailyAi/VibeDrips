@@ -228,7 +228,8 @@ function activateMedia(container, shouldPlay) {
         </svg>
         Tap for sound
       `;
-      if (isUnmutedSession) pill.classList.remove('active');
+      const isUnmuted = window.MediaState?.isUnmuted();
+      if (isUnmuted) pill.classList.remove('active');
       container.appendChild(pill);
 
       const handleHandover = (e) => {
@@ -262,6 +263,12 @@ function activateMedia(container, shouldPlay) {
 
       // ✅ USER INTENT SOVEREIGNTY: Detect if user manually mutes/pauses
       media.addEventListener('volumechange', () => {
+        // 🔊 GLOBAL SYNC: If the user adjusts volume, save it site-wide
+        if (!media.muted && media.volume > 0) {
+          if (window.MediaState) window.MediaState.setVolume(media.volume);
+          media.dataset.userMuted = 'false';
+        }
+
         if (media.muted) {
           media.dataset.userMuted = 'true';
           // Stop heartbeat if user explicitly mutes
@@ -269,8 +276,6 @@ function activateMedia(container, shouldPlay) {
             clearInterval(activeShotgunPulses.get(media));
             activeShotgunPulses.delete(media);
           }
-        } else {
-          media.dataset.userMuted = 'false';
         }
       });
 
