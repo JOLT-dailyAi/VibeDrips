@@ -1312,3 +1312,25 @@ class MediaLightbox {
 if (typeof window !== 'undefined') {
     window.MediaLightbox = MediaLightbox;
 }
+
+// 🔊 GLOBAL VOLUME SYNC: Update active lightbox media if volume changes elsewhere
+window.addEventListener('vibedrips-media-volume', (e) => {
+    const vol = e.detail.volume;
+    const media = document.querySelector('.lightbox-media-container video, .lightbox-media-container iframe');
+
+    if (!media) return;
+
+    if (media.tagName === 'VIDEO') {
+        if (media.dataset.userMuted !== 'true') {
+            media.dataset.scriptTriggeredVolume = 'true';
+            media.volume = vol;
+            setTimeout(() => media.dataset.scriptTriggeredVolume = 'false', 100);
+        }
+    } else if (media.tagName === 'IFRAME' && media.contentWindow) {
+        if (media.dataset.userMuted !== 'true') {
+            const youtubeVol = Math.round(vol * 100);
+            media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [youtubeVol] }), '*');
+            media.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: vol }), '*');
+        }
+    }
+});

@@ -365,6 +365,14 @@ function triggerShotgunPulse(media) {
     else pill.classList.remove('active');
   }
 
+  // 🔊 SILENT PRIMING: Set volume once, separate from play pulse logic
+  if (media.tagName === 'VIDEO') {
+    media.dataset.scriptTriggeredVolume = 'true';
+    media.volume = preferredVolume;
+    media.muted = shouldMute;
+    setTimeout(() => media.dataset.scriptTriggeredVolume = 'false', 100);
+  }
+
   const sendPulse = () => {
     // 🛡️ USER INTENT SOVEREIGNTY: Back off if user manually interacted
     if (media.dataset.userMuted === 'true' || media.dataset.userPaused === 'true') {
@@ -447,6 +455,29 @@ function triggerShotgunPulse(media) {
 
   activeShotgunPulses.set(media, interval);
 }
+
+// 🔊 GLOBAL VOLUME SYNC: Update all active reels if volume changes elsewhere
+window.addEventListener('vibedrips-media-volume', (e) => {
+  const vol = e.detail.volume;
+
+  // Update all native videos that haven't been manually muted
+  document.querySelectorAll('.reels-modal video').forEach(video => {
+    if (video.dataset.userMuted !== 'true') {
+      video.dataset.scriptTriggeredVolume = 'true';
+      video.volume = vol;
+      setTimeout(() => video.dataset.scriptTriggeredVolume = 'false', 100);
+    }
+  });
+
+  // Update all iframes
+  document.querySelectorAll('.reels-modal iframe').forEach(iframe => {
+    if (iframe.contentWindow && iframe.dataset.userMuted !== 'true') {
+      const youtubeVol = Math.round(vol * 100);
+      iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [youtubeVol] }), '*');
+      iframe.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: vol }), '*');
+    }
+  });
+});
 
 function getMediaHTML(type, url, isActive) {
   const embedUrl = getUniversalVideoEmbedUrlForReels(url, isActive);

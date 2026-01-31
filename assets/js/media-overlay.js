@@ -651,3 +651,24 @@ class MediaOverlay {
 }
 
 window.mediaOverlay = new MediaOverlay();
+
+// 🔊 GLOBAL VOLUME SYNC: Update active overlay media if volume changes elsewhere
+window.addEventListener('vibedrips-media-volume', (e) => {
+    const vol = e.detail.volume;
+    if (!window.mediaOverlay?.container?.classList.contains('active')) return;
+
+    const video = window.mediaOverlay.container.querySelector('video');
+    const iframe = window.mediaOverlay.container.querySelector('iframe');
+
+    if (video && video.dataset.userMuted !== 'true') {
+        video.dataset.scriptTriggeredVolume = 'true';
+        video.volume = vol;
+        setTimeout(() => video.dataset.scriptTriggeredVolume = 'false', 100);
+    }
+
+    if (iframe && iframe.contentWindow && iframe.dataset.userMuted !== 'true') {
+        const youtubeVol = Math.round(vol * 100);
+        iframe.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [youtubeVol] }), '*');
+        iframe.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: vol }), '*');
+    }
+});
