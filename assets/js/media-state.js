@@ -123,10 +123,13 @@ const MediaState = {
 
     /**
      * Report that media (Reels/Lightbox) has started playing.
-     * This signals the background music to pause.
+     * This signals the background music and other components to pause.
+     * @param {string} senderId - Identifier of the component starting playback (e.g., 'reels-modal')
      */
-    reportMediaPlay() {
-        window.dispatchEvent(new CustomEvent('vibedrips-media-play'));
+    reportMediaPlay(senderId = 'unknown') {
+        window.dispatchEvent(new CustomEvent('vibedrips-media-play', {
+            detail: { senderId: senderId }
+        }));
     },
 
     /**

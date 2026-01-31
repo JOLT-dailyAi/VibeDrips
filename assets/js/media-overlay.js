@@ -35,6 +35,17 @@ class MediaOverlay {
                 }
             });
 
+            // 🔇 HANDOVER STOP: Pause if another foreground media starts
+            window.addEventListener('vibedrips-media-play', (e) => {
+                const senderId = e.detail?.senderId;
+                if (senderId && senderId !== 'reels-modal') {
+                    if (this.container.classList.contains('active')) {
+                        console.log('🔇 Reels Modal: Pausing for handover to', senderId);
+                        this.togglePlayback(false);
+                    }
+                }
+            });
+
             // Phase 1: Engagement Pill (Tap for Sound)
             this.engagementPill = document.createElement('div');
             this.engagementPill.className = 'engagement-pill';
@@ -481,7 +492,7 @@ class MediaOverlay {
                 }
 
                 video.play().then(() => {
-                    if (window.MediaState) window.MediaState.reportMediaPlay();
+                    if (window.MediaState) window.MediaState.reportMediaPlay('reels-modal');
                 }).catch(err => {
                     console.warn('🎬 Modal: Transition play blocked:', err);
                     // 💊 PILL RESCUE: If unmuted play fails, restore the pill
@@ -561,7 +572,7 @@ class MediaOverlay {
 
                 // Initial burst
                 sendPulse();
-                if (window.MediaState) window.MediaState.reportMediaPlay();
+                if (window.MediaState) window.MediaState.reportMediaPlay('reels-modal');
 
                 // 🔊 SUCCESSIVE PULSE: Pulse every 400ms for 1.6 seconds (One-Shot Safe)
                 let pulses = 0;

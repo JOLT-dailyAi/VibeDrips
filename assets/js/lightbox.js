@@ -57,7 +57,23 @@ class MediaLightbox {
         if (!document.getElementById('mediaLightbox')) {
             this.createLightboxDOM();
             this.attachEventListeners();
+            this.setupHandover();
         }
+    }
+
+    setupHandover() {
+        // 🔇 HANDOVER STOP: Pause if another foreground media starts
+        window.addEventListener('vibedrips-media-play', (e) => {
+            const senderId = e.detail?.senderId;
+            if (senderId && senderId !== 'lightbox') {
+                if (this.isOpen) {
+                    console.log('🔇 Lightbox: Pausing for handover to', senderId);
+                    this.stopMedia(); // Note: This clears the strip, but keeps the lightbox open
+                    // If we want to keep the strip but just pause, we'd need more granular pause logic
+                    // But stopMedia() is robust for now since it prevents any leaks.
+                }
+            }
+        });
     }
 
     createLightboxDOM() {
@@ -740,7 +756,9 @@ class MediaLightbox {
             if (window.MediaState) window.MediaState.lockVolume(video);
             video.muted = shouldMute;
 
-            video.play().catch(err => {
+            video.play().then(() => {
+                if (window.MediaState) window.MediaState.reportMediaPlay('lightbox');
+            }).catch(err => {
                 console.warn('🎬 Lightbox: Autoplay blocked, falling back to muted:', err);
                 video.muted = true;
                 video.play().catch(() => { });
@@ -771,6 +789,7 @@ class MediaLightbox {
             if (this._pulseInterval) clearInterval(this._pulseInterval);
 
             sendPulse();
+            if (window.MediaState) window.MediaState.reportMediaPlay('lightbox');
             let pulses = 0;
             this._pulseInterval = setInterval(() => {
                 sendPulse();
@@ -1056,7 +1075,7 @@ class MediaLightbox {
 
                         if (window.MediaState) {
                             window.MediaState.lockVolume(iframe);
-                            window.MediaState.reportMediaPlay();
+                            window.MediaState.reportMediaPlay('lightbox');
                         }
                     }, 300);
                 }
@@ -1139,7 +1158,7 @@ class MediaLightbox {
 
             video.play().then(() => {
                 // 🔇 AUTO-PAUSE: Notify background music to stop
-                if (window.MediaState) window.MediaState.reportMediaPlay();
+                if (window.MediaState) window.MediaState.reportMediaPlay('lightbox');
 
                 // 🔊 SAFE UNMUTE: Only unmute AFTER confirmed playback
                 // AND only if the user hasn't explicitly muted it already

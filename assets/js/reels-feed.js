@@ -107,6 +107,26 @@ function _initReelsObserverInternal() {
   }, { passive: true });
 
   // 🔊 GLOBAL UNMUTE LISTENER: React when another component triggers sound
+  // 🔇 HANDOVER STOP: Pause if another foreground media starts
+  window.addEventListener('vibedrips-media-play', (e) => {
+    const senderId = e.detail?.senderId;
+    if (senderId && senderId !== 'reels-feed') {
+      const activeSection = REELS_SECTIONS_CACHE[lastActiveIdx];
+      if (activeSection) {
+        const media = activeSection.querySelector('video, iframe');
+        if (media) {
+          console.log('🔇 Reels Feed: Pausing for handover to', senderId);
+          if (media.tagName === 'VIDEO') {
+            media.pause();
+          } else if (media.contentWindow) {
+            media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'pauseVideo', args: '' }), '*');
+            media.contentWindow.postMessage(JSON.stringify({ method: 'pause' }), '*');
+          }
+        }
+      }
+    }
+  });
+
   window.addEventListener('vibedrips-media-unmute', () => {
     // 🛡️ FOCUS GUARD: Only wake up if Lightbox isn't covering us
     const isLightboxActive = window.MediaLightbox && window.MediaLightbox.activeInstance && window.MediaLightbox.activeInstance.isOpen;
@@ -393,7 +413,7 @@ function triggerShotgunPulse(media) {
 
     if (media.tagName === 'VIDEO') {
       media.play().then(() => {
-        if (window.MediaState) window.MediaState.reportMediaPlay();
+        if (window.MediaState) window.MediaState.reportMediaPlay('reels-feed');
       }).catch(() => {
         // 💊 PILL RESCUE: If unmuted play fails, restore the pill so user can fix it
         if (pill) pill.classList.add('active');
@@ -401,7 +421,7 @@ function triggerShotgunPulse(media) {
         media.play().catch(() => { });
       });
     } else if (media.contentWindow) {
-      if (window.MediaState) window.MediaState.reportMediaPlay();
+      if (window.MediaState) window.MediaState.reportMediaPlay('reels-feed');
       media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'playVideo', args: '' }), '*');
       media.contentWindow.postMessage(JSON.stringify({ method: 'play' }), '*');
       media.contentWindow.postMessage('play', '*');
