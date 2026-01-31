@@ -291,8 +291,10 @@ class MediaOverlay {
             // 🛡️ ASYMMETRIC MUTE: Use platform-aware state
             const shouldStartMuted = window.MediaState?.shouldStartMuted();
             const autoplayAttr = isAutoplay ? `autoplay ${shouldStartMuted ? 'muted' : ''}` : '';
+            const currentVol = window.MediaState?.getVolume() || 0.2;
             player = `<video controls playsinline ${autoplayAttr} class="main-video-player" 
-                             data-user-paused="false" data-user-muted="false">
+                             data-user-paused="false" data-user-muted="false"
+                             data-birth-volume="${currentVol}">
                         <source src="${url}" type="video/mp4">
                       </video>`;
         } else {

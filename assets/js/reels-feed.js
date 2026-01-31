@@ -372,11 +372,8 @@ function triggerShotgunPulse(media) {
 
   // 🔊 SILENT PRIMING: Set volume once, separate from play pulse logic
   if (media.tagName === 'VIDEO') {
-    console.log(`🎬 Reels Shotgun: Priming native video to ${preferredVolume}`);
-    media.dataset.scriptTriggeredVolume = 'true';
-    media.volume = preferredVolume;
+    if (window.MediaState) window.MediaState.lockVolume(media);
     media.muted = shouldMute;
-    setTimeout(() => media.dataset.scriptTriggeredVolume = 'false', 100);
   }
 
   const sendPulse = () => {
@@ -446,10 +443,12 @@ function getMediaHTML(type, url, isActive) {
     // 🛡️ ASYMMETRIC MUTE: Use platform-aware state
     const shouldStartMuted = window.MediaState?.shouldStartMuted();
     const autoplayAttr = isActive ? `autoplay ${shouldStartMuted ? 'muted' : ''}` : '';
+    const currentVol = window.MediaState?.getVolume() || 0.2;
 
     // ✅ NATIVE RESET: Ensure new elements start with clean intent
     return `<video controls playsinline ${autoplayAttr} preload="auto" src="${url}" 
               data-user-paused="false" data-user-muted="false"
+              data-birth-volume="${currentVol}"
               style="width:100%;height:100%;object-fit:cover;"></video>`;
   } else {
     return `<iframe src="${embedUrl}" frameborder="0" scrolling="no" allowtransparency="true" allowfullscreen="true" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;

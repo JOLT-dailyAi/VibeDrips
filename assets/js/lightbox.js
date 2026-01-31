@@ -936,7 +936,8 @@ class MediaLightbox {
             // 🛡️ ASYMMETRIC MUTE: Initial attribute based on platform trust
             const shouldStartMuted = window.MediaState?.shouldStartMuted();
             const muteAttr = shouldStartMuted ? 'muted' : '';
-            container.innerHTML = `<video class="lightbox-video" controls autoplay ${muteAttr} playsinline src="${url}" ${attrStr} style="display: block;"></video>`;
+            const currentVol = window.MediaState?.getVolume() || 0.2;
+            container.innerHTML = `<video class="lightbox-video" controls autoplay ${muteAttr} playsinline src="${url}" data-birth-volume="${currentVol}" ${attrStr} style="display: block;"></video>`;
             return container.querySelector('video');
         }
         return null;

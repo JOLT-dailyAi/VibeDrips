@@ -4,6 +4,7 @@ const UNMUTE_STORAGE_KEY = 'vibedrips-unmute-intent-active';
 const VOLUME_STORAGE_KEY = 'vibedrips-volume-level';
 // 🔊 GLOBAL CACHE: Single source of truth. 
 let _cachedVolume = null;
+let _lastLockTime = 0; // 🛡️ FEEDBACK GUARD: Timestamp of the last programmatic lock
 
 const MediaState = {
     // 🎯 DYNAMIC DEFAULT: Replaced static 0.2 with a logic-driven getter
@@ -91,6 +92,14 @@ const MediaState = {
     setVolume(level, silent = false) {
         const vol = Math.max(0, Math.min(1, level));
 
+        // 🛡️ FEEDBACK SILENCER: Reverts to 0.2 (20%) are almost always browser-birth artifacts
+        // If we just locked the volume recently, ignore any "reset" to 0.2
+        const now = Date.now();
+        if (vol === 0.2 && _cachedVolume !== 0.2 && (now - _lastLockTime < 2000)) {
+            console.warn('🔊 MediaState: Feedback Silencer blocked a suspicious revert to 0.2');
+            return;
+        }
+
         // Only trigger if value actually changed
         if (vol === _cachedVolume) return;
 
@@ -126,13 +135,15 @@ const MediaState = {
         if (media.tagName === 'VIDEO') {
             media.dataset.scriptTriggeredVolume = 'true';
             media.volume = vol;
+            _lastLockTime = Date.now(); // 🛡️ Mark birth timestamp
             if (shouldUnmute && media.dataset.userMuted !== 'true') media.muted = false;
             // 🛡️ Guard release
-            setTimeout(() => { if (media) media.dataset.scriptTriggeredVolume = 'false'; }, 200);
+            setTimeout(() => { if (media) media.dataset.scriptTriggeredVolume = 'false'; }, 500);
         } else if (media.tagName === 'IFRAME' && media.contentWindow) {
             const ytVol = Math.round(vol * 100);
             const trySend = () => {
                 if (!media.contentWindow) return;
+                _lastLockTime = Date.now(); // Mark as scripted
                 // 🔊 Volume
                 media.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'setVolume', args: [ytVol] }), '*');
                 media.contentWindow.postMessage(JSON.stringify({ method: 'setVolume', value: vol }), '*');
