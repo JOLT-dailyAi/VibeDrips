@@ -200,6 +200,16 @@ function activateMedia(container, shouldPlay) {
     if (media) {
       media.dataset.loaded = 'true';
 
+      // 🔊 SYNCHRONOUS INITIALIZATION: Lock volume BEFORE browser can report 100% default
+      if (media.tagName === 'VIDEO' && window.MediaState) {
+        const startVol = window.MediaState.getVolume();
+        media.dataset.scriptTriggeredVolume = 'true';
+        media.volume = startVol;
+        console.log(`🎬 Reels Feed: Initializing new video at ${startVol} (Sync Lock)`);
+        // Reset guard after short delay
+        setTimeout(() => { if (media) media.dataset.scriptTriggeredVolume = 'false'; }, 150);
+      }
+
       // 🛡️ SMART SHIELD HANDOVER (Touch-First)
       const shield = document.createElement('div');
       shield.className = 'reel-video-shield';
