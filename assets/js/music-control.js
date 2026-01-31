@@ -37,34 +37,24 @@ document.addEventListener('DOMContentLoaded', function () {
     const musicWrapper = document.createElement('div');
     musicWrapper.className = 'music-control-wrapper';
 
-    if (isMobile) {
-        musicWrapper.innerHTML = `
-            <button id="music-toggle" class="music-control-button" title="Play music">
-                ▶️
+    musicWrapper.innerHTML = `
+        <button id="music-toggle" class="music-control-button" title="Play music">
+            ▶️
+        </button>
+        <div class="volume-panel">
+            <button id="volume-toggle" class="volume-btn" title="Mute/Unmute">
+                🔊
             </button>
-        `;
-    } else {
-        musicWrapper.innerHTML = `
-            <button id="music-toggle" class="music-control-button" title="Play music">
-                ▶️
-            </button>
-            <div class="volume-panel">
-                <button id="volume-toggle" class="volume-btn" title="Mute/Unmute">
-                    🔊
-                </button>
-                <input type="range" id="volume-slider" class="volume-slider" 
-                       min="0" max="1" step="0.01" value="${window.MediaState?.getVolume() || 0.2}">
-            </div>
-        `;
-    }
+            <input type="range" id="volume-slider" class="volume-slider" 
+                   min="0" max="1" step="0.01" value="${window.MediaState?.getVolume() || 0.2}">
+        </div>
+    `;
 
     mediaFloat.appendChild(musicWrapper);
 
     const volumePanel = document.querySelector('.volume-panel');
 
-    if (!isMobile) {
-        audio.volume = window.MediaState?.getVolume() || 0.5;
-    }
+    audio.volume = window.MediaState?.getVolume() || 0.5;
 
     // Update center badge based on music state
     function updateCenterBadge() {
@@ -162,8 +152,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (!badge || !tooltip) return;
 
-        // Desktop: hover
-        if (!isMobile) {
+        const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+        // Desktop (non-touch): hover
+        if (!isTouch) {
             badge.addEventListener('mouseenter', () => {
                 showTooltip(tooltip);
             });
@@ -238,7 +230,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Show volume panel
     function showVolumePanel() {
-        if (isMobile || !volumePanel) return;
+        if (!volumePanel) return;
 
         volumePanel.classList.add('visible');
 
@@ -274,7 +266,10 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // Desktop volume controls
-    if (!isMobile) {
+    const volToggle = document.getElementById('volume-toggle');
+    const volSlider = document.getElementById('volume-slider');
+
+    if (volToggle && volSlider) {
         document.getElementById('volume-toggle').addEventListener('click', function () {
             const slider = document.getElementById('volume-slider');
             if (audio.volume > 0) {
