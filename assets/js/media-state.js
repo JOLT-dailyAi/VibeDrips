@@ -4,6 +4,9 @@ const UNMUTE_STORAGE_KEY = 'vibedrips-unmute-intent-active';
 const VOLUME_STORAGE_KEY = 'vibedrips-volume-level';
 const DEFAULT_VOLUME = 0.2;
 
+// 🔊 GLOBAL CACHE: Single source of truth to prevent loop overhead
+let _cachedVolume = null;
+
 const MediaState = {
     /**
      * Determines if the media should start muted based on OS and user intent.
@@ -62,26 +65,39 @@ const MediaState = {
      * Get the preferred volume level
      */
     getVolume() {
+        if (_cachedVolume !== null) return _cachedVolume;
+
         const stored = localStorage.getItem(VOLUME_STORAGE_KEY);
         if (stored !== null) {
             const parsed = parseFloat(stored);
-            return isNaN(parsed) ? DEFAULT_VOLUME : parsed;
+            _cachedVolume = isNaN(parsed) ? DEFAULT_VOLUME : parsed;
+            return _cachedVolume;
         }
-        return DEFAULT_VOLUME;
+
+        _cachedVolume = DEFAULT_VOLUME;
+        return _cachedVolume;
     },
 
     /**
      * Set the preferred volume level
      * @param {number} level - 0.0 to 1.0
+     * @param {boolean} silent - If true, don't dispatch event (prevents loops)
      */
-    setVolume(level) {
+    setVolume(level, silent = false) {
         const vol = Math.max(0, Math.min(1, level));
-        localStorage.setItem(VOLUME_STORAGE_KEY, vol.toString());
-        console.log(`🔊 Global Media State: Volume set to ${vol}`);
 
-        window.dispatchEvent(new CustomEvent('vibedrips-media-volume', {
-            detail: { volume: vol }
-        }));
+        // Only trigger if value actually changed
+        if (vol === _cachedVolume) return;
+
+        _cachedVolume = vol;
+        localStorage.setItem(VOLUME_STORAGE_KEY, vol.toString());
+        console.log(`🔊 Global Media State: Volume updated to ${vol}`);
+
+        if (!silent) {
+            window.dispatchEvent(new CustomEvent('vibedrips-media-volume', {
+                detail: { volume: vol }
+            }));
+        }
     }
 };
 

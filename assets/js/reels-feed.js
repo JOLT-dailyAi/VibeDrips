@@ -263,6 +263,9 @@ function activateMedia(container, shouldPlay) {
 
       // ✅ USER INTENT SOVEREIGNTY: Detect if user manually mutes/pauses
       media.addEventListener('volumechange', () => {
+        // 🛡️ SYNC GUARD: Ignore volume changes triggered by our own script
+        if (media.dataset.scriptTriggeredVolume === 'true') return;
+
         // 🔊 GLOBAL SYNC: If the user adjusts volume, save it site-wide
         if (!media.muted && media.volume > 0) {
           if (window.MediaState) window.MediaState.setVolume(media.volume);
@@ -351,6 +354,25 @@ function triggerShotgunPulse(media) {
     clearInterval(activeShotgunPulses.get(media));
   }
 
+  const isIOS = window.Device?.isIOS();
+  const shouldMute = window.MediaState?.shouldStartMuted();
+  const preferredVolume = window.MediaState?.getVolume() || 0.2;
+
+  // Phase 1: Pill control (iOS always shows it on EVERY reel; Android only if muted)
+  const pill = media.parentElement?.querySelector('.engagement-pill');
+  if (pill) {
+    if (isIOS || shouldMute) pill.classList.add('active');
+    else pill.classList.remove('active');
+  }
+
+  // 🔊 ONE-SHOT SETUP: Set volume once, separate from play pulse
+  if (media.tagName === 'VIDEO') {
+    media.dataset.scriptTriggeredVolume = 'true';
+    media.volume = preferredVolume;
+    media.muted = shouldMute;
+    setTimeout(() => media.dataset.scriptTriggeredVolume = 'false', 100);
+  }
+
   const sendPulse = () => {
     // 🛡️ USER INTENT SOVEREIGNTY: Back off if user manually interacted
     if (media.dataset.userMuted === 'true' || media.dataset.userPaused === 'true') {
@@ -361,22 +383,7 @@ function triggerShotgunPulse(media) {
       return;
     }
 
-    const isIOS = window.Device?.isIOS();
-    const shouldMute = window.MediaState?.shouldStartMuted();
-
-    // Phase 1: Pill control (iOS always shows it on EVERY reel; Android only if muted)
-    const pill = media.parentElement?.querySelector('.engagement-pill');
-    if (pill) {
-      if (isIOS || shouldMute) pill.classList.add('active');
-      else pill.classList.remove('active');
-    }
-
     if (media.tagName === 'VIDEO') {
-      // 🛡️ ASYMMETRIC MUTE: Use platform-aware state
-      const preferredVolume = window.MediaState?.getVolume() || 0.2;
-      media.muted = shouldMute;
-      media.volume = preferredVolume; // 🔊 SILENT PRIMING: Set volume even if muted
-
       // ✅ NATIVE BRIDGE: Flip sound as soon as the video actually starts moving
       if (!media.dataset.bridgeSet) {
         media.dataset.bridgeSet = 'true';
@@ -385,8 +392,10 @@ function triggerShotgunPulse(media) {
           if (window.MediaState && window.MediaState.isUnmuted()) {
             // Re-check intent inside event/check
             if (media.dataset.userMuted !== 'true') {
+              media.dataset.scriptTriggeredVolume = 'true';
               media.muted = false;
               media.volume = window.MediaState?.getVolume() || 0.2;
+              setTimeout(() => media.dataset.scriptTriggeredVolume = 'false', 100);
             }
           }
         };
@@ -403,7 +412,6 @@ function triggerShotgunPulse(media) {
       });
     } else if (media.contentWindow) {
       if (!shouldMute) {
-        const preferredVolume = window.MediaState?.getVolume() || 0.2;
         const youtubeVol = Math.round(preferredVolume * 100);
 
         // 🛡️ WARMUP DELAY: Reduced to 300ms for snappy parity with LIVE Slot
@@ -435,7 +443,7 @@ function triggerShotgunPulse(media) {
     const activeSection = REELS_SECTIONS_CACHE[lastActiveIdx];
     const isActive = activeSection && activeSection.contains(media);
 
-    if (++pulses >= 10 || !isActive) {
+    if (++pulses >= 4 || !isActive) {
       clearInterval(interval);
       activeShotgunPulses.delete(media);
     }

@@ -446,9 +446,11 @@ class MediaOverlay {
                 // 🛡️ ASYMMETRIC MUTE: Use platform-aware state
                 const shouldMute = window.MediaState?.shouldStartMuted();
                 const preferredVolume = window.MediaState?.getVolume() || 0.2;
-
+                // 🔊 ONE-SHOT SETUP: Set volume once, separate from play pulse logic
+                video.dataset.scriptTriggeredVolume = 'true';
                 video.muted = shouldMute;
-                video.volume = preferredVolume; // 🔊 SILENT PRIMING: Set volume even if muted
+                video.volume = preferredVolume;
+                setTimeout(() => video.dataset.scriptTriggeredVolume = 'false', 100);
 
                 // ✅ NATIVE BRIDGE: Flip sound as soon as the video actually starts moving
                 if (!video.dataset.bridgeSet) {
@@ -457,8 +459,10 @@ class MediaOverlay {
                     const tryUnmute = () => {
                         if (window.MediaState && window.MediaState.isUnmuted()) {
                             if (video.dataset.userMuted !== 'true') {
+                                video.dataset.scriptTriggeredVolume = 'true';
                                 video.muted = false;
                                 video.volume = window.MediaState?.getVolume() || 0.2;
+                                setTimeout(() => video.dataset.scriptTriggeredVolume = 'false', 100);
                             }
                         }
                     };
@@ -467,6 +471,9 @@ class MediaOverlay {
 
                     // 🔊 GLOBAL SYNC: If the user adjusts volume, save it site-wide
                     video.addEventListener('volumechange', () => {
+                        // 🛡️ SYNC GUARD: Ignore volume changes triggered by our own script
+                        if (video.dataset.scriptTriggeredVolume === 'true') return;
+
                         if (!video.muted && video.volume > 0) {
                             if (window.MediaState) window.MediaState.setVolume(video.volume);
                             video.dataset.userMuted = 'false';
