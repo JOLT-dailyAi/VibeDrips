@@ -663,7 +663,27 @@ function createReelSection(reelData, index) {
   videoDiv.dataset.type = reelData.url.match(/\.(mp4|webm|mov|avi)$/i) ? 'video' : 'iframe';
 
   // Initial placeholder (Lazy Injection)
-  videoDiv.innerHTML = '<div class="reel-video-placeholder">🎬</div>';
+  videoDiv.innerHTML = `
+    <div class="reel-video-placeholder">🎬</div>
+    <button class="share-button-reel" aria-label="Share Reel" title="Copy Reel Link">
+      <span>🔗</span>
+    </button>
+  `;
+
+  // Setup Share Button Logic
+  setTimeout(() => {
+    const shareBtn = videoDiv.querySelector('.share-button-reel');
+    if (shareBtn) {
+      shareBtn.onclick = (e) => {
+        e.stopPropagation();
+        const reelUrl = reelData.url;
+        navigator.clipboard.writeText(reelUrl).then(() => {
+          shareBtn.classList.add('success');
+          setTimeout(() => shareBtn.classList.remove('success'), 2000);
+        });
+      };
+    }
+  }, 0);
 
   // Create products container with carousel
   const productsDiv = document.createElement('div');

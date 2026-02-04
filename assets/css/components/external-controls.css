@@ -91,9 +91,136 @@ body.glass-theme .modal-external-controls .globe-toggle.active {
 
 /* Ensure buttons are clickable despite container's pointer-events: none */
 .reels-toggle,
-.globe-toggle {
+.globe-toggle,
+.share-toggle,
+.marketplace-dropdown {
     pointer-events: auto !important;
     cursor: pointer;
+}
+
+/* Share Button (Left Aligned) */
+.share-toggle {
+    width: 42px;
+    height: 42px;
+    background: rgba(var(--color-primary-rgb), 0.1);
+    border: 0.8px solid rgba(var(--color-primary-rgb), 0.6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    font-size: 22px;
+    color: white;
+}
+
+.share-toggle:hover {
+    transform: scale(1.1);
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.share-toggle.success {
+    background: #48BB78 !important;
+    border-color: #48BB78 !important;
+}
+
+/* Marketplace Dropdown (Downwards Opening) */
+.marketplace-dropdown {
+    position: absolute;
+    top: 100%;
+    /* Anchor to top controls and open downwards */
+    margin-top: 12px;
+    right: 0;
+    background: rgba(255, 255, 255, var(--glass-refraction, 0.15));
+    backdrop-filter: blur(var(--glass-blur, 15px)) saturate(1.8);
+    -webkit-backdrop-filter: blur(var(--glass-blur, 15px)) saturate(1.8);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 180px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    /* Slide down from top */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 7000;
+}
+
+/* Share Button in Reels (Aligned with close button) */
+.share-button-reel {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, var(--glass-refraction, 0.15));
+    backdrop-filter: blur(var(--glass-blur, 15px)) saturate(1.8);
+    -webkit-backdrop-filter: blur(var(--glass-blur, 15px)) saturate(1.8);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    z-index: 1005;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    padding: 0;
+}
+
+.share-button-reel:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.1);
+}
+
+.share-button-reel.success {
+    background: #48BB78 !important;
+    border-color: #48BB78 !important;
+}
+
+/* Mobile Shared Alignment */
+@media (max-width: 767px) {
+    .share-button-reel {
+        width: 44px;
+        height: 44px;
+        font-size: 18px;
+        left: 1rem;
+    }
+}
+
+/* Portrait Specific */
+@media (max-width: 767px) and (orientation: portrait) {
+    .share-button-reel {
+        top: 15px;
+        left: 15px;
+    }
+}
+
+/* Landscape Specific */
+@media (max-width: 767px) and (orientation: landscape) {
+    .share-button-reel {
+        top: 10px;
+        left: 10px;
+    }
+}
+
+/* Safe Area Support */
+.share-button-reel {
+    top: calc(2rem + env(safe-area-inset-top, 0px));
+    left: calc(2rem + env(safe-area-inset-left, 0px));
+}
+
+@media (max-width: 767px) and (orientation: portrait) {
+    .share-button-reel {
+        top: calc(15px + env(safe-area-inset-top, 0px));
+        left: calc(15px + env(safe-area-inset-left, 0px));
+    }
 }
 
 /* Glass tail/pointer pointing to the icons */

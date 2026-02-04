@@ -899,6 +899,9 @@ function wrapModalForSliding(centerProductId) {
     const externalControls = document.createElement('div');
     externalControls.className = 'modal-external-controls';
     externalControls.innerHTML = `
+        <button class="share-toggle" aria-label="Share Product" title="Copy Link" style="margin-right: auto;">
+            <span>🔗</span>
+        </button>
         <div class="control-bubble">
             <div class="ticker-viewport">
                 <div class="ticker-content">
@@ -923,14 +926,23 @@ function wrapModalForSliding(centerProductId) {
             <span>🌏</span>
             <span>🌍</span>
             <span>🌎</span>
+            <span>🌐</span>
+            <span>✈️</span>
+            <span>🚀</span>
         </button>
+        <div class="marketplace-dropdown">
+            <!-- Dropdown items will be injected here -->
+        </div>
     `;
 
     // ⚡ Logic: Inline State Management to prevent race conditions
+    const shareBtn = externalControls.querySelector('.share-toggle');
     const reelsBtn = externalControls.querySelector('.reels-toggle');
     const globeBtn = externalControls.querySelector('.globe-toggle');
     const bubble = externalControls.querySelector('.control-bubble');
+    const dropdown = externalControls.querySelector('.marketplace-dropdown');
     const ticker = bubble.querySelector('.ticker-viewport');
+    const tickerContent = bubble.querySelector('.ticker-content');
     const zoomBtnMirror = bubble.querySelector('.zoom-btn-mirror');
 
     const syncState = () => {
@@ -978,6 +990,15 @@ function wrapModalForSliding(centerProductId) {
         const active = globeBtn.classList.toggle('active');
         if (active) reelsBtn.classList.remove('active');
         syncState();
+    };
+
+    shareBtn.onclick = (e) => {
+        e.stopPropagation();
+        const url = window.location.href;
+        navigator.clipboard.writeText(url).then(() => {
+            shareBtn.classList.add('success');
+            setTimeout(() => shareBtn.classList.remove('success'), 2000);
+        });
     };
 
     // NEW: Sliding Viewport (clips the strip while icons sit above)
