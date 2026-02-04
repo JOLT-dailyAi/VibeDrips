@@ -428,13 +428,21 @@
         transform: translate(-15px, 0.5px);
     }
 
-    5%,
-    35% {
+    10% {
         opacity: 1;
         transform: translate(0, 0.5px);
     }
 
-    40%,
+    30% {
+        opacity: 1;
+        transform: translate(0, 0.5px);
+    }
+
+    40% {
+        opacity: 0;
+        transform: translate(15px, 0.5px);
+    }
+
     100% {
         opacity: 0;
         transform: translate(15px, 0.5px);

@@ -959,8 +959,9 @@ function wrapModalForSliding(centerProductId) {
             if (dropdown) dropdown.classList.remove('active');
         } else if (isGlobe) {
             bubble.classList.remove('hidden');
-            ticker.style.display = 'none'; // CRITICAL: Hide ticker for Globe Active
-            zoomBtnMirror.style.display = 'flex'; // Show zoom mirror display
+            ticker.style.display = 'none';
+            zoomBtnMirror.style.display = 'flex';
+            zoomBtnMirror.innerHTML = `<span>✈️ Tap a Flag to Warp Marketplace</span>`; // Corrected Feedback Text
             zoomBtnMirror.style.pointerEvents = 'none'; // Static display only
             if (dropdown) dropdown.classList.add('active');
         } else {

@@ -39,9 +39,13 @@
   transform: translateY(-50%) !important;
   display: flex !important;
   flex-direction: column !important;
+  align-items: center !important;
   gap: 1.5rem !important;
   z-index: 2001;
   pointer-events: none;
+  min-height: 120px !important;
+  /* Lock height to prevent vertical shift */
+  justify-content: center !important;
 }
 
 /* 🔘 Shared Button Base - Standardized to 42px */
@@ -64,6 +68,15 @@
   pointer-events: auto;
   padding: 0;
   flex-shrink: 0;
+}
+
+/* 🕵️ Stability: Use visibility instead of display:none for nav arrows */
+.reels-nav-btn.hidden {
+  display: flex !important;
+  /* Keep in layout */
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 .reels-close-btn:hover,
@@ -111,6 +124,7 @@
 
   .reels-nav-hub {
     right: 1rem !important;
+    min-height: 100px !important;
   }
 
   .reels-close-btn,
