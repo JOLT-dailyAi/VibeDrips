@@ -959,7 +959,7 @@ function wrapModalForSliding(centerProductId) {
             if (dropdown) dropdown.classList.remove('active');
         } else if (isGlobe) {
             bubble.classList.remove('hidden');
-            ticker.style.display = 'none'; // Hide ticker for Globe Active
+            ticker.style.display = 'none'; // CRITICAL: Hide ticker for Globe Active
             zoomBtnMirror.style.display = 'flex'; // Show zoom mirror display
             zoomBtnMirror.style.pointerEvents = 'none'; // Static display only
             if (dropdown) dropdown.classList.add('active');
@@ -968,10 +968,11 @@ function wrapModalForSliding(centerProductId) {
             ticker.style.display = 'block';
             zoomBtnMirror.style.display = 'none';
             if (dropdown) dropdown.classList.remove('active');
-            // Restore Original Ticker Text
+
+            // Restore Ticker Text - Fixed spacing and separators
             tickerContent.innerHTML = `
-                <span>🎬 Reference Media Content for this Product | 🌍 Available in Multiple Regions &nbsp; | &nbsp; </span>
-                <span>🎬 Reference Media Content for this Product | 🌍 Available in Multiple Regions &nbsp; | &nbsp; </span>
+                <span>🎬 Reference Media Content for this Product &nbsp; • &nbsp; 🌍 Available in Multiple Regions &nbsp; • &nbsp; </span>
+                <span>🎬 Reference Media Content for this Product &nbsp; • &nbsp; 🌍 Available in Multiple Regions &nbsp; • &nbsp; </span>
             `;
         }
 

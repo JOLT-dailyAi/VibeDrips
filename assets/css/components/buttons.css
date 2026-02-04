@@ -390,7 +390,7 @@
     width: 100%;
     height: 100%;
     opacity: 0;
-    transform: translate(-14px, 0.5px);
+    transform: translate(-15px, 0.5px);
     line-height: 1;
     transition: none;
     pointer-events: none;
@@ -399,7 +399,7 @@
 /* IDLE CYCLE (1-3): 🌏 -> 🌍 -> 🌎 */
 .globe-toggle:not(.active) span:nth-child(-n+3) {
     display: flex;
-    animation: globeCycle 6s infinite !important;
+    animation: globeCycle 5s infinite linear !important;
 }
 
 .globe-toggle:not(.active) span:nth-child(1) {
@@ -407,11 +407,11 @@
 }
 
 .globe-toggle:not(.active) span:nth-child(2) {
-    animation-delay: 2s;
+    animation-delay: 1.666s;
 }
 
 .globe-toggle:not(.active) span:nth-child(3) {
-    animation-delay: 4s;
+    animation-delay: 3.333s;
 }
 
 /* STATIC FLIGHT (5): ✈️ */
@@ -423,23 +423,21 @@
 }
 
 @keyframes globeCycle {
-
-    0%,
-    2.5% {
+    0% {
         opacity: 0;
-        transform: translate(-14px, 0.5px);
+        transform: translate(-15px, 0.5px);
     }
 
-    7.5%,
-    33.33% {
+    5%,
+    35% {
         opacity: 1;
         transform: translate(0, 0.5px);
     }
 
-    38.33%,
+    40%,
     100% {
         opacity: 0;
-        transform: translate(14px, 0.5px);
+        transform: translate(15px, 0.5px);
     }
 }
 

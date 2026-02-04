@@ -19,27 +19,27 @@
 
 /* 🏗️ Reels Modal Controls */
 .reels-close-btn {
-  position: fixed;
-  top: 2rem;
-  right: 2rem;
+  position: fixed !important;
+  top: 2rem !important;
+  right: 2rem !important;
   z-index: 2001;
 }
 
 .reels-share-btn {
-  position: fixed;
-  top: 2rem;
-  left: 2rem;
+  position: fixed !important;
+  top: 2rem !important;
+  left: 2rem !important;
   z-index: 2001;
 }
 
 .reels-nav-hub {
-  position: fixed;
-  top: 50%;
-  right: 2rem;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  position: fixed !important;
+  top: 50% !important;
+  right: 2rem !important;
+  transform: translateY(-50%) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1.5rem !important;
   z-index: 2001;
   pointer-events: none;
 }
@@ -80,17 +80,17 @@
 
 /* Safe Area Protection */
 .reels-close-btn {
-  top: calc(2rem + env(safe-area-inset-top, 0px));
-  right: calc(2rem + env(safe-area-inset-right, 0px));
+  top: calc(2rem + env(safe-area-inset-top, 0px)) !important;
+  right: calc(2rem + env(safe-area-inset-right, 0px)) !important;
 }
 
 .reels-share-btn {
-  top: calc(2rem + env(safe-area-inset-top, 0px));
-  left: calc(2rem + env(safe-area-inset-left, 0px));
+  top: calc(2rem + env(safe-area-inset-top, 0px)) !important;
+  left: calc(2rem + env(safe-area-inset-left, 0px)) !important;
 }
 
 .reels-nav-hub {
-  right: calc(2rem + env(safe-area-inset-right, 0px));
+  right: calc(2rem + env(safe-area-inset-right, 0px)) !important;
 }
 
 /* Mobile Polish */
@@ -98,19 +98,19 @@
 
   .reels-close-btn,
   .reels-share-btn {
-    top: 1rem;
+    top: 1rem !important;
   }
 
   .reels-close-btn {
-    right: 1rem;
+    right: 1rem !important;
   }
 
   .reels-share-btn {
-    left: 1rem;
+    left: 1rem !important;
   }
 
   .reels-nav-hub {
-    right: 1rem;
+    right: 1rem !important;
   }
 
   .reels-close-btn,
