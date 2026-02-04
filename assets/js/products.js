@@ -928,6 +928,7 @@ function wrapModalForSliding(centerProductId) {
             <span>🌎</span>
             <span>🌐</span>
             <span>✈️</span>
+            <span>🌐</span>
             <span>🚀</span>
         </button>
         <div class="marketplace-dropdown">
@@ -946,19 +947,35 @@ function wrapModalForSliding(centerProductId) {
     const zoomBtnMirror = bubble.querySelector('.zoom-btn-mirror');
 
     const syncState = () => {
-        const anyActive = reelsBtn.classList.contains('active') || globeBtn.classList.contains('active');
         const isReels = reelsBtn.classList.contains('active');
+        const isGlobe = globeBtn.classList.contains('active');
 
+        // Toggle visibility of core bubble components
         if (isReels) {
             bubble.classList.remove('hidden');
             ticker.style.display = 'none';
             zoomBtnMirror.style.display = 'flex';
-        } else if (anyActive) {
-            bubble.classList.add('hidden');
+            if (dropdown) dropdown.classList.remove('active');
+        } else if (isGlobe) {
+            bubble.classList.remove('hidden');
+            ticker.style.display = 'block';
+            zoomBtnMirror.style.display = 'none';
+            if (dropdown) dropdown.classList.add('active');
+            // Update Ticker Text for Flight Mode
+            tickerContent.innerHTML = `
+                <span>🚀 Tap a Flag to Warp Marketplace &nbsp; | &nbsp; </span>
+                <span>🚀 Tap a Flag to Warp Marketplace &nbsp; | &nbsp; </span>
+            `;
         } else {
             bubble.classList.remove('hidden');
             ticker.style.display = 'block';
             zoomBtnMirror.style.display = 'none';
+            if (dropdown) dropdown.classList.remove('active');
+            // Restore Original Ticker Text
+            tickerContent.innerHTML = `
+                <span>🎬 Reference Media Content for this Product | 🌍 Available in Multiple Regions &nbsp; | &nbsp; </span>
+                <span>🎬 Reference Media Content for this Product | 🌍 Available in Multiple Regions &nbsp; | &nbsp; </span>
+            `;
         }
 
         // Trigger Media Overlay

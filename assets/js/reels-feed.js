@@ -663,12 +663,7 @@ function createReelSection(reelData, index) {
   videoDiv.dataset.type = reelData.url.match(/\.(mp4|webm|mov|avi)$/i) ? 'video' : 'iframe';
 
   // Initial placeholder (Lazy Injection)
-  videoDiv.innerHTML = `
-    <div class="reel-video-placeholder">🎬</div>
-    <button class="share-button-reel" aria-label="Share Reel" title="Copy Reel Link">
-      <span>🔗</span>
-    </button>
-  `;
+  videoDiv.innerHTML = '<div class="reel-video-placeholder">🎬</div>';
 
   // Setup Share Button Logic
   setTimeout(() => {

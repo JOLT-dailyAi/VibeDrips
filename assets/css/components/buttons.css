@@ -379,6 +379,20 @@
     animation-delay: 0s;
 }
 
+.globe-toggle span {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transform: translate(-14px, 0.5px) scale(1);
+    line-height: 1;
+    transition: all 0.5s ease;
+    animation: globeCycle 6s infinite;
+}
+
 .globe-toggle span:nth-child(1) {
     animation-delay: 0s;
 }
@@ -391,14 +405,14 @@
     animation-delay: 4s;
 }
 
-/* Hide flight emojis (4-6) during idle cycle */
+/* Hide flight emojis (4-7) during idle cycle */
 .globe-toggle:not(.active) span:nth-child(n+4) {
     display: none !important;
 }
 
 /* ========================================
    WARP CYCLE (Active State)
-   🌐 -> ✈️ -> 🌐 -> 🚀
+   🌐(4) -> ✈️(5) -> 🌐(6) -> 🚀(7)
    ======================================== */
 .globe-toggle.active span {
     animation: globeWarp 8s infinite !important;
@@ -412,18 +426,36 @@
     animation-delay: 2s;
 }
 
-.globe-toggle.active span:nth-child(4) {
+.globe-toggle.active span:nth-child(6) {
     animation-delay: 4s;
 }
 
-/* Return to globe */
-.globe-toggle.active span:nth-child(6) {
+.globe-toggle.active span:nth-child(7) {
     animation-delay: 6s;
 }
 
 /* Hide idle emojis (1-3) during flight */
 .globe-toggle.active span:nth-child(-n+3) {
     display: none !important;
+}
+
+@keyframes globeCycle {
+    0% {
+        opacity: 0;
+        transform: translate(-14px, 0.5px);
+    }
+
+    5%,
+    33.33% {
+        opacity: 1;
+        transform: translate(0, 0.5px);
+    }
+
+    38.33%,
+    100% {
+        opacity: 0;
+        transform: translate(14px, 0.5px);
+    }
 }
 
 @keyframes globeWarp {
@@ -433,12 +465,12 @@
     }
 
     5%,
-    20% {
+    25% {
         opacity: 1;
         transform: translate(0, 0.5px) scale(1);
     }
 
-    25%,
+    30%,
     100% {
         opacity: 0;
         transform: translate(14px, 0.5px) scale(1.2);

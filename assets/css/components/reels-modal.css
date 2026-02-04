@@ -109,35 +109,82 @@
   pointer-events: none !important;
 }
 
-/* Mobile Polish */
+/* ========================================
+   REELS EXTERNAL CONTROLS (Top Header Row)
+   ======================================== */
+.reels-external-controls {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  right: 2rem;
+  height: 42px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  z-index: 2000;
+  pointer-events: none;
+}
+
+.share-toggle-mirror,
+.close-toggle-mirror {
+  width: 42px;
+  height: 42px;
+  background: rgba(255, 255, 255, var(--glass-refraction, 0.15));
+  backdrop-filter: blur(var(--glass-blur, 15px)) saturate(1.8);
+  -webkit-backdrop-filter: blur(var(--glass-blur, 15px)) saturate(1.8);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  padding: 0;
+}
+
+.share-toggle-mirror {
+  margin-right: auto;
+  /* Push Share to left, Close to right */
+  font-size: 22px;
+}
+
+.share-toggle-mirror:hover,
+.close-toggle-mirror:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.share-toggle-mirror.success {
+  background: #48BB78 !important;
+  border-color: #48BB78 !important;
+}
+
+/* Mobile Adjustments for Top Row */
 @media (max-width: 767px) {
-  .reels-nav-hub {
-    right: 1rem;
-    width: 44px;
-  }
-
-  .reels-close-btn,
-  .reels-nav-btn {
-    width: 44px;
-    height: 44px;
-  }
-
-  .reels-close-btn {
+  .reels-external-controls {
     top: 1rem;
+    left: 1rem;
+    right: 1rem;
   }
+}
 
-  .reels-nav-btn.up {
-    top: calc(50% - 0.5rem);
-    transform: translateY(-100%);
+/* Landscape Mobile Offset */
+@media (max-width: 950px) and (orientation: landscape) {
+  .reels-external-controls {
+    top: 10px;
+    left: calc(10px + env(safe-area-inset-left, 0px));
+    right: calc(10px + env(safe-area-inset-right, 0px));
   }
+}
 
-  .reels-nav-btn.down {
-    top: calc(50% + 0.5rem);
-  }
-
-  .reels-nav-btn.up:hover {
-    transform: translateY(-100%) scale(1.1);
-  }
+/* Safe Area Protection */
+.reels-external-controls {
+  top: calc(2rem + env(safe-area-inset-top, 0px));
 }
 
 /* Scroll Container - INSTAGRAM/SHORTS MODE (NO PEEKING) */
