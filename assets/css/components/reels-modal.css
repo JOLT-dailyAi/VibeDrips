@@ -17,17 +17,15 @@
   display: none;
 }
 
-/* 🏗️ Navigation Hub - Repurposed as Top Header Row */
-/* 🏗️ Navigation Hub - Repurposed as Top Header Row */
+/* 🏗️ Navigation Hub - Vertical Hub on Right */
 .reels-nav-hub {
-  position: absolute;
+  position: fixed;
   top: 2rem;
-  left: 2rem;
   right: 2rem;
-  height: 42px;
+  width: 42px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
   gap: 12px;
   z-index: 2000;
   pointer-events: none;
@@ -52,6 +50,7 @@
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   pointer-events: auto;
   padding: 0;
+  flex-shrink: 0;
 }
 
 .reels-close-btn:hover,
@@ -62,56 +61,51 @@
   transform: scale(1.1);
 }
 
-/* 🔝 Buttons Positioning in Top Row */
-.reels-close-btn,
+/* 🔝 Share Button - Horizontal alignment with Close */
 .reels-share-btn {
-  position: static;
-  /* Clean flex positioning in hub */
-}
-
-.reels-share-btn {
-  margin-right: auto;
-  /* Push Share to left, Close/Arrows to right */
+  position: fixed;
+  top: 2rem;
+  left: 2rem;
+  z-index: 2000;
   font-size: 20px;
 }
 
-.reels-nav-btn {
-  position: fixed;
-  /* Keep arrows on right side, independent of header flex */
-  right: 2rem;
-  z-index: 1002;
-}
-
-.reels-nav-btn.up {
-  top: calc(50% - 0.75rem);
-  transform: translateY(-100%);
-}
-
-.reels-nav-btn.down {
-  top: calc(50% + 0.75rem);
+/* Navigation Arrow Specifics */
+.reels-nav-btn svg {
+  display: block;
 }
 
 /* Safe Area Protection */
 .reels-nav-hub {
   top: calc(2rem + env(safe-area-inset-top, 0px));
-  left: calc(2rem + env(safe-area-inset-left, 0px));
   right: calc(2rem + env(safe-area-inset-right, 0px));
 }
 
-.reels-nav-btn {
-  right: calc(2rem + env(safe-area-inset-right, 0px));
+.reels-share-btn {
+  top: calc(2rem + env(safe-area-inset-top, 0px));
+  left: calc(2rem + env(safe-area-inset-left, 0px));
 }
 
 /* Mobile Polish */
 @media (max-width: 767px) {
-  .reels-nav-hub {
+
+  .reels-nav-hub,
+  .reels-share-btn {
     top: 1rem;
-    left: 1rem;
+  }
+
+  .reels-nav-hub {
     right: 1rem;
   }
 
+  .reels-share-btn {
+    left: 1rem;
+  }
+
+  .reels-nav-hub,
+  .reels-share-btn,
+  .reels-close-btn,
   .reels-nav-btn {
-    right: 1rem;
     width: 36px;
     height: 36px;
   }

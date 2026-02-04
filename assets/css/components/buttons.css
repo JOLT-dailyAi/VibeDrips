@@ -414,26 +414,12 @@
     animation-delay: 4s;
 }
 
-/* FLIGHT CYCLE (4-7): 🌐 -> ✈️ -> 🌐 -> 🚀 */
-.globe-toggle.active span:nth-child(n+4) {
-    display: flex;
-    animation: globeWarp 8s infinite !important;
-}
-
-.globe-toggle.active span:nth-child(4) {
-    animation-delay: 0s;
-}
-
+/* STATIC FLIGHT (5): ✈️ */
 .globe-toggle.active span:nth-child(5) {
-    animation-delay: 2s;
-}
-
-.globe-toggle.active span:nth-child(6) {
-    animation-delay: 4s;
-}
-
-.globe-toggle.active span:nth-child(7) {
-    animation-delay: 6s;
+    display: flex;
+    opacity: 1;
+    transform: translate(0, 0.5px);
+    animation: none !important;
 }
 
 @keyframes globeCycle {
@@ -454,65 +440,6 @@
     100% {
         opacity: 0;
         transform: translate(14px, 0.5px);
-    }
-}
-
-@keyframes globeWarp {
-
-    0%,
-    2% {
-        opacity: 0;
-        transform: translate(-14px, 0.5px) scale(0.8);
-    }
-
-    5%,
-    25% {
-        opacity: 1;
-        transform: translate(0, 0.5px) scale(1);
-    }
-
-    30%,
-    100% {
-        opacity: 0;
-        transform: translate(14px, 0.5px) scale(1.2);
-    }
-}
-
-@keyframes globeCycle {
-    0% {
-        opacity: 0;
-        transform: translate(-14px, 0.5px);
-    }
-
-    5%,
-    33.33% {
-        opacity: 1;
-        transform: translate(0, 0.5px);
-    }
-
-    38.33%,
-    100% {
-        opacity: 0;
-        transform: translate(14px, 0.5px);
-    }
-}
-
-@keyframes globeWarp {
-    0% {
-        opacity: 0;
-        transform: translate(-14px, 0.5px) scale(0.8);
-    }
-
-    5%,
-    25% {
-        opacity: 1;
-        transform: translate(0, 0.5px) scale(1);
-    }
-
-    30%,
-    100% {
-        opacity: 0;
-        transform: translate(14px, 0.5px) scale(1.2);
     }
 }
 

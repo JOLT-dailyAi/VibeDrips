@@ -20,9 +20,8 @@ function openReelsModal() {
   if (window.renderReelsFeed) {
     window.renderReelsFeed();
 
-    // ✅ REUSE: Inject Share button into existing Nav Hub
-    const hub = modal.querySelector('.reels-nav-hub');
-    if (hub && !hub.querySelector('.reels-share-btn')) {
+    // ✅ REUSE: Inject Share button into modal (positioned Top-Left via CSS)
+    if (modal && !modal.querySelector('.reels-share-btn')) {
       const shareBtn = document.createElement('button');
       shareBtn.className = 'reels-share-btn';
       shareBtn.innerHTML = '<span>🔗</span>';
@@ -39,8 +38,8 @@ function openReelsModal() {
         shareBtn.classList.add('success');
         setTimeout(() => shareBtn.classList.remove('success'), 2000);
       };
-      // Insert as first child to align left in hub's top row
-      hub.insertBefore(shareBtn, hub.firstChild);
+      // Append to modal root to be positioned fixed/top-left
+      modal.appendChild(shareBtn);
     }
 
     // ✅ NEW: Restore last position after render
