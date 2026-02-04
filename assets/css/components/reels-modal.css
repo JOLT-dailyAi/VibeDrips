@@ -17,17 +17,30 @@
   display: none;
 }
 
-/* 🏗️ Navigation Hub - Vertical Hub on Right */
-.reels-nav-hub {
+/* 🏗️ Reels Modal Controls */
+.reels-close-btn {
   position: fixed;
   top: 2rem;
   right: 2rem;
-  width: 42px;
+  z-index: 2001;
+}
+
+.reels-share-btn {
+  position: fixed;
+  top: 2rem;
+  left: 2rem;
+  z-index: 2001;
+}
+
+.reels-nav-hub {
+  position: fixed;
+  top: 50%;
+  right: 2rem;
+  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  z-index: 2000;
+  gap: 1.5rem;
+  z-index: 2001;
   pointer-events: none;
 }
 
@@ -61,22 +74,12 @@
   transform: scale(1.1);
 }
 
-/* 🔝 Share Button - Horizontal alignment with Close */
-.reels-share-btn {
-  position: fixed;
-  top: 2rem;
-  left: 2rem;
-  z-index: 2000;
-  font-size: 20px;
-}
-
-/* Navigation Arrow Specifics */
 .reels-nav-btn svg {
   display: block;
 }
 
 /* Safe Area Protection */
-.reels-nav-hub {
+.reels-close-btn {
   top: calc(2rem + env(safe-area-inset-top, 0px));
   right: calc(2rem + env(safe-area-inset-right, 0px));
 }
@@ -86,15 +89,19 @@
   left: calc(2rem + env(safe-area-inset-left, 0px));
 }
 
+.reels-nav-hub {
+  right: calc(2rem + env(safe-area-inset-right, 0px));
+}
+
 /* Mobile Polish */
 @media (max-width: 767px) {
 
-  .reels-nav-hub,
+  .reels-close-btn,
   .reels-share-btn {
     top: 1rem;
   }
 
-  .reels-nav-hub {
+  .reels-close-btn {
     right: 1rem;
   }
 
@@ -102,9 +109,12 @@
     left: 1rem;
   }
 
-  .reels-nav-hub,
-  .reels-share-btn,
+  .reels-nav-hub {
+    right: 1rem;
+  }
+
   .reels-close-btn,
+  .reels-share-btn,
   .reels-nav-btn {
     width: 36px;
     height: 36px;

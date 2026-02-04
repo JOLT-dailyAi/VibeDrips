@@ -955,17 +955,14 @@ function wrapModalForSliding(centerProductId) {
             bubble.classList.remove('hidden');
             ticker.style.display = 'none';
             zoomBtnMirror.style.display = 'flex';
+            zoomBtnMirror.style.pointerEvents = 'auto';
             if (dropdown) dropdown.classList.remove('active');
         } else if (isGlobe) {
             bubble.classList.remove('hidden');
-            ticker.style.display = 'block';
-            zoomBtnMirror.style.display = 'none';
+            ticker.style.display = 'none'; // Hide ticker for Globe Active
+            zoomBtnMirror.style.display = 'flex'; // Show zoom mirror display
+            zoomBtnMirror.style.pointerEvents = 'none'; // Static display only
             if (dropdown) dropdown.classList.add('active');
-            // Update Ticker Text for Flight Mode
-            tickerContent.innerHTML = `
-                <span>🚀 Tap a Flag to Warp Marketplace &nbsp; | &nbsp; </span>
-                <span>🚀 Tap a Flag to Warp Marketplace &nbsp; | &nbsp; </span>
-            `;
         } else {
             bubble.classList.remove('hidden');
             ticker.style.display = 'block';
