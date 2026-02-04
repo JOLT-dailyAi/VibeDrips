@@ -20,33 +20,28 @@ function openReelsModal() {
   if (window.renderReelsFeed) {
     window.renderReelsFeed();
 
-    // ✅ NEW: Top Controls Row (aligned with globe-toggle height)
-    let controlsGroup = modal.querySelector('.reels-external-controls');
-    if (!controlsGroup) {
-      controlsGroup = document.createElement('div');
-      controlsGroup.className = 'reels-external-controls';
-      controlsGroup.innerHTML = `
-            <button class="reels-share-btn share-toggle-mirror" title="Copy Reel Link">🔗</button>
-            <button class="reels-exit-btn close-toggle-mirror" title="Close Reels">✕</button>
-        `;
-      modal.appendChild(controlsGroup);
-    }
-
-    const shareBtn = controlsGroup.querySelector('.reels-share-btn');
-    const closeBtn = controlsGroup.querySelector('.reels-exit-btn');
-
-    shareBtn.onclick = (e) => {
-      e.stopPropagation();
-      // Get URL of currently visible reel from DOM if possible, or use current location
-      const activeReel = document.querySelector('.reel-section:not(.hidden)');
-      const url = activeReel ? (activeReel.querySelector('.reel-video')?.dataset?.url || window.location.href) : window.location.href;
-      navigator.clipboard.writeText(url).then(() => {
+    // ✅ REUSE: Inject Share button into existing Nav Hub
+    const hub = modal.querySelector('.reels-nav-hub');
+    if (hub && !hub.querySelector('.reels-share-btn')) {
+      const shareBtn = document.createElement('button');
+      shareBtn.className = 'reels-share-btn';
+      shareBtn.innerHTML = '<span>🔗</span>';
+      shareBtn.title = 'Copy Reel Link';
+      shareBtn.onclick = (e) => {
+        e.stopPropagation();
+        const activeReel = document.querySelector('.reel-section:not(.hidden)');
+        const url = activeReel?.querySelector('.reel-video')?.dataset?.url || window.location.href;
+        if (window.fallbackCopyToClipboard) {
+          window.fallbackCopyToClipboard(url);
+        } else {
+          navigator.clipboard.writeText(url);
+        }
         shareBtn.classList.add('success');
         setTimeout(() => shareBtn.classList.remove('success'), 2000);
-      });
-    };
-
-    closeBtn.onclick = (e) => { e.stopPropagation(); closeReelsModal(); };
+      };
+      // Insert as first child to align left in hub's top row
+      hub.insertBefore(shareBtn, hub.firstChild);
+    }
 
     // ✅ NEW: Restore last position after render
     setTimeout(() => {

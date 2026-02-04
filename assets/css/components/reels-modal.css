@@ -17,140 +17,107 @@
   display: none;
 }
 
-/* 🏗️ Navigation Hub - Vertical Hub on Right (Full Height) */
+/* 🏗️ Navigation Hub - Repurposed as Top Header Row */
+/* 🏗️ Navigation Hub - Repurposed as Top Header Row */
 .reels-nav-hub {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 2rem;
-  width: 60px;
-  /* Match button width */
-  z-index: 1002;
-  pointer-events: none;
-}
-
-/* 🔘 Shared Button Base */
-.reels-close-btn,
-.reels-nav-btn {
-  background: rgba(0, 0, 0, 0.4);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: white;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  pointer-events: auto;
-  backdrop-filter: blur(10px);
-  padding: 0;
-}
-
-.reels-close-btn:hover,
-.reels-nav-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.5);
-  transform: scale(1.1);
-}
-
-.reels-close-btn:active,
-.reels-nav-btn:active {
-  transform: scale(0.95);
-}
-
-/* 🔝 Close Button - FIXED at Top */
-.reels-close-btn {
-  position: absolute;
-  top: 2rem;
-  right: 0;
-  /* Align to hub edge */
-  z-index: 1003;
-}
-
-/* Navigation Arrows - FIXED VERTICAL SLOTS */
-.reels-nav-btn {
-  position: absolute;
-  left: 0;
-  font-size: 20px;
-  line-height: 1;
-}
-
-.reels-nav-btn.up {
-  top: calc(50% - 0.75rem);
-  transform: translateY(-100%);
-  /* Bottom of button at center - gap/2 */
-}
-
-.reels-nav-btn.down {
-  top: calc(50% + 0.75rem);
-  /* Top of button at center + gap/2 */
-}
-
-.reels-nav-btn:hover {
-  transform: scale(1.1) translateY(var(--tw-translate-y, 0));
-  /* Preserving offset if needed, but let's simplify */
-}
-
-/* Specific Hover Fixes for transformed buttons */
-.reels-nav-btn.up:hover {
-  transform: translateY(-100%) scale(1.1);
-}
-
-.reels-nav-btn.down:hover {
-  transform: scale(1.1);
-}
-
-/* HIDE arrows when at boundaries (controlled by JS) */
-.reels-nav-btn.hidden {
-  visibility: hidden !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
-
-/* ========================================
-   REELS EXTERNAL CONTROLS (Top Header Row)
-   ======================================== */
-.reels-external-controls {
   position: absolute;
   top: 2rem;
   left: 2rem;
   right: 2rem;
   height: 42px;
   display: flex;
-  justify-content: flex-end;
   align-items: center;
+  justify-content: flex-end;
   gap: 12px;
   z-index: 2000;
   pointer-events: none;
 }
 
-.share-toggle-mirror,
-.close-toggle-mirror {
-  width: 42px;
-  height: 42px;
+/* 🔘 Shared Button Base - Standardized to 42px */
+.reels-close-btn,
+.reels-share-btn,
+.reels-nav-btn {
   background: rgba(255, 255, 255, var(--glass-refraction, 0.15));
   backdrop-filter: blur(var(--glass-blur, 15px)) saturate(1.8);
   -webkit-backdrop-filter: blur(var(--glass-blur, 15px)) saturate(1.8);
   border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
+  width: 42px;
+  height: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  font-size: 20px;
   cursor: pointer;
-  pointer-events: auto;
+  color: white;
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  pointer-events: auto;
   padding: 0;
 }
 
-.share-toggle-mirror {
-  margin-right: auto;
-  /* Push Share to left, Close to right */
-  font-size: 22px;
+.reels-close-btn:hover,
+.reels-share-btn:hover,
+.reels-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: scale(1.1);
 }
+
+/* 🔝 Buttons Positioning in Top Row */
+.reels-close-btn,
+.reels-share-btn {
+  position: static;
+  /* Clean flex positioning in hub */
+}
+
+.reels-share-btn {
+  margin-right: auto;
+  /* Push Share to left, Close/Arrows to right */
+  font-size: 20px;
+}
+
+.reels-nav-btn {
+  position: fixed;
+  /* Keep arrows on right side, independent of header flex */
+  right: 2rem;
+  z-index: 1002;
+}
+
+.reels-nav-btn.up {
+  top: calc(50% - 0.75rem);
+  transform: translateY(-100%);
+}
+
+.reels-nav-btn.down {
+  top: calc(50% + 0.75rem);
+}
+
+/* Safe Area Protection */
+.reels-nav-hub {
+  top: calc(2rem + env(safe-area-inset-top, 0px));
+  left: calc(2rem + env(safe-area-inset-left, 0px));
+  right: calc(2rem + env(safe-area-inset-right, 0px));
+}
+
+.reels-nav-btn {
+  right: calc(2rem + env(safe-area-inset-right, 0px));
+}
+
+/* Mobile Polish */
+@media (max-width: 767px) {
+  .reels-nav-hub {
+    top: 1rem;
+    left: 1rem;
+    right: 1rem;
+  }
+
+  .reels-nav-btn {
+    right: 1rem;
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* Scroll Container - INSTAGRAM/SHORTS MODE (NO PEEKING) */
 
 .share-toggle-mirror:hover,
 .close-toggle-mirror:hover {
