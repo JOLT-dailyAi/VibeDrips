@@ -107,3 +107,12 @@ Mobile landscape toggles (`.reels-toggle`, `.globe-toggle`) must maintain an **a
 ## 🏗️ Known Architectural Gaps (Waitlist)
 - **One-Way Slider Binding**: The header volume slider (Music Control) propagates its value to media, but media changes (e.g., native volume adjustments) do not reflect back to the slider.
 - **Muted Asymmetry**: The system allows volume persistence but intentionally enforces *Muted-First* behavior on iOS to comply with hardware policies, which can result in perceived state "mismatch" for users moving between platforms.
+### 10. Warp Navigation Standards
+When implementing "Warp" navigation (e.g., from Product Modal to Reels), you must ensure state persistence.
+- **Rule**: Use specific `localStorage` keys (e.g., `vibedrips-last-reel-url`) to preserve the user's focus during the transition.
+- **Rule**: Transitions must be smooth and non-disruptive to the underlying UI state.
+
+### 11. Highlighting Discipline
+To prevent user disorientation after a "Warp" or direct navigation event, the landing target must be visually emphasized.
+- **Rule**: The target element (e.g., a product card in a reel) must trigger a pulse animation or a temporary highlight state upon successful landing.
+- **Rule**: Use a consistent highlight color (e.g., `--color-primary`) to maintain brand parity.

@@ -11,7 +11,7 @@ External controls (like the Reels and Globe toggles) were originally on the same
 ### The Solution: "The Z-Index Hop"
 External modal controls must be placed on a significantly higher layer to clear all glow and shadow artifacts.
 - **Product Box / Glow Layer**: `z-index: 1001`
-- **External Controls**: `z-index: 2000`
+- **External Controls**: `z-index: 6000`
 
 > [!IMPORTANT]
 > Always ensure external controls bypass the modal's decorative shadow layers by using a z-index delta of at least 500.
@@ -162,3 +162,8 @@ To prevent hidden DOM elements from interfering with active media logic, the sys
 The VibeDrips `index.html` contains several hidden static modal roots (`#static-modal`) used for initialization. A generic selector mistakenly identifies these as "True" even when they are hidden, causing background scripts (like the Reels Feed) to think the user is in a modal when they are actually on the home page. This leads to severe "Backgrounding" regressions where media pulses are permanently blocked.
 
 ---
+
+## 13. Absolute Size Lock (Portrait)
+To prevent horizontal overflow and "bleeding" on small devices, the External Controls bubble uses a fixed-width strategy in portrait mode.
+- **Ticker Width**: Locked to `180px` (or `60vw` on ultra-narrow devices) to ensure icons remain accessible.
+- **Gap Control**: A strict `8px` gap is maintained between the bubble and the modal top edge to prevent z-index "merging" on high-DPI screens.

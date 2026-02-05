@@ -39,7 +39,8 @@ graph TD
     
     JS --> PJS["products.js (Core)"]
     JS --> CUT["carousel-utils.js (Reusable)"]
-    JS --> RJS["reels-modal.js (Feature)"]
+    JS --> RJS["reels-feed.js (Feature)"]
+    JS --> RPS["reels-position.js (State)"]
     
     CSS --> CB["base / (Reset/Vars)"]
     CSS --> CC["components / (Modals/Cards)"]
@@ -123,3 +124,16 @@ To balance performance on restricted mobile browsers with high-speed autoplay on
 Despite recent advancements, some patterns remain in the tracking phase:
 - **One-Way Slider Binding**: The header volume slider propagates its value to media, but media changes (e.g., native adjustments) do not reflect back to the slider.
 - **Cross-Component Persistence**: Volume preference is perfectly synced, but the *Muted State* is intentionally asymmetric to support platform-specific rules (iOS strictly Muted-First).
+
+---
+
+## 5. Regional Warp Logic
+The "Regional Discovery & Share" system enables a seamless jump between the static product catalog and the dynamic media reels.
+
+### One-Focus Interaction Rule
+To maintain visual clarity, the External Controls bubble follows a strict mutual exclusion rule:
+- **🎬 Reels Active**: Displays the media-gallery zoom mirror. The globe dropdown is hidden.
+- **🌎 Globe Active**: Displays "Warp Marketplace" feedback text. The reels control is static.
+
+### State Transitions
+State is preserved during these jumps using the `vibedrips-last-reel-url` key in `localStorage`. This ensures that when a user "warps" to a marketplace, the UI remembers their exact position in the reel feed upon landing.
