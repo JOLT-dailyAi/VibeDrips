@@ -926,10 +926,6 @@ function wrapModalForSliding(centerProductId) {
             <span>🌏</span>
             <span>🌍</span>
             <span>🌎</span>
-            <span>🌐</span>
-            <span>✈️</span>
-            <span>🌐</span>
-            <span>🚀</span>
         </button>
         <div class="marketplace-dropdown">
             <!-- Dropdown items will be injected here -->
