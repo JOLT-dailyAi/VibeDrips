@@ -84,34 +84,22 @@ function restoreReelPosition() {
       console.log(`🎬 Scrolling to target section: ${targetIndex}`);
       reelSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-      // Restore carousel page after scrolling
+      // 🏙️ Phase 8: Simplified Landing - Highlight the entire grid
       setTimeout(() => {
-        const carousel = reelSection.querySelector('.products-carousel');
-        if (carousel && window.goToPage) {
-          window.goToPage(carousel, targetPage);
-
-          // 🏙️ Step 9: Persistent Highlight
-          setTimeout(() => {
-            const grid = reelSection.querySelector('.products-grid');
-            if (grid) {
-              grid.classList.add('persistent-warp-highlight');
-            } else {
-              // Fallback to highlighting the carousel/active card area
-              const carousel = reelSection.querySelector('.products-carousel');
-              if (carousel) carousel.classList.add('persistent-warp-highlight');
-            }
-
-            // 🛑 Step 10: Stop Inward Pulsating Glow
-            const overlay = document.querySelector('.warp-overlay');
-            if (overlay) {
-              overlay.style.opacity = '0';
-              setTimeout(() => overlay.remove(), 800);
-            }
-          }, 1500); // Wait for carousel to settle
+        const grid = reelSection.querySelector('.products-grid');
+        if (grid) {
+          console.log('✨ Applying Persistent Grid Highlight');
+          grid.classList.add('persistent-warp-highlight');
         }
-      }, 1200);
-    }
 
+        // 🛑 Step 10: Stop Inward Pulsating Glow
+        const overlay = document.querySelector('.warp-overlay');
+        if (overlay) {
+          overlay.style.opacity = '0';
+          setTimeout(() => overlay.remove(), 800);
+        }
+      }, 1500); // Wait for reel scroll to settle
+    }
   } catch (error) {
     console.error('❌ Error in restoreReelPosition:', error);
   }
