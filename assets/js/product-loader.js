@@ -39,6 +39,9 @@ async function loadProducts(currency) {
         VibeDrips.elements.productCount.textContent = VibeDrips.allProducts.length || 0;
         VibeDrips.elements.categoryCount.textContent = VibeDrips.categories.size || 0;
 
+        // PHASE_3: Check for Warp Landing
+        handleWarpLanding();
+
     } catch (error) {
         console.error('❌ Product loading failed:', error);
         showError('Unable to load products. Please check your connection and try again.');
@@ -224,10 +227,23 @@ function populateCategoryFilter() {
     });
 }
 
+/**
+ * PHASE_3: Detect and trigger warp sequence
+ */
+function handleWarpLanding() {
+    const targetAsin = localStorage.getItem('vibedrips-warp-target');
+    if (targetAsin && window.openReelsModal) {
+        console.log(`🎯 Warp target detected: ${targetAsin}. Triggering Reels...`);
+        // Note: restoreReelPosition inside openReelsModal handles the specific ASIN navigation
+        window.openReelsModal();
+    }
+}
+
 // Export to global scope
 window.loadProducts = loadProducts;
 window.processProductData = processProductData;
 window.generateId = generateId;
 window.extractCategories = extractCategories;
 window.populateCategoryFilter = populateCategoryFilter;
+window.handleWarpLanding = handleWarpLanding;
 window.DATA_VERSION = DATA_VERSION; // Expose version for debugging

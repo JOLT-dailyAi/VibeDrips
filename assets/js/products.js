@@ -823,6 +823,64 @@ function setupProductInteractions(product) {
 }
 
 /**
+ * PHASE_2: Populate marketplace dropdown from regional_availability
+ */
+function populateMarketplaceDropdown(product, dropdownElement) {
+    if (!dropdownElement) return;
+    dropdownElement.innerHTML = '';
+    
+    const variants = product.regional_variants || {};
+    const regions = Object.keys(variants);
+    
+    const flagMap = {
+        'INR': '🇮🇳',
+        'AUD': '🇦🇺',
+        'USD': '🇺🇸',
+        'GBP': '🇬🇧',
+        'EUR': '🇪🇺',
+        'JPY': '🇯🇵',
+        'CAD': '🇨🇦',
+        'BRL': '🇧🇷',
+        'MXN': '🇲🇽',
+        'AED': '🇦🇪'
+    };
+
+    if (regions.length === 0) {
+        dropdownElement.innerHTML = '<div class="marketplace-item empty">No other regions available</div>';
+        return;
+    }
+
+    regions.forEach(regionCode => {
+        const currencyData = (VibeDrips.availableCurrencies || []).find(c => c.code === regionCode);
+        const flag = flagMap[regionCode] || '🏳️';
+        const countryName = currencyData ? (currencyData.countries ? currencyData.countries[0] : currencyData.name) : regionCode;
+        const symbol = currencyData ? currencyData.symbol : '';
+
+        const item = document.createElement('div');
+        item.className = 'marketplace-item';
+        item.innerHTML = `<span>${flag}</span> ${countryName} (${symbol})`;
+        
+        item.onclick = (e) => {
+            e.stopPropagation();
+            console.log(`🚀 Warping to ${regionCode} for ASIN: ${variants[regionCode]}`);
+            
+            // Set Warp State
+            localStorage.setItem('vibedrips-warp-target', variants[regionCode]);
+            localStorage.setItem('vibedrips-warp-currency', regionCode);
+            
+            // Invoke global currency switch
+            const selector = document.getElementById('currency-selector');
+            if (selector) {
+                selector.value = regionCode;
+                if (window.setCurrency) window.setCurrency();
+            }
+        };
+        
+        dropdownElement.appendChild(item);
+    });
+}
+
+/**
  * PHASE_1: Wrap existing modal with sliding navigation structure
  */
 function wrapModalForSliding(centerProductId) {
@@ -1076,6 +1134,10 @@ function wrapModalForSliding(centerProductId) {
     if (window.VibeDrips && VibeDrips.ExternalControls) {
         setTimeout(() => {
             VibeDrips.ExternalControls.init();
+
+            // PHASE_2: Populate Marketplace Dropdown
+            const currentItem = productList[VibeDrips.modalState.currentIndex];
+            populateMarketplaceDropdown(currentItem, dropdown);
         }, 50);
     }
 }

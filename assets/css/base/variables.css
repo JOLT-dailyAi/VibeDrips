@@ -3,6 +3,7 @@
 :root {
     /* Brand Colors */
     --color-primary: #667eea;
+    --color-primary-rgb: 102, 126, 234;
     --color-primary-dark: #5a67d8;
     --color-secondary: #764ba2;
     --color-bg-main: #2E1D80;

@@ -28,15 +28,15 @@ function saveReelPosition(reelUrl, pageIndex) {
  */
 function restoreReelPosition() {
   try {
+    // PHASE_3: Check for Warp Target (priority) or Saved URL
+    const warpAsin = localStorage.getItem('vibedrips-warp-target');
     const savedUrl = localStorage.getItem(STORAGE_KEY_REEL_URL);
     const savedPage = parseInt(localStorage.getItem(STORAGE_KEY_PAGE) || '0');
 
-    if (!savedUrl) {
-      console.log('💾 No saved position found');
+    if (!warpAsin && !savedUrl) {
+      console.log('💾 No saved position or warp target found');
       return;
     }
-
-    console.log(`💾 Restoring position: ${savedUrl}, page ${savedPage}`);
 
     // Get all reels data
     const reelsData = window.getReelsDataFromProducts ? window.getReelsDataFromProducts() : [];
@@ -45,35 +45,67 @@ function restoreReelPosition() {
       return;
     }
 
-    // Find reel index by URL
-    const reelIndex = reelsData.findIndex(reel => reel.url === savedUrl);
+    let targetIndex = -1;
+    let targetPage = 0;
 
-    if (reelIndex === -1) {
-      console.warn('⚠️ Saved reel URL not found, clearing localStorage');
-      localStorage.removeItem(STORAGE_KEY_REEL_URL);
-      localStorage.removeItem(STORAGE_KEY_PAGE);
+    if (warpAsin) {
+      // 🚀 WARP LOGIC: Find reel containing the target ASIN
+      reelsData.forEach((reel, rIdx) => {
+        const pIdx = reel.products.findIndex(p => p.asin === warpAsin);
+        if (pIdx !== -1) {
+          targetIndex = rIdx;
+          targetPage = pIdx;
+        }
+      });
+      console.log(`🚀 Warp target found: ASIN ${warpAsin} -> Reel ${targetIndex}, Page ${targetPage}`);
+      // Clear warp state immediately to prevent infinite "Warp" on refresh
+      localStorage.removeItem('vibedrips-warp-target');
+      localStorage.removeItem('vibedrips-warp-currency');
+    } else {
+      // Find reel index by URL
+      targetIndex = reelsData.findIndex(reel => reel.url === savedUrl);
+      targetPage = savedPage;
+    }
+
+    if (targetIndex === -1) {
+      console.warn('⚠️ Target not found');
+      if (!warpAsin) {
+        localStorage.removeItem(STORAGE_KEY_REEL_URL);
+        localStorage.removeItem(STORAGE_KEY_PAGE);
+      }
       return;
     }
 
-    console.log(`✅ Found reel at index ${reelIndex}, navigating...`);
+    // Scroll and Highlight
+    const container = document.querySelector('.reels-scroll-container');
+    const reelSection = document.querySelector(`[data-reel-index="${targetIndex}"]`);
 
-    // Scroll to saved reel section
-    const reelSection = document.querySelector(`[data-reel-index="${reelIndex}"]`);
     if (reelSection) {
+      console.log(`🎬 Scrolling to target section: ${targetIndex}`);
       reelSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      
+
       // Restore carousel page after scrolling
       setTimeout(() => {
         const carousel = reelSection.querySelector('.products-carousel');
         if (carousel && window.goToPage) {
-          window.goToPage(carousel, savedPage);
-          console.log(`✅ Restored to page ${savedPage}`);
+          window.goToPage(carousel, targetPage);
+
+          // 🛡️ PHASE_3: Unified Glow Pulse (Wait for carousel to land)
+          setTimeout(() => {
+            const cards = reelSection.querySelectorAll('.product-card');
+            const targetCard = cards[targetPage];
+            if (targetCard) {
+              console.log('✨ Applying Warp Highlight Pulse');
+              targetCard.classList.add('warp-highlight');
+              setTimeout(() => targetCard.classList.remove('warp-highlight'), 3000);
+            }
+          }, 600);
         }
-      }, 2000);  // ← Give it 2 full seconds
+      }, 1200);
     }
 
   } catch (error) {
-    console.error('❌ Error restoring position:', error);
+    console.error('❌ Error in restoreReelPosition:', error);
   }
 }
 
