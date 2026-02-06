@@ -206,14 +206,13 @@ body.light-theme .marketplace-item {
 }
 
 body.light-theme .marketplace-item:hover {
-    background: rgba(90, 75, 255, 0.08);
-    /* Light primary tint */
-    color: var(--color-primary, #5A4BFF);
+    background: #667eea !important;
+    color: white !important;
 }
 
 /* Theme Awareness: Dark Theme Marketplace Item */
 body.dark-theme .marketplace-item:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.25) !important;
 }
 
 .marketplace-item.empty {
