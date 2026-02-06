@@ -1009,6 +1009,12 @@ function wrapModalForSliding(centerProductId) {
             ticker.style.display = 'none';
             zoomBtnMirror.style.display = 'flex';
             zoomBtnMirror.style.pointerEvents = 'auto';
+            zoomBtnMirror.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                </svg>
+                Fullscreen Gallery
+            `;
             if (dropdown) dropdown.classList.remove('active');
         } else if (isGlobe) {
             bubble.classList.remove('hidden');
