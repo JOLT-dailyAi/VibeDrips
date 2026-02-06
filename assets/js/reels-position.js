@@ -90,16 +90,24 @@ function restoreReelPosition() {
         if (carousel && window.goToPage) {
           window.goToPage(carousel, targetPage);
 
-          // 🛡️ PHASE_3: Unified Glow Pulse (Wait for carousel to land)
+          // 🏙️ Step 9: Persistent Highlight
           setTimeout(() => {
-            const cards = reelSection.querySelectorAll('.product-card');
-            const targetCard = cards[targetPage];
-            if (targetCard) {
-              console.log('✨ Applying Warp Highlight Pulse');
-              targetCard.classList.add('warp-highlight');
-              setTimeout(() => targetCard.classList.remove('warp-highlight'), 3000);
+            const grid = reelSection.querySelector('.products-grid');
+            if (grid) {
+              grid.classList.add('persistent-warp-highlight');
+            } else {
+              // Fallback to highlighting the carousel/active card area
+              const carousel = reelSection.querySelector('.products-carousel');
+              if (carousel) carousel.classList.add('persistent-warp-highlight');
             }
-          }, 600);
+
+            // 🛑 Step 10: Stop Inward Pulsating Glow
+            const overlay = document.querySelector('.warp-overlay');
+            if (overlay) {
+              overlay.style.opacity = '0';
+              setTimeout(() => overlay.remove(), 800);
+            }
+          }, 1500); // Wait for carousel to settle
         }
       }, 1200);
     }

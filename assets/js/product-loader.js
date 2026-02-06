@@ -228,14 +228,28 @@ function populateCategoryFilter() {
 }
 
 /**
- * PHASE_3: Detect and trigger warp sequence
+ * PHASE_6: Automated High-Fidelity Sequence
+ * Step 7: Wait for data load, then trigger click on Reels category
  */
 function handleWarpLanding() {
     const targetAsin = localStorage.getItem('vibedrips-warp-target');
     if (targetAsin && window.openReelsModal) {
-        console.log(`🎯 Warp target detected: ${targetAsin}. Triggering Reels...`);
-        // Note: restoreReelPosition inside openReelsModal handles the specific ASIN navigation
-        window.openReelsModal();
+        console.log(`🎯 Warp Landing Detected: ${targetAsin}`);
+
+        // 🏙️ Step 7: Find Reels Filter, simulate hover/click
+        setTimeout(() => {
+            const reelsFilter = document.querySelector('.time-category[data-filter="reels"]');
+            if (reelsFilter) {
+                reelsFilter.classList.add('system-hover');
+
+                setTimeout(() => {
+                    reelsFilter.classList.remove('system-hover');
+                    window.openReelsModal();
+                }, 1000); // 1s hover for visibility
+            } else {
+                window.openReelsModal();
+            }
+        }, 1200); // Initial delay to allow DOM to stabilize after load
     }
 }
 

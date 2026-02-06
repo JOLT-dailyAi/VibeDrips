@@ -862,17 +862,8 @@ function populateMarketplaceDropdown(product, dropdownElement) {
 
         item.onclick = (e) => {
             e.stopPropagation();
-            console.log(`🚀 Warping to ${regionCode} for ASIN: ${variants[regionCode]}`);
-
-            // Set Warp State
-            localStorage.setItem('vibedrips-warp-target', variants[regionCode]);
-            localStorage.setItem('vibedrips-warp-currency', regionCode);
-
-            // Invoke global currency switch
-            const selector = document.getElementById('currency-selector');
-            if (selector) {
-                selector.value = regionCode;
-                if (window.setCurrency) window.setCurrency();
+            if (window.triggerHighFidelityWarp) {
+                window.triggerHighFidelityWarp(regionCode, variants[regionCode]);
             }
         };
 
@@ -1970,6 +1961,83 @@ window.sortProducts = sortProducts;
 window.openAmazonLink = openAmazonLink;
 window.showProductModal = showProductModal;
 window.populateMarketplaceDropdown = populateMarketplaceDropdown;
+/**
+ * PHASE_6: Automated High-Fidelity Warp Sequence
+ * Orchestrates the 10-step sequence requested by the user.
+ */
+async function triggerHighFidelityWarp(regionCode, targetAsin) {
+    console.log(`🌌 Initiating High-Fidelity Warp to ${regionCode}...`);
+
+    // 1️⃣ Step 1: Start Inward Pulsating Glow
+    let overlay = document.querySelector('.warp-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'warp-overlay';
+        overlay.innerHTML = `
+            <div class="warp-overlay-glow"></div>
+            <div class="warp-center-ring"></div>
+        `;
+        document.body.appendChild(overlay);
+    }
+    void overlay.offsetWidth;
+    overlay.classList.add('active');
+
+    // 2️⃣ Step 2: Change dropdown state to OFF
+    const dropdown = document.querySelector('.marketplace-dropdown');
+    if (dropdown) dropdown.classList.remove('active');
+
+    await new Promise(r => setTimeout(r, 400));
+
+    // 3️⃣ Step 3: Close product-modal (Dynamic Modal)
+    const modal = document.querySelector('.dynamic-modal');
+    if (modal) {
+        // Trigger close via the internal overlay to ensure it runs through closeDynamicModal logic
+        const modalOverlay = modal.querySelector('.modal-overlay');
+        if (modalOverlay) {
+            closeDynamicModal({ target: modalOverlay, stopPropagation: () => { } });
+        } else {
+            modal.remove();
+        }
+    }
+
+    // 4️⃣ Step 4: if reels-modal is open then closeReelsModal()
+    if (window.closeReelsModal) {
+        window.closeReelsModal();
+    }
+
+    await new Promise(r => setTimeout(r, 600));
+
+    // 5️⃣ Step 5: trigger id="currency-trigger" hover state then call showCurrencyModal()
+    const trigger = document.getElementById('currency-trigger');
+    const currencyBtn = document.querySelector('.currency-display');
+    if (currencyBtn) {
+        currencyBtn.classList.add('system-hover');
+        await new Promise(r => setTimeout(r, 800));
+        if (window.showCurrencyModal) window.showCurrencyModal();
+        currencyBtn.classList.remove('system-hover');
+    }
+
+    await new Promise(r => setTimeout(r, 500));
+
+    // 6️⃣ Step 6: id="currency-selector" hover then set value and setCurrency()
+    const selector = document.getElementById('currency-selector');
+    if (selector) {
+        selector.classList.add('system-hover');
+        await new Promise(r => setTimeout(r, 800));
+
+        // Load target into state
+        localStorage.setItem('vibedrips-warp-target', targetAsin);
+        localStorage.setItem('vibedrips-warp-currency', regionCode);
+
+        selector.value = regionCode;
+        if (window.setCurrency) {
+            await window.setCurrency();
+        }
+        selector.classList.remove('system-hover');
+    }
+}
+
+window.triggerHighFidelityWarp = triggerHighFidelityWarp;
 // PHASE_1: Export navigation functions
 window.navigateModal = navigateModal;
 window.setupProductInteractions = setupProductInteractions;

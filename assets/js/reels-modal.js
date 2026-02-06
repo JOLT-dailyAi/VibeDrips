@@ -16,6 +16,12 @@ function openReelsModal() {
   // Disable body scroll
   document.body.style.overflow = 'hidden';
 
+  // 🧹 PHASE_5: Safety Cleanup - Remove any lingering warp overlays on open
+  const existingOverlay = document.querySelector('.warp-overlay');
+  if (existingOverlay && !localStorage.getItem('vibedrips-warp-target')) {
+    existingOverlay.remove();
+  }
+
   // Render reels feed inside modal
   if (window.renderReelsFeed) {
     window.renderReelsFeed();
