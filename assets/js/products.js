@@ -1121,16 +1121,20 @@ function wrapModalForSliding(centerProductId) {
     // PHASE_10: Dynamic Dimension Sync
     syncModalDimensions();
 
-    // PHASE_12: External Controls Logic with Safety Delay
-    if (window.VibeDrips && VibeDrips.ExternalControls) {
-        setTimeout(() => {
+    // 🚀 PHASE_13: Robust Marketplace Initialization (Fixes Blank Dropdown)
+    // Remove fragile ExternalControls gating; call population directly.
+    setTimeout(() => {
+        if (window.VibeDrips && VibeDrips.ExternalControls) {
             VibeDrips.ExternalControls.init();
+        }
 
-            // PHASE_2: Populate Marketplace Dropdown
-            const currentItem = productList[VibeDrips.modalState.currentIndex];
+        // Direct robust population check
+        const currentItem = productList[VibeDrips.modalState.currentIndex];
+        if (dropdown && currentItem && typeof populateMarketplaceDropdown === 'function') {
+            console.log('🌍 Marketplace Sync: Initializing Dropdown Content');
             populateMarketplaceDropdown(currentItem, dropdown);
-        }, 50);
-    }
+        }
+    }, 50);
 }
 
 /**
