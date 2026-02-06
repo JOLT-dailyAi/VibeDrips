@@ -2081,8 +2081,17 @@ async function triggerHighFidelityWarp(regionCode, targetAsin, isLocal = false) 
         console.log('⚡ Local Warp: Coordinating Context Jump');
         localStorage.setItem('vibedrips-warp-target', targetAsin);
 
-        // 1. Settlement Delay: Let the home page reveal itself
-        console.log('⏳ Settlement Delay: 1.2s');
+        // 🏙️ Phase 23: Ultra-Premium Pacing
+        // 1. Stabilization Delay: Ensure DOM settles after modal closures
+        console.log('⏳ Stabilization Delay: 800ms');
+        await new Promise(r => setTimeout(r, 800));
+
+        // 2. Smooth Scroll: Direct visibility of navigation context
+        console.log('📜 Scrolling to top for traversal visibility...');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        // 3. Cinematic Delay: Wait for scroll to reach target and settle
+        console.log('⏳ Cinematic Scroll Delay: 1200ms');
         await new Promise(r => setTimeout(r, 1200));
 
         const tabs = Array.from(document.querySelectorAll('.time-category'));
