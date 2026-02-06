@@ -2028,9 +2028,19 @@ async function triggerHighFidelityWarp(regionCode, targetAsin) {
         escapeCount++;
     }
 
-    await new Promise(r => setTimeout(r, 400));
+    // 4️⃣ Step 4: 🚀 PHASE_16: Complete Context Clearance (Reels Modal)
+    // If we're inside a Reels Modal, close it to reveal the home page before warp finish
+    const reelsModal = document.getElementById('reels-modal');
+    if (reelsModal && !reelsModal.classList.contains('hidden')) {
+        console.log('🎬 Cinematic Escape Stage 2: Closing Background Reels Modal');
+        if (window.closeReelsModal) {
+            window.closeReelsModal();
+            // Wait for reels-modal exit animation (300ms) + buffer
+            await new Promise(r => setTimeout(r, 450));
+        }
+    }
 
-    // 4️⃣ Step 4: [REMOVED] - Now handled by Tiered Escape Loop in Step 3
+    await new Promise(r => setTimeout(r, 400));
 
     // 5️⃣ Step 5: trigger id="currency-trigger" hover state then call showCurrencyModal()
     const trigger = document.getElementById('currency-trigger');
