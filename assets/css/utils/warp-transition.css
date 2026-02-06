@@ -18,7 +18,8 @@
     opacity: 1;
     pointer-events: all;
     background: rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(2px);
+    /* PHASE_7: Removed blur for perfect clarity */
+    backdrop-filter: none;
 }
 
 .warp-overlay-glow {
@@ -96,9 +97,8 @@
 
 /* Persistent Grid/Card Highlight */
 .persistent-warp-highlight {
-    outline: 3px solid rgba(var(--color-primary-rgb), 1);
-    outline-offset: 4px;
-    box-shadow: 0 0 40px rgba(var(--color-primary-rgb), 0.8),
-        inset 0 0 20px rgba(var(--color-primary-rgb), 0.4);
+    /* PHASE_7: Switched to pure box-shadow to ensure zero dimension impact */
+    box-shadow: 0 0 50px 15px rgba(var(--color-primary-rgb), 0.8),
+        inset 0 0 30px rgba(var(--color-primary-rgb), 0.4);
     transition: box-shadow 0.5s ease-in-out;
 }
