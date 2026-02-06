@@ -2005,24 +2005,32 @@ async function triggerHighFidelityWarp(regionCode, targetAsin) {
 
     await new Promise(r => setTimeout(r, 400));
 
-    // 3️⃣ Step 3: Close product-modal (Dynamic Modal)
-    const modal = document.querySelector('.dynamic-modal');
-    if (modal) {
-        // Trigger close via the internal overlay to ensure it runs through closeDynamicModal logic
+    // 3️⃣ Step 3: 🚀 PHASE_15: Tiered Cinematic Escape Loop
+    // Gracefully unwinds active layers (Dropdown -> Reels -> Modal) using tiered logic
+    let escapeCount = 0;
+    const maxEscapes = 5; // Safety cap
+
+    while (document.querySelector('.dynamic-modal') && escapeCount < maxEscapes) {
+        const modal = document.querySelector('.dynamic-modal');
         const modalOverlay = modal.querySelector('.modal-overlay');
+
         if (modalOverlay) {
+            console.log(`🌀 Cinematic Escape Layer #${escapeCount + 1}`);
             closeDynamicModal({ target: modalOverlay, stopPropagation: () => { } });
+
+            // Brief delay between "tiers" for premium visual unwinding
+            await new Promise(r => setTimeout(r, 350));
         } else {
+            console.log('🛑 No modal overlay found, immediate removal');
             modal.remove();
+            break;
         }
+        escapeCount++;
     }
 
-    // 4️⃣ Step 4: if reels-modal is open then closeReelsModal()
-    if (window.closeReelsModal) {
-        window.closeReelsModal();
-    }
+    await new Promise(r => setTimeout(r, 400));
 
-    await new Promise(r => setTimeout(r, 600));
+    // 4️⃣ Step 4: [REMOVED] - Now handled by Tiered Escape Loop in Step 3
 
     // 5️⃣ Step 5: trigger id="currency-trigger" hover state then call showCurrencyModal()
     const trigger = document.getElementById('currency-trigger');
