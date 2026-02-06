@@ -2012,7 +2012,7 @@ async function triggerHighFidelityWarp(regionCode, targetAsin) {
     const currencyBtn = document.querySelector('.currency-display');
     if (currencyBtn) {
         currencyBtn.classList.add('system-hover');
-        await new Promise(r => setTimeout(r, 800));
+        await new Promise(r => setTimeout(r, 1200)); // Phase 11: Extended to 1.2s
         if (window.showCurrencyModal) window.showCurrencyModal();
         currencyBtn.classList.remove('system-hover');
     }

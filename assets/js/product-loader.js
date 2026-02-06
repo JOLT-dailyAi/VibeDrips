@@ -236,20 +236,26 @@ function handleWarpLanding() {
     if (targetAsin && window.openReelsModal) {
         console.log(`🎯 Warp Landing Detected: ${targetAsin}`);
 
-        // 🏙️ Step 7: Find Reels Filter, simulate hover/click
+        // 🏙️ Phase 11: Cinematic Landing Visibility
+        // 1. Smooth Scroll to top so elements are in view
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        // 2. Settlement Delay + Find Reels Filter
         setTimeout(() => {
             const reelsFilter = document.querySelector('.time-category[data-filter="reels"]');
             if (reelsFilter) {
+                console.log('✨ Walkthrough: Highlighting Reels Filter');
                 reelsFilter.classList.add('system-hover');
 
+                // 3. Extended Hover for professional "walkthrough" feel
                 setTimeout(() => {
                     reelsFilter.classList.remove('system-hover');
                     window.openReelsModal();
-                }, 1000); // 1s hover for visibility
+                }, 1500); // 1.5s hover
             } else {
                 window.openReelsModal();
             }
-        }, 1200); // Initial delay to allow DOM to stabilize after load
+        }, 1200); // Wait for scroll/load settlement
     }
 }
 
