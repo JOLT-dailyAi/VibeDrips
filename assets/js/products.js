@@ -828,10 +828,10 @@ function setupProductInteractions(product) {
 function populateMarketplaceDropdown(product, dropdownElement) {
     if (!dropdownElement) return;
     dropdownElement.innerHTML = '';
-    
+
     const variants = product.regional_variants || {};
     const regions = Object.keys(variants);
-    
+
     const flagMap = {
         'INR': '🇮🇳',
         'AUD': '🇦🇺',
@@ -859,15 +859,15 @@ function populateMarketplaceDropdown(product, dropdownElement) {
         const item = document.createElement('div');
         item.className = 'marketplace-item';
         item.innerHTML = `<span>${flag}</span> ${countryName} (${symbol})`;
-        
+
         item.onclick = (e) => {
             e.stopPropagation();
             console.log(`🚀 Warping to ${regionCode} for ASIN: ${variants[regionCode]}`);
-            
+
             // Set Warp State
             localStorage.setItem('vibedrips-warp-target', variants[regionCode]);
             localStorage.setItem('vibedrips-warp-currency', regionCode);
-            
+
             // Invoke global currency switch
             const selector = document.getElementById('currency-selector');
             if (selector) {
@@ -875,7 +875,7 @@ function populateMarketplaceDropdown(product, dropdownElement) {
                 if (window.setCurrency) window.setCurrency();
             }
         };
-        
+
         dropdownElement.appendChild(item);
     });
 }
@@ -1271,6 +1271,13 @@ function navigateModal(direction) {
                 const activeGrid = window.mediaOverlay.strip?.children[2];
                 const playerSlot = activeGrid?.querySelector('.active-player');
                 if (playerSlot) playerSlot.innerHTML = window.mediaOverlay.getPlayerHTML(window.mediaOverlay.mediaItems[0]);
+            }
+
+            // ✅ PHASE_4: Sync Marketplace Dropdown after navigation
+            const activeProduct = productList[VibeDrips.modalState.currentIndex];
+            const dropdown = document.querySelector('.marketplace-dropdown');
+            if (dropdown && activeProduct && typeof populateMarketplaceDropdown === 'function') {
+                populateMarketplaceDropdown(activeProduct, dropdown);
             }
 
             // 4. CRITICAL: Force Reflow
@@ -1962,6 +1969,7 @@ window.filterProducts = filterProducts;
 window.sortProducts = sortProducts;
 window.openAmazonLink = openAmazonLink;
 window.showProductModal = showProductModal;
+window.populateMarketplaceDropdown = populateMarketplaceDropdown;
 // PHASE_1: Export navigation functions
 window.navigateModal = navigateModal;
 window.setupProductInteractions = setupProductInteractions;
