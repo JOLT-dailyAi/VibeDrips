@@ -2024,6 +2024,10 @@ window.populateMarketplaceDropdown = populateMarketplaceDropdown;
 async function triggerHighFidelityWarp(regionCode, targetAsin, isLocal = false) {
     console.log(`🌌 Initiating High-Fidelity Warp to ${regionCode} (isLocal: ${isLocal})...`);
 
+    // 0️⃣ Step 0: Capture Initial State (for Local Warp Context Awareness)
+    const reelsModal = document.getElementById('reels-modal');
+    const isReelsInitiallyActive = reelsModal && !reelsModal.classList.contains('hidden');
+
     // 1️⃣ Step 1: Start Inward Pulsating Glow
     let overlay = document.querySelector('.warp-overlay');
     if (!overlay) {
@@ -2065,12 +2069,15 @@ async function triggerHighFidelityWarp(regionCode, targetAsin, isLocal = false) 
     }
 
     // 4️⃣ Step 4: 🚀 PHASE_16: Complete Context Clearance (Reels Modal)
-    const reelsModal = document.getElementById('reels-modal');
-    if (reelsModal && !reelsModal.classList.contains('hidden')) {
-        console.log('🎬 Cinematic Escape Stage 2: Closing Background Reels Modal');
-        if (window.closeReelsModal) {
-            window.closeReelsModal();
-            await new Promise(r => setTimeout(r, 450));
+    // 🛡️ LOCAL WARP BYPASS: Don't close reels if we are already in the right context
+    if (!isLocal || !isReelsInitiallyActive) {
+        const reelsModal = document.getElementById('reels-modal');
+        if (reelsModal && !reelsModal.classList.contains('hidden')) {
+            console.log('🎬 Cinematic Escape Stage 2: Closing Background Reels Modal');
+            if (window.closeReelsModal) {
+                window.closeReelsModal();
+                await new Promise(r => setTimeout(r, 450));
+            }
         }
     }
 
@@ -2081,10 +2088,7 @@ async function triggerHighFidelityWarp(regionCode, targetAsin, isLocal = false) 
         console.log('⚡ Local Warp: Coordinating Context Jump');
         localStorage.setItem('vibedrips-warp-target', targetAsin);
 
-        const reelsModal = document.getElementById('reels-modal');
-        const isReelsActive = reelsModal && !reelsModal.classList.contains('hidden');
-
-        if (isReelsActive) {
+        if (isReelsInitiallyActive) {
             // 🎬 Priority 1: Instant Reveal (Already in Discovery)
             console.log('🚀 Local Warp Branch: Instant Reveal (Already in Discovery)');
             if (window.openReelsModal) window.openReelsModal();
@@ -2131,6 +2135,9 @@ async function triggerHighFidelityWarp(regionCode, targetAsin, isLocal = false) 
                 reelsTab.click();
             }
         }
+
+        // 🧹 6. UI Cleanup: Ensure no persistent highlights
+        document.querySelectorAll('.time-category').forEach(t => t.classList.remove('system-hover'));
 
         // Clean up overlay
         setTimeout(() => {
