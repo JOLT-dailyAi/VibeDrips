@@ -379,6 +379,12 @@ body.view-reels-mode .reels-toggle.active::before {
     animation: zoomPulse 2s infinite;
 }
 
+/* Theme Awareness: Light Theme Mirror Text Visibility */
+body.light-theme .control-bubble .zoom-btn-mirror {
+    color: #2D3748 !important;
+    font-weight: 700;
+}
+
 @keyframes zoomPulse {
     0% {
         opacity: 0.8;
@@ -399,4 +405,9 @@ body.view-reels-mode .reels-toggle.active::before {
 .zoom-btn-mirror svg {
     color: #E53E3E;
     /* Match the red theme */
+}
+
+/* Light Theme SVG Adjustment */
+body.light-theme .control-bubble .zoom-btn-mirror svg {
+    color: var(--color-primary, #5A4BFF) !important;
 }
