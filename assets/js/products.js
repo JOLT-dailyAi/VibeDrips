@@ -831,6 +831,7 @@ function populateMarketplaceDropdown(product, dropdownElement) {
 
     const variants = product.regional_variants || {};
     const regions = Object.keys(variants);
+    const currentRegionCode = VibeDrips.currentCurrency || 'INR';
 
     const flagMap = {
         'INR': 'in',
@@ -844,6 +845,38 @@ function populateMarketplaceDropdown(product, dropdownElement) {
         'MXN': 'mx',
         'AED': 'ae'
     };
+
+    // 🎬 LOCAL DISCOVERY WARP: Inject current region as "Hero" option
+    const currencyData = (VibeDrips.availableCurrencies || []).find(c => c.code === currentRegionCode);
+    const countryCode = flagMap[currentRegionCode] || currentRegionCode.toLowerCase().substring(0, 2);
+    const countryName = currencyData ? (currencyData.countries ? currencyData.countries[0] : currencyData.name) : (currentRegionCode === 'INR' ? 'India' : currentRegionCode);
+    const symbol = currencyData ? currencyData.symbol : '';
+
+    const heroItem = document.createElement('div');
+    heroItem.className = 'marketplace-item local-jump';
+    heroItem.innerHTML = `
+        <img src="https://flagcdn.com/w40/${countryCode}.png" 
+             srcset="https://flagcdn.com/w80/${countryCode}.png 2x"
+             width="20" 
+             alt="${countryName}"
+             class="marketplace-flag"
+             style="margin-right: 8px; border-radius: 2px; vertical-align: middle;">
+        ${countryName} (${symbol})
+    `;
+
+    heroItem.onclick = (e) => {
+        e.stopPropagation();
+        if (window.triggerHighFidelityWarp) {
+            window.triggerHighFidelityWarp(currentRegionCode, product.asin, true);
+        }
+    };
+
+    dropdownElement.appendChild(heroItem);
+
+    // Separator line
+    const separator = document.createElement('div');
+    separator.className = 'marketplace-separator';
+    dropdownElement.appendChild(separator);
 
     if (regions.length === 0) {
         dropdownElement.innerHTML = '<div class="marketplace-item empty">No other regions available</div>';
@@ -1988,8 +2021,8 @@ window.populateMarketplaceDropdown = populateMarketplaceDropdown;
  * PHASE_6: Automated High-Fidelity Warp Sequence
  * Orchestrates the 10-step sequence requested by the user.
  */
-async function triggerHighFidelityWarp(regionCode, targetAsin) {
-    console.log(`🌌 Initiating High-Fidelity Warp to ${regionCode}...`);
+async function triggerHighFidelityWarp(regionCode, targetAsin, isLocal = false) {
+    console.log(`🌌 Initiating High-Fidelity Warp to ${regionCode} (isLocal: ${isLocal})...`);
 
     // 1️⃣ Step 1: Start Inward Pulsating Glow
     let overlay = document.querySelector('.warp-overlay');
@@ -2012,9 +2045,8 @@ async function triggerHighFidelityWarp(regionCode, targetAsin) {
     await new Promise(r => setTimeout(r, 400));
 
     // 3️⃣ Step 3: 🚀 PHASE_15: Tiered Cinematic Escape Loop
-    // Gracefully unwinds active layers (Dropdown -> Reels -> Modal) using tiered logic
     let escapeCount = 0;
-    const maxEscapes = 5; // Safety cap
+    const maxEscapes = 5;
 
     while (document.querySelector('.dynamic-modal') && escapeCount < maxEscapes) {
         const modal = document.querySelector('.dynamic-modal');
@@ -2023,8 +2055,6 @@ async function triggerHighFidelityWarp(regionCode, targetAsin) {
         if (modalOverlay) {
             console.log(`🌀 Cinematic Escape Layer #${escapeCount + 1}`);
             closeDynamicModal({ target: modalOverlay, stopPropagation: () => { } });
-
-            // Brief delay between "tiers" for premium visual unwinding
             await new Promise(r => setTimeout(r, 350));
         } else {
             console.log('🛑 No modal overlay found, immediate removal');
@@ -2035,18 +2065,42 @@ async function triggerHighFidelityWarp(regionCode, targetAsin) {
     }
 
     // 4️⃣ Step 4: 🚀 PHASE_16: Complete Context Clearance (Reels Modal)
-    // If we're inside a Reels Modal, close it to reveal the home page before warp finish
     const reelsModal = document.getElementById('reels-modal');
     if (reelsModal && !reelsModal.classList.contains('hidden')) {
         console.log('🎬 Cinematic Escape Stage 2: Closing Background Reels Modal');
         if (window.closeReelsModal) {
             window.closeReelsModal();
-            // Wait for reels-modal exit animation (300ms) + buffer
             await new Promise(r => setTimeout(r, 450));
         }
     }
 
     await new Promise(r => setTimeout(r, 400));
+
+    // 🏎️ LOCAL WARP SHORT-CIRCUIT
+    if (isLocal) {
+        console.log('⚡ Local Warp: Coordinating Context Jump');
+        localStorage.setItem('vibedrips-warp-target', targetAsin);
+
+        const tabs = Array.from(document.querySelectorAll('.time-category'));
+        const reelsTab = tabs.find(t => t.getAttribute('data-filter') === 'reels');
+        const isAlreadyReels = reelsTab && reelsTab.classList.contains('active');
+
+        if (!isAlreadyReels && reelsTab) {
+            console.log('📍 Switching to Discovery category');
+            reelsTab.click();
+            // Category click triggers handleWarpLanding in product-loader.js
+        } else if (window.openReelsModal) {
+            console.log('📍 Already in Discovery, revealing background reel');
+            window.openReelsModal();
+        }
+
+        // Clean up overlay
+        setTimeout(() => {
+            overlay.classList.remove('active');
+            setTimeout(() => overlay.remove(), 1000);
+        }, 1200);
+        return;
+    }
 
     // 5️⃣ Step 5: trigger id="currency-trigger" hover state then call showCurrencyModal()
     const trigger = document.getElementById('currency-trigger');
