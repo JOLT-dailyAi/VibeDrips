@@ -180,6 +180,53 @@ body.dark-theme .marketplace-dropdown {
     transform: translateY(0);
 }
 
+/* Marketplace Item Styling & Hover Effects */
+.marketplace-item {
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: white;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+}
+
+.marketplace-item:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Theme Awareness: Light Theme Marketplace Item */
+body.light-theme .marketplace-item {
+    color: #2D3748;
+}
+
+body.light-theme .marketplace-item:hover {
+    background: rgba(90, 75, 255, 0.08);
+    /* Light primary tint */
+    color: var(--color-primary, #5A4BFF);
+}
+
+/* Theme Awareness: Dark Theme Marketplace Item */
+body.dark-theme .marketplace-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.marketplace-item.empty {
+    opacity: 0.6;
+    cursor: default;
+    justify-content: center;
+}
+
+.marketplace-item.empty:hover {
+    background: none;
+    transform: none;
+}
+
 /* Glass tail/pointer pointing to the icons */
 .control-bubble::after {
     content: '';
