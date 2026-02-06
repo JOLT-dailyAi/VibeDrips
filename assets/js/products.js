@@ -2081,52 +2081,54 @@ async function triggerHighFidelityWarp(regionCode, targetAsin, isLocal = false) 
         console.log('⚡ Local Warp: Coordinating Context Jump');
         localStorage.setItem('vibedrips-warp-target', targetAsin);
 
-        // 🏙️ Phase 23: Ultra-Premium Pacing
-        // 1. Stabilization Delay: Ensure DOM settles after modal closures
-        console.log('⏳ Stabilization Delay: 800ms');
-        await new Promise(r => setTimeout(r, 800));
+        const reelsModal = document.getElementById('reels-modal');
+        const isReelsActive = reelsModal && !reelsModal.classList.contains('hidden');
 
-        // 2. Smooth Scroll: Direct visibility of navigation context
-        console.log('📜 Scrolling to top for traversal visibility...');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (isReelsActive) {
+            // 🎬 Priority 1: Instant Reveal (Already in Discovery)
+            console.log('🚀 Local Warp Branch: Instant Reveal (Already in Discovery)');
+            if (window.openReelsModal) window.openReelsModal();
+        } else {
+            // 📖 Priority 2: Premium Discovery (Static Categories)
+            console.log('🚀 Local Warp Branch: Premium Discovery (Static Category)');
 
-        // 3. Cinematic Delay: Wait for scroll to reach target and settle
-        console.log('⏳ Cinematic Scroll Delay: 1200ms');
-        await new Promise(r => setTimeout(r, 1200));
+            // 1. Stabilization Delay: Ensure DOM settles after modal closures
+            console.log('⏳ Stabilization Delay: 800ms');
+            await new Promise(r => setTimeout(r, 800));
 
-        const tabs = Array.from(document.querySelectorAll('.time-category'));
-        const reelsTab = tabs.find(t => t.getAttribute('data-filter') === 'reels');
-        const activeTab = tabs.find(t => t.classList.contains('active'));
+            // 2. Smooth Scroll: Direct visibility of navigation context
+            console.log('📜 Scrolling to top for traversal visibility...');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
 
-        if (reelsTab) {
-            // 2. Premium Traversal: Sequential Hover Loop
-            const targetIndex = tabs.indexOf(reelsTab);
-            const startIndex = activeTab ? tabs.indexOf(activeTab) : (tabs.length - 1);
+            // 3. Cinematic Delay: Wait for scroll to reach target and settle
+            console.log('⏳ Cinematic Scroll Delay: 1200ms');
+            await new Promise(r => setTimeout(r, 1200));
 
-            console.log(`🛤️ Traversing category tabs from index ${startIndex} to ${targetIndex}`);
+            const tabs = Array.from(document.querySelectorAll('.time-category'));
+            const reelsTab = tabs.find(t => t.getAttribute('data-filter') === 'reels');
+            const activeTab = tabs.find(t => t.classList.contains('active'));
 
-            const step = startIndex <= targetIndex ? 1 : -1;
-            for (let i = startIndex; i !== targetIndex + step; i += step) {
-                const currentTab = tabs[i];
-                currentTab.classList.add('system-hover');
+            if (reelsTab) {
+                // 4. Premium Traversal: Sequential Hover Loop
+                const targetIndex = tabs.indexOf(reelsTab);
+                const startIndex = activeTab ? tabs.indexOf(activeTab) : (tabs.length - 1);
 
-                // Delay for visibility of each tab hover
-                await new Promise(r => setTimeout(r, 300));
+                console.log(`🛤️ Traversing category tabs from index ${startIndex} to ${targetIndex}`);
 
-                if (i !== targetIndex) {
-                    currentTab.classList.remove('system-hover');
+                const step = startIndex <= targetIndex ? 1 : -1;
+                for (let i = startIndex; i !== targetIndex + step; i += step) {
+                    const currentTab = tabs[i];
+                    currentTab.classList.add('system-hover');
+                    await new Promise(r => setTimeout(r, 300));
+
+                    if (i !== targetIndex) {
+                        currentTab.classList.remove('system-hover');
+                    }
                 }
-            }
 
-            // 3. Final Action
-            const isAlreadyReels = reelsTab.classList.contains('active');
-            if (!isAlreadyReels) {
+                // 5. Final Action: Switch to Discovery
                 console.log('📍 Switching to Discovery category');
                 reelsTab.click();
-            } else if (window.openReelsModal) {
-                console.log('📍 Already in Discovery, revealing background reel');
-                reelsTab.classList.remove('system-hover');
-                window.openReelsModal();
             }
         }
 
