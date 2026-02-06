@@ -833,16 +833,16 @@ function populateMarketplaceDropdown(product, dropdownElement) {
     const regions = Object.keys(variants);
 
     const flagMap = {
-        'INR': '🇮🇳',
-        'AUD': '🇦🇺',
-        'USD': '🇺🇸',
-        'GBP': '🇬🇧',
-        'EUR': '🇪🇺',
-        'JPY': '🇯🇵',
-        'CAD': '🇨🇦',
-        'BRL': '🇧🇷',
-        'MXN': '🇲🇽',
-        'AED': '🇦🇪'
+        'INR': 'in',
+        'AUD': 'au',
+        'USD': 'us',
+        'GBP': 'gb',
+        'EUR': 'eu',
+        'JPY': 'jp',
+        'CAD': 'ca',
+        'BRL': 'br',
+        'MXN': 'mx',
+        'AED': 'ae'
     };
 
     if (regions.length === 0) {
@@ -852,13 +852,21 @@ function populateMarketplaceDropdown(product, dropdownElement) {
 
     regions.forEach(regionCode => {
         const currencyData = (VibeDrips.availableCurrencies || []).find(c => c.code === regionCode);
-        const flag = flagMap[regionCode] || '🏳️';
+        const countryCode = flagMap[regionCode] || regionCode.toLowerCase().substring(0, 2);
         const countryName = currencyData ? (currencyData.countries ? currencyData.countries[0] : currencyData.name) : regionCode;
         const symbol = currencyData ? currencyData.symbol : '';
 
         const item = document.createElement('div');
         item.className = 'marketplace-item';
-        item.innerHTML = `<span>${flag}</span> ${countryName} (${symbol})`;
+        item.innerHTML = `
+            <img src="https://flagcdn.com/w40/${countryCode}.png" 
+                 srcset="https://flagcdn.com/w80/${countryCode}.png 2x"
+                 width="20" 
+                 alt="${countryName}"
+                 class="marketplace-flag"
+                 style="margin-right: 8px; border-radius: 2px; vertical-align: middle;">
+            ${countryName} (${symbol})
+        `;
 
         item.onclick = (e) => {
             e.stopPropagation();
@@ -1849,8 +1857,13 @@ function closeDynamicModal(event) {
 
     if (modal) {
         if (event.target.classList.contains('modal-overlay') || button) {
-            // Restore body scroll
-            document.body.style.overflow = '';
+            // ✅ TIERED CLOSURE: Stage 0 - Globe Toggle (Marketplace Dropdown)
+            const globeBtn = document.querySelector('.globe-toggle.active');
+            if (event.target.classList.contains('modal-overlay') && globeBtn) {
+                console.log('🌍 Marketplace Sync: Dismissing Dropdown via Overlay Click');
+                globeBtn.click();
+                return;
+            }
 
             // ✅ TIERED CLOSURE: Stage 1 - Media Overlay
             const reelsBtn = document.querySelector('.reels-toggle.active');
