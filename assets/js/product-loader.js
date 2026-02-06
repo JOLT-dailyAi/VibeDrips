@@ -236,28 +236,48 @@ function handleWarpLanding() {
     if (targetAsin && window.openReelsModal) {
         console.log(`🎯 Warp Landing Detected: ${targetAsin}`);
 
-        // 🏙️ Phase 11: Cinematic Landing Visibility
+        // 🏙️ Phase 12: Smart Cinematic Interaction Traversal
         // 1. Smooth Scroll to top so elements are in view
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
-        // 2. Settlement Delay + Find Reels Filter
-        setTimeout(() => {
-            const reelsFilter = document.querySelector('.time-category[data-filter="reels"]');
-            if (reelsFilter) {
-                console.log('✨ Walkthrough: Highlighting Reels Filter');
-                reelsFilter.classList.add('system-hover');
+        // 2. Settlement Delay + Dynamic Tab Pathfinding
+        setTimeout(async () => {
+            const tabs = Array.from(document.querySelectorAll('.time-category'));
+            const targetTab = tabs.find(t => t.getAttribute('data-filter') === 'reels');
+            const activeTab = tabs.find(t => t.classList.contains('active'));
 
-                // 3. Extended Hover for professional "walkthrough" feel
+            if (targetTab && tabs.length > 0) {
+                const targetIndex = tabs.indexOf(targetTab);
+                const startIndex = activeTab ? tabs.indexOf(activeTab) : tabs.length - 1;
+
+                console.log(`🛤️ Traversing category tabs from index ${startIndex} to ${targetIndex}`);
+
+                // Sequential Hover Flow
+                const step = startIndex <= targetIndex ? 1 : -1;
+                for (let i = startIndex; i !== targetIndex + step; i += step) {
+                    const currentTab = tabs[i];
+                    currentTab.classList.add('system-hover');
+
+                    // Delay for visibility of each tab hover
+                    await new Promise(r => setTimeout(r, 300));
+
+                    if (i !== targetIndex) {
+                        currentTab.classList.remove('system-hover');
+                    }
+                }
+
+                // Final Selection Pause
                 setTimeout(() => {
-                    reelsFilter.classList.remove('system-hover');
+                    targetTab.classList.remove('system-hover');
                     window.openReelsModal();
-                }, 1500); // 1.5s hover
-            } else {
+                }, 800);
+            } else if (window.openReelsModal) {
                 window.openReelsModal();
             }
-        }, 1200); // Wait for scroll/load settlement
+        }, 1200); // Initial settlement delay
     }
 }
+
 
 // Export to global scope
 window.loadProducts = loadProducts;

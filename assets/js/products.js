@@ -2025,22 +2025,34 @@ async function triggerHighFidelityWarp(regionCode, targetAsin) {
         selector.classList.add('system-hover');
         await new Promise(r => setTimeout(r, 600));
 
-        // 🏙️ PHASE_10: Simulate "Open" state by expanding size
+        // 🏙️ PHASE_12: Dynamic Traversal (No Hard-Coding)
         console.log('⚡ Visual Expansion: Simulating Open Dropdown');
         const originalSize = selector.size || 1;
-        selector.size = Math.min(selector.options.length, 5); // Show up to 5 options
+        selector.size = Math.min(selector.options.length, 5);
 
-        await new Promise(r => setTimeout(r, 1200)); // Delay to show values
+        await new Promise(r => setTimeout(r, 600));
+
+        // Smart Pathfinding: Find target index
+        const options = Array.from(selector.options);
+        const targetIndex = options.findIndex(opt => opt.value === regionCode);
+        const startIndex = selector.selectedIndex > 0 ? selector.selectedIndex : 0;
+
+        if (targetIndex !== -1) {
+            console.log(`🛤️ Traversing from index ${startIndex} to ${targetIndex}`);
+
+            // Sequential highlight traversal
+            const step = startIndex <= targetIndex ? 1 : -1;
+            for (let i = startIndex; i !== targetIndex + step; i += step) {
+                selector.selectedIndex = i;
+                await new Promise(r => setTimeout(r, 200)); // Cinematic step delay
+            }
+        }
 
         // Load target into state
         localStorage.setItem('vibedrips-warp-target', targetAsin);
         localStorage.setItem('vibedrips-warp-currency', regionCode);
 
-        // Visual Selection
-        console.log(`🎯 System Selection: ${regionCode}`);
-        selector.value = regionCode;
-
-        await new Promise(r => setTimeout(r, 800)); // Delay to show selection
+        await new Promise(r => setTimeout(r, 800)); // Selection pause
 
         // Collapse and Finish
         selector.size = originalSize;
