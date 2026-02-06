@@ -2019,17 +2019,31 @@ async function triggerHighFidelityWarp(regionCode, targetAsin) {
 
     await new Promise(r => setTimeout(r, 500));
 
-    // 6️⃣ Step 6: id="currency-selector" hover then set value and setCurrency()
+    // 6️⃣ Step 6: id="currency-selector" hover then simulate "Open" state
     const selector = document.getElementById('currency-selector');
     if (selector) {
         selector.classList.add('system-hover');
-        await new Promise(r => setTimeout(r, 800));
+        await new Promise(r => setTimeout(r, 600));
+
+        // 🏙️ PHASE_10: Simulate "Open" state by expanding size
+        console.log('⚡ Visual Expansion: Simulating Open Dropdown');
+        const originalSize = selector.size || 1;
+        selector.size = Math.min(selector.options.length, 5); // Show up to 5 options
+
+        await new Promise(r => setTimeout(r, 1200)); // Delay to show values
 
         // Load target into state
         localStorage.setItem('vibedrips-warp-target', targetAsin);
         localStorage.setItem('vibedrips-warp-currency', regionCode);
 
+        // Visual Selection
+        console.log(`🎯 System Selection: ${regionCode}`);
         selector.value = regionCode;
+
+        await new Promise(r => setTimeout(r, 800)); // Delay to show selection
+
+        // Collapse and Finish
+        selector.size = originalSize;
         if (window.setCurrency) {
             await window.setCurrency();
         }
@@ -2042,4 +2056,3 @@ window.triggerHighFidelityWarp = triggerHighFidelityWarp;
 window.navigateModal = navigateModal;
 window.setupProductInteractions = setupProductInteractions;
 console.log('Products.js loaded successfully with currency-aware price formatting and text truncation');
-

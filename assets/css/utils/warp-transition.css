@@ -102,3 +102,28 @@
         inset 0 0 40px rgba(var(--color-primary-rgb), 0.3);
     transition: box-shadow 0.5s ease-in-out;
 }
+
+/* PHASE_10: Expanded Dropdown Simulation */
+#currency-selector[size]:not([size="1"]) {
+    background: rgba(15, 15, 15, 0.95) !important;
+    border: 2px solid rgba(var(--color-primary-rgb), 0.8) !important;
+    border-radius: 12px !important;
+    padding: 10px !important;
+    margin-top: 10px !important;
+    color: white !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+    overflow-y: auto !important;
+}
+
+#currency-selector[size]:not([size="1"]) option {
+    padding: 12px !important;
+    margin: 4px 0 !important;
+    border-radius: 6px !important;
+    transition: background 0.3s ease !important;
+}
+
+#currency-selector[size]:not([size="1"]) option:hover,
+#currency-selector[size]:not([size="1"]) option:checked {
+    background: rgba(var(--color-primary-rgb), 0.4) !important;
+    color: white !important;
+}
