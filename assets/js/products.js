@@ -2081,24 +2081,51 @@ async function triggerHighFidelityWarp(regionCode, targetAsin, isLocal = false) 
         console.log('⚡ Local Warp: Coordinating Context Jump');
         localStorage.setItem('vibedrips-warp-target', targetAsin);
 
+        // 1. Settlement Delay: Let the home page reveal itself
+        console.log('⏳ Settlement Delay: 1.2s');
+        await new Promise(r => setTimeout(r, 1200));
+
         const tabs = Array.from(document.querySelectorAll('.time-category'));
         const reelsTab = tabs.find(t => t.getAttribute('data-filter') === 'reels');
-        const isAlreadyReels = reelsTab && reelsTab.classList.contains('active');
+        const activeTab = tabs.find(t => t.classList.contains('active'));
 
-        if (!isAlreadyReels && reelsTab) {
-            console.log('📍 Switching to Discovery category');
-            reelsTab.click();
-            // Category click triggers handleWarpLanding in product-loader.js
-        } else if (window.openReelsModal) {
-            console.log('📍 Already in Discovery, revealing background reel');
-            window.openReelsModal();
+        if (reelsTab) {
+            // 2. Premium Traversal: Sequential Hover Loop
+            const targetIndex = tabs.indexOf(reelsTab);
+            const startIndex = activeTab ? tabs.indexOf(activeTab) : (tabs.length - 1);
+
+            console.log(`🛤️ Traversing category tabs from index ${startIndex} to ${targetIndex}`);
+
+            const step = startIndex <= targetIndex ? 1 : -1;
+            for (let i = startIndex; i !== targetIndex + step; i += step) {
+                const currentTab = tabs[i];
+                currentTab.classList.add('system-hover');
+
+                // Delay for visibility of each tab hover
+                await new Promise(r => setTimeout(r, 300));
+
+                if (i !== targetIndex) {
+                    currentTab.classList.remove('system-hover');
+                }
+            }
+
+            // 3. Final Action
+            const isAlreadyReels = reelsTab.classList.contains('active');
+            if (!isAlreadyReels) {
+                console.log('📍 Switching to Discovery category');
+                reelsTab.click();
+            } else if (window.openReelsModal) {
+                console.log('📍 Already in Discovery, revealing background reel');
+                reelsTab.classList.remove('system-hover');
+                window.openReelsModal();
+            }
         }
 
         // Clean up overlay
         setTimeout(() => {
             overlay.classList.remove('active');
             setTimeout(() => overlay.remove(), 1000);
-        }, 1200);
+        }, 800);
         return;
     }
 

@@ -381,4 +381,25 @@ body.dark-theme .control-bubble::after {
         gap: 8px !important;
         /* Tighten gap to save horizontal space */
     }
+
+}
+
+/* ============================================================
+   MARKETPLACE SEPARATOR (Universal Theme Support)
+   ============================================================ */
+.marketplace-separator {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.12);
+    /* Default Dark/Glass */
+    margin: 6px 12px;
+    display: block;
+}
+
+body.light-theme .marketplace-separator {
+    background: rgba(45, 55, 72, 0.1);
+}
+
+/* Specific Glass Parity */
+body.glass-theme .marketplace-separator {
+    background: rgba(255, 255, 255, 0.15);
 }
