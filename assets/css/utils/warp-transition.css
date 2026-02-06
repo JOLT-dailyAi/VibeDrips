@@ -97,8 +97,8 @@
 
 /* Persistent Grid/Card Highlight */
 .persistent-warp-highlight {
-    /* PHASE_7: Switched to pure box-shadow to ensure zero dimension impact */
-    box-shadow: 0 0 50px 15px rgba(var(--color-primary-rgb), 0.8),
-        inset 0 0 30px rgba(var(--color-primary-rgb), 0.4);
+    /* PHASE_9: Unified Reel Glow - Enhanced for a larger container */
+    box-shadow: 0 0 60px 25px rgba(var(--color-primary-rgb), 0.8),
+        inset 0 0 40px rgba(var(--color-primary-rgb), 0.3);
     transition: box-shadow 0.5s ease-in-out;
 }

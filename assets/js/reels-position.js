@@ -84,12 +84,12 @@ function restoreReelPosition() {
       console.log(`🎬 Scrolling to target section: ${targetIndex}`);
       reelSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-      // 🏙️ Phase 8: Simplified Landing - Highlight the entire grid
+      // 🏙️ Phase 9: Unified Reel Landing - Highlight the entire content card
       setTimeout(() => {
-        const grid = reelSection.querySelector('.products-grid');
-        if (grid) {
-          console.log('✨ Applying Persistent Grid Highlight');
-          grid.classList.add('persistent-warp-highlight');
+        const content = reelSection.querySelector('.reel-content');
+        if (content) {
+          console.log('✨ Applying Unified Reel Highlight');
+          content.classList.add('persistent-warp-highlight');
         }
 
         // 🛑 Step 10: Stop Inward Pulsating Glow
