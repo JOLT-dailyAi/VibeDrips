@@ -31,6 +31,12 @@ window.VibeDrips = {
         currentIndex: 0,
         isSliding: false,
         currentProductList: [] // PHASE_7: Scoped list for context-aware navigation
+    },
+    // 📱 PWA Detection Helper
+    isStandalone: () => {
+        return window.matchMedia('(display-mode: standalone)').matches ||
+            window.navigator.standalone === true ||
+            window.matchMedia('(display-mode: minimal-ui)').matches;
     }
 };
 
@@ -68,8 +74,7 @@ async function initializeApp() {
             }
 
             // 📱 PWA Nudge: Encourage App experience if on browser
-            const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
-            if (!isPWA && window.showDeepLinkNudge) {
+            if (!VibeDrips.isStandalone() && window.showDeepLinkNudge) {
                 setTimeout(() => window.showDeepLinkNudge(), 3000);
             }
         }

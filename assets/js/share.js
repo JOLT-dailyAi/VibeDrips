@@ -119,6 +119,12 @@ function showToast(message) {
 
 // 📱 PHASE_25: Unified Deep-Link PWA Nudge
 window.showDeepLinkNudge = function () {
+    // 🛡️ Safety Check: Suppress nudge if ALREADY in PWA
+    if (window.VibeDrips && window.VibeDrips.isStandalone()) {
+        console.log('📱 PWA Detection: Already in Standalone mode, suppressing nudge.');
+        return;
+    }
+
     const existing = document.querySelector('.deeplink-nudge');
     if (existing) return;
 
