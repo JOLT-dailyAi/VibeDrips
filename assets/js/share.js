@@ -128,17 +128,12 @@ window.showDeepLinkNudge = function () {
     const existing = document.querySelector('.deeplink-nudge');
     if (existing) return;
 
-    // 🏷️ Label Logic: Default to INSTALL. 
-    // Only show OPEN if we have high confidence it's installed (history).
-    const hasHistoryOfInstall = localStorage.getItem('vibedrips_pwa_installed') === 'true';
-    const btnLabel = hasHistoryOfInstall ? 'OPEN' : 'INSTALL';
-
     const nudge = document.createElement('div');
     nudge.className = 'deeplink-nudge';
     nudge.innerHTML = `
         <div class="nudge-content">
-            <span>✨ Open in VibeDrips App for a smoother experience</span>
-            <button class="nudge-btn" onclick="if(window.handleInstall) window.handleInstall(); this.closest('.deeplink-nudge').classList.remove('visible');">${btnLabel}</button>
+            <span>✨ Experience VibeDrips at its best with the standalone app</span>
+            <button class="nudge-btn" onclick="if(window.handleInstall) window.handleInstall(); this.closest('.deeplink-nudge').classList.remove('visible');">GET APP</button>
         </div>
     `;
 

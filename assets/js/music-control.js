@@ -76,15 +76,6 @@ document.addEventListener('DOMContentLoaded', function () {
         // 📱 Check if physically inside the PWA right now
         const isCurrentlyStandalone = window.VibeDrips && window.VibeDrips.isStandalone();
 
-        // 📱 Check if we have a record of it being installed previously
-        const hasHistoryOfInstall = localStorage.getItem('vibedrips_pwa_installed') === 'true';
-
-        // 🏷️ Label Logic: 
-        // Default to INSTALL. 
-        // Only show OPEN if we have high confidence it's installed (history) 
-        // and we aren't currently inside it (where it's hidden).
-        const btnLabel = hasHistoryOfInstall ? 'OPEN' : 'INSTALL';
-
         centerBadgeContainer.innerHTML = `
             <div style="display: flex; gap: 10px; align-items: center;">
                 <button class="center-badge" id="share-badge" onclick="handleShare()">
@@ -92,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 </button>
                 ${!isCurrentlyStandalone ? `
                     <button class="center-badge" id="install-badge" onclick="handleInstall()">
-                        📱 ${btnLabel}
+                        📱 GET APP
                     </button>
                 ` : ''}
             </div>
@@ -433,13 +424,14 @@ document.addEventListener('DOMContentLoaded', function () {
         const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
         const isAndroid = /Android/.test(navigator.userAgent);
 
-        let icon = '💻';
-        if (isIOS) icon = '📱';
-        if (isAndroid) icon = '📱';
+        let setupHint = 'Use your browser\'s menu to "Add to Home Screen" or "Install App"';
+        if (isIOS) setupHint = 'Tap the <span class="inline-icon share-icon">⎋</span> Share icon and select <span class="inline-icon install-icon">+</span> "Add to Home Screen"';
+        if (isAndroid) setupHint = 'Tap the browser menu <span class="inline-icon">⋮</span> and select "Install App" or "Add to Home Screen"';
 
-        const message = `${icon} Use your browser's menu to "Add to Home Screen" or "Install App"`;
+        const premiumMessage = `✨ Experience VibeDrips at its best! Install the app for a <strong>smoother experience</strong>, <strong>richer UI</strong>, and a truly <strong>premium feel</strong>.`;
+        const subtext = `<br><br><em>Already installed? Simply find us on your home screen! If not, ${setupHint}.</em>`;
 
-        showInstallModal('Install VibeDrips', message);
+        showInstallModal('Get the VibeDrips App', premiumMessage + subtext);
     }
 
 
