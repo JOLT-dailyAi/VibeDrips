@@ -2072,6 +2072,11 @@ async function triggerHighFidelityWarp(regionCode, targetAsin, isLocal = false) 
     let escapeCount = 0;
     const maxEscapes = 5;
 
+    // 🛡️ Deterministic Reset: Explicitly hide currency modal if open
+    if (window.hideCurrencyModal) {
+        window.hideCurrencyModal();
+    }
+
     while (document.querySelector('.dynamic-modal') && escapeCount < maxEscapes) {
         const modal = document.querySelector('.dynamic-modal');
         const modalOverlay = modal.querySelector('.modal-overlay');
@@ -2087,6 +2092,10 @@ async function triggerHighFidelityWarp(regionCode, targetAsin, isLocal = false) 
         }
         escapeCount++;
     }
+
+    // Fail-safe for lingering modals
+    const finalModalCheck = document.querySelector('.dynamic-modal');
+    if (finalModalCheck) finalModalCheck.remove();
 
     // 4️⃣ Step 4: 🚀 PHASE_16: Complete Context Clearance (Reels Modal)
     // 🛡️ LOCAL WARP BYPASS: Don't close reels if we are already in the right context
