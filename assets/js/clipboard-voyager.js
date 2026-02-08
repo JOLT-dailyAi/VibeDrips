@@ -10,36 +10,46 @@
         console.log('📋 Warp Drive: Assessing clipboard content...');
 
         try {
+            // Force focus check (some browsers require the window to be focused)
+            if (document.hasFocus && !document.hasFocus()) {
+                console.warn('⚠️ Warp Drive: Window not focused, focusing now...');
+                window.focus();
+            }
+
             const text = await navigator.clipboard.readText();
             const sanitizedText = text.trim();
+
+            console.log('📋 Warp Drive: Read text length:', sanitizedText.length);
 
             if (!sanitizedText) {
                 showToast('📋 Clipboard is empty');
                 return;
             }
 
-            // 🔍 Validation: Check if it's a valid VibeDrips link
-            // Supports: vibedrips.github.io, localhost, or custom deep-link formats
-            const isVibeDrips = sanitizedText.includes('vibedrips.github.io') ||
-                sanitizedText.includes('localhost') ||
-                sanitizedText.startsWith('web+vibedrips://');
+            // 🔍 Extraction Logic: Use regex to find a VibeDrips URL inside the text
+            const urlRegex = /(https?:\/\/(vibedrips\.github\.io|localhost|127\.0\.0\.1)[^\s<>"]+)|(web\+vibedrips:\/\/[^\s<>"]+)/i;
+            const match = sanitizedText.match(urlRegex);
 
-            if (!isVibeDrips) {
-                console.warn('⚠️ Warp Drive: Invalid URL detected on clipboard.');
+            if (!match) {
+                console.warn('⚠️ Warp Drive: No valid VibeDrips URL found in text:', sanitizedText.substring(0, 50) + '...');
                 showToast('❌ No VibeDrips link found');
                 return;
             }
 
-            // 🧩 Extraction Logic
+            const foundUrl = match[0];
+            console.log('🚀 Warp Drive: Found VibeDrips URL:', foundUrl);
+
+            // 🧩 Parsing Logic
             let urlObj;
             try {
                 // Handle custom protocol if present
-                const normalizedUrl = sanitizedText.startsWith('web+vibedrips://')
-                    ? sanitizedText.replace('web+vibedrips://', 'https://')
-                    : sanitizedText;
+                const normalizedUrl = foundUrl.toLowerCase().startsWith('web+vibedrips://')
+                    ? foundUrl.replace(/web\+vibedrips:\/\//i, 'https://')
+                    : foundUrl;
 
                 urlObj = new URL(normalizedUrl);
             } catch (e) {
+                console.error('❌ Warp Drive: URL parsing failed for:', foundUrl);
                 showToast('❌ Invalid URL format');
                 return;
             }
@@ -49,23 +59,31 @@
             const currency = params.get('currency');
 
             if (!asin) {
+                console.warn('⚠️ Warp Drive: ASIN missing in URL parameters.');
                 showToast('❌ No Product ASIN found in link');
                 return;
             }
 
-            console.log(`🚀 Warp Drive: Valid link found! Warping to ${asin} (${currency || 'default'})...`);
+            console.log(`🚀 Warp Drive: Success! Warping to ${asin} (${currency || 'default'})...`);
 
             // 🎇 Trigger the High-Fidelity Sequence
             if (window.triggerHighFidelityWarp) {
                 window.triggerHighFidelityWarp(currency, asin, false);
             } else if (window.ProductLoader && window.ProductLoader.openProductModal) {
-                // Fallback for older context
                 window.ProductLoader.openProductModal(asin);
+            } else {
+                console.error('❌ Warp Drive: No warp trigger function found.');
+                showToast('❌ System not ready for warp');
             }
 
         } catch (err) {
             console.error('❌ Warp Drive: Clipboard access failed:', err);
-            showToast('⚠️ Please allow paste permission');
+            // Handle specific browser error cases
+            if (err.name === 'NotAllowedError') {
+                showToast('⚠️ Please allow paste permission');
+            } else {
+                showToast('❌ Clipboard access denied');
+            }
         }
     };
 
