@@ -429,6 +429,12 @@ body.dark-theme .volume-panel {
     pointer-events: none !important;
 }
 
+/* 📱 PWA Mode: Strictly hide install elements in standalone mode */
+body.pwa-mode #install-badge,
+body.pwa-mode .deeplink-nudge {
+    display: none !important;
+}
+
 .center-badge {
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);

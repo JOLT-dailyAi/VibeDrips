@@ -48,6 +48,7 @@ async function initializeApp() {
         cacheElements();
         // 📱 PHASE_27: Persist PWA installation status
         if (window.VibeDrips.isStandalone()) {
+            document.body.classList.add('pwa-mode');
             localStorage.setItem('vibedrips_pwa_installed', 'true');
             console.log('📱 PWA Detection: Standalone mode detected, persisting state.');
         }
