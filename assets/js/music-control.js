@@ -67,16 +67,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Show share button (with install button - always visible unless already installed)
     function showShareBadge() {
-        // Check if already installed (PWA standalone mode)
-        const isInstalled = window.matchMedia('(display-mode: standalone)').matches
-            || window.navigator.standalone === true;
+        // 📱 Check if already installed via centralized helper
+        const isStandalone = window.VibeDrips && window.VibeDrips.isStandalone();
 
         centerBadgeContainer.innerHTML = `
             <div style="display: flex; gap: 10px; align-items: center;">
                 <button class="center-badge" id="share-badge" onclick="handleShare()">
                     SHARE ↗️
                 </button>
-                ${!isInstalled ? `
+                ${!isStandalone ? `
                     <button class="center-badge" id="install-badge" onclick="handleInstall()">
                         📱 ${window.deferredPrompt ? 'INSTALL' : 'OPEN'}
                     </button>
