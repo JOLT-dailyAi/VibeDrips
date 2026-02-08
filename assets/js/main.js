@@ -32,11 +32,14 @@ window.VibeDrips = {
         isSliding: false,
         currentProductList: [] // PHASE_7: Scoped list for context-aware navigation
     },
-    // 📱 PWA Detection Helper
+    // 📱 PWA Detection Helper: Comprehensive check for all standalone-like modes
     isStandalone: () => {
         return window.matchMedia('(display-mode: standalone)').matches ||
+            window.matchMedia('(display-mode: minimal-ui)').matches ||
+            window.matchMedia('(display-mode: fullscreen)').matches ||
+            window.matchMedia('(display-mode: window-controls-overlay)').matches ||
             window.navigator.standalone === true ||
-            window.matchMedia('(display-mode: minimal-ui)').matches;
+            document.referrer.includes('android-app://');
     }
 };
 

@@ -73,8 +73,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Show share button (with install button - always visible unless already installed)
     function showShareBadge() {
-        // 📱 Check if physically inside the PWA right now
-        const isCurrentlyStandalone = window.VibeDrips && window.VibeDrips.isStandalone();
+        // 📱 Check if physically inside the PWA right now (Double-Check with CSS class)
+        const isCurrentlyStandalone = (window.VibeDrips && window.VibeDrips.isStandalone()) ||
+            document.body.classList.contains('pwa-mode');
 
         centerBadgeContainer.innerHTML = `
             <div style="display: flex; gap: 10px; align-items: center;">
