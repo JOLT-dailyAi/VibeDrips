@@ -1,58 +1,47 @@
-// clipboard-voyager.js - The "Warp Drive" logic for VibeDrips
-// Handles reading clipboard content and triggering high-fidelity warps.
+// clipboard-voyager.js - Integrated Search-Warp Drive for VibeDrips
+// Offers a "Paste & Warp" experience directly within the search interface.
 
 (function () {
+    let warpPromptElement = null;
+
     /**
      * Extracts parameters from a VibeDrips URL and triggers a warp.
+     * @param {string} customText - Optional text to bypass clipboard read (for debugging).
      */
-    window.handleClipboardPaste = async function () {
-        console.log('📋 Warp Drive: Assessing clipboard content...');
-        showToast('🔍 Reading Clipboard...');
+    window.handleClipboardPaste = async function (customText = null) {
+        console.log('📋 Warp Drive: Assessing content...');
 
         try {
-            // Artificial delay to ensure OS clipboard buffer is ready
-            await new Promise(resolve => setTimeout(resolve, 300));
-
-            const text = await navigator.clipboard.readText();
+            const text = customText || await navigator.clipboard.readText();
             const sanitizedText = text.trim();
 
-            console.log('📋 Warp Drive: Raw text length:', sanitizedText.length);
+            if (!sanitizedText) return;
 
-            if (!sanitizedText) {
-                showToast('📋 Clipboard is empty');
-                return;
-            }
-
-            // 🔍 Extraction Logic: More forgiving regex (protocol optional)
-            // Finds vibedrips.github.io, localhost, or web+vibedrips protocol
-            const urlRegex = /((?:https?:\/\/)?(?:vibedrips\.github\.io|localhost|127\.0\.0\.1)[^\s<>"]+)|(web\+vibedrips:\/\/[^\s<>"]+)/i;
+            // 🔍 EXTRACTION REGEX: Now supports jolt-dailyai, vibedrips.github.io, etc.
+            // Simplified: Looks for github.io/VibeDrips or localhost with an ASIN
+            const urlRegex = /((?:https?:\/\/)?(?:[a-z0-9-]+\.github\.io\/VibeDrips|localhost|127\.0\.0\.1)[^\s<>"]+)/i;
             const match = sanitizedText.match(urlRegex);
 
             if (!match) {
                 console.warn('⚠️ Warp Drive: No valid VibeDrips URL found.');
-                const snippet = sanitizedText.substring(0, 15);
-                showToast(`❌ No VibeDrips link found in: "${snippet}..."`);
+                // Only show toast if explicitly requested via button/prompt click, not on auto-scan
+                if (customText) showToast('❌ No VibeDrips link found');
                 return;
             }
 
-            let foundUrl = match[0];
-            console.log('🚀 Warp Drive: Found URL Candidate:', foundUrl);
+            const foundUrl = match[0];
+            console.log('🚀 Warp Drive: Found URL:', foundUrl);
 
             // 🧩 Parsing Logic
             let urlObj;
             try {
-                // Ensure a protocol exists for URL constructor
                 let normalizedUrl = foundUrl;
-                if (normalizedUrl.toLowerCase().startsWith('web+vibedrips://')) {
-                    normalizedUrl = normalizedUrl.replace(/web\+vibedrips:\/\//i, 'https://');
-                } else if (!normalizedUrl.match(/^https?:\/\//i)) {
+                if (!normalizedUrl.match(/^https?:\/\//i)) {
                     normalizedUrl = 'https://' + normalizedUrl;
                 }
-
                 urlObj = new URL(normalizedUrl);
             } catch (e) {
-                console.error('❌ Warp Drive: URL parsing failed for:', foundUrl);
-                showToast('❌ Invalid URL format');
+                if (customText) showToast('❌ Invalid URL format');
                 return;
             }
 
@@ -61,52 +50,135 @@
             const currency = params.get('currency');
 
             if (!asin) {
-                console.warn('⚠️ Warp Drive: ASIN missing.');
-                showToast('❌ Link is missing ASIN parameter');
+                if (customText) showToast('❌ Link missing ASIN');
                 return;
             }
 
             console.log(`🚀 Warp Drive: Success! Warping to ${asin}...`);
+            hideWarpPrompt();
             showToast('🚀 Launching Warp Drive...');
 
-            // 🎇 Trigger the High-Fidelity Sequence
             if (window.triggerHighFidelityWarp) {
                 window.triggerHighFidelityWarp(currency, asin, false);
             } else if (window.ProductLoader && window.ProductLoader.openProductModal) {
                 window.ProductLoader.openProductModal(asin);
-            } else {
-                console.error('❌ Warp Drive: No warp trigger function found.');
-                showToast('❌ System not ready for warp');
             }
-
         } catch (err) {
-            console.error('❌ Warp Drive: Clipboard access failed:', err);
-            // Handle specific browser error cases
-            if (err.name === 'NotAllowedError') {
-                showToast('⚠️ Please allow paste permission');
-            } else {
-                showToast('❌ Clipboard access denied');
-            }
+            console.error('❌ Warp Drive Error:', err);
         }
     };
 
-    // Helper to show toasts (synchronized with site style)
+    /**
+     * Initializes the search bar integration.
+     */
+    function initSearchIntegration() {
+        const searchInput = document.getElementById('search');
+        if (!searchInput) return;
+
+        console.log('🔍 Warp Drive: Integrating with Search Bar...');
+
+        // 1. Monitor Focus to offer Warp
+        searchInput.addEventListener('focus', async () => {
+            console.log('🔍 Search focused, checking clipboard...');
+            try {
+                // We don't want to show a toast every time they focus, 
+                // just silently check if we should show the prompt.
+                const text = await navigator.clipboard.readText();
+                const sanitizedText = text.trim();
+
+                // Broad check to see if it's even worth analyzing
+                if (sanitizedText.includes('.github.io') || sanitizedText.includes('localhost')) {
+                    showWarpPrompt(searchInput);
+                }
+            } catch (e) {
+                // Silent fail for focus-check to avoid annoying the user
+            }
+        });
+
+        // 2. Hide prompt on blur (with slight delay for click)
+        searchInput.addEventListener('blur', () => {
+            setTimeout(hideWarpPrompt, 200);
+        });
+    }
+
+    /**
+     * Displays the floating Warp prompt above the search bar.
+     */
+    function showWarpPrompt(anchor) {
+        if (warpPromptElement) return;
+
+        const wrapper = anchor.closest('.search-wrapper');
+        if (!wrapper) return;
+
+        warpPromptElement = document.createElement('div');
+        warpPromptElement.className = 'warp-drive-prompt';
+        warpPromptElement.innerHTML = `
+            <div class="warp-prompt-content" onclick="window.handleClipboardPaste()">
+                <span>🚀 Warp to copied link?</span>
+            </div>
+        `;
+
+        // Style the prompt (inline for maximum containment)
+        Object.assign(warpPromptElement.style, {
+            position: 'absolute',
+            top: '-45px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            background: 'var(--glass-bg, rgba(255, 255, 255, 0.9))',
+            backdropFilter: 'blur(10px)',
+            padding: '8px 15px',
+            borderRadius: '20px',
+            border: '1px solid var(--glass-border, rgba(255, 255, 255, 0.3))',
+            boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
+            fontSize: '13px',
+            fontWeight: '600',
+            color: 'var(--color-primary, #2E1D80)',
+            cursor: 'pointer',
+            zIndex: '1000',
+            animation: 'warpFadeIn 0.3s ease-out forwards',
+            whiteSpace: 'nowrap'
+        });
+
+        wrapper.appendChild(warpPromptElement);
+    }
+
+    function hideWarpPrompt() {
+        if (warpPromptElement && warpPromptElement.parentNode) {
+            warpPromptElement.parentNode.removeChild(warpPromptElement);
+            warpPromptElement = null;
+        }
+    }
+
+    // Helper to show toasts
     function showToast(message) {
         const toast = document.getElementById('toast-notification');
-        if (!toast) {
-            console.log('Toast:', message);
-            return;
-        }
-
+        if (!toast) return;
         toast.textContent = message;
         toast.classList.remove('hidden');
         toast.classList.add('visible');
-
         setTimeout(() => {
             toast.classList.remove('visible');
             setTimeout(() => toast.classList.add('hidden'), 300);
         }, 3000);
     }
 
-    console.log('✅ Clipboard Voyager (Warp Drive) ready');
+    // Add necessary animation to document
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes warpFadeIn {
+            from { opacity: 0; transform: translate(-50%, 10px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
+        .warp-prompt-content:hover { transform: scale(1.05); transition: transform 0.2s; }
+    `;
+    document.head.appendChild(style);
+
+    // Initial load
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initSearchIntegration);
+    } else {
+        initSearchIntegration();
+    }
+
+    console.log('✅ Search-Integrated Warp Drive ready');
 })();

@@ -122,8 +122,10 @@
 
                 <div class="filter-controls">
                     <div class="filter-group">
-                        <input type="text" id="search" placeholder="🔍 Search products, brands..."
-                            oninput="filterProducts()">
+                        <div class="search-wrapper" style="position: relative; flex: 1;">
+                            <input type="text" id="search" placeholder="🔍 Search products, brands..."
+                                oninput="filterProducts()" autocomplete="off">
+                        </div>
                     </div>
                     <div class="filter-group">
                         <select id="category-filter" onchange="filterProducts()">
