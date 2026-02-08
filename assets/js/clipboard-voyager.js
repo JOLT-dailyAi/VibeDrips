@@ -77,13 +77,10 @@
                         view = params.get('view') || 'reel';
                     }
 
-                    // Verification: Does this ASIN actually exist in our DB?
+                    // ✅ FIX: Trust URL-based ASINs immediately without strict DB gating.
+                    // This enables cross-currency warps (e.g. INR link landing while on USD site).
                     const product = findProductInDb(asin);
-                    if (product) {
-                        return { asin, currency: currency || product.currency, view, type: 'warp' };
-                    }
-                    // If it's an amazon/external link with a valid ASIN, we still warp if we have it
-                    if (product) return { asin, currency: product.currency, view: 'reel', type: 'warp' };
+                    return { asin, currency: currency || (product ? product.currency : null), view, type: 'warp' };
                 }
             }
 
