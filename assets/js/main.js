@@ -46,6 +46,13 @@ async function initializeApp() {
 
     try {
         cacheElements();
+        // 📱 PHASE_27: Persist PWA installation status
+        if (window.VibeDrips.isStandalone()) {
+            localStorage.setItem('vibedrips_pwa_installed', 'true');
+            console.log('📱 PWA Detection: Standalone mode detected, persisting state.');
+        }
+
+        // Detect currency and region from IP
         setupEventListeners();
         await detectUserRegion();
         await loadAvailableCurrencies();

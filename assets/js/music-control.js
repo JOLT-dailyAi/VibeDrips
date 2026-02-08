@@ -65,19 +65,34 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // 📱 PWA Sync Bridge: Refreshes the badge when installation state is confirmed
+    window.checkPWAInstallable = function () {
+        console.log('📱 PWA Detection: Confirming installability state...');
+        updateCenterBadge();
+    };
+
     // Show share button (with install button - always visible unless already installed)
     function showShareBadge() {
-        // 📱 Check if already installed via centralized helper
-        const isStandalone = window.VibeDrips && window.VibeDrips.isStandalone();
+        // 📱 Check if physically inside the PWA right now
+        const isCurrentlyStandalone = window.VibeDrips && window.VibeDrips.isStandalone();
+
+        // 📱 Check if we have a record of it being installed previously
+        const hasHistoryOfInstall = localStorage.getItem('vibedrips_pwa_installed') === 'true';
+
+        // 🏷️ Label Logic: 
+        // Default to INSTALL. 
+        // Only show OPEN if we have high confidence it's installed (history) 
+        // and we aren't currently inside it (where it's hidden).
+        const btnLabel = hasHistoryOfInstall ? 'OPEN' : 'INSTALL';
 
         centerBadgeContainer.innerHTML = `
             <div style="display: flex; gap: 10px; align-items: center;">
                 <button class="center-badge" id="share-badge" onclick="handleShare()">
                     SHARE ↗️
                 </button>
-                ${!isStandalone ? `
+                ${!isCurrentlyStandalone ? `
                     <button class="center-badge" id="install-badge" onclick="handleInstall()">
-                        📱 ${window.deferredPrompt ? 'INSTALL' : 'OPEN'}
+                        📱 ${btnLabel}
                     </button>
                 ` : ''}
             </div>

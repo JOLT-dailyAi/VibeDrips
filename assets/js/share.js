@@ -128,8 +128,10 @@ window.showDeepLinkNudge = function () {
     const existing = document.querySelector('.deeplink-nudge');
     if (existing) return;
 
-    const isInstallable = !!window.deferredPrompt;
-    const btnLabel = isInstallable ? 'INSTALL' : 'OPEN';
+    // 🏷️ Label Logic: Default to INSTALL. 
+    // Only show OPEN if we have high confidence it's installed (history).
+    const hasHistoryOfInstall = localStorage.getItem('vibedrips_pwa_installed') === 'true';
+    const btnLabel = hasHistoryOfInstall ? 'OPEN' : 'INSTALL';
 
     const nudge = document.createElement('div');
     nudge.className = 'deeplink-nudge';
