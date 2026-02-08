@@ -412,10 +412,13 @@ body.dark-theme .volume-panel {
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 999;
+    z-index: 1002;
+    /* Above side floats (1000) */
     display: flex;
     justify-content: center;
     align-items: center;
+    pointer-events: none;
+    /* Allow interaction with underlying elements if needed */
 }
 
 .center-badge {
@@ -439,6 +442,8 @@ body.dark-theme .volume-panel {
     text-overflow: ellipsis;
     max-width: calc(100vw - 40px);
     font-family: inherit;
+    pointer-events: auto;
+    /* Re-enable for the actual button */
 }
 
 .center-badge:hover {
@@ -737,6 +742,13 @@ body.dark-theme .inline-icon {
 .install-modal-close:hover {
     background: #764ba2;
     transform: scale(1.02);
+}
+
+/* Volume Panel Hiding for Mobile/Tablets */
+@media (max-width: 1024px) {
+    .volume-panel {
+        display: none !important;
+    }
 }
 
 /* Mobile optimization */

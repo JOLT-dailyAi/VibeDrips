@@ -228,9 +228,16 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Show volume panel
+    // Show volume panel (Desktop only)
     function showVolumePanel() {
         if (!volumePanel) return;
+
+        // Skip on mobile/iPad
+        const isTouchUI = isMobile || window.innerWidth <= 1024;
+        if (isTouchUI) {
+            console.log('🔇 Volume panel suppressed for mobile/tablet');
+            return;
+        }
 
         volumePanel.classList.add('visible');
 
