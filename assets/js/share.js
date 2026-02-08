@@ -7,12 +7,12 @@ function handleShare() {
     const siteUrl = 'https://jolt-dailyai.github.io/VibeDrips/';
     const tagline = 'Curated digital finds and affiliate drops — aesthetic tools, festive picks, and everyday scroll-stoppers.';
 
-    // Formatted text for clipboard: Tagline + Newline + URL
-    const formattedShareText = `${tagline}\n${siteUrl}`;
+    // Formatted text for clipboard: JUST the URL to prevent redundancy with preview card
+    const formattedShareText = `${siteUrl}`;
 
     const shareData = {
         title: 'VibeDrips - Drops that Drip.',
-        text: tagline,
+        text: '', // Empty text to let metadata preview card handle the description
         url: siteUrl
     };
 
