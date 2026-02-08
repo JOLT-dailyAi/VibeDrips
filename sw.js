@@ -66,6 +66,7 @@ const urlsToCache = [
   '/VibeDrips/assets/js/install-prompt.js',
   '/VibeDrips/assets/js/music-control.js',
   '/VibeDrips/assets/js/share.js',
+  '/VibeDrips/assets/js/clipboard-voyager.js',
 
   // Images
   '/VibeDrips/assets/images/VibeDrips.png',

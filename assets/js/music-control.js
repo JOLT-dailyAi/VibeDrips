@@ -90,6 +90,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 <button class="center-badge" id="share-badge" onclick="handleShare()">
                     SHARE ↗️
                 </button>
+                <button class="center-badge" id="paste-warp-badge" onclick="handleClipboardPaste()" title="Warp from Clipboard Link">
+                    📋
+                </button>
                 ${!isCurrentlyStandalone ? `
                     <button class="center-badge" id="install-badge" onclick="handleInstall()">
                         📱 ${btnLabel}

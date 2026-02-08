@@ -22,5 +22,12 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["shopping", "lifestyle"]
+  "categories": ["shopping", "lifestyle"],
+  "handle_links": "preferred",
+  "protocol_handlers": [
+    {
+      "protocol": "web+vibedrips",
+      "url": "/VibeDrips/?open=%s"
+    }
+  ]
 }
