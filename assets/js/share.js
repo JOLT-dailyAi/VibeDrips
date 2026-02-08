@@ -3,8 +3,21 @@
 console.log('📤 Share functionality loading...');
 
 // Global share handler
-function handleShare() {
-    const siteUrl = 'https://jolt-dailyai.github.io/VibeDrips/';
+function handleShare(options = {}) {
+    const { asin, currency, view } = options;
+
+    // Base site URL
+    let siteUrl = 'https://jolt-dailyai.github.io/VibeDrips/';
+
+    // 🔗 PHASE_25: Construct deep-link if parameters are provided
+    if (asin && currency) {
+        const params = new URLSearchParams();
+        params.set('asin', asin);
+        params.set('currency', currency);
+        if (view) params.set('view', view);
+        siteUrl += `?${params.toString()}`;
+    }
+
     const tagline = 'Curated digital finds and affiliate drops — aesthetic tools, festive picks, and everyday scroll-stoppers.';
 
     // Formatted text for clipboard: JUST the URL to prevent redundancy with preview card
@@ -22,7 +35,7 @@ function handleShare() {
         navigator.clipboard.writeText(formattedShareText)
             .then(() => {
                 showToast('✓ Link copied to clipboard!');
-                console.log('✅ Formatted content copied to clipboard pre-share');
+                console.log(`✅ Formatted content copied to clipboard: ${siteUrl}`);
 
                 // 📤 Step 2: Native Share (Delayed slightly for clipboard process to settle)
                 setTimeout(() => initiateNativeShare(shareData), 100);
@@ -103,5 +116,33 @@ function showToast(message) {
         }, 300);
     }, 3000);
 }
+
+// 📱 PHASE_25: Unified Deep-Link PWA Nudge
+window.showDeepLinkNudge = function () {
+    const existing = document.querySelector('.deeplink-nudge');
+    if (existing) return;
+
+    const nudge = document.createElement('div');
+    nudge.className = 'deeplink-nudge';
+    nudge.innerHTML = `
+        <div class="nudge-content">
+            <span>✨ Open in VibeDrips App for a smoother experience</span>
+            <button class="nudge-btn" onclick="if(window.handleInstall) window.handleInstall(); this.closest('.deeplink-nudge').classList.remove('visible');">OPEN</button>
+        </div>
+    `;
+
+    document.body.appendChild(nudge);
+
+    // Animate in
+    requestAnimationFrame(() => {
+        nudge.classList.add('visible');
+    });
+
+    // Auto-hide after 10 seconds
+    setTimeout(() => {
+        nudge.classList.remove('visible');
+        setTimeout(() => nudge.remove(), 600);
+    }, 10000);
+};
 
 console.log('✅ Share functionality ready');

@@ -1102,11 +1102,23 @@ function wrapModalForSliding(centerProductId) {
 
     shareBtn.onclick = (e) => {
         e.stopPropagation();
-        const url = window.location.href;
-        navigator.clipboard.writeText(url).then(() => {
+        const currentItem = productList[VibeDrips.modalState.currentIndex];
+        if (window.handleShare && currentItem) {
+            window.handleShare({
+                asin: currentItem.asin,
+                currency: VibeDrips.currentCurrency || 'INR',
+                view: 'modal'
+            });
             shareBtn.classList.add('success');
             setTimeout(() => shareBtn.classList.remove('success'), 2000);
-        });
+        } else {
+            // Fallback for safety
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                shareBtn.classList.add('success');
+                setTimeout(() => shareBtn.classList.remove('success'), 2000);
+            });
+        }
     };
 
     // NEW: Sliding Viewport (clips the strip while icons sit above)

@@ -662,6 +662,11 @@ function createReelSection(reelData, index) {
   videoDiv.dataset.url = reelData.url;
   videoDiv.dataset.type = reelData.url.match(/\.(mp4|webm|mov|avi)$/i) ? 'video' : 'iframe';
 
+  // 🔗 PHASE_25: Store ASIN for deep-linking (use first product associated with reel)
+  if (reelData.products && reelData.products.length > 0) {
+    videoDiv.dataset.asin = reelData.products[0].asin;
+  }
+
   // Initial placeholder (Lazy Injection)
   videoDiv.innerHTML = '<div class="reel-video-placeholder">🎬</div>';
 

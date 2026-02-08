@@ -98,6 +98,14 @@ function restoreReelPosition() {
           overlay.style.opacity = '0';
           setTimeout(() => overlay.remove(), 800);
         }
+
+        // 🔗 PHASE_25: Conditional Post-Warp Landing (Automatic Modal Open)
+        const deeplinkMode = localStorage.getItem('vibedrips-deeplink-mode');
+        if (deeplinkMode === 'modal' && warpAsin && window.showProductModal) {
+          console.log('🚀 Deep-Link: Automatically opening product modal...');
+          window.showProductModal(warpAsin);
+        }
+        localStorage.removeItem('vibedrips-deeplink-mode');
       }, 1500); // Wait for reel scroll to settle
     }
   } catch (error) {

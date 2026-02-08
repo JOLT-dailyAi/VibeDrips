@@ -48,6 +48,32 @@ async function initializeApp() {
         setupThemeToggle();
         closeSimpleModal();
 
+        // 🔗 PHASE_25: Deep-Link Parameter Detection & Orchestration
+        const urlParams = new URLSearchParams(window.location.search);
+        const warpAsin = urlParams.get('asin');
+        const warpCurrency = urlParams.get('currency');
+        const landingView = urlParams.get('view'); // 'modal' or 'reel'
+
+        if (warpAsin && warpCurrency) {
+            console.log(`🔗 Deep-Link detected: ASIN ${warpAsin}, Currency ${warpCurrency}, View ${landingView}`);
+
+            // Store landing mode for post-warp actions
+            if (landingView) {
+                localStorage.setItem('vibedrips-deeplink-mode', landingView);
+            }
+
+            // Trigger High-Fidelity Warp (Cinematic Glow + Tab Jump)
+            if (window.triggerHighFidelityWarp) {
+                window.triggerHighFidelityWarp(warpCurrency, warpAsin, false);
+            }
+
+            // 📱 PWA Nudge: Encourage App experience if on browser
+            const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+            if (!isPWA && window.showDeepLinkNudge) {
+                setTimeout(() => window.showDeepLinkNudge(), 3000);
+            }
+        }
+
         console.log('✅ VibeDrips initialized successfully!');
 
     } catch (error) {

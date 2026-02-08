@@ -35,11 +35,23 @@ function openReelsModal() {
       shareBtn.onclick = (e) => {
         e.stopPropagation();
         const activeReel = document.querySelector('.reel-section:not(.hidden)');
-        const url = activeReel?.querySelector('.reel-video')?.dataset?.url || window.location.href;
-        if (window.fallbackCopyToClipboard) {
-          window.fallbackCopyToClipboard(url);
+        const video = activeReel?.querySelector('.reel-video');
+        const asin = video?.dataset?.asin;
+
+        if (window.handleShare && asin) {
+          window.handleShare({
+            asin: asin,
+            currency: VibeDrips.currentCurrency || 'INR',
+            view: 'reel'
+          });
         } else {
-          navigator.clipboard.writeText(url);
+          // Fallback for safety
+          const url = video?.dataset?.url || window.location.href;
+          if (window.fallbackCopyToClipboard) {
+            window.fallbackCopyToClipboard(url);
+          } else {
+            navigator.clipboard.writeText(url);
+          }
         }
         shareBtn.classList.add('success');
         setTimeout(() => shareBtn.classList.remove('success'), 2000);
