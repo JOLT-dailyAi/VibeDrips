@@ -4,48 +4,50 @@
 (function () {
     /**
      * Extracts parameters from a VibeDrips URL and triggers a warp.
-     * @param {string} text - The clipboard text to process.
      */
     window.handleClipboardPaste = async function () {
         console.log('📋 Warp Drive: Assessing clipboard content...');
+        showToast('🔍 Reading Clipboard...');
 
         try {
-            // Force focus check (some browsers require the window to be focused)
-            if (document.hasFocus && !document.hasFocus()) {
-                console.warn('⚠️ Warp Drive: Window not focused, focusing now...');
-                window.focus();
-            }
+            // Artificial delay to ensure OS clipboard buffer is ready
+            await new Promise(resolve => setTimeout(resolve, 300));
 
             const text = await navigator.clipboard.readText();
             const sanitizedText = text.trim();
 
-            console.log('📋 Warp Drive: Read text length:', sanitizedText.length);
+            console.log('📋 Warp Drive: Raw text length:', sanitizedText.length);
 
             if (!sanitizedText) {
                 showToast('📋 Clipboard is empty');
                 return;
             }
 
-            // 🔍 Extraction Logic: Use regex to find a VibeDrips URL inside the text
-            const urlRegex = /(https?:\/\/(vibedrips\.github\.io|localhost|127\.0\.0\.1)[^\s<>"]+)|(web\+vibedrips:\/\/[^\s<>"]+)/i;
+            // 🔍 Extraction Logic: More forgiving regex (protocol optional)
+            // Finds vibedrips.github.io, localhost, or web+vibedrips protocol
+            const urlRegex = /((?:https?:\/\/)?(?:vibedrips\.github\.io|localhost|127\.0\.0\.1)[^\s<>"]+)|(web\+vibedrips:\/\/[^\s<>"]+)/i;
             const match = sanitizedText.match(urlRegex);
 
             if (!match) {
-                console.warn('⚠️ Warp Drive: No valid VibeDrips URL found in text:', sanitizedText.substring(0, 50) + '...');
-                showToast('❌ No VibeDrips link found');
+                console.warn('⚠️ Warp Drive: No valid VibeDrips URL found.');
+                const snippet = sanitizedText.substring(0, 15);
+                showToast(`❌ No VibeDrips link found in: "${snippet}..."`);
                 return;
             }
 
-            const foundUrl = match[0];
-            console.log('🚀 Warp Drive: Found VibeDrips URL:', foundUrl);
+            let foundUrl = match[0];
+            console.log('🚀 Warp Drive: Found URL Candidate:', foundUrl);
 
             // 🧩 Parsing Logic
             let urlObj;
             try {
-                // Handle custom protocol if present
-                const normalizedUrl = foundUrl.toLowerCase().startsWith('web+vibedrips://')
-                    ? foundUrl.replace(/web\+vibedrips:\/\//i, 'https://')
-                    : foundUrl;
+                // Ensure a protocol exists for URL constructor
+                let normalizedUrl = foundUrl;
+                if (normalizedUrl.toLowerCase().startsWith('web+vibedrips://')) {
+                    normalizedUrl = normalizedUrl.replace(/web\+vibedrips:\/\//i, 'https://');
+                } else if (!normalizedUrl.match(/^https?:\/\//i)) {
+                    normalizedUrl = 'https://' + normalizedUrl;
+                }
 
                 urlObj = new URL(normalizedUrl);
             } catch (e) {
@@ -59,12 +61,13 @@
             const currency = params.get('currency');
 
             if (!asin) {
-                console.warn('⚠️ Warp Drive: ASIN missing in URL parameters.');
-                showToast('❌ No Product ASIN found in link');
+                console.warn('⚠️ Warp Drive: ASIN missing.');
+                showToast('❌ Link is missing ASIN parameter');
                 return;
             }
 
-            console.log(`🚀 Warp Drive: Success! Warping to ${asin} (${currency || 'default'})...`);
+            console.log(`🚀 Warp Drive: Success! Warping to ${asin}...`);
+            showToast('🚀 Launching Warp Drive...');
 
             // 🎇 Trigger the High-Fidelity Sequence
             if (window.triggerHighFidelityWarp) {
