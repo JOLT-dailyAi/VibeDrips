@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 </button>
                 ${!isInstalled ? `
                     <button class="center-badge" id="install-badge" onclick="handleInstall()">
-                        📱 INSTALL
+                        📱 ${window.deferredPrompt ? 'INSTALL' : 'OPEN'}
                     </button>
                 ` : ''}
             </div>
@@ -362,33 +362,54 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Make handleInstall global
+    // 📱 Smart Launch Handler: Attempts to launch app or show install prompt
     window.handleInstall = function () {
-        // Check if native prompt is available
+        console.log('🚀 PWA: Smart Launch triggered');
+
+        // Case 1: Browser-level Install Prompt is available (Chrome/Edge/Android)
         if (window.deferredPrompt) {
-            // Chrome/Edge: Use native prompt
+            console.log('📦 Native install prompt available, launching...');
             window.deferredPrompt.prompt();
             window.deferredPrompt.userChoice.then((result) => {
                 console.log('Install result:', result.outcome);
-
                 if (result.outcome === 'accepted') {
                     showToast('✓ Installing VibeDrips...');
                 }
-
                 window.deferredPrompt = null;
 
-                // Remove install button after acceptance
-                const installBtn = document.getElementById('install-badge');
-                if (installBtn && result.outcome === 'accepted') {
-                    setTimeout(() => {
-                        if (installBtn.parentElement) {
-                            installBtn.remove();
-                        }
-                    }, 2000);
-                }
+                // Hide any nudge if present
+                const nudge = document.querySelector('.deeplink-nudge');
+                if (nudge) nudge.classList.remove('visible');
             });
+            return;
+        }
+
+        // Case 2: iOS or Browser where prompt is missing but app might be installed
+        const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+        const isAndroid = /Android/.test(navigator.userAgent);
+
+        if (isIOS || isAndroid) {
+            console.log('🔗 Attempting Launch Transition (App Redirection)...');
+
+            // Try to navigate to the scope root. 
+            // On mobile, if the PWA is installed, the OS usually intercepts this 
+            // and offers to open it in the App.
+            const scopeUrl = window.location.origin + (window.location.pathname.startsWith('/VibeDrips/') ? '/VibeDrips/' : '/');
+
+            // Optimization: If we are on a deep-link, we want to stay on that page but trigger the prompt
+            // Navigating to the current URL in a way the browser recognizes as a "navigation" can help.
+            window.location.href = window.location.href;
+
+            // Delay the fallback: Give the OS/Browser 2 seconds to launch or prompt "Open in App"
+            setTimeout(() => {
+                // If we are still in the browser (page didn't hide/blur), show instructions
+                if (document.visibilityState === 'visible') {
+                    console.log('⚠️ Launch transition timed out, showing manual instructions.');
+                    showInstallInstructions();
+                }
+            }, 2500);
         } else {
-            // Safari/Opera/Others: Show manual instructions
+            // Desktop or generic fallback
             showInstallInstructions();
         }
     };

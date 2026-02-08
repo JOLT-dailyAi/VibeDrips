@@ -128,12 +128,15 @@ window.showDeepLinkNudge = function () {
     const existing = document.querySelector('.deeplink-nudge');
     if (existing) return;
 
+    const isInstallable = !!window.deferredPrompt;
+    const btnLabel = isInstallable ? 'INSTALL' : 'OPEN';
+
     const nudge = document.createElement('div');
     nudge.className = 'deeplink-nudge';
     nudge.innerHTML = `
         <div class="nudge-content">
             <span>✨ Open in VibeDrips App for a smoother experience</span>
-            <button class="nudge-btn" onclick="if(window.handleInstall) window.handleInstall(); this.closest('.deeplink-nudge').classList.remove('visible');">OPEN</button>
+            <button class="nudge-btn" onclick="if(window.handleInstall) window.handleInstall(); this.closest('.deeplink-nudge').classList.remove('visible');">${btnLabel}</button>
         </div>
     `;
 
