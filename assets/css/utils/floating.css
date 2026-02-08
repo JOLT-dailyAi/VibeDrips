@@ -419,6 +419,14 @@ body.dark-theme .volume-panel {
     align-items: center;
     pointer-events: none;
     /* Allow interaction with underlying elements if needed */
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* 🧼 Contextual Cleanup: Hide site-wide badge on Modals/Reels to prevent overlap/redundancy */
+.center-badge-container.context-hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
 }
 
 .center-badge {

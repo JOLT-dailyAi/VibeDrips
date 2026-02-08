@@ -1794,6 +1794,10 @@ function showProductModal(productId, triggerElement = null) {
 
     // PHASE_1: Wrap modal for sliding navigation
     wrapModalForSliding(productId);
+
+    // 🧼 Contextual Cleanup: Hide site-wide center badge
+    const centerBadge = document.querySelector('.center-badge-container');
+    if (centerBadge) centerBadge.classList.add('context-hidden');
 }
 
 // Helper: Get emoji for product detail keys
@@ -1941,6 +1945,10 @@ function closeDynamicModal(event) {
                 // Desktop or non-button close: immediate
                 modal.remove();
             }
+
+            // 🧼 Contextual Cleanup: Restore site-wide center badge
+            const centerBadge = document.querySelector('.center-badge-container');
+            if (centerBadge) centerBadge.classList.remove('context-hidden');
         }
     }
 }

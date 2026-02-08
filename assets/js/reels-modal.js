@@ -70,6 +70,10 @@ function openReelsModal() {
     console.error('❌ renderReelsFeed function not found');
   }
 
+  // 🧼 Contextual Cleanup: Hide site-wide center badge
+  const centerBadge = document.querySelector('.center-badge-container');
+  if (centerBadge) centerBadge.classList.add('context-hidden');
+
   // Setup close handlers
   setupModalCloseHandlers();
   // Setup navigation handlers
@@ -99,6 +103,10 @@ function closeReelsModal() {
     modal.classList.add('hidden');
     // Re-enable body scroll
     document.body.style.overflow = '';
+
+    // 🧼 Contextual Cleanup: Restore site-wide center badge
+    const centerBadge = document.querySelector('.center-badge-container');
+    if (centerBadge) centerBadge.classList.remove('context-hidden');
 
     // Clean up
     if (closeBtn) {
