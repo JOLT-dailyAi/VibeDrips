@@ -384,9 +384,18 @@
     width: 100%;
   }
 
-  .reels-close-btn {
-    top: 15px;
-    right: 15px;
+  .reels-close-btn,
+  .reels-share-btn {
+    top: 15px !important;
+  }
+
+  .reels-close-btn,
+  .reels-nav-hub {
+    right: 15px !important;
+  }
+
+  .reels-share-btn {
+    left: 15px !important;
   }
 }
 
@@ -453,9 +462,18 @@
     width: 50%;
   }
 
-  .reels-close-btn {
-    top: 10px;
-    right: 10px;
+  .reels-close-btn,
+  .reels-share-btn {
+    top: 15px !important;
+  }
+
+  .reels-close-btn,
+  .reels-nav-hub {
+    right: calc(15px + env(safe-area-inset-right, 0px)) !important;
+  }
+
+  .reels-share-btn {
+    left: calc(15px + env(safe-area-inset-left, 0px)) !important;
   }
 }
 
@@ -522,15 +540,19 @@
     max-height: 95vh !important;
   }
 
-  /* Reposition floating close button for safe areas */
-  .reels-modal .reels-close-btn {
+  /* Reposition floating controls for safe areas */
+  .reels-modal .reels-close-btn,
+  .reels-modal .reels-share-btn {
     top: env(safe-area-inset-top, 15px) !important;
+  }
+
+  .reels-modal .reels-close-btn,
+  .reels-nav-btn {
     right: calc(15px + env(safe-area-inset-right, 0px)) !important;
   }
 
-  /* Adjust side-nav buttons if they exist */
-  .reels-nav-btn {
-    right: calc(10px + env(safe-area-inset-right, 0px)) !important;
+  .reels-modal .reels-share-btn {
+    left: calc(15px + env(safe-area-inset-left, 0px)) !important;
   }
 }
 
