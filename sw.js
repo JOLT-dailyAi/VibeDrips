@@ -135,9 +135,21 @@ self.addEventListener('message', event => {
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
+  // 🛡️ Method Guard: Only GET requests can be cached. 
+  // Bypass HEAD, POST, etc. to prevent Cache API crashes.
+  if (event.request.method !== 'GET') {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
   // Don't cache external resources (CDN, APIs, etc)
   if (!url.pathname.startsWith('/VibeDrips/')) {
-    event.respondWith(fetch(event.request));
+    event.respondWith(
+      fetch(event.request).catch(err => {
+        console.warn(`[SW ${CACHE_VERSION}] External fetch failed:`, url.href);
+        return new Response('External resource unavailable', { status: 503 });
+      })
+    );
     return;
   }
 
