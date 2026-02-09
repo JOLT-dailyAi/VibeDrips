@@ -56,8 +56,13 @@ function openReelsModal() {
         shareBtn.classList.add('success');
         setTimeout(() => shareBtn.classList.remove('success'), 2000);
       };
-      // Append to modal root to be positioned fixed/top-left
-      modal.appendChild(shareBtn);
+      // Append to left rail for stable alignment
+      const leftRail = modal.querySelector('.reels-left-rail');
+      if (leftRail) {
+        leftRail.appendChild(shareBtn);
+      } else {
+        modal.appendChild(shareBtn);
+      }
     }
 
     // ✅ NEW: Restore last position after render

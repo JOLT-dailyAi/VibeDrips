@@ -17,34 +17,58 @@
   display: none;
 }
 
-/* 🏗️ Reels Modal Controls */
-.reels-close-btn {
-  position: fixed !important;
-  top: 2rem !important;
-  right: 2rem !important;
+/* 🏗️ Reels Modal UI Overlay */
+.reels-ui-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 2001;
+  pointer-events: none;
+  display: flex;
+  justify-content: space-between;
+  padding: 2rem;
+  padding-top: calc(2rem + env(safe-area-inset-top, 0px));
+  padding-left: calc(2rem + env(safe-area-inset-left, 0px));
+  padding-right: calc(2rem + env(safe-area-inset-right, 0px));
 }
 
-.reels-share-btn {
-  position: fixed !important;
-  top: 2rem !important;
-  left: 2rem !important;
-  z-index: 2001;
+.reels-left-rail,
+.reels-right-rail {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  pointer-events: none;
+}
+
+.reels-right-rail {
+  align-items: center;
+  /* 🎯 Vertical Alignment Lock */
+}
+
+.reels-close-btn,
+.reels-share-btn,
+.reels-nav-hub {
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
+  left: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  pointer-events: auto;
+  margin: 0;
 }
 
 .reels-nav-hub {
-  position: fixed !important;
-  top: 50% !important;
-  right: 2rem !important;
-  transform: translateY(-50%) !important;
+  margin-top: auto;
+  margin-bottom: auto;
+  /* 🎯 Center Nav Hub in Rail */
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
   gap: 1.5rem !important;
-  z-index: 2001;
-  pointer-events: none;
   min-height: 120px !important;
-  /* Lock height to prevent vertical shift */
   justify-content: center !important;
 }
 
@@ -91,39 +115,19 @@
   display: block;
 }
 
-/* Safe Area Protection */
-.reels-close-btn {
-  top: calc(2rem + env(safe-area-inset-top, 0px)) !important;
-  right: calc(2rem + env(safe-area-inset-right, 0px)) !important;
-}
-
-.reels-share-btn {
-  top: calc(2rem + env(safe-area-inset-top, 0px)) !important;
-  left: calc(2rem + env(safe-area-inset-left, 0px)) !important;
-}
-
-.reels-nav-hub {
-  right: calc(2rem + env(safe-area-inset-right, 0px)) !important;
-}
+/* Safe Area Padding Managed by Overlay */
 
 /* Mobile Polish */
 @media (max-width: 767px) {
 
-  .reels-close-btn,
-  .reels-share-btn {
-    top: 1rem !important;
-  }
-
-  .reels-close-btn {
-    right: 1rem !important;
-  }
-
-  .reels-share-btn {
-    left: 1rem !important;
+  .reels-ui-overlay {
+    padding: 1rem;
+    padding-top: calc(1rem + env(safe-area-inset-top, 0px));
+    padding-left: calc(1rem + env(safe-area-inset-left, 0px));
+    padding-right: calc(1rem + env(safe-area-inset-right, 0px));
   }
 
   .reels-nav-hub {
-    right: 1rem !important;
     min-height: 100px !important;
   }
 
@@ -522,15 +526,12 @@
     max-height: 95vh !important;
   }
 
-  /* Reposition floating close button for safe areas */
-  .reels-modal .reels-close-btn {
-    top: env(safe-area-inset-top, 15px) !important;
-    right: calc(15px + env(safe-area-inset-right, 0px)) !important;
-  }
-
-  /* Adjust side-nav buttons if they exist */
-  .reels-nav-btn {
-    right: calc(10px + env(safe-area-inset-right, 0px)) !important;
+  /* Reposition floating overlay for landscape safe areas */
+  .reels-ui-overlay {
+    padding: 10px;
+    padding-top: env(safe-area-inset-top, 10px) !important;
+    padding-left: calc(10px + env(safe-area-inset-left, 0px)) !important;
+    padding-right: calc(10px + env(safe-area-inset-right, 0px)) !important;
   }
 }
 
@@ -541,9 +542,4 @@
 
 .reels-modal {
   padding-top: env(safe-area-inset-top, 0px) !important;
-}
-
-/* Handle Close button with safe areas */
-.reels-close-btn {
-  top: calc(2rem + env(safe-area-inset-top, 0px)) !important;
 }
