@@ -300,7 +300,8 @@ body.dark-theme .control-bubble::after {
     /* Phase 7 ABSOLUTE: Force uniform 32px size for BOTH inactive and active states */
     /* Matches the control-bubble height perfectly */
     .reels-toggle,
-    .globe-toggle {
+    .globe-toggle,
+    .share-toggle {
         width: 32px !important;
         height: 32px !important;
         min-width: 32px !important;
@@ -313,12 +314,16 @@ body.dark-theme .control-bubble::after {
     /* Must match "Ultimate Glow" specificity to lock down dimensions */
     html body .modal-external-controls .reels-toggle.active,
     html body .modal-external-controls .globe-toggle.active,
+    html body .modal-external-controls .share-toggle.active,
     body.light-theme .modal-external-controls .reels-toggle.active,
     body.light-theme .modal-external-controls .globe-toggle.active,
+    body.light-theme .modal-external-controls .share-toggle.active,
     body.dark-theme .modal-external-controls .reels-toggle.active,
     body.dark-theme .modal-external-controls .globe-toggle.active,
+    body.dark-theme .modal-external-controls .share-toggle.active,
     body.glass-theme .modal-external-controls .reels-toggle.active,
-    body.glass-theme .modal-external-controls .globe-toggle.active {
+    body.glass-theme .modal-external-controls .globe-toggle.active,
+    body.glass-theme .modal-external-controls .share-toggle.active {
         width: 32px !important;
         height: 32px !important;
         transform: none !important;
@@ -332,7 +337,8 @@ body.dark-theme .control-bubble::after {
 
     /* Disable hover expansion in landscape to prevent potential clipping */
     .reels-toggle:hover,
-    .globe-toggle:hover {
+    .globe-toggle:hover,
+    .share-toggle:hover {
         transform: none !important;
     }
 
