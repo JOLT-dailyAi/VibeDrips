@@ -227,16 +227,16 @@
     left: 50% !important;
     transform: translateX(-50%) !important;
     width: 100% !important;
-    max-width: 1540px !important;
-    /* 1400px content + 70px gutters */
+    max-width: 1480px !important;
+    /* 1400px content + 40px gutters */
     padding: 0 !important;
     background: transparent !important;
   }
 
   .reels-nav-hub {
     top: 50% !important;
-    right: calc(50% - 700px - 70px) !important;
-    /* Anchored to desktop gutter */
+    right: calc(50% - 700px - 40px) !important;
+    /* Anchored closer to content */
     transform: translateY(-50%) !important;
   }
 }
