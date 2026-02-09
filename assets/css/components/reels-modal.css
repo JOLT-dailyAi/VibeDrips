@@ -92,6 +92,8 @@
   pointer-events: auto;
   padding: 0;
   flex-shrink: 0;
+  font-size: 22px;
+  /* 🎯 Match Product Modal Share scaling */
 }
 
 /* 🕵️ Stability: Use visibility instead of display:none for nav arrows */
@@ -136,6 +138,8 @@
   .reels-nav-btn {
     width: 36px;
     height: 36px;
+    font-size: 18px;
+    /* 🎯 Proportionally scale emoji */
   }
 }
 
@@ -532,6 +536,22 @@
     padding-top: env(safe-area-inset-top, 10px) !important;
     padding-left: calc(10px + env(safe-area-inset-left, 0px)) !important;
     padding-right: calc(10px + env(safe-area-inset-right, 0px)) !important;
+  }
+
+  /* 🎯 Phase 7 Sync: Force 32px lock in landscape to match external controls */
+  .reels-close-btn,
+  .reels-share-btn,
+  .reels-nav-btn {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
+    font-size: 18px !important;
+  }
+
+  .reels-nav-hub {
+    gap: 1rem !important;
+    min-height: 80px !important;
   }
 }
 
