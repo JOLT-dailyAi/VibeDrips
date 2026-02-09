@@ -174,7 +174,6 @@
   position: relative;
 }
 
-/* ==================== DESKTOP: Side-by-Side Layout (≥1200px) ==================== */
 @media (min-width: 1200px) {
   .reel-section {
     padding: 20px;
@@ -230,6 +229,23 @@
     height: 763px;
     /* ✅ MATCH VIDEO HEIGHT */
     max-height: 763px;
+  }
+
+  /* DESKTOP ALIGNMENT: Gutter-Relative placement (Outside 1400px box) */
+  .reels-external-controls {
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, calc(-416.5px - 100% - 20px)) !important;
+    width: 100% !important;
+    max-width: 1540px !important;
+    /* 1400px + 70px gutter each side */
+    padding: 0 !important;
+    background: transparent !important;
+  }
+
+  .reels-nav-hub {
+    right: calc(50% - 700px - 70px) !important;
+    /* Pushed into right gutter */
   }
 }
 
@@ -352,14 +368,20 @@
     width: 100%;
   }
 
-  /* PORTRAIT ALIGNMENT: Mimic Modal External Controls placement */
+  /* PORTRAIT ALIGNMENT: Pure Content-Relative (Anchored to 793px centered card) */
   .reels-external-controls {
-    top: 11vh !important;
-    padding: 0 2rem !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, calc(-396.5px - 100% - 15px)) !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 15px !important;
+    /* FLUSH with content edges */
+    background: transparent !important;
   }
 
   .reels-nav-hub {
-    right: 2rem !important;
+    right: 15px !important;
   }
 }
 
@@ -427,13 +449,17 @@
   }
 
   .reels-external-controls {
-    top: 15px !important;
-    padding-left: calc(15px + env(safe-area-inset-left, 0px)) !important;
-    padding-right: calc(15px + env(safe-area-inset-right, 0px)) !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, calc(-396.5px - 100% - 10px)) !important;
+    padding: 0 10px !important;
+    width: 100% !important;
   }
 
   .reels-nav-hub {
-    right: calc(15px + env(safe-area-inset-right, 0px)) !important;
+    right: calc(10px + env(safe-area-inset-right, 0px)) !important;
+    gap: 3.5rem !important;
+    /* INCREASE GAP to clear product carousel arrows */
   }
 }
 
