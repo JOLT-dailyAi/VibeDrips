@@ -149,28 +149,7 @@
   border-color: #48BB78 !important;
 }
 
-/* Mobile Adjustments for Top Row */
-@media (max-width: 767px) {
-  .reels-external-controls {
-    top: 1rem;
-    left: 1rem;
-    right: 1rem;
-  }
-}
 
-/* Landscape Mobile Offset */
-@media (max-width: 950px) and (orientation: landscape) {
-  .reels-external-controls {
-    top: 10px;
-    left: calc(10px + env(safe-area-inset-left, 0px));
-    right: calc(10px + env(safe-area-inset-right, 0px));
-  }
-}
-
-/* Safe Area Protection */
-.reels-external-controls {
-  top: calc(2rem + env(safe-area-inset-top, 0px));
-}
 
 /* Scroll Container - INSTAGRAM/SHORTS MODE (NO PEEKING) */
 .reels-scroll-container {
@@ -547,7 +526,7 @@
   }
 
   .reels-modal .reels-close-btn,
-  .reels-nav-btn {
+  .reels-modal .reels-nav-hub {
     right: calc(15px + env(safe-area-inset-right, 0px)) !important;
   }
 
@@ -566,6 +545,4 @@
 }
 
 /* Handle Close button with safe areas */
-.reels-close-btn {
-  top: calc(2rem + env(safe-area-inset-top, 0px)) !important;
-}
+/* Removed global top-position override for .reels-close-btn as per instructions */
