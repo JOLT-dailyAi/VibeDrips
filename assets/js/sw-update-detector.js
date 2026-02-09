@@ -3,35 +3,50 @@
 
 if ('serviceWorker' in navigator) {
   let refreshing = false;
-  
+
   // Register service worker
   navigator.serviceWorker.register('/VibeDrips/sw.js')
     .then(registration => {
       console.log('✅ Service Worker registered');
-      
+
       // Check for updates every 60 seconds
       setInterval(() => {
         registration.update();
       }, 60000);
-      
+
       // Listen for new service worker taking control
       navigator.serviceWorker.addEventListener('controllerchange', () => {
         if (refreshing) return;
         refreshing = true;
-        
+
         console.log('🔄 New service worker active - reloading page');
         window.location.reload();
       });
-      
+
       // Check for waiting service worker
       registration.addEventListener('updatefound', () => {
         const newWorker = registration.installing;
-        
-        newWorker.addEventListener('statechange', () => {
+
+        newWorker.addEventListener('statechange', async () => {
           if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-            // New service worker available - show update prompt
+            // New service worker available - query version for custom message
             console.log('📦 New version available');
-            showUpdatePrompt(registration);
+
+            const messageChannel = new MessageChannel();
+            messageChannel.port1.onmessage = (event) => {
+              const version = event.data.version || '';
+              console.log('🏷️ Update version tag:', version);
+              showUpdatePrompt(registration, version);
+            };
+
+            newWorker.postMessage({ type: 'GET_VERSION' }, [messageChannel.port2]);
+
+            // Fallback if version check fails
+            setTimeout(() => {
+              if (!document.getElementById('update-prompt')) {
+                showUpdatePrompt(registration);
+              }
+            }, 2000);
           }
         });
       });
@@ -41,11 +56,19 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-function showUpdatePrompt(registration) {
+function showUpdatePrompt(registration, version = '') {
   // Remove existing prompt if any
   const existingPrompt = document.getElementById('update-prompt');
   if (existingPrompt) existingPrompt.remove();
-  
+
+  // Determine message based on version suffix
+  let displayMessage = '✨ New version available!';
+  if (version.endsWith('-data')) {
+    displayMessage = '✨ New products available!';
+  } else if (version.endsWith('-ui')) {
+    displayMessage = '✨ VibeDrips has been updated!';
+  }
+
   // Create update prompt
   const prompt = document.createElement('div');
   prompt.id = 'update-prompt';
@@ -69,10 +92,10 @@ function showUpdatePrompt(registration) {
     flex-wrap: wrap;
     justify-content: center;
   `;
-  
+
   prompt.innerHTML = `
     <span style="font-weight: 600; font-size: 14px;">
-      ✨ New products available!
+      ${displayMessage}
     </span>
     <button id="update-btn" style="
       background: white;
@@ -100,14 +123,14 @@ function showUpdatePrompt(registration) {
       Later
     </button>
   `;
-  
+
   document.body.appendChild(prompt);
-  
+
   // Hover effects
   const updateBtn = document.getElementById('update-btn');
   updateBtn.addEventListener('mouseenter', () => updateBtn.style.transform = 'scale(1.05)');
   updateBtn.addEventListener('mouseleave', () => updateBtn.style.transform = 'scale(1)');
-  
+
   // Update button - force new SW to activate
   updateBtn.addEventListener('click', () => {
     if (registration.waiting) {
@@ -115,12 +138,12 @@ function showUpdatePrompt(registration) {
     }
     prompt.remove();
   });
-  
+
   // Dismiss button
   document.getElementById('dismiss-btn').addEventListener('click', () => {
     prompt.remove();
   });
-  
+
   // Auto-dismiss after 15 seconds
   setTimeout(() => {
     if (document.getElementById('update-prompt')) {

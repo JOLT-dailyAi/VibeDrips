@@ -60,7 +60,7 @@ jobs:
             echo "Updated DATA_VERSION to ${DATA_TS}-auto"
           fi
           SW_TS=$(date +%Y%m%dT%H%M%S)
-          NEW_VERSION="v${SW_TS}"
+          NEW_VERSION="v${SW_TS}-data"
           if [ -f "sw.js" ]; then
             sed -i "s/const CACHE_VERSION = 'v[^']*'/const CACHE_VERSION = '${NEW_VERSION}'/" sw.js
             echo "Updated CACHE_VERSION to ${NEW_VERSION}"

@@ -130,8 +130,15 @@ self.addEventListener('message', event => {
     self.skipWaiting();
   }
 });
-
-// Fetch strategy
+// Handle messages from the client
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'GET_VERSION') {
+    event.ports[0].postMessage({ version: CACHE_VERSION });
+  }
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
