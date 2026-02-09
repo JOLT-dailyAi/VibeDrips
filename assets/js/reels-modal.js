@@ -26,12 +26,14 @@ function openReelsModal() {
   if (window.renderReelsFeed) {
     window.renderReelsFeed();
 
-    // ✅ REUSE: Inject Share button into modal (positioned Top-Left via CSS)
-    if (modal && !modal.querySelector('.reels-share-btn')) {
+    // ✅ REUSE: Inject Share button into modal (inside unified container)
+    const externalControls = modal.querySelector('.reels-external-controls');
+    if (externalControls && !externalControls.querySelector('.reels-share-btn')) {
       const shareBtn = document.createElement('button');
       shareBtn.className = 'reels-share-btn';
       shareBtn.innerHTML = '<span>🔗</span>';
       shareBtn.title = 'Copy Reel Link';
+      shareBtn.style.marginRight = 'auto'; // Push others to right
       shareBtn.onclick = (e) => {
         e.stopPropagation();
         const activeReel = document.querySelector('.reel-section:not(.hidden)');
@@ -56,8 +58,8 @@ function openReelsModal() {
         shareBtn.classList.add('success');
         setTimeout(() => shareBtn.classList.remove('success'), 2000);
       };
-      // Append to modal root to be positioned fixed/top-left
-      modal.appendChild(shareBtn);
+      // Prepend to external controls to sit on the left
+      externalControls.prepend(shareBtn);
     }
 
     // ✅ NEW: Restore last position after render

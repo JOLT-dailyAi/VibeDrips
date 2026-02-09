@@ -17,19 +17,22 @@
   display: none;
 }
 
-/* 🏗️ Reels Modal Controls */
-.reels-close-btn {
-  position: fixed !important;
-  top: 2rem !important;
-  right: 2rem !important;
+/* 🏗️ Reels Modal Controls Container */
+.reels-external-controls {
+  position: fixed;
+  top: 2rem;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 2rem;
   z-index: 2001;
+  pointer-events: none;
 }
 
-.reels-share-btn {
-  position: fixed !important;
-  top: 2rem !important;
-  left: 2rem !important;
-  z-index: 2001;
+.reels-external-controls button {
+  pointer-events: auto;
 }
 
 .reels-nav-hub {
@@ -44,7 +47,6 @@
   z-index: 2001;
   pointer-events: none;
   min-height: 120px !important;
-  /* Lock height to prevent vertical shift */
   justify-content: center !important;
 }
 
@@ -92,34 +94,21 @@
 }
 
 /* Safe Area Protection */
-.reels-close-btn {
-  top: calc(2rem + env(safe-area-inset-top, 0px)) !important;
-  right: calc(2rem + env(safe-area-inset-right, 0px)) !important;
-}
-
-.reels-share-btn {
-  top: calc(2rem + env(safe-area-inset-top, 0px)) !important;
-  left: calc(2rem + env(safe-area-inset-left, 0px)) !important;
+.reels-external-controls {
+  top: calc(2rem + env(safe-area-inset-top, 0px));
+  padding-left: calc(2rem + env(safe-area-inset-left, 30px));
+  padding-right: calc(2rem + env(safe-area-inset-right, 30px));
 }
 
 .reels-nav-hub {
-  right: calc(2rem + env(safe-area-inset-right, 0px)) !important;
+  right: calc(2rem + env(safe-area-inset-right, 30px)) !important;
 }
 
 /* Mobile Polish */
 @media (max-width: 767px) {
-
-  .reels-close-btn,
-  .reels-share-btn {
-    top: 1rem !important;
-  }
-
-  .reels-close-btn {
-    right: 1rem !important;
-  }
-
-  .reels-share-btn {
-    left: 1rem !important;
+  .reels-external-controls {
+    top: 1rem;
+    padding: 0 1rem;
   }
 
   .reels-nav-hub {
@@ -363,18 +352,14 @@
     width: 100%;
   }
 
-  .reels-close-btn,
-  .reels-share-btn {
-    top: 15px !important;
+  /* PORTRAIT ALIGNMENT: Mimic Modal External Controls placement */
+  .reels-external-controls {
+    top: 11vh !important;
+    padding: 0 2rem !important;
   }
 
-  .reels-close-btn,
   .reels-nav-hub {
-    right: 15px !important;
-  }
-
-  .reels-share-btn {
-    left: 15px !important;
+    right: 2rem !important;
   }
 }
 
@@ -441,18 +426,14 @@
     width: 50%;
   }
 
-  .reels-close-btn,
-  .reels-share-btn {
+  .reels-external-controls {
     top: 15px !important;
+    padding-left: calc(15px + env(safe-area-inset-left, 0px)) !important;
+    padding-right: calc(15px + env(safe-area-inset-right, 0px)) !important;
   }
 
-  .reels-close-btn,
   .reels-nav-hub {
     right: calc(15px + env(safe-area-inset-right, 0px)) !important;
-  }
-
-  .reels-share-btn {
-    left: calc(15px + env(safe-area-inset-left, 0px)) !important;
   }
 }
 
@@ -520,18 +501,14 @@
   }
 
   /* Reposition floating controls for safe areas */
-  .reels-modal .reels-close-btn,
-  .reels-modal .reels-share-btn {
+  .reels-external-controls {
     top: env(safe-area-inset-top, 15px) !important;
+    padding-left: calc(15px + env(safe-area-inset-left, 0px)) !important;
+    padding-right: calc(15px + env(safe-area-inset-right, 0px)) !important;
   }
 
-  .reels-modal .reels-close-btn,
-  .reels-modal .reels-nav-hub {
+  .reels-nav-hub {
     right: calc(15px + env(safe-area-inset-right, 0px)) !important;
-  }
-
-  .reels-modal .reels-share-btn {
-    left: calc(15px + env(safe-area-inset-left, 0px)) !important;
   }
 }
 
