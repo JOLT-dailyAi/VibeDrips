@@ -1,0 +1,46 @@
+name: Bump UI Cache Version
+
+on:
+  push:
+    branches:
+      - main
+      - feat/*
+      - fix/*
+    paths:
+      - 'assets/css/**'
+      - 'assets/js/**'
+      - 'index.html'
+  workflow_dispatch:
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Bump sw.js version
+        run: |
+          echo "Auto-bumping UI version..."
+          SW_TS=$(date +%Y%m%dT%H%M%S)
+          # Use UTC timestamp for consistency
+          NEW_VERSION="v${SW_TS}"
+          
+          if [ -f "sw.js" ]; then
+            sed -i "s/const CACHE_VERSION = 'v[^']*'/const CACHE_VERSION = '${NEW_VERSION}'/" sw.js
+            echo "Updated CACHE_VERSION to ${NEW_VERSION} in sw.js"
+          else
+            echo "Error: sw.js not found"
+            exit 1
+          fi
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add sw.js
+          git commit -m "automation: bump UI cache version [skip ci]"
+          git push
