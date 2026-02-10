@@ -54,8 +54,10 @@
     "affiliate_link": "https://amzn.to/4q46SfP",
     "release_date": "2025-01-01T00:00:00.000Z",
     "influencer": "Food Pharmer",
-    "manual_collections": [],
-    "season": null,
+    "manual_collections": [
+      "Air Purifier"
+    ],
+    "season": "Winter",
     "featured": false,
     "trending": false,
     "productDetails": [
@@ -206,7 +208,7 @@
       "is_high_visibility": true,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 404,
+      "product_age_days": 405,
       "drop_categories": [
         "creator-picks"
       ]
@@ -263,8 +265,10 @@
     "affiliate_link": "https://amzn.to/4jf44JZ",
     "release_date": "2024-01-01T00:00:00.000Z",
     "influencer": null,
-    "manual_collections": [],
-    "season": null,
+    "manual_collections": [
+      "Air Purifier"
+    ],
+    "season": "Winter",
     "featured": false,
     "trending": false,
     "productDetails": [
@@ -381,7 +385,7 @@
       "is_high_visibility": true,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 770,
+      "product_age_days": 771,
       "drop_categories": [
         "creator-picks"
       ]
@@ -449,8 +453,10 @@
     "affiliate_link": "https://amzn.to/48PBAD1",
     "release_date": "2024-01-01T00:00:00.000Z",
     "influencer": "Food Pharmer",
-    "manual_collections": [],
-    "season": "Summer",
+    "manual_collections": [
+      "Air Purifier"
+    ],
+    "season": "Winter",
     "featured": false,
     "trending": false,
     "productDetails": [
@@ -555,7 +561,7 @@
       "is_high_visibility": true,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 770,
+      "product_age_days": 771,
       "drop_categories": [
         "creator-picks"
       ]
@@ -621,8 +627,10 @@
     "affiliate_link": "https://amzn.to/4p7Vb6m",
     "release_date": "2024-01-01T00:00:00.000Z",
     "influencer": null,
-    "manual_collections": [],
-    "season": "Summer",
+    "manual_collections": [
+      "Humidifier"
+    ],
+    "season": "Winter",
     "featured": false,
     "trending": false,
     "productDetails": [
@@ -737,7 +745,7 @@
       "is_high_visibility": true,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 770,
+      "product_age_days": 771,
       "drop_categories": [
         "creator-picks"
       ]
@@ -794,8 +802,10 @@
     "affiliate_link": "https://amzn.to/3KHxW53",
     "release_date": "2023-01-01T00:00:00.000Z",
     "influencer": null,
-    "manual_collections": [],
-    "season": "Summer",
+    "manual_collections": [
+      "Air Purifier"
+    ],
+    "season": "Winter",
     "featured": false,
     "trending": false,
     "productDetails": [
@@ -954,7 +964,7 @@
       "is_high_visibility": true,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 1135,
+      "product_age_days": 1136,
       "drop_categories": [
         "creator-picks"
       ]
@@ -1015,8 +1025,10 @@
     "affiliate_link": "https://amzn.to/4pdv5iw",
     "release_date": "2022-01-01T00:00:00.000Z",
     "influencer": null,
-    "manual_collections": [],
-    "season": "Summer",
+    "manual_collections": [
+      "Air Purifier"
+    ],
+    "season": "Winter",
     "featured": false,
     "trending": false,
     "productDetails": [
@@ -1167,7 +1179,7 @@
       "is_high_visibility": true,
       "is_social_proof": true,
       "is_new_release": false,
-      "product_age_days": 1500,
+      "product_age_days": 1501,
       "drop_categories": [
         "creator-picks",
         "viral-reels"
@@ -1226,7 +1238,9 @@
     "affiliate_link": "https://amzn.to/4qf6cUh",
     "release_date": "2022-01-01T00:00:00.000Z",
     "influencer": "Food Pharmer",
-    "manual_collections": [],
+    "manual_collections": [
+      "Air Purifier"
+    ],
     "season": "Winter",
     "featured": false,
     "trending": false,
@@ -1374,7 +1388,7 @@
       "is_high_visibility": true,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 1500,
+      "product_age_days": 1501,
       "drop_categories": [
         "creator-picks"
       ]
@@ -1431,7 +1445,9 @@
     "affiliate_link": "https://amzn.to/4s1oEkS",
     "release_date": null,
     "influencer": null,
-    "manual_collections": [],
+    "manual_collections": [
+      "Books"
+    ],
     "season": null,
     "featured": false,
     "trending": false,
@@ -1631,8 +1647,10 @@
     "affiliate_link": "https://amzn.to/48KIWaZ",
     "release_date": null,
     "influencer": "Food Pharmer",
-    "manual_collections": [],
-    "season": null,
+    "manual_collections": [
+      "Air Purifier"
+    ],
+    "season": "Winter",
     "featured": false,
     "trending": false,
     "productDetails": [
@@ -1805,7 +1823,9 @@
     "affiliate_link": "https://amzn.to/48HAvgG",
     "release_date": null,
     "influencer": null,
-    "manual_collections": [],
+    "manual_collections": [
+      "Books"
+    ],
     "season": "Summer",
     "featured": false,
     "trending": false,
@@ -2007,8 +2027,10 @@
     "affiliate_link": "https://amzn.to/4904RK9",
     "release_date": null,
     "influencer": "Food Pharmer",
-    "manual_collections": [],
-    "season": null,
+    "manual_collections": [
+      "Air Purifier"
+    ],
+    "season": "Winter",
     "featured": false,
     "trending": false,
     "productDetails": [
@@ -2158,7 +2180,9 @@
     "affiliate_link": "https://amzn.to/48Q68EV",
     "release_date": null,
     "influencer": null,
-    "manual_collections": [],
+    "manual_collections": [
+      "Books"
+    ],
     "season": null,
     "featured": false,
     "trending": false,
@@ -2338,7 +2362,9 @@
     "affiliate_link": "https://amzn.to/3YhVUXP",
     "release_date": null,
     "influencer": null,
-    "manual_collections": [],
+    "manual_collections": [
+      "Books"
+    ],
     "season": null,
     "featured": false,
     "trending": false,

@@ -1,5 +1,5 @@
 VibeDrips Data Processing Summary
-Generated: 2026-02-09T18:13:02.174Z
+Generated: 2026-02-10T07:32:12.182Z
 
 📊 STATISTICS
 - Total Rows Processed: 23
@@ -32,9 +32,9 @@ Generated: 2026-02-09T18:13:02.174Z
 - List: HouseFresh, Food Pharmer
 
 💎 COLLECTIONS
-- Products in collections: 0
-- Unique collections: 0
-- List: None
+- Products in collections: 23
+- Unique collections: 3
+- List: Books, Air Purifier, Humidifier
 
 🌿 SEASONS
 - Seasons Detected: 2
@@ -69,7 +69,7 @@ Generated: 2026-02-09T18:13:02.174Z
 - currencies.json (manifest)
 - drops.json (drops manifest)
 - influencers.json (2 influencers)
-- collections.json (0 collections)
+- collections.json (3 collections)
 - errors.json (23 flagged products)
 
 📁 FINAL FILES PRESENT
