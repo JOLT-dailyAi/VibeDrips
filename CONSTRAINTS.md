@@ -116,3 +116,26 @@ When implementing "Warp" navigation (e.g., from Product Modal to Reels), you mus
 To prevent user disorientation after a "Warp" or direct navigation event, the landing target must be visually emphasized.
 - **Rule**: The target element (e.g., a product card in a reel) must trigger a pulse animation or a temporary highlight state upon successful landing.
 - **Rule**: Use a consistent highlight color (e.g., `--color-primary`) to maintain brand parity.
+
+---
+
+## 🏗️ Service Worker & PWA Constraints
+
+### 1. The Method Guard Rule (Stability)
+- **Constraint**: `sw.js` MUST implement a Method Guard to bypass caching for non-GET requests.
+- **Why**: Attempting to cache `HEAD` requests (common in media pre-fetching) causes a `TypeError` that crashes the Service Worker lifecycle.
+
+### 2. Error Shielding (External Fetches)
+- **Constraint**: All external network fetches within the Service Worker MUST be wrapped in `.catch()` with a fallback response/null.
+- **Standard**: Provide `new Response(null, { status: 404 })` for failed external media lookups to prevent console noise and SW stalling.
+
+### 3. Version Tagging Protocol (Automation)
+- **Rule**: All automated `CACHE_VERSION` bumps MUST include a stateful suffix.
+- **Suffixes**:
+    - `-data`: Used by the CSV processor for product data changes.
+    - `-ui`: Used by the UI versioning workflow for CSS/JS/HTML changes.
+- **Handshake**: The Service Worker MUST respond to a `'GET_VERSION'` message from the client to support targeted update prompts.
+
+### 4. Zero-Reload Install Trigger
+- **Constraint**: The PWA install flow MUST NOT trigger a manual page reload (`location.reload()` or `href = href`).
+- **Standard**: Rely on manual instruction visibility triggers only.

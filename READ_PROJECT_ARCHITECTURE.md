@@ -32,6 +32,7 @@ To ensure "Butter-Smooth" transitions on mobile devices:
 graph TD
     Root["/ (Root)"] --> Assets["assets/"]
     Root --> Docs["CONSTRAINTS.md"]
+    Root --> Actions[".github/workflows/"]
     
     Assets --> JS["js / (Logic)"]
     Assets --> CSS["css / (Design System)"]
@@ -53,6 +54,8 @@ graph TD
 - **`assets/js/products.js`**: The heartbeat of the application, managing data fetching, filtering, and the complex sliding modal engine.
 - **`assets/js/carousel-utils.js`**: Shared logic for image galleries, swipe detection, and counter-state.
 - **`assets/css/main.css`**: The central import point for the design system.
+- **`sw.js`**: The Service Worker managing offline caching, method-guards (stability), and version-tagging.
+- **`assets/js/sw-update-detector.js`**: Logic for detected updates and querying the Service Worker for specific version tags.
 
 ---
 
@@ -124,6 +127,26 @@ To balance performance on restricted mobile browsers with high-speed autoplay on
 Despite recent advancements, some patterns remain in the tracking phase:
 - **One-Way Slider Binding**: The header volume slider propagates its value to media, but media changes (e.g., native adjustments) do not reflect back to the slider.
 - **Cross-Component Persistence**: Volume preference is perfectly synced, but the *Muted State* is intentionally asymmetric to support platform-specific rules (iOS strictly Muted-First).
+
+---
+
+## 6. Smart PWA Lifecycle & Automation (Stateful Versioning)
+
+To decouple data updates from UI deployments, VibeDrips uses an asymmetric automation strategy.
+
+### 1. Dual-Workflow Strategy
+- **Data Versioning (`process-csv.yml`)**: Triggered by `products.csv` changes. Bumps `CACHE_VERSION` with a `-data` suffix. Focuses on cache invalidation for product manifests.
+- **UI Versioning (`ui-versioning.yml`)**: Triggered by `assets/` or `index.html` changes. Bumps `CACHE_VERSION` with a `-ui` suffix. Skips heavy data processing for faster design iteration.
+
+### 2. The Version Handshake (Smart Notifications)
+- **Concept**: The browser and Service Worker communicate via `postMessage` during the update lifecycle.
+- **The Flow**:
+    1.  A new SW is detected.
+    2.  `sw-update-detector.js` sends a `GET_VERSION` request.
+    3.  `sw.js` responds with the tag-suffixed `CACHE_VERSION`.
+    4.  The UI displays a targeted message:
+        - **-data**: "✨ New products available!"
+        - **-ui**: "✨ VibeDrips has been updated!"
 
 ---
 

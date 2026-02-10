@@ -167,3 +167,29 @@ The VibeDrips `index.html` contains several hidden static modal roots (`#static-
 To prevent horizontal overflow and "bleeding" on small devices, the External Controls bubble uses a fixed-width strategy in portrait mode.
 - **Ticker Width**: Locked to `180px` (or `60vw` on ultra-narrow devices) to ensure icons remain accessible.
 - **Gap Control**: A strict `8px` gap is maintained between the bubble and the modal top edge to prevent z-index "merging" on high-DPI screens.
+
+---
+
+## 14. PWA Install UI Standards
+
+To maintain a premium, platform-agnostic experience, VibeDrips uses manual installation instructions instead of native browser prompts.
+
+### The "GET APP" Logic
+- **Bypassing Native Prompts**: We do not intercept `beforeinstallprompt`. Instead, the "GET APP" button directly opens the manual instructions modal.
+- **Privacy First**: Never force a `window.location.href = window.location.href` reload during installation triggers.
+- **Dynamic Visibility**: The install button is automatically hidden if `window.matchMedia('(display-mode: standalone)').matches` is true.
+
+### The Instructions Modal
+- **Requirement**: Must include step-by-step visuals for iOS (Safari "Add to Home Screen") and Android (Chrome "Install app").
+- **Constraint**: The modal must be accessible via the `.install-instructions` selector.
+
+---
+
+## 15. Share Button Parity (32px Landscape Lock)
+
+Across all modal types (Product vs. Reels), secondary controls must maintain strictly identical footprints in mobile landscape.
+
+### The Standard
+- **Dimensions**: Locked to **32px x 32px**.
+- **Icon Sizing**: Reels Share emojis/icons are scaled to `22px` to match the visual weight of the Close button SVG.
+- **Selection State**: No scaling expansion is permitted on select to avoid layout "jitter" in constrained height environments.
