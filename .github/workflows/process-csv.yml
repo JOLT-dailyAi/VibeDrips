@@ -92,6 +92,12 @@ jobs:
             echo "errors.json MISSING"
             CRITICAL_MISSING+=("errors.json")
           fi
+          if [ -f "data/seasons.json" ]; then
+            echo "seasons.json exists"
+          else
+            echo "seasons.json MISSING"
+            CRITICAL_MISSING+=("seasons.json")
+          fi
           if [ ${#CRITICAL_MISSING[@]} -gt 0 ]; then
             echo "ERROR: Critical files missing: ${CRITICAL_MISSING[@]}"
             exit 1
@@ -138,6 +144,7 @@ jobs:
           git rm --cached data/errors.json 2>/dev/null || echo "errors.json not in cache"
           git rm --cached data/categories.json 2>/dev/null || echo "categories.json not in cache"
           git rm --cached data/brands.json 2>/dev/null || echo "brands.json not in cache"
+          git rm --cached data/seasons.json 2>/dev/null || echo "seasons.json not in cache"
           git rm --cached data/products-*.json 2>/dev/null || echo "No product files in cache"
           
           echo "=== STAGING FRESHLY GENERATED FILES ==="
@@ -149,6 +156,7 @@ jobs:
           git add -f data/categories.json 2>/dev/null || echo "No categories.json to add"
           git add -f data/brands.json 2>/dev/null || echo "No brands.json to add"
           git add -f data/errors.json 2>/dev/null || echo "No errors.json to add"
+          git add -f data/seasons.json 2>/dev/null || echo "No seasons.json to add"
           git add -f data/last_updated.txt 2>/dev/null || echo "No last_updated.txt to add"
           git add -f sw.js 2>/dev/null || echo "No sw.js to add"
           git add -f assets/js/product-loader.js 2>/dev/null || echo "No product-loader.js to add"
