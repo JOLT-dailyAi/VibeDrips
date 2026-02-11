@@ -8,6 +8,7 @@ on:
       - 'data/products.csv'
       - 'convert-csv.js'
       - 'validation-config.js'
+      - '.github/workflows/process-csv.yml'
   workflow_dispatch:
 permissions:
   contents: write
