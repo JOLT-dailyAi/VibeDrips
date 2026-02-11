@@ -1,0 +1,57 @@
+{
+  "config": {
+    "title": "💸 Under the Bag",
+    "enabled": true,
+    "last_updated": "2026-02-11T21:02:18.024Z",
+    "currencies": {
+      "INR": {
+        "default_budget": 5000,
+        "slider_min": 500,
+        "slider_max": 50000,
+        "step": 500
+      },
+      "USD": {
+        "default_budget": 80,
+        "slider_min": 10,
+        "slider_max": 1000,
+        "step": 10
+      },
+      "AUD": {
+        "default_budget": 120,
+        "slider_min": 20,
+        "slider_max": 1500,
+        "step": 20
+      },
+      "CAD": {
+        "default_budget": 100,
+        "slider_min": 20,
+        "slider_max": 1500,
+        "step": 20
+      },
+      "GBP": {
+        "default_budget": 60,
+        "slider_min": 10,
+        "slider_max": 800,
+        "step": 10
+      },
+      "EUR": {
+        "default_budget": 75,
+        "slider_min": 10,
+        "slider_max": 1000,
+        "step": 10
+      },
+      "JPY": {
+        "default_budget": 10000,
+        "slider_min": 1000,
+        "slider_max": 100000,
+        "step": 1000
+      }
+    },
+    "tier_labels": [
+      "Best Value",
+      "Budget Pick",
+      "High-value"
+    ],
+    "max_variants_per_group": 3
+  }
+}

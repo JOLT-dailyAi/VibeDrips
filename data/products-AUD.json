@@ -9,7 +9,7 @@
     "discount_percentage": 23,
     "discountPercentage": 23,
     "availability": "In Stock",
-    "Error-Flag": 1,
+    "Error-Flag": 0,
     "Error-Reason": "",
     "Error-Fields": [
       "Amazon marketplace domain"
@@ -17,7 +17,7 @@
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Levoit",
-    "category": "Air Purifier",
+    "category": "Furniture",
     "subcategory": "Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/91hGOWzAGFL.jpg",
     "all_images": [
@@ -45,14 +45,17 @@
       "INR": "B076HP91MN"
     },
     "amazon_short": "https://amzn.to/493nRIX",
-    "amazon_long": "https://www.amazon.com.au/Purifier-Bedroom-Quality-Allergies-Core300S/dp/B0F2MLPWTG?crid=ELQVWDXWQHCQ&dib=eyJ2IjoiMSJ9.FOAH8neW_BkiQyheRWadP_Vzl3UKAcMdELFu6isypav_CGNPFW5YobAbwbtKkznVOzXLaiJl8GIfXrvtsfg1PPKpwvr8q-z5FFiws6k_G2HdECSKc4wMSGlqfPImlyAzK23ofQ7xuPeLujS41XmxJRnkQXt-zd5TPVFKWRd8rNIePZYpdypIwwl_2Xm9ciS-8CWs3IqwaWPdc0KVXUfKpQL9cY53ogEMSflkbVoAbRHikVaWa91VQ7Otjk5dmplty-CWIofnzg0Nfn8QpR3mn6k0BQd4gqRZu4JKuC_EHPI.3ob2vEV8RqxLQoKvTGojLCMzVDFh1zQEXwQ7KkRQp1U&dib_tag=se&keywords=LEVOIT%2BCore%2BMini%2BAir%2BPurifier%2BFor%2BCoverage%2BArea%2B183%2BSq%2BFt%2C%2BH13%2BTruehepa%2BFilter%2C%2BRemove%2B99.97%25%2BDust%2C%2BSmoke%2C%2B%26%2BPollen%2C%2BWith%2BFragrance%2BSponge%2C%2B%282%2BYears%2BWarranty%29%2C%2BWhite&qid=1767415465&sprefix=levoit%2Bcore%2Bmini%2Bair%2Bpurifier%2Bfor%2Bcoverage%2Barea%2B183%2Bsq%2Bft%2Bh13%2Btruehepa%2Bfilter%2Bremove%2B99.97%2Bdust%2Bsmoke%2B%26%2Bpollen%2Bwith%2Bfragrance%2Bsponge%2B2%2Byears%2Bwarranty%2Bwhite%2Caps%2C284&sr=8-5&th=1&linkCode=ll1&tag=vibedrips21-22&linkId=c7e8c72112fd62ab075a59a6e449d543&language=en_AU&ref_=as_li_ss_tl",
+    "amazon_long": "",
     "affiliate_link": "https://amzn.to/493nRIX",
     "release_date": "2025-10-15T00:00:00.000Z",
+    "timestamp": "1/3/2026 10:41:13",
     "influencer": "HouseFresh",
     "manual_collections": [
       "Air Purifier"
     ],
     "season": "Summer",
+    "category_is_auto_detected": false,
+    "season_is_auto_detected": false,
     "featured": false,
     "trending": false,
     "productDetails": [
@@ -81,6 +84,12 @@
         "priority": 5
       },
       {
+        "key": "powerwattage",
+        "label": "Wattage",
+        "value": "39 watts",
+        "priority": 5
+      },
+      {
         "key": "noise_level",
         "label": "Noise Level",
         "value": "24 Decibels",
@@ -88,6 +97,12 @@
       },
       {
         "key": "special_feature",
+        "label": "Special Features",
+        "value": "Plasma Pro Technology, HEPASmart Technology, Real-time Air Quality Monitoring, Smart App Integration",
+        "priority": 10
+      },
+      {
+        "key": "special_features",
         "label": "Special Features",
         "value": "Plasma Pro Technology, HEPASmart Technology, Real-time Air Quality Monitoring, Smart App Integration",
         "priority": 10
@@ -143,6 +158,13 @@
         }
       ]
     },
+    "Warnings": [
+      {
+        "field": "Amazon marketplace domain",
+        "reason": "Metadata leaked: Australia (AU) — amazon.com.au",
+        "severity": "WARNING"
+      }
+    ],
     "drop_signals": {
       "has_reference_media": true,
       "media_count": 3,
@@ -171,7 +193,7 @@
     "discount_percentage": 15,
     "discountPercentage": 15,
     "availability": "In Stock",
-    "Error-Flag": 1,
+    "Error-Flag": 0,
     "Error-Reason": "",
     "Error-Fields": [
       "Amazon marketplace domain",
@@ -182,7 +204,7 @@
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Winix",
-    "category": "Air Purifier",
+    "category": "General",
     "subcategory": "Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/71Cph7LlfZL.jpg",
     "all_images": [
@@ -211,14 +233,17 @@
       "INR": "B076HP91MN"
     },
     "amazon_short": "https://amzn.to/4pfw29L",
-    "amazon_long": "https://www.amazon.com.au/Winix-Compact-360-5-Stage-Purifier/dp/B0FVXJ52W6?crid=3SEE7AW4CTF3L&dib=eyJ2IjoiMSJ9.yjPUZwIiQAwGIy6h3ZERzP3vcaJXxXKxgtt3l8HubDTOjsuHkqRN8SciutwmHQwwMILl22ht4Ih_Fz_1OwVjnrRdMIUmtwrCJNiqOEc8-Lct893igYyATCFTqfvQnccTyrSng-bobCrdG_SO1DsZcwetE7qOq2mJtvGVzXwNfHIGsjaYz3VajEcu_bObXVBx77zYxVaqXkxjmJ5nCJpeh3JCXJZ66k_ddrjspK0Shr7p46mq9guKbZI1KKDi1Og5xRLLAXbYmg60F3c3h_3HuyST_2CSKbJjfPkvofARSZM.0rGjNVV4bXLN5DKU8853Q78B6ZA5MLnsY3MoW4UNhLg&dib_tag=se&keywords=winix+a230+air+purifier&qid=1767420555&refinements=p_123%3A322708&rnid=23341319051&sprefix=Winix+A230%2Caps%2C304&sr=8-7&linkCode=ll1&tag=vibedrips21-22&linkId=2a2f064cefc865213c085c46fe0d4387&language=en_AU&ref_=as_li_ss_tl",
+    "amazon_long": "",
     "affiliate_link": "https://amzn.to/4pfw29L",
     "release_date": "2025-10-07T00:00:00.000Z",
+    "timestamp": "1/3/2026 14:37:23",
     "influencer": "HouseFresh",
     "manual_collections": [
       "Air Purifier"
     ],
     "season": "Summer",
+    "category_is_auto_detected": false,
+    "season_is_auto_detected": false,
     "featured": false,
     "trending": false,
     "productDetails": [
@@ -242,6 +267,12 @@
       },
       {
         "key": "wattage",
+        "label": "Wattage",
+        "value": "49 watts",
+        "priority": 5
+      },
+      {
+        "key": "powerwattage",
         "label": "Wattage",
         "value": "49 watts",
         "priority": 5
@@ -277,6 +308,28 @@
         }
       ]
     },
+    "Warnings": [
+      {
+        "field": "Amazon marketplace domain",
+        "reason": "Metadata leaked: Australia (AU) — amazon.com.au",
+        "severity": "WARNING"
+      },
+      {
+        "field": "item_model_number",
+        "reason": "Value already in title/description",
+        "severity": "INFO"
+      },
+      {
+        "field": "generic_name",
+        "reason": "Value already in title/description",
+        "severity": "INFO"
+      },
+      {
+        "field": "model_number",
+        "reason": "Value already in title/description",
+        "severity": "INFO"
+      }
+    ],
     "drop_signals": {
       "has_reference_media": true,
       "media_count": 4,
@@ -305,7 +358,7 @@
     "discount_percentage": 22,
     "discountPercentage": 22,
     "availability": "In Stock",
-    "Error-Flag": 1,
+    "Error-Flag": 0,
     "Error-Reason": "",
     "Error-Fields": [
       "Amazon marketplace domain",
@@ -317,7 +370,7 @@
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Levoit",
-    "category": "Air Purifier",
+    "category": "Furniture",
     "subcategory": "Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/71XylkefYdL.jpg",
     "all_images": [
@@ -345,14 +398,17 @@
       "INR": "B076HP91MN"
     },
     "amazon_short": "https://amzn.to/3MYIkWR",
-    "amazon_long": "https://www.amazon.com.au/Purifiers-Bedroom-Allergies-Ultra-quiet-Portable/dp/B0F9FJS3VW?crid=ELQVWDXWQHCQ&dib=eyJ2IjoiMSJ9.FOAH8neW_BkiQyheRWadP_Vzl3UKAcMdELFu6isypav_CGNPFW5YobAbwbtKkznVOzXLaiJl8GIfXrvtsfg1PPKpwvr8q-z5FFiws6k_G2HdECSKc4wMSGlqfPImlyAzK23ofQ7xuPeLujS41XmxJRnkQXt-zd5TPVFKWRd8rNIePZYpdypIwwl_2Xm9ciS-8CWs3IqwaWPdc0KVXUfKpQL9cY53ogEMSflkbVoAbRHikVaWa91VQ7Otjk5dmplty-CWIofnzg0Nfn8QpR3mn6k0BQd4gqRZu4JKuC_EHPI.3ob2vEV8RqxLQoKvTGojLCMzVDFh1zQEXwQ7KkRQp1U&dib_tag=se&keywords=LEVOIT%2BCore%2BMini%2BAir%2BPurifier%2BFor%2BCoverage%2BArea%2B183%2BSq%2BFt%2C%2BH13%2BTruehepa%2BFilter%2C%2BRemove%2B99.97%25%2BDust%2C%2BSmoke%2C%2B%26%2BPollen%2C%2BWith%2BFragrance%2BSponge%2C%2B%282%2BYears%2BWarranty%29%2C%2BWhite&qid=1767415465&sprefix=levoit%2Bcore%2Bmini%2Bair%2Bpurifier%2Bfor%2Bcoverage%2Barea%2B183%2Bsq%2Bft%2Bh13%2Btruehepa%2Bfilter%2Bremove%2B99.97%2Bdust%2Bsmoke%2B%26%2Bpollen%2Bwith%2Bfragrance%2Bsponge%2B2%2Byears%2Bwarranty%2Bwhite%2Caps%2C284&sr=8-1-spons&sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&th=1&linkCode=ll1&tag=vibedrips21-22&linkId=beb325622ccdebbad661d944f7c6f40f&language=en_AU&ref_=as_li_ss_tl",
+    "amazon_long": "",
     "affiliate_link": "https://amzn.to/3MYIkWR",
     "release_date": "2025-09-23T00:00:00.000Z",
+    "timestamp": "1/3/2026 10:40:34",
     "influencer": "HouseFresh",
     "manual_collections": [
       "Air Purifier"
     ],
     "season": "Summer",
+    "category_is_auto_detected": false,
+    "season_is_auto_detected": false,
     "featured": false,
     "trending": false,
     "productDetails": [
@@ -376,6 +432,12 @@
       },
       {
         "key": "special_feature",
+        "label": "Special Features",
+        "value": "Manual",
+        "priority": 10
+      },
+      {
+        "key": "special_features",
         "label": "Special Features",
         "value": "Manual",
         "priority": 10
@@ -425,6 +487,33 @@
         }
       ]
     },
+    "Warnings": [
+      {
+        "field": "Amazon marketplace domain",
+        "reason": "Metadata leaked: Australia (AU) — amazon.com.au",
+        "severity": "WARNING"
+      },
+      {
+        "field": "color",
+        "reason": "Value already in title/description",
+        "severity": "INFO"
+      },
+      {
+        "field": "generic_name",
+        "reason": "Value already in title/description",
+        "severity": "INFO"
+      },
+      {
+        "field": "product_dimensions",
+        "reason": "Conflict with dimensions",
+        "severity": "WARNING"
+      },
+      {
+        "field": "colour",
+        "reason": "Value already in title/description",
+        "severity": "INFO"
+      }
+    ],
     "drop_signals": {
       "has_reference_media": true,
       "media_count": 3,
@@ -453,7 +542,7 @@
     "discount_percentage": 0,
     "discountPercentage": 0,
     "availability": "In Stock",
-    "Error-Flag": 1,
+    "Error-Flag": 0,
     "Error-Reason": "",
     "Error-Fields": [
       "Amazon marketplace domain",
@@ -464,7 +553,7 @@
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Winix",
-    "category": "Air Purifier",
+    "category": "General",
     "subcategory": "Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/71dW-xRhaTL.jpg",
     "all_images": [
@@ -493,14 +582,17 @@
       "INR": "B076HP91MN"
     },
     "amazon_short": "https://amzn.to/4q7G8Lg",
-    "amazon_long": "https://www.amazon.com.au/Winix-Smart-Zero-4-Stage-Purifier/dp/B0DT4F8T4L?crid=ELQVWDXWQHCQ&dib=eyJ2IjoiMSJ9.L6EeAo92rin7UrwhDrHrODZMqe6EBCBLrUNUWbTNFp2uVFSOhAgC_eyuAsvR8NOlcTbVThxkLLRpDyb7dOyDPw.4ooEt3zaE9eNXiIk-80aYgyLTJW19qOo7EEaI9Uabr8&dib_tag=se&keywords=LEVOIT%2BCore%2BMini%2BAir%2BPurifier%2BFor%2BCoverage%2BArea%2B183%2BSq%2BFt%2C%2BH13%2BTruehepa%2BFilter%2C%2BRemove%2B99.97%25%2BDust%2C%2BSmoke%2C%2B%26%2BPollen%2C%2BWith%2BFragrance%2BSponge%2C%2B%282%2BYears%2BWarranty%29%2C%2BWhite&qid=1767419802&refinements=p_n_prime_domestic%3A6845356051%2Cp_123%3A322708&sprefix=levoit%2Bcore%2Bmini%2Bair%2Bpurifier%2Bfor%2Bcoverage%2Barea%2B183%2Bsq%2Bft%2Bh13%2Btruehepa%2Bfilter%2Bremove%2B99.97%2Bdust%2Bsmoke%2B%26%2Bpollen%2Bwith%2Bfragrance%2Bsponge%2B2%2Byears%2Bwarranty%2Bwhite%2Caps%2C284&sr=8-3&th=1&linkCode=ll1&tag=vibedrips21-22&linkId=a9007baf41faa16d9559d9103cbd03e2&language=en_AU&ref_=as_li_ss_tl",
+    "amazon_long": "",
     "affiliate_link": "https://amzn.to/4q7G8Lg",
     "release_date": "2025-01-15T00:00:00.000Z",
+    "timestamp": "1/3/2026 11:36:34",
     "influencer": "HouseFresh",
     "manual_collections": [
       "Air Purifier"
     ],
     "season": "Summer",
+    "category_is_auto_detected": false,
+    "season_is_auto_detected": false,
     "featured": false,
     "trending": false,
     "productDetails": [
@@ -529,6 +621,12 @@
         "priority": 5
       },
       {
+        "key": "powerwattage",
+        "label": "Wattage",
+        "value": "50 watts",
+        "priority": 5
+      },
+      {
         "key": "noise_level",
         "label": "Noise Level",
         "value": "27 Decibels",
@@ -536,6 +634,12 @@
       },
       {
         "key": "special_feature",
+        "label": "Special Features",
+        "value": "PlasmaWave Technology and Intelligent Sensors",
+        "priority": 10
+      },
+      {
+        "key": "special_features",
         "label": "Special Features",
         "value": "PlasmaWave Technology and Intelligent Sensors",
         "priority": 10
@@ -577,6 +681,28 @@
         }
       ]
     },
+    "Warnings": [
+      {
+        "field": "Amazon marketplace domain",
+        "reason": "Metadata leaked: Australia (AU) — amazon.com.au",
+        "severity": "WARNING"
+      },
+      {
+        "field": "item_model_number",
+        "reason": "Value already in title/description",
+        "severity": "INFO"
+      },
+      {
+        "field": "generic_name",
+        "reason": "Value already in title/description",
+        "severity": "INFO"
+      },
+      {
+        "field": "model_number",
+        "reason": "Value already in title/description",
+        "severity": "INFO"
+      }
+    ],
     "drop_signals": {
       "has_reference_media": true,
       "media_count": 4,
@@ -615,7 +741,7 @@
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Cornerstone Press",
-    "category": "Book",
+    "category": "Books",
     "subcategory": "Book",
     "main_image": "https://m.media-amazon.com/images/I/61X7tH9kPOL.jpg",
     "all_images": [
@@ -642,14 +768,17 @@
       "INR": "9355991479"
     },
     "amazon_short": "https://amzn.to/49mRnZa",
-    "amazon_long": "https://www.amazon.com.au/Ikigai-Simple-Secrets-Long-Happy/dp/1529902401?_encoding=UTF8&dib_tag=se&dib=eyJ2IjoiMSJ9.fnTYwXmHd1cvomaHCc5XqKXrTuwIsooh5W_7EuD2WB4ZaDgK2e1r7bEBhJ00YEyANnfIq1jlgqnQbTAIVQ2QWj7YK6EkQqeJJVLmph5gP1wCMMztkrx6nNP4knowlpE54_uS45CQhKerxiLbHZsevQaDB_FQacJQOIsRSicsM05jsj6kPiq6SyxEJoaBqXp1mDE5F0cGAAHQKqVBXWNZB3IJZYHD88rq7im4u7qCJ5usqOose5yqbCR1zazRC-Y79Lph1VkHK6aHzc-QHDlyrBNScZUqd4emqkwQw0C_u08.3ras5C8GtGooH1pt5vWOIL9GRCsurW06RTm_cxboGJw&qid=1767246466&sr=8-5&linkCode=ll1&tag=vibedrips21-22&linkId=a31a2a031631ed4b19fee9cbb44b810c&language=en_AU&ref_=as_li_ss_tl",
+    "amazon_long": "",
     "affiliate_link": "https://amzn.to/49mRnZa",
     "release_date": "2023-08-01T00:00:00.000Z",
+    "timestamp": "1/1/2026 14:24:13",
     "influencer": null,
     "manual_collections": [
       "Books"
     ],
     "season": "Winter",
+    "category_is_auto_detected": false,
+    "season_is_auto_detected": true,
     "featured": false,
     "trending": false,
     "productDetails": [
@@ -742,6 +871,18 @@
         }
       ]
     },
+    "Warnings": [
+      {
+        "field": "Amazon marketplace domain",
+        "reason": "Metadata leaked: Australia (AU) — amazon.com.au",
+        "severity": "WARNING"
+      },
+      {
+        "field": "generic_name",
+        "reason": "Value already in title/description",
+        "severity": "INFO"
+      }
+    ],
     "drop_signals": {
       "has_reference_media": true,
       "media_count": 2,
@@ -771,7 +912,7 @@
     "discount_percentage": 0,
     "discountPercentage": 0,
     "availability": "In Stock",
-    "Error-Flag": 1,
+    "Error-Flag": 0,
     "Error-Reason": "",
     "Error-Fields": [
       "Amazon marketplace domain",
@@ -781,7 +922,7 @@
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Winix",
-    "category": "Air Purifier",
+    "category": "Furniture",
     "subcategory": "Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/61EZjAU+fUL.jpg",
     "all_images": [
@@ -810,14 +951,17 @@
       "INR": "B076HP91MN"
     },
     "amazon_short": "https://amzn.to/4pl6OXy",
-    "amazon_long": "https://www.amazon.com.au/Compact-Purifier-Filtration-Captures-Suitable/dp/B094DRK41G?crid=ELQVWDXWQHCQ&dib=eyJ2IjoiMSJ9.L6EeAo92rin7UrwhDrHrODZMqe6EBCBLrUNUWbTNFp16MSXHqEkdZD7LXIZjFzl77ISQJiT0EM-2BtqpoJVdF_wXq5dn0YSOzCQmwCGqH0YGMf95ZtH8IaB04uVPQ8nU.xIE1Z8NW2f--4_KVa8FKbS1rEvkJWZ_BxwNM097DRZ8&dib_tag=se&keywords=LEVOIT+Core+Mini+Air+Purifier+For+Coverage+Area+183+Sq+Ft%2C+H13+Truehepa+Filter%2C+Remove+99.97%25+Dust%2C+Smoke%2C+%26+Pollen%2C+With+Fragrance+Sponge%2C+%282+Years+Warranty%29%2C+White&qid=1767420471&refinements=p_123%3A322708&rnid=6963563051&sprefix=levoit+core+mini+air+purifier+for+coverage+area+183+sq+ft+h13+truehepa+filter+remove+99.97+dust+smoke+%26+pollen+with+fragrance+sponge+2+years+warranty+white%2Caps%2C284&sr=8-4&linkCode=ll1&tag=vibedrips21-22&linkId=561b359428d66168fb817a410a30457e&language=en_AU&ref_=as_li_ss_tl",
+    "amazon_long": "",
     "affiliate_link": "https://amzn.to/4pl6OXy",
     "release_date": "2022-10-05T00:00:00.000Z",
+    "timestamp": "1/3/2026 14:36:25",
     "influencer": "HouseFresh",
     "manual_collections": [
       "Air Purifier"
     ],
     "season": "Summer",
+    "category_is_auto_detected": false,
+    "season_is_auto_detected": false,
     "featured": false,
     "trending": false,
     "productDetails": [
@@ -873,9 +1017,32 @@
           "label": "Number Of Pieces",
           "category": "Product Specs",
           "value": "1"
+        },
+        {
+          "key": "number_of_pieces",
+          "label": "Number Of Pieces",
+          "category": "Product Specs",
+          "value": "1"
         }
       ]
     },
+    "Warnings": [
+      {
+        "field": "Amazon marketplace domain",
+        "reason": "Metadata leaked: Australia (AU) — amazon.com.au",
+        "severity": "WARNING"
+      },
+      {
+        "field": "includedComponents",
+        "reason": "Value already in title/description",
+        "severity": "INFO"
+      },
+      {
+        "field": "generic_name",
+        "reason": "Value already in title/description",
+        "severity": "INFO"
+      }
+    ],
     "drop_signals": {
       "has_reference_media": true,
       "media_count": 4,
@@ -904,7 +1071,7 @@
     "discount_percentage": 40,
     "discountPercentage": 40,
     "availability": "In Stock",
-    "Error-Flag": 1,
+    "Error-Flag": 0,
     "Error-Reason": "",
     "Error-Fields": [
       "Amazon marketplace domain"
@@ -912,7 +1079,7 @@
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Breville",
-    "category": "Air Purifier",
+    "category": "General",
     "subcategory": "Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/71AqfDto--L.jpg",
     "all_images": [
@@ -940,14 +1107,17 @@
       "INR": "B076HP91MN"
     },
     "amazon_short": "https://amzn.to/3YROScj",
-    "amazon_long": "https://www.amazon.com.au/Breville-Smart-Protect-Compact-Purifier/dp/B0BGRHMQ7C?crid=ELQVWDXWQHCQ&dib=eyJ2IjoiMSJ9.FHXLsM-DLpqlKvvci8N-591N18N1mBip80ehzAIu27h0luxf7lXG_WloQ6QAQ4_MMgI3USbhuHkHfEHVVvH_ww-DDW4gL8_LLN5u3Oyco_F7COYggKDqt-3UgrFT0IjkkncHvOBdqtynodECvdJtLDxZ8sfAdUGI8gSjCt98EqQ.3faedlDnO1zCR7W86hZxKFXN69_uhD61FDyPhIzWEKw&dib_tag=se&keywords=LEVOIT+Core+Mini+Air+Purifier+For+Coverage+Area+183+Sq+Ft%2C+H13+Truehepa+Filter%2C+Remove+99.97%25+Dust%2C+Smoke%2C+%26+Pollen%2C+With+Fragrance+Sponge%2C+%282+Years+Warranty%29%2C+White&qid=1767418066&refinements=p_123%3A394078%2Cp_n_prime_domestic%3A6845356051&rnid=6963563051&sprefix=levoit+core+mini+air+purifier+for+coverage+area+183+sq+ft+h13+truehepa+filter+remove+99.97+dust+smoke+%26+pollen+with+fragrance+sponge+2+years+warranty+white%2Caps%2C284&sr=8-3&linkCode=ll1&tag=vibedrips21-22&linkId=c4c89645ba3b1a2485919c59506945f0&language=en_AU&ref_=as_li_ss_tl",
+    "amazon_long": "",
     "affiliate_link": "https://amzn.to/3YROScj",
     "release_date": "2022-09-29T00:00:00.000Z",
+    "timestamp": "1/3/2026 11:23:10",
     "influencer": "HouseFresh",
     "manual_collections": [
       "Air Purifier"
     ],
     "season": "Summer",
+    "category_is_auto_detected": false,
+    "season_is_auto_detected": false,
     "featured": false,
     "trending": false,
     "productDetails": [
@@ -1002,6 +1172,13 @@
         }
       ]
     },
+    "Warnings": [
+      {
+        "field": "Amazon marketplace domain",
+        "reason": "Metadata leaked: Australia (AU) — amazon.com.au",
+        "severity": "WARNING"
+      }
+    ],
     "drop_signals": {
       "has_reference_media": true,
       "media_count": 3,
@@ -1030,7 +1207,7 @@
     "discount_percentage": 44,
     "discountPercentage": 44,
     "availability": "In Stock",
-    "Error-Flag": 1,
+    "Error-Flag": 0,
     "Error-Reason": "",
     "Error-Fields": [
       "Amazon marketplace domain",
@@ -1040,7 +1217,7 @@
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Breville",
-    "category": "Air Purifier",
+    "category": "General",
     "subcategory": "Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/51qL3f4OqJL.jpg",
     "all_images": [
@@ -1067,14 +1244,17 @@
       "INR": "B076HP91MN"
     },
     "amazon_short": "https://amzn.to/3Ymok2Q",
-    "amazon_long": "https://www.amazon.com.au/Breville-Connect-Purifier-Wi-Fi-LAP158WHT2IAN1/dp/B08NYTLNQ9?crid=ELQVWDXWQHCQ&dib=eyJ2IjoiMSJ9.FHXLsM-DLpqlKvvci8N-591N18N1mBip80ehzAIu27h0luxf7lXG_WloQ6QAQ4_MMgI3USbhuHkHfEHVVvH_ww-DDW4gL8_LLN5u3Oyco_F7COYggKDqt-3UgrFT0IjkkncHvOBdqtynodECvdJtLDxZ8sfAdUGI8gSjCt98EqQ.3faedlDnO1zCR7W86hZxKFXN69_uhD61FDyPhIzWEKw&dib_tag=se&keywords=LEVOIT%2BCore%2BMini%2BAir%2BPurifier%2BFor%2BCoverage%2BArea%2B183%2BSq%2BFt%2C%2BH13%2BTruehepa%2BFilter%2C%2BRemove%2B99.97%25%2BDust%2C%2BSmoke%2C%2B%26%2BPollen%2C%2BWith%2BFragrance%2BSponge%2C%2B%282%2BYears%2BWarranty%29%2C%2BWhite&qid=1767418066&refinements=p_123%3A394078%2Cp_n_prime_domestic%3A6845356051&rnid=6963563051&sprefix=levoit%2Bcore%2Bmini%2Bair%2Bpurifier%2Bfor%2Bcoverage%2Barea%2B183%2Bsq%2Bft%2Bh13%2Btruehepa%2Bfilter%2Bremove%2B99.97%2Bdust%2Bsmoke%2B%26%2Bpollen%2Bwith%2Bfragrance%2Bsponge%2B2%2Byears%2Bwarranty%2Bwhite%2Caps%2C284&sr=8-4&th=1&linkCode=ll1&tag=vibedrips21-22&linkId=e7da94870738285708023c039c0fe364&language=en_AU&ref_=as_li_ss_tl",
+    "amazon_long": "",
     "affiliate_link": "https://amzn.to/3Ymok2Q",
     "release_date": "2020-11-21T00:00:00.000Z",
+    "timestamp": "1/3/2026 11:24:21",
     "influencer": "HouseFresh",
     "manual_collections": [
       "Air Purifier"
     ],
     "season": "Summer",
+    "category_is_auto_detected": false,
+    "season_is_auto_detected": false,
     "featured": false,
     "trending": false,
     "productDetails": [
@@ -1135,6 +1315,23 @@
         }
       ]
     },
+    "Warnings": [
+      {
+        "field": "Amazon marketplace domain",
+        "reason": "Metadata leaked: Australia (AU) — amazon.com.au",
+        "severity": "WARNING"
+      },
+      {
+        "field": "color",
+        "reason": "Value already in title/description",
+        "severity": "INFO"
+      },
+      {
+        "field": "colour",
+        "reason": "Value already in title/description",
+        "severity": "INFO"
+      }
+    ],
     "drop_signals": {
       "has_reference_media": true,
       "media_count": 3,
@@ -1163,7 +1360,7 @@
     "discount_percentage": 14,
     "discountPercentage": 14,
     "availability": "In Stock",
-    "Error-Flag": 1,
+    "Error-Flag": 0,
     "Error-Reason": "",
     "Error-Fields": [
       "Amazon marketplace domain",
@@ -1173,7 +1370,7 @@
     "currency": "AUD",
     "symbol": "A$",
     "brand": "Winix",
-    "category": "Air Purifier",
+    "category": "Furniture",
     "subcategory": "Air Purifier",
     "main_image": "https://m.media-amazon.com/images/I/61bu1YA8FpL.jpg",
     "all_images": [
@@ -1202,14 +1399,17 @@
       "INR": "B076HP91MN"
     },
     "amazon_short": "https://amzn.to/4sjJxIx",
-    "amazon_long": "https://www.amazon.com.au/Winix-Australia-4-Stage-Hospital-Purifier/dp/B07PNJQMK6?crid=ELQVWDXWQHCQ&dib=eyJ2IjoiMSJ9.L6EeAo92rin7UrwhDrHrODZMqe6EBCBLrUNUWbTNFp2uVFSOhAgC_eyuAsvR8NOlcTbVThxkLLRpDyb7dOyDPw.4ooEt3zaE9eNXiIk-80aYgyLTJW19qOo7EEaI9Uabr8&dib_tag=se&keywords=LEVOIT%2BCore%2BMini%2BAir%2BPurifier%2BFor%2BCoverage%2BArea%2B183%2BSq%2BFt%2C%2BH13%2BTruehepa%2BFilter%2C%2BRemove%2B99.97%25%2BDust%2C%2BSmoke%2C%2B%26%2BPollen%2C%2BWith%2BFragrance%2BSponge%2C%2B%282%2BYears%2BWarranty%29%2C%2BWhite&qid=1767419802&refinements=p_n_prime_domestic%3A6845356051%2Cp_123%3A322708&sprefix=levoit%2Bcore%2Bmini%2Bair%2Bpurifier%2Bfor%2Bcoverage%2Barea%2B183%2Bsq%2Bft%2Bh13%2Btruehepa%2Bfilter%2Bremove%2B99.97%2Bdust%2Bsmoke%2B%26%2Bpollen%2Bwith%2Bfragrance%2Bsponge%2B2%2Byears%2Bwarranty%2Bwhite%2Caps%2C284&sr=8-5&th=1&linkCode=ll1&tag=vibedrips21-22&linkId=9960c752e67567452bdd8d8acd27c7d8&language=en_AU&ref_=as_li_ss_tl",
+    "amazon_long": "",
     "affiliate_link": "https://amzn.to/4sjJxIx",
     "release_date": "2019-03-13T00:00:00.000Z",
+    "timestamp": "1/3/2026 11:37:18",
     "influencer": "HouseFresh",
     "manual_collections": [
       "Air Purifier"
     ],
     "season": "Summer",
+    "category_is_auto_detected": false,
+    "season_is_auto_detected": false,
     "featured": false,
     "trending": false,
     "productDetails": [
@@ -1221,6 +1421,12 @@
       },
       {
         "key": "includedComponents",
+        "label": "Included Components",
+        "value": "1 x Air Purifier, 1 x Deodorization Activated Carbon Filter, 1 x Pre-Filter, 1 x True HEPA Filter, 1 x User Manual",
+        "priority": 11
+      },
+      {
+        "key": "included_components",
         "label": "Included Components",
         "value": "1 x Air Purifier, 1 x Deodorization Activated Carbon Filter, 1 x Pre-Filter, 1 x True HEPA Filter, 1 x User Manual",
         "priority": 11
@@ -1277,6 +1483,12 @@
           "label": "Number Of Pieces",
           "category": "Product Specs",
           "value": "1"
+        },
+        {
+          "key": "number_of_pieces",
+          "label": "Number Of Pieces",
+          "category": "Product Specs",
+          "value": "1"
         }
       ],
       "Care Instructions": [
@@ -1288,6 +1500,23 @@
         }
       ]
     },
+    "Warnings": [
+      {
+        "field": "Amazon marketplace domain",
+        "reason": "Metadata leaked: Australia (AU) — amazon.com.au",
+        "severity": "WARNING"
+      },
+      {
+        "field": "color",
+        "reason": "Value already in title/description",
+        "severity": "INFO"
+      },
+      {
+        "field": "generic_name",
+        "reason": "Value already in title/description",
+        "severity": "INFO"
+      }
+    ],
     "drop_signals": {
       "has_reference_media": true,
       "media_count": 4,
@@ -1326,7 +1555,7 @@
     "currency": "AUD",
     "symbol": "A$",
     "brand": "HUTCHINSON PUBLISHING - TRADE",
-    "category": "Book",
+    "category": "Books",
     "subcategory": "Book",
     "main_image": "https://m.media-amazon.com/images/I/81l3rZK4lnL.jpg",
     "all_images": [
@@ -1353,14 +1582,17 @@
       "INR": "9355991479"
     },
     "amazon_short": "https://amzn.to/44RpxTq",
-    "amazon_long": "https://www.amazon.com.au/Ikigai-Japanese-secret-long-happy/dp/178633089X?_encoding=UTF8&dib_tag=se&dib=eyJ2IjoiMSJ9.fnTYwXmHd1cvomaHCc5XqKXrTuwIsooh5W_7EuD2WB4ZaDgK2e1r7bEBhJ00YEyANnfIq1jlgqnQbTAIVQ2QWj7YK6EkQqeJJVLmph5gP1wCMMztkrx6nNP4knowlpE54_uS45CQhKerxiLbHZsevQaDB_FQacJQOIsRSicsM05jsj6kPiq6SyxEJoaBqXp1mDE5F0cGAAHQKqVBXWNZB3IJZYHD88rq7im4u7qCJ5usqOose5yqbCR1zazRC-Y79Lph1VkHK6aHzc-QHDlyrBNScZUqd4emqkwQw0C_u08.3ras5C8GtGooH1pt5vWOIL9GRCsurW06RTm_cxboGJw&qid=1767246466&sr=8-5&linkCode=ll1&tag=vibedrips21-22&linkId=26ece1d59414947e2b91c636860f7c67&language=en_AU&ref_=as_li_ss_tl",
+    "amazon_long": "",
     "affiliate_link": "https://amzn.to/44RpxTq",
     "release_date": "2017-09-18T00:00:00.000Z",
+    "timestamp": "1/1/2026 14:13:46",
     "influencer": null,
     "manual_collections": [
       "Books"
     ],
     "season": "Winter",
+    "category_is_auto_detected": false,
+    "season_is_auto_detected": true,
     "featured": false,
     "trending": false,
     "productDetails": [
@@ -1459,6 +1691,18 @@
         }
       ]
     },
+    "Warnings": [
+      {
+        "field": "Amazon marketplace domain",
+        "reason": "Metadata leaked: Australia (AU) — amazon.com.au",
+        "severity": "WARNING"
+      },
+      {
+        "field": "generic_name",
+        "reason": "Value already in title/description",
+        "severity": "INFO"
+      }
+    ],
     "drop_signals": {
       "has_reference_media": true,
       "media_count": 2,

@@ -1,34 +1,43 @@
 {
   "summary": {
-    "total_categories": 3,
+    "total_categories": 4,
     "total_products": 23,
-    "last_updated": "2026-02-11T09:20:41.546Z"
+    "last_updated": "2026-02-11T21:02:18.022Z"
   },
   "categories": [
     {
-      "name": "Air Purifier",
-      "product_count": 16,
+      "id": "general",
+      "name": "General",
+      "product_count": 9,
       "asins": [
-        "B0F2MLPWTG",
         "B0BGRHMQ7C",
         "B08NYTLNQ9",
         "B0DT4F8T4L",
-        "B07PNJQMK6",
-        "B094DRK41G",
         "B0FVXJ52W6",
-        "B0F9FJS3VW",
         "B0FJ5R8JN7",
         "B0DHGFCG6P",
         "B0F1MR9W8R",
         "B0CQ2MVRXR",
-        "B0CG1N11DV",
-        "B0BCC8KZHK",
-        "B0BDX9ZN46",
         "B076HP91MN"
       ]
     },
     {
-      "name": "Book",
+      "id": "furniture",
+      "name": "Furniture",
+      "product_count": 7,
+      "asins": [
+        "B0F2MLPWTG",
+        "B07PNJQMK6",
+        "B094DRK41G",
+        "B0F9FJS3VW",
+        "B0DF6NBJDW",
+        "B0BCC8KZHK",
+        "B0BDX9ZN46"
+      ]
+    },
+    {
+      "id": "books",
+      "name": "Books",
       "product_count": 6,
       "asins": [
         "178633089X",
@@ -40,10 +49,11 @@
       ]
     },
     {
-      "name": "Humidifier",
+      "id": "beauty-&-personal-care",
+      "name": "Beauty & Personal Care",
       "product_count": 1,
       "asins": [
-        "B0DF6NBJDW"
+        "B0CG1N11DV"
       ]
     }
   ]

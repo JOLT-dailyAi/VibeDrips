@@ -1,244 +1,52 @@
 {
   "summary": {
-    "total_collections": 3,
-    "last_updated": "2026-02-11T09:20:41.546Z"
+    "total_top_level": 3,
+    "last_updated": "2026-02-11T21:02:18.024Z"
   },
   "collections": {
     "Books": {
       "name": "Books",
-      "productCount": 6,
-      "totalValue": 912.72,
-      "categories": {},
-      "brands": {},
-      "currencies": {},
-      "influencers": {},
-      "priceRange": {
-        "min": 16,
-        "max": 269
-      },
-      "products": [
-        {
-          "asin": "178633089X",
-          "currency": "AUD",
-          "drop_categories": [
-            "creator-picks",
-            "viral-reels"
-          ],
-          "influencer": null
-        },
-        {
-          "asin": "1529902401",
-          "currency": "AUD",
-          "drop_categories": [
-            "creator-picks",
-            "viral-reels"
-          ],
-          "influencer": null
-        },
-        {
-          "asin": "9388550315",
-          "currency": "INR",
-          "drop_categories": [
-            "creator-picks",
-            "viral-reels"
-          ],
-          "influencer": null
-        },
-        {
-          "asin": "9388550072",
-          "currency": "INR",
-          "drop_categories": [
-            "creator-picks",
-            "viral-reels"
-          ],
-          "influencer": null
-        },
-        {
-          "asin": "9355995008",
-          "currency": "INR",
-          "drop_categories": [
-            "creator-picks",
-            "viral-reels"
-          ],
-          "influencer": null
-        },
-        {
-          "asin": "9355991479",
-          "currency": "INR",
-          "drop_categories": [
-            "creator-picks",
-            "viral-reels"
-          ],
-          "influencer": null
-        }
-      ]
+      "product_count": 6,
+      "asins": [
+        "178633089X",
+        "1529902401",
+        "9388550315",
+        "9388550072",
+        "9355995008",
+        "9355991479"
+      ],
+      "sub_collections": {}
     },
     "Air Purifier": {
       "name": "Air Purifier",
-      "productCount": 16,
-      "totalValue": 255853,
-      "categories": {},
-      "brands": {},
-      "currencies": {},
-      "influencers": {},
-      "priceRange": {
-        "min": 109,
-        "max": 126804
-      },
-      "products": [
-        {
-          "asin": "B0F2MLPWTG",
-          "currency": "AUD",
-          "drop_categories": [
-            "creator-picks"
-          ],
-          "influencer": "HouseFresh"
-        },
-        {
-          "asin": "B0BGRHMQ7C",
-          "currency": "AUD",
-          "drop_categories": [
-            "creator-picks"
-          ],
-          "influencer": "HouseFresh"
-        },
-        {
-          "asin": "B08NYTLNQ9",
-          "currency": "AUD",
-          "drop_categories": [
-            "creator-picks"
-          ],
-          "influencer": "HouseFresh"
-        },
-        {
-          "asin": "B0DT4F8T4L",
-          "currency": "AUD",
-          "drop_categories": [
-            "creator-picks"
-          ],
-          "influencer": "HouseFresh"
-        },
-        {
-          "asin": "B07PNJQMK6",
-          "currency": "AUD",
-          "drop_categories": [
-            "creator-picks"
-          ],
-          "influencer": "HouseFresh"
-        },
-        {
-          "asin": "B094DRK41G",
-          "currency": "AUD",
-          "drop_categories": [
-            "creator-picks"
-          ],
-          "influencer": "HouseFresh"
-        },
-        {
-          "asin": "B0FVXJ52W6",
-          "currency": "AUD",
-          "drop_categories": [
-            "creator-picks"
-          ],
-          "influencer": "HouseFresh"
-        },
-        {
-          "asin": "B0F9FJS3VW",
-          "currency": "AUD",
-          "drop_categories": [
-            "creator-picks"
-          ],
-          "influencer": "HouseFresh"
-        },
-        {
-          "asin": "B0FJ5R8JN7",
-          "currency": "INR",
-          "drop_categories": [
-            "creator-picks"
-          ],
-          "influencer": "Food Pharmer"
-        },
-        {
-          "asin": "B0DHGFCG6P",
-          "currency": "INR",
-          "drop_categories": [
-            "creator-picks"
-          ],
-          "influencer": "Food Pharmer"
-        },
-        {
-          "asin": "B0F1MR9W8R",
-          "currency": "INR",
-          "drop_categories": [
-            "creator-picks"
-          ],
-          "influencer": null
-        },
-        {
-          "asin": "B0CQ2MVRXR",
-          "currency": "INR",
-          "drop_categories": [
-            "creator-picks"
-          ],
-          "influencer": null
-        },
-        {
-          "asin": "B0CG1N11DV",
-          "currency": "INR",
-          "drop_categories": [
-            "creator-picks"
-          ],
-          "influencer": "Food Pharmer"
-        },
-        {
-          "asin": "B0BCC8KZHK",
-          "currency": "INR",
-          "drop_categories": [
-            "creator-picks",
-            "viral-reels"
-          ],
-          "influencer": null
-        },
-        {
-          "asin": "B0BDX9ZN46",
-          "currency": "INR",
-          "drop_categories": [
-            "creator-picks"
-          ],
-          "influencer": "Food Pharmer"
-        },
-        {
-          "asin": "B076HP91MN",
-          "currency": "INR",
-          "drop_categories": [
-            "creator-picks"
-          ],
-          "influencer": "Food Pharmer"
-        }
-      ]
+      "product_count": 16,
+      "asins": [
+        "B0F2MLPWTG",
+        "B0BGRHMQ7C",
+        "B08NYTLNQ9",
+        "B0DT4F8T4L",
+        "B07PNJQMK6",
+        "B094DRK41G",
+        "B0FVXJ52W6",
+        "B0F9FJS3VW",
+        "B0FJ5R8JN7",
+        "B0DHGFCG6P",
+        "B0F1MR9W8R",
+        "B0CQ2MVRXR",
+        "B0CG1N11DV",
+        "B0BCC8KZHK",
+        "B0BDX9ZN46",
+        "B076HP91MN"
+      ],
+      "sub_collections": {}
     },
     "Humidifier": {
       "name": "Humidifier",
-      "productCount": 1,
-      "totalValue": 65628,
-      "categories": {},
-      "brands": {},
-      "currencies": {},
-      "influencers": {},
-      "priceRange": {
-        "min": 65628,
-        "max": 65628
-      },
-      "products": [
-        {
-          "asin": "B0DF6NBJDW",
-          "currency": "INR",
-          "drop_categories": [
-            "creator-picks"
-          ],
-          "influencer": null
-        }
-      ]
+      "product_count": 1,
+      "asins": [
+        "B0DF6NBJDW"
+      ],
+      "sub_collections": {}
     }
   }
 }

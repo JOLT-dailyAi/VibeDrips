@@ -1,5 +1,5 @@
 VibeDrips Data Processing Summary
-Generated: 2026-02-11T09:20:41.548Z
+Generated: 2026-02-11T21:02:18.027Z
 
 📊 STATISTICS
 - Total Rows Processed: 23
@@ -19,33 +19,23 @@ Generated: 2026-02-11T09:20:41.548Z
 - Available: AUD, INR
 
 📦 CATEGORIES
-- Categories Found: 3
-- Top Categories: Book, Air Purifier, Humidifier
-
-🏷️ BRANDS
-- Brands Found: 14
-- Top Brands: HUTCHINSON PUBLISHING - TRADE, Cornerstone Press, MyMirror Publishing House, Levoit, Breville
+- Categories Found: 4
+- Review Needed: 0 products
 
 👤 INFLUENCERS
 - Products with influencers: 13
 - Unique influencers: 2
-- List: HouseFresh, Food Pharmer
 
 💎 COLLECTIONS
-- Products in collections: 23
 - Unique collections: 3
-- List: Books, Air Purifier, Humidifier
 
 🌿 SEASONS
 - Seasons Detected: 2
-- Active: Winter, Summer
+- Review Needed: 3 products
 
 ⚠️ ERRORS & VALIDATION
-- Products with errors: 23
-- Error rate: 100%
-- Critical errors: 0
-- Warnings: 1
-- Top error types: DISCOUNT_MISMATCH (2), INVALID_ORIGINAL (1)
+- Products with errors: 3
+- Error rate: 13%
 
 🎬 DROPS
 - 🎬 Creator Picks: 23 products
@@ -58,31 +48,38 @@ Generated: 2026-02-11T09:20:41.548Z
 - categories.json
 - last_updated.txt
 - products.csv
+- seasons.json
 
 📁 FILES DELETED
 - brands.json
 - categories.json
+- seasons.json
 
 📁 FILES GENERATED
 - products-AUD.json (10 products)
 - products-INR.json (13 products)
-- currencies.json (manifest)
-- drops.json (drops manifest)
-- influencers.json (2 influencers)
-- collections.json (3 collections)
-- errors.json (23 flagged products)
-- seasons.json (5 seasons)
+- categories.json & categories_auto-detect.json
+- seasons.json & seasons_auto-detect.json
+- influencers.json
+- collections.json
+- recent-drops.json
+- UnderTheBag.json
+- brands.json
+- errors.json
 
 📁 FINAL FILES PRESENT
+- UnderTheBag.json
 - brands.json
 - categories.json
+- categories_auto-detect.json
 - collections.json
 - currencies.json
-- drops.json
 - errors.json
 - influencers.json
 - last_updated.txt
 - products-AUD.json
 - products-INR.json
 - products.csv
+- recent-drops.json
 - seasons.json
+- seasons_auto-detect.json

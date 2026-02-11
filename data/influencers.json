@@ -1,119 +1,84 @@
 {
   "summary": {
     "total_influencers": 2,
-    "last_updated": "2026-02-11T09:20:41.545Z"
+    "total_products": 13,
+    "last_updated": "2026-02-11T21:02:18.023Z"
   },
-  "influencers": {
-    "HouseFresh": {
+  "influencers": [
+    {
       "name": "HouseFresh",
-      "productCount": 8,
-      "totalValue": 1784,
-      "categories": {},
-      "brands": {},
-      "currencies": {},
-      "products": [
+      "product_count": 8,
+      "has_creator_video": false,
+      "regions": [
+        "AUD"
+      ],
+      "media_groups": [
         {
-          "asin": "B0F2MLPWTG",
-          "currency": "AUD",
-          "drop_categories": [
-            "creator-picks"
+          "media_url": "https://youtu.be/NL55L7OKzp0?si=JxPFyO9RcL11D0O6",
+          "category": "Furniture",
+          "asins": [
+            "B0F2MLPWTG",
+            "B0F9FJS3VW"
           ]
         },
         {
-          "asin": "B0BGRHMQ7C",
-          "currency": "AUD",
-          "drop_categories": [
-            "creator-picks"
+          "media_url": "https://youtu.be/MAfvR2a9nuE?si=g4c8Cz5FNHs61ZCi",
+          "category": "General",
+          "asins": [
+            "B0BGRHMQ7C",
+            "B08NYTLNQ9"
           ]
         },
         {
-          "asin": "B08NYTLNQ9",
-          "currency": "AUD",
-          "drop_categories": [
-            "creator-picks"
+          "media_url": "https://youtu.be/xpFCJcTcQEg?si=2bPN4u-8VD3EIhrk",
+          "category": "General",
+          "asins": [
+            "B0DT4F8T4L",
+            "B0FVXJ52W6"
           ]
         },
         {
-          "asin": "B0DT4F8T4L",
-          "currency": "AUD",
-          "drop_categories": [
-            "creator-picks"
-          ]
-        },
-        {
-          "asin": "B07PNJQMK6",
-          "currency": "AUD",
-          "drop_categories": [
-            "creator-picks"
-          ]
-        },
-        {
-          "asin": "B094DRK41G",
-          "currency": "AUD",
-          "drop_categories": [
-            "creator-picks"
-          ]
-        },
-        {
-          "asin": "B0FVXJ52W6",
-          "currency": "AUD",
-          "drop_categories": [
-            "creator-picks"
-          ]
-        },
-        {
-          "asin": "B0F9FJS3VW",
-          "currency": "AUD",
-          "drop_categories": [
-            "creator-picks"
+          "media_url": "https://youtu.be/xpFCJcTcQEg?si=2bPN4u-8VD3EIhrk",
+          "category": "Furniture",
+          "asins": [
+            "B07PNJQMK6",
+            "B094DRK41G"
           ]
         }
       ]
     },
-    "Food Pharmer": {
+    {
       "name": "Food Pharmer",
-      "productCount": 5,
-      "totalValue": 97566,
-      "categories": {},
-      "brands": {},
-      "currencies": {},
-      "products": [
+      "product_count": 5,
+      "has_creator_video": false,
+      "regions": [
+        "INR"
+      ],
+      "media_groups": [
         {
-          "asin": "B0FJ5R8JN7",
-          "currency": "INR",
-          "drop_categories": [
-            "creator-picks"
+          "media_url": "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
+          "category": "General",
+          "asins": [
+            "B0FJ5R8JN7",
+            "B0DHGFCG6P",
+            "B076HP91MN"
           ]
         },
         {
-          "asin": "B0DHGFCG6P",
-          "currency": "INR",
-          "drop_categories": [
-            "creator-picks"
+          "media_url": "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
+          "category": "Beauty & Personal Care",
+          "asins": [
+            "B0CG1N11DV"
           ]
         },
         {
-          "asin": "B0CG1N11DV",
-          "currency": "INR",
-          "drop_categories": [
-            "creator-picks"
-          ]
-        },
-        {
-          "asin": "B0BDX9ZN46",
-          "currency": "INR",
-          "drop_categories": [
-            "creator-picks"
-          ]
-        },
-        {
-          "asin": "B076HP91MN",
-          "currency": "INR",
-          "drop_categories": [
-            "creator-picks"
+          "media_url": "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd",
+          "category": "Furniture",
+          "asins": [
+            "B0BDX9ZN46"
           ]
         }
       ]
     }
-  }
+  ]
 }

@@ -1,0 +1,23 @@
+{
+  "summary": {
+    "total_to_review": 3,
+    "last_updated": "2026-02-11T21:02:18.023Z"
+  },
+  "products": [
+    {
+      "asin": "178633089X",
+      "name": "Ikigai [hardcover]: The Japanese secret to a long and happy life",
+      "guessed_season": "Winter"
+    },
+    {
+      "asin": "1529902401",
+      "name": "Ikigai (PB): The Japanese secret to a long and happy life",
+      "guessed_season": "Winter"
+    },
+    {
+      "asin": "9388550072",
+      "name": "Ikigai (Hindi) [PB]: Héctor García, Francesc Miralles",
+      "guessed_season": "Summer"
+    }
+  ]
+}
