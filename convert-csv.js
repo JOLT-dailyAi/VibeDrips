@@ -1867,7 +1867,7 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
             error_rate: Math.round((allProducts.filter(p => p['Error-Flag'] === 1).length / allProducts.length) * 100),
             last_updated: new Date().toISOString()
           },
-          error_breakdown,
+          error_breakdown: errorBreakdown,
           flagged_products: allProducts.filter(p => p['Error-Fields']?.length > 0)
         };
         fs.writeFileSync(path.join(dataDir, 'errors.json'), JSON.stringify(errorsData, null, 2));
