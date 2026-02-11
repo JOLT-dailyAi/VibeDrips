@@ -385,30 +385,26 @@ function getProductReleaseDate(data) {
 }
 
 function detectSeasonFromText(text, seasonOverride) {
-  // 1. SMART SKIP: If SeasonOverride is already populated (and not 'None'), use it and skip auto-detection
-  if (seasonOverride && seasonOverride.trim() && seasonOverride.trim().toLowerCase() !== 'none') {
-    return {
-      season: seasonOverride.trim(),
-      is_auto_detected: false
-    };
+  if (seasonOverride && seasonOverride.trim() !== '') {
+    const override = seasonOverride.trim();
+    if (override === 'None') return null;
+    if (SEASONS_CONFIG.VALID_OPTIONS.includes(override)) {
+      return override;
+    }
+    console.warn(`⚠️ Invalid SeasonOverride: "${override}". Using auto-detect.`);
   }
 
-  if (seasonOverride === 'None') return { season: null, is_auto_detected: false };
+  if (!text) return null;
 
-  const lowerText = (text || '').toLowerCase();
+  const lowerText = text.toLowerCase();
+
   for (const [season, pattern] of Object.entries(SEASONS_CONFIG.PATTERNS)) {
     if (pattern.test(lowerText)) {
-      return {
-        season,
-        is_auto_detected: true
-      };
+      return season;
     }
   }
 
-  return {
-    season: null,
-    is_auto_detected: false
-  };
+  return null;
 }
 
 function extractInfluencerAndCollections(data) {
@@ -434,7 +430,7 @@ function structureProductData(rawData, coreProductData) {
   const additionalInfo = [];
   const seenLabels = new Set();
   const seenValues = new Map();
-  const warnings = []; // { field, reason, severity }
+  const errorFields = [];
 
   Object.keys(rawData).forEach(fieldName => {
     const value = rawData[fieldName];
@@ -447,13 +443,15 @@ function structureProductData(rawData, coreProductData) {
     const normalizedValue = normalizeValueForComparison(value);
 
     if (isValueInCoreFields(value, coreProductData)) {
-      warnings.push({ field: fieldName, reason: 'Value already in title/description', severity: 'INFO' });
+      errorFields.push(fieldName);
+      console.warn(`⚠️ Redundant field "${fieldName}": value already in title/description`);
       return;
     }
 
     const metadataKeywords = ['http', 'www', 'amazon', 'asin'];
     if (metadataKeywords.some(kw => normalizedValue.includes(kw))) {
-      warnings.push({ field: fieldName, reason: `Metadata leaked: ${value}`, severity: 'WARNING' });
+      errorFields.push(fieldName);
+      console.warn(`⚠️ Metadata leaked into field "${fieldName}": ${value}`);
       return;
     }
 
@@ -461,59 +459,77 @@ function structureProductData(rawData, coreProductData) {
 
     if (productDetail) {
       const canonicalKey = canonicalField.toLowerCase();
+
       if (seenValues.has(canonicalKey)) {
         const existing = seenValues.get(canonicalKey);
-        if (normalizeValueForComparison(existing.value) !== normalizedValue) {
-          warnings.push({ field: fieldName, reason: `Conflict with ${existing.source}`, severity: 'WARNING' });
+        const existingNormalized = normalizeValueForComparison(existing.value);
+
+        if (existingNormalized !== normalizedValue) {
+          errorFields.push(fieldName);
+          console.warn(`⚠️ CONFLICT in ${canonicalField}:`);
+          console.warn(`  ${existing.source}: "${existing.value}"`);
+          console.warn(`  ${fieldName}: "${value}"`);
+          console.warn(`  → Keeping first value`);
         }
         return;
       }
-      productDetails.push(productDetail);
-      seenLabels.add(productDetail.label.toLowerCase());
-      seenValues.set(canonicalKey, { value, source: fieldName });
+
+      const labelKey = productDetail.label.toLowerCase();
+      if (!seenLabels.has(labelKey)) {
+        productDetails.push(productDetail);
+        seenLabels.add(labelKey);
+        seenValues.set(canonicalKey, { value, source: fieldName });
+      }
       return;
     }
 
     const { category } = detectAdditionalInfoCategory(fieldName);
     const label = humanizeFieldName(fieldName);
+    const labelKey = label.toLowerCase();
     const canonicalKey = canonicalField.toLowerCase();
 
     if (seenValues.has(canonicalKey)) {
       const existing = seenValues.get(canonicalKey);
-      if (normalizeValueForComparison(existing.value) !== normalizedValue) {
-        warnings.push({ field: fieldName, reason: `Conflict with ${existing.source}`, severity: 'WARNING' });
+      const existingNormalized = normalizeValueForComparison(existing.value);
+
+      if (existingNormalized !== normalizedValue) {
+        errorFields.push(fieldName);
+        console.warn(`⚠️ CONFLICT in ${canonicalField}:`);
+        console.warn(`  ${existing.source}: "${existing.value}"`);
+        console.warn(`  ${fieldName}: "${value}"`);
       }
       return;
     }
 
-    additionalInfo.push({ key: fieldName, label, category, value });
-    seenLabels.add(label.toLowerCase());
-    seenValues.set(canonicalKey, { value, source: fieldName });
+    if (!seenLabels.has(labelKey)) {
+      additionalInfo.push({ key: fieldName, label, category, value });
+      seenLabels.add(labelKey);
+      seenValues.set(canonicalKey, { value, source: fieldName });
+    }
+  });
+
+  productDetails.sort((a, b) => a.priority - b.priority);
+
+  const groupedAdditionalInfo = {};
+  additionalInfo.forEach(item => {
+    if (!groupedAdditionalInfo[item.category]) {
+      groupedAdditionalInfo[item.category] = [];
+    }
+    groupedAdditionalInfo[item.category].push(item);
   });
 
   const structured = {
     ...coreProductData,
-    productDetails: productDetails.sort((a, b) => a.priority - b.priority),
-    additionalInfo: additionalInfo.reduce((acc, item) => {
-      if (!acc[item.category]) acc[item.category] = [];
-      acc[item.category].push(item);
-      return acc;
-    }, {})
+    productDetails,
+    additionalInfo: groupedAdditionalInfo
   };
 
-  // Merge legacy error logic with new severity model
-  const legacyErrors = coreProductData['Error-Fields'] || [];
-  const criticalErrors = legacyErrors.filter(f => !['Amazon marketplace domain'].includes(f)); // Example exclusion
-
-  const allErrorFields = [...new Set([...legacyErrors, ...warnings.map(w => w.field)])];
+  const existingErrorFields = coreProductData['Error-Fields'] || [];
+  const allErrorFields = [...new Set([...existingErrorFields, ...errorFields])];
 
   if (allErrorFields.length > 0) {
+    structured['Error-Flag'] = 1;
     structured['Error-Fields'] = allErrorFields;
-    // ONLY set flag if it's a critical error (from validatePricing)
-    if (coreProductData['Error-Flag'] === 1 || criticalErrors.length > 0) {
-      structured['Error-Flag'] = 1;
-    }
-    structured['Warnings'] = warnings;
   }
 
   return structured;
@@ -618,56 +634,39 @@ function generateInfluencersJSON(products) {
   products.forEach(product => {
     if (!product.influencer) return;
 
-    const name = product.influencer;
-    if (!influencers[name]) {
-      influencers[name] = {
-        name: name,
-        product_count: 0,
-        has_creator_video: false,
-        regions: new Set(),
-        media_groups: {} // Keyed by shared URL + Category
+    if (!influencers[product.influencer]) {
+      influencers[product.influencer] = {
+        name: product.influencer,
+        productCount: 0,
+        totalValue: 0,
+        categories: new Set(),
+        brands: new Set(),
+        currencies: new Set(),
+        products: []
       };
     }
 
-    const inf = influencers[name];
-    inf.product_count++;
-    inf.regions.add(product.currency);
+    const inf = influencers[product.influencer];
+    inf.productCount++;
+    inf.totalValue += product.price || 0;
+    if (product.category) inf.categories.add(product.category);
+    if (product.brand) inf.brands.add(product.brand);
+    if (product.currency) inf.currencies.add(product.currency);
 
-    // Classification boolean
-    const hasVideo = product.referenceMedia && product.referenceMedia.some(link =>
-      DROPS_CONFIG.THRESHOLDS.INFLUENCER_KEYWORDS.some(kw => link.toLowerCase().includes(kw.toLowerCase()))
-    );
-    if (hasVideo) inf.has_creator_video = true;
-
-    // Media + Category Grouping
-    const primaryMedia = product.referenceMedia && product.referenceMedia.length > 0
-      ? product.referenceMedia[0]
-      : product.source_link;
-
-    const groupKey = `${primaryMedia || 'no-link'}|${product.category}`;
-    if (!inf.media_groups[groupKey]) {
-      inf.media_groups[groupKey] = {
-        media_url: primaryMedia,
-        category: product.category,
-        asins: []
-      };
-    }
-    inf.media_groups[groupKey].asins.push(product.asin);
+    // ✅ ONLY store ASIN + currency + computed signals
+    inf.products.push({
+      asin: product.asin,
+      currency: product.currency,
+      drop_categories: product.drop_signals?.drop_categories || []
+    });
   });
-
-  const finalInfluencers = Object.values(influencers).map(inf => ({
-    ...inf,
-    regions: Array.from(inf.regions),
-    media_groups: Object.values(inf.media_groups)
-  })).sort((a, b) => b.product_count - a.product_count);
 
   return {
     summary: {
-      total_influencers: finalInfluencers.length,
-      total_products: products.filter(p => p.influencer).length,
+      total_influencers: Object.keys(influencers).length,
       last_updated: new Date().toISOString()
     },
-    influencers: finalInfluencers
+    influencers: influencers
   };
 }
 
@@ -675,35 +674,49 @@ function generateCollectionsJSON(products) {
   const collections = {};
 
   products.forEach(product => {
-    if (!product.manual_collections) return;
+    if (!product.manual_collections || product.manual_collections.length === 0) return;
 
-    product.manual_collections.forEach(collName => {
-      const parts = collName.split('>').map(p => p.trim());
-      let currentLevel = collections;
+    product.manual_collections.forEach(collectionName => {
+      if (!collections[collectionName]) {
+        collections[collectionName] = {
+          name: collectionName,
+          productCount: 0,
+          totalValue: 0,
+          categories: new Set(),
+          brands: new Set(),
+          currencies: new Set(),
+          influencers: new Set(),
+          priceRange: { min: Infinity, max: 0 },
+          products: []
+        };
+      }
 
-      parts.forEach((part, index) => {
-        if (!currentLevel[part]) {
-          currentLevel[part] = {
-            name: part,
-            product_count: 0,
-            asins: [],
-            sub_collections: {}
-          };
-        }
+      const col = collections[collectionName];
+      col.productCount++;
+      col.totalValue += product.price || 0;
+      if (product.category) col.categories.add(product.category);
+      if (product.brand) col.brands.add(product.brand);
+      if (product.currency) col.currencies.add(product.currency);
+      if (product.influencer) col.influencers.add(product.influencer);
 
-        currentLevel[part].product_count++;
-        currentLevel[part].asins.push(product.asin);
+      if (product.price) {
+        col.priceRange.min = Math.min(col.priceRange.min, product.price);
+        col.priceRange.max = Math.max(col.priceRange.max, product.price);
+      }
 
-        if (index < parts.length - 1) {
-          currentLevel = currentLevel[part].sub_collections;
-        }
+      // ✅ ONLY store ASIN + currency + computed signals
+      col.products.push({
+        asin: product.asin,
+        currency: product.currency,
+        drop_categories: product.drop_signals?.drop_categories || [],
+        influencer: product.influencer // Keep for filtering
       });
     });
   });
 
   return {
     summary: {
-      total_top_level: Object.keys(collections).length,
+      total_collections: Object.keys(collections).length,
       last_updated: new Date().toISOString()
     },
     collections: collections
@@ -716,46 +729,32 @@ function generateCollectionsJSON(products) {
 
 function generateCategoriesJSON(products) {
   const categories = {};
-  const autoDetectList = [];
 
   products.forEach(product => {
-    const cat = product.category || 'General';
-    if (!categories[cat]) {
-      categories[cat] = {
-        id: cat.toLowerCase().replace(/\s+/g, '-'),
-        name: cat,
+    const category = product.category || 'General';
+
+    if (!categories[category]) {
+      categories[category] = {
+        name: category,
         product_count: 0,
         asins: []
       };
     }
-    categories[cat].product_count++;
-    categories[cat].asins.push(product.asin);
 
-    if (product.category_is_auto_detected) {
-      autoDetectList.push({
-        asin: product.asin,
-        name: product.name,
-        guessed_category: cat
-      });
-    }
+    categories[category].product_count++;
+    categories[category].asins.push(product.asin);
   });
 
+  // Convert to array and sort by product count (descending)
+  const categoriesArray = Object.values(categories).sort((a, b) => b.product_count - a.product_count);
+
   return {
-    manifest: {
-      summary: {
-        total_categories: Object.keys(categories).length,
-        total_products: products.length,
-        last_updated: new Date().toISOString()
-      },
-      categories: Object.values(categories).sort((a, b) => b.product_count - a.product_count)
+    summary: {
+      total_categories: categoriesArray.length,
+      total_products: products.length,
+      last_updated: new Date().toISOString()
     },
-    review: {
-      summary: {
-        total_to_review: autoDetectList.length,
-        last_updated: new Date().toISOString()
-      },
-      products: autoDetectList
-    }
+    categories: categoriesArray
   };
 }
 
@@ -853,107 +852,34 @@ function generateDropsJSON(products) {
 
 function generateSeasonsJSON(products) {
   const seasons = {};
-  const autoDetectList = [];
 
-  // Initialize all 5 seasons to ensure stable UI structure
-  Object.keys(SEASON_UI_META).forEach(key => {
-    seasons[key] = {
-      ...SEASON_UI_META[key],
+  // Initialize with all valid options from SEASON_UI_META to ensure full coverage
+  Object.keys(SEASON_UI_META).forEach(seasonKey => {
+    seasons[seasonKey] = {
+      ...SEASON_UI_META[seasonKey],
       product_count: 0,
       asins: []
     };
   });
 
   products.forEach(product => {
-    if (product.season && seasons[product.season]) {
-      seasons[product.season].product_count++;
-      seasons[product.season].asins.push(product.asin);
-
-      if (product.season_is_auto_detected) {
-        autoDetectList.push({
-          asin: product.asin,
-          name: product.name,
-          guessed_season: product.season
-        });
-      }
+    const season = product.season;
+    if (season && seasons[season]) {
+      seasons[season].product_count++;
+      seasons[season].asins.push(product.asin);
     }
   });
 
-  return {
-    manifest: {
-      summary: {
-        total_seasons: Object.keys(seasons).length,
-        total_products: products.length,
-        last_updated: new Date().toISOString()
-      },
-      seasons: Object.values(seasons)
-    },
-    review: {
-      summary: {
-        total_to_review: autoDetectList.length,
-        last_updated: new Date().toISOString()
-      },
-      products: autoDetectList
-    }
-  };
-}
-
-function generateRecentDropsJSON(products) {
-  const RECENT_WINDOW = DROPS_CONFIG.THRESHOLDS.NEW_RELEASE_DAYS; // 60 days
-  const recentProducts = [];
-
-  products.forEach(product => {
-    if (!product.timestamp) return;
-
-    try {
-      const addedDate = new Date(product.timestamp);
-      const expiryDate = new Date(addedDate.getTime() + (RECENT_WINDOW * 24 * 60 * 60 * 1000));
-      const now = new Date();
-
-      if (expiryDate > now) {
-        recentProducts.push({
-          asin: product.asin,
-          currency: product.currency,
-          added_date: product.timestamp,
-          expiry_time: expiryDate.toISOString()
-        });
-      }
-    } catch (e) {
-      // Skip invalid timestamps
-    }
-  });
-
-  // Sort by newest first
-  recentProducts.sort((a, b) => new Date(b.added_date) - new Date(a.added_date));
+  // Convert to array in chronological order (following the order in SEASON_UI_META)
+  const seasonsArray = Object.keys(SEASON_UI_META).map(key => seasons[key]);
 
   return {
     summary: {
-      total_recent: recentProducts.length,
-      window_days: RECENT_WINDOW,
+      total_seasons: seasonsArray.length,
+      total_products: products.length,
       last_updated: new Date().toISOString()
     },
-    recent_drops: recentProducts
-  };
-}
-
-function generateUnderTheBagJSON() {
-  return {
-    config: {
-      title: "💸 Under the Bag",
-      enabled: true,
-      last_updated: new Date().toISOString(),
-      currencies: {
-        'INR': { default_budget: 5000, slider_min: 500, slider_max: 50000, step: 500 },
-        'USD': { default_budget: 80, slider_min: 10, slider_max: 1000, step: 10 },
-        'AUD': { default_budget: 120, slider_min: 20, slider_max: 1500, step: 20 },
-        'CAD': { default_budget: 100, slider_min: 20, slider_max: 1500, step: 20 },
-        'GBP': { default_budget: 60, slider_min: 10, slider_max: 800, step: 10 },
-        'EUR': { default_budget: 75, slider_min: 10, slider_max: 1000, step: 10 },
-        'JPY': { default_budget: 10000, slider_min: 1000, slider_max: 100000, step: 1000 }
-      },
-      tier_labels: ["Best Value", "Budget Pick", "High-value"],
-      max_variants_per_group: 3
-    }
+    seasons: seasonsArray
   };
 }
 
@@ -1229,34 +1155,26 @@ function isBlacklisted(value) {
   return GENERIC_BLACKLIST.includes(normalized);
 }
 
-function assignCategory(data, CANDIDATE_MAP) {
-  // 1. SMART SKIP: If Category is already populated in CSV, use it and skip auto-detection
-  if (data.Category && data.Category.trim()) {
-    return {
-      category: data.Category.trim(),
-      is_auto_detected: false
-    };
-  }
-
+function assignCategory(row, CANDIDATE_MAP) {
   // Extract and normalize values from all priority fields
   const candidates = {
-    itemTypeName: normalizeCategory(data.itemTypeName),
-    generic_name: normalizeCategory(data.generic_name),
-    Category: normalizeCategory(data.Category),
+    itemTypeName: normalizeCategory(row.itemTypeName),
+    generic_name: normalizeCategory(row.generic_name),
+    Category: normalizeCategory(row.Category),
     categoryHierarchy: normalizeCategory(
-      data.categoryHierarchy ? data.categoryHierarchy.split('>')[0] : ''
+      row.categoryHierarchy ? row.categoryHierarchy.split('>')[0] : ''
     )
   };
 
   // Store original (non-normalized) values
   const originals = {
-    itemTypeName: (data.itemTypeName || '').trim(),
-    generic_name: (data.generic_name || '').trim(),
-    Category: (data.Category || '').trim(),
-    categoryHierarchy: data.categoryHierarchy ? data.categoryHierarchy.split('>')[0].trim() : ''
+    itemTypeName: (row.itemTypeName || '').trim(),
+    generic_name: (row.generic_name || '').trim(),
+    Category: (row.Category || '').trim(),
+    categoryHierarchy: row.categoryHierarchy ? row.categoryHierarchy.split('>')[0].trim() : ''
   };
 
-  const titleLower = (data.Title || data.productTitle || '').toLowerCase();
+  const titleLower = (row.Title || row.productTitle || '').toLowerCase();
 
   // Priority order for matching
   const priorities = [
@@ -1265,9 +1183,6 @@ function assignCategory(data, CANDIDATE_MAP) {
     { source: 'Category', normalized: candidates.Category, original: originals.Category },
     { source: 'categoryHierarchy', normalized: candidates.categoryHierarchy, original: originals.categoryHierarchy }
   ];
-
-  let detected = 'General';
-  let is_auto_detected = false;
 
   // Try each priority level
   for (const priority of priorities) {
@@ -1278,12 +1193,10 @@ function assignCategory(data, CANDIDATE_MAP) {
       const canonicalCategory = CANDIDATE_MAP[priority.normalized];
       const validated = titleLower.includes(priority.normalized);
 
-      console.log(`📦 ${data.productTitle || data.Title}`);
+      console.log(`📦 ${row.productTitle || row.Title}`);
       console.log(`   Category: "${canonicalCategory}" (from ${priority.source}, ${validated ? '✅ validated' : '⚠️ not validated'})`);
 
-      detected = canonicalCategory;
-      is_auto_detected = true;
-      break; // Found a category, break from loop
+      return canonicalCategory;
     }
 
     // SUBSTRING EXTRACTION: Try to find a known category within the value
@@ -1292,41 +1205,30 @@ function assignCategory(data, CANDIDATE_MAP) {
     for (const [knownNorm, knownCanonical] of Object.entries(CANDIDATE_MAP)) {
       if (originalValue.includes(knownNorm) && !isBlacklisted(knownNorm)) {
         const validated = titleLower.includes(knownNorm);
-        console.log(`📦 ${data.productTitle || data.Title}`);
+        console.log(`📦 ${row.productTitle || row.Title}`);
         console.log(`   Category: "${knownCanonical}" (extracted from ${priority.source}: "${priority.original}", ${validated ? '✅ validated' : '⚠️ not validated'})`);
-        detected = knownCanonical;
-        is_auto_detected = true;
-        break; // Found a category, break from loop
+        return knownCanonical;
       }
     }
-    if (is_auto_detected) break; // If category found in substring extraction, break from outer loop
   }
 
   // Final fallback: use original Category or categoryHierarchy if not blacklisted
-  if (!is_auto_detected) {
-    if (originals.Category && !isBlacklisted(candidates.Category)) {
-      console.log(`📦 ${data.productTitle || data.Title}`);
-      console.log(`   Category: "${originals.Category}" (fallback: raw Category)`);
-      detected = originals.Category;
-      is_auto_detected = true;
-    } else if (originals.categoryHierarchy && !isBlacklisted(candidates.categoryHierarchy)) {
-      console.log(`📦 ${data.productTitle || data.Title}`);
-      console.log(`   Category: "${originals.categoryHierarchy}" (fallback: raw categoryHierarchy)`);
-      detected = originals.categoryHierarchy;
-      is_auto_detected = true;
-    } else {
-      // Default
-      console.log(`📦 ${data.productTitle || data.Title}`);
-      console.log(`   Category: "General" (default)`);
-      detected = 'General';
-      is_auto_detected = true; // Default is also considered auto-detected
-    }
+  if (originals.Category && !isBlacklisted(candidates.Category)) {
+    console.log(`📦 ${row.productTitle || row.Title}`);
+    console.log(`   Category: "${originals.Category}" (fallback: raw Category)`);
+    return originals.Category;
   }
 
-  return {
-    category: detected,
-    is_auto_detected: is_auto_detected
-  };
+  if (originals.categoryHierarchy && !isBlacklisted(candidates.categoryHierarchy)) {
+    console.log(`📦 ${row.productTitle || row.Title}`);
+    console.log(`   Category: "${originals.categoryHierarchy}" (fallback: raw categoryHierarchy)`);
+    return originals.categoryHierarchy;
+  }
+
+  // Default
+  console.log(`📦 ${row.productTitle || row.Title}`);
+  console.log(`   Category: "General" (default)`);
+  return 'General';
 }
 
 function generateAsin(row) {
@@ -1394,12 +1296,12 @@ function detectRegionalVariants(products) {
   });
 }
 
-function extractCoreFields(data, pricingValidation, currency, referenceMedia, categoryResult) {
-  const finalCategory = categoryResult.category || 'General';
+function extractCoreFields(data, pricingValidation, currency, referenceMedia, category) {
+  const finalCategory = category || 'General';
 
   const releaseDate = getProductReleaseDate(data);
   const { influencer, manualCollections, seasonOverride } = extractInfluencerAndCollections(data);
-  const seasonResult = detectSeasonFromText(
+  const season = detectSeasonFromText(
     (data.productTitle || '') + ' ' + (data.Description || ''),
     seasonOverride
   );
@@ -1438,16 +1340,13 @@ function extractCoreFields(data, pricingValidation, currency, referenceMedia, ca
     regional_availability: 0,
     regional_variants: {},
     amazon_short: data['Amazon SiteStripe (Short)'] || '',
-    amazon_long: data.amazon_long || '',
+    amazon_long: data['Amazon SiteStripe (Long)'] || '',
     affiliate_link: data['Amazon SiteStripe (Short)'] || '',
 
-    release_date: releaseDate,
-    timestamp: data.Timestamp || new Date().toISOString(),
+    release_date: releaseDate ? releaseDate.toISOString() : null,
     influencer: influencer,
     manual_collections: manualCollections,
-    season: seasonResult.season,
-    category_is_auto_detected: categoryResult.is_auto_detected,
-    season_is_auto_detected: seasonResult.is_auto_detected,
+    season: season,
 
     featured: false,
     trending: false
@@ -1835,62 +1734,85 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
         const manifestPath = path.join(dataDir, 'currencies.json');
         fs.writeFileSync(manifestPath, JSON.stringify(currencyManifest, null, 2));
 
-        // Write individual manifests (v2 Architecture)
-        const categoriesResult = generateCategoriesJSON(allProducts);
-        fs.writeFileSync(path.join(dataDir, 'categories.json'), JSON.stringify(categoriesResult.manifest, null, 2));
-        fs.writeFileSync(path.join(dataDir, 'categories_auto-detect.json'), JSON.stringify(categoriesResult.review, null, 2));
+        // ============================================
+        // GENERATE DROPS.JSON (with product references)
+        // ============================================
+        console.log(`\n🎬 Generating drops.json...`);
+        const dropsData = generateDropsJSON(allProducts);
+        const dropsPath = path.join(dataDir, 'drops.json');
+        fs.writeFileSync(dropsPath, JSON.stringify(dropsData, null, 2));
+        console.log(`✅ Drops manifest created: drops.json`);
 
-        const seasonsResult = generateSeasonsJSON(allProducts);
-        fs.writeFileSync(path.join(dataDir, 'seasons.json'), JSON.stringify(seasonsResult.manifest, null, 2));
-        fs.writeFileSync(path.join(dataDir, 'seasons_auto-detect.json'), JSON.stringify(seasonsResult.review, null, 2));
+        // ============================================
+        // GENERATE INFLUENCERS.JSON
+        // ============================================
+        console.log(`\n👤 Generating influencers.json...`);
+        const influencersData = generateInfluencersJSON(allProducts);
+        const influencersPath = path.join(dataDir, 'influencers.json');
+        fs.writeFileSync(influencersPath, JSON.stringify(influencersData, null, 2));
+        console.log(`✅ Influencers manifest created: influencers.json (${Object.keys(influencersData.influencers).length} influencers)`);
 
-        const influencerResult = generateInfluencersJSON(allProducts);
-        fs.writeFileSync(path.join(dataDir, 'influencers.json'), JSON.stringify(influencerResult, null, 2));
+        // ============================================
+        // GENERATE COLLECTIONS.JSON
+        // ============================================
+        console.log(`\n💎 Generating collections.json...`);
+        const collectionsData = generateCollectionsJSON(allProducts);
+        const collectionsPath = path.join(dataDir, 'collections.json');
+        fs.writeFileSync(collectionsPath, JSON.stringify(collectionsData, null, 2));
+        console.log(`✅ Collections manifest created: collections.json (${Object.keys(collectionsData.collections).length} collections)`);
 
-        const collectionResult = generateCollectionsJSON(allProducts);
-        fs.writeFileSync(path.join(dataDir, 'collections.json'), JSON.stringify(collectionResult, null, 2));
+        // ============================================
+        // GENERATE CATEGORIES.JSON
+        // ============================================
+        console.log(`\n📦 Generating categories.json...`);
+        const categoriesData = generateCategoriesJSON(allProducts);
+        const categoriesPath = path.join(dataDir, 'categories.json');
+        fs.writeFileSync(categoriesPath, JSON.stringify(categoriesData, null, 2));
+        console.log(`✅ Categories manifest created: categories.json (${categoriesData.categories.length} categories)`);
 
-        const recentDropsResult = generateRecentDropsJSON(allProducts);
-        fs.writeFileSync(path.join(dataDir, 'recent-drops.json'), JSON.stringify(recentDropsResult, null, 2));
-
-        const underTheBagResult = generateUnderTheBagJSON();
-        fs.writeFileSync(path.join(dataDir, 'UnderTheBag.json'), JSON.stringify(underTheBagResult, null, 2));
-
+        // ============================================
+        // GENERATE BRANDS.JSON
+        // ============================================
+        console.log(`\n🏷️  Generating brands.json...`);
         const brandsData = generateBrandsJSON(allProducts);
-        fs.writeFileSync(path.join(dataDir, 'brands.json'), JSON.stringify(brandsData, null, 2));
+        const brandsPath = path.join(dataDir, 'brands.json');
+        fs.writeFileSync(brandsPath, JSON.stringify(brandsData, null, 2));
+        console.log(`✅ Brands manifest created: brands.json (${brandsData.brands.length} brands)`);
 
-        // Refined Error Manifest
-        const errorsData = {
-          summary: {
-            total_products: allProducts.length,
-            products_with_errors: allProducts.filter(p => p['Error-Flag'] === 1).length,
-            error_rate: Math.round((allProducts.filter(p => p['Error-Flag'] === 1).length / allProducts.length) * 100),
-            last_updated: new Date().toISOString()
-          },
-          error_breakdown,
-          flagged_products: allProducts.filter(p => p['Error-Fields']?.length > 0)
-        };
-        fs.writeFileSync(path.join(dataDir, 'errors.json'), JSON.stringify(errorsData, null, 2));
+        // ============================================
+        // NEW: GENERATE ERRORS.JSON
+        // ============================================
+        console.log(`\n⚠️  Generating errors.json...`);
+        const errorsData = generateErrorsJSON(allProducts);
+        const errorsPath = path.join(dataDir, 'errors.json');
+        fs.writeFileSync(errorsPath, JSON.stringify(errorsData, null, 2));
+        console.log(`✅ Errors manifest created: errors.json (${errorsData.flagged_products.length} flagged products)`);
 
-        const generatedFilesList = new Set([
+        // ============================================
+        // GENERATE SEASONS.JSON
+        // ============================================
+        console.log(`\n🌿 Generating seasons.json...`);
+        const seasonsData = generateSeasonsJSON(allProducts);
+        const seasonsPath = path.join(dataDir, 'seasons.json');
+        fs.writeFileSync(seasonsPath, JSON.stringify(seasonsData, null, 2));
+        console.log(`✅ Seasons manifest created: seasons.json (${seasonsData.seasons.length} seasons)`);
+
+        const finalFiles = fs.existsSync(dataDir) ? fs.readdirSync(dataDir) : [];
+        const generatedFiles = new Set([
           'last_updated.txt',
           'products.csv',
           ...Object.keys(currencyResults).map(c => `products-${c}.json`),
           'currencies.json',
-          'categories.json',
-          'categories_auto-detect.json',
-          'seasons.json',
-          'seasons_auto-detect.json',
+          'drops.json',
           'influencers.json',
           'collections.json',
-          'recent-drops.json',
-          'UnderTheBag.json',
+          'categories.json',
           'brands.json',
-          'errors.json'
+          'errors.json',
+          'seasons.json'
         ]);
 
-        const finalFiles = fs.existsSync(dataDir) ? fs.readdirSync(dataDir) : [];
-        const remnantFiles = finalFiles.filter(file => !generatedFilesList.has(file));
+        const remnantFiles = finalFiles.filter(file => !generatedFiles.has(file));
 
         const summary = `VibeDrips Data Processing Summary
 Generated: ${new Date().toISOString()}
@@ -1914,27 +1836,41 @@ ${Object.entries(errorBreakdown).length > 0 ? '- Error Breakdown:\n' + Object.en
 - Available: ${Array.from(processingStats.currenciesFound).join(', ')}
 
 📦 CATEGORIES
-- Categories Found: ${categoriesResult.manifest.summary.total_categories}
-- Review Needed: ${categoriesResult.review.summary.total_to_review} products
+- Categories Found: ${processingStats.categoriesFound.size}
+- Top Categories: ${Array.from(processingStats.categoriesFound).slice(0, 5).join(', ') || 'None'}
+
+🏷️ BRANDS
+- Brands Found: ${processingStats.brandsFound.size}
+- Top Brands: ${Array.from(processingStats.brandsFound).slice(0, 5).join(', ') || 'None'}
 
 👤 INFLUENCERS
-- Products with influencers: ${influencerResult.summary.total_products}
-- Unique influencers: ${influencerResult.summary.total_influencers}
+- Products with influencers: ${allProducts.filter(p => p.influencer).length}
+- Unique influencers: ${Object.keys(influencersData.influencers).length}
+- List: ${Object.keys(influencersData.influencers).join(', ') || 'None'}
 
 💎 COLLECTIONS
-- Unique collections: ${collectionResult.summary.total_top_level}
+- Products in collections: ${allProducts.filter(p => p.manual_collections && p.manual_collections.length > 0).length}
+- Unique collections: ${Object.keys(collectionsData.collections).length}
+- List: ${Object.keys(collectionsData.collections).join(', ') || 'None'}
 
 🌿 SEASONS
 - Seasons Detected: ${processingStats.seasonsFound.size}
-- Review Needed: ${seasonsResult.review.summary.total_to_review} products
+- Active: ${Array.from(processingStats.seasonsFound).join(', ') || 'None'}
 
 ⚠️ ERRORS & VALIDATION
-- Products with errors: ${errorsData.summary.products_with_errors}
+- Products with errors: ${errorsData.flagged_products.length}
 - Error rate: ${errorsData.summary.error_rate}%
+- Critical errors: ${errorsData.flagged_products.filter(p => p.severity === 'critical').length}
+- Warnings: ${errorsData.flagged_products.filter(p => p.severity === 'warning').length}
+- Top error types: ${Object.entries(errorsData.error_breakdown)
+            .sort(([, a], [, b]) => b - a)
+            .slice(0, 3)
+            .map(([type, count]) => `${type} (${count})`)
+            .join(', ') || 'None'}
 
 🎬 DROPS
 ${Object.entries(dropStats).map(([cat, count]) =>
-              `- ${DROPS_CONFIG.CATEGORIES[cat]?.emoji || '💧'} ${DROPS_CONFIG.CATEGORIES[cat]?.label || cat}: ${count} products`
+              `- ${DROPS_CONFIG.CATEGORIES[cat].emoji} ${DROPS_CONFIG.CATEGORIES[cat].label}: ${count} products`
             ).join('\n')}
 
 📁 FILES BEFORE DELETION
@@ -1945,14 +1881,12 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
 
 📁 FILES GENERATED
 ${Object.keys(currencyResults).map(currency => `- products-${currency}.json (${currencyResults[currency].length} products)`).join('\n')}
-- categories.json & categories_auto-detect.json
-- seasons.json & seasons_auto-detect.json
-- influencers.json
-- collections.json
-- recent-drops.json
-- UnderTheBag.json
-- brands.json
-- errors.json
+- currencies.json (manifest)
+- drops.json (drops manifest)
+- influencers.json (${Object.keys(influencersData.influencers).length} influencers)
+- collections.json (${Object.keys(collectionsData.collections).length} collections)
+- errors.json (${errorsData.flagged_products.length} flagged products)
+- seasons.json (${seasonsData.seasons.length} seasons)
 
 📁 FINAL FILES PRESENT
 ${finalFiles.map(file => `- ${file}`).join('\n') || '- None'}
@@ -1961,10 +1895,34 @@ ${remnantFiles.length > 0 ? `\n⚠️ Remnant files detected:\n${remnantFiles.ma
         fs.writeFileSync(path.join(dataDir, 'last_updated.txt'), summary);
 
         console.log('\n✅ SUCCESS! Multi-currency data processing complete.');
+        console.log(`📁 Generated ${Object.keys(currencyResults).length} currency files`);
+        console.log(`📊 Processed ${processingStats.processed} products from ${processingStats.total} rows`);
+        console.log(`💰 Currencies: ${Array.from(processingStats.currenciesFound).join(', ')}`);
+        console.log(`👤 Influencers: ${Object.keys(influencersData).length}`);
+        console.log(`💎 Collections: ${Object.keys(collectionsData).length}`);
+        console.log(`🌿 Seasons: ${Array.from(processingStats.seasonsFound).join(', ')}`);
+        console.log(`⚠️  Errors: ${errorsData.flagged_products.length} flagged (${errorsData.summary.error_rate}% error rate)`);
+
+        if (processingStats.validationErrors > 0) {
+          console.log(`⚠️ ${processingStats.validationErrors} products flagged for review (Error-Flag=1)`);
+        }
+
+        if (processingStats.fieldConflicts > 0) {
+          console.log(`⚠️ ${processingStats.fieldConflicts} products with field conflicts (check Error-Fields)`);
+        }
+
+        if (processingStats.errors > 0) {
+          console.log(`⚠️ ${processingStats.errors} rows had processing errors`);
+        }
+      })
+      .on('error', (error) => {
+        console.error('❌ Error processing CSV during PASS 2:', error);
       });
   }
 }
 
-console.log('🚀 VibeDrips Multi-Currency Product Processor v2.0 (Dynamic Manifests)');
-console.log('=====================================================================');
+console.log('🚀 VibeDrips Multi-Currency Product Processor v7.0');
+console.log('===================================================');
+console.log('✨ Lean Manifests + Error Tracking + Drop Products');
+console.log('');
 convertCsvToJson();
