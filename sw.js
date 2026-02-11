@@ -1,7 +1,7 @@
 // sw.js - Service worker for VibeDrips PWA
 // CACHE_VERSION is now timestamp-based and auto-updated by the workflow
 
-const CACHE_VERSION = 'v20260210T073212-data'; // This string will be overwritten by process-csv.yml
+const CACHE_VERSION = 'v20260211T085847-data'; // This string will be overwritten by process-csv.yml
 const CACHE_NAME = `vibedrips-static-${CACHE_VERSION}`;
 const DATA_CACHE = `vibedrips-data-${CACHE_VERSION}`;
 
