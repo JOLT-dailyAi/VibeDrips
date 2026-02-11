@@ -1,0 +1,78 @@
+{
+  "summary": {
+    "total_seasons": 5,
+    "total_products": 23,
+    "last_updated": "2026-02-11T09:20:41.548Z"
+  },
+  "seasons": [
+    {
+      "id": "spring",
+      "name": "Spring",
+      "emoji": "🌱",
+      "label": "Spring Bloom",
+      "product_count": 0,
+      "asins": []
+    },
+    {
+      "id": "summer",
+      "name": "Summer",
+      "emoji": "☀️",
+      "label": "Summer Vibe",
+      "product_count": 9,
+      "asins": [
+        "B0F2MLPWTG",
+        "B0BGRHMQ7C",
+        "B08NYTLNQ9",
+        "B0DT4F8T4L",
+        "B07PNJQMK6",
+        "B094DRK41G",
+        "B0FVXJ52W6",
+        "B0F9FJS3VW",
+        "9388550072"
+      ]
+    },
+    {
+      "id": "monsoon",
+      "name": "Monsoon",
+      "emoji": "🌦️",
+      "localized_label": {
+        "INR": "Monsoon",
+        "default": "Rainy"
+      },
+      "product_count": 0,
+      "asins": []
+    },
+    {
+      "id": "fall",
+      "name": "Fall",
+      "emoji": "🍂",
+      "localized_label": {
+        "USD": "Fall",
+        "CAD": "Fall",
+        "default": "Autumn"
+      },
+      "product_count": 0,
+      "asins": []
+    },
+    {
+      "id": "winter",
+      "name": "Winter",
+      "emoji": "❄️",
+      "label": "Winter Collection",
+      "product_count": 11,
+      "asins": [
+        "178633089X",
+        "1529902401",
+        "B0FJ5R8JN7",
+        "B0DHGFCG6P",
+        "B0F1MR9W8R",
+        "B0CQ2MVRXR",
+        "B0CG1N11DV",
+        "B0DF6NBJDW",
+        "B0BCC8KZHK",
+        "B0BDX9ZN46",
+        "B076HP91MN"
+      ]
+    }
+  ]
+}
