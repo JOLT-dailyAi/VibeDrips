@@ -97,6 +97,8 @@ jobs:
             echo "seasons.json exists"
           else
             echo "seasons.json MISSING"
+            CRITICAL_MISSING+=("seasons.json")
+          fi
           if [ -f "data/recent-drops.json" ]; then
             echo "recent-drops.json exists"
           else
