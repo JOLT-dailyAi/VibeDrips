@@ -140,13 +140,47 @@ const FIELD_CONFIG = {
 // SEASONS & COLLECTIONS CONFIG
 // ============================================
 const SEASONS_CONFIG = {
-  VALID_OPTIONS: ['', 'Winter', 'Summer', 'Monsoon', 'Autumn', 'None'],
+  VALID_OPTIONS: ['', 'Winter', 'Spring', 'Summer', 'Monsoon', 'Fall', 'None'],
 
   PATTERNS: {
     'Winter': /winter|cold|snow|warm|jacket|sweater|hoodie|thermal/i,
+    'Spring': /spring|floral|bloom|linen|pastel/i,
     'Summer': /summer|cool|hot|heat|light|breathable|shorts|tank/i,
     'Monsoon': /monsoon|rain|waterproof|umbrella|raincoat/i,
-    'Autumn': /autumn|fall/i
+    'Fall': /autumn|fall/i
+  }
+};
+
+const SEASON_UI_META = {
+  'Spring': {
+    id: 'spring',
+    name: 'Spring',
+    emoji: '🌱',
+    label: 'Spring Bloom'
+  },
+  'Summer': {
+    id: 'summer',
+    name: 'Summer',
+    emoji: '☀️',
+    label: 'Summer Vibe'
+  },
+  'Monsoon': {
+    id: 'monsoon',
+    name: 'Monsoon',
+    emoji: '🌦️',
+    localized_label: { 'INR': 'Monsoon', 'default': 'Rainy' }
+  },
+  'Fall': {
+    id: 'fall',
+    name: 'Fall',
+    emoji: '🍂',
+    localized_label: { 'USD': 'Fall', 'CAD': 'Fall', 'default': 'Autumn' }
+  },
+  'Winter': {
+    id: 'winter',
+    name: 'Winter',
+    emoji: '❄️',
+    label: 'Winter Collection'
   }
 };
 
@@ -810,6 +844,43 @@ function generateDropsJSON(products) {
   drops.drops_by_category = productsByCategory;
 
   return drops;
+}
+
+// ============================================
+// NEW: SEASONS JSON MANIFEST
+// ============================================
+
+function generateSeasonsJSON(products) {
+  const seasons = {};
+
+  // Initialize with all valid options from SEASON_UI_META to ensure full coverage
+  Object.keys(SEASON_UI_META).forEach(seasonKey => {
+    seasons[seasonKey] = {
+      ...SEASON_UI_META[seasonKey],
+      product_count: 0,
+      asins: []
+    };
+  });
+
+  products.forEach(product => {
+    const season = product.season;
+    if (season && seasons[season]) {
+      seasons[season].product_count++;
+      seasons[season].asins.push(product.asin);
+    }
+  });
+
+  // Convert to array in chronological order (following the order in SEASON_UI_META)
+  const seasonsArray = Object.keys(SEASON_UI_META).map(key => seasons[key]);
+
+  return {
+    summary: {
+      total_seasons: seasonsArray.length,
+      total_products: products.length,
+      last_updated: new Date().toISOString()
+    },
+    seasons: seasonsArray
+  };
 }
 
 // ============================================
@@ -1717,6 +1788,15 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
         fs.writeFileSync(errorsPath, JSON.stringify(errorsData, null, 2));
         console.log(`✅ Errors manifest created: errors.json (${errorsData.flagged_products.length} flagged products)`);
 
+        // ============================================
+        // GENERATE SEASONS.JSON
+        // ============================================
+        console.log(`\n🌿 Generating seasons.json...`);
+        const seasonsData = generateSeasonsJSON(allProducts);
+        const seasonsPath = path.join(dataDir, 'seasons.json');
+        fs.writeFileSync(seasonsPath, JSON.stringify(seasonsData, null, 2));
+        console.log(`✅ Seasons manifest created: seasons.json (${seasonsData.seasons.length} seasons)`);
+
         const finalFiles = fs.existsSync(dataDir) ? fs.readdirSync(dataDir) : [];
         const generatedFiles = new Set([
           'last_updated.txt',
@@ -1728,7 +1808,8 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
           'collections.json',
           'categories.json',
           'brands.json',
-          'errors.json'
+          'errors.json',
+          'seasons.json'
         ]);
 
         const remnantFiles = finalFiles.filter(file => !generatedFiles.has(file));
@@ -1805,6 +1886,7 @@ ${Object.keys(currencyResults).map(currency => `- products-${currency}.json (${c
 - influencers.json (${Object.keys(influencersData.influencers).length} influencers)
 - collections.json (${Object.keys(collectionsData.collections).length} collections)
 - errors.json (${errorsData.flagged_products.length} flagged products)
+- seasons.json (${seasonsData.seasons.length} seasons)
 
 📁 FINAL FILES PRESENT
 ${finalFiles.map(file => `- ${file}`).join('\n') || '- None'}
