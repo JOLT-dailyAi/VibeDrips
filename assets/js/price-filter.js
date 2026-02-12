@@ -170,7 +170,7 @@ window.VibeDripsPriceFilter = {
         this.currentMin = this.rangeMin;
         this.currentMax = this.rangeMax;
 
-        // Update slider attributes
+        // Update slider attributes - Strictly start at rangeMin
         this.els.minSlider.min = this.rangeMin;
         this.els.maxSlider.min = this.rangeMin;
         this.els.minSlider.max = this.rangeMax;
@@ -194,7 +194,7 @@ window.VibeDripsPriceFilter = {
         this.els.minDisplay.textContent = `${this.currencySymbol}${this.currentMin.toLocaleString()}`;
         this.els.maxDisplay.textContent = `${this.currencySymbol}${this.currentMax.toLocaleString()}${this.currentMax >= this.rangeMax ? '+' : ''}`;
 
-        // Update track highlight
+        // Update track highlight - Localized calculation
         const range = this.rangeMax - this.rangeMin;
         const minPercent = range === 0 ? 0 : ((this.currentMin - this.rangeMin) / range) * 100;
         const maxPercent = range === 0 ? 100 : ((this.currentMax - this.rangeMin) / range) * 100;
