@@ -24,8 +24,9 @@
     opacity: 0.7;
 }
 
-/* Dropdown Menu - V11.2 Theme-Aware Parity */
-/* Base inherits marketplace spoon-fed visuals but themes override for identity */
+/* Dropdown Menu - V12.0 SURGICAL INHERITANCE (Clean Slate) */
+/* This element inherits ALL visual DNA (Blur, saturate, border, shadow, alpha) */
+/* from the .marketplace-dropdown class assigned in the JS. */
 .price-filter-dropdown {
     position: absolute !important;
     top: 100% !important;
@@ -33,10 +34,7 @@
     left: 0 !important;
     right: auto !important;
 
-    /* Visual DNA: Inherited from .marketplace-dropdown in JS */
-    /* Handled by .marketplace-dropdown class: blur, saturate, shadow, border-radius */
-
-    /* Functional DNA: Absolute Defaults */
+    /* Functional DNA: Only keep local overrides for internal structure */
     width: 380px !important;
     min-width: 380px !important;
     padding: 8px !important;
@@ -231,7 +229,7 @@
     z-index: 5;
 }
 
-/* Theme Awareness Overrides - Restoring Specific Theme Identities */
+/* Theme Awareness Overrides - Minimal Local Consistency */
 
 /* KILL rogue borders from global dark-theme rules */
 body.dark-theme .price-filter-group .price-range-container,
@@ -243,18 +241,7 @@ body.dark-theme .price-filter-group input.price-input-range {
     box-shadow: none !important;
 }
 
-/* Dark Theme Restoration */
-body.dark-theme .price-filter-dropdown.active {
-    background: rgba(0, 0, 0, 0.85) !important;
-    border: 1px solid rgba(255, 255, 255, 0.45) !important;
-}
-
-/* Light Theme Restoration */
-body.light-theme .price-filter-dropdown.active {
-    background: var(--color-white) !important;
-    border: 2px solid rgba(var(--color-primary-rgb), 0.7) !important;
-}
-
+/* Light Theme Text Sync */
 body.light-theme .price-filter-title,
 body.light-theme .price-value-box {
     color: var(--color-primary);
@@ -266,8 +253,4 @@ body.light-theme .price-value-input {
     border-color: #667eea;
 }
 
-/* Glass Theme Restoration (Occlusion Over Parity) */
-body.glass-theme .price-filter-dropdown {
-    background: rgba(var(--color-bg-rgb, 20), 0.95) !important;
-    /* Keeps inherited .marketplace-dropdown border/shadow/blur */
-}
+/* NO Glass/Dark visual overrides needed - they are now inherited from marketplace! */
