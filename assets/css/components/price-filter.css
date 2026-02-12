@@ -33,11 +33,11 @@
     left: 0 !important;
     right: auto !important;
 
-    /* Visual DNA: Literal clones from .marketplace-dropdown in external-controls.css */
-    backdrop-filter: blur(25px) saturate(3) !important;
-    -webkit-backdrop-filter: blur(25px) saturate(3) !important;
+    /* Visual DNA: Nuclear Readability v13.3 */
+    backdrop-filter: blur(30px) saturate(4) brightness(0.7) !important;
+    -webkit-backdrop-filter: blur(30px) saturate(4) brightness(0.7) !important;
     background: rgba(20, 20, 20, 0.45) !important;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4) !important;
+    box-shadow: 0 12px 60px rgba(0, 0, 0, 0.7) !important;
     border-radius: 16px !important;
 
     /* Z-Index Lock: Strictly < 100 */
@@ -251,13 +251,13 @@ body.dark-theme .price-filter-group input.price-input-range {
 
 /* Body Classes Overrides - Restoring Prominent Border Identities */
 
-/* Glass Theme Hybrid Polish - Emerald Core + Unified Outer Glow */
+/* Glass Theme Nuclear Polish - High-Contrast Emerald + Massive Unified Glow */
 body.glass-theme .price-filter-dropdown {
-    background: rgba(15, 35, 25, 0.6) !important;
+    background: rgba(0, 40, 20, 0.88) !important;
     border: 1px solid rgba(255, 255, 255, 0.25) !important;
     box-shadow:
-        0 0 20px 4px rgba(90, 75, 255, 0.2),
-        0 12px 40px rgba(0, 0, 0, 0.4) !important;
+        0 0 35px 12px rgba(90, 75, 255, 0.5),
+        0 12px 60px rgba(0, 0, 0, 0.7) !important;
 }
 
 /* Dark Theme Restoration */
