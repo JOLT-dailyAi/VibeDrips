@@ -163,8 +163,8 @@ window.VibeDripsPriceFilter = {
         this.els.trigger.textContent = `Price ${this.currencySymbol}`;
 
         // Map range keys
-        this.rangeMin = currencyConfig.range_min !== undefined ? currencyConfig.range_min : currencyConfig.min;
-        this.rangeMax = currencyConfig.range_max !== undefined ? currencyConfig.range_max : currencyConfig.max;
+        this.rangeMin = currencyConfig.range_min !== undefined ? currencyConfig.range_min : (currencyConfig.min || 0);
+        this.rangeMax = currencyConfig.range_max !== undefined ? currencyConfig.range_max : (currencyConfig.max || 1000);
 
         // Set current selection to full range on currency switch
         this.currentMin = this.rangeMin;
@@ -196,11 +196,15 @@ window.VibeDripsPriceFilter = {
 
         // Update track highlight - Localized calculation
         const range = this.rangeMax - this.rangeMin;
-        const minPercent = range === 0 ? 0 : ((this.currentMin - this.rangeMin) / range) * 100;
-        const maxPercent = range === 0 ? 100 : ((this.currentMax - this.rangeMin) / range) * 100;
-
-        this.els.track.style.left = minPercent + '%';
-        this.els.track.style.width = (maxPercent - minPercent) + '%';
+        if (range <= 0) {
+            this.els.track.style.left = '0%';
+            this.els.track.style.width = '100%';
+        } else {
+            const minPercent = ((this.currentMin - this.rangeMin) / range) * 100;
+            const maxPercent = ((this.currentMax - this.rangeMin) / range) * 100;
+            this.els.track.style.left = minPercent + '%';
+            this.els.track.style.width = (maxPercent - minPercent) + '%';
+        }
 
         // Notify app to filter
         if (window.filterProducts) {

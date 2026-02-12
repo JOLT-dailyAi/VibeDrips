@@ -80,6 +80,7 @@ body.glass-theme .time-category.active {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     width: fit-content;
     margin: 10px auto;
+    /* Force block-level centering */
 }
 
 /* Glass theme - Filter Controls Container */
