@@ -1,21 +1,87 @@
 /* assets/css/components/price-filter.css */
 
 .price-filter-group {
+    position: relative;
     display: flex;
-    flex-direction: column;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-sm) var(--spacing-md);
+    align-items: center;
+}
+
+/* The Trigger Button */
+.price-filter-trigger {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
-    border-radius: var(--radius-md);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    min-width: 280px;
+    color: var(--color-white);
+    padding: 8px 15px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    min-width: 140px;
+    height: 40px;
+    /* Match other filters */
+    transition: all 0.2s ease;
+}
+
+.price-filter-trigger:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--color-primary);
+}
+
+.price-filter-trigger::after {
+    content: '\f0d7';
+    /* font-awesome chevron-down */
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+/* Dropdown Menu */
+.price-filter-dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    width: 320px;
+    background: rgba(15, 10, 40, 0.95);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    z-index: 1000;
+    box-shadow: var(--shadow-xl);
+    display: none;
+    /* Controlled by JS */
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.price-filter-dropdown.active {
+    display: flex;
+    animation: fadeInScale 0.2s ease-out;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 .price-filter-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 10px;
 }
 
 .price-filter-label {
@@ -35,25 +101,35 @@
     border-radius: 4px;
     transition: all 0.2s ease;
     text-decoration: underline;
+    opacity: 0.8;
 }
 
 .price-reset-btn:hover {
+    opacity: 1;
     color: var(--color-white);
-    background: rgba(var(--color-primary-rgb), 0.2);
+}
+
+/* Range Label Text (from PFA) */
+.price-range-label {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--color-white);
+    letter-spacing: 0.5px;
 }
 
 /* Dual Slider Container */
 .price-range-container {
     position: relative;
-    height: 40px;
+    height: 30px;
     display: flex;
     align-items: center;
+    margin: 10px 0;
 }
 
 .price-sliders-wrapper {
     position: relative;
     width: 100%;
-    height: 5px;
+    height: 4px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-full);
 }
@@ -61,7 +137,8 @@
 .price-slider-track {
     position: absolute;
     height: 100%;
-    background: var(--color-primary);
+    background: #185a9d;
+    /* Blue track from PFA */
     border-radius: var(--radius-full);
     z-index: 1;
 }
@@ -80,23 +157,34 @@
 }
 
 .price-input-range::-webkit-slider-thumb {
-    height: 18px;
-    width: 18px;
+    height: 20px;
+    width: 20px;
     border-radius: 50%;
     background: var(--color-white);
-    border: 2px solid var(--color-primary);
+    border: 4px solid #185a9d;
+    /* Thick blue border from PFA */
     cursor: pointer;
     pointer-events: auto;
     -webkit-appearance: none;
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
     transition: transform 0.1s ease;
 }
 
-.price-input-range::-webkit-slider-thumb:active {
-    transform: scale(1.2);
+/* Thumb inner circle look */
+.price-input-range::-webkit-slider-thumb::before {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #185a9d;
+    border-radius: 50%;
 }
 
-/* Input Boxes Row */
+.price-input-range::-webkit-slider-thumb:active {
+    transform: scale(1.15);
+}
+
+/* Input Boxes (Bottom Row) */
 .price-values-row {
     display: flex;
     align-items: center;
@@ -105,16 +193,15 @@
 }
 
 .price-input-field {
-    width: 80px;
-    background: rgba(0, 0, 0, 0.2);
+    width: 100px;
+    background: rgba(0, 0, 0, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-sm);
     color: var(--color-white);
-    padding: 4px 8px;
-    font-size: 0.8rem;
+    padding: 6px 10px;
+    font-size: 0.85rem;
     text-align: center;
     outline: none;
-    transition: border-color 0.2s ease;
 }
 
 .price-input-field:focus {
