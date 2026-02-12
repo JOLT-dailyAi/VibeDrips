@@ -6,11 +6,7 @@
     align-items: center;
 }
 
-/* 
-   Trigger Button:
-   Inherits borders, glass, and theme styles from .filter-group input/select 
-   base classes in filters.css. 
-*/
+/* Trigger Button */
 .price-filter-trigger {
     cursor: pointer;
     display: flex;
@@ -28,25 +24,22 @@
     opacity: 0.7;
 }
 
-/* Dropdown Menu - Standard Base (Matched to marketplace-dropdown)
-   Uses opacity/visibility/transform for smooth deep parity 
-*/
+/* Dropdown Menu - Standard Base (1:1 Twin to marketplace-dropdown) */
 .price-filter-dropdown {
     position: absolute;
     top: 100%;
     margin-top: 12px;
     left: 0;
-    width: 400px;
-    /* Widened for physical moat */
+    width: 380px;
     padding: 20px;
     background: rgba(var(--color-bg-rgb, 20), 0.45);
     backdrop-filter: blur(25px) saturate(2);
     -webkit-backdrop-filter: blur(25px) saturate(2);
     border-radius: 16px;
-    z-index: 2020;
+    z-index: 7020;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
 
-    /* Deep Parity: Active State Logic */
+    /* Animation Deep Parity */
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -63,7 +56,7 @@
     transform: translateY(0);
 }
 
-/* Header with Reset at Top-Right */
+/* Header with Reset */
 .price-filter-header {
     display: flex;
     justify-content: space-between;
@@ -94,15 +87,17 @@
     color: var(--color-white);
 }
 
-/* Horizontal Layout */
+/* Row Layout */
 .price-minimal-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    gap: 12px;
+    /* Standard separation gap */
 }
 
-/* Fit-Content Containers for labels */
+/* Labels fit text perfectly */
 .price-value-container {
     width: fit-content;
     min-width: 65px;
@@ -112,7 +107,6 @@
     min-height: 32px;
 }
 
-/* Alignment Requirements: Min (Right), Max (Left) */
 #price-min-display {
     text-align: right;
     width: 100%;
@@ -151,19 +145,19 @@
     display: none;
 }
 
-/* Slider Section - PHYSICAL MOAT (40px Margins) */
+/* Slider Track Area - BORDERLESS by default */
 .price-range-container {
     flex: 1;
     position: relative;
     height: 32px;
     display: flex;
     align-items: center;
-    margin: 0 40px;
-    /* unbreakable physical distance from labels */
+    margin: 0;
     box-sizing: border-box;
     border: none !important;
     outline: none !important;
     box-shadow: none !important;
+    background: transparent !important;
 }
 
 .price-sliders-wrapper {
@@ -182,7 +176,7 @@
     z-index: 1;
 }
 
-/* Slider Input - Standard baseline at 0 */
+/* Range Inputs */
 .price-input-range {
     position: absolute;
     width: 100%;
@@ -199,7 +193,7 @@
     box-shadow: none !important;
 }
 
-/* Slider Thumb Styling */
+/* Range Thumb */
 .price-input-range::-webkit-slider-thumb {
     height: 20px;
     width: 20px;
@@ -213,17 +207,18 @@
     z-index: 5;
 }
 
-/* Theme Awareness Override */
+/* Theme Awareness Overrides */
 
-/* Dark Theme - Reintroduce Dropdown Border & Confirm No Container Outline */
+/* Dark Theme - Dropdown Border ON, Track Border OFF */
 body.dark-theme .price-filter-dropdown {
     background: rgba(0, 0, 0, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 
 body.dark-theme .price-range-container {
     border: none !important;
     outline: none !important;
+    background: none !important;
     box-shadow: none !important;
 }
 
