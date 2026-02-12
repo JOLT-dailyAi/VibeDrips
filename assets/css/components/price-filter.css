@@ -24,7 +24,7 @@
     opacity: 0.7;
 }
 
-/* Dropdown Menu - Standard Base (1:1 Twin to marketplace-dropdown) */
+/* Dropdown Menu - Standard Base (Exact 1:1 Twin to marketplace-dropdown) */
 .price-filter-dropdown {
     position: absolute;
     top: 100%;
@@ -32,13 +32,13 @@
     left: 0;
     width: 380px;
     padding: 20px;
-    background: rgba(var(--color-bg-rgb, 15), 0.8);
-    /* Solidified for "hide content" requirement */
+    background: rgba(var(--color-bg-rgb, 20), 0.45);
     backdrop-filter: blur(25px) saturate(2);
     -webkit-backdrop-filter: blur(25px) saturate(2);
+    border: 1px solid rgba(255, 255, 255, 0.25);
     border-radius: 16px;
     z-index: 7020;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
 
     /* Animation Deep Parity */
     display: flex;
@@ -88,20 +88,19 @@
     color: var(--color-white);
 }
 
-/* Row Layout - Fixed Gap for Absolute Separation */
+/* Row Layout - Standardized Centering */
 .price-minimal-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    gap: 20px;
-    /* Safe gap between labels and slider container */
+    gap: 12px;
 }
 
-/* Labels fit text perfectly */
+/* Fixed width containers keep the slider perfectly centered */
 .price-value-container {
-    width: fit-content;
-    min-width: 60px;
+    width: 85px;
+    /* Sized for max currency length to prevent jumping */
     flex-shrink: 0;
     display: flex;
     align-items: center;
@@ -146,16 +145,21 @@
     display: none;
 }
 
-/* Slider Track Area - Internal Padding so knobs never hit labels */
+/* Slider Track Area - BORDERLESS and FULL WIDTH */
 .price-range-container {
     flex: 1;
     position: relative;
     height: 32px;
     display: flex;
     align-items: center;
-    padding: 0 10px;
-    /* Inner safe zone for knobs */
+    margin: 0;
+    padding: 0;
+    /* Zero padding for edge-to-edge movement */
     box-sizing: border-box;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
 }
 
 .price-sliders-wrapper {
@@ -174,12 +178,13 @@
     z-index: 1;
 }
 
-/* Range Inputs */
+/* Range Inputs - Total Edge-to-Edge */
 .price-input-range {
     position: absolute;
-    width: calc(100% - 20px);
-    /* Account for container padding */
-    left: 10px;
+    width: 100%;
+    /* Pure 100% width */
+    left: 0;
+    /* Pure 0 offset */
     top: 50%;
     transform: translateY(-50%);
     background: none !important;
@@ -190,6 +195,13 @@
     z-index: 2;
     border: none !important;
     box-shadow: none !important;
+    padding: 0 !important;
+}
+
+/* Remove blur regression from inputs in glass theme */
+.price-input-range {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
 }
 
 /* Range Thumb */
@@ -206,18 +218,16 @@
     z-index: 5;
 }
 
-/* 
-   THEME SPECIFIC OVERRIDES - ULTRA HIGH SELECTIVITY 
-   Targeting the parents to crush global dark-theme rules.
-*/
+/* Theme Awareness Overrides */
 
-/* Dark Theme - Dropdown Border ON, Track/Input Border OFF */
+/* Dark Theme - High-Parity Dropdown Border */
 body.dark-theme .price-filter-dropdown.active {
     background: rgba(10, 5, 25, 0.95);
     border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    /* Brighter border like requested */
 }
 
-/* Force removal of borders from track and inputs in dark mode */
+/* KILL rogue borders from global dark-theme rules */
 body.dark-theme .price-filter-group .price-range-container,
 body.dark-theme .price-filter-group .price-sliders-wrapper,
 body.dark-theme .price-filter-group input.price-input-range {
@@ -227,19 +237,13 @@ body.dark-theme .price-filter-group input.price-input-range {
     box-shadow: none !important;
 }
 
-/* Standard internal wrapper background for dark mode */
-body.dark-theme .price-sliders-wrapper {
-    background: rgba(255, 255, 255, 0.1) !important;
-}
-
 /* Glass Theme - 1:1 Parity and Background Seclusion */
 body.glass-theme .price-filter-dropdown {
-    background: rgba(15, 10, 30, 0.8);
-    /* Darker alpha to "hide content behind" */
+    background: rgba(var(--color-bg-rgb, 20), 0.45);
     backdrop-filter: blur(25px) saturate(2);
     -webkit-backdrop-filter: blur(25px) saturate(2);
     border: 1px solid rgba(255, 255, 255, 0.25);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
 }
 
 /* Light Theme - Blue Outline Parity */
