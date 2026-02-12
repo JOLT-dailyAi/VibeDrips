@@ -24,8 +24,8 @@
     opacity: 0.7;
 }
 
-/* Dropdown Menu - V11.1 TOTAL SUBSTITUTION (Bit-for-Bit Parity) */
-/* Literally hardcoding the spoon-fed computed styles to end all regressions */
+/* Dropdown Menu - V11.2 Theme-Aware Parity */
+/* Base inherits marketplace spoon-fed visuals but themes override for identity */
 .price-filter-dropdown {
     position: absolute !important;
     top: 100% !important;
@@ -33,19 +33,13 @@
     left: 0 !important;
     right: auto !important;
 
-    /* Visual DNA: Literal Spoon-Fed Match */
-    backdrop-filter: blur(25px) saturate(2) !important;
-    -webkit-backdrop-filter: blur(25px) saturate(2) !important;
-    background-color: rgba(var(--color-bg-rgb, 20), 0.45) !important;
-    /* Marketplace Base Alpha */
-    border: 0.8px solid rgba(255, 255, 255, 0.25) !important;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4) !important;
-    border-radius: 16px !important;
-    padding: 8px !important;
+    /* Visual DNA: Inherited from .marketplace-dropdown in JS */
+    /* Handled by .marketplace-dropdown class: blur, saturate, shadow, border-radius */
 
-    /* Functional DNA: Maintain Layout */
+    /* Functional DNA: Absolute Defaults */
     width: 380px !important;
     min-width: 380px !important;
+    padding: 8px !important;
     gap: 15px !important;
     display: flex !important;
     flex-direction: column !important;
@@ -237,7 +231,7 @@
     z-index: 5;
 }
 
-/* Theme Awareness Overrides - REMOVED redundant visual theme overrides to enforce base parity */
+/* Theme Awareness Overrides - Restoring Specific Theme Identities */
 
 /* KILL rogue borders from global dark-theme rules */
 body.dark-theme .price-filter-group .price-range-container,
@@ -249,7 +243,18 @@ body.dark-theme .price-filter-group input.price-input-range {
     box-shadow: none !important;
 }
 
-/* Light Theme - Text Color Only */
+/* Dark Theme Restoration */
+body.dark-theme .price-filter-dropdown.active {
+    background: rgba(0, 0, 0, 0.85) !important;
+    border: 1px solid rgba(255, 255, 255, 0.45) !important;
+}
+
+/* Light Theme Restoration */
+body.light-theme .price-filter-dropdown.active {
+    background: var(--color-white) !important;
+    border: 2px solid rgba(var(--color-primary-rgb), 0.7) !important;
+}
+
 body.light-theme .price-filter-title,
 body.light-theme .price-value-box {
     color: var(--color-primary);
@@ -259,4 +264,10 @@ body.light-theme .price-value-input {
     background: #f7fafc;
     color: #1a202c;
     border-color: #667eea;
+}
+
+/* Glass Theme Restoration (Occlusion Over Parity) */
+body.glass-theme .price-filter-dropdown {
+    background: rgba(var(--color-bg-rgb, 20), 0.95) !important;
+    /* Keeps inherited .marketplace-dropdown border/shadow/blur */
 }
