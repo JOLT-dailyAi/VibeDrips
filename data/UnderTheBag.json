@@ -2,49 +2,25 @@
   "config": {
     "title": "💸 Under the Bag",
     "enabled": true,
-    "last_updated": "2026-02-11T21:02:18.024Z",
+    "last_updated": "2026-02-12T06:50:19.636Z",
     "currencies": {
-      "INR": {
-        "default_budget": 5000,
-        "slider_min": 500,
-        "slider_max": 50000,
-        "step": 500
-      },
-      "USD": {
-        "default_budget": 80,
-        "slider_min": 10,
-        "slider_max": 1000,
-        "step": 10
-      },
       "AUD": {
-        "default_budget": 120,
-        "slider_min": 20,
-        "slider_max": 1500,
-        "step": 20
+        "range_min": 16,
+        "range_max": 343,
+        "user_min": 16,
+        "user_max": 343,
+        "step": 1,
+        "allow_free_input": true,
+        "has_reset": true
       },
-      "CAD": {
-        "default_budget": 100,
-        "slider_min": 20,
-        "slider_max": 1500,
-        "step": 20
-      },
-      "GBP": {
-        "default_budget": 60,
-        "slider_min": 10,
-        "slider_max": 800,
-        "step": 10
-      },
-      "EUR": {
-        "default_budget": 75,
-        "slider_min": 10,
-        "slider_max": 1000,
-        "step": 10
-      },
-      "JPY": {
-        "default_budget": 10000,
-        "slider_min": 1000,
-        "slider_max": 100000,
-        "step": 1000
+      "INR": {
+        "range_min": 150,
+        "range_max": 126804,
+        "user_min": 150,
+        "user_max": 126804,
+        "step": 1,
+        "allow_free_input": true,
+        "has_reset": true
       }
     },
     "tier_labels": [

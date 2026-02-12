@@ -1,5 +1,5 @@
 VibeDrips Data Processing Summary
-Generated: 2026-02-11T21:02:18.027Z
+Generated: 2026-02-12T06:50:19.639Z
 
 📊 STATISTICS
 - Total Rows Processed: 23
@@ -44,16 +44,24 @@ Generated: 2026-02-11T21:02:18.027Z
 - 🆕 New Releases: 0 products
 
 📁 FILES BEFORE DELETION
+- UnderTheBag.json
 - brands.json
 - categories.json
+- categories_auto-detect.json
 - last_updated.txt
 - products.csv
+- recent-drops.json
 - seasons.json
+- seasons_auto-detect.json
 
 📁 FILES DELETED
+- UnderTheBag.json
 - brands.json
 - categories.json
+- categories_auto-detect.json
+- recent-drops.json
 - seasons.json
+- seasons_auto-detect.json
 
 📁 FILES GENERATED
 - products-AUD.json (10 products)
