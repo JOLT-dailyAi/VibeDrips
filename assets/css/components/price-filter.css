@@ -58,12 +58,25 @@
     visibility: hidden;
     transform: translateY(-10px);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Phase 14: Responsive Centering & Fluid Width */
+    @media (max-width: 480px) {
+        width: calc(100vw - 32px) !important;
+        min-width: 0 !important;
+        left: 50% !important;
+        right: auto !important;
+        transform: translateX(-50%) translateY(-10px) !important;
+    }
 }
 
 .price-filter-dropdown.active {
     opacity: 1 !important;
     visibility: visible !important;
     transform: translateY(0) !important;
+
+    @media (max-width: 480px) {
+        transform: translateX(-50%) translateY(0) !important;
+    }
 }
 
 /* Header with Reset */
@@ -137,12 +150,9 @@
     white-space: nowrap;
 }
 
-/* Directional Inputs */
+/* Directional Inputs - PHASE 14: Inline Switch Toggle (No Absolute Overflow) */
 .price-value-input {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 80px;
+    width: 100% !important;
     background: rgba(0, 0, 0, 0.9);
     border: 1px solid var(--color-primary);
     border-radius: 4px;
@@ -152,23 +162,15 @@
     text-align: center;
     outline: none;
     display: none;
-    z-index: 10;
+    /* Toggled via JS */
+    box-sizing: border-box;
 }
 
-/* Min Expands LEFT: Anchored Right */
-#price-min-input {
-    right: 0;
-}
-
-/* Max Expands RIGHT: Anchored Left */
-#price-max-input {
-    left: 0;
-}
-
-/* Slider Track Area - 10px Moat logic (v6/v7) */
+/* Slider Track Area - 10px Moat logic (v6/v7) - PHASE 14: Fluid center */
 .price-range-container {
-    width: 200px;
-    flex: none;
+    flex: 1;
+    /* Elastic center */
+    min-width: 140px;
     position: relative;
     height: 32px;
     display: flex;
