@@ -1,4 +1,4 @@
-/* assets/js/price-filter.js */
+/* assets/js/price-filter.js - Minimalistic Dropdown Refinement */
 
 window.VibeDripsPriceFilter = {
     config: null,
@@ -52,19 +52,27 @@ window.VibeDripsPriceFilter = {
             <button class="price-filter-trigger" id="price-trigger">Price</button>
             <div class="price-filter-dropdown">
                 <div class="price-filter-header">
-                    <button class="price-reset-btn" onclick="VibeDripsPriceFilter.reset()">Reset</button>
-                    <div class="price-range-label" id="price-range-display">0 - 0</div>
+                    <span class="price-filter-title">Budget Range</span>
+                    <button class="price-reset-btn" id="price-reset">Reset</button>
                 </div>
-                <div class="price-range-container">
-                    <div class="price-sliders-wrapper">
-                        <div class="price-slider-track" id="price-track"></div>
+                <div class="price-minimal-row">
+                    <div class="price-value-container">
+                        <div class="price-value-box" id="price-min-display"></div>
+                        <input type="number" class="price-value-input" id="price-min-input">
                     </div>
-                    <input type="range" class="price-input-range" id="price-min-slider">
-                    <input type="range" class="price-input-range" id="price-max-slider">
-                </div>
-                <div class="price-values-row">
-                    <input type="number" class="price-input-field" id="price-min-input">
-                    <input type="number" class="price-input-field" id="price-max-input">
+                    
+                    <div class="price-range-container">
+                        <div class="price-sliders-wrapper">
+                            <div class="price-slider-track" id="price-track"></div>
+                        </div>
+                        <input type="range" class="price-input-range" id="price-min-slider">
+                        <input type="range" class="price-input-range" id="price-max-slider">
+                    </div>
+
+                    <div class="price-value-container">
+                        <div class="price-value-box" id="price-max-display"></div>
+                        <input type="number" class="price-value-input" id="price-max-input">
+                    </div>
                 </div>
             </div>
         `;
@@ -83,11 +91,13 @@ window.VibeDripsPriceFilter = {
         this.els = {
             trigger: document.getElementById('price-trigger'),
             dropdown: group.querySelector('.price-filter-dropdown'),
-            display: document.getElementById('price-range-display'),
-            minSlider: document.getElementById('price-min-slider'),
-            maxSlider: document.getElementById('price-max-slider'),
+            reset: document.getElementById('price-reset'),
+            minDisplay: document.getElementById('price-min-display'),
+            maxDisplay: document.getElementById('price-max-display'),
             minInput: document.getElementById('price-min-input'),
             maxInput: document.getElementById('price-max-input'),
+            minSlider: document.getElementById('price-min-slider'),
+            maxSlider: document.getElementById('price-max-slider'),
             track: document.getElementById('price-track')
         };
 
@@ -97,10 +107,24 @@ window.VibeDripsPriceFilter = {
             this.els.dropdown.classList.toggle('active');
         });
 
+        this.els.reset.addEventListener('click', () => this.reset());
+
         this.els.minSlider.addEventListener('input', () => this.handleSliderChange('min'));
         this.els.maxSlider.addEventListener('input', () => this.handleSliderChange('max'));
+
+        // Inline editing logic
+        this.els.minDisplay.addEventListener('click', () => this.toggleEdit('min', true));
+        this.els.maxDisplay.addEventListener('click', () => this.toggleEdit('max', true));
+
+        this.els.minInput.addEventListener('blur', () => this.toggleEdit('min', false));
+        this.els.maxInput.addEventListener('blur', () => this.toggleEdit('max', false));
+
         this.els.minInput.addEventListener('change', () => this.handleInputChange('min'));
         this.els.maxInput.addEventListener('change', () => this.handleInputChange('max'));
+
+        // Handle Enter key on inputs
+        this.els.minInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') this.els.minInput.blur(); });
+        this.els.maxInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') this.els.maxInput.blur(); });
     },
 
     /**
@@ -110,10 +134,8 @@ window.VibeDripsPriceFilter = {
         if (!this.config || !this.config.currencies[currency]) return;
 
         const currencyConfig = this.config.currencies[currency];
-        const group = document.querySelector('.price-filter-group');
-        if (group) group.style.display = 'flex';
 
-        // Get currency symbol from VibeDrips state
+        // Localized Currency Map
         const currencyMap = {
             'INR': '₹', 'USD': '$', 'EUR': '€', 'GBP': '£', 'JPY': '¥',
             'CAD': 'C$', 'AUD': 'A$', 'BRL': 'R$', 'MXN': '$', 'AED': 'د.إ',
@@ -149,8 +171,9 @@ window.VibeDripsPriceFilter = {
         this.els.minInput.value = this.currentMin;
         this.els.maxInput.value = this.currentMax;
 
-        // Update display text (e.g. ₹470 - ₹395,800+)
-        this.els.display.textContent = `${this.currencySymbol}${this.currentMin.toLocaleString()} - ${this.currencySymbol}${this.currentMax.toLocaleString()}${this.currentMax >= this.rangeMax ? '+' : ''}`;
+        // Update human-readable labels
+        this.els.minDisplay.textContent = `${this.currencySymbol}${this.currentMin.toLocaleString()}`;
+        this.els.maxDisplay.textContent = `${this.currencySymbol}${this.currentMax.toLocaleString()}${this.currentMax >= this.rangeMax ? '+' : ''}`;
 
         // Update track highlight
         const minPercent = ((this.currentMin - this.rangeMin) / (this.rangeMax - this.rangeMin)) * 100;
@@ -162,6 +185,24 @@ window.VibeDripsPriceFilter = {
         // Notify app to filter
         if (window.filterProducts) {
             window.filterProducts();
+        }
+    },
+
+    /**
+     * Toggle between label display and input field
+     */
+    toggleEdit(type, showInput) {
+        const display = type === 'min' ? this.els.minDisplay : this.els.maxDisplay;
+        const input = type === 'min' ? this.els.minInput : this.els.maxInput;
+
+        if (showInput) {
+            display.style.display = 'none';
+            input.style.display = 'block';
+            input.focus();
+            input.select();
+        } else {
+            display.style.display = 'block';
+            input.style.display = 'none';
         }
     },
 
@@ -221,14 +262,13 @@ window.VibeDripsPriceFilter = {
      */
     matches(price) {
         const p = parseFloat(price);
-        if (isNaN(p)) return true; // Show items with invalid price if any
+        if (isNaN(p)) return true;
         return p >= this.currentMin && p <= this.currentMax;
     }
 };
 
 // Auto-init
 document.addEventListener('DOMContentLoaded', () => {
-    // Wait for main core data to be ready
     const checkInit = setInterval(() => {
         if (window.VibeDrips && window.VibeDrips.currentCurrency) {
             VibeDripsPriceFilter.init();

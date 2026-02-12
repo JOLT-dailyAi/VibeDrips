@@ -1,4 +1,4 @@
-/* assets/css/components/price-filter.css */
+/* assets/css/components/price-filter.css - Minimalistic Dropdown Refinement */
 
 .price-filter-group {
     position: relative;
@@ -6,24 +6,25 @@
     align-items: center;
 }
 
-/* The Trigger Button */
+/* The Trigger Button - Height Locked at 40px */
 .price-filter-trigger {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    /* Match CONSTRAINTS.md */
     color: var(--color-white);
-    padding: 8px 15px;
+    padding: 0 15px;
     border-radius: var(--radius-sm);
     cursor: pointer;
     font-size: 0.9rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     min-width: 140px;
     height: 40px;
-    /* Match other filters */
     transition: all 0.2s ease;
+    box-sizing: border-box;
 }
 
 .price-filter-trigger:hover {
@@ -33,73 +34,61 @@
 
 .price-filter-trigger::after {
     content: '\f0d7';
-    /* font-awesome chevron-down */
     font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     font-size: 0.8rem;
     opacity: 0.7;
 }
 
-/* Dropdown Menu */
+/* Dropdown Menu - Minimalist Single Line */
 .price-filter-dropdown {
     position: absolute;
-    top: calc(100% + 10px);
+    top: calc(100% + 8px);
     left: 0;
     width: 320px;
+    padding: 12px 15px;
     background: rgba(15, 10, 40, 0.95);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(25px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    /* CONSTRAINTS.md Standard */
     border-radius: var(--radius-md);
-    padding: var(--spacing-md);
     z-index: 1000;
     box-shadow: var(--shadow-xl);
     display: none;
-    /* Controlled by JS */
     flex-direction: column;
-    gap: var(--spacing-md);
+    gap: 15px;
+    box-sizing: border-box;
 }
 
 .price-filter-dropdown.active {
     display: flex;
-    animation: fadeInScale 0.2s ease-out;
 }
 
-@keyframes fadeInScale {
-    from {
-        opacity: 0;
-        transform: translateY(-10px) scale(0.95);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
+/* Header with Reset at Top-Right */
 .price-filter-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    padding-bottom: 10px;
+    width: 100%;
 }
 
-.price-filter-label {
-    font-size: 0.9rem;
-    font-weight: 600;
+.price-filter-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.6;
     color: var(--color-white);
-    opacity: 0.9;
 }
 
 .price-reset-btn {
     background: none;
     border: none;
     color: var(--color-primary);
-    font-size: 0.75rem;
+    font-size: 0.7rem;
+    font-weight: 600;
     cursor: pointer;
-    padding: 2px 5px;
-    border-radius: 4px;
-    transition: all 0.2s ease;
+    padding: 2px 0;
     text-decoration: underline;
     opacity: 0.8;
 }
@@ -109,21 +98,53 @@
     color: var(--color-white);
 }
 
-/* Range Label Text (from PFA) */
-.price-range-label {
-    font-weight: 700;
-    font-size: 1.1rem;
-    color: var(--color-white);
-    letter-spacing: 0.5px;
-}
-
-/* Dual Slider Container */
-.price-range-container {
-    position: relative;
-    height: 30px;
+/* Single Line Layout: [min] --- slider --- [max] */
+.price-minimal-row {
     display: flex;
     align-items: center;
-    margin: 10px 0;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+}
+
+.price-value-box {
+    min-width: 50px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--color-white);
+    padding: 4px 6px;
+    border-radius: 4px;
+    transition: background 0.15s ease;
+}
+
+.price-value-box:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Inline Input Toggle */
+.price-value-input {
+    width: 65px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--color-primary);
+    border-radius: 4px;
+    color: var(--color-white);
+    padding: 4px 6px;
+    font-size: 0.85rem;
+    text-align: center;
+    outline: none;
+    display: none;
+    /* Controlled by JS */
+}
+
+/* The Slider Bar */
+.price-range-container {
+    flex: 1;
+    position: relative;
+    height: 20px;
+    display: flex;
+    align-items: center;
 }
 
 .price-sliders-wrapper {
@@ -138,7 +159,6 @@
     position: absolute;
     height: 100%;
     background: #185a9d;
-    /* Blue track from PFA */
     border-radius: var(--radius-full);
     z-index: 1;
 }
@@ -157,72 +177,64 @@
 }
 
 .price-input-range::-webkit-slider-thumb {
-    height: 20px;
-    width: 20px;
+    height: 18px;
+    width: 18px;
     border-radius: 50%;
     background: var(--color-white);
-    border: 4px solid #185a9d;
-    /* Thick blue border from PFA */
+    border: 3px solid #185a9d;
     cursor: pointer;
     pointer-events: auto;
     -webkit-appearance: none;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-    transition: transform 0.1s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
-/* Thumb inner circle look */
-.price-input-range::-webkit-slider-thumb::before {
-    content: '';
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    background: #185a9d;
-    border-radius: 50%;
+/* Theme Parity Logic (Strict variable usage) */
+
+/* DARK THEME Overrides */
+body.dark-theme .price-filter-dropdown {
+    background: rgba(0, 0, 0, 0.92);
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
 }
 
-.price-input-range::-webkit-slider-thumb:active {
-    transform: scale(1.15);
+body.dark-theme .price-filter-trigger {
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
 }
 
-/* Input Boxes (Bottom Row) */
-.price-values-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--spacing-sm);
+/* GLASS THEME Overrides */
+body.glass-theme .price-filter-dropdown {
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, var(--glass-refraction)) 0%,
+            rgba(255, 255, 255, calc(var(--glass-refraction) / 2)) 100%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
 }
 
-.price-input-field {
-    width: 100px;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-sm);
-    color: var(--color-white);
-    padding: 6px 10px;
-    font-size: 0.85rem;
-    text-align: center;
-    outline: none;
+body.glass-theme .price-filter-trigger {
+    background: rgba(255, 255, 255, var(--glass-refraction));
+    backdrop-filter: blur(var(--glass-blur));
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
 }
 
-.price-input-field:focus {
+/* LIGHT THEME Overrides */
+body.light-theme .price-filter-dropdown {
+    background: white;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+body.light-theme .price-filter-trigger {
+    background: white;
+    color: var(--color-text-dark);
+    border: 1px solid var(--color-border);
+}
+
+body.light-theme .price-value-box,
+body.light-theme .price-filter-title {
+    color: var(--color-text-dark);
+}
+
+body.light-theme .price-value-input {
+    background: #f8f9fa;
+    color: var(--color-text-dark);
     border-color: var(--color-primary);
-}
-
-.price-separator {
-    color: var(--color-text-light);
-    font-size: 0.8rem;
-}
-
-/* Responsive adjustment for filter-controls */
-.filter-controls .filter-group.price-filter-group {
-    flex: 2;
-    /* Take more space than simple selects */
-    min-width: 300px;
-}
-
-@media (max-width: 768px) {
-    .price-filter-group {
-        width: 100%;
-        min-width: unset;
-    }
 }
