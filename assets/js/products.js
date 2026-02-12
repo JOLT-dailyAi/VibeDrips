@@ -130,31 +130,29 @@ function applyCurrentFilters() {
     const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
     const categoryValue = categoryFilter ? categoryFilter.value.trim() : '';
 
-    if (searchTerm || categoryValue) {
-        VibeDrips.filteredProducts = VibeDrips.filteredProducts.filter(product => {
-            const searchFields = [
-                product.name,
-                product.description,
-                product.category,
-                product.subcategory,
-                product.brand
-            ].filter(field => field && field.toString().trim());
+    VibeDrips.filteredProducts = VibeDrips.filteredProducts.filter(product => {
+        const searchFields = [
+            product.name,
+            product.description,
+            product.category,
+            product.subcategory,
+            product.brand
+        ].filter(field => field && field.toString().trim());
 
-            const matchesSearch = !searchTerm || searchFields.some(field =>
-                field.toString().toLowerCase().includes(searchTerm)
-            );
+        const matchesSearch = !searchTerm || searchFields.some(field =>
+            field.toString().toLowerCase().includes(searchTerm)
+        );
 
-            const matchesCategory = !categoryValue ||
-                product.category === categoryValue ||
-                product.subcategory === categoryValue;
+        const matchesCategory = !categoryValue ||
+            product.category === categoryValue ||
+            product.subcategory === categoryValue;
 
-            // NEW: Price range matching
-            const matchesPrice = !window.VibeDripsPriceFilter ||
-                window.VibeDripsPriceFilter.matches(product.price);
+        // NEW: Price range matching
+        const matchesPrice = !window.VibeDripsPriceFilter ||
+            window.VibeDripsPriceFilter.matches(product.price);
 
-            return matchesSearch && matchesCategory && matchesPrice;
-        });
-    }
+        return matchesSearch && matchesCategory && matchesPrice;
+    });
 }
 
 /**

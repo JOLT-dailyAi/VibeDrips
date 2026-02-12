@@ -20,38 +20,40 @@ function filterProducts() {
 function applyCurrentFilters() {
     const searchInput = VibeDrips.elements.search;
     const categoryFilter = VibeDrips.elements.categoryFilter;
-    
+
     const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
     const categoryValue = categoryFilter ? categoryFilter.value.trim() : '';
 
-    if (searchTerm || categoryValue) {
-        VibeDrips.filteredProducts = VibeDrips.filteredProducts.filter(product => {
-            const searchFields = [
-                product.name, 
-                product.description, 
-                product.category,
-                product.subcategory,
-                product.brand
-            ].filter(field => field && field.toString().trim());
-            
-            const matchesSearch = !searchTerm || searchFields.some(field => 
-                field.toString().toLowerCase().includes(searchTerm)
-            );
+    VibeDrips.filteredProducts = VibeDrips.filteredProducts.filter(product => {
+        const searchFields = [
+            product.name,
+            product.description,
+            product.category,
+            product.subcategory,
+            product.brand
+        ].filter(field => field && field.toString().trim());
 
-            const matchesCategory = !categoryValue || 
-                product.category === categoryValue || 
-                product.subcategory === categoryValue;
+        const matchesSearch = !searchTerm || searchFields.some(field =>
+            field.toString().toLowerCase().includes(searchTerm)
+        );
 
-            return matchesSearch && matchesCategory;
-        });
-    }
+        const matchesCategory = !categoryValue ||
+            product.category === categoryValue ||
+            product.subcategory === categoryValue;
+
+        // NEW: Price range matching
+        const matchesPrice = !window.VibeDripsPriceFilter ||
+            window.VibeDripsPriceFilter.matches(product.price);
+
+        return matchesSearch && matchesCategory && matchesPrice;
+    });
 }
 
 // Sort products
 function sortProducts() {
     const sortSelect = VibeDrips.elements.priceSort;
     if (!sortSelect) return;
-    
+
     const sortBy = sortSelect.value;
 
     switch (sortBy) {
@@ -78,7 +80,7 @@ function sortProducts() {
             VibeDrips.filteredProducts.sort((a, b) => {
                 if (a.featured && !b.featured) return -1;
                 if (!a.featured && b.featured) return 1;
-                
+
                 const dateA = new Date(a.date_first_available || a.timestamp);
                 const dateB = new Date(b.date_first_available || b.timestamp);
                 return dateB - dateA;
