@@ -70,7 +70,7 @@ window.VibeDripsPriceFilter = {
         // Layout: [Min] --- [Slider] --- [Max]
         group.innerHTML = `
             <button class="price-filter-trigger" id="price-trigger">Price</button>
-            <div class="price-filter-dropdown">
+            <div class="price-filter-dropdown marketplace-dropdown">
                 <div class="price-filter-header">
                     <span class="price-filter-title">💸 Under the Bag</span>
                     <button class="price-reset-btn" id="price-reset">Reset</button>
