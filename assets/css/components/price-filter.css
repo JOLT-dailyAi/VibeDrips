@@ -24,28 +24,34 @@
     opacity: 0.7;
 }
 
-/* Dropdown Menu - V11.0 NUCLEAR PARITY (Total Substitution) */
-/* Hardcoding every spoon-fed property with !important to end inheritance battles */
+/* Dropdown Menu - V11.1 TOTAL SUBSTITUTION (Bit-for-Bit Parity) */
+/* Literally hardcoding the spoon-fed computed styles to end all regressions */
 .price-filter-dropdown {
     position: absolute !important;
     top: 100% !important;
     margin-top: 12px !important;
     left: 0 !important;
     right: auto !important;
-    width: 380px !important;
-    min-width: 380px !important;
-    padding: 8px !important;
-    background: rgba(0, 0, 0, 0.45) !important;
+
+    /* Visual DNA: Literal Spoon-Fed Match */
     backdrop-filter: blur(25px) saturate(2) !important;
     -webkit-backdrop-filter: blur(25px) saturate(2) !important;
+    background-color: rgba(var(--color-bg-rgb, 20), 0.45) !important;
+    /* Marketplace Base Alpha */
     border: 0.8px solid rgba(255, 255, 255, 0.25) !important;
-    border-radius: 16px !important;
-    z-index: 7020 !important;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4) !important;
+    border-radius: 16px !important;
+    padding: 8px !important;
+
+    /* Functional DNA: Maintain Layout */
+    width: 380px !important;
+    min-width: 380px !important;
+    gap: 15px !important;
     display: flex !important;
     flex-direction: column !important;
-    gap: 15px !important;
     box-sizing: border-box !important;
+    z-index: 7020 !important;
+    unicode-bidi: isolate !important;
 
     /* Animation/State */
     opacity: 0;
@@ -231,7 +237,7 @@
     z-index: 5;
 }
 
-/* Theme Awareness Overrides */
+/* Theme Awareness Overrides - REMOVED redundant visual theme overrides to enforce base parity */
 
 /* KILL rogue borders from global dark-theme rules */
 body.dark-theme .price-filter-group .price-range-container,
@@ -243,23 +249,7 @@ body.dark-theme .price-filter-group input.price-input-range {
     box-shadow: none !important;
 }
 
-/* Dark Theme - High-Visibility override */
-body.dark-theme .price-filter-dropdown.active {
-    background: rgba(0, 0, 0, 0.85) !important;
-    border: 1px solid rgba(255, 255, 255, 0.45) !important;
-}
-
-/* Glass Theme - Absolute Occlusion Override (Maintains 0.95 alpha) */
-body.glass-theme .price-filter-dropdown {
-    background: rgba(20, 20, 25, 0.95) !important;
-}
-
-/* Light Theme - Original Baseline override */
-body.light-theme .price-filter-dropdown {
-    background: var(--color-white) !important;
-    border: 2px solid rgba(var(--color-primary-rgb), 0.3) !important;
-}
-
+/* Light Theme - Text Color Only */
 body.light-theme .price-filter-title,
 body.light-theme .price-value-box {
     color: var(--color-primary);
