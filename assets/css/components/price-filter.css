@@ -1,4 +1,4 @@
-/* assets/css/components/price-filter.css - Minimalistic Dropdown Refinement */
+/* assets/css/components/price-filter.css */
 
 .price-filter-group {
     position: relative;
@@ -6,30 +6,18 @@
     align-items: center;
 }
 
-/* The Trigger Button - Height Locked at 40px */
+/* 
+   Trigger Button:
+   Inherits borders, glass, and theme styles from .filter-group input/select 
+   base classes in filters.css. 
+*/
 .price-filter-trigger {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    /* Match CONSTRAINTS.md */
-    color: var(--color-white);
-    padding: 0 15px;
-    border-radius: var(--radius-sm);
     cursor: pointer;
-    font-size: 0.9rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 8px;
-    min-width: 140px;
-    height: 40px;
-    transition: all 0.2s ease;
-    box-sizing: border-box;
-}
-
-.price-filter-trigger:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: var(--color-primary);
+    /* transition and other basics inherited */
 }
 
 .price-filter-trigger::after {
@@ -40,17 +28,15 @@
     opacity: 0.7;
 }
 
-/* Dropdown Menu - Minimalist Single Line */
+/* Dropdown Menu */
 .price-filter-dropdown {
     position: absolute;
     top: calc(100% + 8px);
     left: 0;
     width: 320px;
-    padding: 12px 15px;
+    padding: 15px;
     background: rgba(15, 10, 40, 0.95);
     backdrop-filter: blur(25px);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    /* CONSTRAINTS.md Standard */
     border-radius: var(--radius-md);
     z-index: 1000;
     box-shadow: var(--shadow-xl);
@@ -58,10 +44,24 @@
     flex-direction: column;
     gap: 15px;
     box-sizing: border-box;
+    /* Theme overrides for dropdown border below */
 }
 
 .price-filter-dropdown.active {
     display: flex;
+    animation: fadeInDropdown 0.2s ease-out;
+}
+
+@keyframes fadeInDropdown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Header with Reset at Top-Right */
@@ -73,12 +73,10 @@
 }
 
 .price-filter-title {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    opacity: 0.6;
     color: var(--color-white);
+    opacity: 0.9;
 }
 
 .price-reset-btn {
@@ -88,7 +86,6 @@
     font-size: 0.7rem;
     font-weight: 600;
     cursor: pointer;
-    padding: 2px 0;
     text-decoration: underline;
     opacity: 0.8;
 }
@@ -103,42 +100,51 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
+    gap: 10px;
     width: 100%;
 }
 
+/* FIXED WIDTH Containers for values (80px) to prevent overlap */
+.price-value-container {
+    width: 80px;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+}
+
 .price-value-box {
-    min-width: 50px;
+    width: 100%;
     text-align: center;
     cursor: pointer;
     font-weight: 700;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: var(--color-white);
-    padding: 4px 6px;
+    padding: 4px 0;
     border-radius: 4px;
     transition: background 0.15s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .price-value-box:hover {
     background: rgba(255, 255, 255, 0.1);
 }
 
-/* Inline Input Toggle */
 .price-value-input {
-    width: 65px;
+    width: 100%;
     background: rgba(0, 0, 0, 0.4);
     border: 1px solid var(--color-primary);
     border-radius: 4px;
     color: var(--color-white);
-    padding: 4px 6px;
-    font-size: 0.85rem;
+    padding: 4px;
+    font-size: 0.8rem;
     text-align: center;
     outline: none;
     display: none;
-    /* Controlled by JS */
 }
 
-/* The Slider Bar */
+/* Slider Section */
 .price-range-container {
     flex: 1;
     position: relative;
@@ -188,53 +194,32 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
-/* Theme Parity Logic (Strict variable usage) */
+/* Dropdown Theme Parity (Inheritance handled for trigger) */
 
-/* DARK THEME Overrides */
 body.dark-theme .price-filter-dropdown {
-    background: rgba(0, 0, 0, 0.92);
-    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+    background: rgba(0, 0, 0, 0.95);
+    border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
-body.dark-theme .price-filter-trigger {
-    border: 2px solid rgba(255, 255, 255, 0.3) !important;
-}
-
-/* GLASS THEME Overrides */
 body.glass-theme .price-filter-dropdown {
     background: linear-gradient(135deg,
             rgba(255, 255, 255, var(--glass-refraction)) 0%,
             rgba(255, 255, 255, calc(var(--glass-refraction) / 2)) 100%);
     backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+    border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
-body.glass-theme .price-filter-trigger {
-    background: rgba(255, 255, 255, var(--glass-refraction));
-    backdrop-filter: blur(var(--glass-blur));
-    border: 2px solid rgba(255, 255, 255, 0.3) !important;
-}
-
-/* LIGHT THEME Overrides */
 body.light-theme .price-filter-dropdown {
     background: white;
     border: 1px solid var(--color-border);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
-body.light-theme .price-filter-trigger {
-    background: white;
-    color: var(--color-text-dark);
-    border: 1px solid var(--color-border);
-}
-
-body.light-theme .price-value-box,
-body.light-theme .price-filter-title {
+body.light-theme .price-filter-title,
+body.light-theme .price-value-box {
     color: var(--color-text-dark);
 }
 
 body.light-theme .price-value-input {
     background: #f8f9fa;
     color: var(--color-text-dark);
-    border-color: var(--color-primary);
 }

@@ -67,16 +67,17 @@ body.glass-theme .time-category.active {
         inset 0 2px 0 rgba(255, 255, 255, 0.7);
 }
 
-/* Filter Controls */
+/* Filter Controls - Standardized Flex Layout */
 .filter-controls {
-    display: grid;
-    grid-template-columns: auto auto auto;
-    gap: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
     background: rgba(255, 255, 255, 0.9);
-    padding: 5px;
+    padding: 8px 12px;
     border-radius: 15px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    /* overflow: visible; - removed hidden to allow floating warp prompt */
 }
 
 /* Glass theme - Filter Controls Container */
@@ -91,15 +92,18 @@ body.glass-theme .filter-controls {
 }
 
 .filter-group input,
-.filter-group select {
+.filter-group select,
+.filter-group .price-filter-trigger {
     width: 160px;
-    padding: 6px;
+    height: 38px;
+    padding: 6px 12px;
     border: 2px solid #e2e8f0;
     border-radius: 8px;
     font-size: 14px;
-    transition: border-color 0.3s;
+    transition: all 0.3s;
     background: #FFFFFF;
     color: #333;
+    box-sizing: border-box;
 }
 
 #search {
@@ -116,7 +120,8 @@ body.glass-theme .filter-controls {
 
 /* Glass theme - Filter Inputs */
 body.glass-theme .filter-group input,
-body.glass-theme .filter-group select {
+body.glass-theme .filter-group select,
+body.glass-theme .filter-group .price-filter-trigger {
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
@@ -134,14 +139,16 @@ body.glass-theme .filter-group select option {
 }
 
 .filter-group input:focus,
-.filter-group select:focus {
+.filter-group select:focus,
+.filter-group .price-filter-trigger:focus {
     outline: none;
     border-color: #667eea;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 body.glass-theme .filter-group input:focus,
-body.glass-theme .filter-group select:focus {
+body.glass-theme .filter-group select:focus,
+body.glass-theme .filter-group .price-filter-trigger:focus {
     border-color: rgba(255, 255, 255, 0.5);
     box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
 }
@@ -168,47 +175,37 @@ body.glass-theme .filter-group select:focus {
     }
 
     .filter-controls {
-        grid-template-columns: auto auto auto;
-        gap: 5px;
-        padding: 5px;
+        gap: 8px;
+        padding: 6px;
     }
 
     .filter-group input,
-    .filter-group select {
+    .filter-group select,
+    .filter-group .price-filter-trigger {
         width: 120px;
-        padding: 6px;
-        font-size: 14px;
+        height: 34px;
+        padding: 4px 8px;
+        font-size: 13px;
     }
 
     #search {
-        width: 200px;
-    }
-
-    #category-filter {
-        width: 120px;
-    }
-
-    #price-sort {
-        width: 120px;
+        width: 180px;
     }
 }
 
 @media (max-width: 480px) {
+    .filter-controls {
+        gap: 5px;
+    }
 
     .filter-group input,
-    .filter-group select {
+    .filter-group select,
+    .filter-group .price-filter-trigger {
         width: 100px;
+        font-size: 12px;
     }
 
     #search {
-        width: 150px;
-    }
-
-    #category-filter {
-        width: 100px;
-    }
-
-    #price-sort {
-        width: 100px;
+        width: 140px;
     }
 }

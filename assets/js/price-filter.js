@@ -19,10 +19,13 @@ window.VibeDripsPriceFilter = {
             this.config = data.config;
 
             this.setupUI();
-            this.updateForCurrency(window.VibeDrips.currentCurrency);
 
-            // Listen for currency changes
+            // Initial update based on current global currency
+            this.updateForCurrency(window.VibeDrips?.currentCurrency || 'INR');
+
+            // Global Currency Switch Observer
             window.addEventListener('currencyChanged', (e) => {
+                console.log('💱 Currency switch detected:', e.detail.currency);
                 this.updateForCurrency(e.detail.currency);
             });
 
@@ -30,7 +33,7 @@ window.VibeDripsPriceFilter = {
             document.addEventListener('click', (e) => {
                 const group = document.querySelector('.price-filter-group');
                 if (group && !group.contains(e.target)) {
-                    document.querySelector('.price-filter-dropdown')?.classList.remove('active');
+                    this.els.dropdown.classList.remove('active');
                 }
             });
         } catch (error) {
@@ -45,14 +48,28 @@ window.VibeDripsPriceFilter = {
         const controls = document.querySelector('.filter-controls');
         if (!controls) return;
 
-        // Create the group
-        const group = document.createElement('div');
-        group.className = 'filter-group price-filter-group';
+        // Check if group already exists (prevent duplicates during re-init if any)
+        let group = document.querySelector('.price-filter-group');
+        if (!group) {
+            group = document.createElement('div');
+            group.className = 'filter-group price-filter-group';
+
+            // Insert after category-filter group for logical flow
+            const categoryFilter = document.getElementById('category-filter');
+            const categoryGroup = categoryFilter ? categoryFilter.closest('.filter-group') : null;
+
+            if (categoryGroup) {
+                categoryGroup.after(group);
+            } else {
+                controls.appendChild(group);
+            }
+        }
+
         group.innerHTML = `
             <button class="price-filter-trigger" id="price-trigger">Price</button>
             <div class="price-filter-dropdown">
                 <div class="price-filter-header">
-                    <span class="price-filter-title">Budget Range</span>
+                    <span class="price-filter-title">💸 Under the Bag</span>
                     <button class="price-reset-btn" id="price-reset">Reset</button>
                 </div>
                 <div class="price-minimal-row">
@@ -76,16 +93,6 @@ window.VibeDripsPriceFilter = {
                 </div>
             </div>
         `;
-
-        // Insert after category-filter group
-        const categoryFilter = document.getElementById('category-filter');
-        const categoryGroup = categoryFilter ? categoryFilter.closest('.filter-group') : null;
-
-        if (categoryGroup) {
-            categoryGroup.after(group);
-        } else {
-            controls.appendChild(group);
-        }
 
         // Cache elements
         this.els = {
@@ -131,7 +138,10 @@ window.VibeDripsPriceFilter = {
      * Update ranges based on selected currency
      */
     updateForCurrency(currency) {
-        if (!this.config || !this.config.currencies[currency]) return;
+        if (!this.config || !this.config.currencies[currency]) {
+            console.warn('⚠️ No config found for currency:', currency);
+            return;
+        }
 
         const currencyConfig = this.config.currencies[currency];
 
@@ -141,15 +151,16 @@ window.VibeDripsPriceFilter = {
             'CAD': 'C$', 'AUD': 'A$', 'BRL': 'R$', 'MXN': '$', 'AED': 'د.إ',
             'SGD': 'S$', 'SAR': '﷼', 'SEK': 'kr', 'PLN': 'zł'
         };
-        this.currencySymbol = currencyMap[currency] || '';
+        this.currencySymbol = currencyMap[currency] || currency;
 
-        // Update trigger label
+        // Update trigger label with dynamic currency symbol
         this.els.trigger.textContent = `Price ${this.currencySymbol}`;
 
-        this.rangeMin = currencyConfig.range_min;
-        this.rangeMax = currencyConfig.range_max;
-        this.currentMin = currencyConfig.user_min;
-        this.currentMax = currencyConfig.user_max;
+        // Map range keys (with fallback for older versions if they still exist)
+        this.rangeMin = currencyConfig.range_min !== undefined ? currencyConfig.range_min : currencyConfig.min;
+        this.rangeMax = currencyConfig.range_max !== undefined ? currencyConfig.range_max : currencyConfig.max;
+        this.currentMin = currencyConfig.user_min !== undefined ? currencyConfig.user_min : this.rangeMin;
+        this.currentMax = currencyConfig.user_max !== undefined ? currencyConfig.user_max : this.rangeMax;
 
         // Update slider attributes
         this.els.minSlider.min = this.rangeMin;
@@ -176,8 +187,9 @@ window.VibeDripsPriceFilter = {
         this.els.maxDisplay.textContent = `${this.currencySymbol}${this.currentMax.toLocaleString()}${this.currentMax >= this.rangeMax ? '+' : ''}`;
 
         // Update track highlight
-        const minPercent = ((this.currentMin - this.rangeMin) / (this.rangeMax - this.rangeMin)) * 100;
-        const maxPercent = ((this.currentMax - this.rangeMin) / (this.rangeMax - this.rangeMin)) * 100;
+        const range = this.rangeMax - this.rangeMin;
+        const minPercent = range === 0 ? 0 : ((this.currentMin - this.rangeMin) / range) * 100;
+        const maxPercent = range === 0 ? 100 : ((this.currentMax - this.rangeMin) / range) * 100;
 
         this.els.track.style.left = minPercent + '%';
         this.els.track.style.width = (maxPercent - minPercent) + '%';
@@ -268,11 +280,8 @@ window.VibeDripsPriceFilter = {
 };
 
 // Auto-init
-document.addEventListener('DOMContentLoaded', () => {
-    const checkInit = setInterval(() => {
-        if (window.VibeDrips && window.VibeDrips.currentCurrency) {
-            VibeDripsPriceFilter.init();
-            clearInterval(checkInit);
-        }
-    }, 100);
-});
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => VibeDripsPriceFilter.init());
+} else {
+    VibeDripsPriceFilter.init();
+}
