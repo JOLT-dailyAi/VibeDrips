@@ -24,17 +24,11 @@
     opacity: 0.7;
 }
 
-/* Dropdown Menu - V12.0 SURGICAL INHERITANCE (Clean Slate) */
-/* This element inherits ALL visual DNA (Blur, saturate, border, shadow, alpha) */
-/* from the .marketplace-dropdown class assigned in the JS. */
+/* Dropdown Menu - V12.2 PHYSICAL ISOLATION (Single Source) */
+/* Moved to document.body in JS to escape parent inheritance buckets. */
+/* Visual DNA inherited 100% from .marketplace-dropdown in external-controls.css */
 .price-filter-dropdown {
-    position: absolute !important;
-    top: 100% !important;
-    margin-top: 12px !important;
-    left: 0 !important;
-    right: auto !important;
-
-    /* Functional DNA: Only keep local overrides for internal structure */
+    /* Functional DNA ONLY */
     width: 380px !important;
     min-width: 380px !important;
     padding: 8px !important;
@@ -229,7 +223,7 @@
     z-index: 5;
 }
 
-/* Theme Awareness Overrides - Minimal Local Consistency */
+/* Theme Awareness Overrides - Minimal Local Consistency ONLY */
 
 /* KILL rogue borders from global dark-theme rules */
 body.dark-theme .price-filter-group .price-range-container,
@@ -253,4 +247,4 @@ body.light-theme .price-value-input {
     border-color: #667eea;
 }
 
-/* NO Glass/Dark visual overrides needed - they are now inherited from marketplace! */
+/* ALL visual DNA (background, blur, border, shadow) is now inherited from marketplace-dropdown source */
