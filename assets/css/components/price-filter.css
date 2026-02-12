@@ -24,22 +24,30 @@
     opacity: 0.7;
 }
 
-/* Dropdown Menu - V10.9 Inherits from .marketplace-dropdown */
+/* Dropdown Menu - V11.0 NUCLEAR PARITY (Total Substitution) */
+/* Hardcoding every spoon-fed property with !important to end inheritance battles */
 .price-filter-dropdown {
-    /* Critical Overrides for Price Filter Functionality */
-    width: 380px !important;
-    min-width: 380px !important;
-    gap: 15px !important;
-    /* Overrides marketplace 4px gap */
+    position: absolute !important;
+    top: 100% !important;
+    margin-top: 12px !important;
     left: 0 !important;
     right: auto !important;
+    width: 380px !important;
+    min-width: 380px !important;
+    padding: 8px !important;
+    background: rgba(0, 0, 0, 0.45) !important;
+    backdrop-filter: blur(25px) saturate(2) !important;
+    -webkit-backdrop-filter: blur(25px) saturate(2) !important;
+    border: 0.8px solid rgba(255, 255, 255, 0.25) !important;
+    border-radius: 16px !important;
     z-index: 7020 !important;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 15px !important;
+    box-sizing: border-box !important;
 
-    /* Inheritance provides: background, border, shadow, blur, radius, padding */
-
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
+    /* Animation/State */
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
@@ -47,9 +55,9 @@
 }
 
 .price-filter-dropdown.active {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
 }
 
 /* Header with Reset */
@@ -225,12 +233,6 @@
 
 /* Theme Awareness Overrides */
 
-/* Dark Theme - High-Visibility override */
-body.dark-theme .price-filter-dropdown.active {
-    background: rgba(0, 0, 0, 0.85) !important;
-    border: 1px solid rgba(255, 255, 255, 0.45) !important;
-}
-
 /* KILL rogue borders from global dark-theme rules */
 body.dark-theme .price-filter-group .price-range-container,
 body.dark-theme .price-filter-group .price-sliders-wrapper,
@@ -241,9 +243,15 @@ body.dark-theme .price-filter-group input.price-input-range {
     box-shadow: none !important;
 }
 
+/* Dark Theme - High-Visibility override */
+body.dark-theme .price-filter-dropdown.active {
+    background: rgba(0, 0, 0, 0.85) !important;
+    border: 1px solid rgba(255, 255, 255, 0.45) !important;
+}
+
 /* Glass Theme - Absolute Occlusion Override (Maintains 0.95 alpha) */
 body.glass-theme .price-filter-dropdown {
-    background: rgba(var(--color-bg-rgb, 20), 0.95) !important;
+    background: rgba(20, 20, 25, 0.95) !important;
 }
 
 /* Light Theme - Original Baseline override */
