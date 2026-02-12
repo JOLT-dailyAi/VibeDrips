@@ -69,8 +69,7 @@ body.glass-theme .time-category.active {
 
 /* Filter Controls - Standardized Flex Layout */
 .filter-controls {
-    display: inline-flex;
-    /* Wraps content tightly */
+    display: flex;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
@@ -79,8 +78,8 @@ body.glass-theme .time-category.active {
     padding: 8px 12px;
     border-radius: 15px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    margin: 0 auto;
-    /* Center the tightly wrapped container */
+    width: fit-content;
+    margin: 10px auto;
 }
 
 /* Glass theme - Filter Controls Container */
@@ -92,6 +91,7 @@ body.glass-theme .filter-controls {
     box-shadow:
         0 4px 20px rgba(0, 0, 0, 0.1),
         inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    width: fit-content;
 }
 
 .filter-group input,
@@ -100,15 +100,14 @@ body.glass-theme .filter-controls {
     width: 160px;
     height: 38px;
     padding: 6px 12px;
-    border: 2px solid #e2e8f0;
+    border: 2px solid #185a9d;
+    /* Standard Blue Border for Light Theme */
     border-radius: 8px;
     font-size: 14px;
     transition: all 0.3s;
     background: #FFFFFF;
     color: #333;
     box-sizing: border-box;
-    border: 2px solid #185a9d;
-    /* Standard Blue Outline by default for Light Theme */
 }
 
 #search {

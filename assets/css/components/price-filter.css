@@ -99,10 +99,12 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
+    gap: 4px;
+    /* Tighten gap since boxes have internal padding/alignment */
     width: 100%;
 }
 
+/* FIXED WIDTH Containers for values (80px) to prevent overlap */
 .price-value-container {
     width: 80px;
     flex-shrink: 0;
@@ -114,12 +116,12 @@
 /* Alignment Requirements: Min (Right), Max (Left) */
 #price-min-display {
     text-align: right;
-    padding-right: 8px;
+    padding-right: 2px;
 }
 
 #price-max-display {
     text-align: left;
-    padding-left: 8px;
+    padding-left: 2px;
 }
 
 .price-value-box {
@@ -151,15 +153,15 @@
     display: none;
 }
 
-/* Slider Section - Overlap Prevention with Padding */
+/* Slider Section - Absolute Overlap Prevention with Buffer */
 .price-range-container {
     flex: 1;
     position: relative;
     height: 32px;
     display: flex;
     align-items: center;
-    padding: 0 12px;
-    /* Prevent thumbs/track from bleeding into boxes */
+    padding: 0 15px;
+    /* Increased buffer to contain thumbs */
     box-sizing: border-box;
 }
 
@@ -181,9 +183,9 @@
 
 .price-input-range {
     position: absolute;
-    width: calc(100% - 24px);
-    /* Match container padding */
-    left: 12px;
+    width: calc(100% - 30px);
+    /* Exact match for 15px padding on each side */
+    left: 15px;
     top: 50%;
     transform: translateY(-50%);
     background: none !important;
@@ -193,6 +195,7 @@
     margin: 0;
     z-index: 2;
     border: none !important;
+    box-shadow: none !important;
 }
 
 /* Slider Thumb Parity */
@@ -211,11 +214,11 @@
 
 /* Theme Overrides */
 
-/* Dark Theme - Remove dropdown outline */
+/* Dark Theme - No dropdown outline */
 body.dark-theme .price-filter-dropdown {
     background: rgba(10, 5, 25, 0.98);
-    border: none;
-    /* Removed as requested */
+    border: none !important;
+    /* Explicitly removed */
 }
 
 body.glass-theme .price-filter-dropdown {
@@ -230,7 +233,7 @@ body.glass-theme .price-filter-dropdown {
 body.light-theme .price-filter-dropdown {
     background: #FFFFFF;
     border: 2px solid #185a9d;
-    /* Explicit Blue Border */
+    /* Explicit Persistent Blue Border */
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
