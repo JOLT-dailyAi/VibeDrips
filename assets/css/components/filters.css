@@ -69,16 +69,18 @@ body.glass-theme .time-category.active {
 
 /* Filter Controls - Standardized Flex Layout */
 .filter-controls {
-    display: flex;
+    display: inline-flex;
+    /* Wraps content tightly */
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
     gap: 12px;
     background: rgba(255, 255, 255, 0.9);
-    padding: 8px 4px;
-    /* Reduced horizontal padding for centering */
+    padding: 8px 12px;
     border-radius: 15px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+    /* Center the tightly wrapped container */
 }
 
 /* Glass theme - Filter Controls Container */
@@ -105,6 +107,8 @@ body.glass-theme .filter-controls {
     background: #FFFFFF;
     color: #333;
     box-sizing: border-box;
+    border: 2px solid #185a9d;
+    /* Standard Blue Outline by default for Light Theme */
 }
 
 #search {
