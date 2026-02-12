@@ -30,13 +30,13 @@
     top: 100%;
     margin-top: 12px;
     left: 0;
-    width: auto;
+    right: auto;
+    width: max-content;
     min-width: 380px;
-    max-width: 95vw;
-    padding: 12px;
-    /* Standardized with marketplace-dropdown active */
-    background: rgba(var(--color-bg-rgb, 10), 0.85) !important;
-    /* Enhanced Occlusion */
+    padding: 8px;
+    /* Bit-for-bit parity from marketplace-dropdown */
+    background: rgba(var(--color-bg-rgb, 20), 0.95) !important;
+    /* High Occlusion */
     backdrop-filter: blur(25px) saturate(2);
     -webkit-backdrop-filter: blur(25px) saturate(2);
     border: 1px solid rgba(255, 255, 255, 0.25);
@@ -96,13 +96,12 @@
 .price-minimal-row {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    /* Driven by elastic containers */
+    justify-content: space-between;
     width: 100%;
     gap: 10px;
 }
 
-/* Value Containers stretch to either end */
+/* Value Containers - Support for Directional Expansion */
 .price-value-container {
     flex: 1;
     position: relative;
@@ -111,16 +110,14 @@
     min-height: 32px;
 }
 
-#price-min-display {
-    text-align: left;
-    width: 100%;
+/* Min: Align items Right so expansion pushes Left */
+#price-min-container {
+    justify-content: flex-end;
 }
 
-#price-max-display {
-    text-align: right;
-    width: 100%;
-    padding-right: 15px;
-    /* Clearance for the Max Knob */
+/* Max: Align items Left so expansion pushes Right */
+#price-max-container {
+    justify-content: flex-start;
 }
 
 .price-value-box {
@@ -134,16 +131,13 @@
     white-space: nowrap;
 }
 
-/* Expand to the LEFT away from slider for Min, and away from edge for Max */
+/* Common Expansion Base */
 .price-value-input {
     position: absolute;
-    right: 0;
-    /* Anchored Right, grows LEFT */
     top: 50%;
     transform: translateY(-50%);
     width: 80px;
-    background: rgba(0, 0, 0, 0.8);
-    /* Higher contrast for editing */
+    background: rgba(0, 0, 0, 0.9);
     border: 1px solid var(--color-primary);
     border-radius: 4px;
     color: var(--color-white);
@@ -155,7 +149,17 @@
     z-index: 10;
 }
 
-/* Slider Track Area - FIXED CENTER (200px) */
+/* Min Expands LEFT: Anchored Right */
+#price-min-input {
+    right: 0;
+}
+
+/* Max Expands RIGHT: Anchored Left */
+#price-max-input {
+    left: 0;
+}
+
+/* Slider Track Area - 10px Padding Moat logic (v6/v7) */
 .price-range-container {
     width: 200px;
     flex: none;
@@ -164,8 +168,8 @@
     display: flex;
     align-items: center;
     margin: 0;
-    padding: 0;
-    /* Pure 0 padding for edge-to-edge knobs */
+    padding: 0 10px !important;
+    /* The 10px Moat */
     box-sizing: border-box;
     border: none !important;
     outline: none !important;
@@ -189,11 +193,11 @@
     z-index: 1;
 }
 
-/* Range Inputs - Pure Edge-to-Edge */
+/* Range Inputs - Restored Moat width/offset */
 .price-input-range {
     position: absolute;
-    width: 100%;
-    left: 0;
+    width: calc(100% - 20px) !important;
+    left: 10px !important;
     top: 50%;
     transform: translateY(-50%);
     background: none !important;
@@ -245,13 +249,14 @@ body.dark-theme .price-filter-group input.price-input-range {
     box-shadow: none !important;
 }
 
-/* Glass Theme - 1:1 Parity and High Occlusion */
+/* Glass Theme - Bit-for-bit Parity and High Occlusion (0.95) */
 body.glass-theme .price-filter-dropdown {
-    background: rgba(var(--color-bg-rgb, 10), 0.85) !important;
-    /* Darker to hide background text */
+    background: rgba(var(--color-bg-rgb, 20), 0.95) !important;
     backdrop-filter: blur(25px) saturate(2);
     -webkit-backdrop-filter: blur(25px) saturate(2);
     border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 8px;
+    /* Parity */
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
 }
 
