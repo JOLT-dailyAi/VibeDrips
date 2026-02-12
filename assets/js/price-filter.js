@@ -115,23 +115,10 @@ window.VibeDripsPriceFilter = {
             track: document.getElementById('price-track')
         };
 
-        // 🛡️ PHYSICAL ISOLATION: Move dropdown to body to escape filter-controls inheritance
-        document.body.appendChild(this.els.dropdown);
-
         // Attach events
         this.els.trigger.addEventListener('click', (e) => {
             e.stopPropagation();
-            const isActive = this.els.dropdown.classList.toggle('active');
-            if (isActive) {
-                this.repositionDropdown();
-            }
-        });
-
-        // Reposition on window resize
-        window.addEventListener('resize', () => {
-            if (this.els.dropdown.classList.contains('active')) {
-                this.repositionDropdown();
-            }
+            this.els.dropdown.classList.toggle('active');
         });
 
         this.els.reset.addEventListener('click', () => this.reset());
@@ -293,23 +280,6 @@ window.VibeDripsPriceFilter = {
         this.currentMin = this.rangeMin;
         this.currentMax = this.rangeMax;
         this.syncUI();
-    },
-
-    /**
-     * Reposition the isolated dropdown to align with the trigger
-     */
-    repositionDropdown() {
-        if (!this.els.dropdown || !this.els.trigger) return;
-
-        const rect = this.els.trigger.getBoundingClientRect();
-        const scrollX = window.scrollX || window.pageXOffset;
-        const scrollY = window.scrollY || window.pageYOffset;
-
-        // Position directly below trigger
-        this.els.dropdown.style.position = 'absolute';
-        this.els.dropdown.style.top = (rect.bottom + scrollY) + 'px';
-        this.els.dropdown.style.left = (rect.left + scrollX) + 'px';
-        this.els.dropdown.style.marginTop = '12px';
     },
 
     /**

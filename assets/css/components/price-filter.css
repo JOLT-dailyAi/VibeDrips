@@ -24,11 +24,26 @@
     opacity: 0.7;
 }
 
-/* Dropdown Menu - V12.2 PHYSICAL ISOLATION (Single Source) */
-/* Moved to document.body in JS to escape parent inheritance buckets. */
-/* Visual DNA inherited 100% from .marketplace-dropdown in external-controls.css */
+/* Dropdown Menu - V13.0 LITERAL VALUE CLONES */
+/* Hardcoded marketplace visual DNA to bypass inheritance conflicts. */
 .price-filter-dropdown {
-    /* Functional DNA ONLY */
+    position: absolute !important;
+    top: 100% !important;
+    margin-top: 12px !important;
+    left: 0 !important;
+    right: auto !important;
+
+    /* Visual DNA: Literal clones from .marketplace-dropdown in external-controls.css */
+    backdrop-filter: blur(25px) saturate(2) !important;
+    -webkit-backdrop-filter: blur(25px) saturate(2) !important;
+    background: rgba(20, 20, 20, 0.45) !important;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4) !important;
+    border-radius: 16px !important;
+
+    /* Z-Index Lock: Strictly < 100 */
+    z-index: 90 !important;
+
+    /* Functional DNA: Absolute Defaults */
     width: 380px !important;
     min-width: 380px !important;
     padding: 8px !important;
@@ -36,7 +51,6 @@
     display: flex !important;
     flex-direction: column !important;
     box-sizing: border-box !important;
-    z-index: 7020 !important;
     unicode-bidi: isolate !important;
 
     /* Animation/State */
@@ -235,7 +249,25 @@ body.dark-theme .price-filter-group input.price-input-range {
     box-shadow: none !important;
 }
 
-/* Light Theme Text Sync */
+/* Body Classes Overrides - Restoring Prominent Border Identities */
+
+/* Glass Theme Border Parity */
+body.glass-theme .price-filter-dropdown {
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+}
+
+/* Dark Theme Restoration */
+body.dark-theme .price-filter-dropdown {
+    background: rgba(0, 0, 0, 0.85) !important;
+    border: 1px solid rgba(255, 255, 255, 0.45) !important;
+}
+
+/* Light Theme Restoration */
+body.light-theme .price-filter-dropdown {
+    background: rgba(255, 255, 255, 0.98) !important;
+    border: 2px solid rgba(102, 126, 234, 0.7) !important;
+}
+
 body.light-theme .price-filter-title,
 body.light-theme .price-value-box {
     color: var(--color-primary);
@@ -246,5 +278,3 @@ body.light-theme .price-value-input {
     color: #1a202c;
     border-color: #667eea;
 }
-
-/* ALL visual DNA (background, blur, border, shadow) is now inherited from marketplace-dropdown source */
