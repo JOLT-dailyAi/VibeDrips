@@ -170,9 +170,9 @@ window.VibeDripsPriceFilter = {
         this.currentMin = this.rangeMin;
         this.currentMax = this.rangeMax;
 
-        // Update slider attributes - Strictly start at rangeMin
-        this.els.minSlider.min = this.rangeMin;
-        this.els.maxSlider.min = this.rangeMin;
+        // Update slider attributes - Strictly start at 0 for clean baseline
+        this.els.minSlider.min = 0;
+        this.els.maxSlider.min = 0;
         this.els.minSlider.max = this.rangeMax;
         this.els.maxSlider.max = this.rangeMax;
         this.els.minSlider.step = currencyConfig.step || 1;
@@ -194,14 +194,14 @@ window.VibeDripsPriceFilter = {
         this.els.minDisplay.textContent = `${this.currencySymbol}${this.currentMin.toLocaleString()}`;
         this.els.maxDisplay.textContent = `${this.currencySymbol}${this.currentMax.toLocaleString()}${this.currentMax >= this.rangeMax ? '+' : ''}`;
 
-        // Update track highlight - Localized calculation
-        const range = this.rangeMax - this.rangeMin;
+        // Update track highlight - 0 Baseline calculation
+        const range = this.rangeMax;
         if (range <= 0) {
             this.els.track.style.left = '0%';
             this.els.track.style.width = '100%';
         } else {
-            const minPercent = ((this.currentMin - this.rangeMin) / range) * 100;
-            const maxPercent = ((this.currentMax - this.rangeMin) / range) * 100;
+            const minPercent = (this.currentMin / range) * 100;
+            const maxPercent = (this.currentMax / range) * 100;
             this.els.track.style.left = minPercent + '%';
             this.els.track.style.width = (maxPercent - minPercent) + '%';
         }
