@@ -24,15 +24,19 @@
     opacity: 0.7;
 }
 
-/* Dropdown Menu - Standard Base (Exact 1:1 Twin to marketplace-dropdown) */
+/* Dropdown Menu - Flexible Center Architecture */
 .price-filter-dropdown {
     position: absolute;
     top: 100%;
     margin-top: 12px;
     left: 0;
-    width: 380px;
-    padding: 20px;
-    background: rgba(var(--color-bg-rgb, 20), 0.45);
+    width: auto;
+    min-width: 380px;
+    max-width: 95vw;
+    padding: 12px;
+    /* Standardized with marketplace-dropdown active */
+    background: rgba(var(--color-bg-rgb, 10), 0.85) !important;
+    /* Enhanced Occlusion */
     backdrop-filter: blur(25px) saturate(2);
     -webkit-backdrop-filter: blur(25px) saturate(2);
     border: 1px solid rgba(255, 255, 255, 0.25);
@@ -40,7 +44,6 @@
     z-index: 7020;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
 
-    /* Animation Deep Parity */
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -63,6 +66,7 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    padding: 0 4px;
 }
 
 .price-filter-title {
@@ -88,33 +92,35 @@
     color: var(--color-white);
 }
 
-/* Row Layout - Standardized Centering */
+/* Symmetrical Layout - Fixed Center, Elastic Ends */
 .price-minimal-row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
+    /* Driven by elastic containers */
     width: 100%;
-    gap: 12px;
+    gap: 10px;
 }
 
-/* Fixed width containers keep the slider perfectly centered */
+/* Value Containers stretch to either end */
 .price-value-container {
-    width: 85px;
-    /* Sized for max currency length to prevent jumping */
-    flex-shrink: 0;
+    flex: 1;
+    position: relative;
     display: flex;
     align-items: center;
     min-height: 32px;
 }
 
 #price-min-display {
-    text-align: right;
+    text-align: left;
     width: 100%;
 }
 
 #price-max-display {
-    text-align: left;
+    text-align: right;
     width: 100%;
+    padding-right: 15px;
+    /* Clearance for the Max Knob */
 }
 
 .price-value-box {
@@ -128,13 +134,16 @@
     white-space: nowrap;
 }
 
-.price-value-box:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
-
+/* Expand to the LEFT away from slider for Min, and away from edge for Max */
 .price-value-input {
-    width: 100%;
-    background: rgba(0, 0, 0, 0.4);
+    position: absolute;
+    right: 0;
+    /* Anchored Right, grows LEFT */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 80px;
+    background: rgba(0, 0, 0, 0.8);
+    /* Higher contrast for editing */
     border: 1px solid var(--color-primary);
     border-radius: 4px;
     color: var(--color-white);
@@ -143,18 +152,20 @@
     text-align: center;
     outline: none;
     display: none;
+    z-index: 10;
 }
 
-/* Slider Track Area - BORDERLESS and FULL WIDTH */
+/* Slider Track Area - FIXED CENTER (200px) */
 .price-range-container {
-    flex: 1;
+    width: 200px;
+    flex: none;
     position: relative;
     height: 32px;
     display: flex;
     align-items: center;
     margin: 0;
     padding: 0;
-    /* Zero padding for edge-to-edge movement */
+    /* Pure 0 padding for edge-to-edge knobs */
     box-sizing: border-box;
     border: none !important;
     outline: none !important;
@@ -178,13 +189,11 @@
     z-index: 1;
 }
 
-/* Range Inputs - Total Edge-to-Edge */
+/* Range Inputs - Pure Edge-to-Edge */
 .price-input-range {
     position: absolute;
     width: 100%;
-    /* Pure 100% width */
     left: 0;
-    /* Pure 0 offset */
     top: 50%;
     transform: translateY(-50%);
     background: none !important;
@@ -198,7 +207,7 @@
     padding: 0 !important;
 }
 
-/* Remove blur regression from inputs in glass theme */
+/* Nuclear Blur Kill in Glass Theme */
 .price-input-range {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
@@ -224,7 +233,6 @@
 body.dark-theme .price-filter-dropdown.active {
     background: rgba(10, 5, 25, 0.95);
     border: 1px solid rgba(255, 255, 255, 0.3) !important;
-    /* Brighter border like requested */
 }
 
 /* KILL rogue borders from global dark-theme rules */
@@ -237,9 +245,10 @@ body.dark-theme .price-filter-group input.price-input-range {
     box-shadow: none !important;
 }
 
-/* Glass Theme - 1:1 Parity and Background Seclusion */
+/* Glass Theme - 1:1 Parity and High Occlusion */
 body.glass-theme .price-filter-dropdown {
-    background: rgba(var(--color-bg-rgb, 20), 0.45);
+    background: rgba(var(--color-bg-rgb, 10), 0.85) !important;
+    /* Darker to hide background text */
     backdrop-filter: blur(25px) saturate(2);
     -webkit-backdrop-filter: blur(25px) saturate(2);
     border: 1px solid rgba(255, 255, 255, 0.25);
