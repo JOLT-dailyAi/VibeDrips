@@ -936,21 +936,50 @@ function generateRecentDropsJSON(products) {
   };
 }
 
-function generateUnderTheBagJSON() {
+function generateUnderTheBagJSON(allProducts) {
+  const currencyRanges = {};
+
+  // Group by currency and find min/max
+  allProducts.forEach(product => {
+    const currency = product.currency || 'MISC';
+    const price = parseFloat(product.price);
+
+    if (isNaN(price) || price <= 0) return;
+
+    if (!currencyRanges[currency]) {
+      currencyRanges[currency] = {
+        min: price,
+        max: price
+      };
+    } else {
+      currencyRanges[currency].min = Math.min(currencyRanges[currency].min, price);
+      currencyRanges[currency].max = Math.max(currencyRanges[currency].max, price);
+    }
+  });
+
+  const currenciesConfig = {};
+  Object.keys(currencyRanges).forEach(currency => {
+    const range = currencyRanges[currency];
+    currenciesConfig[currency] = {
+      // Bounds for the sliders
+      range_min: Math.floor(range.min),
+      range_max: Math.ceil(range.max),
+      // Default selection (Show All)
+      user_min: Math.floor(range.min),
+      user_max: Math.ceil(range.max),
+      // UI Metadata
+      step: 1,
+      allow_free_input: true,
+      has_reset: true
+    };
+  });
+
   return {
     config: {
       title: "💸 Under the Bag",
       enabled: true,
       last_updated: new Date().toISOString(),
-      currencies: {
-        'INR': { default_budget: 5000, slider_min: 500, slider_max: 50000, step: 500 },
-        'USD': { default_budget: 80, slider_min: 10, slider_max: 1000, step: 10 },
-        'AUD': { default_budget: 120, slider_min: 20, slider_max: 1500, step: 20 },
-        'CAD': { default_budget: 100, slider_min: 20, slider_max: 1500, step: 20 },
-        'GBP': { default_budget: 60, slider_min: 10, slider_max: 800, step: 10 },
-        'EUR': { default_budget: 75, slider_min: 10, slider_max: 1000, step: 10 },
-        'JPY': { default_budget: 10000, slider_min: 1000, slider_max: 100000, step: 1000 }
-      },
+      currencies: currenciesConfig,
       tier_labels: ["Best Value", "Budget Pick", "High-value"],
       max_variants_per_group: 3
     }
@@ -1853,7 +1882,7 @@ ${deletedFiles.length > 0 ? deletedFiles.map(file => `- ${file}`).join('\n') : '
         const recentDropsResult = generateRecentDropsJSON(allProducts);
         fs.writeFileSync(path.join(dataDir, 'recent-drops.json'), JSON.stringify(recentDropsResult, null, 2));
 
-        const underTheBagResult = generateUnderTheBagJSON();
+        const underTheBagResult = generateUnderTheBagJSON(allProducts);
         fs.writeFileSync(path.join(dataDir, 'UnderTheBag.json'), JSON.stringify(underTheBagResult, null, 2));
 
         const brandsData = generateBrandsJSON(allProducts);

@@ -148,7 +148,11 @@ function applyCurrentFilters() {
                 product.category === categoryValue ||
                 product.subcategory === categoryValue;
 
-            return matchesSearch && matchesCategory;
+            // NEW: Price range matching
+            const matchesPrice = !window.VibeDripsPriceFilter ||
+                window.VibeDripsPriceFilter.matches(product.price);
+
+            return matchesSearch && matchesCategory && matchesPrice;
         });
     }
 }

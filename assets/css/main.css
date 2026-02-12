@@ -27,6 +27,7 @@
 @import url('./components/lightbox.css');
 @import url('./components/engagement-pill.css');
 @import url('./components/deeplink-nudge.css');
+@import url('./components/price-filter.css');
 
 /* States */
 @import url('./states/loading.css');
