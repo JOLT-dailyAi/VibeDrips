@@ -249,13 +249,15 @@ body.dark-theme .price-filter-group input.price-input-range {
     box-shadow: none !important;
 }
 
-/* Glass Theme - Corrected bit-for-bit Parity and High Occlusion (0.95) with Prominent Border */
+/* Glass Theme - Exact Spoon-Fed Parity and High Occlusion (0.95) */
 body.glass-theme .price-filter-dropdown {
     background: rgba(var(--color-bg-rgb, 20), 0.95) !important;
-    backdrop-filter: blur(25px) saturate(2);
-    -webkit-backdrop-filter: blur(25px) saturate(2);
-    border: 1px solid rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(25px) saturate(2) !important;
+    -webkit-backdrop-filter: blur(25px) saturate(2) !important;
+    border: 0.8px solid rgba(255, 255, 255, 0.25) !important;
+    border-radius: 16px;
     padding: 8px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4) !important;
 }
 
 /* Reverted Light Theme - Restored Prominent Outline */
