@@ -58,14 +58,16 @@ body.dark-theme .filter-controls {
 }
 
 body.dark-theme .filter-group input,
-body.dark-theme .filter-group select {
+body.dark-theme .filter-group select,
+body.dark-theme .filter-group .price-filter-trigger {
     background: #333333;
     color: #FFFFFF;
     border: 2px solid rgba(255, 255, 255, 0.3) !important;
 }
 
 body.dark-theme .filter-group input:focus,
-body.dark-theme .filter-group select:focus {
+body.dark-theme .filter-group select:focus,
+body.dark-theme .filter-group .price-filter-trigger:focus {
     border-color: #667eea;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }

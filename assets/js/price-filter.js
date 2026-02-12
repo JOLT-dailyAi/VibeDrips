@@ -21,11 +21,13 @@ window.VibeDripsPriceFilter = {
             this.setupUI();
 
             // Initial update based on current global currency
-            this.updateForCurrency(window.VibeDrips?.currentCurrency || 'INR');
+            if (window.VibeDrips && window.VibeDrips.currentCurrency) {
+                this.updateForCurrency(window.VibeDrips.currentCurrency);
+            }
 
             // Global Currency Switch Observer
             window.addEventListener('currencyChanged', (e) => {
-                console.log('💱 Currency switch detected:', e.detail.currency);
+                console.log('💱 Currency switch detected by Price Filter:', e.detail.currency);
                 this.updateForCurrency(e.detail.currency);
             });
 
@@ -48,7 +50,7 @@ window.VibeDripsPriceFilter = {
         const controls = document.querySelector('.filter-controls');
         if (!controls) return;
 
-        // Check if group already exists (prevent duplicates during re-init if any)
+        // Check if group already exists (prevent duplicates)
         let group = document.querySelector('.price-filter-group');
         if (!group) {
             group = document.createElement('div');
@@ -65,6 +67,7 @@ window.VibeDripsPriceFilter = {
             }
         }
 
+        // Layout: [Min] --- [Slider] --- [Max]
         group.innerHTML = `
             <button class="price-filter-trigger" id="price-trigger">Price</button>
             <div class="price-filter-dropdown">
@@ -73,11 +76,13 @@ window.VibeDripsPriceFilter = {
                     <button class="price-reset-btn" id="price-reset">Reset</button>
                 </div>
                 <div class="price-minimal-row">
+                    <!-- Left: Min Value -->
                     <div class="price-value-container">
                         <div class="price-value-box" id="price-min-display"></div>
                         <input type="number" class="price-value-input" id="price-min-input">
                     </div>
                     
+                    <!-- Center: Slider Body -->
                     <div class="price-range-container">
                         <div class="price-sliders-wrapper">
                             <div class="price-slider-track" id="price-track"></div>
@@ -86,6 +91,7 @@ window.VibeDripsPriceFilter = {
                         <input type="range" class="price-input-range" id="price-max-slider">
                     </div>
 
+                    <!-- Right: Max Value -->
                     <div class="price-value-container">
                         <div class="price-value-box" id="price-max-display"></div>
                         <input type="number" class="price-value-input" id="price-max-input">
@@ -156,11 +162,13 @@ window.VibeDripsPriceFilter = {
         // Update trigger label with dynamic currency symbol
         this.els.trigger.textContent = `Price ${this.currencySymbol}`;
 
-        // Map range keys (with fallback for older versions if they still exist)
+        // Map range keys
         this.rangeMin = currencyConfig.range_min !== undefined ? currencyConfig.range_min : currencyConfig.min;
         this.rangeMax = currencyConfig.range_max !== undefined ? currencyConfig.range_max : currencyConfig.max;
-        this.currentMin = currencyConfig.user_min !== undefined ? currencyConfig.user_min : this.rangeMin;
-        this.currentMax = currencyConfig.user_max !== undefined ? currencyConfig.user_max : this.rangeMax;
+
+        // Set current selection to full range on currency switch
+        this.currentMin = this.rangeMin;
+        this.currentMax = this.rangeMax;
 
         // Update slider attributes
         this.els.minSlider.min = this.rangeMin;

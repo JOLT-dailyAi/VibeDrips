@@ -75,7 +75,8 @@ body.glass-theme .time-category.active {
     flex-wrap: wrap;
     gap: 12px;
     background: rgba(255, 255, 255, 0.9);
-    padding: 8px 12px;
+    padding: 8px 4px;
+    /* Reduced horizontal padding for centering */
     border-radius: 15px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }

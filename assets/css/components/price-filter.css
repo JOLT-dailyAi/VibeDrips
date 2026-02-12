@@ -17,7 +17,10 @@
     justify-content: space-between;
     align-items: center;
     gap: 8px;
-    /* transition and other basics inherited */
+    background: transparent;
+    /* Let inheritance handle it */
+    border: none;
+    /* Inherited classes like .filter-group input handle this */
 }
 
 .price-filter-trigger::after {
@@ -38,13 +41,13 @@
     background: rgba(15, 10, 40, 0.95);
     backdrop-filter: blur(25px);
     border-radius: var(--radius-md);
-    z-index: 1000;
+    z-index: 2000;
+    /* Higher than other elements */
     box-shadow: var(--shadow-xl);
     display: none;
     flex-direction: column;
     gap: 15px;
     box-sizing: border-box;
-    /* Theme overrides for dropdown border below */
 }
 
 .price-filter-dropdown.active {
@@ -73,7 +76,7 @@
 }
 
 .price-filter-title {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     font-weight: 700;
     color: var(--color-white);
     opacity: 0.9;
@@ -95,12 +98,14 @@
     color: var(--color-white);
 }
 
-/* Single Line Layout: [min] --- slider --- [max] */
+/* Single Line Layout: [min] --- slider --- [max] 
+   Order is strictly enforced in JS but CSS handles the flow.
+*/
 .price-minimal-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 10px;
+    gap: 8px;
     width: 100%;
 }
 
@@ -110,6 +115,8 @@
     flex-shrink: 0;
     display: flex;
     justify-content: center;
+    align-items: center;
+    min-height: 32px;
 }
 
 .price-value-box {
@@ -117,14 +124,12 @@
     text-align: center;
     cursor: pointer;
     font-weight: 700;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     color: var(--color-white);
-    padding: 4px 0;
+    padding: 6px 0;
     border-radius: 4px;
     transition: background 0.15s ease;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .price-value-box:hover {
@@ -138,7 +143,7 @@
     border-radius: 4px;
     color: var(--color-white);
     padding: 4px;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     text-align: center;
     outline: none;
     display: none;
@@ -148,9 +153,11 @@
 .price-range-container {
     flex: 1;
     position: relative;
-    height: 20px;
+    height: 32px;
     display: flex;
     align-items: center;
+    /* Ensure clear separation from side containers */
+    margin: 0 4px;
 }
 
 .price-sliders-wrapper {
@@ -174,30 +181,47 @@
     width: 100%;
     top: 50%;
     transform: translateY(-50%);
-    background: none;
+    background: none !important;
     pointer-events: none;
     -webkit-appearance: none;
     appearance: none;
     margin: 0;
     z-index: 2;
+    border: none !important;
+    box-shadow: none !important;
 }
 
+/* Unified Slider Thumb Style for Min and Max - Prevents invisibility */
 .price-input-range::-webkit-slider-thumb {
-    height: 18px;
-    width: 18px;
+    height: 20px;
+    width: 20px;
     border-radius: 50%;
-    background: var(--color-white);
-    border: 3px solid #185a9d;
+    background: #FFFFFF !important;
+    border: 4px solid #185a9d !important;
+    /* Fixed blue border to prevent white-on-white */
     cursor: pointer;
     pointer-events: auto;
     -webkit-appearance: none;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+    z-index: 5;
 }
 
-/* Dropdown Theme Parity (Inheritance handled for trigger) */
+.price-input-range::-moz-range-thumb {
+    height: 16px;
+    width: 16px;
+    border-radius: 50%;
+    background: #FFFFFF !important;
+    border: 4px solid #185a9d !important;
+    cursor: pointer;
+    pointer-events: auto;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+    z-index: 5;
+}
+
+/* Dropdown Theme Parity */
 
 body.dark-theme .price-filter-dropdown {
-    background: rgba(0, 0, 0, 0.95);
+    background: rgba(10, 5, 25, 0.98);
     border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
@@ -210,16 +234,18 @@ body.glass-theme .price-filter-dropdown {
 }
 
 body.light-theme .price-filter-dropdown {
-    background: white;
-    border: 1px solid var(--color-border);
+    background: #FFFFFF;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 body.light-theme .price-filter-title,
 body.light-theme .price-value-box {
-    color: var(--color-text-dark);
+    color: #1a202c;
 }
 
 body.light-theme .price-value-input {
-    background: #f8f9fa;
-    color: var(--color-text-dark);
+    background: #f7fafc;
+    color: #1a202c;
+    border-color: #667eea;
 }
