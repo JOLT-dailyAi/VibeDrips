@@ -24,14 +24,14 @@
     opacity: 0.7;
 }
 
-/* Dropdown Menu - V13.0 LITERAL VALUE CLONES */
-/* Hardcoded marketplace visual DNA to bypass inheritance conflicts. */
+/* Dropdown Menu - V13.0 LITERAL VALUE CLONES + POSITIONAL CENTERING v14.23 */
 .price-filter-dropdown {
-    position: absolute !important;
-    top: 100% !important;
-    margin-top: 12px !important;
-    left: 0 !important;
-    right: auto !important;
+    position: fixed !important;
+    /* Fixed to viewport */
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    /* Center alignment */
 
     /* Visual DNA: Nuclear Readability v13.3 */
     backdrop-filter: blur(30px) saturate(4) brightness(0.7) !important;
@@ -40,8 +40,8 @@
     box-shadow: 0 12px 60px rgba(0, 0, 0, 0.7) !important;
     border-radius: 16px !important;
 
-    /* Z-Index Lock: Strictly < 100 */
-    z-index: 90 !important;
+    /* Z-Index Lock: Layer with modals */
+    z-index: 10001 !important;
 
     /* Functional DNA: Absolute Defaults */
     width: 380px !important;
@@ -56,27 +56,18 @@
     /* Animation/State */
     opacity: 0;
     visibility: hidden;
-    transform: translateY(-10px);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-    /* Phase 14: Responsive Centering & Fluid Width */
+    /* Phase 14: Responsive Fluidity (Maintains Centering) */
     @media (max-width: 480px) {
         width: calc(100vw - 32px) !important;
         min-width: 0 !important;
-        left: 50% !important;
-        right: auto !important;
-        transform: translateX(-50%) translateY(-10px) !important;
     }
 }
 
 .price-filter-dropdown.active {
     opacity: 1 !important;
     visibility: visible !important;
-    transform: translateY(0) !important;
-
-    @media (max-width: 480px) {
-        transform: translateX(-50%) translateY(0) !important;
-    }
 }
 
 /* Header with Reset */
