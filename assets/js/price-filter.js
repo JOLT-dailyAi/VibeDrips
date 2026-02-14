@@ -34,6 +34,7 @@ window.VibeDripsPriceFilter = {
             // Close dropdown when clicking outside
             document.addEventListener('click', (e) => {
                 if (this.els && this.els.dropdown && this.els.trigger) {
+                    // Check if click is outside BOTH the trigger and the (portal'ed) dropdown
                     if (!this.els.dropdown.contains(e.target) && !this.els.trigger.contains(e.target)) {
                         this.els.dropdown.classList.remove('active');
                     }
@@ -51,13 +52,12 @@ window.VibeDripsPriceFilter = {
         const controls = document.querySelector('.filter-controls');
         if (!controls) return;
 
-        // Check if group already exists (prevent duplicates)
+        // 1. Create/Ensure the Trigger Group (remains in the filter controls)
         let group = document.querySelector('.price-filter-group');
         if (!group) {
             group = document.createElement('div');
             group.className = 'filter-group price-filter-group';
 
-            // Insert after category-filter group for logical flow
             const categoryFilter = document.getElementById('category-filter');
             const categoryGroup = categoryFilter ? categoryFilter.closest('.filter-group') : null;
 
@@ -68,35 +68,38 @@ window.VibeDripsPriceFilter = {
             }
         }
 
-        // Layout: [Min] --- [Slider] --- [Max]
-        group.innerHTML = `
-            <button class="price-filter-trigger" id="price-trigger">Price</button>
-            <div class="price-filter-dropdown marketplace-dropdown">
-                <div class="price-filter-header">
-                    <span class="price-filter-title">💸 Under the Bag</span>
-                    <button class="price-reset-btn" id="price-reset">Reset</button>
-                </div>
-                <div class="price-minimal-row">
-                    <!-- Left: Min Value -->
-                    <div class="price-value-container">
-                        <div class="price-value-box" id="price-min-display"></div>
-                        <input type="number" class="price-value-input" id="price-min-input">
-                    </div>
-                    
-                    <!-- Center: Slider Body -->
-                    <div class="price-range-container">
-                        <div class="price-sliders-wrapper">
-                            <div class="price-slider-track" id="price-track"></div>
-                        </div>
-                        <input type="range" class="price-input-range" id="price-min-slider">
-                        <input type="range" class="price-input-range" id="price-max-slider">
-                    </div>
+        // Just the Trigger remains here
+        group.innerHTML = `<button class="price-filter-trigger" id="price-trigger">Price</button>`;
 
-                    <!-- Right: Max Value -->
-                    <div class="price-value-container">
-                        <div class="price-value-box" id="price-max-display"></div>
-                        <input type="number" class="price-value-input" id="price-max-input">
+        // 2. Create/Ensure the Dropdown (moves to body to fix 'fixed' positioning)
+        let dropdown = document.getElementById('price-filter-dropdown-portal');
+        if (!dropdown) {
+            dropdown = document.createElement('div');
+            dropdown.id = 'price-filter-dropdown-portal';
+            dropdown.className = 'price-filter-dropdown marketplace-dropdown';
+            document.body.appendChild(dropdown);
+        }
+
+        dropdown.innerHTML = `
+            <div class="price-filter-header">
+                <span class="price-filter-title">💸 Under the Bag</span>
+                <button class="price-reset-btn" id="price-reset">Reset</button>
+            </div>
+            <div class="price-minimal-row">
+                <div class="price-value-container">
+                    <div class="price-value-box" id="price-min-display"></div>
+                    <input type="number" class="price-value-input" id="price-min-input">
+                </div>
+                <div class="price-range-container">
+                    <div class="price-sliders-wrapper">
+                        <div class="price-slider-track" id="price-track"></div>
                     </div>
+                    <input type="range" class="price-input-range" id="price-min-slider">
+                    <input type="range" class="price-input-range" id="price-max-slider">
+                </div>
+                <div class="price-value-container">
+                    <div class="price-value-box" id="price-max-display"></div>
+                    <input type="number" class="price-value-input" id="price-max-input">
                 </div>
             </div>
         `;
@@ -104,14 +107,14 @@ window.VibeDripsPriceFilter = {
         // Cache elements
         this.els = {
             trigger: document.getElementById('price-trigger'),
-            dropdown: group.querySelector('.price-filter-dropdown'),
+            dropdown: document.getElementById('price-filter-dropdown-portal'),
             reset: document.getElementById('price-reset'),
+            minSlider: document.getElementById('price-min-slider'),
+            maxSlider: document.getElementById('price-max-slider'),
             minDisplay: document.getElementById('price-min-display'),
             maxDisplay: document.getElementById('price-max-display'),
             minInput: document.getElementById('price-min-input'),
             maxInput: document.getElementById('price-max-input'),
-            minSlider: document.getElementById('price-min-slider'),
-            maxSlider: document.getElementById('price-max-slider'),
             track: document.getElementById('price-track')
         };
 
@@ -161,7 +164,7 @@ window.VibeDripsPriceFilter = {
         this.currencySymbol = currencyMap[currency] || currency;
 
         // Update trigger label with dynamic currency symbol
-        this.els.trigger.textContent = `Price ${this.currencySymbol}`;
+        this.els.trigger.textContent = `Price ${this.currencySymbol} `;
 
         // Map range keys
         this.rangeMin = currencyConfig.range_min !== undefined ? currencyConfig.range_min : (currencyConfig.min || 0);
@@ -192,8 +195,8 @@ window.VibeDripsPriceFilter = {
         this.els.maxInput.value = this.currentMax;
 
         // Update human-readable labels
-        this.els.minDisplay.textContent = `${this.currencySymbol}${this.currentMin.toLocaleString()}`;
-        this.els.maxDisplay.textContent = `${this.currencySymbol}${this.currentMax.toLocaleString()}${this.currentMax >= this.rangeMax ? '+' : ''}`;
+        this.els.minDisplay.textContent = `${this.currencySymbol}${this.currentMin.toLocaleString()} `;
+        this.els.maxDisplay.textContent = `${this.currencySymbol}${this.currentMax.toLocaleString()}${this.currentMax >= this.rangeMax ? '+' : ''} `;
 
         // Update track highlight - 0 Baseline calculation
         const range = this.rangeMax;
