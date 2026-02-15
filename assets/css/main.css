@@ -8,6 +8,7 @@
 @import url('./layout/header.css');
 @import url('./layout/footer.css');
 @import url('./layout/grid.css');
+@import url('./layout/discovery-rails.css');
 
 /* Components */
 @import url('./components/filters.css');

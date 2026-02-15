@@ -5,16 +5,31 @@ function setTimeFilter(filter) {
     console.log(`Setting time filter: ${filter}`);
     VibeDrips.currentTimeFilter = filter;
 
+    // Phase_26: Support Discovery vs Sub-filters
+    const discoverySubFilters = ['hot', 'featured', 'new', 'trending'];
+    const isDiscoverySubFilter = discoverySubFilters.includes(filter);
+    const activeMainFilter = (isDiscoverySubFilter || filter === 'discovery') ? 'discovery' : filter;
+
     // Update active filter UI
     document.querySelectorAll('.time-category').forEach(cat => {
         cat.classList.remove('active');
-        if (cat.getAttribute('data-filter') === filter) {
+        if (cat.getAttribute('data-filter') === activeMainFilter) {
             cat.classList.add('active');
         }
     });
 
+    // Update Dropdown Items Active State
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+        item.classList.remove('active');
+        // We'll use a simple text match or data-category if we added it, 
+        // but for now let's just match the filter if it's a sub-filter
+    });
+
     // Filter products based on selected filter
     switch (filter) {
+        case 'discovery':
+            VibeDrips.filteredProducts = [...VibeDrips.allProducts];
+            break;
         case 'hot':
             VibeDrips.filteredProducts = getHotProducts();
             break;
@@ -226,15 +241,123 @@ function renderProducts() {
         return;
     }
 
-    // Clear container and add cards directly (no wrapper needed)
-    container.innerHTML = '';
+    // PHASE_26: Discovery Rails vs Grid View
+    const searchInput = VibeDrips.elements.search;
+    const categoryFilter = VibeDrips.elements.categoryFilter;
+    const hasSearch = searchInput && searchInput.value.trim().length > 0;
+    const hasCategory = categoryFilter && categoryFilter.value.trim().length > 0;
 
-    VibeDrips.filteredProducts.forEach(product => {
-        const productCard = createProductCard(product);
-        container.appendChild(productCard);
-    });
+    const discoverySubFilters = ['hot', 'featured', 'new', 'trending', 'discovery'];
+    const isDiscoveryMode = discoverySubFilters.includes(VibeDrips.currentTimeFilter);
+
+    if (isDiscoveryMode && !hasSearch && !hasCategory) {
+        renderDiscoveryRails();
+    } else {
+        // Clear container and add cards directly (no wrapper needed)
+        container.innerHTML = '';
+        VibeDrips.filteredProducts.forEach(product => {
+            const productCard = createProductCard(product);
+            container.appendChild(productCard);
+        });
+    }
 
     updateStats();
+}
+
+/**
+ * PHASE_26: Render Netflix-style horizontal rails for different time-categories
+ */
+function renderDiscoveryRails() {
+    const container = VibeDrips.elements.productsContainer;
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    let categories = [
+        { id: 'hot', title: '🔥 Hot This Month', subtitle: 'Trending products that just dropped' },
+        { id: 'featured', title: '⭐ Featured', subtitle: 'Our hand-picked recommendations' },
+        { id: 'new', title: '🆕 New Arrivals', subtitle: 'Fresh drops from the last 30 days' },
+        { id: 'trending', title: '📈 Trending Now', subtitle: 'What everyone is talking about' }
+    ];
+
+    // If a specific sub-category is selected, only show that rail
+    const currentFilter = VibeDrips.currentTimeFilter;
+    if (['hot', 'featured', 'new', 'trending'].includes(currentFilter)) {
+        categories = categories.filter(cat => cat.id === currentFilter);
+    }
+
+    categories.forEach(cat => {
+        let railProducts = [];
+        switch (cat.id) {
+            case 'hot': railProducts = getHotProducts(); break;
+            case 'featured': railProducts = VibeDrips.allProducts.filter(p => p.featured); break;
+            case 'new': railProducts = getNewArrivals(); break;
+            case 'trending': railProducts = VibeDrips.allProducts.filter(p => p.trending); break;
+        }
+
+        if (railProducts.length > 0) {
+            const railSection = createDiscoveryRail(cat, railProducts);
+            container.appendChild(railSection);
+        }
+    });
+
+    // If no specific categories found, fallback to grid (shouldn't happen with valid data)
+    if (container.children.length === 0) {
+        VibeDrips.filteredProducts.forEach(product => {
+            container.appendChild(createProductCard(product));
+        });
+    }
+}
+
+/**
+ * PHASE_26: Create a single discovery rail element
+ */
+function createDiscoveryRail(category, products) {
+    const rail = document.createElement('div');
+    rail.className = 'discovery-rail';
+    rail.dataset.categoryId = category.id;
+
+    rail.innerHTML = `
+        <div class="rail-header">
+            <div class="rail-info">
+                <h3 class="rail-title">${category.title}</h3>
+                <span class="rail-subtitle">${category.subtitle}</span>
+            </div>
+            <button class="rail-view-all" onclick="setTimeFilter('${category.id}')">View All →</button>
+        </div>
+        <div class="rail-container-wrapper">
+            <button class="rail-nav-btn prev" aria-label="Previous">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+            <div class="rail-container"></div>
+            <button class="rail-nav-btn next" aria-label="Next">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+        </div>
+    `;
+
+    const railContainer = rail.querySelector('.rail-container');
+    products.forEach(product => {
+        railContainer.appendChild(createProductCard(product));
+    });
+
+    // Add navigation logic
+    const prevBtn = rail.querySelector('.rail-nav-btn.prev');
+    const nextBtn = rail.querySelector('.rail-nav-btn.next');
+
+    prevBtn.onclick = () => {
+        railContainer.scrollBy({ left: -window.innerWidth * 0.8, behavior: 'smooth' });
+    };
+
+    nextBtn.onclick = () => {
+        railContainer.scrollBy({ left: window.innerWidth * 0.8, behavior: 'smooth' });
+    };
+
+    return rail;
 }
 
 // ============================================
