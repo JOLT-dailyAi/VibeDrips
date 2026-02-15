@@ -251,8 +251,10 @@ function renderProducts() {
     const isDiscoveryMode = discoverySubFilters.includes(VibeDrips.currentTimeFilter);
 
     if (isDiscoveryMode && !hasSearch && !hasCategory) {
+        container.classList.remove('products-grid');
         renderDiscoveryRails();
     } else {
+        container.classList.add('products-grid');
         // Clear container and add cards directly (no wrapper needed)
         container.innerHTML = '';
         VibeDrips.filteredProducts.forEach(product => {
