@@ -415,13 +415,13 @@ function renderDiscoveryRails() {
         });
     } else if (currentFilter === 'categories') {
         // ISOLATED VIEW: Show partitions (child rails)
-        const categoryRails = Array.from(VibeDrips.categories).sort().map(cat => ({
+        // Reset categories array to EXCLUDE global rails (Hot, New, etc.)
+        categories = Array.from(VibeDrips.categories).sort().map(cat => ({
             id: 'custom',
             title: `📂 ${cat}`,
             subtitle: `Everything in ${cat}`,
             categoryName: cat
         }));
-        categories = [...categories, ...categoryRails];
     } else if (isSpecificCategory) {
         // Show only the selected category rail
         categories = [{
