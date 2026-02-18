@@ -407,6 +407,14 @@ function renderDiscoveryRails() {
     const isSpecificCategory = VibeDrips.currentCategory !== '';
 
     if (currentFilter === 'discovery' && !isSpecificCategory) {
+        // GLOBAL VIEW: Bundle all categories into ONE rail
+        categories.push({
+            id: 'categories-all',
+            title: '📂 Categories',
+            subtitle: 'Browse all products by department'
+        });
+    } else if (currentFilter === 'categories') {
+        // ISOLATED VIEW: Show partitions (child rails)
         const categoryRails = Array.from(VibeDrips.categories).sort().map(cat => ({
             id: 'custom',
             title: `📂 ${cat}`,
@@ -414,14 +422,6 @@ function renderDiscoveryRails() {
             categoryName: cat
         }));
         categories = [...categories, ...categoryRails];
-    } else if (currentFilter === 'categories') {
-        // Isolated Categories View: Filter out default rails, show only dynamic categories
-        categories = Array.from(VibeDrips.categories).sort().map(cat => ({
-            id: 'custom',
-            title: `📂 ${cat}`,
-            subtitle: `Everything in ${cat}`,
-            categoryName: cat
-        }));
     } else if (isSpecificCategory) {
         // Show only the selected category rail
         categories = [{
@@ -445,6 +445,10 @@ function renderDiscoveryRails() {
             case 'featured': railProducts = VibeDrips.allProducts.filter(p => p.featured); break;
             case 'new': railProducts = getNewArrivals(); break;
             case 'trending': railProducts = VibeDrips.allProducts.filter(p => p.trending); break;
+            case 'categories-all':
+                // Bundle all departmental products for global view
+                railProducts = VibeDrips.allProducts.filter(p => p.category && VibeDrips.categories.has(p.category));
+                break;
             case 'custom':
                 const targetCat = cat.categoryName || VibeDrips.currentCategory;
                 railProducts = VibeDrips.allProducts.filter(p => p.category === targetCat || p.subcategory === targetCat);
@@ -452,8 +456,8 @@ function renderDiscoveryRails() {
         }
 
         if (railProducts.length > 0) {
-            // PHASE_26: Insert Group Header before first dynamic category rail
-            if (cat.id === 'custom' && categoriesRendered === 0 && (currentFilter === 'discovery' || isIsolatedCategories)) {
+            // PHASE_26: Insert Parent Group Header ONLY for Isolated View (with partitions)
+            if (cat.id === 'custom' && categoriesRendered === 0 && isIsolatedCategories) {
                 const groupHeader = document.createElement('div');
                 groupHeader.className = 'rail-group-header';
                 groupHeader.innerHTML = `<h2>📂 Categories</h2>`;

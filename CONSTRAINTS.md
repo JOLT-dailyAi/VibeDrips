@@ -107,8 +107,9 @@ Mobile landscape toggles (`.reels-toggle`, `.globe-toggle`) must maintain an **a
 ### 1. Nested Dropdown Group Rule
 Any dropdown item that serves as a container for secondary options (e.g., "Categories", "Brand Filter", "Collection Bundles") MUST implement a **Dual-Action Interaction**:
 - **Navigation Action**: MUST expand or collapse the nested sub-menu to reveal granular choices.
-- **Isolation Action**: MUST simultaneously update the background layout to an "Isolated View". This view MUST only render the rails or product groups contained within that specific dropdown group, hiding all other unrelated discovery rails (e.g., "Hot", "New", "Trending").
-- **Group Header Requirement**: When an isolated view OR multiple rails from a nested group are displayed, they MUST be preceded by a prominent **Group Header** (e.g., "📂 Categories") in the layout to clearly designate the parent-child relationship. Individual rails below this header must maintain their specific leaf-item names.
+- **Isolation Action**: MUST simultaneously update the background layout to an "Isolated View". This view MUST render child rails (partitions) for each nested option, preceded by a prominent **Group Header** (e.g., "📂 Categories") to clearly designate the parent-child relationship.
+- **Global View Exception**: When the parent group is NOT explicitly selected (e.g., in "Discovery (All Rails)"), child nodes SHOULD NOT be partitioned. Instead, all child values MUST be bundled into a single rail under the parent name (e.g., one "Categories" rail containing all departmental products).
+- **Group Header Requirement**: Sticky group headers are mandatory for **Isolated Views** to provide directional context as users scroll through child partitions.
 - **Visual Persistence**: The group header MUST maintain an `active` state as long as the view is isolated to its children, providing clear visual context to the user.
 - **Closure Rule**: Selecting a specific "leaf" item from the nested menu MUST apply that specific filter and close the entire dropdown. Clicking the Group Header itself MUST apply the broader isolated view but keep the menu open.
 
