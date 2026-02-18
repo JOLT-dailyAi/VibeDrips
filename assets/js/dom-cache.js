@@ -1,7 +1,7 @@
 // dom-cache.js - EXACT COPY from main.js lines 33-60
 function cacheElements() {
     const elements = VibeDrips.elements;
-    
+
     elements.currencyModal = document.getElementById('currency-modal');
     elements.currencySelector = document.getElementById('currency-selector');
     elements.currencyDisplay = document.getElementById('currency-display');
@@ -16,8 +16,9 @@ function cacheElements() {
     elements.categoryFilter = document.getElementById('category-filter');
     elements.priceSort = document.getElementById('price-sort');
     elements.themeToggle = document.getElementById('theme-toggle');
+    elements.navCategoryMenu = document.getElementById('nav-category-menu');
     elements.staticModal = document.getElementById('static-modal');
-    
+
     console.log('📋 DOM elements cached');
 }
 

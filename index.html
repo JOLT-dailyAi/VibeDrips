@@ -115,7 +115,7 @@
                     <div class="time-category" data-filter="reels" onclick="openReelsModal()">🎬 Reels</div>
 
                     <!-- Discovery Dropdown -->
-                    <div class="time-category active dropdown" data-filter="discovery">
+                    <div class="time-category dropdown" data-filter="discovery">
                         <span class="dropdown-trigger">🏠 Discovery <i class="fas fa-chevron-down"></i></span>
                         <div class="dropdown-menu">
                             <div class="dropdown-item" onclick="event.stopPropagation(); setTimeFilter('hot')">🔥 Hot
@@ -126,6 +126,14 @@
                                 Arrivals</div>
                             <div class="dropdown-item" onclick="event.stopPropagation(); setTimeFilter('trending')">📈
                                 Trending</div>
+                        </div>
+                    </div>
+
+                    <!-- Categories Dropdown (Merged from filter group) -->
+                    <div class="time-category active dropdown" data-filter="categories">
+                        <span class="dropdown-trigger">📂 Categories <i class="fas fa-chevron-down"></i></span>
+                        <div class="dropdown-menu" id="nav-category-menu">
+                            <!-- Dynamically populated categories go here -->
                         </div>
                     </div>
 
@@ -140,11 +148,7 @@
                                 oninput="filterProducts()" autocomplete="off">
                         </div>
                     </div>
-                    <div class="filter-group">
-                        <select id="category-filter" onchange="filterProducts()">
-                            <option value="">All Categories</option>
-                        </select>
-                    </div>
+
                     <div class="filter-group">
                         <select id="price-sort" onchange="sortProducts()">
                             <option value="">Sort By: Default</option>

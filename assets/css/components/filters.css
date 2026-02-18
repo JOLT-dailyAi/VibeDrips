@@ -167,7 +167,8 @@ body.glass-theme .filter-group .price-filter-trigger:focus {
 /* Responsive */
 @media (max-width: 768px) {
     .time-categories {
-        justify-content: flex-start;
+        justify-content: center;
+        /* Center aligned as requested */
         overflow-x: auto;
         padding: 5px 0;
         gap: 8px;

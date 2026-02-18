@@ -10,27 +10,34 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 20px;
-    margin-bottom: 15px;
+    padding: 8px 16px;
+    /* Reduced from 12px 20px */
+    margin-bottom: 12px;
     border-radius: 12px;
     position: sticky;
     top: 60px;
     /* Adjust based on main header height */
-    z-index: 100;
-    background: rgba(255, 255, 255, var(--glass-refraction, 0.15));
-    backdrop-filter: blur(15px) saturate(1.8);
-    -webkit-backdrop-filter: blur(15px) saturate(1.8);
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    z-index: 90;
+    /* Reduced from 100 */
+    background: rgba(15, 15, 15, 0.4);
+    /* Darker Netflix-style base */
+    backdrop-filter: blur(25px) saturate(2.1);
+    -webkit-backdrop-filter: blur(25px) saturate(2.1);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+    /* Minimalist thin border */
     color: white;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.6);
 }
 
 .rail-view-all {
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 6px 15px;
+    padding: 4px 12px;
+    /* Reduced from 6px 15px */
     border-radius: 20px;
     color: white;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+    /* Reduced from 0.85rem */
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -50,9 +57,15 @@
 }
 
 .rail-title {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
+    /* Reduced from 1.5rem */
     font-weight: 700;
     margin: 0;
+    background: linear-gradient(90deg, #fff 0%, rgba(255, 255, 255, 0.7) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    /* Added for compatibility */
+    -webkit-text-fill-color: transparent;
 }
 
 .rail-subtitle {
@@ -87,7 +100,8 @@
 }
 
 .discovery-rail .product-card {
-    flex: 0 0 280px;
+    flex: 0 0 200px;
+    /* Reduced from 280px for compact Netflix look */
     scroll-snap-align: start;
     margin-bottom: 0;
     /* Override grid margin */
@@ -98,8 +112,10 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 42px;
-    height: 42px;
+    width: 36px;
+    /* Reduced from 42px */
+    height: 36px;
+    /* Reduced from 42px */
     border-radius: 50%;
     background: rgba(255, 255, 255, var(--glass-refraction, 0.15));
     backdrop-filter: blur(15px) saturate(1.8);

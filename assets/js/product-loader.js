@@ -214,16 +214,23 @@ function extractCategories() {
 
 // Populate category filter dropdown
 function populateCategoryFilter() {
-    const categoryFilter = VibeDrips.elements.categoryFilter;
-    if (!categoryFilter) return;
+    const navMenu = VibeDrips.elements.navCategoryMenu;
+    if (!navMenu) return;
 
-    categoryFilter.innerHTML = '<option value="">All Categories</option>';
+    navMenu.innerHTML = '';
+
+    // Add "All Categories" if needed, or just let 'All Products' tab handle it
+    // For Netflix style, we usually just show the categories
 
     Array.from(VibeDrips.categories).sort().forEach(category => {
-        const option = document.createElement('option');
-        option.value = category;
-        option.textContent = category;
-        categoryFilter.appendChild(option);
+        const item = document.createElement('div');
+        item.className = 'dropdown-item';
+        item.onclick = (e) => {
+            e.stopPropagation();
+            setCategoryFilter(category);
+        };
+        item.textContent = category;
+        navMenu.appendChild(item);
     });
 }
 

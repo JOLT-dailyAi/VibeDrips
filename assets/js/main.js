@@ -7,7 +7,7 @@ window.VibeDrips = {
     allProducts: [],
     filteredProducts: [],
     categories: new Set(),
-    currentTimeFilter: 'discovery',
+    currentTimeFilter: 'categories',
     config: {
         dataUrl: './data',
         fallbackCurrency: 'INR',

@@ -5,10 +5,18 @@ function setTimeFilter(filter) {
     console.log(`Setting time filter: ${filter}`);
     VibeDrips.currentTimeFilter = filter;
 
+    // Reset specific category if switching to a main tab
+    if (filter !== 'categories' && !['hot', 'featured', 'new', 'trending'].includes(filter)) {
+        VibeDrips.currentCategory = '';
+    }
+
     // Phase_26: Support Discovery vs Sub-filters
-    const discoverySubFilters = ['hot', 'featured', 'new', 'trending'];
-    const isDiscoverySubFilter = discoverySubFilters.includes(filter);
-    const activeMainFilter = (isDiscoverySubFilter || filter === 'discovery') ? 'discovery' : filter;
+    const mainTabs = ['reels', 'discovery', 'categories', 'all'];
+    const subFilters = ['hot', 'featured', 'new', 'trending'];
+
+    const isSubFilter = subFilters.includes(filter);
+    const activeMainFilter = (isSubFilter || filter === 'discovery') ? 'discovery' :
+        (VibeDrips.currentCategory ? 'categories' : filter);
 
     // Update active filter UI
     document.querySelectorAll('.time-category').forEach(cat => {
@@ -21,13 +29,12 @@ function setTimeFilter(filter) {
     // Update Dropdown Items Active State
     document.querySelectorAll('.dropdown-item').forEach(item => {
         item.classList.remove('active');
-        // We'll use a simple text match or data-category if we added it, 
-        // but for now let's just match the filter if it's a sub-filter
     });
 
     // Filter products based on selected filter
     switch (filter) {
         case 'discovery':
+        case 'categories':
             VibeDrips.filteredProducts = [...VibeDrips.allProducts];
             break;
         case 'hot':
@@ -52,6 +59,17 @@ function setTimeFilter(filter) {
     updateSectionTitle(filter);
     applyCurrentFilters();
     renderProducts();
+}
+
+/**
+ * Handle specific category selection from nav dropdown
+ */
+function setCategoryFilter(category) {
+    console.log(`Setting category filter: ${category}`);
+    VibeDrips.currentCategory = category;
+    VibeDrips.currentTimeFilter = 'categories';
+
+    setTimeFilter('categories');
 }
 
 /**
@@ -143,7 +161,7 @@ function applyCurrentFilters() {
     const categoryFilter = VibeDrips.elements.categoryFilter;
 
     const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
-    const categoryValue = categoryFilter ? categoryFilter.value.trim() : '';
+    const categoryValue = VibeDrips.currentCategory || '';
 
     VibeDrips.filteredProducts = VibeDrips.filteredProducts.filter(product => {
         const searchFields = [
@@ -247,7 +265,7 @@ function renderProducts() {
     const hasSearch = searchInput && searchInput.value.trim().length > 0;
     const hasCategory = categoryFilter && categoryFilter.value.trim().length > 0;
 
-    const discoverySubFilters = ['hot', 'featured', 'new', 'trending', 'discovery'];
+    const discoverySubFilters = ['hot', 'featured', 'new', 'trending', 'discovery', 'categories'];
     const isDiscoveryMode = discoverySubFilters.includes(VibeDrips.currentTimeFilter);
 
     if (isDiscoveryMode && !hasSearch && !hasCategory) {
@@ -282,10 +300,21 @@ function renderDiscoveryRails() {
         { id: 'trending', title: '📈 Trending Now', subtitle: 'What everyone is talking about' }
     ];
 
-    // If a specific sub-category is selected, only show that rail
+    // If a specific sub-category or category is selected, only show that rail
     const currentFilter = VibeDrips.currentTimeFilter;
     if (['hot', 'featured', 'new', 'trending'].includes(currentFilter)) {
         categories = categories.filter(cat => cat.id === currentFilter);
+    } else if (currentFilter === 'categories' && VibeDrips.currentCategory) {
+        // Show only the selected category rail
+        categories = [{ id: 'custom', title: `📂 ${VibeDrips.currentCategory}`, subtitle: `Explore ${VibeDrips.currentCategory}` }];
+    } else if (currentFilter === 'categories') {
+        // Show all category rails
+        categories = Array.from(VibeDrips.categories).sort().map(cat => ({
+            id: 'custom',
+            title: `📂 ${cat}`,
+            subtitle: `Everything in ${cat}`,
+            categoryName: cat
+        }));
     }
 
     categories.forEach(cat => {
@@ -295,6 +324,10 @@ function renderDiscoveryRails() {
             case 'featured': railProducts = VibeDrips.allProducts.filter(p => p.featured); break;
             case 'new': railProducts = getNewArrivals(); break;
             case 'trending': railProducts = VibeDrips.allProducts.filter(p => p.trending); break;
+            case 'custom':
+                const targetCat = cat.categoryName || VibeDrips.currentCategory;
+                railProducts = VibeDrips.allProducts.filter(p => p.category === targetCat || p.subcategory === targetCat);
+                break;
         }
 
         if (railProducts.length > 0) {
