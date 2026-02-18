@@ -24,7 +24,7 @@ function setTimeFilter(filter) {
     }
 
     // Update active filter UI
-    document.querySelectorAll('.time-category').forEach(cat => {
+    document.querySelectorAll('.time-category, .dropdown-item').forEach(cat => {
         cat.classList.remove('active');
 
         // Handle custom dropdown vs div tabs
@@ -33,6 +33,12 @@ function setTimeFilter(filter) {
             if (isDiscoveryActive) {
                 cat.classList.add('active');
                 updateDiscoveryLabel(filter);
+            }
+        } else if (cat.classList.contains('dropdown-item')) {
+            // Check if this dropdown item matches the filter (for category/sub-filter active states)
+            const itemFilter = cat.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
+            if (itemFilter === filter) {
+                cat.classList.add('active');
             }
         } else {
             if (cat.getAttribute('data-filter') === filter) {
@@ -81,7 +87,19 @@ function setTimeFilter(filter) {
 function toggleDiscoveryDropdown(event) {
     if (event) event.stopPropagation();
     const dropdown = document.getElementById('discovery-dropdown');
+    const isOpen = dropdown.classList.contains('open');
+
     dropdown.classList.toggle('open');
+
+    // persistent Expansion: If a category is active, ensure the group is expanded when opening
+    if (!isOpen && VibeDrips.currentCategory) {
+        const group = document.querySelector('.dropdown-group');
+        const subMenu = document.getElementById('categories-sub-menu');
+        if (group && subMenu) {
+            group.classList.add('expanded');
+            subMenu.classList.remove('collapsed');
+        }
+    }
 }
 
 function closeDiscoveryDropdown() {
