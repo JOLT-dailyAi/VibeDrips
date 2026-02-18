@@ -240,8 +240,8 @@ function updateSectionTitle(filter) {
             subtitle: 'Complete collection of curated finds'
         },
         'categories': {
-            title: 'Product Categories',
-            subtitle: 'Explore our full range by department'
+            title: '📂 Categories',
+            subtitle: 'Departmental drops organized by category'
         }
     };
 
@@ -460,16 +460,7 @@ function renderDiscoveryRails() {
         }
 
         if (railProducts.length > 0) {
-            // PHASE_26: Insert Parent Group Header (Reusable Section Header)
-            if (cat.id === 'custom' && categoriesRendered === 0 && isIsolatedCategories) {
-                const groupHeader = document.createElement('div');
-                groupHeader.className = 'section-header';
-                groupHeader.innerHTML = `
-                    <h2><span class="emoji">📂</span> Categories</h2>
-                    <p>Departmental drops organized by category</p>
-                `;
-                container.appendChild(groupHeader);
-            }
+
 
             const railSection = createDiscoveryRail(cat, railProducts);
             container.appendChild(railSection);

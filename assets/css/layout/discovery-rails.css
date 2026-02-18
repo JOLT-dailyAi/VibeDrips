@@ -18,20 +18,21 @@
     position: sticky;
     top: 60px;
     z-index: 90;
-    transition: all 0.3s ease;
+    overflow: visible !important;
 }
 
 /* Base Rail Glow - Unified */
 .rail-header::after {
     content: '';
     position: absolute;
-    bottom: -2px;
+    bottom: -4px;
     left: 16px;
     right: 16px;
-    height: 2px;
+    height: 3px;
     background: var(--color-primary, #5a4bff);
-    box-shadow: 0 0 35px 5px var(--color-primary-glow, rgba(90, 75, 255, 0.9));
-    opacity: 0.9;
+    box-shadow: 0 0 45px 8px var(--color-primary-glow, rgba(90, 75, 255, 1));
+    opacity: 0.95;
+    z-index: 1;
 }
 
 /* Terminate old moveable characteristics & stabilize */
@@ -51,10 +52,10 @@
 }
 
 .glass-theme .dropdown-menu {
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(20px) saturate(1.5);
-    -webkit-backdrop-filter: blur(20px) saturate(1.5);
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(25px) saturate(1.8);
+    -webkit-backdrop-filter: blur(25px) saturate(1.8);
+    border: 2px solid rgba(255, 255, 255, 0.5);
 }
 
 /* 🌑 Dark Theme */
@@ -66,8 +67,9 @@
 }
 
 .dark-theme .dropdown-menu {
-    background: #1a1a1a;
-    border: 2px solid rgba(255, 255, 255, 0.15);
+    background: #111;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
 }
 
 /* ☀️ Light Theme */
