@@ -114,14 +114,13 @@
                     <!-- Reels tab -->
                     <div class="time-category" data-filter="reels" onclick="openReelsModal()">🎬 Reels</div>
 
-                    <!-- Discovery Tab (Integrated Nested Select) -->
-                    <div class="time-category active" data-filter="discovery" onclick="setTimeFilter('discovery')">
-                        <span class="discovery-label">🏠 Discovery</span>
-                        <select id="category-filter" onclick="event.stopPropagation()"
-                            onchange="setCategoryFilter(this.value)">
-                            <option value="">📂 Categories</option>
-                        </select>
-                    </div>
+                    <!-- Unified Discovery Select (Nested Dropdown) -->
+                    <select id="discovery-select" class="time-category active" onchange="setTimeFilter(this.value)">
+                        <option value="discovery">🏠 Discovery</option>
+                        <optgroup label="📂 Categories" id="discovery-categories-optgroup">
+                            <!-- Dynamically populated categories go here -->
+                        </optgroup>
+                    </select>
 
                     <!-- All Products tab -->
                     <div class="time-category" data-filter="all" onclick="setTimeFilter('all')">🛍️ All Products</div>
