@@ -14,7 +14,7 @@ function setTimeFilter(filter, shouldClose = true) {
     VibeDrips.currentTimeFilter = filter;
 
     // Determine if it's a category (custom dropdown selections)
-    const mainFilters = ['reels', 'discovery', 'all', 'hot', 'featured', 'new', 'trending'];
+    const mainFilters = ['reels', 'discovery', 'all', 'hot', 'featured', 'new', 'trending', 'categories'];
     const isCategory = !mainFilters.includes(filter);
 
     if (isCategory) {
@@ -81,6 +81,9 @@ function setTimeFilter(filter, shouldClose = true) {
         case 'trending':
             VibeDrips.filteredProducts = VibeDrips.allProducts.filter(product => product.trending);
             break;
+        case 'categories':
+            VibeDrips.filteredProducts = [...VibeDrips.allProducts];
+            break;
         default:
             // Specific category from custom dropdown
             VibeDrips.filteredProducts = [...VibeDrips.allProducts];
@@ -121,8 +124,8 @@ function toggleCategoryGroup(event) {
     if (event) event.stopPropagation();
 
     // PHASE_26: Dual-Action Click
-    // Apply "Discovery" (All Rails) filter without closing the dropdown
-    setTimeFilter('discovery', false);
+    // Apply "Categories" (Isolated View) filter without closing the dropdown
+    setTimeFilter('categories', false);
 
     const group = event.currentTarget.closest('.dropdown-group') || event.currentTarget;
     const subMenu = document.getElementById('categories-sub-menu');
@@ -147,7 +150,8 @@ function updateDiscoveryLabel(filter) {
         'hot': '🔥 Hot This Month',
         'featured': '⭐ Featured',
         'new': '🆕 New Arrivals',
-        'trending': '📈 Trending Now'
+        'trending': '📈 Trending Now',
+        'categories': '📂 Categories'
     };
 
     // Robust fallback: If filter is somehow null/undefined or missing, show 'Discovery'
@@ -234,6 +238,10 @@ function updateSectionTitle(filter) {
         'all': {
             title: 'All Products',
             subtitle: 'Complete collection of curated finds'
+        },
+        'categories': {
+            title: 'Product Categories',
+            subtitle: 'Explore our full range by department'
         }
     };
 
@@ -394,6 +402,7 @@ function renderDiscoveryRails() {
     ];
 
     // If in discovery mode, append all category rails (Netflix Style)
+    // If in categories mode, only show category rails (Isolated view)
     const currentFilter = VibeDrips.currentTimeFilter;
     const isSpecificCategory = VibeDrips.currentCategory !== '';
 
@@ -405,6 +414,14 @@ function renderDiscoveryRails() {
             categoryName: cat
         }));
         categories = [...categories, ...categoryRails];
+    } else if (currentFilter === 'categories') {
+        // Isolated Categories View: Filter out default rails, show only dynamic categories
+        categories = Array.from(VibeDrips.categories).sort().map(cat => ({
+            id: 'custom',
+            title: `📂 ${cat}`,
+            subtitle: `Everything in ${cat}`,
+            categoryName: cat
+        }));
     } else if (isSpecificCategory) {
         // Show only the selected category rail
         categories = [{
