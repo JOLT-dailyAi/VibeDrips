@@ -367,9 +367,11 @@ function renderProducts() {
     const hasCategory = VibeDrips.currentCategory && VibeDrips.currentCategory.length > 0;
 
     const mainFilters = ['hot', 'featured', 'new', 'trending', 'discovery', 'categories'];
-    const isDiscoveryMode = mainFilters.includes(VibeDrips.currentTimeFilter) || hasCategory;
+    // hasCategory: if user picked a specific department, default to Grid unless search is active (which already triggers grid)
+    // EXCEPT if we are explicitly in a group mode
+    const isDiscoveryMode = mainFilters.includes(VibeDrips.currentTimeFilter);
 
-    if (isDiscoveryMode && !hasSearch) {
+    if (isDiscoveryMode && !hasSearch && !hasCategory) {
         container.classList.remove('products-grid');
         renderDiscoveryRails();
     } else {
@@ -411,7 +413,8 @@ function renderDiscoveryRails() {
         categories.push({
             id: 'categories-all',
             title: '📂 Categories',
-            subtitle: 'Browse all products by department'
+            subtitle: 'Browse all products by department',
+            isParent: true
         });
     } else if (currentFilter === 'categories') {
         // ISOLATED VIEW: Show partitions (child rails)
@@ -420,7 +423,8 @@ function renderDiscoveryRails() {
             id: 'custom',
             title: `📂 ${cat}`,
             subtitle: `Everything in ${cat}`,
-            categoryName: cat
+            categoryName: cat,
+            isChild: true
         }));
     } else if (isSpecificCategory) {
         // Show only the selected category rail
@@ -460,7 +464,7 @@ function renderDiscoveryRails() {
             if (cat.id === 'custom' && categoriesRendered === 0 && isIsolatedCategories) {
                 const groupHeader = document.createElement('div');
                 groupHeader.className = 'rail-group-header';
-                groupHeader.innerHTML = `<h2>📂 Categories</h2>`;
+                groupHeader.innerHTML = `<h2><span class="emoji">📂</span> Categories</h2>`;
                 container.appendChild(groupHeader);
             }
 
@@ -489,13 +493,25 @@ function createDiscoveryRail(category, products) {
     rail.className = 'discovery-rail';
     rail.dataset.categoryId = category.id;
 
+    // Helper to wrap emoji
+    const formattedTitle = category.title.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '<span class="emoji">$1</span>');
+
+    // Navigation logic for "View All"
+    let viewAllAction = `setTimeFilter('${category.id}')`;
+    if (category.isParent) {
+        viewAllAction = `setTimeFilter('categories', false)`;
+    } else if (category.categoryName || category.isChild) {
+        const catName = category.categoryName || category.id;
+        viewAllAction = `setTimeFilter('${catName}', true)`;
+    }
+
     rail.innerHTML = `
         <div class="rail-header">
             <div class="rail-info">
-                <h3 class="rail-title">${category.title}</h3>
+                <h3 class="rail-title">${formattedTitle}</h3>
                 <span class="rail-subtitle">${category.subtitle}</span>
             </div>
-            <button class="rail-view-all" onclick="setTimeFilter('${category.id}')">View All →</button>
+            <button class="rail-view-all" onclick="${viewAllAction}">View All →</button>
         </div>
         <div class="rail-container-wrapper">
             <button class="rail-nav-btn prev" aria-label="Previous">
