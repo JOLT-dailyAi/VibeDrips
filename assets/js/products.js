@@ -292,21 +292,22 @@ function renderDiscoveryRails() {
         { id: 'trending', title: '📈 Trending Now', subtitle: 'What everyone is talking about' }
     ];
 
-    // If a specific sub-category or category is selected, only show that rail
+    // If in discovery mode, append all category rails
     const currentFilter = VibeDrips.currentTimeFilter;
-    if (['hot', 'featured', 'new', 'trending'].includes(currentFilter)) {
-        categories = categories.filter(cat => cat.id === currentFilter);
-    } else if (currentFilter === 'categories' && VibeDrips.currentCategory) {
-        // Show only the selected category rail
-        categories = [{ id: 'custom', title: `📂 ${VibeDrips.currentCategory}`, subtitle: `Explore ${VibeDrips.currentCategory}` }];
-    } else if (currentFilter === 'categories') {
-        // Show all category rails
-        categories = Array.from(VibeDrips.categories).sort().map(cat => ({
+    if (currentFilter === 'discovery') {
+        const categoryRails = Array.from(VibeDrips.categories).sort().map(cat => ({
             id: 'custom',
             title: `📂 ${cat}`,
             subtitle: `Everything in ${cat}`,
             categoryName: cat
         }));
+        categories = [...categories, ...categoryRails];
+    } else if (currentFilter === 'categories' && VibeDrips.currentCategory) {
+        // Show only the selected category rail
+        categories = [{ id: 'custom', title: `📂 ${VibeDrips.currentCategory}`, subtitle: `Explore ${VibeDrips.currentCategory}`, categoryName: VibeDrips.currentCategory }];
+    } else if (['hot', 'featured', 'new', 'trending'].includes(currentFilter)) {
+        // Show only the selected sub-filter rail
+        categories = categories.filter(cat => cat.id === currentFilter);
     }
 
     categories.forEach(cat => {

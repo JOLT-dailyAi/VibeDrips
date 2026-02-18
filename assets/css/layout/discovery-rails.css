@@ -1,7 +1,8 @@
 /* discovery-rails.css - Netflix-style horizontal shelves */
 
 .discovery-rail {
-    margin-bottom: 40px;
+    margin-bottom: 30px;
+    /* Reduced from 40px */
     position: relative;
     padding: 0 10px;
 }
@@ -157,8 +158,17 @@
     height: 24px;
 }
 
-/* Discovery Select Styles (Native Select) */
-#discovery-select {
+/* Category Select Wrapper & Styling */
+.category-select-wrapper {
+    position: relative;
+    padding: 0 !important;
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+}
+
+#category-filter {
     appearance: none;
     -webkit-appearance: none;
     background: rgba(255, 255, 255, 0.1);
@@ -177,19 +187,12 @@
     background-position: calc(100% - 12px) center;
 }
 
-#discovery-select:hover {
+#category-filter:hover {
     background-color: rgba(255, 255, 255, 0.2);
     border-color: rgba(255, 255, 255, 0.4);
 }
 
-#discovery-select.active {
-    background: var(--color-primary, #6366f1);
-    border-color: rgba(255, 255, 255, 0.4);
-    box-shadow: 0 0 15px var(--color-primary-glow, rgba(99, 102, 241, 0.4));
-}
-
-#discovery-select option,
-#discovery-select optgroup {
+#category-filter option {
     background: #121212;
     color: white;
     padding: 10px;

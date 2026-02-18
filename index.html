@@ -114,20 +114,19 @@
                     <!-- Reels tab -->
                     <div class="time-category" data-filter="reels" onclick="openReelsModal()">🎬 Reels</div>
 
-                    <!-- Discovery Select (DEFAULT) -->
-                    <select id="discovery-select" class="time-category active" onchange="setTimeFilter(this.value)">
-                        <option value="discovery">🏠 Discovery</option>
-                        <option value="hot">🔥 Hot This Month</option>
-                        <option value="featured">⭐ Featured</option>
-                        <option value="new">🆕 New Arrivals</option>
-                        <option value="trending">📈 Trending</option>
-                        <optgroup label="📂 Categories" id="discovery-categories-optgroup">
-                            <!-- Dynamically populated categories go here -->
-                        </optgroup>
-                    </select>
+                    <!-- Discovery Tab (DEFAULT) -->
+                    <div class="time-category active" data-filter="discovery" onclick="setTimeFilter('discovery')">🏠
+                        Discovery</div>
+
+                    <!-- Separate Standard Category Select -->
+                    <div class="time-category category-select-wrapper">
+                        <select id="category-filter" onchange="setCategoryFilter(this.value)">
+                            <option value="">📂 Categories</option>
+                        </select>
+                    </div>
 
                     <!-- All Products tab -->
-                    <div class="time-category" data-filter="all">🛍️ All Products</div>
+                    <div class="time-category" data-filter="all" onclick="setTimeFilter('all')">🛍️ All Products</div>
                 </div>
 
                 <div class="filter-controls">
