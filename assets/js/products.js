@@ -435,6 +435,9 @@ function renderDiscoveryRails() {
         categories = categories.filter(cat => cat.id === currentFilter);
     }
 
+    let categoriesRendered = 0;
+    const isIsolatedCategories = currentFilter === 'categories';
+
     categories.forEach(cat => {
         let railProducts = [];
         switch (cat.id) {
@@ -449,8 +452,20 @@ function renderDiscoveryRails() {
         }
 
         if (railProducts.length > 0) {
+            // PHASE_26: Insert Group Header before first dynamic category rail
+            if (cat.id === 'custom' && categoriesRendered === 0 && (currentFilter === 'discovery' || isIsolatedCategories)) {
+                const groupHeader = document.createElement('div');
+                groupHeader.className = 'rail-group-header';
+                groupHeader.innerHTML = `<h2>📂 Categories</h2>`;
+                container.appendChild(groupHeader);
+            }
+
             const railSection = createDiscoveryRail(cat, railProducts);
             container.appendChild(railSection);
+
+            if (cat.id === 'custom') {
+                categoriesRendered++;
+            }
         }
     });
 

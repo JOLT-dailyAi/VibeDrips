@@ -104,6 +104,16 @@ Mobile landscape toggles (`.reels-toggle`, `.globe-toggle`) must maintain an **a
 
 ---
 
+### 1. Nested Dropdown Group Rule
+Any dropdown item that serves as a container for secondary options (e.g., "Categories", "Brand Filter", "Collection Bundles") MUST implement a **Dual-Action Interaction**:
+- **Navigation Action**: MUST expand or collapse the nested sub-menu to reveal granular choices.
+- **Isolation Action**: MUST simultaneously update the background layout to an "Isolated View". This view MUST only render the rails or product groups contained within that specific dropdown group, hiding all other unrelated discovery rails (e.g., "Hot", "New", "Trending").
+- **Group Header Requirement**: When an isolated view OR multiple rails from a nested group are displayed, they MUST be preceded by a prominent **Group Header** (e.g., "📂 Categories") in the layout to clearly designate the parent-child relationship. Individual rails below this header must maintain their specific leaf-item names.
+- **Visual Persistence**: The group header MUST maintain an `active` state as long as the view is isolated to its children, providing clear visual context to the user.
+- **Closure Rule**: Selecting a specific "leaf" item from the nested menu MUST apply that specific filter and close the entire dropdown. Clicking the Group Header itself MUST apply the broader isolated view but keep the menu open.
+
+---
+
 ## 🏗️ Known Architectural Gaps (Waitlist)
 - **One-Way Slider Binding**: The header volume slider (Music Control) propagates its value to media, but media changes (e.g., native volume adjustments) do not reflect back to the slider.
 - **Muted Asymmetry**: The system allows volume persistence but intentionally enforces *Muted-First* behavior on iOS to comply with hardware policies, which can result in perceived state "mismatch" for users moving between platforms.
