@@ -245,10 +245,20 @@ function updateSectionTitle(filter) {
         }
     };
 
-    const titleInfo = titles[filter] || titles['all'];
+    let titleInfo = titles[filter];
+
+    // Dynamic fallback for specific categories or unknown filters
+    if (!titleInfo) {
+        titleInfo = {
+            title: filter.startsWith('📂') ? filter : `📂 ${filter}`,
+            subtitle: `Explore our curated ${filter} collection`
+        };
+    }
 
     if (VibeDrips.elements.sectionTitle) {
-        VibeDrips.elements.sectionTitle.textContent = titleInfo.title;
+        // Apply emoji wrapping to section title
+        const formattedTitle = titleInfo.title.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '<span class="emoji">$1</span>');
+        VibeDrips.elements.sectionTitle.innerHTML = formattedTitle;
     }
     if (VibeDrips.elements.sectionSubtitle) {
         VibeDrips.elements.sectionSubtitle.textContent = titleInfo.subtitle;
@@ -366,10 +376,10 @@ function renderProducts() {
     const hasSearch = searchInput && searchInput.value.trim().length > 0;
     const hasCategory = VibeDrips.currentCategory && VibeDrips.currentCategory.length > 0;
 
-    const mainFilters = ['hot', 'featured', 'new', 'trending', 'discovery', 'categories'];
-    // hasCategory: if user picked a specific department, default to Grid unless search is active (which already triggers grid)
-    // EXCEPT if we are explicitly in a group mode
-    const isDiscoveryMode = mainFilters.includes(VibeDrips.currentTimeFilter);
+    // hasCategory: if user picked a specific department, default to Grid unless search is active
+    // Option (i): Categories view (nested) -> Rails
+    // Option (ii): Leaf nodes (Specific Cat, Hot, New) -> Grid
+    const isDiscoveryMode = ['discovery', 'categories'].includes(VibeDrips.currentTimeFilter);
 
     if (isDiscoveryMode && !hasSearch && !hasCategory) {
         container.classList.remove('products-grid');
@@ -493,8 +503,10 @@ function createDiscoveryRail(category, products) {
     // Navigation logic for "View All"
     let viewAllAction = `setTimeFilter('${category.id}')`;
     if (category.isParent) {
+        // Option (i): Parent rail navigates to Rails View
         viewAllAction = `setTimeFilter('categories', false)`;
     } else if (category.categoryName || category.isChild) {
+        // Option (ii): Leaf nodes navigate to Grid View
         const catName = category.categoryName || category.id;
         viewAllAction = `setTimeFilter('${catName}', true)`;
     }
