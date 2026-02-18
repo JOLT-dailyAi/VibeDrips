@@ -1,7 +1,7 @@
 // sw.js - Service worker for VibeDrips PWA
 // CACHE_VERSION is now timestamp-based and auto-updated by the workflow
 
-const CACHE_VERSION = 'v20260218T140126-ui'; // This string will be overwritten by process-csv.yml
+const CACHE_VERSION = 'v20260218T193500-ui'; // Manually bumped to fix stale Discovery dropdown logic
 const CACHE_NAME = `vibedrips-static-${CACHE_VERSION}`;
 const DATA_CACHE = `vibedrips-data-${CACHE_VERSION}`;
 
@@ -45,7 +45,6 @@ const urlsToCache = [
   '/VibeDrips/assets/js/main.js',
   '/VibeDrips/assets/js/dom-cache.js',
   '/VibeDrips/assets/js/theme-toggle.js',
-  '/VibeDrips/assets/js/event-handlers.js',
   '/VibeDrips/assets/js/ui-states.js',
 
   // Modal JS Files
@@ -58,7 +57,6 @@ const urlsToCache = [
   // Data Loader JS Files
   '/VibeDrips/assets/js/currency-loader.js',
   '/VibeDrips/assets/js/product-loader.js',
-  '/VibeDrips/assets/js/filter-manager.js',
   '/VibeDrips/assets/js/products.js',
   '/VibeDrips/assets/js/glass-settings.js',
 
