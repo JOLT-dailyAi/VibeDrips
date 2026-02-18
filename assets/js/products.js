@@ -2,6 +2,14 @@
  * Set time-based filter for products
  */
 function setTimeFilter(filter) {
+    if (!filter) {
+        console.warn('setTimeFilter called with empty/null filter, falling back to discovery');
+        filter = 'discovery';
+    }
+
+    // Ensure filter is a string (prevents null/undefined artifacts)
+    filter = String(filter);
+
     console.log(`Setting time filter: ${filter}`);
     VibeDrips.currentTimeFilter = filter;
 
@@ -93,6 +101,12 @@ function updateDiscoveryLabel(filter) {
     const label = document.getElementById('discovery-current-label');
     if (!label) return;
 
+    // Reset to default on non-discovery main tabs
+    if (filter === 'reels' || filter === 'all') {
+        label.textContent = '🏠 Discovery';
+        return;
+    }
+
     const labels = {
         'discovery': '🏠 Discovery',
         'hot': '🔥 Hot This Month',
@@ -101,7 +115,12 @@ function updateDiscoveryLabel(filter) {
         'trending': '📈 Trending Now'
     };
 
-    label.textContent = labels[filter] || `📂 ${filter}`;
+    // Robust fallback: If filter is somehow null/undefined or missing, show 'Discovery'
+    if (!filter || filter === 'undefined' || filter === 'null') {
+        label.textContent = '🏠 Discovery';
+    } else {
+        label.textContent = labels[filter] || `📂 ${filter}`;
+    }
 }
 
 // Close dropdown on outside click

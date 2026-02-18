@@ -170,6 +170,13 @@
     gap: 8px;
     cursor: pointer;
     user-select: none;
+    white-space: nowrap;
+    max-width: 250px;
+}
+
+#discovery-current-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .dropdown-chevron {
