@@ -1,7 +1,7 @@
 /**
  * Set time-based filter for products
  */
-function setTimeFilter(filter) {
+function setTimeFilter(filter, shouldClose = true) {
     if (!filter) {
         console.warn('setTimeFilter called with empty/null filter, falling back to discovery');
         filter = 'discovery';
@@ -48,7 +48,9 @@ function setTimeFilter(filter) {
     });
 
     // Close dropdown on selection
-    closeDiscoveryDropdown();
+    if (shouldClose) {
+        closeDiscoveryDropdown();
+    }
 
     // Filter products based on selected filter
     switch (filter) {
@@ -109,10 +111,17 @@ function closeDiscoveryDropdown() {
 
 function toggleCategoryGroup(event) {
     if (event) event.stopPropagation();
-    const group = event.currentTarget;
+
+    // PHASE_26: Dual-Action Click
+    // Apply "Discovery" (All Rails) filter without closing the dropdown
+    setTimeFilter('discovery', false);
+
+    const group = event.currentTarget.closest('.dropdown-group') || event.currentTarget;
     const subMenu = document.getElementById('categories-sub-menu');
-    group.classList.toggle('expanded');
-    subMenu.classList.toggle('collapsed');
+    if (group && subMenu) {
+        group.classList.toggle('expanded');
+        subMenu.classList.toggle('collapsed');
+    }
 }
 
 function updateDiscoveryLabel(filter) {

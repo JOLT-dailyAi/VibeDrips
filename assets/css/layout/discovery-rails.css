@@ -268,8 +268,14 @@
     transition: background 0.2s ease;
 }
 
-.dropdown-group:hover {
+.dropdown-group:hover,
+.dropdown-group.active {
     background: rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-group.active span:first-child {
+    color: var(--color-primary, #fff);
+    font-weight: 600;
 }
 
 .group-chevron {
