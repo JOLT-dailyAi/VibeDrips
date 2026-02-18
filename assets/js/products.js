@@ -463,7 +463,7 @@ function renderDiscoveryRails() {
             // PHASE_26: Insert Parent Group Header (Reusable Section Header)
             if (cat.id === 'custom' && categoriesRendered === 0 && isIsolatedCategories) {
                 const groupHeader = document.createElement('div');
-                groupHeader.className = 'section-header rail-group-unified';
+                groupHeader.className = 'section-header';
                 groupHeader.innerHTML = `
                     <h2><span class="emoji">📂</span> Categories</h2>
                     <p>Departmental drops organized by category</p>
