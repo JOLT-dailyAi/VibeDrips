@@ -114,28 +114,17 @@
                     <!-- Reels tab -->
                     <div class="time-category" data-filter="reels" onclick="openReelsModal()">🎬 Reels</div>
 
-                    <!-- Discovery Dropdown (DEFAULT) -->
-                    <div class="time-category active dropdown" data-filter="discovery">
-                        <span class="dropdown-trigger">🏠 Discovery <i class="fas fa-chevron-down"></i></span>
-                        <div class="dropdown-menu">
-                            <div class="dropdown-item" onclick="event.stopPropagation(); setTimeFilter('hot')">🔥 Hot
-                                This Month</div>
-                            <div class="dropdown-item" onclick="event.stopPropagation(); setTimeFilter('featured')">⭐
-                                Featured</div>
-                            <div class="dropdown-item" onclick="event.stopPropagation(); setTimeFilter('new')">🆕 New
-                                Arrivals</div>
-                            <div class="dropdown-item" onclick="event.stopPropagation(); setTimeFilter('trending')">📈
-                                Trending</div>
-
-                            <!-- Nested Standard Category Select -->
-                            <div class="nested-filter-wrapper" onclick="event.stopPropagation()">
-                                <label for="category-filter">📂 Category:</label>
-                                <select id="category-filter" onchange="setCategoryFilter(this.value)">
-                                    <option value="">All Categories</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Discovery Select (DEFAULT) -->
+                    <select id="discovery-select" class="time-category active" onchange="setTimeFilter(this.value)">
+                        <option value="discovery">🏠 Discovery</option>
+                        <option value="hot">🔥 Hot This Month</option>
+                        <option value="featured">⭐ Featured</option>
+                        <option value="new">🆕 New Arrivals</option>
+                        <option value="trending">📈 Trending</option>
+                        <optgroup label="📂 Categories" id="discovery-categories-optgroup">
+                            <!-- Dynamically populated categories go here -->
+                        </optgroup>
+                    </select>
 
                     <!-- All Products tab -->
                     <div class="time-category" data-filter="all">🛍️ All Products</div>

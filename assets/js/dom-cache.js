@@ -13,7 +13,7 @@ function cacheElements() {
     elements.categoryCount = document.getElementById('category-count');
     elements.lastUpdated = document.getElementById('last-updated');
     elements.search = document.getElementById('search');
-    elements.categoryFilter = document.getElementById('category-filter');
+    elements.discoverySelect = document.getElementById('discovery-select');
     elements.priceSort = document.getElementById('price-sort');
     elements.themeToggle = document.getElementById('theme-toggle');
     elements.staticModal = document.getElementById('static-modal');

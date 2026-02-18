@@ -214,16 +214,16 @@ function extractCategories() {
 
 // Populate category filter dropdown
 function populateCategoryFilter() {
-    const categoryFilter = VibeDrips.elements.categoryFilter;
-    if (!categoryFilter) return;
+    const categoriesOptgroup = document.getElementById('discovery-categories-optgroup');
+    if (!categoriesOptgroup) return;
 
-    categoryFilter.innerHTML = '<option value="">All Categories</option>';
+    categoriesOptgroup.innerHTML = '';
 
     Array.from(VibeDrips.categories).sort().forEach(category => {
         const option = document.createElement('option');
         option.value = category;
         option.textContent = category;
-        categoryFilter.appendChild(option);
+        categoriesOptgroup.appendChild(option);
     });
 }
 

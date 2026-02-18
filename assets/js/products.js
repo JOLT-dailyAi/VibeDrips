@@ -5,28 +5,33 @@ function setTimeFilter(filter) {
     console.log(`Setting time filter: ${filter}`);
     VibeDrips.currentTimeFilter = filter;
 
-    // Reset specific category if switching to a main tab
-    if (filter !== 'categories' && !['hot', 'featured', 'new', 'trending'].includes(filter)) {
+    // Determine if it's a main tab or a sub-filter/category from Discovery select
+    const mainTabs = ['reels', 'discovery', 'all'];
+    const subFilters = ['hot', 'featured', 'new', 'trending'];
+    const isCategory = !mainTabs.includes(filter) && !subFilters.includes(filter);
+
+    if (isCategory) {
+        VibeDrips.currentCategory = filter;
+    } else {
         VibeDrips.currentCategory = '';
     }
-
-    // Phase_26: Support Discovery vs Sub-filters
-    const discoveryFilters = ['discovery', 'hot', 'featured', 'new', 'trending'];
-    const isDiscoverySubFilter = ['hot', 'featured', 'new', 'trending'].includes(filter);
-    const activeMainFilter = (isDiscoverySubFilter || filter === 'discovery') ? 'discovery' : filter;
 
     // Update active filter UI
     document.querySelectorAll('.time-category').forEach(cat => {
         cat.classList.remove('active');
-        if (cat.getAttribute('data-filter') === activeMainFilter) {
-            cat.classList.add('active');
-        }
-    });
 
-    // Update Dropdown Items Active State
-    document.querySelectorAll('.dropdown-item').forEach(item => {
-        item.classList.remove('active');
-        // Simple text match or data check could go here if needed
+        // Handle select element vs div tabs
+        if (cat.tagName === 'SELECT') {
+            const isDiscoveryValue = subFilters.includes(filter) || filter === 'discovery' || isCategory;
+            if (isDiscoveryValue) {
+                cat.classList.add('active');
+                cat.value = filter;
+            }
+        } else {
+            if (cat.getAttribute('data-filter') === filter) {
+                cat.classList.add('active');
+            }
+        }
     });
 
     // Filter products based on selected filter
@@ -50,23 +55,13 @@ function setTimeFilter(filter) {
             VibeDrips.filteredProducts = [...VibeDrips.allProducts];
             break;
         default:
+            // Custom category filter
             VibeDrips.filteredProducts = [...VibeDrips.allProducts];
     }
 
     updateSectionTitle(filter);
     applyCurrentFilters();
     renderProducts();
-}
-
-/**
- * Handle specific category selection from nav dropdown
- */
-function setCategoryFilter(category) {
-    console.log(`Setting category filter: ${category}`);
-    VibeDrips.currentCategory = category;
-    VibeDrips.currentTimeFilter = 'categories';
-
-    setTimeFilter('categories');
 }
 
 /**
