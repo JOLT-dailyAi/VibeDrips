@@ -44,6 +44,37 @@ window.VibeDrips = {
     }
 };
 
+/**
+ * Global Event Handlers
+ */
+function setupEventListeners() {
+    document.querySelectorAll('.time-category').forEach(category => {
+        // Skip the dropdown trigger as it has its own logic
+        if (category.classList.contains('dropdown-trigger')) return;
+
+        category.addEventListener('click', function () {
+            const filter = this.getAttribute('data-filter');
+            if (filter) setTimeFilter(filter);
+        });
+    });
+
+    if (VibeDrips.elements.currencySelector) {
+        VibeDrips.elements.currencySelector.addEventListener('change', window.setCurrency);
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            if (window.closeAllModals) window.closeAllModals();
+        }
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+            e.preventDefault();
+            VibeDrips.elements.search?.focus();
+        }
+    });
+
+    console.log('🎧 Event listeners consolidated and set up');
+}
+
 // Initialize the application
 async function initializeApp() {
     console.log('🎯 Starting VibeDrips initialization...');
