@@ -366,7 +366,7 @@ function renderProducts() {
     const hasSearch = searchInput && searchInput.value.trim().length > 0;
     const hasCategory = VibeDrips.currentCategory && VibeDrips.currentCategory.length > 0;
 
-    const mainFilters = ['hot', 'featured', 'new', 'trending', 'discovery'];
+    const mainFilters = ['hot', 'featured', 'new', 'trending', 'discovery', 'categories'];
     const isDiscoveryMode = mainFilters.includes(VibeDrips.currentTimeFilter) || hasCategory;
 
     if (isDiscoveryMode && !hasSearch) {
