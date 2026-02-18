@@ -16,7 +16,6 @@ function cacheElements() {
     elements.categoryFilter = document.getElementById('category-filter');
     elements.priceSort = document.getElementById('price-sort');
     elements.themeToggle = document.getElementById('theme-toggle');
-    elements.navCategoryMenu = document.getElementById('nav-category-menu');
     elements.staticModal = document.getElementById('static-modal');
 
     console.log('📋 DOM elements cached');

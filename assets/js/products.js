@@ -11,12 +11,9 @@ function setTimeFilter(filter) {
     }
 
     // Phase_26: Support Discovery vs Sub-filters
-    const mainTabs = ['reels', 'discovery', 'categories', 'all'];
-    const subFilters = ['hot', 'featured', 'new', 'trending'];
-
-    const isSubFilter = subFilters.includes(filter);
-    const activeMainFilter = (isSubFilter || filter === 'discovery') ? 'discovery' :
-        (VibeDrips.currentCategory ? 'categories' : filter);
+    const discoveryFilters = ['discovery', 'hot', 'featured', 'new', 'trending'];
+    const isDiscoverySubFilter = ['hot', 'featured', 'new', 'trending'].includes(filter);
+    const activeMainFilter = (isDiscoverySubFilter || filter === 'discovery') ? 'discovery' : filter;
 
     // Update active filter UI
     document.querySelectorAll('.time-category').forEach(cat => {
@@ -29,12 +26,12 @@ function setTimeFilter(filter) {
     // Update Dropdown Items Active State
     document.querySelectorAll('.dropdown-item').forEach(item => {
         item.classList.remove('active');
+        // Simple text match or data check could go here if needed
     });
 
     // Filter products based on selected filter
     switch (filter) {
         case 'discovery':
-        case 'categories':
             VibeDrips.filteredProducts = [...VibeDrips.allProducts];
             break;
         case 'hot':

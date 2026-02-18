@@ -114,8 +114,8 @@
                     <!-- Reels tab -->
                     <div class="time-category" data-filter="reels" onclick="openReelsModal()">🎬 Reels</div>
 
-                    <!-- Discovery Dropdown -->
-                    <div class="time-category dropdown" data-filter="discovery">
+                    <!-- Discovery Dropdown (DEFAULT) -->
+                    <div class="time-category active dropdown" data-filter="discovery">
                         <span class="dropdown-trigger">🏠 Discovery <i class="fas fa-chevron-down"></i></span>
                         <div class="dropdown-menu">
                             <div class="dropdown-item" onclick="event.stopPropagation(); setTimeFilter('hot')">🔥 Hot
@@ -126,14 +126,14 @@
                                 Arrivals</div>
                             <div class="dropdown-item" onclick="event.stopPropagation(); setTimeFilter('trending')">📈
                                 Trending</div>
-                        </div>
-                    </div>
 
-                    <!-- Categories Dropdown (Merged from filter group) -->
-                    <div class="time-category active dropdown" data-filter="categories">
-                        <span class="dropdown-trigger">📂 Categories <i class="fas fa-chevron-down"></i></span>
-                        <div class="dropdown-menu" id="nav-category-menu">
-                            <!-- Dynamically populated categories go here -->
+                            <!-- Nested Standard Category Select -->
+                            <div class="nested-filter-wrapper" onclick="event.stopPropagation()">
+                                <label for="category-filter">📂 Category:</label>
+                                <select id="category-filter" onchange="setCategoryFilter(this.value)">
+                                    <option value="">All Categories</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
