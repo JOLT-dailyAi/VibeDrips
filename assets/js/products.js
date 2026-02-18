@@ -24,7 +24,7 @@ function setTimeFilter(filter, shouldClose = true) {
     }
 
     // Update active filter UI
-    document.querySelectorAll('.time-category, .dropdown-item').forEach(cat => {
+    document.querySelectorAll('.time-category, .dropdown-item, .dropdown-group').forEach(cat => {
         cat.classList.remove('active');
 
         // Handle custom dropdown vs div tabs
@@ -35,9 +35,17 @@ function setTimeFilter(filter, shouldClose = true) {
                 updateDiscoveryLabel(filter);
             }
         } else if (cat.classList.contains('dropdown-item')) {
-            // Check if this dropdown item matches the filter (for category/sub-filter active states)
-            const itemFilter = cat.getAttribute('onclick')?.match(/'([^']+)'/)?.[1];
-            if (itemFilter === filter) {
+            // Check literal onclick attribute OR data-category (for dynamic items)
+            const onclickAttr = cat.getAttribute('onclick');
+            const itemFilter = onclickAttr ? onclickAttr.match(/'([^']+)'/)?.[1] : null;
+            const dataFilter = cat.getAttribute('data-category');
+
+            if (itemFilter === filter || dataFilter === filter) {
+                cat.classList.add('active');
+            }
+        } else if (cat.classList.contains('dropdown-group')) {
+            // Categories group is active if discovery is active or a specific category is selected
+            if (filter === 'discovery' || isCategory) {
                 cat.classList.add('active');
             }
         } else {
