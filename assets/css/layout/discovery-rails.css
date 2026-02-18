@@ -17,17 +17,7 @@
     border-radius: 12px;
     position: sticky;
     top: 60px;
-    /* Adjust based on main header height */
     z-index: 90;
-    /* Reduced from 100 */
-    background: rgba(15, 15, 15, 0.4);
-    /* Darker Netflix-style base */
-    backdrop-filter: blur(25px) saturate(2.1);
-    -webkit-backdrop-filter: blur(25px) saturate(2.1);
-    border-bottom: 2px solid rgba(255, 255, 255, 0.08);
-    /* Minimalist thin border */
-    color: white;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.6);
     transition: all 0.3s ease;
 }
 
@@ -65,44 +55,85 @@
     border-bottom: 2px solid var(--glass-border, rgba(255, 255, 255, 0.1));
 }
 
-/* THEME PARITY - Discovery Rails */
-
 /* 💎 Glass Theme */
 .glass-theme .rail-header {
     background: rgba(255, 255, 255, var(--glass-refraction, 0.08));
-    backdrop-filter: blur(var(--glass-blur, 15px));
-    border-bottom-color: var(--glass-border, rgba(255, 255, 255, 0.15));
+    backdrop-filter: blur(var(--glass-blur, 15px)) saturate(var(--glass-saturation, 180%));
+    -webkit-backdrop-filter: blur(var(--glass-blur, 15px)) saturate(var(--glass-saturation, 180%));
+    border-bottom: 2px solid var(--glass-border, rgba(255, 255, 255, 0.15));
+    color: white;
+}
+
+.glass-theme .dropdown-menu {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(20px) saturate(1.5);
+    -webkit-backdrop-filter: blur(20px) saturate(1.5);
+    border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 /* 🌑 Dark Theme */
 .dark-theme .rail-header {
     background: #111;
-    border-bottom-color: rgba(255, 255, 255, 0.05);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.05);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+    color: white;
 }
 
-/* ☀️ Light Theme (Defaults to Glass if not specifically defined) */
-:root:not(.glass-theme):not(.dark-theme) .rail-header {
+.dark-theme .dropdown-menu {
+    background: #1a1a1a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ☀️ Light Theme */
+.light-theme .rail-header {
     background: #f8f9fa;
-    color: #333;
-    border-bottom-color: #dee2e6;
+    color: #1a202c;
+    border-bottom: 2px solid #dee2e6;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
-:root:not(.glass-theme):not(.dark-theme) .rail-title {
-    background: linear-gradient(90deg, #333 0%, #666 100%);
+.light-theme .dropdown-menu {
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.light-theme .dropdown-item {
+    color: #4a5568;
+}
+
+.light-theme .dropdown-item:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: #1a202c;
+}
+
+.light-theme .dropdown-group {
+    color: #1a202c;
+}
+
+.light-theme .dropdown-divider {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.light-theme .rail-title {
+    background: linear-gradient(90deg, #1a202c 0%, #4a5568 100%);
     -webkit-background-clip: text;
     background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-:root:not(.glass-theme):not(.dark-theme) .rail-subtitle {
-    color: #666;
+.light-theme .rail-subtitle {
+    color: #4a5568;
 }
 
-:root:not(.glass-theme):not(.dark-theme) .rail-view-all {
-    background: #e9ecef;
-    border-color: #ced4da;
-    color: #495057;
+.light-theme .rail-view-all {
+    background: rgba(0, 0, 0, 0.05);
+    color: #4a5568;
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.light-theme .rail-view-all:hover {
+    background: rgba(0, 0, 0, 0.1);
 }
 
 /* Removed old .rail-group-header */
@@ -278,10 +309,6 @@
     top: calc(100% + 10px);
     left: 0;
     min-width: 220px;
-    background: rgba(20, 20, 20, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 15px;
     padding: 10px;
     z-index: 1000;
