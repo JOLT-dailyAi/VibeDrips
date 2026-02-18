@@ -214,16 +214,17 @@ function extractCategories() {
 
 // Populate category filter dropdown
 function populateCategoryFilter() {
-    const categoriesOptgroup = document.getElementById('discovery-categories-optgroup');
-    if (!categoriesOptgroup) return;
+    const subMenu = document.getElementById('categories-sub-menu');
+    if (!subMenu) return;
 
-    categoriesOptgroup.innerHTML = '';
+    subMenu.innerHTML = '';
 
     Array.from(VibeDrips.categories).sort().forEach(category => {
-        const option = document.createElement('option');
-        option.value = category;
-        option.textContent = category;
-        categoriesOptgroup.appendChild(option);
+        const item = document.createElement('div');
+        item.className = 'dropdown-item';
+        item.onclick = () => setTimeFilter(category);
+        item.textContent = category;
+        subMenu.appendChild(item);
     });
 }
 

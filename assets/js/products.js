@@ -5,7 +5,7 @@ function setTimeFilter(filter) {
     console.log(`Setting time filter: ${filter}`);
     VibeDrips.currentTimeFilter = filter;
 
-    // Determine if it's a category (not reels, discovery, or all)
+    // Determine if it's a category (custom dropdown selections)
     const mainFilters = ['reels', 'discovery', 'all', 'hot', 'featured', 'new', 'trending'];
     const isCategory = !mainFilters.includes(filter);
 
@@ -19,13 +19,12 @@ function setTimeFilter(filter) {
     document.querySelectorAll('.time-category').forEach(cat => {
         cat.classList.remove('active');
 
-        if (cat.tagName === 'SELECT') {
-            const isDiscoveryActive = filter === 'discovery' || isCategory;
+        // Handle custom dropdown vs div tabs
+        if (cat.classList.contains('dropdown-trigger')) {
+            const isDiscoveryActive = filter === 'discovery' || isCategory || ['hot', 'featured', 'new', 'trending'].includes(filter);
             if (isDiscoveryActive) {
                 cat.classList.add('active');
-                cat.value = filter;
-            } else {
-                cat.value = 'discovery'; // Reset to placeholder when other tabs active
+                updateDiscoveryLabel(filter);
             }
         } else {
             if (cat.getAttribute('data-filter') === filter) {
@@ -33,6 +32,9 @@ function setTimeFilter(filter) {
             }
         }
     });
+
+    // Close dropdown on selection
+    closeDiscoveryDropdown();
 
     // Filter products based on selected filter
     switch (filter) {
@@ -56,7 +58,7 @@ function setTimeFilter(filter) {
             VibeDrips.filteredProducts = VibeDrips.allProducts.filter(product => product.trending);
             break;
         default:
-            // Specific category from dropdown
+            // Specific category from custom dropdown
             VibeDrips.filteredProducts = [...VibeDrips.allProducts];
     }
 
@@ -64,6 +66,51 @@ function setTimeFilter(filter) {
     applyCurrentFilters();
     renderProducts();
 }
+
+/**
+ * Custom Dropdown Logic
+ */
+function toggleDiscoveryDropdown(event) {
+    if (event) event.stopPropagation();
+    const dropdown = document.getElementById('discovery-dropdown');
+    dropdown.classList.toggle('open');
+}
+
+function closeDiscoveryDropdown() {
+    const dropdown = document.getElementById('discovery-dropdown');
+    if (dropdown) dropdown.classList.remove('open');
+}
+
+function toggleCategoryGroup(event) {
+    if (event) event.stopPropagation();
+    const group = event.currentTarget;
+    const subMenu = document.getElementById('categories-sub-menu');
+    group.classList.toggle('expanded');
+    subMenu.classList.toggle('collapsed');
+}
+
+function updateDiscoveryLabel(filter) {
+    const label = document.getElementById('discovery-current-label');
+    if (!label) return;
+
+    const labels = {
+        'discovery': '🏠 Discovery',
+        'hot': '🔥 Hot This Month',
+        'featured': '⭐ Featured',
+        'new': '🆕 New Arrivals',
+        'trending': '📈 Trending Now'
+    };
+
+    label.textContent = labels[filter] || `📂 ${filter}`;
+}
+
+// Close dropdown on outside click
+document.addEventListener('click', (e) => {
+    const dropdown = document.getElementById('discovery-dropdown');
+    if (dropdown && !dropdown.contains(e.target)) {
+        closeDiscoveryDropdown();
+    }
+});
 
 /**
  * Get "Hot This Month" products based on dateFirstAvailable
@@ -254,19 +301,18 @@ function renderProducts() {
 
     // PHASE_26: Discovery Rails vs Grid View
     const searchInput = VibeDrips.elements.search;
-    const categoryFilter = VibeDrips.elements.categoryFilter;
     const hasSearch = searchInput && searchInput.value.trim().length > 0;
-    const hasCategory = categoryFilter && categoryFilter.value.trim().length > 0;
+    const hasCategory = VibeDrips.currentCategory && VibeDrips.currentCategory.length > 0;
 
-    const discoverySubFilters = ['hot', 'featured', 'new', 'trending', 'discovery', 'categories'];
-    const isDiscoveryMode = discoverySubFilters.includes(VibeDrips.currentTimeFilter);
+    const mainFilters = ['hot', 'featured', 'new', 'trending', 'discovery'];
+    const isDiscoveryMode = mainFilters.includes(VibeDrips.currentTimeFilter) || hasCategory;
 
-    if (isDiscoveryMode && !hasSearch && !hasCategory) {
+    if (isDiscoveryMode && !hasSearch) {
         container.classList.remove('products-grid');
         renderDiscoveryRails();
     } else {
         container.classList.add('products-grid');
-        // Clear container and add cards directly (no wrapper needed)
+        // Clear container and add cards directly
         container.innerHTML = '';
         VibeDrips.filteredProducts.forEach(product => {
             const productCard = createProductCard(product);

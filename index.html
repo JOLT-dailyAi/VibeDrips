@@ -114,13 +114,30 @@
                     <!-- Reels tab -->
                     <div class="time-category" data-filter="reels" onclick="openReelsModal()">🎬 Reels</div>
 
-                    <!-- Unified Discovery Select (Nested Dropdown) -->
-                    <select id="discovery-select" class="time-category active" onchange="setTimeFilter(this.value)">
-                        <option value="discovery">🏠 Discovery</option>
-                        <optgroup label="📂 Categories" id="discovery-categories-optgroup">
-                            <!-- Dynamically populated categories go here -->
-                        </optgroup>
-                    </select>
+                    <!-- Custom Discovery Dropdown (Nested & Collapsible) -->
+                    <div class="custom-dropdown" id="discovery-dropdown">
+                        <div class="time-category active dropdown-trigger" onclick="toggleDiscoveryDropdown(event)">
+                            <span id="discovery-current-label">🏠 Discovery</span>
+                            <span class="dropdown-chevron">▼</span>
+                        </div>
+                        <div class="dropdown-menu" id="discovery-menu">
+                            <div class="dropdown-item" onclick="setTimeFilter('discovery')">🏠 Discovery (All Rails)
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-item" onclick="setTimeFilter('hot')">🔥 Hot This Month</div>
+                            <div class="dropdown-item" onclick="setTimeFilter('featured')">⭐ Featured</div>
+                            <div class="dropdown-item" onclick="setTimeFilter('new')">🆕 New Arrivals</div>
+                            <div class="dropdown-item" onclick="setTimeFilter('trending')">📈 Trending Now</div>
+                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-group" onclick="toggleCategoryGroup(event)">
+                                <span>📂 Categories</span>
+                                <span class="group-chevron">▶</span>
+                            </div>
+                            <div class="sub-menu collapsed" id="categories-sub-menu">
+                                <!-- Dynamically populated categories -->
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- All Products tab -->
                     <div class="time-category" data-filter="all" onclick="setTimeFilter('all')">🛍️ All Products</div>
