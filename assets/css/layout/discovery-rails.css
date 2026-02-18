@@ -28,43 +28,84 @@
     /* Minimalist thin border */
     color: white;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.6);
+    transition: all 0.3s ease;
 }
 
-.rail-group-header {
-    margin: 20px 10px 10px 10px;
-    padding: 15px 25px;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border-radius: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    display: flex;
-    align-items: center;
-    gap: 15px;
+/* Base Rail Glow - Unified */
+.rail-header::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 16px;
+    right: 16px;
+    height: 2px;
+    background: var(--color-primary, #5a4bff);
+    box-shadow: 0 0 20px var(--color-primary-glow, rgba(90, 75, 255, 0.6));
+    opacity: 0.6;
+}
+
+/* Terminate old moveable characteristics & stabilize */
+.rail-header {
+    pointer-events: auto;
+    /* Ensure clickable */
+    transform: none !important;
+}
+
+/* Unified Group Header Style (reusing section-header) */
+.rail-group-unified {
+    margin: 40px 10px 20px 10px !important;
+    padding: 20px 25px !important;
     position: sticky;
     top: 60px;
     z-index: 95;
+    background: var(--glass-bg, rgba(15, 15, 15, 0.4));
+    backdrop-filter: blur(25px) saturate(2.1);
+    -webkit-backdrop-filter: blur(25px) saturate(2.1);
+    border-radius: 15px;
+    border-bottom: 2px solid var(--glass-border, rgba(255, 255, 255, 0.1));
 }
 
-.rail-group-header h2 {
-    margin: 0;
-    font-size: 1.6rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.6) 100%);
+/* THEME PARITY - Discovery Rails */
+
+/* 💎 Glass Theme */
+.glass-theme .rail-header {
+    background: rgba(255, 255, 255, var(--glass-refraction, 0.08));
+    backdrop-filter: blur(var(--glass-blur, 15px));
+    border-bottom-color: var(--glass-border, rgba(255, 255, 255, 0.15));
+}
+
+/* 🌑 Dark Theme */
+.dark-theme .rail-header {
+    background: #111;
+    border-bottom-color: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+}
+
+/* ☀️ Light Theme (Defaults to Glass if not specifically defined) */
+:root:not(.glass-theme):not(.dark-theme) .rail-header {
+    background: #f8f9fa;
+    color: #333;
+    border-bottom-color: #dee2e6;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+:root:not(.glass-theme):not(.dark-theme) .rail-title {
+    background: linear-gradient(90deg, #333 0%, #666 100%);
     -webkit-background-clip: text;
     background-clip: text;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: -0.5px;
 }
 
-.rail-group-header::before {
-    content: '';
-    width: 4px;
-    height: 24px;
-    background: var(--color-primary, #5a4bff);
-    border-radius: 2px;
-    box-shadow: 0 0 15px var(--color-primary-glow, rgba(90, 75, 255, 0.4));
+:root:not(.glass-theme):not(.dark-theme) .rail-subtitle {
+    color: #666;
 }
+
+:root:not(.glass-theme):not(.dark-theme) .rail-view-all {
+    background: #e9ecef;
+    border-color: #ced4da;
+    color: #495057;
+}
+
+/* Removed old .rail-group-header */
 
 .rail-view-all {
     background: rgba(255, 255, 255, 0.1);

@@ -146,12 +146,12 @@ function updateDiscoveryLabel(filter) {
     }
 
     const labels = {
-        'discovery': '🏠 Discovery',
+        'discovery': '🏠 Discovery Drops',
         'hot': '🔥 Hot This Month',
         'featured': '⭐ Featured',
         'new': '🆕 New Arrivals',
         'trending': '📈 Trending Now',
-        'categories': '📂 Categories'
+        'categories': '📂 Category Drops'
     };
 
     // Robust fallback: If filter is somehow null/undefined or missing, show 'Discovery'
@@ -413,7 +413,7 @@ function renderDiscoveryRails() {
         categories.push({
             id: 'categories-all',
             title: '📂 Categories',
-            subtitle: 'Browse all products by department',
+            subtitle: 'Browse all curated drops by department',
             isParent: true
         });
     } else if (currentFilter === 'categories') {
@@ -460,11 +460,14 @@ function renderDiscoveryRails() {
         }
 
         if (railProducts.length > 0) {
-            // PHASE_26: Insert Parent Group Header ONLY for Isolated View (with partitions)
+            // PHASE_26: Insert Parent Group Header (Reusable Section Header)
             if (cat.id === 'custom' && categoriesRendered === 0 && isIsolatedCategories) {
                 const groupHeader = document.createElement('div');
-                groupHeader.className = 'rail-group-header';
-                groupHeader.innerHTML = `<h2><span class="emoji">📂</span> Categories</h2>`;
+                groupHeader.className = 'section-header rail-group-unified';
+                groupHeader.innerHTML = `
+                    <h2><span class="emoji">📂</span> Categories</h2>
+                    <p>Departmental drops organized by category</p>
+                `;
                 container.appendChild(groupHeader);
             }
 
