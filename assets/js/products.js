@@ -5,38 +5,27 @@ function setTimeFilter(filter) {
     console.log(`Setting time filter: ${filter}`);
     VibeDrips.currentTimeFilter = filter;
 
-    // Determine if it's a main tab or a sub-filter/category from Discovery select
-    const mainTabs = ['reels', 'discovery', 'all'];
-    const subFilters = ['hot', 'featured', 'new', 'trending'];
-    const isCategory = !mainTabs.includes(filter) && !subFilters.includes(filter);
-
-    if (isCategory) {
-        VibeDrips.currentCategory = filter;
-    } else {
+    // Reset specific category if switching to a main tab
+    if (filter !== 'categories') {
         VibeDrips.currentCategory = '';
+        const catFilter = document.getElementById('category-filter');
+        if (catFilter) {
+            catFilter.value = '';
+        }
     }
 
     // Update active filter UI
     document.querySelectorAll('.time-category').forEach(cat => {
         cat.classList.remove('active');
-
-        // Handle select element vs div tabs
-        if (cat.tagName === 'SELECT') {
-            const isDiscoveryValue = subFilters.includes(filter) || filter === 'discovery' || isCategory;
-            if (isDiscoveryValue) {
-                cat.classList.add('active');
-                cat.value = filter;
-            }
-        } else {
-            if (cat.getAttribute('data-filter') === filter) {
-                cat.classList.add('active');
-            }
+        if (cat.getAttribute('data-filter') === filter || (filter === 'categories' && cat.getAttribute('data-filter') === 'discovery')) {
+            cat.classList.add('active');
         }
     });
 
     // Filter products based on selected filter
     switch (filter) {
         case 'discovery':
+        case 'categories':
             VibeDrips.filteredProducts = [...VibeDrips.allProducts];
             break;
         case 'hot':
@@ -55,13 +44,28 @@ function setTimeFilter(filter) {
             VibeDrips.filteredProducts = [...VibeDrips.allProducts];
             break;
         default:
-            // Custom category filter
             VibeDrips.filteredProducts = [...VibeDrips.allProducts];
     }
 
     updateSectionTitle(filter);
     applyCurrentFilters();
     renderProducts();
+}
+
+/**
+ * Handle specific category selection from nested select
+ */
+function setCategoryFilter(category) {
+    console.log(`Setting category filter: ${category}`);
+    VibeDrips.currentCategory = category;
+
+    if (category) {
+        VibeDrips.currentTimeFilter = 'categories';
+    } else {
+        VibeDrips.currentTimeFilter = 'discovery';
+    }
+
+    setTimeFilter(VibeDrips.currentTimeFilter);
 }
 
 /**
@@ -292,7 +296,6 @@ function renderDiscoveryRails() {
         { id: 'trending', title: '📈 Trending Now', subtitle: 'What everyone is talking about' }
     ];
 
-    // If in discovery mode, append all category rails
     const currentFilter = VibeDrips.currentTimeFilter;
     if (currentFilter === 'discovery') {
         const categoryRails = Array.from(VibeDrips.categories).sort().map(cat => ({

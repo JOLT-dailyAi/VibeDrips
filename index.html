@@ -114,13 +114,11 @@
                     <!-- Reels tab -->
                     <div class="time-category" data-filter="reels" onclick="openReelsModal()">🎬 Reels</div>
 
-                    <!-- Discovery Tab (DEFAULT) -->
-                    <div class="time-category active" data-filter="discovery" onclick="setTimeFilter('discovery')">🏠
-                        Discovery</div>
-
-                    <!-- Separate Standard Category Select -->
-                    <div class="time-category category-select-wrapper">
-                        <select id="category-filter" onchange="setCategoryFilter(this.value)">
+                    <!-- Discovery Tab (Integrated Nested Select) -->
+                    <div class="time-category active" data-filter="discovery" onclick="setTimeFilter('discovery')">
+                        <span class="discovery-label">🏠 Discovery</span>
+                        <select id="category-filter" onclick="event.stopPropagation()"
+                            onchange="setCategoryFilter(this.value)">
                             <option value="">📂 Categories</option>
                         </select>
                     </div>
