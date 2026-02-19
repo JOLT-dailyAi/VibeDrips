@@ -429,6 +429,10 @@
         font-size: 1.2rem;
     }
 
+    .rail-subtitle {
+        display: none;
+    }
+
     .rail-nav-btn {
         display: none;
         /* Rely on touch scrolling on mobile */
