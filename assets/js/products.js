@@ -126,6 +126,27 @@ function handleRelationalFilter(filter) {
 
 
 /**
+ * Get influencers filtered by current region/currency
+ */
+function getFilteredInfluencers() {
+    const currentReg = VibeDrips.currentCurrency;
+    return (VibeDrips.influencers || []).filter(i =>
+        !i.regions || i.regions.length === 0 || i.regions.includes(currentReg)
+    );
+}
+
+/**
+ * Get seasons filtered by current region/currency
+ */
+function getFilteredSeasons() {
+    const currentReg = VibeDrips.currentCurrency;
+    return (VibeDrips.seasons || []).filter(s =>
+        s.product_count > 0 && (!s.regions || s.regions.length === 0 || s.regions.includes(currentReg))
+    );
+}
+
+
+/**
  * Custom Dropdown Logic
  */
 function toggleDiscoveryDropdown(event) {
@@ -153,7 +174,7 @@ function toggleDiscoveryDropdown(event) {
             menu.style.top = `${rect.bottom + window.scrollY + 10}px`;
             menu.style.left = `${rect.left + window.scrollX}px`;
             menu.style.display = 'block';
-            menu.style.zIndex = '10000';
+            menu.style.zIndex = '90';
             // Trigger animation
             setTimeout(() => {
                 menu.style.opacity = '1';
@@ -241,11 +262,11 @@ function toggleRelationalGroup(event, type) {
 function populateRelationalMenus() {
     console.log('🏗️ Populating relational menus...');
 
-    // 1. Creators
+    // 1. Creators (Filtered by Region)
     const creatorsMenu = document.getElementById('creators-sub-menu');
     if (creatorsMenu) {
         creatorsMenu.innerHTML = '';
-        VibeDrips.influencers.forEach(creator => {
+        getFilteredInfluencers().forEach(creator => {
             const item = document.createElement('div');
             item.className = 'dropdown-item';
             item.onclick = () => setTimeFilter(creator.name);
@@ -255,11 +276,11 @@ function populateRelationalMenus() {
         });
     }
 
-    // 2. Seasons
+    // 2. Seasons (Filtered by Region)
     const seasonsMenu = document.getElementById('seasons-sub-menu');
     if (seasonsMenu) {
         seasonsMenu.innerHTML = '';
-        VibeDrips.seasons.forEach(season => {
+        getFilteredSeasons().forEach(season => {
             const item = document.createElement('div');
             item.className = 'dropdown-item';
             item.onclick = () => setTimeFilter(season.id);
@@ -628,22 +649,28 @@ function renderDiscoveryRails() {
     categories.forEach(cat => {
         let railProducts = [];
         switch (cat.id) {
-            case 'new': railProducts = filterByAsins(VibeDrips.recentDrops.map(p => p.asin)); break;
+            case 'new': railProducts = filterByAsins((VibeDrips.recentDrops || []).map(p => p.asin)); break;
             case 'creators':
                 categoriesRendered++;
-                // Show products from first creator as a taste
-                const firstCreator = VibeDrips.influencers[0];
-                if (firstCreator) railProducts = filterByAsins(firstCreator.media_groups.flatMap(mg => mg.asins));
+                // Show products from FIRST region-appropriate creator as a taste
+                const firstCreator = getFilteredInfluencers()[0];
+                if (firstCreator && firstCreator.media_groups) {
+                    railProducts = filterByAsins(firstCreator.media_groups.flatMap(mg => mg.asins || []));
+                }
                 break;
             case 'seasons':
                 categoriesRendered++;
-                const firstSeason = VibeDrips.seasons.find(s => s.product_count > 0);
+                const firstSeason = getFilteredSeasons().find(s => s.product_count > 0);
                 if (firstSeason) railProducts = filterByAsins(firstSeason.asins);
                 break;
             case 'collections':
                 categoriesRendered++;
-                const firstColl = Object.values(VibeDrips.collections)[0];
+                const firstColl = Object.values(VibeDrips.collections || {})[0];
                 if (firstColl) railProducts = filterByAsins(firstColl.asins);
+                break;
+            case 'categories':
+                // Parent rail: Bundle all departmental products for global view
+                railProducts = VibeDrips.allProducts.filter(p => p.category && VibeDrips.categories.has(p.category.trim()));
                 break;
             case 'relational':
                 // Handle specific creator/season/collection item

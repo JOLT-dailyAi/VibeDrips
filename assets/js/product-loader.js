@@ -232,7 +232,7 @@ async function loadDiscoveryIndices() {
             if (res.key === 'collections') {
                 VibeDrips.collections = res.data.collections || {};
             } else if (res.key === 'recentDrops') {
-                VibeDrips.recentDrops = res.data.products || [];
+                VibeDrips.recentDrops = res.data.recent_drops || [];
             } else {
                 VibeDrips[res.key] = res.data[res.key] || [];
             }
