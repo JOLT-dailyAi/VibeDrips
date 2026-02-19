@@ -58,11 +58,11 @@ window.VibeDripsPriceFilter = {
             group = document.createElement('div');
             group.className = 'filter-group price-filter-group';
 
-            const categoryFilter = document.getElementById('category-filter');
-            const categoryGroup = categoryFilter ? categoryFilter.closest('.filter-group') : null;
+            const sortFilter = document.getElementById('price-sort');
+            const sortGroup = sortFilter ? sortFilter.closest('.filter-group') : null;
 
-            if (categoryGroup) {
-                categoryGroup.after(group);
+            if (sortGroup) {
+                sortGroup.before(group);
             } else {
                 controls.appendChild(group);
             }
