@@ -430,7 +430,7 @@
     }
 
     .rail-subtitle {
-        display: none;
+        display: none !important;
     }
 
     .rail-nav-btn {
