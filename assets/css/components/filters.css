@@ -182,7 +182,18 @@ body.glass-theme .filter-group .price-filter-trigger:focus {
 
     .filter-controls {
         gap: 8px;
-        padding: 6px;
+        padding: 6px 12px;
+        flex-wrap: nowrap !important;
+        overflow-x: auto;
+        justify-content: flex-start;
+        max-width: 95vw;
+        scrollbar-width: none;
+        /* Firefox */
+    }
+
+    .filter-controls::-webkit-scrollbar {
+        display: none;
+        /* Chrome/Safari */
     }
 
     .filter-group input,
