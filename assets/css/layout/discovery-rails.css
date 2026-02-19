@@ -440,8 +440,10 @@
 @media (max-width: 767px) {
     .rail-header {
         position: sticky !important;
-        top: 50px !important;
-        /* Slightly tighter on mobile */
+        top: 55px !important;
+        /* Adjusted for better visual gap on mobile */
+        padding: 12px 16px;
+        /* Increased padding to compensate for hidden subtitles */
     }
 
     .rail-title {
