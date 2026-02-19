@@ -450,9 +450,6 @@
         font-size: 1.2rem;
     }
 
-    .rail-subtitle {
-        /* display: none !important; - Unhidden per user request */
-    }
 
     .rail-nav-btn {
         display: none;
