@@ -321,11 +321,11 @@ function updateDiscoveryLabel(filter) {
 
     const labels = {
         'discovery': '🏠 Discover',
-        'new': '🆕 New Arrivals',
+        'new': '🆕 New',
         'categories': '📂 Category Drops',
-        'creators': '👤 Creator Drops',
-        'seasons': '🍃 Seasonal Vibes',
-        'collections': '🧩 Curated Sets'
+        'creators': '👤 Creators',
+        'seasons': '🍃 4 Seasons',
+        'collections': '🧩 Collections'
     };
 
     // Robust fallback: If filter is somehow null/undefined or missing, show 'Discovery'
@@ -402,8 +402,8 @@ function updateSectionTitle(filter) {
             subtitle: 'Our hand-picked recommendations just for you'
         },
         'new': {
-            title: 'New Arrivals',
-            subtitle: 'Fresh drops from the last 30 days'
+            title: '🆕 New',
+            subtitle: 'The latest drops & fresh desk setup inspiration'
         },
         'trending': {
             title: 'Trending Now',
@@ -415,23 +415,23 @@ function updateSectionTitle(filter) {
         },
         'categories': {
             title: '📂 Categories',
-            subtitle: 'Departmental drops organized by category'
+            subtitle: 'Show me cool desk setups by department'
         },
         'discovery': {
             title: '🏠 Discover Drops',
             subtitle: 'Explore our curated drops'
         },
         'creators': {
-            title: '👤 Creator Drops',
-            subtitle: 'Must-haves curated by your favorite influencers'
+            title: '👤 Creators',
+            subtitle: 'What are creators actually using?'
         },
         'seasons': {
-            title: '🍃 Seasonal Vibes',
-            subtitle: 'Hand-picked selections for the current climate'
+            title: '🍃 4 Seasons',
+            subtitle: 'What fits this season? Seasonal essentials.'
         },
         'collections': {
-            title: '🧩 Curated Sets',
-            subtitle: 'Themes and collections grouped for your style'
+            title: '🧩 Collections',
+            subtitle: 'What’s good under my budget? Curated sets.'
         }
     };
 
@@ -607,11 +607,11 @@ function renderDiscoveryRails() {
 
     if (currentFilter === 'discovery' && !isSpecificCategory) {
         // Aligned with the 5 new main buckets + Categories
-        categories.push({ id: 'new', title: '🆕 New (Drops)', subtitle: 'Fresh arrivals from our latest collection' });
-        categories.push({ id: 'creators', title: '👤 Top Creators', subtitle: 'Drops curated by your favorite influencers' });
-        categories.push({ id: 'seasons', title: '🍃 Seasonal Vibes', subtitle: 'Hand-picked for the current season' });
-        categories.push({ id: 'collections', title: '🧩 Curated Collections', subtitle: 'Grouped by theme and style' });
-        categories.push({ id: 'categories', title: '📂 Categories', subtitle: 'Browse all curated drops by department', isParent: true });
+        categories.push({ id: 'new', title: '🆕 New', subtitle: 'The latest drops & fresh desk setup inspiration' });
+        categories.push({ id: 'creators', title: '👤 Creators', subtitle: 'What are creators actually using?' });
+        categories.push({ id: 'seasons', title: '🍃 4 Seasons', subtitle: 'What fits this season? Seasonal essentials.' });
+        categories.push({ id: 'collections', title: '🧩 Collections', subtitle: 'What’s good under my budget? Curated sets.' });
+        categories.push({ id: 'categories', title: '📂 Categories', subtitle: 'Show me cool desk setups by department' });
     } else if (currentFilter === 'creators') {
         categories = VibeDrips.influencers.map(i => ({
             id: 'relational',
