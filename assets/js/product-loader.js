@@ -224,13 +224,16 @@ async function loadDiscoveryIndices() {
         );
 
         results.forEach(res => {
+            if (!res || !res.data) return;
+
             if (res.key === 'collections') {
                 VibeDrips.collections = res.data.collections || {};
             } else if (res.key === 'recentDrops') {
                 VibeDrips.recentDrops = res.data.recent_drops || [];
                 // Attach expiry_time to master products for countdowns
                 VibeDrips.recentDrops.forEach(drop => {
-                    const product = VibeDrips.allProducts.find(p => p.asin === drop.asin);
+                    if (!drop || !drop.asin) return;
+                    const product = (VibeDrips.allProducts || []).find(p => p.asin === drop.asin);
                     if (product) product.expiry_time = drop.expiry_time;
                 });
             } else {

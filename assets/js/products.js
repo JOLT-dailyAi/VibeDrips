@@ -126,13 +126,17 @@ function getRecentDropsBuckets() {
 
     const drops = VibeDrips.recentDrops || [];
     drops.forEach(drop => {
+        if (!drop || !drop.added_date) return;
+
         // Calculate age relative to now
         const addedDate = new Date(drop.added_date);
+        if (isNaN(addedDate.getTime())) return;
+
         const diffDays = (now - addedDate) / (1000 * 60 * 60 * 24);
 
         const bucket = buckets.find(b => diffDays <= b.maxDays);
         if (bucket) {
-            const product = VibeDrips.allProducts.find(p => p.asin === drop.asin);
+            const product = (VibeDrips.allProducts || []).find(p => p.asin === drop.asin);
             if (product) {
                 bucket.products.push({
                     ...product,
@@ -647,7 +651,7 @@ function renderDiscoveryRails() {
         categories.push({ id: 'categories', title: '📂 Categories', subtitle: 'Browse all curated drops by department', isParent: true });
     } else if (currentFilter === 'new') {
         // Partitioned Recent Drops View
-        return getRecentDropsBuckets().forEach(bucket => {
+        getRecentDropsBuckets().forEach(bucket => {
             const railSection = createDiscoveryRail({
                 id: 'relational',
                 title: bucket.title,
@@ -656,6 +660,7 @@ function renderDiscoveryRails() {
             }, bucket.products);
             container.appendChild(railSection);
         });
+        return; // Exit early after rendering partitions
     } else if (currentFilter === 'creators') {
         categories = getFilteredInfluencers().map(i => ({
             id: 'relational',
@@ -701,7 +706,9 @@ function renderDiscoveryRails() {
                 categoriesRendered++;
                 // Show products from first creator as a taste
                 const firstCreator = (getFilteredInfluencers() || [])[0];
-                if (firstCreator) railProducts = filterByAsins(firstCreator.media_groups.flatMap(mg => mg.asins));
+                if (firstCreator && firstCreator.media_groups) {
+                    railProducts = filterByAsins(firstCreator.media_groups.flatMap(mg => mg.asins || []));
+                }
                 break;
             case 'seasons':
                 categoriesRendered++;
