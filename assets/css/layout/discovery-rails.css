@@ -451,7 +451,7 @@
     }
 
     .rail-subtitle {
-        display: none !important;
+        /* display: none !important; - Unhidden per user request */
     }
 
     .rail-nav-btn {
