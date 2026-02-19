@@ -146,7 +146,7 @@ function updateDiscoveryLabel(filter) {
     }
 
     const labels = {
-        'discovery': '🏠 Discovery Drops',
+        'discovery': '🏠 Discover',
         'hot': '🔥 Hot This Month',
         'featured': '⭐ Featured',
         'new': '🆕 New Arrivals',
@@ -242,6 +242,10 @@ function updateSectionTitle(filter) {
         'categories': {
             title: '📂 Categories',
             subtitle: 'Departmental drops organized by category'
+        },
+        'discovery': {
+            title: '🏠 Discover Drops',
+            subtitle: 'Explore our curated drops'
         }
     };
 
@@ -542,6 +546,22 @@ function createDiscoveryRail(category, products) {
     // Add navigation logic
     const prevBtn = rail.querySelector('.rail-nav-btn.prev');
     const nextBtn = rail.querySelector('.rail-nav-btn.next');
+
+    // Boundary-aware arrow visibility
+    const updateArrowVisibility = () => {
+        const scrollLeft = railContainer.scrollLeft;
+        const maxScroll = railContainer.scrollWidth - railContainer.clientWidth;
+
+        prevBtn.style.opacity = scrollLeft <= 5 ? '0' : '1';
+        prevBtn.style.pointerEvents = scrollLeft <= 5 ? 'none' : 'auto';
+
+        nextBtn.style.opacity = scrollLeft >= maxScroll - 5 ? '0' : '1';
+        nextBtn.style.pointerEvents = scrollLeft >= maxScroll - 5 ? 'none' : 'auto';
+    };
+
+    railContainer.addEventListener('scroll', updateArrowVisibility);
+    // Initial check after a short delay to ensure rendering is complete
+    setTimeout(updateArrowVisibility, 100);
 
     prevBtn.onclick = () => {
         railContainer.scrollBy({ left: -window.innerWidth * 0.8, behavior: 'smooth' });
