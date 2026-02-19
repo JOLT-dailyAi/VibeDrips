@@ -299,7 +299,7 @@
     min-width: 220px;
     border-radius: 15px;
     padding: 10px;
-    z-index: 1000;
+    z-index: 95;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     display: none;
     opacity: 0;
