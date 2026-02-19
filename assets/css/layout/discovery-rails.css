@@ -460,3 +460,59 @@
         flex: 0 0 240px;
     }
 }
+
+/* 🆕 Recent Drops Countdown Styles */
+.product-countdown {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 6px 4px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 10;
+    pointer-events: none;
+    font-family: 'Inter', sans-serif;
+}
+
+.countdown-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.countdown-unit .val {
+    color: var(--color-primary, #5a4bff);
+    font-weight: 800;
+    font-size: 14px;
+    line-height: 1;
+    text-shadow: 0 0 10px var(--color-primary-glow, rgba(90, 75, 255, 0.5));
+}
+
+.countdown-unit .label {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+}
+
+.product-countdown .expired {
+    color: #ff4d4d;
+    font-weight: 900;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+
+/* Ensure image wrapper has enough room */
+.product-card .product-image-wrapper {
+    position: relative;
+    padding-bottom: 5px;
+    /* Minimal extra spacing for the countdown absolute overlay */
+}

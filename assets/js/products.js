@@ -93,6 +93,59 @@ function filterByAsins(asinList) {
 }
 
 /**
+ * Get influencers filtered by current region/currency
+ */
+function getFilteredInfluencers() {
+    const currentReg = VibeDrips.currentCurrency;
+    return (VibeDrips.influencers || []).filter(i =>
+        !i.regions || i.regions.length === 0 || i.regions.includes(currentReg)
+    );
+}
+
+/**
+ * Get seasons filtered by current region/currency
+ */
+function getFilteredSeasons() {
+    const currentReg = VibeDrips.currentCurrency;
+    return (VibeDrips.seasons || []).filter(s =>
+        s.product_count > 0 && (!s.regions || s.regions.length === 0 || s.regions.includes(currentReg))
+    );
+}
+
+/**
+ * Advanced: Partition recent drops into time-based buckets
+ */
+function getRecentDropsBuckets() {
+    const now = new Date();
+    const buckets = [
+        { id: 'new-1w', title: '🆕 Added this week · Ending soon', products: [], maxDays: 7 },
+        { id: 'new-2w', title: '🆕 Added 2 weeks ago · Time running out', products: [], maxDays: 14 },
+        { id: 'new-1m', title: '🆕 Added this month · Limited time', products: [], maxDays: 30 },
+        { id: 'new-2m', title: '🆕 Added recently · Final days', products: [], maxDays: 60 }
+    ];
+
+    const drops = VibeDrips.recentDrops || [];
+    drops.forEach(drop => {
+        // Calculate age relative to now
+        const addedDate = new Date(drop.added_date);
+        const diffDays = (now - addedDate) / (1000 * 60 * 60 * 24);
+
+        const bucket = buckets.find(b => diffDays <= b.maxDays);
+        if (bucket) {
+            const product = VibeDrips.allProducts.find(p => p.asin === drop.asin);
+            if (product) {
+                bucket.products.push({
+                    ...product,
+                    expiry_time: drop.expiry_time
+                });
+            }
+        }
+    });
+
+    return buckets.filter(b => b.products.length > 0);
+}
+
+/**
  * Handle specific relational filters (lookup in indices)
  */
 function handleRelationalFilter(filter) {
@@ -153,7 +206,7 @@ function toggleDiscoveryDropdown(event) {
             menu.style.top = `${rect.bottom + window.scrollY + 10}px`;
             menu.style.left = `${rect.left + window.scrollX}px`;
             menu.style.display = 'block';
-            menu.style.zIndex = '10000';
+            menu.style.zIndex = '90';
             // Trigger animation
             setTimeout(() => {
                 menu.style.opacity = '1';
@@ -240,12 +293,13 @@ function toggleRelationalGroup(event, type) {
  */
 function populateRelationalMenus() {
     console.log('🏗️ Populating relational menus...');
+    const currentReg = VibeDrips.currentCurrency;
 
-    // 1. Creators
+    // 1. Creators (Filtered by Region)
     const creatorsMenu = document.getElementById('creators-sub-menu');
     if (creatorsMenu) {
         creatorsMenu.innerHTML = '';
-        VibeDrips.influencers.forEach(creator => {
+        getFilteredInfluencers().forEach(creator => {
             const item = document.createElement('div');
             item.className = 'dropdown-item';
             item.onclick = () => setTimeFilter(creator.name);
@@ -255,11 +309,11 @@ function populateRelationalMenus() {
         });
     }
 
-    // 2. Seasons
+    // 2. Seasons (Filtered by Region)
     const seasonsMenu = document.getElementById('seasons-sub-menu');
     if (seasonsMenu) {
         seasonsMenu.innerHTML = '';
-        VibeDrips.seasons.forEach(season => {
+        getFilteredSeasons().forEach(season => {
             const item = document.createElement('div');
             item.className = 'dropdown-item';
             item.onclick = () => setTimeFilter(season.id);
@@ -586,20 +640,31 @@ function renderDiscoveryRails() {
 
     if (currentFilter === 'discovery' && !isSpecificCategory) {
         // Aligned with the 5 new main buckets + Categories
-        categories.push({ id: 'new', title: '🆕 New (Drops)', subtitle: 'Fresh arrivals from our latest collection' });
-        categories.push({ id: 'creators', title: '👤 Top Creators', subtitle: 'Drops curated by your favorite influencers' });
-        categories.push({ id: 'seasons', title: '🍃 Seasonal Vibes', subtitle: 'Hand-picked for the current season' });
-        categories.push({ id: 'collections', title: '🧩 Curated Collections', subtitle: 'Grouped by theme and style' });
+        categories.push({ id: 'new', title: '🆕 New (Drops)', subtitle: 'Fresh arrivals from our latest collection', isParent: true });
+        categories.push({ id: 'creators', title: '👤 Top Creators', subtitle: 'Drops curated by your favorite influencers', isParent: true });
+        categories.push({ id: 'seasons', title: '🍃 Seasonal Vibes', subtitle: 'Hand-picked for the current season', isParent: true });
+        categories.push({ id: 'collections', title: '🧩 Curated Collections', subtitle: 'Grouped by theme and style', isParent: true });
         categories.push({ id: 'categories', title: '📂 Categories', subtitle: 'Browse all curated drops by department', isParent: true });
+    } else if (currentFilter === 'new') {
+        // Partitioned Recent Drops View
+        return getRecentDropsBuckets().forEach(bucket => {
+            const railSection = createDiscoveryRail({
+                id: 'relational',
+                title: bucket.title,
+                subtitle: 'Expirable inventory based on timestamp',
+                filterValue: bucket.id
+            }, bucket.products);
+            container.appendChild(railSection);
+        });
     } else if (currentFilter === 'creators') {
-        categories = VibeDrips.influencers.map(i => ({
+        categories = getFilteredInfluencers().map(i => ({
             id: 'relational',
             title: `👤 ${i.name}`,
             subtitle: `Curated by ${i.name}`,
             filterValue: i.name
         }));
     } else if (currentFilter === 'seasons') {
-        categories = VibeDrips.seasons.filter(s => s.product_count > 0).map(s => ({
+        categories = getFilteredSeasons().map(s => ({
             id: 'relational',
             title: `${s.emoji} ${s.name}`,
             subtitle: s.label || `Explore our ${s.name} collection`,
@@ -635,12 +700,12 @@ function renderDiscoveryRails() {
             case 'creators':
                 categoriesRendered++;
                 // Show products from first creator as a taste
-                const firstCreator = (VibeDrips.influencers || [])[0];
+                const firstCreator = (getFilteredInfluencers() || [])[0];
                 if (firstCreator) railProducts = filterByAsins(firstCreator.media_groups.flatMap(mg => mg.asins));
                 break;
             case 'seasons':
                 categoriesRendered++;
-                const firstSeason = (VibeDrips.seasons || []).find(s => s.product_count > 0);
+                const firstSeason = (getFilteredSeasons() || []).find(s => s.product_count > 0);
                 if (firstSeason) railProducts = filterByAsins(firstSeason.asins);
                 break;
             case 'collections':
@@ -889,15 +954,22 @@ function createProductCard(product) {
     const symbol = product.symbol || '₹';
     const priceFormatted = formatPrice(price, currencyCode, symbol, true); // Compact format
 
-    // Discount badge logic
-    const showDiscount = product.show_discount || false;
-    const discountPercent = product.computed_discount || 0;
-    const discountBadge = showDiscount && discountPercent > 0
-        ? `<span class="discount-badge"><span class="live-dot" aria-hidden="true"></span>${discountPercent}%</span>`
-        : '';
+    // Countdown Badge logic
+    const isNewSection = VibeDrips.currentTimeFilter === 'new' || VibeDrips.currentTimeFilter === 'discovery';
+    const expiryTime = product.expiry_time;
+    let countdownHTML = '';
 
-    // SVG fallback
-    const svgFallback = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23333' width='200' height='200'/%3E%3Ctext fill='%23fff' font-size='14' x='50%25' y='50%25' text-anchor='middle' dy='.3em'%3E${encodeURIComponent(productName?.substring(0, 20) || 'No Image')}%3C/text%3E%3C/svg%3E`;
+    if (isNewSection && expiryTime) {
+        countdownHTML = `
+            <div class="product-countdown" data-expiry="${expiryTime}">
+                <div class="countdown-unit"><span class="val">00</span><span class="label">Months</span></div>
+                <div class="countdown-unit"><span class="val">00</span><span class="label">Days</span></div>
+                <div class="countdown-unit"><span class="val">00</span><span class="label">Hours</span></div>
+                <div class="countdown-unit"><span class="val">00</span><span class="label">Mins</span></div>
+                <div class="countdown-unit"><span class="val">00</span><span class="label">Secs</span></div>
+            </div>
+        `;
+    }
 
     card.innerHTML = `
         <div class="product-image-wrapper">
@@ -908,6 +980,7 @@ function createProductCard(product) {
 
             ${imageCount > 1 ? `<div class="image-count">${imageCount} photos</div>` : ''}
             ${brand ? `<div class="brand-tag">🏷️ ${brand}</div>` : ''}
+            ${countdownHTML}
         </div>
 
         <div class="product-category">${category}</div>
@@ -933,7 +1006,51 @@ function createProductCard(product) {
     // ✅ PHASE_7: Add ID for DOM-based context extraction
     card.setAttribute('data-product-id', productId);
 
+    // Initial countdown update
+    if (expiryTime) setTimeout(() => updateCardCountdown(card), 10);
+
     return card;
+}
+
+/**
+ * Live Countdown Timer for product cards
+ */
+function updateCardCountdown(card) {
+    const timer = card.querySelector('.product-countdown');
+    if (!timer) return;
+
+    const expiry = new Date(timer.getAttribute('data-expiry')).getTime();
+
+    const interval = setInterval(() => {
+        if (!document.contains(card)) {
+            clearInterval(interval);
+            return;
+        }
+
+        const now = new Date().getTime();
+        const diff = expiry - now;
+
+        if (diff <= 0) {
+            timer.innerHTML = '<span class="expired">EXPIRED</span>';
+            clearInterval(interval);
+            return;
+        }
+
+        const months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30.44));
+        const days = Math.floor((diff % (1000 * 60 * 60 * 24 * 30.44)) / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+        const units = timer.querySelectorAll('.val');
+        if (units.length >= 5) {
+            units[0].textContent = String(months).padStart(2, '0');
+            units[1].textContent = String(days).padStart(2, '0');
+            units[2].textContent = String(hours).padStart(2, '0');
+            units[3].textContent = String(mins).padStart(2, '0');
+            units[4].textContent = String(secs).padStart(2, '0');
+        }
+    }, 1000);
 }
 
 /**

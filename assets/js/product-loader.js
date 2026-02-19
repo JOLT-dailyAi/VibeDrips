@@ -228,6 +228,11 @@ async function loadDiscoveryIndices() {
                 VibeDrips.collections = res.data.collections || {};
             } else if (res.key === 'recentDrops') {
                 VibeDrips.recentDrops = res.data.recent_drops || [];
+                // Attach expiry_time to master products for countdowns
+                VibeDrips.recentDrops.forEach(drop => {
+                    const product = VibeDrips.allProducts.find(p => p.asin === drop.asin);
+                    if (product) product.expiry_time = drop.expiry_time;
+                });
             } else {
                 VibeDrips[res.key] = res.data[res.key] || [];
             }
