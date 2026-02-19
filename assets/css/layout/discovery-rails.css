@@ -7,6 +7,21 @@
     padding: 0 10px;
 }
 
+/* Unified Rail Glow - Ambient */
+.discovery-rail::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 10px;
+    right: 10px;
+    bottom: 0px;
+    border-radius: 20px;
+    pointer-events: none;
+    z-index: -1;
+    box-shadow: 0 0 60px 15px var(--color-primary-glow, rgba(90, 75, 255, 0.4));
+    opacity: 0.4 !important;
+}
+
 .rail-header {
     display: flex;
     justify-content: space-between;
@@ -15,10 +30,12 @@
     /* Reduced from 12px 20px */
     margin-bottom: 12px;
     border-radius: 12px;
-    position: sticky;
-    top: 60px;
+    position: relative !important;
+    /* Force natural scroll flow globally */
+    top: auto !important;
     z-index: 90;
     overflow: visible !important;
+    transition: all 0.3s ease;
 }
 
 /* Base Rail Glow - Unified */
@@ -418,13 +435,8 @@
 
 
 
-/* Mobile Adjustments */
+/* Mobile Portrait Adjustments */
 @media (max-width: 767px) {
-    .rail-header {
-        position: static;
-        padding: 10px 15px;
-    }
-
     .rail-title {
         font-size: 1.2rem;
     }
@@ -441,6 +453,4 @@
     .discovery-rail .product-card {
         flex: 0 0 240px;
     }
-
-
 }

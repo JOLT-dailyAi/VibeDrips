@@ -10,6 +10,13 @@ function setTimeFilter(filter, shouldClose = true) {
     // Ensure filter is a string (prevents null/undefined artifacts)
     filter = String(filter);
 
+    // 🎬 REELS ISOLATION: Prevent Reels from updating main section-header and products
+    if (filter === 'reels') {
+        console.log('🎬 Reels clicked - skipping setTimeFilter to maintain background state');
+        if (window.openReelsModal) window.openReelsModal();
+        return;
+    }
+
     console.log(`Setting time filter: ${filter}`);
     VibeDrips.currentTimeFilter = filter;
 
@@ -99,6 +106,10 @@ function setTimeFilter(filter, shouldClose = true) {
  */
 function toggleDiscoveryDropdown(event) {
     if (event) event.stopPropagation();
+
+    // DUAL-ACTION: Apply "All Drops" filter when opening the dropdown
+    setTimeFilter('discovery', false);
+
     const dropdownWrap = document.getElementById('discovery-dropdown');
     const menu = document.getElementById('discovery-menu');
     if (!dropdownWrap || !menu) return;

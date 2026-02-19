@@ -54,6 +54,8 @@ function setupEventListeners() {
 
         category.addEventListener('click', function () {
             const filter = this.getAttribute('data-filter');
+            // Skip Reels as it's purely a modal experience and shouldn't affect main page state
+            if (filter === 'reels') return;
             if (filter) setTimeFilter(filter);
         });
     });
