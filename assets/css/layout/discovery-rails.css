@@ -30,9 +30,10 @@
     /* Reduced from 12px 20px */
     margin-bottom: 12px;
     border-radius: 12px;
-    position: relative !important;
-    /* Force natural scroll flow globally */
-    top: auto !important;
+    position: sticky !important;
+    /* Force sticky flow globally */
+    top: 60px !important;
+    /* Align below main header */
     z-index: 90;
     overflow: visible !important;
     transition: all 0.3s ease;
@@ -437,6 +438,12 @@
 
 /* Mobile Portrait Adjustments */
 @media (max-width: 767px) {
+    .rail-header {
+        position: sticky !important;
+        top: 50px !important;
+        /* Slightly tighter on mobile */
+    }
+
     .rail-title {
         font-size: 1.2rem;
     }
