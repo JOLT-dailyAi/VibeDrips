@@ -99,25 +99,71 @@ function setTimeFilter(filter, shouldClose = true) {
  */
 function toggleDiscoveryDropdown(event) {
     if (event) event.stopPropagation();
-    const dropdown = document.getElementById('discovery-dropdown');
-    const isOpen = dropdown.classList.contains('open');
+    const dropdownWrap = document.getElementById('discovery-dropdown');
+    const menu = document.getElementById('discovery-menu');
+    if (!dropdownWrap || !menu) return;
 
-    dropdown.classList.toggle('open');
+    const isOpen = dropdownWrap.classList.contains('open');
 
-    // persistent Expansion: If a category is active, ensure the group is expanded when opening
-    if (!isOpen && VibeDrips.currentCategory) {
-        const group = document.querySelector('.dropdown-group');
-        const subMenu = document.getElementById('categories-sub-menu');
-        if (group && subMenu) {
-            group.classList.add('expanded');
-            subMenu.classList.remove('collapsed');
+    if (!isOpen) {
+        // OPENING: Portal to body to avoid clipping
+        dropdownWrap.classList.add('open');
+        document.body.appendChild(menu);
+
+        const updatePos = () => {
+            const rect = dropdownWrap.getBoundingClientRect();
+            menu.style.position = 'absolute';
+            menu.style.top = `${rect.bottom + window.scrollY + 10}px`;
+            menu.style.left = `${rect.left + window.scrollX}px`;
+            menu.style.display = 'block';
+            menu.style.zIndex = '10000';
+            // Trigger animation
+            setTimeout(() => {
+                menu.style.opacity = '1';
+                menu.style.transform = 'translateY(0)';
+            }, 0);
+        };
+
+        updatePos();
+        window.addEventListener('resize', updatePos);
+        window.addEventListener('scroll', updatePos, true);
+        menu._cleanup = () => {
+            window.removeEventListener('resize', updatePos);
+            window.removeEventListener('scroll', updatePos, true);
+        };
+
+        // Persistent Expansion: If a category is active, ensure the group is expanded when opening
+        if (VibeDrips.currentCategory) {
+            const group = menu.querySelector('.dropdown-group');
+            const subMenu = document.getElementById('categories-sub-menu');
+            if (group && subMenu) {
+                group.classList.add('expanded');
+                subMenu.classList.remove('collapsed');
+            }
         }
+    } else {
+        // CLOSING
+        closeDiscoveryDropdown();
     }
 }
 
 function closeDiscoveryDropdown() {
-    const dropdown = document.getElementById('discovery-dropdown');
-    if (dropdown) dropdown.classList.remove('open');
+    const dropdownWrap = document.getElementById('discovery-dropdown');
+    const menu = document.getElementById('discovery-menu');
+    if (!dropdownWrap || !menu) return;
+
+    dropdownWrap.classList.remove('open');
+    menu.style.opacity = '0';
+    menu.style.transform = 'translateY(-10px)';
+
+    if (menu._cleanup) menu._cleanup();
+
+    setTimeout(() => {
+        if (!dropdownWrap.classList.contains('open')) {
+            menu.style.display = 'none';
+            dropdownWrap.appendChild(menu); // Move back to original parent
+        }
+    }, 300);
 }
 
 function toggleCategoryGroup(event) {
