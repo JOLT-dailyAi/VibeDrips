@@ -34,16 +34,11 @@ async function loadProducts(currency) {
 
         extractCategories();
         populateCategoryFilter();
-        setTimeFilter(VibeDrips.currentTimeFilter);
 
-        VibeDrips.elements.productCount.textContent = VibeDrips.allProducts.length || 0;
-        VibeDrips.elements.categoryCount.textContent = VibeDrips.categories.size || 0;
-
-        // PHASE_3: Check for Warp Landing
-        handleWarpLanding();
-
-        // New: Load all discovery index artifacts for relational navigation
+        // New: Load all discovery index artifacts for relational navigation BEFORE initial render
         await loadDiscoveryIndices();
+
+        setTimeFilter(VibeDrips.currentTimeFilter);
 
     } catch (error) {
         console.error('❌ Product loading failed:', error);
@@ -232,7 +227,7 @@ async function loadDiscoveryIndices() {
             if (res.key === 'collections') {
                 VibeDrips.collections = res.data.collections || {};
             } else if (res.key === 'recentDrops') {
-                VibeDrips.recentDrops = res.data.products || [];
+                VibeDrips.recentDrops = res.data.recent_drops || [];
             } else {
                 VibeDrips[res.key] = res.data[res.key] || [];
             }

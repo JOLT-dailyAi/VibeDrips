@@ -628,27 +628,35 @@ function renderDiscoveryRails() {
     categories.forEach(cat => {
         let railProducts = [];
         switch (cat.id) {
-            case 'new': railProducts = filterByAsins(VibeDrips.recentDrops.map(p => p.asin)); break;
+            case 'new':
+                const dropAsins = (VibeDrips.recentDrops || []).map(p => p.asin);
+                railProducts = filterByAsins(dropAsins);
+                break;
             case 'creators':
                 categoriesRendered++;
                 // Show products from first creator as a taste
-                const firstCreator = VibeDrips.influencers[0];
+                const firstCreator = (VibeDrips.influencers || [])[0];
                 if (firstCreator) railProducts = filterByAsins(firstCreator.media_groups.flatMap(mg => mg.asins));
                 break;
             case 'seasons':
                 categoriesRendered++;
-                const firstSeason = VibeDrips.seasons.find(s => s.product_count > 0);
+                const firstSeason = (VibeDrips.seasons || []).find(s => s.product_count > 0);
                 if (firstSeason) railProducts = filterByAsins(firstSeason.asins);
                 break;
             case 'collections':
                 categoriesRendered++;
-                const firstColl = Object.values(VibeDrips.collections)[0];
+                const firstCollId = Object.keys(VibeDrips.collections || {})[0];
+                const firstColl = firstCollId ? VibeDrips.collections[firstCollId] : null;
                 if (firstColl) railProducts = filterByAsins(firstColl.asins);
                 break;
             case 'relational':
                 // Handle specific creator/season/collection item
                 handleRelationalFilter(cat.filterValue);
                 railProducts = [...VibeDrips.filteredProducts];
+                break;
+            case 'categories':
+                // Parent rail: Bundle all departmental products for global view
+                railProducts = VibeDrips.allProducts.filter(p => p.category && VibeDrips.categories.has(p.category.trim()));
                 break;
             case 'custom':
                 const targetCat = cat.categoryName || VibeDrips.currentCategory;
