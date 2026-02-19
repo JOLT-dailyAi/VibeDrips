@@ -126,6 +126,17 @@
         searchInput.addEventListener('focus', handleFocus);
         searchInput.addEventListener('click', handleFocus);
         searchInput.addEventListener('blur', () => setTimeout(hidePrompt, 400));
+
+        // Shorten placeholder for mobile
+        const updatePlaceholder = () => {
+            if (window.innerWidth <= 600) {
+                searchInput.placeholder = "🔍 Search...";
+            } else {
+                searchInput.placeholder = "🔍 Search products, brands...";
+            }
+        };
+        updatePlaceholder();
+        window.addEventListener('resize', updatePlaceholder);
     }
 
     function showControlledPrompt(anchor, isWarp) {
@@ -138,12 +149,18 @@
         activePromptElement.innerHTML = `<span>${isWarp ? '🚀 Warp to copied product?' : '📋 Paste from clipboard?'}</span>`;
         activePromptElement.onclick = isWarp ? triggerWarpAction : triggerPasteAction;
 
+        const isMobile = window.innerWidth <= 767;
+
         Object.assign(activePromptElement.style, {
-            position: 'absolute', top: '-50px', left: '50%', transform: 'translateX(-50%)',
+            position: 'absolute',
+            top: isMobile ? 'calc(100% + 15px)' : '-50px',
+            left: '50%',
+            transform: 'translateX(-50%)',
             background: isWarp ? 'linear-gradient(135deg, #FF3366 0%, #BA2649 100%)' : 'linear-gradient(135deg, #2E1D80 0%, #4a34c2 100%)',
             color: 'white', padding: '10px 18px', borderRadius: '25px', boxShadow: '0 10px 25px rgba(0,0,0,0.2)',
             fontSize: '13px', fontWeight: 'bold', cursor: 'pointer', zIndex: '999999',
-            animation: 'promptSlideIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards', whiteSpace: 'nowrap'
+            animation: isMobile ? 'promptSlideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards' : 'promptSlideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
+            whiteSpace: 'nowrap'
         });
 
         wrapper.appendChild(activePromptElement);
@@ -169,7 +186,16 @@
     }
 
     const style = document.createElement('style');
-    style.textContent = `@keyframes promptSlideIn { from { opacity:0; transform:translate(-50%,15px) scale(0.95); } to { opacity:1; transform:translate(-50%,0) scale(1); } }`;
+    style.textContent = `
+        @keyframes promptSlideUp { 
+            from { opacity:0; transform:translate(-50%,15px) scale(0.95); } 
+            to { opacity:1; transform:translate(-50%,0) scale(1); } 
+        }
+        @keyframes promptSlideDown { 
+            from { opacity:0; transform:translate(-50%,-15px) scale(0.95); } 
+            to { opacity:1; transform:translate(-50%,0) scale(1); } 
+        }
+    `;
     document.head.appendChild(style);
 
     if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initSearchIntegration); } else { initSearchIntegration(); }
