@@ -7,8 +7,16 @@ window.VibeDrips = {
     allProducts: [],
     filteredProducts: [],
     categories: new Set(),
+    // Relational Data Indices
+    influencers: [],
+    seasons: [],
+    collections: {},
+    recentDrops: [],
     currentTimeFilter: 'discovery',
     currentCategory: '',
+    currentCreator: '',
+    currentSeason: '',
+    currentCollection: '',
     config: {
         dataUrl: './data',
         fallbackCurrency: 'INR',

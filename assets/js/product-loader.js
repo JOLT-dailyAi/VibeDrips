@@ -42,6 +42,9 @@ async function loadProducts(currency) {
         // PHASE_3: Check for Warp Landing
         handleWarpLanding();
 
+        // New: Load all discovery index artifacts for relational navigation
+        await loadDiscoveryIndices();
+
     } catch (error) {
         console.error('❌ Product loading failed:', error);
         showError('Unable to load products. Please check your connection and try again.');
@@ -201,6 +204,46 @@ function generateId() {
     return 'prod-' + Math.random().toString(36).substr(2, 9);
 }
 
+/**
+ * Load all discovery index artifacts in parallel
+ */
+async function loadDiscoveryIndices() {
+    console.log('📂 Loading discovery index artifacts...');
+    const v = window.DATA_VERSION || DATA_VERSION;
+    const baseUrl = VibeDrips.config.dataUrl;
+
+    const files = [
+        { key: 'influencers', name: 'influencers.json' },
+        { key: 'seasons', name: 'seasons.json' },
+        { key: 'collections', name: 'collections.json' },
+        { key: 'recentDrops', name: 'recent-drops.json' }
+    ];
+
+    try {
+        const results = await Promise.all(
+            files.map(async file => {
+                const response = await fetch(`${baseUrl}/${file.name}?v=${v}`);
+                if (!response.ok) throw new Error(`Failed to load ${file.name}`);
+                return { key: file.key, data: await response.json() };
+            })
+        );
+
+        results.forEach(res => {
+            if (res.key === 'collections') {
+                VibeDrips.collections = res.data.collections || {};
+            } else if (res.key === 'recentDrops') {
+                VibeDrips.recentDrops = res.data.products || [];
+            } else {
+                VibeDrips[res.key] = res.data[res.key] || [];
+            }
+        });
+
+        console.log('✅ Discovery indices loaded successfully');
+    } catch (error) {
+        console.warn('⚠️ Some discovery indices failed to load, falling back to basic nav:', error);
+    }
+}
+
 // Extract categories from products
 function extractCategories() {
     VibeDrips.categories.clear();
@@ -287,4 +330,5 @@ window.generateId = generateId;
 window.extractCategories = extractCategories;
 window.populateCategoryFilter = populateCategoryFilter;
 window.handleWarpLanding = handleWarpLanding;
+window.loadDiscoveryIndices = loadDiscoveryIndices;
 window.DATA_VERSION = DATA_VERSION; // Expose version for debugging

@@ -124,10 +124,38 @@
                             <div class="dropdown-item" onclick="setTimeFilter('discovery')">🏠 Discover (All Drops)
                             </div>
                             <div class="dropdown-divider"></div>
-                            <div class="dropdown-item" onclick="setTimeFilter('hot')">🔥 Hot This Month</div>
-                            <div class="dropdown-item" onclick="setTimeFilter('featured')">⭐ Featured</div>
-                            <div class="dropdown-item" onclick="setTimeFilter('new')">🆕 New Arrivals</div>
-                            <div class="dropdown-item" onclick="setTimeFilter('trending')">📈 Trending Now</div>
+
+                            <!-- 🆕 New (Drops) -->
+                            <div class="dropdown-item" data-filter="new" onclick="setTimeFilter('new')">🆕 New (Drops)
+                            </div>
+
+                            <!-- 👤 Creators (Influencers) -->
+                            <div class="dropdown-group" onclick="toggleRelationalGroup(event, 'creators')">
+                                <span>👤 Creators</span>
+                                <span class="group-chevron">▶</span>
+                            </div>
+                            <div class="sub-menu collapsed" id="creators-sub-menu">
+                                <!-- Dynamic Creators -->
+                            </div>
+
+                            <!-- 🧩 Collections -->
+                            <div class="dropdown-group" onclick="toggleRelationalGroup(event, 'collections')">
+                                <span>🧩 Collections</span>
+                                <span class="group-chevron">▶</span>
+                            </div>
+                            <div class="sub-menu collapsed" id="collections-sub-menu">
+                                <!-- Dynamic Collections -->
+                            </div>
+
+                            <!-- 🍃 4 Seasons -->
+                            <div class="dropdown-group" onclick="toggleRelationalGroup(event, 'seasons')">
+                                <span>🍃 4 Seasons</span>
+                                <span class="group-chevron">▶</span>
+                            </div>
+                            <div class="sub-menu collapsed" id="seasons-sub-menu">
+                                <!-- Dynamic Seasons -->
+                            </div>
+
                             <div class="dropdown-divider"></div>
                             <div class="dropdown-group" onclick="toggleCategoryGroup(event)">
                                 <span>📂 Categories</span>

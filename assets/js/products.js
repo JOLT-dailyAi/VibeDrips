@@ -20,49 +20,34 @@ function setTimeFilter(filter, shouldClose = true) {
     console.log(`Setting time filter: ${filter}`);
     VibeDrips.currentTimeFilter = filter;
 
-    // Determine if it's a category (custom dropdown selections)
-    const mainFilters = ['reels', 'discovery', 'all', 'hot', 'featured', 'new', 'trending', 'categories'];
-    const isCategory = !mainFilters.includes(filter);
+    // Determine if it's a category or relational type
+    const mainFilters = ['reels', 'discovery', 'all', 'hot', 'featured', 'new', 'trending', 'categories', 'creators', 'seasons', 'collections'];
+    const isRelational = !mainFilters.includes(filter);
 
-    if (isCategory) {
-        VibeDrips.currentCategory = filter;
-    } else {
-        VibeDrips.currentCategory = '';
-    }
+    // Reset current selections
+    VibeDrips.currentCategory = '';
+    VibeDrips.currentCreator = '';
+    VibeDrips.currentSeason = '';
+    VibeDrips.currentCollection = '';
 
     // Update active filter UI
     document.querySelectorAll('.time-category, .dropdown-item, .dropdown-group').forEach(cat => {
         cat.classList.remove('active');
 
-        // Handle custom dropdown vs div tabs
         if (cat.classList.contains('dropdown-trigger')) {
-            const isDiscoveryActive = filter === 'discovery' || isCategory || ['hot', 'featured', 'new', 'trending'].includes(filter);
+            const isDiscoveryActive = filter === 'discovery' || isRelational || ['creators', 'seasons', 'collections'].includes(filter);
             if (isDiscoveryActive) {
                 cat.classList.add('active');
                 updateDiscoveryLabel(filter);
             }
-        } else if (cat.classList.contains('dropdown-item')) {
-            // Check literal onclick attribute OR data-category (for dynamic items)
-            const onclickAttr = cat.getAttribute('onclick');
-            const itemFilter = onclickAttr ? onclickAttr.match(/'([^']+)'/)?.[1] : null;
-            const dataFilter = cat.getAttribute('data-category');
-
-            if (itemFilter === filter || dataFilter === filter) {
-                cat.classList.add('active');
-            }
-        } else if (cat.classList.contains('dropdown-group')) {
-            // Categories group is active if discovery is active or a specific category is selected
-            if (filter === 'discovery' || isCategory) {
-                cat.classList.add('active');
-            }
         } else {
-            if (cat.getAttribute('data-filter') === filter) {
+            const dataFilter = cat.getAttribute('data-filter') || cat.getAttribute('data-category');
+            if (dataFilter === filter) {
                 cat.classList.add('active');
             }
         }
     });
 
-    // Close dropdown on selection
     if (shouldClose) {
         closeDiscoveryDropdown();
     }
@@ -70,36 +55,75 @@ function setTimeFilter(filter, shouldClose = true) {
     // Filter products based on selected filter
     switch (filter) {
         case 'discovery':
-            VibeDrips.filteredProducts = [...VibeDrips.allProducts];
-            break;
-        case 'reels':
         case 'all':
-            VibeDrips.filteredProducts = [...VibeDrips.allProducts];
-            break;
-        case 'hot':
-            VibeDrips.filteredProducts = getHotProducts();
-            break;
-        case 'featured':
-            VibeDrips.filteredProducts = VibeDrips.allProducts.filter(product => product.featured);
-            break;
-        case 'new':
-            VibeDrips.filteredProducts = getNewArrivals();
-            break;
-        case 'trending':
-            VibeDrips.filteredProducts = VibeDrips.allProducts.filter(product => product.trending);
-            break;
         case 'categories':
             VibeDrips.filteredProducts = [...VibeDrips.allProducts];
             break;
-        default:
-            // Specific category from custom dropdown
+        case 'new':
+            const newAsins = VibeDrips.recentDrops.map(p => p.asin);
+            VibeDrips.filteredProducts = filterByAsins(newAsins);
+            break;
+        case 'creators':
+        case 'seasons':
+        case 'collections':
             VibeDrips.filteredProducts = [...VibeDrips.allProducts];
+            break;
+        default:
+            // Check if it's a specific influencer, season, collection, or category
+            if (handleRelationalFilter(filter)) {
+                // Products updated inside handler
+            } else {
+                // Fallback for categories or unknown
+                VibeDrips.currentCategory = filter;
+                VibeDrips.filteredProducts = VibeDrips.allProducts.filter(p => p.category === filter || p.subcategory === filter);
+            }
     }
 
     updateSectionTitle(filter);
     applyCurrentFilters();
     renderProducts();
 }
+
+/**
+ * Resolve ASIN list against master product array
+ */
+function filterByAsins(asinList) {
+    if (!asinList || asinList.length === 0) return [];
+    return VibeDrips.allProducts.filter(p => asinList.includes(p.asin));
+}
+
+/**
+ * Handle specific relational filters (lookup in indices)
+ */
+function handleRelationalFilter(filter) {
+    // 1. Check Influencers (Creators)
+    const creator = VibeDrips.influencers.find(i => i.name === filter);
+    if (creator) {
+        VibeDrips.currentCreator = filter;
+        const asins = creator.media_groups.flatMap(mg => mg.asins);
+        VibeDrips.filteredProducts = filterByAsins(asins);
+        return true;
+    }
+
+    // 2. Check Seasons
+    const season = VibeDrips.seasons.find(s => s.name === filter || s.id === filter);
+    if (season) {
+        VibeDrips.currentSeason = filter;
+        VibeDrips.filteredProducts = filterByAsins(season.asins);
+        return true;
+    }
+
+    // 3. Check Collections
+    const collection = VibeDrips.collections[filter];
+    if (collection) {
+        VibeDrips.currentCollection = filter;
+        VibeDrips.filteredProducts = filterByAsins(collection.asins);
+        return true;
+    }
+
+    return false;
+}
+
 
 /**
  * Custom Dropdown Logic
@@ -114,9 +138,11 @@ function toggleDiscoveryDropdown(event) {
     const menu = document.getElementById('discovery-menu');
     if (!dropdownWrap || !menu) return;
 
+    // POPULATE RELATIONAL MENUS ON OPEN
     const isOpen = dropdownWrap.classList.contains('open');
 
     if (!isOpen) {
+        populateRelationalMenus();
         // OPENING: Portal to body to avoid clipping
         dropdownWrap.classList.add('open');
         document.body.appendChild(menu);
@@ -192,6 +218,76 @@ function toggleCategoryGroup(event) {
     }
 }
 
+/**
+ * Handle relational group toggling (Creators, Seasons, Collections)
+ */
+function toggleRelationalGroup(event, type) {
+    if (event) event.stopPropagation();
+
+    // Dual-Action: Apply the parent filter (e.g., 'creators') without closing
+    setTimeFilter(type, false);
+
+    const group = event.currentTarget.closest('.dropdown-group') || event.currentTarget;
+    const subMenu = document.getElementById(`${type}-sub-menu`);
+    if (group && subMenu) {
+        group.classList.toggle('expanded');
+        subMenu.classList.toggle('collapsed');
+    }
+}
+
+/**
+ * Populate Creators, Seasons, and Collections sub-menus
+ */
+function populateRelationalMenus() {
+    console.log('🏗️ Populating relational menus...');
+
+    // 1. Creators
+    const creatorsMenu = document.getElementById('creators-sub-menu');
+    if (creatorsMenu) {
+        creatorsMenu.innerHTML = '';
+        VibeDrips.influencers.forEach(creator => {
+            const item = document.createElement('div');
+            item.className = 'dropdown-item';
+            item.onclick = () => setTimeFilter(creator.name);
+            item.setAttribute('data-filter', creator.name);
+            item.textContent = creator.name;
+            creatorsMenu.appendChild(item);
+        });
+    }
+
+    // 2. Seasons
+    const seasonsMenu = document.getElementById('seasons-sub-menu');
+    if (seasonsMenu) {
+        seasonsMenu.innerHTML = '';
+        VibeDrips.seasons.forEach(season => {
+            const item = document.createElement('div');
+            item.className = 'dropdown-item';
+            item.onclick = () => setTimeFilter(season.id);
+            item.setAttribute('data-filter', season.id);
+            item.textContent = `${season.emoji} ${season.name}`;
+            seasonsMenu.appendChild(item);
+        });
+    }
+
+    // 3. Collections
+    const collectionsMenu = document.getElementById('collections-sub-menu');
+    if (collectionsMenu) {
+        collectionsMenu.innerHTML = '';
+        Object.keys(VibeDrips.collections).forEach(collId => {
+            const coll = VibeDrips.collections[collId];
+            const item = document.createElement('div');
+            item.className = 'dropdown-item';
+            item.onclick = () => setTimeFilter(collId);
+            item.setAttribute('data-filter', collId);
+            item.textContent = coll.name;
+            collectionsMenu.appendChild(item);
+        });
+    }
+
+    // 4. Categories (already handled by product-loader.js, but let's ensure it's synced)
+    if (window.populateCategoryFilter) window.populateCategoryFilter();
+}
+
 function updateDiscoveryLabel(filter) {
     const label = document.getElementById('discovery-current-label');
     if (!label) return;
@@ -208,7 +304,10 @@ function updateDiscoveryLabel(filter) {
         'featured': '⭐ Featured',
         'new': '🆕 New Arrivals',
         'trending': '📈 Trending Now',
-        'categories': '📂 Category Drops'
+        'categories': '📂 Category Drops',
+        'creators': '👤 Creator Drops',
+        'seasons': '🍃 Seasonal Vibes',
+        'collections': '🧩 Curated Sets'
     };
 
     // Robust fallback: If filter is somehow null/undefined or missing, show 'Discovery'
@@ -303,6 +402,18 @@ function updateSectionTitle(filter) {
         'discovery': {
             title: '🏠 Discover Drops',
             subtitle: 'Explore our curated drops'
+        },
+        'creators': {
+            title: '👤 Creator Drops',
+            subtitle: 'Must-haves curated by your favorite influencers'
+        },
+        'seasons': {
+            title: '🍃 Seasonal Vibes',
+            subtitle: 'Hand-picked selections for the current climate'
+        },
+        'collections': {
+            title: '🧩 Curated Sets',
+            subtitle: 'Themes and collections grouped for your style'
         }
     };
 
@@ -310,9 +421,11 @@ function updateSectionTitle(filter) {
 
     // Dynamic fallback for specific categories or unknown filters
     if (!titleInfo) {
+        // Check relational names (Creators, Seasons, Collections)
+        const relationalName = VibeDrips.currentCreator || VibeDrips.currentSeason || VibeDrips.currentCollection;
         titleInfo = {
-            title: filter.startsWith('📂') ? filter : `📂 ${filter}`,
-            subtitle: `Explore our curated ${filter} collection`
+            title: relationalName || (filter.startsWith('📂') ? filter : `📂 ${filter}`),
+            subtitle: `Explore our curated ${relationalName || filter} collection`
         };
     }
 
@@ -469,9 +582,8 @@ function renderDiscoveryRails() {
 
     let categories = [
         { id: 'hot', title: '🔥 Hot This Month', subtitle: 'Trending products that just dropped' },
-        { id: 'featured', title: '⭐ Featured', subtitle: 'Our hand-picked recommendations' },
         { id: 'new', title: '🆕 New Arrivals', subtitle: 'Fresh drops from the last 30 days' },
-        { id: 'trending', title: '📈 Trending Now', subtitle: 'What everyone is talking about' }
+        { id: 'featured', title: '⭐ Featured', subtitle: 'Our hand-picked recommendations' }
     ];
 
     // If in discovery mode, append all category rails (Netflix Style)
@@ -480,16 +592,33 @@ function renderDiscoveryRails() {
     const isSpecificCategory = VibeDrips.currentCategory !== '';
 
     if (currentFilter === 'discovery' && !isSpecificCategory) {
-        // GLOBAL VIEW: Bundle all categories into ONE rail
-        categories.push({
-            id: 'categories-all',
-            title: '📂 Categories',
-            subtitle: 'Browse all curated drops by department',
-            isParent: true
-        });
+        // Add one relational rail for each type to the home view
+        categories.push({ id: 'creators', title: '👤 Top Creators', subtitle: 'Drops curated by your favorite influencers' });
+        categories.push({ id: 'seasons', title: '🍃 Seasonal Vibes', subtitle: 'Hand-picked for the current season' });
+        categories.push({ id: 'collections', title: '🧩 Curated Collections', subtitle: 'Grouped by theme and style' });
+    } else if (currentFilter === 'creators') {
+        categories = VibeDrips.influencers.map(i => ({
+            id: 'relational',
+            title: `👤 ${i.name}`,
+            subtitle: `Curated by ${i.name}`,
+            filterValue: i.name
+        }));
+    } else if (currentFilter === 'seasons') {
+        categories = VibeDrips.seasons.filter(s => s.product_count > 0).map(s => ({
+            id: 'relational',
+            title: `${s.emoji} ${s.name}`,
+            subtitle: s.label || `Explore our ${s.name} collection`,
+            filterValue: s.id
+        }));
+    } else if (currentFilter === 'collections') {
+        categories = Object.keys(VibeDrips.collections).map(id => ({
+            id: 'relational',
+            title: `🧩 ${VibeDrips.collections[id].name}`,
+            subtitle: `Explore ${VibeDrips.collections[id].name}`,
+            filterValue: id
+        }));
     } else if (currentFilter === 'categories') {
         // ISOLATED VIEW: Show partitions (child rails)
-        // Reset categories array to EXCLUDE global rails (Hot, New, etc.)
         categories = Array.from(VibeDrips.categories).sort().map(cat => ({
             id: 'custom',
             title: `📂 ${cat}`,
@@ -497,32 +626,31 @@ function renderDiscoveryRails() {
             categoryName: cat,
             isChild: true
         }));
-    } else if (isSpecificCategory) {
-        // Show only the selected category rail
-        categories = [{
-            id: 'custom',
-            title: `📂 ${VibeDrips.currentCategory}`,
-            subtitle: `Explore ${VibeDrips.currentCategory}`,
-            categoryName: VibeDrips.currentCategory
-        }];
-    } else if (['hot', 'featured', 'new', 'trending'].includes(currentFilter)) {
-        // Show only the selected sub-filter rail
-        categories = categories.filter(cat => cat.id === currentFilter);
     }
-
-    let categoriesRendered = 0;
-    const isIsolatedCategories = currentFilter === 'categories';
 
     categories.forEach(cat => {
         let railProducts = [];
         switch (cat.id) {
             case 'hot': railProducts = getHotProducts(); break;
+            case 'new': railProducts = filterByAsins(VibeDrips.recentDrops.map(p => p.asin)); break;
             case 'featured': railProducts = VibeDrips.allProducts.filter(p => p.featured); break;
-            case 'new': railProducts = getNewArrivals(); break;
-            case 'trending': railProducts = VibeDrips.allProducts.filter(p => p.trending); break;
-            case 'categories-all':
-                // Bundle all departmental products for global view
-                railProducts = VibeDrips.allProducts.filter(p => p.category && VibeDrips.categories.has(p.category));
+            case 'creators':
+                // Show products from first creator as a taste
+                const firstCreator = VibeDrips.influencers[0];
+                if (firstCreator) railProducts = filterByAsins(firstCreator.media_groups.flatMap(mg => mg.asins));
+                break;
+            case 'seasons':
+                const firstSeason = VibeDrips.seasons.find(s => s.product_count > 0);
+                if (firstSeason) railProducts = filterByAsins(firstSeason.asins);
+                break;
+            case 'collections':
+                const firstColl = Object.values(VibeDrips.collections)[0];
+                if (firstColl) railProducts = filterByAsins(firstColl.asins);
+                break;
+            case 'relational':
+                // Handle specific creator/season/collection item
+                handleRelationalFilter(cat.filterValue);
+                railProducts = [...VibeDrips.filteredProducts];
                 break;
             case 'custom':
                 const targetCat = cat.categoryName || VibeDrips.currentCategory;
