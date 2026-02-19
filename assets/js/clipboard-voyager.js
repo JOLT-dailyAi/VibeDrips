@@ -141,34 +141,66 @@
 
     function showControlledPrompt(anchor, isWarp) {
         if (activePromptElement) hidePrompt();
-        const wrapper = anchor.closest('.search-wrapper');
-        if (!wrapper) return;
 
         activePromptElement = document.createElement('div');
         activePromptElement.className = 'search-clipboard-prompt';
         activePromptElement.innerHTML = `<span>${isWarp ? '🚀 Warp to copied product?' : '📋 Paste from clipboard?'}</span>`;
-        activePromptElement.onclick = isWarp ? triggerWarpAction : triggerPasteAction;
+        activePromptElement.onclick = (e) => {
+            e.stopPropagation();
+            if (isWarp) triggerWarpAction();
+            else triggerPasteAction();
+        };
 
-        const isMobile = window.innerWidth <= 767;
+        const updatePosition = () => {
+            if (!activePromptElement || !anchor) return;
+            const rect = anchor.getBoundingClientRect();
+            const isMobile = window.innerWidth <= 767;
 
-        Object.assign(activePromptElement.style, {
-            position: 'absolute',
-            top: isMobile ? 'calc(100% + 15px)' : '-50px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            background: isWarp ? 'linear-gradient(135deg, #FF3366 0%, #BA2649 100%)' : 'linear-gradient(135deg, #2E1D80 0%, #4a34c2 100%)',
-            color: 'white', padding: '10px 18px', borderRadius: '25px', boxShadow: '0 10px 25px rgba(0,0,0,0.2)',
-            fontSize: '13px', fontWeight: 'bold', cursor: 'pointer', zIndex: '999999',
-            animation: isMobile ? 'promptSlideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards' : 'promptSlideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
-            whiteSpace: 'nowrap'
-        });
+            // Adjust for mobile (below bar) vs desktop (above bar)
+            const top = isMobile
+                ? (rect.bottom + window.scrollY + 12)
+                : (rect.top + window.scrollY - 55);
 
-        wrapper.appendChild(activePromptElement);
+            Object.assign(activePromptElement.style, {
+                position: 'absolute',
+                top: `${top}px`,
+                left: `${rect.left + (rect.width / 2)}px`,
+                transform: 'translateX(-50%)',
+                background: isWarp ? 'linear-gradient(135deg, #FF3366 0%, #BA2649 100%)' : 'linear-gradient(135deg, #2E1D80 0%, #4a34c2 100%)',
+                color: 'white',
+                padding: '10px 18px',
+                borderRadius: '25px',
+                boxShadow: '0 10px 25px rgba(0,0,0,0.3)',
+                fontSize: '13px',
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                zIndex: '9999999',
+                animation: isMobile ? 'promptSlideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards' : 'promptSlideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
+                whiteSpace: 'nowrap',
+                pointerEvents: 'auto'
+            });
+        };
+
+        document.body.appendChild(activePromptElement);
+        updatePosition();
+
+        // Ensure it follows on resize/scroll
+        window.addEventListener('resize', updatePosition);
+        window.addEventListener('scroll', updatePosition, true);
+
+        // Cleanup listener on hide
+        activePromptElement._cleanup = () => {
+            window.removeEventListener('resize', updatePosition);
+            window.removeEventListener('scroll', updatePosition, true);
+        };
     }
 
     function hidePrompt() {
-        if (activePromptElement && activePromptElement.parentNode) {
-            activePromptElement.parentNode.removeChild(activePromptElement);
+        if (activePromptElement) {
+            if (activePromptElement._cleanup) activePromptElement._cleanup();
+            if (activePromptElement.parentNode) {
+                activePromptElement.parentNode.removeChild(activePromptElement);
+            }
             activePromptElement = null;
         }
     }
