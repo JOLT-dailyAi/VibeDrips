@@ -439,6 +439,6 @@
     }
 
     .dropdown-menu {
-        display: none;
+        /* Restored visibility */
     }
 }
