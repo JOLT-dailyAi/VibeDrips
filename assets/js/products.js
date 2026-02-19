@@ -300,10 +300,7 @@ function updateDiscoveryLabel(filter) {
 
     const labels = {
         'discovery': '🏠 Discover',
-        'hot': '🔥 Hot This Month',
-        'featured': '⭐ Featured',
         'new': '🆕 New Arrivals',
-        'trending': '📈 Trending Now',
         'categories': '📂 Category Drops',
         'creators': '👤 Creator Drops',
         'seasons': '🍃 Seasonal Vibes',
@@ -551,9 +548,9 @@ function renderProducts() {
     const hasCategory = VibeDrips.currentCategory && VibeDrips.currentCategory.length > 0;
 
     // hasCategory: if user picked a specific department, default to Grid unless search is active
-    // Option (i): Categories view (nested) -> Rails
-    // Option (ii): Leaf nodes (Specific Cat, Hot, New) -> Grid
-    const isDiscoveryMode = ['discovery', 'categories'].includes(VibeDrips.currentTimeFilter);
+    // Option (i): Dynamic Rails (Discovery, Categories, Creators, Seasons, Collections)
+    // Option (ii): Grid View (Search, Specific Category, Specific Creator, etc.)
+    const isDiscoveryMode = ['discovery', 'categories', 'creators', 'seasons', 'collections'].includes(VibeDrips.currentTimeFilter);
 
     if (isDiscoveryMode && !hasSearch && !hasCategory) {
         container.classList.remove('products-grid');
@@ -580,11 +577,7 @@ function renderDiscoveryRails() {
 
     container.innerHTML = '';
 
-    let categories = [
-        { id: 'hot', title: '🔥 Hot This Month', subtitle: 'Trending products that just dropped' },
-        { id: 'new', title: '🆕 New Arrivals', subtitle: 'Fresh drops from the last 30 days' },
-        { id: 'featured', title: '⭐ Featured', subtitle: 'Our hand-picked recommendations' }
-    ];
+    let categories = [];
 
     // If in discovery mode, append all category rails (Netflix Style)
     // If in categories mode, only show category rails (Isolated view)
@@ -592,10 +585,12 @@ function renderDiscoveryRails() {
     const isSpecificCategory = VibeDrips.currentCategory !== '';
 
     if (currentFilter === 'discovery' && !isSpecificCategory) {
-        // Add one relational rail for each type to the home view
+        // Aligned with the 5 new main buckets + Categories
+        categories.push({ id: 'new', title: '🆕 New (Drops)', subtitle: 'Fresh arrivals from our latest collection' });
         categories.push({ id: 'creators', title: '👤 Top Creators', subtitle: 'Drops curated by your favorite influencers' });
         categories.push({ id: 'seasons', title: '🍃 Seasonal Vibes', subtitle: 'Hand-picked for the current season' });
         categories.push({ id: 'collections', title: '🧩 Curated Collections', subtitle: 'Grouped by theme and style' });
+        categories.push({ id: 'categories', title: '📂 Categories', subtitle: 'Browse all curated drops by department', isParent: true });
     } else if (currentFilter === 'creators') {
         categories = VibeDrips.influencers.map(i => ({
             id: 'relational',
@@ -628,22 +623,25 @@ function renderDiscoveryRails() {
         }));
     }
 
+    let categoriesRendered = 0;
+
     categories.forEach(cat => {
         let railProducts = [];
         switch (cat.id) {
-            case 'hot': railProducts = getHotProducts(); break;
             case 'new': railProducts = filterByAsins(VibeDrips.recentDrops.map(p => p.asin)); break;
-            case 'featured': railProducts = VibeDrips.allProducts.filter(p => p.featured); break;
             case 'creators':
+                categoriesRendered++;
                 // Show products from first creator as a taste
                 const firstCreator = VibeDrips.influencers[0];
                 if (firstCreator) railProducts = filterByAsins(firstCreator.media_groups.flatMap(mg => mg.asins));
                 break;
             case 'seasons':
+                categoriesRendered++;
                 const firstSeason = VibeDrips.seasons.find(s => s.product_count > 0);
                 if (firstSeason) railProducts = filterByAsins(firstSeason.asins);
                 break;
             case 'collections':
+                categoriesRendered++;
                 const firstColl = Object.values(VibeDrips.collections)[0];
                 if (firstColl) railProducts = filterByAsins(firstColl.asins);
                 break;
@@ -691,13 +689,15 @@ function createDiscoveryRail(category, products) {
 
     // Navigation logic for "View All"
     let viewAllAction = `setTimeFilter('${category.id}')`;
-    if (category.isParent) {
-        // Option (i): Parent rail navigates to Rails View
-        viewAllAction = `setTimeFilter('categories', false)`;
-    } else if (category.categoryName || category.isChild) {
+    const isParentType = ['creators', 'seasons', 'collections'].includes(category.id);
+
+    if (category.isParent || isParentType) {
+        // Option (i): Parent rail navigates to Rails View (Partitions)
+        viewAllAction = `setTimeFilter('${category.id}', false)`;
+    } else if (category.categoryName || category.isChild || category.id === 'relational') {
         // Option (ii): Leaf nodes navigate to Grid View
-        const catName = category.categoryName || category.id;
-        viewAllAction = `setTimeFilter('${catName}', true)`;
+        const filterVal = category.filterValue || category.categoryName || category.id;
+        viewAllAction = `setTimeFilter('${filterVal}', true)`;
     }
 
     rail.innerHTML = `
