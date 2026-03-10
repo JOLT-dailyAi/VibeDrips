@@ -7,27 +7,58 @@
       "countries": [
         "India"
       ],
-      "product_count": 9,
+      "product_count": 13,
       "filename": "products-INR.json",
       "categories": [
-        "Electronics",
         "General",
-        "Toys & Games"
+        "Beauty & Personal Care",
+        "Furniture",
+        "Books"
       ],
       "brands": [
-        "boAt",
-        "Diamond Books",
-        "MyMirror Publishing House Pvt. Ltd.",
-        "CodersParadise",
-        "woopme"
+        "Praan",
+        "UBreathe",
+        "LEVOIT",
+        "Dreo",
+        "Nuwave",
+        "MyMirror Publishing House",
+        "Qubo",
+        "Honeywell",
+        "Diamond Books"
       ],
       "price_range": {
         "min": 150,
-        "max": 1499
+        "max": 126804
+      }
+    },
+    {
+      "code": "AUD",
+      "name": "Australian Dollar",
+      "symbol": "A$",
+      "countries": [
+        "Australia"
+      ],
+      "product_count": 10,
+      "filename": "products-AUD.json",
+      "categories": [
+        "Furniture",
+        "General",
+        "Books"
+      ],
+      "brands": [
+        "Levoit",
+        "Winix",
+        "Cornerstone Press",
+        "Breville",
+        "HUTCHINSON PUBLISHING - TRADE"
+      ],
+      "price_range": {
+        "min": 16,
+        "max": 343
       }
     }
   ],
-  "last_updated": "2025-12-17T13:49:43.584Z",
-  "total_products": 9,
+  "last_updated": "2026-03-10T02:46:08.268Z",
+  "total_products": 23,
   "default_currency": "INR"
 }
