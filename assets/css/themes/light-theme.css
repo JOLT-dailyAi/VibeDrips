@@ -2,7 +2,112 @@
 
 body.light-theme {
     background: #2E1D80;
-    color: #FFFFFF;
+    color: #1a202c;
 }
 
-/* Light theme is the default, so minimal overrides needed */
+/* Global Glass & Badge Parity */
+body.light-theme .glass,
+body.light-theme .glass-pill,
+body.light-theme .center-badge {
+    border: 2px solid var(--color-primary) !important;
+}
+
+/* Base Components Parity */
+body.light-theme .product-card,
+body.light-theme .stat-item,
+body.light-theme .filter-controls,
+body.light-theme .time-category,
+body.light-theme .carousel-controls button,
+body.light-theme .carousel-prev,
+body.light-theme .carousel-next,
+body.light-theme .carousel-counter,
+body.light-theme .carousel-controls .counter {
+    border: 2px solid var(--color-primary) !important;
+}
+
+/* Input Parity */
+body.light-theme .filter-group input,
+body.light-theme .filter-group select {
+    border-width: 2px !important;
+    border-color: var(--color-primary) !important;
+}
+
+/* Modal Styles for Light Theme */
+body.light-theme .simple-modal-content {
+    background: #FFFFFF;
+    border: 2px solid var(--color-primary) !important;
+}
+
+/* Header title color removed - uses base white from ribbon */
+
+body.light-theme .simple-modal-body p {
+    color: #2d3748;
+}
+
+body.light-theme .simple-modal-body p strong {
+    color: #2E1D80;
+}
+
+/* Separator Colors for Light Theme */
+body.light-theme .info-row .label,
+body.light-theme .detail-row .label {
+    border-right-color: rgba(45, 55, 72, 0.2);
+}
+
+body.light-theme .info-row .label::after,
+body.light-theme .detail-row .label::after {
+    background: linear-gradient(to bottom,
+            transparent 0%,
+            rgba(45, 55, 72, 0.3) 30%,
+            rgba(45, 55, 72, 0.3) 70%,
+            transparent 100%);
+}
+
+body.light-theme .modal-actions {
+    border-top-color: rgba(45, 55, 72, 0.15);
+}
+
+/* Section Separator and Modal Actions Background */
+body.light-theme .modal-description-section {
+    border-bottom-color: rgba(45, 55, 72, 0.15);
+}
+
+body.light-theme .modal-actions {
+    background: rgba(255, 255, 255, 0.95);
+}
+
+/* Brand and Category Section Separators */
+body.light-theme .modal-brand-section,
+body.light-theme .modal-category-section {
+    border-bottom-color: rgba(45, 55, 72, 0.15);
+}
+
+/* Collapsible Section Separators (Product Details, Additional Info, Description) */
+body.light-theme .modal-section {
+    border-bottom-color: rgba(45, 55, 72, 0.1);
+}
+
+/* Modal External Controls Parity - White Style */
+body.light-theme .modal-external-controls .globe-toggle,
+body.light-theme .modal-external-controls .reels-toggle,
+body.light-theme .carousel-controls button,
+body.light-theme .carousel-prev,
+body.light-theme .carousel-next {
+    background: #FFFFFF !important;
+    border: 2px solid #667eea !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    z-index: 2000 !important;
+    color: #333 !important;
+}
+
+body.light-theme .carousel-counter,
+body.light-theme .carousel-controls .counter {
+    background: #FFFFFF !important;
+    color: #333 !important;
+}
+
+body.light-theme .modal-external-controls .globe-toggle:hover,
+body.light-theme .modal-external-controls .reels-toggle:hover {
+    background: #667eea !important;
+    color: white !important;
+}

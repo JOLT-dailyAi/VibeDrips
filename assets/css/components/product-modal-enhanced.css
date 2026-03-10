@@ -1,0 +1,229 @@
+/* ============================================
+   PRODUCT MODAL - ENHANCED SECTIONS
+   Glass Theme Compatible - Preserves CSS Variables
+   ============================================ */
+
+/* Hide lightbox caption for product modal */
+.product-modal .lightbox-caption {
+    display: none !important;
+}
+
+/* ============================================
+   CORE INFO SECTION
+   ============================================ */
+
+.modal-core-info {
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.modal-core-info .info-row {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.modal-core-info .info-row .emoji {
+    margin-right: 8px;
+    font-size: 18px;
+}
+
+.modal-core-info .info-row .label {
+    font-weight: 600;
+    margin-right: 6px;
+    opacity: 0.9;
+}
+
+.modal-core-info .info-row .value {
+    opacity: 0.95;
+}
+
+/* ============================================
+   IMAGE GALLERY SECTION
+   ============================================ */
+
+.modal-image-gallery {
+    padding: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    text-align: center;
+}
+
+/* ============================================
+   COLLAPSIBLE SECTIONS
+   ============================================ */
+
+.modal-section {
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-section:last-child {
+    border-bottom: none;
+}
+
+.modal-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 8px 0;
+    margin-bottom: 12px;
+    user-select: none;
+}
+
+.modal-section-header .title {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 600;
+    opacity: 0.95;
+}
+
+.modal-section-header .title .emoji {
+    margin-right: 8px;
+    font-size: 20px;
+}
+
+.modal-section-header .toggle-icon {
+    font-size: 14px;
+    opacity: 0.7;
+    transition: transform 0.2s ease;
+}
+
+.modal-section-header.expanded .toggle-icon {
+    transform: rotate(180deg);
+}
+
+/* Section Content */
+.modal-section-content {
+    padding-left: 28px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.modal-section-content.expanded {
+    max-height: 1000px;
+}
+
+/* ============================================
+   PRODUCT DETAILS ROWS
+   ============================================ */
+
+.detail-row {
+    display: flex;
+    align-items: flex-start;
+    padding: 6px 0;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.detail-row .emoji {
+    margin-right: 8px;
+    font-size: 16px;
+    min-width: 20px;
+}
+
+.detail-row .label {
+    font-weight: 500;
+    margin-right: 6px;
+    opacity: 0.85;
+}
+
+.detail-row .value {
+    opacity: 0.95;
+}
+
+/* ============================================
+   ADDITIONAL INFO - GROUPED DISPLAY
+   ============================================ */
+
+.info-group {
+    margin-bottom: 16px;
+}
+
+.info-group:last-child {
+    margin-bottom: 0;
+}
+
+.info-group-header {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 600;
+    opacity: 0.9;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.info-group-header .emoji {
+    margin-right: 6px;
+    font-size: 16px;
+}
+
+.info-item {
+    display: flex;
+    padding: 4px 0;
+    padding-left: 22px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.info-item .label {
+    font-weight: 500;
+    margin-right: 6px;
+    opacity: 0.8;
+}
+
+.info-item .value {
+    opacity: 0.9;
+}
+
+/* ============================================
+   DESCRIPTION SECTION
+   ============================================ */
+
+.modal-description {
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-description .description-text {
+    font-size: 14px;
+    line-height: 1.7;
+    opacity: 0.9;
+}
+
+/* ============================================
+   ACTIONS SECTION
+   ============================================ */
+
+.modal-actions {
+    padding: 24px;
+    text-align: center;
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 768px) {
+
+    .modal-core-info,
+    .modal-section,
+    .modal-description,
+    .modal-actions {
+        padding: 16px 20px;
+    }
+
+    .modal-section-content {
+        padding-left: 24px;
+    }
+
+    .info-item {
+        padding-left: 18px;
+    }
+}

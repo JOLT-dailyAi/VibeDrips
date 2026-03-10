@@ -1,37 +1,82 @@
 /**
  * Set time-based filter for products
  */
-function setTimeFilter(filter) {
+function setTimeFilter(filter, shouldClose = true) {
+    if (!filter) {
+        console.warn('setTimeFilter called with empty/null filter, falling back to discovery');
+        filter = 'discovery';
+    }
+
+    // Ensure filter is a string (prevents null/undefined artifacts)
+    filter = String(filter);
+
+    // 🎬 REELS ISOLATION: Prevent Reels from updating main section-header and products
+    if (filter === 'reels') {
+        console.log('🎬 Reels clicked - skipping setTimeFilter to maintain background state');
+        if (window.openReelsModal) window.openReelsModal();
+        return;
+    }
+
     console.log(`Setting time filter: ${filter}`);
     VibeDrips.currentTimeFilter = filter;
-    
+
+    // Determine if it's a category or relational type
+    const mainFilters = ['reels', 'discovery', 'all', 'hot', 'featured', 'new', 'trending', 'categories', 'creators', 'seasons', 'collections'];
+    const isRelational = !mainFilters.includes(filter);
+
+    // Reset current selections
+    VibeDrips.currentCategory = '';
+    VibeDrips.currentCreator = '';
+    VibeDrips.currentSeason = '';
+    VibeDrips.currentCollection = '';
+
     // Update active filter UI
-    document.querySelectorAll('.time-category').forEach(cat => {
+    document.querySelectorAll('.time-category, .dropdown-item, .dropdown-group').forEach(cat => {
         cat.classList.remove('active');
-        if (cat.getAttribute('data-filter') === filter) {
-            cat.classList.add('active');
+
+        if (cat.classList.contains('dropdown-trigger')) {
+            const isDiscoveryActive = filter === 'discovery' || isRelational || ['creators', 'seasons', 'collections'].includes(filter);
+            if (isDiscoveryActive) {
+                cat.classList.add('active');
+                updateDiscoveryLabel(filter);
+            }
+        } else {
+            const dataFilter = cat.getAttribute('data-filter') || cat.getAttribute('data-category');
+            if (dataFilter === filter) {
+                cat.classList.add('active');
+            }
         }
     });
 
+    if (shouldClose) {
+        closeDiscoveryDropdown();
+    }
+
     // Filter products based on selected filter
     switch (filter) {
-        case 'hot':
-            VibeDrips.filteredProducts = getHotProducts();
-            break;
-        case 'featured':
-            VibeDrips.filteredProducts = VibeDrips.allProducts.filter(product => product.featured);
+        case 'discovery':
+        case 'all':
+        case 'categories':
+            VibeDrips.filteredProducts = [...VibeDrips.allProducts];
             break;
         case 'new':
-            VibeDrips.filteredProducts = getNewArrivals();
+            const newAsins = VibeDrips.recentDrops.map(p => p.asin);
+            VibeDrips.filteredProducts = filterByAsins(newAsins);
             break;
-        case 'trending':
-            VibeDrips.filteredProducts = VibeDrips.allProducts.filter(product => product.trending);
-            break;
-        case 'all':
+        case 'creators':
+        case 'seasons':
+        case 'collections':
             VibeDrips.filteredProducts = [...VibeDrips.allProducts];
             break;
         default:
-            VibeDrips.filteredProducts = [...VibeDrips.allProducts];
+            // Check if it's a specific influencer, season, collection, or category
+            if (handleRelationalFilter(filter)) {
+                // Products updated inside handler
+            } else {
+                // Fallback for categories or unknown
+                VibeDrips.currentCategory = filter;
+                VibeDrips.filteredProducts = VibeDrips.allProducts.filter(p => p.category === filter || p.subcategory === filter);
+            }
     }
 
     updateSectionTitle(filter);
@@ -40,22 +85,282 @@ function setTimeFilter(filter) {
 }
 
 /**
+ * Resolve ASIN list against master product array
+ */
+function filterByAsins(asinList) {
+    if (!asinList || asinList.length === 0) return [];
+    return VibeDrips.allProducts.filter(p => asinList.includes(p.asin));
+}
+
+/**
+ * Handle specific relational filters (lookup in indices)
+ */
+function handleRelationalFilter(filter) {
+    // 1. Check Influencers (Creators)
+    const creator = VibeDrips.influencers.find(i => i.name === filter);
+    if (creator) {
+        VibeDrips.currentCreator = filter;
+        const asins = creator.media_groups.flatMap(mg => mg.asins);
+        VibeDrips.filteredProducts = filterByAsins(asins);
+        return true;
+    }
+
+    // 2. Check Seasons
+    const season = VibeDrips.seasons.find(s => s.name === filter || s.id === filter);
+    if (season) {
+        VibeDrips.currentSeason = filter;
+        VibeDrips.filteredProducts = filterByAsins(season.asins);
+        return true;
+    }
+
+    // 3. Check Collections
+    const collection = VibeDrips.collections[filter];
+    if (collection) {
+        VibeDrips.currentCollection = filter;
+        VibeDrips.filteredProducts = filterByAsins(collection.asins);
+        return true;
+    }
+
+    return false;
+}
+
+
+/**
+ * Get influencers filtered by current region/currency
+ */
+function getFilteredInfluencers() {
+    const currentReg = VibeDrips.currentCurrency;
+    return (VibeDrips.influencers || []).filter(i =>
+        !i.regions || i.regions.length === 0 || i.regions.includes(currentReg)
+    );
+}
+
+/**
+ * Get seasons filtered by current region/currency
+ */
+function getFilteredSeasons() {
+    const currentReg = VibeDrips.currentCurrency;
+    return (VibeDrips.seasons || []).filter(s =>
+        s.product_count > 0 && (!s.regions || s.regions.length === 0 || s.regions.includes(currentReg))
+    );
+}
+
+
+/**
+ * Custom Dropdown Logic
+ */
+function toggleDiscoveryDropdown(event) {
+    if (event) event.stopPropagation();
+
+    // DUAL-ACTION: Apply "All Drops" filter when opening the dropdown
+    setTimeFilter('discovery', false);
+
+    const dropdownWrap = document.getElementById('discovery-dropdown');
+    const menu = document.getElementById('discovery-menu');
+    if (!dropdownWrap || !menu) return;
+
+    // POPULATE RELATIONAL MENUS ON OPEN
+    const isOpen = dropdownWrap.classList.contains('open');
+
+    if (!isOpen) {
+        populateRelationalMenus();
+        // OPENING: Portal to body to avoid clipping
+        dropdownWrap.classList.add('open');
+        document.body.appendChild(menu);
+
+        const updatePos = () => {
+            const rect = dropdownWrap.getBoundingClientRect();
+            menu.style.position = 'absolute';
+            menu.style.top = `${rect.bottom + window.scrollY + 10}px`;
+            menu.style.left = `${rect.left + window.scrollX}px`;
+            menu.style.display = 'block';
+            menu.style.zIndex = '90';
+            // Trigger animation
+            setTimeout(() => {
+                menu.style.opacity = '1';
+                menu.style.transform = 'translateY(0)';
+            }, 0);
+        };
+
+        updatePos();
+        window.addEventListener('resize', updatePos);
+        window.addEventListener('scroll', updatePos, true);
+        menu._cleanup = () => {
+            window.removeEventListener('resize', updatePos);
+            window.removeEventListener('scroll', updatePos, true);
+        };
+
+        // Persistent Expansion: If a category is active, ensure the group is expanded when opening
+        if (VibeDrips.currentCategory) {
+            const group = menu.querySelector('.dropdown-group');
+            const subMenu = document.getElementById('categories-sub-menu');
+            if (group && subMenu) {
+                group.classList.add('expanded');
+                subMenu.classList.remove('collapsed');
+            }
+        }
+    } else {
+        // CLOSING
+        closeDiscoveryDropdown();
+    }
+}
+
+function closeDiscoveryDropdown() {
+    const dropdownWrap = document.getElementById('discovery-dropdown');
+    const menu = document.getElementById('discovery-menu');
+    if (!dropdownWrap || !menu) return;
+
+    dropdownWrap.classList.remove('open');
+    menu.style.opacity = '0';
+    menu.style.transform = 'translateY(-10px)';
+
+    if (menu._cleanup) menu._cleanup();
+
+    setTimeout(() => {
+        if (!dropdownWrap.classList.contains('open')) {
+            menu.style.display = 'none';
+            dropdownWrap.appendChild(menu); // Move back to original parent
+        }
+    }, 300);
+}
+
+function toggleCategoryGroup(event) {
+    if (event) event.stopPropagation();
+
+    // PHASE_26: Dual-Action Click
+    // Apply "Categories" (Isolated View) filter without closing the dropdown
+    setTimeFilter('categories', false);
+
+    const group = event.currentTarget.closest('.dropdown-group') || event.currentTarget;
+    const subMenu = document.getElementById('categories-sub-menu');
+    if (group && subMenu) {
+        group.classList.toggle('expanded');
+        subMenu.classList.toggle('collapsed');
+    }
+}
+
+/**
+ * Handle relational group toggling (Creators, Seasons, Collections)
+ */
+function toggleRelationalGroup(event, type) {
+    if (event) event.stopPropagation();
+
+    // Dual-Action: Apply the parent filter (e.g., 'creators') without closing
+    setTimeFilter(type, false);
+
+    const group = event.currentTarget.closest('.dropdown-group') || event.currentTarget;
+    const subMenu = document.getElementById(`${type}-sub-menu`);
+    if (group && subMenu) {
+        group.classList.toggle('expanded');
+        subMenu.classList.toggle('collapsed');
+    }
+}
+
+/**
+ * Populate Creators, Seasons, and Collections sub-menus
+ */
+function populateRelationalMenus() {
+    console.log('🏗️ Populating relational menus...');
+
+    // 1. Creators (Filtered by Region)
+    const creatorsMenu = document.getElementById('creators-sub-menu');
+    if (creatorsMenu) {
+        creatorsMenu.innerHTML = '';
+        getFilteredInfluencers().forEach(creator => {
+            const item = document.createElement('div');
+            item.className = 'dropdown-item';
+            item.onclick = () => setTimeFilter(creator.name);
+            item.setAttribute('data-filter', creator.name);
+            item.textContent = creator.name;
+            creatorsMenu.appendChild(item);
+        });
+    }
+
+    // 2. Seasons (Filtered by Region)
+    const seasonsMenu = document.getElementById('seasons-sub-menu');
+    if (seasonsMenu) {
+        seasonsMenu.innerHTML = '';
+        getFilteredSeasons().forEach(season => {
+            const item = document.createElement('div');
+            item.className = 'dropdown-item';
+            item.onclick = () => setTimeFilter(season.id);
+            item.setAttribute('data-filter', season.id);
+            item.textContent = `${season.emoji} ${season.name}`;
+            seasonsMenu.appendChild(item);
+        });
+    }
+
+    // 3. Collections
+    const collectionsMenu = document.getElementById('collections-sub-menu');
+    if (collectionsMenu) {
+        collectionsMenu.innerHTML = '';
+        Object.keys(VibeDrips.collections).forEach(collId => {
+            const coll = VibeDrips.collections[collId];
+            const item = document.createElement('div');
+            item.className = 'dropdown-item';
+            item.onclick = () => setTimeFilter(collId);
+            item.setAttribute('data-filter', collId);
+            item.textContent = coll.name;
+            collectionsMenu.appendChild(item);
+        });
+    }
+
+    // 4. Categories (already handled by product-loader.js, but let's ensure it's synced)
+    if (window.populateCategoryFilter) window.populateCategoryFilter();
+}
+
+function updateDiscoveryLabel(filter) {
+    const label = document.getElementById('discovery-current-label');
+    if (!label) return;
+
+    // Reset to default on non-discovery main tabs
+    if (filter === 'reels' || filter === 'all') {
+        label.textContent = '🏠 Discovery';
+        return;
+    }
+
+    const labels = {
+        'discovery': '🏠 Discover',
+        'new': '🆕 New',
+        'categories': '📂 Category Drops',
+        'creators': '👤 Creators',
+        'seasons': '🍃 4 Seasons',
+        'collections': '🧩 Collections'
+    };
+
+    // Robust fallback: If filter is somehow null/undefined or missing, show 'Discovery'
+    if (!filter || filter === 'undefined' || filter === 'null') {
+        label.textContent = '🏠 Discovery';
+    } else {
+        label.textContent = labels[filter] || `📂 ${filter}`;
+    }
+}
+
+// Close dropdown on outside click
+document.addEventListener('click', (e) => {
+    const dropdown = document.getElementById('discovery-dropdown');
+    if (dropdown && !dropdown.contains(e.target)) {
+        closeDiscoveryDropdown();
+    }
+});
+
+/**
  * Get "Hot This Month" products based on dateFirstAvailable
  */
 function getHotProducts() {
     const currentDate = new Date();
     const currentMonth = currentDate.getMonth();
     const currentYear = currentDate.getFullYear();
-    
+
     return VibeDrips.allProducts.filter(product => {
         const dateStr = product.date_first_available || product.dateFirstAvailable || product.timestamp;
         if (!dateStr) return false;
-        
+
         try {
             const productDate = new Date(dateStr);
-            return (productDate.getMonth() === currentMonth && 
-                    productDate.getFullYear() === currentYear) ||
-                   (productDate.getMonth() === (currentMonth - 1 + 12) % 12 && 
+            return (productDate.getMonth() === currentMonth &&
+                productDate.getFullYear() === currentYear) ||
+                (productDate.getMonth() === (currentMonth - 1 + 12) % 12 &&
                     productDate.getFullYear() === currentYear);
         } catch (error) {
             console.warn('Invalid date format for product:', product.name, dateStr);
@@ -74,7 +379,7 @@ function getHotProducts() {
 function getNewArrivals() {
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    
+
     return VibeDrips.allProducts
         .filter(product => {
             const productDate = new Date(product.timestamp);
@@ -88,32 +393,64 @@ function getNewArrivals() {
  */
 function updateSectionTitle(filter) {
     const titles = {
-        'hot': { 
-            title: 'Hot This Month', 
+        'hot': {
+            title: 'Hot This Month',
             subtitle: 'Trending products that just dropped and making waves'
         },
-        'featured': { 
-            title: 'Featured Products', 
+        'featured': {
+            title: 'Featured Products',
             subtitle: 'Our hand-picked recommendations just for you'
         },
-        'new': { 
-            title: 'New Arrivals', 
-            subtitle: 'Fresh drops from the last 30 days'
+        'new': {
+            title: '🆕 New',
+            subtitle: 'The latest drops & fresh desk setup inspiration'
         },
-        'trending': { 
-            title: 'Trending Now', 
+        'trending': {
+            title: 'Trending Now',
             subtitle: 'What everyone is talking about'
         },
-        'all': { 
-            title: 'All Products', 
+        'all': {
+            title: 'All Products',
             subtitle: 'Complete collection of curated finds'
+        },
+        'categories': {
+            title: '📂 Categories',
+            subtitle: 'Show me cool desk setups by department'
+        },
+        'discovery': {
+            title: '🏠 Discover Drops',
+            subtitle: 'Explore our curated drops'
+        },
+        'creators': {
+            title: '👤 Creators',
+            subtitle: 'What are creators actually using?'
+        },
+        'seasons': {
+            title: '🍃 4 Seasons',
+            subtitle: 'What fits this season? Seasonal essentials.'
+        },
+        'collections': {
+            title: '🧩 Collections',
+            subtitle: 'What’s good under my budget? Curated sets.'
         }
     };
-    
-    const titleInfo = titles[filter] || titles['all'];
-    
+
+    let titleInfo = titles[filter];
+
+    // Dynamic fallback for specific categories or unknown filters
+    if (!titleInfo) {
+        // Check relational names (Creators, Seasons, Collections)
+        const relationalName = VibeDrips.currentCreator || VibeDrips.currentSeason || VibeDrips.currentCollection;
+        titleInfo = {
+            title: relationalName || (filter.startsWith('📂') ? filter : `📂 ${filter}`),
+            subtitle: `Explore our curated ${relationalName || filter} collection`
+        };
+    }
+
     if (VibeDrips.elements.sectionTitle) {
-        VibeDrips.elements.sectionTitle.textContent = titleInfo.title;
+        // Apply emoji wrapping to section title
+        const formattedTitle = titleInfo.title.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '<span class="emoji">$1</span>');
+        VibeDrips.elements.sectionTitle.innerHTML = formattedTitle;
     }
     if (VibeDrips.elements.sectionSubtitle) {
         VibeDrips.elements.sectionSubtitle.textContent = titleInfo.subtitle;
@@ -126,31 +463,33 @@ function updateSectionTitle(filter) {
 function applyCurrentFilters() {
     const searchInput = VibeDrips.elements.search;
     const categoryFilter = VibeDrips.elements.categoryFilter;
-    
+
     const searchTerm = searchInput ? searchInput.value.toLowerCase().trim() : '';
-    const categoryValue = categoryFilter ? categoryFilter.value.trim() : '';
+    const categoryValue = VibeDrips.currentCategory || '';
 
-    if (searchTerm || categoryValue) {
-        VibeDrips.filteredProducts = VibeDrips.filteredProducts.filter(product => {
-            const searchFields = [
-                product.name, 
-                product.description, 
-                product.category,
-                product.subcategory,
-                product.brand
-            ].filter(field => field && field.toString().trim());
-            
-            const matchesSearch = !searchTerm || searchFields.some(field => 
-                field.toString().toLowerCase().includes(searchTerm)
-            );
+    VibeDrips.filteredProducts = VibeDrips.filteredProducts.filter(product => {
+        const searchFields = [
+            product.name,
+            product.description,
+            product.category,
+            product.subcategory,
+            product.brand
+        ].filter(field => field && field.toString().trim());
 
-            const matchesCategory = !categoryValue || 
-                product.category === categoryValue || 
-                product.subcategory === categoryValue;
+        const matchesSearch = !searchTerm || searchFields.some(field =>
+            field.toString().toLowerCase().includes(searchTerm)
+        );
 
-            return matchesSearch && matchesCategory;
-        });
-    }
+        const matchesCategory = !categoryValue ||
+            product.category === categoryValue ||
+            product.subcategory === categoryValue;
+
+        // NEW: Price range matching
+        const matchesPrice = !window.VibeDripsPriceFilter ||
+            window.VibeDripsPriceFilter.matches(product.price);
+
+        return matchesSearch && matchesCategory && matchesPrice;
+    });
 }
 
 /**
@@ -166,7 +505,7 @@ function filterProducts() {
 function sortProducts() {
     const sortSelect = VibeDrips.elements.priceSort;
     if (!sortSelect) return;
-    
+
     const sortBy = sortSelect.value;
 
     switch (sortBy) {
@@ -193,7 +532,7 @@ function sortProducts() {
             VibeDrips.filteredProducts.sort((a, b) => {
                 if (a.featured && !b.featured) return -1;
                 if (!a.featured && b.featured) return 1;
-                
+
                 const dateA = new Date(a.date_first_available || a.timestamp);
                 const dateB = new Date(b.date_first_available || b.timestamp);
                 return dateB - dateA;
@@ -209,7 +548,7 @@ function sortProducts() {
 function renderProducts() {
     const container = VibeDrips.elements.productsContainer;
     if (!container) return;
-    
+
     if (VibeDrips.filteredProducts.length === 0) {
         container.innerHTML = `
             <div class="no-products">
@@ -224,77 +563,397 @@ function renderProducts() {
         return;
     }
 
-    // Clear container and add cards directly (no wrapper needed)
-    container.innerHTML = '';
-    
-    VibeDrips.filteredProducts.forEach(product => {
-        const productCard = createProductCard(product);
-        container.appendChild(productCard);  // ← Append directly to container
-    });
+    // PHASE_26: Discovery Rails vs Grid View
+    const searchInput = VibeDrips.elements.search;
+    const hasSearch = searchInput && searchInput.value.trim().length > 0;
+    const hasCategory = VibeDrips.currentCategory && VibeDrips.currentCategory.length > 0;
+
+    // hasCategory: if user picked a specific department, default to Grid unless search is active
+    // Option (i): Dynamic Rails (Discovery, Categories, Creators, Seasons, Collections)
+    // Option (ii): Grid View (Search, Specific Category, Specific Creator, etc.)
+    const isDiscoveryMode = ['discovery', 'categories', 'creators', 'seasons', 'collections'].includes(VibeDrips.currentTimeFilter);
+
+    if (isDiscoveryMode && !hasSearch && !hasCategory) {
+        container.classList.remove('products-grid');
+        renderDiscoveryRails();
+    } else {
+        container.classList.add('products-grid');
+        // Clear container and add cards directly
+        container.innerHTML = '';
+        VibeDrips.filteredProducts.forEach(product => {
+            const productCard = createProductCard(product);
+            container.appendChild(productCard);
+        });
+    }
 
     updateStats();
 }
 
+/**
+ * PHASE_26: Render Netflix-style horizontal rails for different time-categories
+ */
+function renderDiscoveryRails() {
+    const container = VibeDrips.elements.productsContainer;
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    let categories = [];
+
+    // If in discovery mode, append all category rails (Netflix Style)
+    // If in categories mode, only show category rails (Isolated view)
+    const currentFilter = VibeDrips.currentTimeFilter;
+    const isSpecificCategory = VibeDrips.currentCategory !== '';
+
+    if (currentFilter === 'discovery' && !isSpecificCategory) {
+        // Aligned with the 5 new main buckets + Categories
+        categories.push({ id: 'new', title: '🆕 New', subtitle: 'The latest drops & fresh desk setup inspiration' });
+        categories.push({ id: 'creators', title: '👤 Creators', subtitle: 'What are creators actually using?' });
+        categories.push({ id: 'seasons', title: '🍃 4 Seasons', subtitle: 'What fits this season? Seasonal essentials.' });
+        categories.push({ id: 'collections', title: '🧩 Collections', subtitle: 'What’s good under my budget? Curated sets.' });
+        categories.push({ id: 'categories', title: '📂 Categories', subtitle: 'Show me cool desk setups by department' });
+    } else if (currentFilter === 'creators') {
+        categories = VibeDrips.influencers.map(i => ({
+            id: 'relational',
+            title: `👤 ${i.name}`,
+            subtitle: `Curated by ${i.name}`,
+            filterValue: i.name
+        }));
+    } else if (currentFilter === 'seasons') {
+        categories = VibeDrips.seasons.filter(s => s.product_count > 0).map(s => ({
+            id: 'relational',
+            title: `${s.emoji} ${s.name}`,
+            subtitle: s.label || `Explore our ${s.name} collection`,
+            filterValue: s.id
+        }));
+    } else if (currentFilter === 'collections') {
+        categories = Object.keys(VibeDrips.collections).map(id => ({
+            id: 'relational',
+            title: `🧩 ${VibeDrips.collections[id].name}`,
+            subtitle: `Explore ${VibeDrips.collections[id].name}`,
+            filterValue: id
+        }));
+    } else if (currentFilter === 'categories') {
+        // ISOLATED VIEW: Show partitions (child rails)
+        categories = Array.from(VibeDrips.categories).sort().map(cat => ({
+            id: 'custom',
+            title: `📂 ${cat}`,
+            subtitle: `Everything in ${cat}`,
+            categoryName: cat,
+            isChild: true
+        }));
+    }
+
+    let categoriesRendered = 0;
+
+    categories.forEach(cat => {
+        let railProducts = [];
+        switch (cat.id) {
+            case 'new': railProducts = filterByAsins((VibeDrips.recentDrops || []).map(p => p.asin)); break;
+            case 'creators':
+                categoriesRendered++;
+                // Show products from FIRST region-appropriate creator as a taste
+                const firstCreator = getFilteredInfluencers()[0];
+                if (firstCreator && firstCreator.media_groups) {
+                    railProducts = filterByAsins(firstCreator.media_groups.flatMap(mg => mg.asins || []));
+                }
+                break;
+            case 'seasons':
+                categoriesRendered++;
+                const firstSeason = getFilteredSeasons().find(s => s.product_count > 0);
+                if (firstSeason) railProducts = filterByAsins(firstSeason.asins);
+                break;
+            case 'collections':
+                categoriesRendered++;
+                const firstColl = Object.values(VibeDrips.collections || {})[0];
+                if (firstColl) railProducts = filterByAsins(firstColl.asins);
+                break;
+            case 'categories':
+                // Parent rail: Bundle all departmental products for global view
+                railProducts = VibeDrips.allProducts.filter(p => p.category && VibeDrips.categories.has(p.category.trim()));
+                break;
+            case 'relational':
+                // Handle specific creator/season/collection item
+                handleRelationalFilter(cat.filterValue);
+                railProducts = [...VibeDrips.filteredProducts];
+                break;
+            case 'custom':
+                const targetCat = cat.categoryName || VibeDrips.currentCategory;
+                railProducts = VibeDrips.allProducts.filter(p => p.category === targetCat || p.subcategory === targetCat);
+                break;
+        }
+
+        if (railProducts.length > 0) {
+
+
+            const railSection = createDiscoveryRail(cat, railProducts);
+            container.appendChild(railSection);
+
+            if (cat.id === 'custom') {
+                categoriesRendered++;
+            }
+        }
+    });
+
+    // If no specific categories found, fallback to grid (shouldn't happen with valid data)
+    if (container.children.length === 0) {
+        VibeDrips.filteredProducts.forEach(product => {
+            container.appendChild(createProductCard(product));
+        });
+    }
+}
 
 /**
- * Create a product card element - NEW UNIFIED LAYOUT
+ * PHASE_26: Create a single discovery rail element
+ */
+function createDiscoveryRail(category, products) {
+    const rail = document.createElement('div');
+    rail.className = 'discovery-rail';
+    rail.dataset.categoryId = category.id;
+
+    // Helper to wrap emoji
+    const formattedTitle = category.title.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '<span class="emoji">$1</span>');
+
+    // Navigation logic for "View All"
+    let viewAllAction = `setTimeFilter('${category.id}')`;
+    const isParentType = ['creators', 'seasons', 'collections'].includes(category.id);
+
+    if (category.isParent || isParentType) {
+        // Option (i): Parent rail navigates to Rails View (Partitions)
+        viewAllAction = `setTimeFilter('${category.id}', false)`;
+    } else if (category.categoryName || category.isChild || category.id === 'relational') {
+        // Option (ii): Leaf nodes navigate to Grid View
+        const filterVal = category.filterValue || category.categoryName || category.id;
+        viewAllAction = `setTimeFilter('${filterVal}', true)`;
+    }
+
+    rail.innerHTML = `
+        <div class="rail-header">
+            <div class="rail-info">
+                <h3 class="rail-title">${formattedTitle}</h3>
+                <span class="rail-subtitle">${category.subtitle}</span>
+            </div>
+            <button class="rail-view-all" onclick="${viewAllAction}">View All →</button>
+        </div>
+        <div class="rail-container-wrapper">
+            <button class="rail-nav-btn prev" aria-label="Previous">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+            <div class="rail-container"></div>
+            <button class="rail-nav-btn next" aria-label="Next">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+        </div>
+    `;
+
+    const railContainer = rail.querySelector('.rail-container');
+    products.forEach(product => {
+        railContainer.appendChild(createProductCard(product));
+    });
+
+    // Add navigation logic
+    const prevBtn = rail.querySelector('.rail-nav-btn.prev');
+    const nextBtn = rail.querySelector('.rail-nav-btn.next');
+
+    // Boundary-aware arrow visibility
+    const updateArrowVisibility = () => {
+        const scrollLeft = railContainer.scrollLeft;
+        const maxScroll = railContainer.scrollWidth - railContainer.clientWidth;
+
+        prevBtn.style.opacity = scrollLeft <= 5 ? '0' : '1';
+        prevBtn.style.pointerEvents = scrollLeft <= 5 ? 'none' : 'auto';
+
+        nextBtn.style.opacity = scrollLeft >= maxScroll - 5 ? '0' : '1';
+        nextBtn.style.pointerEvents = scrollLeft >= maxScroll - 5 ? 'none' : 'auto';
+    };
+
+    railContainer.addEventListener('scroll', updateArrowVisibility);
+    // Initial check after a short delay to ensure rendering is complete
+    setTimeout(updateArrowVisibility, 100);
+
+    prevBtn.onclick = () => {
+        railContainer.scrollBy({ left: -window.innerWidth * 0.8, behavior: 'smooth' });
+    };
+
+    nextBtn.onclick = () => {
+        railContainer.scrollBy({ left: window.innerWidth * 0.8, behavior: 'smooth' });
+    };
+
+    return rail;
+}
+
+// ============================================
+// ✅ Currency-aware price formatting
+// ============================================
+
+const CURRENCY_FORMAT_RULES = {
+    'INR': {
+        units: [
+            { value: 10000000, suffix: 'Cr' },
+            { value: 100000, suffix: 'L' },
+            { value: 1000, suffix: 'K' }
+        ],
+        locale: 'en-IN'
+    },
+    'USD': {
+        units: [
+            { value: 1000000000, suffix: 'B' },
+            { value: 1000000, suffix: 'M' },
+            { value: 1000, suffix: 'K' }
+        ],
+        locale: 'en-US'
+    },
+    'EUR': {
+        units: [
+            { value: 1000000000, suffix: 'Mrd' },
+            { value: 1000000, suffix: 'Mio' },
+            { value: 1000, suffix: 'K' }
+        ],
+        locale: 'de-DE'
+    },
+    'GBP': {
+        units: [
+            { value: 1000000000, suffix: 'B' },
+            { value: 1000000, suffix: 'M' },
+            { value: 1000, suffix: 'K' }
+        ],
+        locale: 'en-GB'
+    },
+    'JPY': {
+        units: [
+            { value: 100000000, suffix: '億' },
+            { value: 10000, suffix: '万' },
+            { value: 1000, suffix: 'K' }
+        ],
+        locale: 'ja-JP'
+    },
+    'DEFAULT': {
+        units: [
+            { value: 1000000, suffix: 'M' },
+            { value: 1000, suffix: 'K' }
+        ],
+        locale: 'en-US'
+    }
+};
+
+const formatPrice = (amount, currencyCode = 'INR', symbol = '₹', compact = true) => {
+    if (!amount || amount === 0) return `${symbol}0`;
+    const num = parseFloat(amount);
+    if (isNaN(num)) return `${symbol}0`;
+
+    const rules = CURRENCY_FORMAT_RULES[currencyCode] || CURRENCY_FORMAT_RULES['DEFAULT'];
+
+    if (compact) {
+        // No decimals in compact mode
+        if (num < 1000) return `${symbol}${Math.round(num)}`;
+        for (const unit of rules.units) {
+            if (num >= unit.value) {
+                const formatted = (num / unit.value).toFixed(1).replace(/\.0$/, '');
+                return `${symbol}${formatted}${unit.suffix}`;
+            }
+        }
+        return `${symbol}${Math.round(num)}`;
+    } else {
+        return `${symbol}${num.toLocaleString(rules.locale, { maximumFractionDigits: 2, minimumFractionDigits: 2 })}`;
+    }
+};
+
+// ✅ NEW: Truncate text with word boundary (for brand/category)
+const truncateTextAtWord = (text, maxChars = 18) => {
+    if (!text || text.length <= maxChars) return text;
+    const truncated = text.substring(0, maxChars);
+    const lastSpace = truncated.lastIndexOf(' ');
+    if (lastSpace > 0) {
+        return truncated.substring(0, lastSpace) + '...';
+    }
+    return truncated + '...';
+};
+
+/**
+ * Create a product card element - UPDATED WITH DISCOUNT BADGE
  */
 function createProductCard(product) {
     const card = document.createElement('div');
     card.className = 'product-card';
-    
+
     // Extract all fields from product data
     const imageUrl = product.main_image || '';
-    const allImages = [product.main_image, ...(product.all_images || [])].filter(Boolean);
+    const allImages = [...(product.all_images || [])].filter(Boolean);
     const imageCount = allImages.length;
     const amazonLink = product.amazon_short || product.amazon_long || product.source_link || '#';
     const productName = product.name || product.productTitle || 'Product Name';
     const productId = product.asin || product.id || '';
-    const category = product.subcategory || product.itemTypeName || product.category || 'General';
-    const brand = product.brand || 'VibeDrips';
+
+    // ✅ UPDATED: Truncate category and brand to 18 chars at word boundary
+    const category = truncateTextAtWord(product.category || 'General', 18);
+    const brand = truncateTextAtWord(product.brand || 'VibeDrips', 18);
+
     const rating = parseFloat(product.customer_rating) || 0;
-    
-    // Format price
-    const price = product.price || 0;
-    const currency = product.symbol || '₹';
-    const priceFormatted = typeof price === 'number' 
-        ? `${currency}${price.toLocaleString('en-IN')}` 
-        : price;
-    
+    const reviewCount = parseInt(product.review_count) || 0;
+
+    // ✅ Format review count helper
+    const formatCount = (n) => {
+        if (!n || n < 1000) return String(n || 0);
+        if (n < 10000) return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+        return Math.round(n / 1000) + 'k';
+    };
+
+    // ✅ Use formatPrice with currency awareness (compact, no decimals)
+    const price = product.display_price || product.price || 0;
+    const currencyCode = product.currency || 'INR';
+    const symbol = product.symbol || '₹';
+    const priceFormatted = formatPrice(price, currencyCode, symbol, true); // Compact format
+
+    // Discount badge logic
+    const showDiscount = product.show_discount || false;
+    const discountPercent = product.computed_discount || 0;
+    const discountBadge = showDiscount && discountPercent > 0
+        ? `<span class="discount-badge"><span class="live-dot" aria-hidden="true"></span>${discountPercent}%</span>`
+        : '';
+
     // SVG fallback
     const svgFallback = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect fill='%23333' width='200' height='200'/%3E%3Ctext fill='%23fff' font-size='14' x='50%25' y='50%25' text-anchor='middle' dy='.3em'%3E${encodeURIComponent(productName?.substring(0, 20) || 'No Image')}%3C/text%3E%3C/svg%3E`;
-    
+
     card.innerHTML = `
         <div class="product-image-wrapper">
             <img src="${imageUrl || svgFallback}" 
                  alt="${productName}"
                  loading="lazy"
                  onerror="this.src='${svgFallback}'">
-            
+
             ${imageCount > 1 ? `<div class="image-count">${imageCount} photos</div>` : ''}
             ${brand ? `<div class="brand-tag">🏷️ ${brand}</div>` : ''}
         </div>
-        
+
         <div class="product-category">${category}</div>
         <h3 class="product-name">${productName}</h3>
-        
+
         <div class="product-price-row">
-            <span class="product-price">${priceFormatted}</span>
-            ${rating > 0 ? `<span class="rating">⭐ ${rating.toFixed(1)}</span>` : ''}
+            <div class="price-container">
+                <span class="product-price">${priceFormatted}</span>
+                ${discountBadge}
+            </div>
+            ${rating > 0 ? `<span class="rating">⭐ ${rating.toFixed(1)}${reviewCount > 0 ? ` (${formatCount(reviewCount)})` : ''}</span>` : ''}
         </div>
-        
+
         <button class="amazon-button" onclick="event.stopPropagation(); openAmazonLink('${amazonLink}', '${productId}')">
             🛒 Buy on Amazon
         </button>
     `;
-    
-    // Make entire card clickable to open modal
-    card.onclick = () => showProductModal(productId);
+
+    // Make entire card clickable to open modal - PHASE_7: Pass 'this' for context detection
+    card.onclick = function () { showProductModal(productId, this); };
     card.style.cursor = 'pointer';
-    
+
+    // ✅ PHASE_7: Add ID for DOM-based context extraction
+    card.setAttribute('data-product-id', productId);
+
     return card;
 }
-
 
 /**
  * Open Amazon/affiliate link
@@ -308,50 +967,1539 @@ function openAmazonLink(link, productId) {
     }
 }
 
+// ============================================
+// PHASE_1: Modal Navigation Helper Functions
+// ============================================
+
 /**
- * Show detailed product modal
+ * PHASE_1: Generate modal HTML for a single product
+ * Extracted from showProductModal - NO LOGIC CHANGES
+ * This is an exact copy of the HTML generation code (lines 426-700 from original)
  */
-function showProductModal(productId) {
+function generateModalHTML(product) {
+    // Helper: Format price with conditional decimals
+    const formatPriceFull = (amount, currencyCode, symbol) => {
+        const hasDecimals = amount % 1 !== 0;
+        if (hasDecimals) {
+            return `${symbol}${amount.toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            })}`;
+        } else {
+            return `${symbol}${amount.toLocaleString('en-US')}`;
+        }
+    };
+
+    // Helper: Format review count with commas
+    const formatCountFull = (n) => {
+        return n ? n.toLocaleString('en-US') : '0';
+    };
+
+    // Prepare data (TRIM all values)
+    const productId = product.id;
+    const currencyCode = product.currency || 'INR';
+    const symbol = product.symbol || '₹';
+    const priceFormatted = formatPriceFull(product.price || 0, currencyCode, symbol);
+    const rating = parseFloat(product.customer_rating) || 0;
+    const reviewCount = parseInt(product.review_count) || 0;
+    const showDiscount = product.show_discount || false;
+    const discountPercent = product.computed_discount || 0;
+
+    // Prepare images for gallery
+    const images = product.all_images || [];
+
+    // Title truncation
+    const isMobile = window.innerWidth <= 768;
+    const maxTitleLength = isMobile ? 35 : 80;
+    const productTitle = (product.name || 'Product').trim();
+    const isTitleLong = productTitle.length > maxTitleLength;
+    const displayTitle = isTitleLong
+        ? productTitle.substring(0, maxTitleLength).trim() + '...'
+        : productTitle;
+
+    // Description truncation
+    const maxDescLength = 200;
+    const description = (product.description || '').trim();
+    const isDescLong = description.length > maxDescLength;
+    const displayDesc = isDescLong
+        ? description.substring(0, 200).trim() + '...'
+        : description;
+
+    // Build modal HTML - EXACT COPY from original showProductModal
+    return `
+        <div class="simple-modal dynamic-modal">
+            <div class="modal-overlay" onclick="closeDynamicModal(event)"></div>
+            <div class="simple-modal-content">
+                <div class="simple-modal-header">
+                    <h2 id="modal-title-${productId}" 
+                        class="${isTitleLong ? 'expandable' : ''}" 
+                        ${isTitleLong ? `onclick="toggleTitle_${productId}()"` : ''}>
+                        ${escapeHtml(displayTitle)}
+                    </h2>
+                    <button class="modal-close-button" onclick="closeDynamicModal(event)">❌</button>
+                </div>
+                <div class="simple-modal-body">
+                    
+                    <!-- Brand Section (SEPARATE) -->
+                    <div class="modal-brand-section">
+                        <div class="info-row">
+                            <span class="label">Brand 🏷️</span>
+                            <span class="value">${escapeHtml((product.brand || 'Unknown').trim())}</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Image Gallery Section (BEFORE Category) -->
+                    ${images.length > 0 ? `
+                    <div class="modal-image-gallery">
+                        <!-- Desktop: Split View -->
+                        <div class="gallery-desktop">
+                            <div class="gallery-thumbnails">
+                                ${images.map((img, idx) => `
+                                <div class="thumbnail ${idx === 0 ? 'active' : ''}" 
+                                     onmouseover="previewImage_${productId}(${idx})"
+                                     onmouseout="revertImage_${productId}()"
+                                     onclick="selectImage_${productId}(${idx})"
+                                     ondblclick="openImageGallery_${productId}(${idx})">
+                                    <img src="${img}" alt="Thumb ${idx + 1}">
+                                </div>
+                                `).join('')}
+                            </div>
+                            <div class="gallery-main">
+                                <img src="${images[0]}" 
+                                     alt="${escapeHtml(product.name)}" 
+                                     style="max-width: 100%; max-height: 450px; border-radius: 12px; cursor: pointer;"
+                                     ondblclick="openImageGallery_${productId}()" id="main-image-${productId}">
+                                <div class="zoom-hint">🔍 Double-click to view full screen</div>
+                                <div class="carousel-controls">
+                                    <button class="arrow-button lightbox-arrow lightbox-prev" onclick="prevImage_${productId}()" aria-label="Previous">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="15 18 9 12 15 6"></polyline>
+                                        </svg>
+                                    </button>
+                                    <span class="counter" id="counter-${productId}">1 / ${images.length}</span>
+                                    <button class="arrow-button lightbox-arrow lightbox-next" onclick="nextImage_${productId}()" aria-label="Next">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9 18 15 12 9 6"></polyline>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Mobile: Main + Slider -->
+                        <div class="gallery-mobile">
+                            <div class="mobile-main">
+                                <img id="main-image-mobile-${productId}" 
+                                     src="${images[0]}" 
+                                     onclick="openImageGallery_${productId}()">
+                                <div class="zoom-hint">🔍</div>
+                                <div class="carousel-controls" onclick="event.stopPropagation()">
+                                    <button class="arrow-button lightbox-arrow lightbox-prev" onclick="prevImage_${productId}()" aria-label="Previous">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="15 18 9 12 15 6"></polyline>
+                                        </svg>
+                                    </button>
+                                    <span class="counter" id="counter-mobile-${productId}">1 / ${images.length}</span>
+                                    <button class="arrow-button lightbox-arrow lightbox-next" onclick="nextImage_${productId}()" aria-label="Next">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="9 18 15 12 9 6"></polyline>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="mobile-thumbnails">
+                                ${images.map((img, idx) => `
+                                <div class="thumbnail ${idx === 0 ? 'active' : ''}" onclick="selectImage_${productId}(${idx})">
+                                    <img src="${img}" alt="Thumb ${idx + 1}">
+                                </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                    ` : ''}
+                    
+                    <!-- Category Section (SEPARATE) -->
+                    <div class="modal-category-section">
+                        <div class="info-row">
+                            <span class="label">Category 📦</span>
+                            <span class="value">${escapeHtml((product.category || 'General').trim())}</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Price + Rating + Reviews Section (NO Brand/Category) -->
+                    <div class="modal-core-info">
+                        <div class="info-row">
+                            <span class="label">Price 💰</span>
+                            <span class="value">
+                                ${priceFormatted}
+                                ${showDiscount && discountPercent > 0 ? `
+                                    <span class="discount-badge">
+                                        <span class="live-dot" aria-hidden="true"></span>${discountPercent}%
+                                    </span>
+                                ` : ''}
+                            </span>
+                        </div>
+                        ${rating > 0 ? `
+                        <div class="info-row">
+                            <span class="label">Rating ⭐</span>
+                            <span class="value">${rating.toFixed(1)} out of 5 stars</span>
+                        </div>
+                        ` : ''}
+                        ${reviewCount > 0 ? `
+                        <div class="info-row">
+                            <span class="label">Reviews 👥</span>
+                            <span class="value">${formatCountFull(reviewCount)} customer reviews</span>
+                        </div>
+                        ` : ''}
+                    </div>
+                    
+                    <!-- Product Details Section (Collapsible) -->
+                    ${product.productDetails && product.productDetails.length > 0 ? `
+                    <div class="modal-section">
+                        <div class="modal-section-header" onclick="toggleSection(this)">
+                            <div class="title">
+                                <span class="emoji">📋</span>
+                                <span>Product Details</span>
+                            </div>
+                            <span class="toggle-icon">▶</span>
+                        </div>
+                        <div class="modal-section-content">
+                            ${product.productDetails.sort((a, b) => (a.priority || 0) - (b.priority || 0)).map(item => {
+        const emoji = getDetailEmoji(item.key, item.value);
+        const label = escapeHtml((item.label || '').trim());
+        return `
+                                <div class="detail-row">
+                                    <span class="label">${label} ${emoji}</span>
+                                    <span class="value">${escapeHtml((item.value || '').trim())}</span>
+                                </div>
+                                `;
+    }).join('')}
+                        </div>
+                    </div>
+                    ` : ''}
+                    
+                    <!-- Additional Info Section (Collapsible, Collapsed by Default) -->
+                    ${product.additionalInfo && Object.keys(product.additionalInfo).length > 0 ? `
+                    <div class="modal-section">
+                        <div class="modal-section-header" onclick="toggleSection(this)">
+                            <div class="title">
+                                <span class="emoji">ℹ️</span>
+                                <span>Additional Information</span>
+                            </div>
+                            <span class="toggle-icon">▶</span>
+                        </div>
+                        <div class="modal-section-content">
+                            ${(() => {
+                const flattened = Object.entries(product.additionalInfo)
+                    .flatMap(([groupName, items]) => {
+                        if (groupName === 'Books' && product.category !== 'Book') return [];
+                        return items || [];
+                    })
+                    .filter(item => {
+                        const key = (item.key || '').toLowerCase();
+                        const val = (item.value || '').trim();
+                        if (!val) return false;
+                        if (['timestamp', 'discount', 'net quantity', 'generic name', 'item weight', 'item dimensions', 'product dimensions', 'country of origin'].includes(key)) return false;
+                        return true;
+                    });
+
+                // Group by normalized value to catch duplicates
+                const groups = [];
+                flattened.forEach(item => {
+                    const val = (item.value || '').trim();
+                    const label = (item.label || '').trim();
+                    const existingGroup = groups.find(g => g.value === val);
+                    if (existingGroup) {
+                        if (!existingGroup.labels.includes(label)) {
+                            existingGroup.labels.push(label);
+                        }
+                    } else {
+                        groups.push({ value: val, labels: [label] });
+                    }
+                });
+
+                return groups.map(group => `
+                                    <div class="info-row">
+                                        <span class="emoji"></span>
+                                        <span class="label">${escapeHtml(group.labels.join(' / '))}</span>
+                                        <span class="value">${escapeHtml(group.value)}</span>
+                                    </div>
+                                `).join('');
+            })()}
+                        </div>
+                    </div>
+                    ` : ''}
+                    
+                    <!-- Description Section -->
+                    ${description ? `
+                    <div class="modal-description-section">
+                        <div class="modal-section-header" onclick="toggleDescription_${productId}()" style="cursor: pointer;">
+                            <div class="title">
+                                <span class="emoji">📝</span>
+                                <span>Description & Reviews</span>
+                            </div>
+                            <span class="toggle-icon">▼</span>
+                        </div>
+                        <div class="modal-section-content expanded">
+                            <div class="description-text" id="desc-${productId}" onclick="toggleDescription_${productId}()" style="cursor: pointer;">${escapeHtml(displayDesc)}</div>
+                            ${isDescLong ? `
+                            <button class="read-more-btn" onclick="toggleDescription_${productId}()">Read More ▼</button>
+                            ` : ''}
+                        </div>
+                    </div>
+                    ` : ''}
+                    
+                    <!-- Buy Button -->
+                    <div class="modal-actions">
+                        <button onclick="openAmazonLink('${escapeHtml(product.amazon_short || product.amazon_long || product.source_link || '#')}', '${product.id}')" 
+                                class="amazon-button">🛒 Buy on Amazon</button>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+/**
+ * PHASE_1: Build 5-product cache [P-2, P-1, Active, N+1, N+2]
+ * PHASE_7: Uses currentProductList for context-awareness
+ */
+function build5ProductCache(centerIndex) {
+    const cache = [];
+    const productList = VibeDrips.modalState.currentProductList;
+    const totalProducts = productList.length;
+
+    if (totalProducts === 0) return [];
+
+    for (let i = -2; i <= 2; i++) {
+        const idx = (centerIndex + i + totalProducts) % totalProducts;
+        cache.push(productList[idx]);
+    }
+
+    return cache;
+}
+
+/**
+ * PHASE_1: Setup interactive functions for a product
+ * Extracted from showProductModal (lines 704-767)
+ */
+function setupProductInteractions(product) {
+    const productId = product.id;
+    const images = product.all_images || [];
+
+    // Setup image gallery
+    if (images.length > 0 && typeof MediaLightbox !== 'undefined') {
+        window[`openImageGallery_${productId}`] = function () {
+            const lightbox = new MediaLightbox({
+                showCounter: true,
+                showDots: true,
+                enableSwipe: true,
+                enableKeyboard: true
+            });
+            lightbox.open(images, 0);
+        };
+    }
+
+    // Setup carousel navigation
+    if (images.length > 0) {
+        const carousel = CarouselUtils.createCarousel(productId, images);
+        window[`selectImage_${productId}`] = (index) => carousel.selectImage(index);
+        window[`previewImage_${productId}`] = (index) => carousel.previewImage(index);
+        window[`revertImage_${productId}`] = () => carousel.updateAll();
+        window[`prevImage_${productId}`] = () => carousel.prev();
+        window[`nextImage_${productId}`] = () => carousel.next();
+
+        // PHASE_3: Add Swipe/Drag support to the internal gallery containers
+        // We use a small timeout to ensure DOM is ready after modal insertion
+        setTimeout(() => {
+            const desktopGallery = document.querySelector(`#main-image-${productId}`)?.parentElement;
+            const mobileGallery = document.querySelector(`#main-image-mobile-${productId}`)?.parentElement;
+
+            const callbacks = {
+                onNext: () => carousel.next(),
+                onPrev: () => carousel.prev()
+            };
+
+            if (desktopGallery) CarouselUtils.addSwipeHandle(desktopGallery, callbacks);
+            if (mobileGallery) CarouselUtils.addSwipeHandle(mobileGallery, callbacks);
+        }, 100);
+    }
+
+    // Setup title toggle
+    const isMobile = window.innerWidth <= 768;
+    const maxTitleLength = isMobile ? 35 : 80;
+    const productTitle = (product.name || 'Product').trim();
+    const isTitleLong = productTitle.length > maxTitleLength;
+
+    if (isTitleLong) {
+        window[`toggleTitle_${productId}`] = function () {
+            const titleEl = document.getElementById(`modal-title-${productId}`);
+            const isExpanded = titleEl.classList.contains('expanded');
+
+            if (isExpanded) {
+                const isMobile = window.innerWidth <= 768;
+                const maxLen = isMobile ? 35 : 80;
+                titleEl.textContent = productTitle.substring(0, maxLen).trim() + '...';
+                titleEl.classList.remove('expanded');
+            } else {
+                titleEl.textContent = productTitle;
+                titleEl.classList.add('expanded');
+            }
+        };
+    }
+
+    // Setup description toggle
+    const description = (product.description || '').trim();
+    const maxDescLength = 200;
+    const isDescLong = description.length > maxDescLength;
+
+    if (isDescLong) {
+        window[`toggleDescription_${productId}`] = function () {
+            const descEl = document.getElementById(`desc-${productId}`);
+            const btn = descEl.parentElement.querySelector('.read-more-btn');
+            const header = descEl.closest('.modal-description-section').querySelector('.modal-section-header');
+
+            if (btn.textContent.includes('More')) {
+                descEl.textContent = description;
+                btn.textContent = 'Read Less ▲';
+                header.classList.add('expanded');
+            } else {
+                descEl.textContent = description.substring(0, 200).trim() + '...';
+                btn.textContent = 'Read More ▼';
+                header.classList.remove('expanded');
+            }
+        };
+    }
+}
+
+/**
+ * PHASE_2: Populate marketplace dropdown from regional_availability
+ */
+function populateMarketplaceDropdown(product, dropdownElement) {
+    if (!dropdownElement) return;
+    dropdownElement.innerHTML = '';
+
+    const variants = product.regional_variants || {};
+    const regions = Object.keys(variants);
+    const currentRegionCode = VibeDrips.currentCurrency || 'INR';
+
+    const flagMap = {
+        'INR': 'in',
+        'AUD': 'au',
+        'USD': 'us',
+        'GBP': 'gb',
+        'EUR': 'eu',
+        'JPY': 'jp',
+        'CAD': 'ca',
+        'BRL': 'br',
+        'MXN': 'mx',
+        'AED': 'ae'
+    };
+
+    // 🎬 LOCAL DISCOVERY WARP: Inject current region as "Hero" option
+    const currencyData = (VibeDrips.availableCurrencies || []).find(c => c.code === currentRegionCode);
+    const countryCode = flagMap[currentRegionCode] || currentRegionCode.toLowerCase().substring(0, 2);
+    const countryName = currencyData ? (currencyData.countries ? currencyData.countries[0] : currencyData.name) : (currentRegionCode === 'INR' ? 'India' : currentRegionCode);
+    const symbol = currencyData ? currencyData.symbol : '';
+
+    const heroItem = document.createElement('div');
+    heroItem.className = 'marketplace-item local-jump';
+    heroItem.innerHTML = `
+        <img src="https://flagcdn.com/w40/${countryCode}.png" 
+             srcset="https://flagcdn.com/w80/${countryCode}.png 2x"
+             width="20" 
+             alt="${countryName}"
+             class="marketplace-flag"
+             style="margin-right: 8px; border-radius: 2px; vertical-align: middle;">
+        ${countryName} (${symbol})
+    `;
+
+    heroItem.onclick = (e) => {
+        e.stopPropagation();
+        if (window.triggerHighFidelityWarp) {
+            window.triggerHighFidelityWarp(currentRegionCode, product.asin, true);
+        }
+    };
+
+    dropdownElement.appendChild(heroItem);
+
+    // Separator line
+    const separator = document.createElement('div');
+    separator.className = 'marketplace-separator';
+    dropdownElement.appendChild(separator);
+
+    if (regions.length === 0) {
+        dropdownElement.innerHTML = '<div class="marketplace-item empty">No other regions available</div>';
+        return;
+    }
+
+    regions.forEach(regionCode => {
+        const currencyData = (VibeDrips.availableCurrencies || []).find(c => c.code === regionCode);
+        const countryCode = flagMap[regionCode] || regionCode.toLowerCase().substring(0, 2);
+        const countryName = currencyData ? (currencyData.countries ? currencyData.countries[0] : currencyData.name) : regionCode;
+        const symbol = currencyData ? currencyData.symbol : '';
+
+        const item = document.createElement('div');
+        item.className = 'marketplace-item';
+        item.innerHTML = `
+            <img src="https://flagcdn.com/w40/${countryCode}.png" 
+                 srcset="https://flagcdn.com/w80/${countryCode}.png 2x"
+                 width="20" 
+                 alt="${countryName}"
+                 class="marketplace-flag"
+                 style="margin-right: 8px; border-radius: 2px; vertical-align: middle;">
+            ${countryName} (${symbol})
+        `;
+
+        item.onclick = (e) => {
+            e.stopPropagation();
+            if (window.triggerHighFidelityWarp) {
+                window.triggerHighFidelityWarp(regionCode, variants[regionCode]);
+            }
+        };
+
+        dropdownElement.appendChild(item);
+    });
+}
+
+/**
+ * PHASE_1: Wrap existing modal with sliding navigation structure
+ */
+function wrapModalForSliding(centerProductId) {
+    const existingModal = document.querySelector('.dynamic-modal');
+    if (!existingModal) return;
+
+    const productList = VibeDrips.modalState.currentProductList;
+    const centerIndex = productList.findIndex(p => p.id === centerProductId);
+    VibeDrips.modalState.currentIndex = centerIndex;
+
+    // Build 5-product cache
+    const cache = build5ProductCache(centerIndex);
+
+    // Create navigation container
+    const navContainer = document.createElement('div');
+    navContainer.className = 'modal-nav-container';
+
+    // Create sliding strip
+    const slidingStrip = document.createElement('div');
+    slidingStrip.className = 'modal-sliding-strip';
+
+    // Generate HTML for all 5 products
+    cache.forEach(product => {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = generateModalHTML(product);
+        const modalContent = tempDiv.querySelector('.simple-modal-content');
+        slidingStrip.appendChild(modalContent);
+    });
+
+    // Center the active product (index 2 in 5-product cache)
+    // Child 0: 0%, Child 1: -20%, Child 2: -40%, Child 3: -60%, Child 4: -80%
+    slidingStrip.style.transform = 'translate3d(-40%, 0, 0)';
+
+    // Add strip to container
+    navContainer.appendChild(slidingStrip);
+
+    // ✅ PHASE_9: Relocated Hybrid Indicator (Dots or Counter)
+    // Create indicator container at the modal level, not inside navContainer
+    let indicatorContainer = existingModal.querySelector('.modal-nav-indicator');
+    if (!indicatorContainer) {
+        indicatorContainer = document.createElement('div');
+        indicatorContainer.className = 'modal-nav-indicator glass-pill';
+        existingModal.appendChild(indicatorContainer);
+    }
+
+    // Determine type and update (Dots if <= 10, Counter if > 10)
+    const totalItems = productList.length;
+    if (totalItems <= 10 && window.CarouselUtils) {
+        window.CarouselUtils.enableDots(indicatorContainer, totalItems, centerIndex);
+    } else if (window.CarouselUtils) {
+        window.CarouselUtils.updateCounter(indicatorContainer, centerIndex, totalItems);
+    }
+
+    // Add click listeners to dots if they exist
+    indicatorContainer.addEventListener('click', (e) => {
+        const dot = e.target.closest('.dot');
+        if (dot) {
+            const targetIndex = parseInt(dot.getAttribute('data-index'));
+            // Navigation logic for direct dot jump could be added here
+        }
+    });
+
+    // CRITICAL FIX: Insert navContainer AFTER overlay to maintain z-index stacking
+    // The overlay must be BEFORE the content in DOM order for z-index to work
+    const overlay = existingModal.querySelector('.modal-overlay');
+    const oldContent = existingModal.querySelector('.simple-modal-content');
+    if (oldContent) oldContent.remove();
+
+    // NEW: Modal Layout Wrapper - The MASTER ANCHOR for alignment
+    const layoutWrapper = document.createElement('div');
+    layoutWrapper.className = 'modal-layout-wrapper';
+
+    // ✅ NEW: External Animated Icons (🎬 and 🌎)
+    const externalControls = document.createElement('div');
+    externalControls.className = 'modal-external-controls';
+    externalControls.innerHTML = `
+        <button class="share-toggle" aria-label="Share Product" title="Copy Link" style="margin-right: auto;">
+            <span>🔗</span>
+        </button>
+        <div class="control-bubble">
+            <div class="ticker-viewport">
+                <div class="ticker-content">
+                    <span>🎬 Reference Media Content for this Product | 🌍 Available in Multiple Regions &nbsp; | &nbsp; </span>
+                    <span>🎬 Reference Media Content for this Product | 🌍 Available in Multiple Regions &nbsp; | &nbsp; </span>
+                </div>
+            </div>
+            <button class="zoom-btn-mirror" style="display:none;" onclick="event.stopPropagation(); window.mediaOverlay.openFullscreen()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                </svg>
+                Fullscreen Gallery
+            </button>
+        </div>
+        <button class="reels-toggle" aria-label="Reels Animation">
+            <span>🎬</span>
+            <span>🎞️</span>
+            <span>📱</span>
+            <span>🎞️</span>
+        </button>
+        <button class="globe-toggle" aria-label="Global Availability">
+            <span>🌏</span>
+            <span>🌍</span>
+            <span>🌎</span>
+        </button>
+        <div class="marketplace-dropdown">
+            <!-- Dropdown items will be injected here -->
+        </div>
+    `;
+
+    // ⚡ Logic: Inline State Management to prevent race conditions
+    const shareBtn = externalControls.querySelector('.share-toggle');
+    const reelsBtn = externalControls.querySelector('.reels-toggle');
+    const globeBtn = externalControls.querySelector('.globe-toggle');
+    const bubble = externalControls.querySelector('.control-bubble');
+    const dropdown = externalControls.querySelector('.marketplace-dropdown');
+    const ticker = bubble.querySelector('.ticker-viewport');
+    const tickerContent = bubble.querySelector('.ticker-content');
+    const zoomBtnMirror = bubble.querySelector('.zoom-btn-mirror');
+
+    const syncState = () => {
+        const isReels = reelsBtn.classList.contains('active');
+        const isGlobe = globeBtn.classList.contains('active');
+
+        // Toggle visibility of core bubble components
+        if (isReels) {
+            bubble.classList.remove('hidden');
+            ticker.style.display = 'none';
+            zoomBtnMirror.style.display = 'flex';
+            zoomBtnMirror.style.pointerEvents = 'auto';
+            zoomBtnMirror.innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                </svg>
+                Fullscreen Gallery
+            `;
+            if (dropdown) dropdown.classList.remove('active');
+        } else if (isGlobe) {
+            bubble.classList.remove('hidden');
+            ticker.style.display = 'none';
+            zoomBtnMirror.style.display = 'flex';
+            zoomBtnMirror.innerHTML = `<span>✈️ Tap a Flag to Warp Marketplace</span>`; // Corrected Feedback Text
+            zoomBtnMirror.style.pointerEvents = 'none'; // Static display only
+            if (dropdown) dropdown.classList.add('active');
+        } else {
+            bubble.classList.remove('hidden');
+            ticker.style.display = 'block';
+            zoomBtnMirror.style.display = 'none';
+            if (dropdown) dropdown.classList.remove('active');
+
+            // Restore Ticker Text - Fixed spacing and separators
+            tickerContent.innerHTML = `
+                <span>🎬 Reference Media Content for this Product &nbsp; • &nbsp; 🌍 Available in Multiple Regions &nbsp; • &nbsp; </span>
+                <span>🎬 Reference Media Content for this Product &nbsp; • &nbsp; 🌍 Available in Multiple Regions &nbsp; • &nbsp; </span>
+            `;
+        }
+
+        // Trigger Media Overlay
+        if (reelsBtn.classList.contains('active')) {
+            const currentItem = VibeDrips.modalState.currentProductList[VibeDrips.modalState.currentIndex];
+            console.log('🎬 Reels toggled ON. Items:', currentItem?.asin);
+            if (window.mediaOverlay) {
+                window.mediaOverlay.open(currentItem);
+            } else {
+                console.error('❌ mediaOverlay not found on window');
+            }
+        } else {
+            console.log('🎬 Reels toggled OFF');
+            if (window.mediaOverlay) {
+                window.mediaOverlay.close();
+            }
+        }
+    };
+
+    reelsBtn.onclick = (e) => {
+        e.stopPropagation();
+        reelsBtn.classList.toggle('active');
+        if (reelsBtn.classList.contains('active')) globeBtn.classList.remove('active');
+        syncState();
+    };
+
+    globeBtn.onclick = (e) => {
+        e.stopPropagation();
+        const active = globeBtn.classList.toggle('active');
+        if (active) reelsBtn.classList.remove('active');
+        syncState();
+    };
+
+    shareBtn.onclick = (e) => {
+        e.stopPropagation();
+        const currentItem = productList[VibeDrips.modalState.currentIndex];
+        if (window.handleShare && currentItem) {
+            window.handleShare({
+                asin: currentItem.asin,
+                currency: VibeDrips.currentCurrency || 'INR',
+                view: 'modal'
+            });
+            shareBtn.classList.add('success');
+            setTimeout(() => shareBtn.classList.remove('success'), 2000);
+        } else {
+            // Fallback for safety
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                shareBtn.classList.add('success');
+                setTimeout(() => shareBtn.classList.remove('success'), 2000);
+            });
+        }
+    };
+
+    // NEW: Sliding Viewport (clips the strip while icons sit above)
+    const slidingViewport = document.createElement('div');
+    slidingViewport.className = 'modal-sliding-viewport';
+    slidingViewport.appendChild(slidingStrip);
+    navContainer.appendChild(slidingViewport);
+
+    // Assembly: Nest both siblings in the mirror anchor
+    layoutWrapper.appendChild(externalControls);
+    layoutWrapper.appendChild(navContainer);
+
+    // Insert AFTER overlay (overlay is z-index 999, layoutWrapper is 1001)
+    if (overlay.nextSibling) {
+        existingModal.insertBefore(layoutWrapper, overlay.nextSibling);
+    } else {
+        existingModal.appendChild(layoutWrapper);
+    }
+
+    // PHASE_2: Add boundary glow overlays
+    const glowHTML = `
+        <div class="boundary-glow-overlay left"></div>
+        <div class="boundary-glow-overlay right"></div>
+    `;
+    // Add to existingModal (outside viewport so they sit on top)
+    existingModal.insertAdjacentHTML('beforeend', glowHTML);
+
+    // PHASE_1: Add glass zones HTML - FIXED: Add to MODAL (not navContainer) so they're outside scrollable content
+    const glassZonesHTML = `
+        <button class="arrow-button glass-zone left" aria-label="Previous product">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            <span class="prohibited-icon" aria-hidden="true">⛔</span>
+        </button>
+        <button class="arrow-button glass-zone right" aria-label="Next product">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+            <span class="prohibited-icon" aria-hidden="true">⛔</span>
+        </button>
+    `;
+    // Add to MODAL, not navContainer
+    existingModal.insertAdjacentHTML('beforeend', glassZonesHTML);
+
+    // Setup event listeners for all cached products
+    cache.forEach(product => {
+        setupProductInteractions(product);
+    });
+
+    // PHASE_1: Setup glass zones and update states
+    setupGlassZones();
+    updateGlassZoneStates();
+
+    // PHASE_2: Setup unified global drag and isolation
+    setupUnifiedModalDrag();
+    setupEventIsolation();
+
+    // PHASE_10: Dynamic Dimension Sync
+    syncModalDimensions();
+
+    // 🚀 PHASE_13: Robust Marketplace Initialization (Fixes Blank Dropdown)
+    // Remove fragile ExternalControls gating; call population directly.
+    setTimeout(() => {
+        if (window.VibeDrips && VibeDrips.ExternalControls) {
+            VibeDrips.ExternalControls.init();
+        }
+
+        // Direct robust population check
+        const currentItem = productList[VibeDrips.modalState.currentIndex];
+        if (dropdown && currentItem && typeof populateMarketplaceDropdown === 'function') {
+            console.log('🌍 Marketplace Sync: Initializing Dropdown Content');
+            populateMarketplaceDropdown(currentItem, dropdown);
+        }
+    }, 50);
+}
+
+/**
+ * PHASE_1: Navigate to next/prev product (basic version)
+ */
+function navigateModal(direction) {
+    const productList = VibeDrips.modalState.currentProductList;
+    const totalProducts = productList.length;
+    const strip = document.querySelector('.modal-sliding-strip');
+
+    if (!strip || VibeDrips.modalState.isSliding) return;
+
+    VibeDrips.modalState.isSliding = true;
+
+    // Calculate new index
+    // Calculate new index with boundary clamping (no cycling)
+    if (direction === 'next') {
+        if (VibeDrips.modalState.currentIndex >= totalProducts - 1) {
+            VibeDrips.modalState.isSliding = false;
+            return;
+        }
+        VibeDrips.modalState.currentIndex++;
+    } else {
+        if (VibeDrips.modalState.currentIndex <= 0) {
+            VibeDrips.modalState.isSliding = false;
+            return;
+        }
+        VibeDrips.modalState.currentIndex--;
+    }
+
+    // ✅ PHASE_9: Simultaneous Trigger (Timing Sync)
+    // Update indicators at the START of navigation so they move with the slide
+    updateGlassZoneStates();
+
+    // Explicit math for 500% width strip (each product is 20%)
+    // Center is -40% (2 products left of active)
+    const currentTransform = -40;
+    const offset = direction === 'next' ? -20 : 20;
+    const newTransform = currentTransform + offset;
+
+    // Apply transition
+    // ✅ PHASE_9: RAF De-coupling (Start-Frame Priority)
+    // Ensures indicator logic finishes before the slide starts
+    requestAnimationFrame(() => {
+        strip.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
+        strip.style.transform = `translateX(${newTransform}%)`;
+
+        // 🎬 Mirrored Media Sync
+        if (window.mediaOverlay && window.mediaOverlay.container.classList.contains('active')) {
+            window.mediaOverlay.syncSlide(newTransform);
+        }
+    });
+
+    // On transitionend: Atomic Teleport + Surgical Node Rotation
+    strip.addEventListener('transitionend', function handler(e) {
+        try {
+            // STRICT CHECK: Only respond to transform transition on the strip itself
+            if (e.target !== strip || e.propertyName !== 'transform') return;
+
+            strip.removeEventListener('transitionend', handler);
+
+            // ATOMIC TELEPORT SEQUENCE START
+            // 1. Kill transition instantly
+            strip.style.transition = 'none';
+            strip.classList.add('no-transition');
+
+            // 2. Set teleport target (back to center)
+            strip.style.transform = 'translateX(-40%)';
+
+            // 🎬 Mirrored Media Teleport
+            if (window.mediaOverlay && window.mediaOverlay.container && window.mediaOverlay.container.classList.contains('active')) {
+                window.mediaOverlay.strip.style.transition = 'none';
+                window.mediaOverlay.strip.style.transform = 'translateX(-40%)';
+            }
+
+            // 3. SURGICAL NODE ROTATION (Zero-Flash)
+            const cache = build5ProductCache(VibeDrips.modalState.currentIndex);
+
+            if (direction === 'next') {
+                const first = strip.firstElementChild;
+                if (first) strip.removeChild(first);
+
+                const newProduct = cache[4];
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = generateModalHTML(newProduct);
+                const modalContent = tempDiv.querySelector('.simple-modal-content');
+                strip.appendChild(modalContent);
+                setupProductInteractions(newProduct);
+
+                // 🎬 Mirrored Media Rotation
+                if (window.mediaOverlay && window.mediaOverlay.container && window.mediaOverlay.container.classList.contains('active')) {
+                    const mFirst = window.mediaOverlay.strip.firstElementChild;
+                    if (mFirst) window.mediaOverlay.strip.removeChild(mFirst);
+
+                    const mGrid = document.createElement('div');
+                    mGrid.className = 'media-grid-wrapper';
+                    mGrid.innerHTML = window.mediaOverlay.renderGridHTML(newProduct, false);
+                    window.mediaOverlay.strip.appendChild(mGrid);
+                }
+            } else {
+                const last = strip.lastElementChild;
+                if (last) strip.removeChild(last);
+
+                const newProduct = cache[0];
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = generateModalHTML(newProduct);
+                const modalContent = tempDiv.querySelector('.simple-modal-content');
+                strip.insertBefore(modalContent, strip.firstChild);
+                setupProductInteractions(newProduct);
+
+                // 🎬 Mirrored Media Rotation
+                if (window.mediaOverlay && window.mediaOverlay.container && window.mediaOverlay.container.classList.contains('active')) {
+                    const mLast = window.mediaOverlay.strip.lastElementChild;
+                    if (mLast) window.mediaOverlay.strip.removeChild(mLast);
+
+                    const mGrid = document.createElement('div');
+                    mGrid.className = 'media-grid-wrapper';
+                    mGrid.innerHTML = window.mediaOverlay.renderGridHTML(newProduct, false);
+                    window.mediaOverlay.strip.insertBefore(mGrid, window.mediaOverlay.strip.firstChild);
+                }
+            }
+
+            // 🎬 Sync active media state after rotation
+            if (window.mediaOverlay && window.mediaOverlay.container && window.mediaOverlay.container.classList.contains('active')) {
+                const activeProduct = productList[VibeDrips.modalState.currentIndex];
+                window.mediaOverlay.mediaItems = Array.isArray(activeProduct.reference_media) ? activeProduct.reference_media : [];
+                window.mediaOverlay.currentIndex = 0;
+
+                const activeGrid = window.mediaOverlay.strip?.children[2];
+                const playerSlot = activeGrid?.querySelector('.active-player');
+                if (playerSlot) playerSlot.innerHTML = window.mediaOverlay.getPlayerHTML(window.mediaOverlay.mediaItems[0]);
+            }
+
+            // ✅ PHASE_4: Sync Marketplace Dropdown after navigation
+            const activeProduct = productList[VibeDrips.modalState.currentIndex];
+            const dropdown = document.querySelector('.marketplace-dropdown');
+            if (dropdown && activeProduct && typeof populateMarketplaceDropdown === 'function') {
+                populateMarketplaceDropdown(activeProduct, dropdown);
+            }
+
+            // 4. CRITICAL: Force Reflow
+            void strip.offsetWidth;
+            if (window.mediaOverlay && window.mediaOverlay.strip) {
+                void window.mediaOverlay.strip.offsetWidth;
+            }
+
+        } catch (err) {
+            console.error('❌ Modal Navigation Error:', err);
+        } finally {
+            // 5. Re-enable transition for NEXT navigation with double RAF safety
+            requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                    strip.classList.remove('no-transition');
+                    strip.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
+
+                    if (window.mediaOverlay && window.mediaOverlay.strip) {
+                        window.mediaOverlay.strip.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
+                    }
+
+                    VibeDrips.modalState.isSliding = false;
+                    syncModalDimensions();
+                });
+            });
+        }
+    });
+}
+// END_PHASE_1
+
+// ============================================
+// PHASE_1: Keyboard Navigation & Glass Zones
+// ============================================
+
+/**
+ * PHASE_1: Setup keyboard navigation for modal
+ */
+function setupModalKeyboardNav() {
+    document.addEventListener('keydown', (e) => {
+        // Only if modal is open
+        if (!document.querySelector('.dynamic-modal')) return;
+
+        const productList = VibeDrips.modalState.currentProductList;
+        const currentIndex = VibeDrips.modalState.currentIndex;
+        const totalProducts = productList.length;
+
+        if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            if (currentIndex === 0) {
+                const leftZone = document.querySelector('.glass-zone.left');
+                if (leftZone) {
+                    leftZone.classList.add('pulse');
+                    setTimeout(() => leftZone.classList.remove('pulse'), 1000);
+                }
+                return;
+            }
+            navigateModal('prev');
+        } else if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            if (currentIndex === totalProducts - 1) {
+                const rightZone = document.querySelector('.glass-zone.right');
+                if (rightZone) {
+                    rightZone.classList.add('pulse');
+                    setTimeout(() => rightZone.classList.remove('pulse'), 1000);
+                }
+                return;
+            }
+            navigateModal('next');
+        } else if (e.key === 'Escape') {
+            const modal = document.querySelector('.dynamic-modal');
+            if (modal) {
+                const overlay = modal.querySelector('.modal-overlay');
+                if (overlay) closeDynamicModal({ target: overlay, stopPropagation: () => { } });
+            }
+        }
+    });
+}
+
+/**
+ * PHASE_1: Update glass zone states based on current position
+ */
+function updateGlassZoneStates() {
+    const leftZone = document.querySelector('.glass-zone.left');
+    const rightZone = document.querySelector('.glass-zone.right');
+
+    if (!leftZone || !rightZone) return;
+
+    const productList = VibeDrips.modalState.currentProductList;
+    const currentIndex = VibeDrips.modalState.currentIndex;
+    const totalProducts = productList.length;
+
+    // ✅ PHASE_9: Update Hybrid Indicator
+    const indicator = document.querySelector('.dynamic-modal .modal-nav-indicator');
+    if (indicator && window.CarouselUtils) {
+        if (totalProducts <= 10) {
+            window.CarouselUtils.enableDots(indicator, totalProducts, currentIndex);
+        } else {
+            window.CarouselUtils.updateCounter(indicator, currentIndex, totalProducts);
+        }
+    }
+
+    // Left zone disabled at first product
+    if (currentIndex === 0) {
+        leftZone.classList.add('disabled');
+        leftZone.setAttribute('aria-disabled', 'true');
+    } else {
+        leftZone.classList.remove('disabled', 'pulse');
+        leftZone.setAttribute('aria-disabled', 'false');
+    }
+
+    // Right zone disabled at last product
+    if (currentIndex === totalProducts - 1) {
+        rightZone.classList.add('disabled');
+        rightZone.setAttribute('aria-disabled', 'true');
+    } else {
+        rightZone.classList.remove('disabled', 'pulse');
+        rightZone.setAttribute('aria-disabled', 'false');
+    }
+}
+
+function setupGlassZones() {
+    const leftZone = document.querySelector('.glass-zone.left');
+    const rightZone = document.querySelector('.glass-zone.right');
+    const strip = document.querySelector('.modal-sliding-strip');
+
+    if (!leftZone || !rightZone) return;
+
+    // ✅ PHASE_9: Interactivity Warmup (Cold-Start Click Fix)
+    // Forces pre-allocation of the graphics layer BEFORE the click event fires
+    const warmup = () => {
+        if (!strip || VibeDrips.modalState.isSliding) return;
+        // Prime the transform with a sub-pixel offset to trigger layerization
+        strip.style.willChange = 'transform';
+        // Applying a literal 0.01px translateX ensures Constraint 2.2 compliance
+        if (strip.style.transform === 'translateX(-40%)' || !strip.style.transform) {
+            strip.style.transform = 'translateX(-40.01%)';
+        }
+    };
+
+    // Warmup on press
+    [leftZone, rightZone].forEach(zone => {
+        zone.addEventListener('mousedown', warmup);
+        zone.addEventListener('touchstart', warmup, { passive: true });
+    });
+
+    // Left zone navigation
+    leftZone.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (leftZone.classList.contains('disabled')) {
+            // Trigger pulse animation on boundary click
+            leftZone.classList.add('pulse');
+            setTimeout(() => leftZone.classList.remove('pulse'), 1000);
+            return;
+        }
+        navigateModal('prev');
+    });
+
+    // Right zone navigation
+    rightZone.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (rightZone.classList.contains('disabled')) {
+            // Trigger pulse animation on boundary click
+            rightZone.classList.add('pulse');
+            setTimeout(() => rightZone.classList.remove('pulse'), 1000);
+            return;
+        }
+        navigateModal('next');
+    });
+}
+
+/**
+ * PHASE_2: Setup Event Isolation
+ * Protect internal gallery/buttons from triggering the main modal swipe
+ */
+function setupEventIsolation() {
+    const protectedSelectors = [
+        '.modal-image-gallery',
+        '.carousel-controls',
+        '.thumbnail',
+        '.amazon-button',
+        '.read-more-btn',
+        '.modal-close-button',
+        '.modal-section-content' // Allow vertical scroll inside sections without horizontal snap
+    ];
+
+    protectedSelectors.forEach(selector => {
+        const elements = document.querySelectorAll(`.dynamic-modal ${selector}`);
+        elements.forEach(el => {
+            // Mousedown/Touchstart isolation
+            el.addEventListener('mousedown', (e) => e.stopPropagation());
+            el.addEventListener('touchstart', (e) => e.stopPropagation(), { passive: true });
+        });
+    });
+}
+
+/**
+ * PHASE_2: Setup Unified Modal Drag
+ * Drag content ANYWHERE to trigger navigation/elasticity
+ */
+function setupUnifiedModalDrag() {
+    const container = document.querySelector('.modal-nav-container');
+    const modalBase = document.querySelector('.dynamic-modal');
+    const leftZone = document.querySelector('.glass-zone.left');
+    const rightZone = document.querySelector('.glass-zone.right');
+
+    if (!container || !modalBase) return;
+
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let activeZone = null;
+    let activeGlow = null;
+
+    const handleStart = (e) => {
+        if (VibeDrips.modalState.isSliding) return;
+
+        // Don't drag if we're clicking a collapsible header or the close button
+        if (e.target.closest('.modal-section-header') || e.target.closest('.modal-close-button')) return;
+
+        isDragging = true;
+        modalBase.classList.add('dragging');
+
+        const touch = e.type.startsWith('mouse') ? e : e.touches[0];
+        startX = touch.clientX;
+        startY = touch.clientY;
+        currentX = startX;
+        currentY = startY;
+
+        // Reset transitions
+        if (leftZone) leftZone.style.transition = 'none';
+        if (rightZone) rightZone.style.transition = 'none';
+
+        // Add document listeners only while dragging to prevent leaks and conflicts
+        document.addEventListener('mousemove', handleMove);
+        document.addEventListener('touchmove', handleMove, { passive: false });
+        document.addEventListener('mouseup', handleEnd);
+        document.addEventListener('touchend', handleEnd);
+        document.addEventListener('touchcancel', handleEnd);
+    };
+
+    const handleMove = (e) => {
+        if (!isDragging) return;
+
+        const touch = e.type.startsWith('mouse') ? e : e.touches[0];
+        currentX = touch.clientX;
+        currentY = touch.clientY;
+
+        const deltaX = currentX - startX;
+        const deltaY = currentY - startY;
+        const absX = Math.abs(deltaX);
+        const absY = Math.abs(deltaY);
+
+        // VERTICAL INTENT DETECTION
+        // If the user swiped more than 10px vertically and it's clearly more vertical than horizontal,
+        // cancel the horizontal drag to allow native vertical scrolling.
+        if (absY > absX && absY > 10) {
+            handleEnd();
+            return;
+        }
+
+        // Only prevent default if we've actually moved enough horizontally to be sure it's a drag
+        // This stops the initial slight touch from blocking vertical scroll start
+        if (absX > 10) {
+            if (e.cancelable) e.preventDefault();
+        } else {
+            // Not enough movement yet to commit
+            return;
+        }
+
+        const rawPull = Math.abs(deltaX);
+
+        // Determine which lever we are "pulling"
+        // Swipe Right (deltaX > 0) -> Pulling LEFT Lever
+        // Swipe Left (deltaX < 0) -> Pulling RIGHT Lever
+        const side = deltaX > 0 ? 'left' : 'right';
+
+        // Switch active zone if direction changes mid-drag
+        const zone = (side === 'left') ? leftZone : rightZone;
+        if (zone !== activeZone) {
+            // Reset previous if we crossed the center line
+            if (activeZone) {
+                activeZone.style.setProperty('--lever-x', '0px');
+                activeZone.classList.remove('pulse'); // Safety
+            }
+            if (activeGlow) {
+                activeGlow.classList.remove('active');
+                activeGlow.style.width = '0px';
+            }
+
+            activeZone = zone;
+            activeGlow = document.querySelector(`.boundary-glow-overlay.${side}`);
+            if (activeGlow) {
+                activeGlow.classList.add('active');
+                activeGlow.style.transition = 'none';
+            }
+        }
+
+        // Apply 0.4x Dampening
+        const pull = deltaX * 0.4;
+        if (activeZone) {
+            activeZone.style.setProperty('--lever-x', `${pull}px`);
+        }
+
+        // Color Logic and Width
+        const productList = VibeDrips.modalState.currentProductList;
+        const totalProducts = productList.length;
+        const isBoundary = (side === 'left' && VibeDrips.modalState.currentIndex === 0) ||
+            (side === 'right' && VibeDrips.modalState.currentIndex === totalProducts - 1);
+
+        const glowColor = isBoundary ? "255, 50, 50" : "90, 75, 255";
+        const intensity = Math.min(rawPull / 150, 1);
+        const glowWidth = 30 + Math.abs(pull);
+
+        if (activeGlow) {
+            activeGlow.style.setProperty('--glow-rgb', glowColor);
+            activeGlow.style.setProperty('--glow-intensity', intensity);
+            activeGlow.style.width = `${glowWidth}px`;
+        }
+    };
+
+    const handleEnd = () => {
+        if (!isDragging) return;
+        isDragging = false;
+        modalBase.classList.remove('dragging');
+
+        // Clean up document listeners
+        document.removeEventListener('mousemove', handleMove);
+        document.removeEventListener('touchmove', handleMove);
+        document.removeEventListener('mouseup', handleEnd);
+        document.removeEventListener('touchend', handleEnd);
+        document.removeEventListener('touchcancel', handleEnd);
+
+        const deltaX = currentX - startX;
+        const absoluteDelta = Math.abs(deltaX);
+        const side = deltaX > 0 ? 'left' : 'right';
+
+        // Reference captured zone for async cleanup
+        const zoneToClean = activeZone;
+        const glowToClean = activeGlow;
+
+        // Snap-back Lever
+        if (zoneToClean) {
+            zoneToClean.style.transition = 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)';
+            zoneToClean.style.setProperty('--lever-x', '0px');
+
+            // Wobble
+            const dirMultiplier = side === 'left' ? 1 : -1;
+            setTimeout(() => {
+                if (zoneToClean) {
+                    zoneToClean.style.setProperty('--wobble-dir', `${-8 * dirMultiplier}px`);
+                    zoneToClean.style.setProperty('--wobble-rebound', `${4 * dirMultiplier}px`);
+                    zoneToClean.style.setProperty('--wobble-settle', `${-2 * dirMultiplier}px`);
+                    zoneToClean.classList.add('wobbling');
+                    setTimeout(() => zoneToClean.classList.remove('wobbling'), 400);
+                }
+            }, 400);
+        }
+
+        // Navigation Trigger (80px Threshold)
+        if (absoluteDelta > 80) {
+            if (side === 'left' && VibeDrips.modalState.currentIndex > 0) {
+                navigateModal('prev');
+            } else if (side === 'right' && VibeDrips.modalState.currentIndex < VibeDrips.filteredProducts.length - 1) {
+                navigateModal('next');
+            } else if (zoneToClean) {
+                // Boundary hit feedback
+                zoneToClean.classList.add('pulse');
+                setTimeout(() => zoneToClean.classList.remove('pulse'), 1000);
+            }
+        }
+
+        // Reset Glows
+        if (glowToClean) {
+            glowToClean.style.transition = 'opacity 0.2s ease, width 0.2s ease';
+            glowToClean.classList.remove('active');
+            glowToClean.style.width = '0px';
+        }
+
+        activeZone = null;
+        activeGlow = null;
+    };
+
+    // ONLY add start listener to container
+    container.addEventListener('mousedown', handleStart);
+    container.addEventListener('touchstart', handleStart, { passive: true });
+}
+
+// Initialize keyboard navigation on page load
+setupModalKeyboardNav();
+
+// END_PHASE_1_FUNCTIONS
+
+
+/**
+ * Show detailed product modal with enhanced UI
+ * PHASE_7: Added triggerElement for context-aware navigation
+ */
+function showProductModal(productId, triggerElement = null) {
     const product = VibeDrips.allProducts.find(p => p.id === productId);
     if (!product) {
         console.error('Product not found:', productId);
         return;
     }
 
-    // Create dynamic modal with separate overlay and content
-    const modalContent = `
-        <div class="simple-modal dynamic-modal">
-            <div class="modal-overlay" onclick="closeDynamicModal(event)"></div>
-            <div class="simple-modal-content">
-                <div class="simple-modal-header">
-                    <h2>${escapeHtml(product.name)}</h2>
-                    <button onclick="closeDynamicModal(event)">X</button>
-                </div>
-                <div class="simple-modal-body">
-                    <img src="${product.main_image}" alt="${escapeHtml(product.name)}" style="max-width: 200px;">
-                    <p><strong>Price:</strong> ₹${product.price}</p>
-                    <p><strong>Brand:</strong> ${escapeHtml(product.brand)}</p>
-                    <p><strong>Category:</strong> ${escapeHtml(product.category)}</p>
-                    <p><strong>Description:</strong> ${escapeHtml(product.description)}</p>
-                    <button onclick="openAmazonLink('${escapeHtml(product.amazon_short || product.amazon_long || product.source_link || '#')}', '${product.id}')" 
-                            class="amazon-button">🛒 Buy on Amazon</button>
-                </div>
-            </div>
-        </div>
-    `;
-    
+    // ✅ PHASE_7: Scoped Context Detection (Supports Main Grid, Reels, etc.)
+    let scopedProducts = [];
+    if (triggerElement) {
+        // Special Case: Reels Carousel (which is paginated, so DOM query isn't enough)
+        const reelCarousel = triggerElement.closest('.products-carousel');
+        if (reelCarousel && window.getReelsDataFromProducts) {
+            const reelIndex = parseInt(reelCarousel.getAttribute('data-reel-index'));
+            const reels = window.getReelsDataFromProducts();
+            if (reels[reelIndex]) {
+                scopedProducts = reels[reelIndex].products;
+                console.log(`🎬 Scoped modal to ALL ${scopedProducts.length} products in Reel #${reelIndex}.`);
+            }
+        }
+
+        // Standard Case: Grid query (for main page or other gridded sections)
+        if (scopedProducts.length === 0) {
+            const parentGrid = triggerElement.closest('.reel-products') ||
+                triggerElement.closest('#products-container') ||
+                triggerElement.closest('.products-section') ||
+                triggerElement.closest('.products-grid');
+
+            if (parentGrid) {
+                // Extract IDs in current visual order from DOM
+                const siblingCards = parentGrid.querySelectorAll('[data-product-id]');
+                const scopedIds = Array.from(siblingCards).map(card => card.getAttribute('data-product-id'));
+
+                // Map IDs back to full product objects
+                scopedProducts = scopedIds.map(id => VibeDrips.allProducts.find(p => p.id === id)).filter(Boolean);
+                console.log(`🔍 Scoped modal to ${scopedProducts.length} products from DOM container.`);
+            }
+        }
+    }
+
+    // Fallback to global list if no context found
+    if (scopedProducts.length === 0) {
+        scopedProducts = [...VibeDrips.filteredProducts];
+        console.log('🔍 No scoped context found, falling back to global filtered list.');
+    }
+
+    // Save context to global state
+    VibeDrips.modalState.currentProductList = scopedProducts;
+
+    // CRITICAL FIX: Remove any existing modal first
+    const existingModal = document.querySelector('.dynamic-modal');
+    if (existingModal) {
+        existingModal.remove();
+    }
+
+    // PHASE_1: Generate modal HTML using extracted function
+    const modalContent = generateModalHTML(product);
+
+    // Insert into DOM
     document.body.insertAdjacentHTML('beforeend', modalContent);
+
+    // PHASE_1: Wrap modal for sliding navigation
+    wrapModalForSliding(productId);
+
+    // 🧼 Contextual Cleanup: Hide site-wide center badge
+    const centerBadge = document.querySelector('.center-badge-container');
+    if (centerBadge) centerBadge.classList.add('context-hidden');
+}
+
+// Helper: Get emoji for product detail keys
+// Helper: Get dynamic Material emoji based on value
+function getMaterialEmoji(materialValue) {
+    if (!materialValue) return '🧵';
+    const material = materialValue.toLowerCase();
+
+    // Paper
+    if (material.includes('paper') || material.includes('cardboard')) return '📄';
+    // Wood
+    if (material.includes('wood') || material.includes('timber') || material.includes('bamboo') || material.includes('pine')) return '🪵';
+    // Metal
+    if (material.includes('metal') || material.includes('steel') || material.includes('aluminum') || material.includes('iron') || material.includes('brass') || material.includes('copper')) return '🔩';
+    // Plastic
+    if (material.includes('plastic') || material.includes('polymer') || material.includes('pvc') || material.includes('abs') || material.includes('pet') || material.includes('synthetic')) return '🧪';
+    // Fabric
+    if (material.includes('fabric') || material.includes('cloth') || material.includes('silk') || material.includes('cotton') || material.includes('polyester') || material.includes('wool')) return '🧵';
+    // Glass
+    if (material.includes('glass') || material.includes('crystal')) return '🪟';
+    // Leather
+    if (material.includes('leather')) return '🎒';
+    // Stone
+    if (material.includes('stone') || material.includes('marble') || material.includes('granite') || material.includes('ceramic')) return '🪨';
+    // Masonry
+    if (material.includes('brick') || material.includes('concrete')) return '🧱';
+    // Eco
+    if (material.includes('recycled') || material.includes('eco') || material.includes('sustainable') || material.includes('bio')) return '♻️';
+
+    return '🧵'; // Default
+}
+
+function getDetailEmoji(key, value) {
+    const emojiMap = {
+        // Priority 0 - Country
+        'country_of_origin': '🌍',
+        'countryOfOrigin': '🌍',
+        'country': '🌍',
+        'origin': '🌍',
+        'made_in': '🌍',
+
+        // Physical
+        'weight': '⚖️',
+        'dimensions': '📏',
+        'color': '🎨',
+        'material': (value) => getMaterialEmoji(value), // DYNAMIC!
+
+        // Performance
+        'wattage': '⚡',
+        'voltage': '⚡',
+        'noise_level': '🔊',
+        'sound_level': '🔊',
+        'floor_area': '📐',
+        'coverage_area': '📐',
+        'room_type': '🏠',
+
+        // Features
+        'special_feature': '⭐',
+        'special_features': '⭐',
+        'included_components': '🧩', // REVERTIBLE: Change back to '📦' if needed
+        'includedComponents': '🧩', // Actual key from JSON data
+
+        // Books
+        'paperback': '📄',
+        'hardcover': '📘',
+        'publisher': '📚',
+        'language': '🌐',
+        'publication_date': '📅',
+        'print_length': '📄',
+        'number_of_pages': '📄'
+    };
+
+    const emoji = emojiMap[key];
+    // If emoji is a function (like Material), call it with the value
+    if (typeof emoji === 'function') {
+        return emoji(value);
+    }
+    return emoji || '•';
+}
+
+// Helper: Get emoji for additional info groups
+function getGroupEmoji(groupName) {
+    const emojiMap = {
+        'Manufacturing': '🏭',
+        'Product Specs': '🔢',
+        'Books': '📚',
+        'Technical': '⚡',
+        'Care Instructions': '🧼',
+        'Other': 'ℹ️'
+    };
+    return emojiMap[groupName] || 'ℹ️';
+}
+
+// Helper: Toggle collapsible section
+function toggleSection(header) {
+    header.classList.toggle('expanded');
+    const content = header.nextElementSibling;
+    content.classList.toggle('expanded');
+
+    // Update toggle icon
+    const icon = header.querySelector('.toggle-icon');
+    icon.textContent = header.classList.contains('expanded') ? '▼' : '▶';
 }
 
 /**
  * Close dynamic modal (specific to modals created by showProductModal)
  */
 function closeDynamicModal(event) {
-    event.stopPropagation(); // Prevent event from bubbling further if needed
+    event.stopPropagation();
     const modal = event.target.closest('.dynamic-modal');
+    const button = event.target.closest('button');
+
     if (modal) {
-        if (event.target.classList.contains('modal-overlay') || event.target.closest('button')) {
-            modal.remove();
+        if (event.target.classList.contains('modal-overlay') || button) {
+            // ✅ TIERED CLOSURE: Stage 0 - Globe Toggle (Marketplace Dropdown)
+            const globeBtn = document.querySelector('.globe-toggle.active');
+            if (event.target.classList.contains('modal-overlay') && globeBtn) {
+                console.log('🌍 Marketplace Sync: Dismissing Dropdown via Overlay Click');
+                globeBtn.click();
+                return;
+            }
+
+            // ✅ TIERED CLOSURE: Stage 1 - Media Overlay
+            const reelsBtn = document.querySelector('.reels-toggle.active');
+            if (reelsBtn) {
+                console.log('🎬 Stage 1 Close: Clicking Reels Toggle to Cleanly Close Overlay');
+                reelsBtn.click(); // Triggers existing syncState with cascading effects
+                return; // 🛑 Stop here - stage 1 complete
+            }
+
+            // Detect touch device
+            const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+            if (isTouchDevice && button && button.classList.contains('modal-close-button')) {
+                // Add closing animation class
+                button.classList.add('closing');
+
+                // Delay close to show animation
+                setTimeout(() => {
+                    modal.remove();
+                    // Clean up class (in case button is reused)
+                    button.classList.remove('closing');
+                }, 300); // Match animation duration
+            } else {
+                // Desktop or non-button close: immediate
+                modal.remove();
+            }
+
+            // 🧼 Contextual Cleanup: Restore site-wide center badge
+            const centerBadge = document.querySelector('.center-badge-container');
+            if (centerBadge) centerBadge.classList.remove('context-hidden');
         }
     }
 }
@@ -373,13 +2521,21 @@ function updateStats() {
  */
 function escapeHtml(unsafe) {
     if (!unsafe) return '';
-    return unsafe
-        .toString()
+    // First, decode existing entities to prevent double-escaping (&amp; -> &)
+    const decoded = unsafe.toString()
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#039;/g, "'")
+        .replace(/&#39;/g, "'");
+
+    return decoded
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+        .replace(/'/g, "'");
 }
 
 function truncateText(text, maxLength) {
@@ -388,12 +2544,247 @@ function truncateText(text, maxLength) {
     return text.substr(0, maxLength) + '...';
 }
 
+/**
+ * PHASE_10: Synchronize modal dimensions to eliminate gaps and bleeding
+ * Measures the active product content and applies it to the navigation container
+ */
+function syncModalDimensions() {
+    const layoutWrapper = document.querySelector('.modal-layout-wrapper');
+    const strip = document.querySelector('.modal-sliding-strip');
+    // Index 2 is always active in our 5-item cache
+    const activeProduct = strip ? strip.children[2] : null;
+
+    if (!layoutWrapper || !activeProduct) return;
+
+    // Use double requestAnimationFrame to ensure the DOM is settled and rendered
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            const productContent = activeProduct;
+            if (productContent) {
+                const width = productContent.offsetWidth;
+                const height = productContent.offsetHeight;
+                if (width > 0 && height > 0) {
+                    // Apply literal dimensions to the master anchor
+                    layoutWrapper.style.setProperty('width', `${width}px`, 'important');
+                    layoutWrapper.style.setProperty('height', `${height}px`, 'important');
+                    console.log(`📏 Synced Master Anchor: ${width}x${height}px`);
+                }
+            }
+        });
+    });
+}
+
+// Global Resize Listener for Dynamic Modal
+window.addEventListener('resize', () => {
+    if (document.querySelector('.dynamic-modal')) {
+        syncModalDimensions();
+    }
+});
+
 // Export functions to global scope
 window.setTimeFilter = setTimeFilter;
 window.filterProducts = filterProducts;
 window.sortProducts = sortProducts;
 window.openAmazonLink = openAmazonLink;
 window.showProductModal = showProductModal;
-// Do not export closeDynamicModal to avoid conflict with closeSimpleModal
+window.populateMarketplaceDropdown = populateMarketplaceDropdown;
+/**
+ * PHASE_6: Automated High-Fidelity Warp Sequence
+ * Orchestrates the 10-step sequence requested by the user.
+ */
+async function triggerHighFidelityWarp(regionCode, targetAsin, isLocal = false) {
+    console.log(`🌌 Initiating High-Fidelity Warp to ${regionCode} (isLocal: ${isLocal})...`);
 
-console.log('Products.js loaded successfully');
+    // 0️⃣ Step 0: Capture Initial State (for Local Warp Context Awareness)
+    const reelsModal = document.getElementById('reels-modal');
+    const isReelsInitiallyActive = reelsModal && !reelsModal.classList.contains('hidden');
+
+    // 1️⃣ Step 1: Start Inward Pulsating Glow
+    let overlay = document.querySelector('.warp-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.className = 'warp-overlay';
+        overlay.innerHTML = `
+            <div class="warp-overlay-glow"></div>
+            <div class="warp-center-ring"></div>
+        `;
+        document.body.appendChild(overlay);
+    }
+    void overlay.offsetWidth;
+    overlay.classList.add('active');
+
+    // 2️⃣ Step 2: Change dropdown state to OFF
+    const dropdown = document.querySelector('.marketplace-dropdown');
+    if (dropdown) dropdown.classList.remove('active');
+
+    await new Promise(r => setTimeout(r, 400));
+
+    // 3️⃣ Step 3: 🚀 PHASE_15: Tiered Cinematic Escape Loop
+    let escapeCount = 0;
+    const maxEscapes = 5;
+
+    // 🛡️ Deterministic Reset: Explicitly hide currency modal if open
+    if (window.hideCurrencyModal) {
+        window.hideCurrencyModal();
+    }
+
+    while (document.querySelector('.dynamic-modal') && escapeCount < maxEscapes) {
+        const modal = document.querySelector('.dynamic-modal');
+        const modalOverlay = modal.querySelector('.modal-overlay');
+
+        if (modalOverlay) {
+            console.log(`🌀 Cinematic Escape Layer #${escapeCount + 1}`);
+            closeDynamicModal({ target: modalOverlay, stopPropagation: () => { } });
+            await new Promise(r => setTimeout(r, 350));
+        } else {
+            console.log('🛑 No modal overlay found, immediate removal');
+            modal.remove();
+            break;
+        }
+        escapeCount++;
+    }
+
+    // Fail-safe for lingering modals
+    const finalModalCheck = document.querySelector('.dynamic-modal');
+    if (finalModalCheck) finalModalCheck.remove();
+
+    // 4️⃣ Step 4: 🚀 PHASE_16: Complete Context Clearance (Reels Modal)
+    // 🛡️ LOCAL WARP BYPASS: Don't close reels if we are already in the right context
+    if (!isLocal || !isReelsInitiallyActive) {
+        const reelsModal = document.getElementById('reels-modal');
+        if (reelsModal && !reelsModal.classList.contains('hidden')) {
+            console.log('🎬 Cinematic Escape Stage 2: Closing Background Reels Modal');
+            if (window.closeReelsModal) {
+                window.closeReelsModal();
+                await new Promise(r => setTimeout(r, 450));
+            }
+        }
+    }
+
+    await new Promise(r => setTimeout(r, 400));
+
+    // 🏎️ LOCAL WARP SHORT-CIRCUIT
+    if (isLocal) {
+        console.log('⚡ Local Warp: Coordinating Context Jump');
+        localStorage.setItem('vibedrips-warp-target', targetAsin);
+
+        if (isReelsInitiallyActive) {
+            // 🎬 Priority 1: Instant Reveal (Already in Discovery)
+            console.log('🚀 Local Warp Branch: Instant Reveal (Already in Discovery)');
+            if (window.openReelsModal) window.openReelsModal();
+        } else {
+            // 📖 Priority 2: Premium Discovery (Static Categories)
+            console.log('🚀 Local Warp Branch: Premium Discovery (Static Category)');
+
+            // 1. Stabilization Delay: Ensure DOM settles after modal closures
+            console.log('⏳ Stabilization Delay: 800ms');
+            await new Promise(r => setTimeout(r, 800));
+
+            // 2. Smooth Scroll: Direct visibility of navigation context
+            console.log('📜 Scrolling to top for traversal visibility...');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // 3. Cinematic Delay: Wait for scroll to reach target and settle
+            console.log('⏳ Cinematic Scroll Delay: 1200ms');
+            await new Promise(r => setTimeout(r, 1200));
+
+            const tabs = Array.from(document.querySelectorAll('.time-category'));
+            const reelsTab = tabs.find(t => t.getAttribute('data-filter') === 'reels');
+            const activeTab = tabs.find(t => t.classList.contains('active'));
+
+            if (reelsTab) {
+                // 4. Premium Traversal: Sequential Hover Loop
+                const targetIndex = tabs.indexOf(reelsTab);
+                const startIndex = activeTab ? tabs.indexOf(activeTab) : (tabs.length - 1);
+
+                console.log(`🛤️ Traversing category tabs from index ${startIndex} to ${targetIndex}`);
+
+                const step = startIndex <= targetIndex ? 1 : -1;
+                for (let i = startIndex; i !== targetIndex + step; i += step) {
+                    const currentTab = tabs[i];
+                    currentTab.classList.add('system-hover');
+                    await new Promise(r => setTimeout(r, 300));
+
+                    if (i !== targetIndex) {
+                        currentTab.classList.remove('system-hover');
+                    }
+                }
+
+                // 5. Final Action: Switch to Discovery
+                console.log('📍 Switching to Discovery category');
+                reelsTab.click();
+            }
+        }
+
+        // 🧹 6. UI Cleanup: Ensure no persistent highlights
+        document.querySelectorAll('.time-category').forEach(t => t.classList.remove('system-hover'));
+
+        // Clean up overlay
+        setTimeout(() => {
+            overlay.classList.remove('active');
+            setTimeout(() => overlay.remove(), 1000);
+        }, 800);
+        return;
+    }
+
+    // 5️⃣ Step 5: trigger id="currency-trigger" hover state then call showCurrencyModal()
+    const trigger = document.getElementById('currency-trigger');
+    const currencyBtn = document.querySelector('.currency-display');
+    if (currencyBtn) {
+        currencyBtn.classList.add('system-hover');
+        await new Promise(r => setTimeout(r, 1200)); // Phase 11: Extended to 1.2s
+        if (window.showCurrencyModal) window.showCurrencyModal();
+        currencyBtn.classList.remove('system-hover');
+    }
+
+    await new Promise(r => setTimeout(r, 500));
+
+    // 6️⃣ Step 6: id="currency-selector" hover then simulate "Open" state
+    const selector = document.getElementById('currency-selector');
+    if (selector) {
+        selector.classList.add('system-hover');
+        await new Promise(r => setTimeout(r, 600));
+
+        // 🏙️ PHASE_12: Dynamic Traversal (No Hard-Coding)
+        console.log('⚡ Visual Expansion: Simulating Open Dropdown');
+        const originalSize = selector.size || 1;
+        selector.size = Math.min(selector.options.length, 5);
+
+        await new Promise(r => setTimeout(r, 600));
+
+        // Smart Pathfinding: Find target index
+        const options = Array.from(selector.options);
+        const targetIndex = options.findIndex(opt => opt.value === regionCode);
+        const startIndex = selector.selectedIndex > 0 ? selector.selectedIndex : 0;
+
+        if (targetIndex !== -1) {
+            console.log(`🛤️ Traversing from index ${startIndex} to ${targetIndex}`);
+
+            // Sequential highlight traversal
+            const step = startIndex <= targetIndex ? 1 : -1;
+            for (let i = startIndex; i !== targetIndex + step; i += step) {
+                selector.selectedIndex = i;
+                await new Promise(r => setTimeout(r, 200)); // Cinematic step delay
+            }
+        }
+
+        // Load target into state
+        localStorage.setItem('vibedrips-warp-target', targetAsin);
+        localStorage.setItem('vibedrips-warp-currency', regionCode);
+
+        await new Promise(r => setTimeout(r, 800)); // Selection pause
+
+        // Collapse and Finish
+        selector.size = originalSize;
+        if (window.setCurrency) {
+            await window.setCurrency();
+        }
+        selector.classList.remove('system-hover');
+    }
+}
+
+window.triggerHighFidelityWarp = triggerHighFidelityWarp;
+// PHASE_1: Export navigation functions
+window.navigateModal = navigateModal;
+window.setupProductInteractions = setupProductInteractions;
+console.log('Products.js loaded successfully with currency-aware price formatting and text truncation');

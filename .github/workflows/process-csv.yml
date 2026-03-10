@@ -1,114 +1,202 @@
 # .github/workflows/process-csv.yml
 
 name: Process CSV Data
-
 on:
   schedule:
     - cron: '0 0 * * *'
   push:
     paths:
       - 'data/products.csv'
+      - 'convert-csv.js'
+      - 'validation-config.js'
+      - '.github/workflows/process-csv.yml'
   workflow_dispatch:
-
 permissions:
   contents: write
-
 jobs:
   process-csv:
     runs-on: ubuntu-latest
-    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-      
       - name: Install dependencies
         run: |
           npm init -y
           npm install csv-parser
-      
-      # NEW: Fix Git cached/ghost files
       - name: Remove cached ghost files
         run: |
-          echo "🔍 Checking for cached/ghost files..."
-          # List all files in git index
-          echo "📋 Files in Git index:"
+          echo "Checking for cached/ghost files..."
+          echo "Files in Git index:"
           git ls-files data/
-          
-          # List actual files on filesystem
-          echo "📋 Files on filesystem:"
+          echo "Files on filesystem:"
           ls -la data/ || echo "Directory doesn't exist yet"
-          
-          # Remove ghost JSON files from git cache
-          echo "🗑️ Removing cached JSON files..."
-          git rm --cached data/products-*.json || echo "No cached product files found"
-          git rm --cached data/currencies.json || echo "No cached currencies file found"
-          
-          # Verify removal
-          echo "✅ Git index after cleanup:"
+          echo "Removing cached JSON files..."
+          git rm --cached data/products-*.json 2>/dev/null || echo "No cached product files"
+          git rm --cached data/currencies.json 2>/dev/null || echo "No cached currencies file"
+          git rm --cached data/drops.json 2>/dev/null || echo "No cached drops file"
+          git rm --cached data/influencers.json 2>/dev/null || echo "No cached influencers file"
+          git rm --cached data/collections.json 2>/dev/null || echo "No cached collections file"
+          git rm --cached data/errors.json 2>/dev/null || echo "No cached errors file"
+          echo "Git index after cleanup:"
           git ls-files data/
-      
       - name: Clean old physical files
         run: |
-          # Clean any remaining physical files
+          echo "Cleaning old JSON files..."
           find data/ -name "products-*.json" -type f -delete 2>/dev/null || true
           rm -f data/currencies.json 2>/dev/null || true
-          echo "🧹 Physical file cleanup complete"
-      
-      # OPTIONAL: Auto-bump cache versions
+          rm -f data/drops.json 2>/dev/null || true
+          rm -f data/influencers.json 2>/dev/null || true
+          rm -f data/collections.json 2>/dev/null || true
+          rm -f data/errors.json 2>/dev/null || true
+          echo "Physical file cleanup complete"
       - name: Bump cache versions
         run: |
-          echo "🔢 Auto-bumping version numbers..."
-          
-          # Get current timestamp for DATA_VERSION
-          TIMESTAMP=$(date +%Y%m%d)
-          
-          # Update product-loader.js DATA_VERSION
+          echo "Auto-bumping version numbers..."
+          DATA_TS=$(date +%Y%m%d)
           if [ -f "assets/js/product-loader.js" ]; then
-            sed -i "s/const DATA_VERSION = '[^']*'/const DATA_VERSION = '${TIMESTAMP}-auto'/" assets/js/product-loader.js
-            echo "✅ Updated DATA_VERSION to ${TIMESTAMP}-auto"
+            sed -i "s/const DATA_VERSION = '[^']*'/const DATA_VERSION = '${DATA_TS}-auto'/" assets/js/product-loader.js
+            echo "Updated DATA_VERSION to ${DATA_TS}-auto"
           fi
-          
-          # Extract and increment SW version
+          SW_TS=$(date +%Y%m%dT%H%M%S)
+          NEW_VERSION="v${SW_TS}-data"
           if [ -f "sw.js" ]; then
-            CURRENT_VERSION=$(grep -oP "const CACHE_VERSION = 'v\K[0-9]+\.[0-9]+(?=')" sw.js)
-            MAJOR=$(echo $CURRENT_VERSION | cut -d. -f1)
-            MINOR=$(echo $CURRENT_VERSION | cut -d. -f2)
-            NEW_MINOR=$((MINOR + 1))
-            NEW_VERSION="v${MAJOR}.${NEW_MINOR}"
-            
             sed -i "s/const CACHE_VERSION = 'v[^']*'/const CACHE_VERSION = '${NEW_VERSION}'/" sw.js
-            echo "✅ Updated CACHE_VERSION from v${CURRENT_VERSION} to ${NEW_VERSION}"
+            echo "Updated CACHE_VERSION to ${NEW_VERSION}"
           fi
-      
       - name: Convert CSV to JSON
         run: |
-          cat data/products.csv | node convert-csv.js
-      
+          echo "Starting CSV conversion..."
+          node convert-csv.js
+          echo "Conversion complete"
+      - name: Verify manifest generation
+        run: |
+          echo "Verifying generated manifest files..."
+          CRITICAL_MISSING=()
+          if [ -f "data/categories.json" ]; then
+            echo "categories.json exists"
+          else
+            echo "categories.json MISSING"
+            CRITICAL_MISSING+=("categories.json")
+          fi
+          if [ -f "data/currencies.json" ]; then
+            echo "currencies.json exists"
+          else
+            echo "currencies.json MISSING"
+            CRITICAL_MISSING+=("currencies.json")
+          fi
+          if [ -f "data/errors.json" ]; then
+            echo "errors.json exists"
+          else
+            echo "errors.json MISSING"
+            CRITICAL_MISSING+=("errors.json")
+          fi
+          if [ -f "data/seasons.json" ]; then
+            echo "seasons.json exists"
+          else
+            echo "seasons.json MISSING"
+            CRITICAL_MISSING+=("seasons.json")
+          fi
+          if [ -f "data/recent-drops.json" ]; then
+            echo "recent-drops.json exists"
+          else
+            echo "recent-drops.json MISSING"
+            CRITICAL_MISSING+=("recent-drops.json")
+          fi
+          if [ -f "data/UnderTheBag.json" ]; then
+            echo "UnderTheBag.json exists"
+          else
+            echo "UnderTheBag.json MISSING"
+            CRITICAL_MISSING+=("UnderTheBag.json")
+          fi
+          if [ ${#CRITICAL_MISSING[@]} -gt 0 ]; then
+            echo "ERROR: Critical files missing: ${CRITICAL_MISSING[@]}"
+            exit 1
+          fi
+          echo "All critical manifest files present"
+      - name: Quality gate checks
+        run: |
+          echo "Running quality gate checks..."
+          if [ -f "data/errors.json" ]; then
+            ERROR_RATE=$(cat data/errors.json | jq '.summary.error_rate' 2>/dev/null || echo "0")
+            TOTAL_PRODUCTS=$(cat data/errors.json | jq '.summary.total_products' 2>/dev/null || echo "0")
+            FLAGGED=$(cat data/errors.json | jq '.flagged_products | length' 2>/dev/null || echo "0")
+            echo "Quality Metrics:"
+            echo "  Total products: ${TOTAL_PRODUCTS}"
+            echo "  Flagged products: ${FLAGGED}"
+            echo "  Error rate: ${ERROR_RATE}%"
+            if (( $(echo "$ERROR_RATE > 20" | bc -l 2>/dev/null || echo 0) )); then
+              echo "WARNING: Error rate exceeds 20% threshold"
+            elif (( $(echo "$ERROR_RATE > 10" | bc -l 2>/dev/null || echo 0) )); then
+              echo "NOTICE: Error rate above 10%"
+            else
+              echo "Error rate within acceptable limits"
+            fi
+          fi
       - name: List generated files
         run: |
-          echo "📁 Generated files:"
+          echo "Generated files:"
           ls -la data/
-          echo "📁 Git index files:"
+          echo "Git index files:"
           git ls-files data/
-      
       - name: Commit processed data
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           
-          # Add all generated files + version bumps
-          git add data/products-*.json data/currencies.json data/last_updated.txt
-          git add sw.js assets/js/product-loader.js 2>/dev/null || true
+          echo "=== PRE-COMMIT FILE STATUS ==="
+          ls -la data/*.json 2>/dev/null || echo "No JSON files found"
           
-          # Check if there are changes to commit
+          echo "=== FORCE REMOVING OLD MANIFESTS FROM GIT ==="
+          git rm --cached data/collections.json 2>/dev/null || echo "collections.json not in cache"
+          git rm --cached data/influencers.json 2>/dev/null || echo "influencers.json not in cache"
+          git rm --cached data/drops.json 2>/dev/null || echo "drops.json not in cache"
+          git rm --cached data/currencies.json 2>/dev/null || echo "currencies.json not in cache"
+          git rm --cached data/errors.json 2>/dev/null || echo "errors.json not in cache"
+          git rm --cached data/categories.json 2>/dev/null || echo "categories.json not in cache"
+          git rm --cached data/brands.json 2>/dev/null || echo "brands.json not in cache"
+          git rm --cached data/seasons.json 2>/dev/null || echo "seasons.json not in cache"
+          git rm --cached data/products-*.json 2>/dev/null || echo "No product files in cache"
+          
+          echo "=== STAGING FRESHLY GENERATED FILES ==="
+          git add -f data/products-*.json 2>/dev/null || echo "No product files to add"
+          git add -f data/currencies.json 2>/dev/null || echo "No currencies.json to add"
+          git add -f data/drops.json 2>/dev/null || echo "No drops.json to add"
+          git add -f data/influencers.json 2>/dev/null || echo "No influencers.json to add"
+          git add -f data/collections.json 2>/dev/null || echo "No collections.json to add"
+          git add -f data/categories.json 2>/dev/null || echo "No categories.json to add"
+          git add -f data/categories_auto-detect.json 2>/dev/null || echo "No categories_auto-detect.json to add"
+          git add -f data/brands.json 2>/dev/null || echo "No brands.json to add"
+          git add -f data/errors.json 2>/dev/null || echo "No errors.json to add"
+          git add -f data/seasons.json 2>/dev/null || echo "No seasons.json to add"
+          git add -f data/seasons_auto-detect.json 2>/dev/null || echo "No seasons_auto-detect.json to add"
+          git add -f data/recent-drops.json 2>/dev/null || echo "No recent-drops.json to add"
+          git add -f data/UnderTheBag.json 2>/dev/null || echo "No UnderTheBag.json to add"
+          git add -f data/last_updated.txt 2>/dev/null || echo "No last_updated.txt to add"
+          git add -f sw.js 2>/dev/null || echo "No sw.js to add"
+          git add -f assets/js/product-loader.js 2>/dev/null || echo "No product-loader.js to add"
+          
+          echo "=== STAGED FILES ==="
+          git diff --staged --name-status
+          
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "🔄 Process CSV data + auto-bump versions - $(date)"
+            git commit -m "Process CSV data + auto-bump versions - $(date)"
             git push
           fi
+      - name: Summary
+        if: always()
+        run: |
+          echo "=========================================="
+          echo "PROCESSING SUMMARY"
+          echo "=========================================="
+          if [ -f "data/last_updated.txt" ]; then
+            cat data/last_updated.txt
+          else
+            echo "No processing report generated"
+          fi
+          echo "=========================================="

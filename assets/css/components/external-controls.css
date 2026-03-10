@@ -1,0 +1,413 @@
+/* assets/css/components/external-controls.css */
+
+/* ============================================================
+   EXTERNAL CONTROLS BUBBLE (News Ticker)
+   ============================================================ */
+
+.modal-external-controls {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 0;
+    width: 100%;
+    gap: 12px;
+    padding: 4px;
+    z-index: 6000 !important;
+    /* EMERGENCY OVERRIDE - Boosted to stay above media overlay */
+    pointer-events: none;
+}
+
+/* The Bubble Container */
+.control-bubble {
+    height: 42px;
+    padding: 0 16px;
+    background: rgba(255, 255, 255, var(--glass-refraction, 0.15));
+    backdrop-filter: blur(var(--glass-blur, 15px)) saturate(1.8);
+    -webkit-backdrop-filter: blur(var(--glass-blur, 15px)) saturate(1.8);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 21px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    opacity: 1;
+    visibility: visible;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    pointer-events: auto !important;
+    z-index: 3001 !important;
+    overflow: visible;
+}
+
+/* Theme Awareness: Light Theme Bubble */
+body.light-theme .control-bubble {
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid var(--color-primary, #5A4BFF);
+    box-shadow: 0 4px 15px rgba(90, 75, 255, 0.15);
+}
+
+/* Theme Awareness: Dark Theme Bubble */
+body.dark-theme .control-bubble {
+    background: rgba(0, 0, 0, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Theme Awareness Override for Ticker Content only */
+body.light-theme .ticker-content {
+    color: #2D3748;
+    font-weight: 600;
+}
+
+/* Hidden state when toggles are ON */
+.control-bubble.hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transform: translateX(12px) scale(0.95);
+    pointer-events: none;
+}
+
+/* Unified Glow for Active State - ULTRA high specificity to crush theme !important */
+html body .modal-external-controls .reels-toggle.active,
+html body .modal-external-controls .globe-toggle.active,
+body.light-theme .modal-external-controls .reels-toggle.active,
+body.light-theme .modal-external-controls .globe-toggle.active,
+body.dark-theme .modal-external-controls .reels-toggle.active,
+body.dark-theme .modal-external-controls .globe-toggle.active,
+body.glass-theme .modal-external-controls .reels-toggle.active,
+body.glass-theme .modal-external-controls .globe-toggle.active {
+    background: var(--color-primary, #5A4BFF) !important;
+    border: 2px solid var(--color-primary, #5A4BFF) !important;
+    color: white !important;
+    box-shadow:
+        0 0 20px 4px rgba(90, 75, 255, 0.7),
+        0 0 10px 1px rgba(90, 75, 255, 0.4),
+        0 4px 12px rgba(0, 0, 0, 0.4) !important;
+    transform: scale(1.08) !important;
+    pointer-events: auto !important;
+    opacity: 1 !important;
+}
+
+/* Ensure buttons are clickable despite container's pointer-events: none */
+.reels-toggle,
+.globe-toggle,
+.share-toggle,
+.marketplace-dropdown {
+    pointer-events: auto !important;
+    cursor: pointer;
+}
+
+/* Share Button (Left Aligned in Product Modal Hub) */
+.share-toggle {
+    width: 42px;
+    height: 42px;
+    background: rgba(255, 255, 255, var(--glass-refraction, 0.15));
+    backdrop-filter: blur(var(--glass-blur, 15px)) saturate(1.8);
+    -webkit-backdrop-filter: blur(var(--glass-blur, 15px)) saturate(1.8);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-size: 22px;
+    color: white;
+}
+
+.share-toggle:hover {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.share-toggle.success {
+    background: #48BB78 !important;
+    border-color: #48BB78 !important;
+}
+
+/* Theme Awareness: Light Theme Share Toggle */
+body.light-theme .share-toggle {
+    background: var(--color-white);
+    border: 2px solid rgba(var(--color-primary-rgb), 0.3);
+    color: var(--color-primary);
+}
+
+/* Marketplace Dropdown (Downwards Opening) */
+.marketplace-dropdown {
+    position: absolute;
+    top: 100%;
+    /* Anchor to top controls and open downwards */
+    margin-top: 12px;
+    right: 0;
+    background: rgba(var(--color-bg-rgb, 20), 0.45);
+    backdrop-filter: blur(25px) saturate(2);
+    -webkit-backdrop-filter: blur(25px) saturate(2);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 16px;
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 180px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    /* Slide down from top */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 7001;
+    /* Above modal header */
+}
+
+/* Theme Parity: Light Theme Dropdown */
+body.light-theme .marketplace-dropdown {
+    background: rgba(255, 255, 255, 0.98);
+    border: 2px solid var(--color-primary, #5A4BFF);
+    box-shadow: 0 8px 25px rgba(90, 75, 255, 0.15);
+}
+
+/* Theme Parity: Dark Theme Dropdown */
+body.dark-theme .marketplace-dropdown {
+    background: rgba(0, 0, 0, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.marketplace-dropdown.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Marketplace Item Styling & Hover Effects */
+.marketplace-item {
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: white;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+}
+
+.marketplace-item:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Theme Awareness: Light Theme Marketplace Item */
+body.light-theme .marketplace-item {
+    color: #2D3748;
+}
+
+body.light-theme .marketplace-item:hover {
+    background: #667eea !important;
+    color: white !important;
+}
+
+/* Theme Awareness: Dark Theme Marketplace Item */
+body.dark-theme .marketplace-item:hover {
+    background: rgba(255, 255, 255, 0.25) !important;
+}
+
+.marketplace-item.empty {
+    opacity: 0.6;
+    cursor: default;
+    justify-content: center;
+}
+
+.marketplace-item.empty:hover {
+    background: none;
+    transform: none;
+}
+
+/* Glass tail/pointer pointing to the icons */
+.control-bubble::after {
+    content: '';
+    position: absolute;
+    right: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+    border-left: 8px solid rgba(255, 255, 255, 0.3);
+}
+
+body.light-theme .control-bubble::after {
+    border-left-color: var(--color-primary, #5A4BFF);
+}
+
+body.dark-theme .control-bubble::after {
+    border-left-color: rgba(255, 255, 255, 0.15);
+}
+
+/* News Ticker Viewport */
+.ticker-viewport {
+    width: 280px;
+    overflow: hidden;
+    white-space: nowrap;
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+/* Ticker Content */
+.ticker-content {
+    display: flex;
+    gap: 0;
+    padding-left: 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: white;
+    letter-spacing: 0.3px;
+    animation: externalTicker 15s linear infinite;
+    width: max-content;
+}
+
+.ticker-content span {
+    white-space: nowrap;
+    display: block;
+}
+
+/* The Ticker Animation: Seamless Loop */
+@keyframes externalTicker {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+/* ============================================================
+   MOBILE LANDSCAPE SCALING & PHASE 7 ABSOLUTE SIZE LOCK
+   ============================================================ */
+@media (max-width: 950px) and (orientation: landscape) {
+
+    /* Sync controls to original bottom-anchor */
+    .modal-external-controls {
+        top: auto !important;
+        bottom: calc(100% + 6px) !important;
+    }
+
+    /* Phase 7 ABSOLUTE: Force uniform 32px size for BOTH inactive and active states */
+    /* Matches the control-bubble height perfectly */
+    .reels-toggle,
+    .globe-toggle,
+    .share-toggle {
+        width: 32px !important;
+        height: 32px !important;
+        min-width: 32px !important;
+        min-height: 32px !important;
+        font-size: 20px !important;
+        /* Smaller emoji for smaller button */
+    }
+
+    /* Phase 7 ABSOLUTE: Strict Physical Size Lock for active state */
+    /* Must match "Ultimate Glow" specificity to lock down dimensions */
+    html body .modal-external-controls .reels-toggle.active,
+    html body .modal-external-controls .globe-toggle.active,
+    html body .modal-external-controls .share-toggle.active,
+    body.light-theme .modal-external-controls .reels-toggle.active,
+    body.light-theme .modal-external-controls .globe-toggle.active,
+    body.light-theme .modal-external-controls .share-toggle.active,
+    body.dark-theme .modal-external-controls .reels-toggle.active,
+    body.dark-theme .modal-external-controls .globe-toggle.active,
+    body.dark-theme .modal-external-controls .share-toggle.active,
+    body.glass-theme .modal-external-controls .reels-toggle.active,
+    body.glass-theme .modal-external-controls .globe-toggle.active,
+    body.glass-theme .modal-external-controls .share-toggle.active {
+        width: 32px !important;
+        height: 32px !important;
+        transform: none !important;
+        /* Killer: No scale(1.08) expansion */
+        border-width: 0.8px !important;
+        /* Killer: Match inactive thickness */
+        top: 0 !important;
+        font-size: 18px !important;
+        /* Specific emoji sync for active Red X */
+    }
+
+    /* Disable hover expansion in landscape to prevent potential clipping */
+    .reels-toggle:hover,
+    .globe-toggle:hover,
+    .share-toggle:hover {
+        transform: none !important;
+    }
+
+    .control-bubble {
+        height: 32px;
+        padding: 0 12px;
+        border-radius: 16px;
+    }
+
+    .ticker-viewport {
+        width: 220px;
+    }
+
+    .ticker-content {
+        font-size: 11px;
+    }
+
+    .control-bubble::after {
+        right: -6px;
+        border-top-width: 5px;
+        border-bottom-width: 5px;
+        border-left-width: 6px;
+    }
+}
+
+/* ============================================================
+   MOBILE PORTRAIT CONSTRAINTS
+   Prevents bubble from hitting the left edge of the modal
+   ============================================================ */
+@media (max-width: 480px) and (orientation: portrait) {
+    .ticker-viewport {
+        width: 180px !important;
+        /* Narrower ticker for portrait */
+    }
+
+    .ticker-content {
+        font-size: 11px !important;
+    }
+
+    .control-bubble {
+        padding: 0 10px !important;
+        height: 38px !important;
+    }
+
+    .modal-external-controls {
+        gap: 8px !important;
+        /* Tighten gap to save horizontal space */
+    }
+
+}
+
+/* ============================================================
+   MARKETPLACE SEPARATOR (Universal Theme Support)
+   ============================================================ */
+.marketplace-separator {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.12);
+    /* Default Dark/Glass */
+    margin: 6px 12px;
+    display: block;
+}
+
+body.light-theme .marketplace-separator {
+    background: rgba(45, 55, 72, 0.1);
+}
+
+/* Specific Glass Parity */
+body.glass-theme .marketplace-separator {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(4px);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+}

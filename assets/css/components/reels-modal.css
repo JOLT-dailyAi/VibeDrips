@@ -17,81 +17,167 @@
   display: none;
 }
 
-/* Close Button - Floating */
-.reels-close-btn {
+/* 🏗️ Reels Modal UI Overlay */
+.reels-ui-overlay {
   position: fixed;
-  top: 20px;
-  right: 40px;
-  width: 40px;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  color: white;
-  font-size: 24px;
-  font-weight: 300;
-  cursor: pointer;
-  z-index: 1002;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2001;
+  pointer-events: none;
   display: flex;
+  justify-content: space-between;
+  padding: 2rem;
+  padding-top: calc(2rem + env(safe-area-inset-top, 0px));
+  padding-left: calc(2rem + env(safe-area-inset-left, 0px));
+  padding-right: calc(2rem + env(safe-area-inset-right, 0px));
+}
+
+.reels-left-rail,
+.reels-right-rail {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  pointer-events: none;
+}
+
+.reels-right-rail {
   align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  line-height: 1;
-  padding: 0;
+  /* 🎯 Vertical Alignment Lock */
 }
 
-.reels-close-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
-  transform: scale(1.1);
+.reels-close-btn,
+.reels-share-btn,
+.reels-nav-hub {
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
+  left: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  pointer-events: auto;
+  margin: 0;
 }
 
-/* Navigation Arrows - Up/Down */
+.reels-nav-hub {
+  margin-top: auto;
+  margin-bottom: auto;
+  /* 🎯 Center Nav Hub in Rail */
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 1.5rem !important;
+  min-height: 120px !important;
+  justify-content: center !important;
+}
+
+/* 🔘 Shared Button Base - Standardized to 42px */
+.reels-close-btn,
+.reels-share-btn,
 .reels-nav-btn {
-  position: fixed;
-  right: 40px;
-  width: 40px;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, var(--glass-refraction, 0.15));
+  backdrop-filter: blur(var(--glass-blur, 15px)) saturate(1.8);
+  -webkit-backdrop-filter: blur(var(--glass-blur, 15px)) saturate(1.8);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
-  color: white;
-  font-size: 20px;
-  font-weight: 300;
-  cursor: pointer;
-  z-index: 1002;
+  width: 42px;
+  height: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
-  line-height: 1;
+  cursor: pointer;
+  color: white;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  pointer-events: auto;
   padding: 0;
+  flex-shrink: 0;
+  font-size: 22px;
+  /* 🎯 Match Product Modal Share scaling */
 }
 
+/* 🕵️ Stability: Use visibility instead of display:none for nav arrows */
+.reels-nav-btn.hidden {
+  display: flex !important;
+  /* Keep in layout */
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+.reels-close-btn:hover,
+.reels-share-btn:hover,
 .reels-nav-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
   transform: scale(1.1);
 }
 
-.reels-nav-btn.up {
-  top: 25vh;
+.reels-nav-btn svg {
+  display: block;
 }
 
-.reels-nav-btn.down {
-  top: 75vh;
-}
+/* Safe Area Padding Managed by Overlay */
 
-/* HIDE arrows when at boundaries (controlled by JS) */
-.reels-nav-btn.hidden {
-  display: none !important;
-}
-
-/* Hide nav buttons on mobile */
+/* Mobile Polish */
 @media (max-width: 767px) {
-  .reels-nav-btn {
-    display: none;
+
+  .reels-ui-overlay {
+    padding: 1rem;
+    padding-top: calc(1rem + env(safe-area-inset-top, 0px));
+    padding-left: calc(1rem + env(safe-area-inset-left, 0px));
+    padding-right: calc(1rem + env(safe-area-inset-right, 0px));
   }
+
+  .reels-nav-hub {
+    min-height: 100px !important;
+  }
+
+  .reels-close-btn,
+  .reels-share-btn,
+  .reels-nav-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+    /* 🎯 Proportionally scale emoji */
+  }
+}
+
+/* Scroll Container - INSTAGRAM/SHORTS MODE (NO PEEKING) */
+
+.share-toggle-mirror:hover,
+.close-toggle-mirror:hover {
+  transform: scale(1.1);
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.share-toggle-mirror.success {
+  background: #48BB78 !important;
+  border-color: #48BB78 !important;
+}
+
+/* Mobile Adjustments for Top Row */
+@media (max-width: 767px) {
+  .reels-external-controls {
+    top: 1rem;
+    left: 1rem;
+    right: 1rem;
+  }
+}
+
+/* Landscape Mobile Offset */
+@media (max-width: 950px) and (orientation: landscape) {
+  .reels-external-controls {
+    top: 10px;
+    left: calc(10px + env(safe-area-inset-left, 0px));
+    right: calc(10px + env(safe-area-inset-right, 0px));
+  }
+}
+
+/* Safe Area Protection */
+.reels-external-controls {
+  top: calc(2rem + env(safe-area-inset-top, 0px));
 }
 
 /* Scroll Container - INSTAGRAM/SHORTS MODE (NO PEEKING) */
@@ -119,8 +205,10 @@
   max-height: 100vh;
   width: 100vw;
   display: flex;
-  align-items: center; /* ✅ Vertical centering */
-  justify-content: center; /* ✅ Horizontal centering */
+  align-items: center;
+  /* ✅ Vertical centering */
+  justify-content: center;
+  /* ✅ Horizontal centering */
   padding: 0;
   overflow: hidden;
   position: relative;
@@ -137,9 +225,11 @@
     gap: 30px;
     max-width: 1400px;
     width: 100%;
-    height: 833px; /* ✅ FIXED: 763 + 40 (padding) + 30 (gap) */
+    height: 833px;
+    /* ✅ FIXED: 763 + 40 (padding) + 30 (gap) */
     max-height: 833px;
-    margin: 0 auto; /* Horizontal centering */
+    margin: 0 auto;
+    /* Horizontal centering */
     padding: 20px;
     box-sizing: border-box;
   }
@@ -150,19 +240,21 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    height: 763px; /* ✅ CAPPED HEIGHT */
+    height: 763px;
+    /* ✅ CAPPED HEIGHT */
     max-height: 763px;
   }
 
   .reel-video iframe {
     width: 100%;
     height: 100%;
-    max-height: 763px; /* ✅ CAPPED HEIGHT */
-    
+    max-height: 763px;
+    /* ✅ CAPPED HEIGHT */
+
     /* OPTION A: Maintain aspect ratio (ACTIVE) */
     max-width: 100%;
     object-fit: contain;
-    
+
     /* OPTION B: Width adjusts freely (COMMENTED OUT)
     width: 100%;
     height: 100%;
@@ -175,7 +267,8 @@
     flex-direction: column;
     justify-content: center;
     overflow: hidden;
-    height: 763px; /* ✅ MATCH VIDEO HEIGHT */
+    height: 763px;
+    /* ✅ MATCH VIDEO HEIGHT */
     max-height: 763px;
   }
 }
@@ -191,7 +284,8 @@
     gap: 20px;
     max-width: 1000px;
     width: 100%;
-    height: 823px; /* ✅ FIXED: 763 + 40 (padding) + 20 (gap) */
+    height: 823px;
+    /* ✅ FIXED: 763 + 40 (padding) + 20 (gap) */
     max-height: 823px;
     margin: 0 auto;
     padding: 20px;
@@ -204,19 +298,21 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    height: 763px; /* ✅ CAPPED HEIGHT */
+    height: 763px;
+    /* ✅ CAPPED HEIGHT */
     max-height: 763px;
   }
 
   .reel-video iframe {
     width: 100%;
     height: 100%;
-    max-height: 763px; /* ✅ CAPPED HEIGHT */
-    
+    max-height: 763px;
+    /* ✅ CAPPED HEIGHT */
+
     /* OPTION A: Maintain aspect ratio (ACTIVE) */
     max-width: 100%;
     object-fit: contain;
-    
+
     /* OPTION B: Width adjusts freely (COMMENTED OUT)
     width: 100%;
     height: 100%;
@@ -229,7 +325,8 @@
     flex-direction: column;
     justify-content: center;
     overflow: hidden;
-    height: 763px; /* ✅ MATCH VIDEO HEIGHT */
+    height: 763px;
+    /* ✅ MATCH VIDEO HEIGHT */
     max-height: 763px;
   }
 }
@@ -248,7 +345,8 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 793px; /* ✅ FIXED: 763 + 20 (padding) + 10 (gap) */
+    height: 793px;
+    /* ✅ FIXED: 763 + 20 (padding) + 10 (gap) */
     max-height: 793px;
     padding: 10px;
     box-sizing: border-box;
@@ -257,7 +355,8 @@
   }
 
   .reel-video {
-    flex: 0 0 763px; /* ✅ FIXED HEIGHT */
+    flex: 0 0 763px;
+    /* ✅ FIXED HEIGHT */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -271,11 +370,12 @@
     width: 100%;
     max-width: 100%;
     height: 100%;
-    max-height: 763px; /* ✅ CAPPED HEIGHT */
-    
+    max-height: 763px;
+    /* ✅ CAPPED HEIGHT */
+
     /* OPTION A: Maintain aspect ratio (ACTIVE) */
     object-fit: contain;
-    
+
     /* OPTION B: Width adjusts freely (COMMENTED OUT)
     width: 100%;
     height: 100%;
@@ -283,7 +383,8 @@
   }
 
   .reel-products {
-    flex: 1; /* Take remaining space */
+    flex: 1;
+    /* Take remaining space */
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -292,11 +393,8 @@
   }
 
   .reels-close-btn {
-    top: 10px;
-    right: 10px;
-    width: 36px;
-    height: 36px;
-    font-size: 20px;
+    top: 15px;
+    right: 15px;
   }
 }
 
@@ -315,7 +413,8 @@
     gap: 10px;
     width: 100vw;
     max-width: 100vw;
-    height: 793px; /* ✅ FIXED: 763 + 20 (padding) + 10 (gap) */
+    height: 793px;
+    /* ✅ FIXED: 763 + 20 (padding) + 10 (gap) */
     max-height: 793px;
     margin: 0 auto;
     padding: 10px;
@@ -328,7 +427,8 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    height: 763px; /* ✅ CAPPED HEIGHT */
+    height: 763px;
+    /* ✅ CAPPED HEIGHT */
     max-height: 763px;
     width: 50%;
   }
@@ -337,11 +437,12 @@
     width: 100%;
     max-width: 100%;
     height: 100%;
-    max-height: 763px; /* ✅ CAPPED HEIGHT */
-    
+    max-height: 763px;
+    /* ✅ CAPPED HEIGHT */
+
     /* OPTION A: Maintain aspect ratio (ACTIVE) */
     object-fit: contain;
-    
+
     /* OPTION B: Width adjusts freely (COMMENTED OUT)
     width: 100%;
     height: 100%;
@@ -354,7 +455,8 @@
     flex-direction: column;
     justify-content: flex-start;
     overflow: hidden;
-    height: 763px; /* ✅ MATCH VIDEO HEIGHT */
+    height: 763px;
+    /* ✅ MATCH VIDEO HEIGHT */
     max-height: 763px;
     width: 50%;
   }
@@ -362,9 +464,6 @@
   .reels-close-btn {
     top: 10px;
     right: 10px;
-    width: 32px;
-    height: 32px;
-    font-size: 18px;
   }
 }
 
@@ -393,6 +492,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -400,4 +500,66 @@
 
 .reels-modal:not(.hidden) {
   animation: fadeIn 0.3s ease;
+}
+
+/* ========================================
+   MOBILE LANDSCAPE OPTIMIZATION
+   Maximize space and dodge Dynamic Islands
+   (STRICTLY LANDSCAPE ONLY)
+   ======================================== */
+
+@media (max-width: 950px) and (orientation: landscape) {
+  .reel-content {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    padding: 0 env(safe-area-inset-right, 20px) 0 env(safe-area-inset-left, 20px) !important;
+    gap: 15px !important;
+  }
+
+  .reel-video {
+    flex: 0 0 40% !important;
+    height: 95vh !important;
+    max-height: 95vh !important;
+  }
+
+  .reel-products {
+    flex: 1 !important;
+    height: 95vh !important;
+    max-height: 95vh !important;
+  }
+
+  /* Reposition floating overlay for landscape safe areas */
+  .reels-ui-overlay {
+    padding: 10px;
+    padding-top: env(safe-area-inset-top, 10px) !important;
+    padding-left: calc(10px + env(safe-area-inset-left, 0px)) !important;
+    padding-right: calc(10px + env(safe-area-inset-right, 0px)) !important;
+  }
+
+  /* 🎯 Phase 7 Sync: Force 32px lock in landscape to match external controls */
+  .reels-close-btn,
+  .reels-share-btn,
+  .reels-nav-btn {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
+    font-size: 18px !important;
+  }
+
+  .reels-nav-hub {
+    gap: 1rem !important;
+    min-height: 80px !important;
+  }
+}
+
+/* ========================================
+   GLOBAL SAFE-AREA POLISH
+   Protect UI from Dynamic Island / Notch
+   ======================================== */
+
+.reels-modal {
+  padding-top: env(safe-area-inset-top, 0px) !important;
 }

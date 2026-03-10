@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>VibeDrips</title>
 
     <!-- Short names for mobile home screen -->
@@ -11,33 +12,59 @@
 
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
-    
+
     <!-- Favicon & App Icons - Toggle between Option 1 and Option 2 by moving comment blocks -->
-    
+
     <!-- Option 1: VibeDrips.png (uncomment block below to use)
     <link rel="icon" type="image/png" href="assets/images/VibeDrips.png">
     <link rel="apple-touch-icon" href="assets/images/VibeDrips.png">
     <link rel="icon" type="image/png" sizes="192x192" href="assets/images/VibeDrips.png">
     <link rel="icon" type="image/png" sizes="512x512" href="assets/images/VibeDrips.png">
     End Option 1 -->
-    
+
     <!-- Option 2: VibeDrips_DP.png (currently active) -->
     <link rel="icon" type="image/png" href="assets/images/VibeDrips_DP.png">
     <link rel="apple-touch-icon" href="assets/images/VibeDrips_DP.png">
     <link rel="icon" type="image/png" sizes="192x192" href="assets/images/VibeDrips_DP.png">
     <link rel="icon" type="image/png" sizes="512x512" href="assets/images/VibeDrips_DP.png">
     <!-- End Option 2 -->
-    
+
     <!-- PWA Settings -->
     <meta name="theme-color" content="#2E1D80">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
+
     <!-- Stylesheets -->
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/utils/glass.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="assets/css/utils/warp-transition.css">
+    <link rel="stylesheet" href="assets/css/components/media-overlay.css">
+
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://jolt-dailyai.github.io/VibeDrips/">
+    <meta property="og:title" content="VibeDrips - Drops that Drip.">
+    <meta property="og:description"
+        content="Curated digital finds and affiliate drops — aesthetic tools, festive picks, and everyday scroll-stoppers.">
+    <meta property="og:image"
+        content="https://jolt-dailyai.github.io/VibeDrips/assets/images/VibeDrips_favicon.png?v=1.2">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta property="og:image:type" content="image/png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://jolt-dailyai.github.io/VibeDrips/">
+    <meta property="twitter:title" content="VibeDrips - Drops that Drip.">
+    <meta property="twitter:description"
+        content="Curated digital finds and affiliate drops — aesthetic tools, festive picks, and everyday scroll-stoppers.">
+    <meta property="twitter:image"
+        content="https://jolt-dailyai.github.io/VibeDrips/assets/images/VibeDrips_favicon.png?v=1.2">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body class="glass-theme">
@@ -59,13 +86,14 @@
         <div class="simple-modal-content">
             <div class="simple-modal-header">
                 <h2>Product Details</h2>
-                <button onclick="closeSimpleModal()">X</button>
+                <button class="modal-close-button" onclick="closeSimpleModal()">❌</button>
             </div>
             <div class="simple-modal-body">
                 <img src="https://via.placeholder.com/400x300" alt="Product Image">
                 <p><strong>Name:</strong> Sample Product</p>
                 <p><strong>Price:</strong> $99.99</p>
-                <p><strong>Description:</strong> This is a sample product description that provides details about the item.</p>
+                <p><strong>Description:</strong> This is a sample product description that provides details about the
+                    item.</p>
                 <a href="#" class="amazon-button">Buy on Amazon</a>
             </div>
         </div>
@@ -73,8 +101,8 @@
 
     <!-- Header -->
     <header class="main-header">
-        <img src="https://raw.githubusercontent.com/JOLT-dailyAi/VibeDrips/refs/heads/main/assets/images/VibeDrips_logo.png" 
-             alt="VibeDrips" class="logo-img">
+        <img src="https://raw.githubusercontent.com/JOLT-dailyAi/VibeDrips/refs/heads/main/assets/images/VibeDrips_logo.png"
+            alt="VibeDrips" class="logo-img">
     </header>
 
     <!-- Main Content -->
@@ -83,24 +111,74 @@
         <section class="filters-section">
             <div class="container">
                 <div class="time-categories">
-                    <!-- UPDATED: Changed to openReelsModal() -->
+                    <!-- Reels tab -->
                     <div class="time-category" data-filter="reels" onclick="openReelsModal()">🎬 Reels</div>
-                    <div class="time-category" data-filter="hot">🔥 Hot This Month</div>
-                    <div class="time-category" data-filter="featured">⭐ Featured</div>
-                    <div class="time-category" data-filter="new">🆕 New Arrivals</div>
-                    <div class="time-category" data-filter="trending">📈 Trending</div>
-                    <div class="time-category active" data-filter="all">🛍️ All Products</div>
+
+                    <!-- Custom Discovery Dropdown (Nested & Collapsible) -->
+                    <div class="custom-dropdown" id="discovery-dropdown">
+                        <div class="time-category active dropdown-trigger" onclick="toggleDiscoveryDropdown(event)">
+                            <span id="discovery-current-label">🏠 Discover</span>
+                            <span class="dropdown-chevron">▼</span>
+                        </div>
+                        <div class="dropdown-menu" id="discovery-menu">
+                            <div class="dropdown-item" onclick="setTimeFilter('discovery')">🏠 Discover (All Drops)
+                            </div>
+                            <div class="dropdown-divider"></div>
+
+                            <!-- 🆕 New -->
+                            <div class="dropdown-item" data-filter="new" onclick="setTimeFilter('new')">🆕 New
+                            </div>
+
+                            <!-- 👤 Creators (Influencers) -->
+                            <div class="dropdown-group" onclick="toggleRelationalGroup(event, 'creators')">
+                                <span>👤 Creators</span>
+                                <span class="group-chevron">▶</span>
+                            </div>
+                            <div class="sub-menu collapsed" id="creators-sub-menu">
+                                <!-- Dynamic Creators -->
+                            </div>
+
+                            <!-- 🧩 Collections -->
+                            <div class="dropdown-group" onclick="toggleRelationalGroup(event, 'collections')">
+                                <span>🧩 Collections</span>
+                                <span class="group-chevron">▶</span>
+                            </div>
+                            <div class="sub-menu collapsed" id="collections-sub-menu">
+                                <!-- Dynamic Collections -->
+                            </div>
+
+                            <!-- 🍃 4 Seasons -->
+                            <div class="dropdown-group" onclick="toggleRelationalGroup(event, 'seasons')">
+                                <span>🍃 4 Seasons</span>
+                                <span class="group-chevron">▶</span>
+                            </div>
+                            <div class="sub-menu collapsed" id="seasons-sub-menu">
+                                <!-- Dynamic Seasons -->
+                            </div>
+
+                            <div class="dropdown-divider"></div>
+                            <div class="dropdown-group" onclick="toggleCategoryGroup(event)">
+                                <span>📂 Categories</span>
+                                <span class="group-chevron">▶</span>
+                            </div>
+                            <div class="sub-menu collapsed" id="categories-sub-menu">
+                                <!-- Dynamically populated categories -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- All Products tab -->
+                    <div class="time-category" data-filter="all" onclick="setTimeFilter('all')">🛍️ All Products</div>
                 </div>
-                
+
                 <div class="filter-controls">
                     <div class="filter-group">
-                        <input type="text" id="search" placeholder="🔍 Search products, brands..." oninput="filterProducts()">
+                        <div class="search-wrapper" style="position: relative; flex: 1;">
+                            <input type="text" id="search" placeholder="🔍 Search products, brands..."
+                                oninput="filterProducts()" autocomplete="off">
+                        </div>
                     </div>
-                    <div class="filter-group">
-                        <select id="category-filter" onchange="filterProducts()">
-                            <option value="">All Categories</option>
-                        </select>
-                    </div>
+
                     <div class="filter-group">
                         <select id="price-sort" onchange="sortProducts()">
                             <option value="">Sort By: Default</option>
@@ -122,7 +200,7 @@
                     <h2 id="section-title">🔥 Hot This Month</h2>
                     <p id="section-subtitle">Trending products that are making waves</p>
                 </div>
-                
+
                 <div class="stats-bar">
                     <div class="stat-item">
                         <div class="stat-number" id="product-count">0</div>
@@ -143,7 +221,7 @@
                 </div>
 
                 <!-- Regular Products Grid -->
-                <div id="products-container" class="products-grid">
+                <div id="products-container">
                     <div class="loading-state">
                         <div class="loading-spinner"></div>
                         <div>Loading your curated drops...</div>
@@ -157,11 +235,12 @@
     <footer class="main-footer">
         <div class="container">
             <div class="footer-brand">
-                <img src="https://raw.githubusercontent.com/JOLT-dailyAi/VibeDrips/refs/heads/main/assets/images/VibeDrips_DP.png" 
-                     alt="VibeDrips Brand" class="footer-logo" width="550" height="350">
+                <img src="https://raw.githubusercontent.com/JOLT-dailyAi/VibeDrips/refs/heads/main/assets/images/VibeDrips_DP.png"
+                    alt="VibeDrips Brand" class="footer-logo" width="550" height="350">
                 <h3 class="footer-tagline">Drops that Drip. Curated Finds, Digitally Yours.</h3>
                 <p class="footer-description">
-                    Curated digital finds and affiliate drops — aesthetic tools, festive picks, and everyday scroll-stoppers.
+                    Curated digital finds and affiliate drops — aesthetic tools, festive picks, and everyday
+                    scroll-stoppers.
                 </p>
             </div>
         </div>
@@ -171,57 +250,33 @@
     <div id="glass-settings-panel" class="glass-settings-panel glass">
         <div class="glass-panel-header">
             <div id="glass-panel-title" class="glass-panel-title">💎 Glass Theme</div>
-            <button id="glass-panel-close" class="glass-panel-close">×</button>
+            <button id="glass-panel-close" class="glass-panel-close">❌</button>
         </div>
-        
+
         <div class="glass-sliders">
             <!-- Blur Slider -->
             <div class="glass-slider-wrapper">
                 <div class="glass-slider-value" id="glass-blur-value">5</div>
-                <input 
-                    type="range" 
-                    id="glass-blur-slider" 
-                    class="glass-slider" 
-                    min="0" 
-                    max="50" 
-                    value="5" 
-                    step="1"
-                    orient="vertical"
-                >
+                <input type="range" id="glass-blur-slider" class="glass-slider" min="0" max="50" value="5" step="1"
+                    orient="vertical">
                 <div class="glass-slider-label">Blur</div>
                 <div class="glass-slider-limits">0-50</div>
             </div>
-            
+
             <!-- Refraction Slider -->
             <div class="glass-slider-wrapper">
                 <div class="glass-slider-value" id="glass-refraction-value">0.15</div>
-                <input 
-                    type="range" 
-                    id="glass-refraction-slider" 
-                    class="glass-slider" 
-                    min="0.0" 
-                    max="0.4" 
-                    value="0.08" 
-                    step="0.01"
-                    orient="vertical"
-                >
+                <input type="range" id="glass-refraction-slider" class="glass-slider" min="0.0" max="0.4" value="0.08"
+                    step="0.01" orient="vertical">
                 <div class="glass-slider-label">Opacity</div>
                 <div class="glass-slider-limits">0.0-0.4</div>
             </div>
-            
+
             <!-- Depth Slider -->
             <div class="glass-slider-wrapper">
                 <div class="glass-slider-value" id="glass-depth-value">0</div>
-                <input 
-                    type="range" 
-                    id="glass-depth-slider" 
-                    class="glass-slider" 
-                    min="0" 
-                    max="30" 
-                    value="0" 
-                    step="1"
-                    orient="vertical"
-                >
+                <input type="range" id="glass-depth-slider" class="glass-slider" min="0" max="30" value="0" step="1"
+                    orient="vertical">
                 <div class="glass-slider-label">Depth</div>
                 <div class="glass-slider-limits">0-30</div>
             </div>
@@ -229,8 +284,8 @@
             <!-- Saturation Slider -->
             <div class="glass-slider-wrapper">
                 <div class="glass-slider-value" id="glass-saturation-value">180</div>
-                <input type="range" id="glass-saturation-slider" class="glass-slider" 
-                    min="100" max="200" value="180" step="5" orient="vertical">
+                <input type="range" id="glass-saturation-slider" class="glass-slider" min="100" max="200" value="180"
+                    step="5" orient="vertical">
                 <div class="glass-slider-label">Saturation</div>
                 <div class="glass-slider-limits">100-200</div>
             </div>
@@ -244,14 +299,15 @@
             <span id="currency-trigger">INR</span>
         </div>
     </div>
-    
+
     <!-- Left-side Floating Media Controls -->
     <div class="media-float">
         <!-- Linktree -->
-        <a href="https://linktr.ee/JOLT_dailyAi" target="_blank" rel="noopener" class="linktree-button" aria-label="Linktree">
+        <a href="https://linktr.ee/JOLT_dailyAi" target="_blank" rel="noopener" class="linktree-button"
+            aria-label="Linktree">
             <img src="assets/images/linktree.png" alt="Linktree" onerror="this.parentElement.innerHTML='🌲';">
         </a>
-        
+
         <!-- Music control button added here by JS -->
     </div>
 
@@ -259,7 +315,7 @@
     <div class="center-badge-container">
         <!-- Dynamically populated by JS -->
     </div>
-    
+
     <!-- Background Music -->
     <audio id="bg-music" loop>
         <source src="assets/music/Losstime.mp3" type="audio/mpeg">
@@ -272,38 +328,70 @@
 
     <!-- NEW: Reels Modal -->
     <div id="reels-modal" class="reels-modal hidden">
-        <button class="reels-close-btn" onclick="closeReelsModal()">×</button>
-        
-        <!-- Navigation Arrows -->
-        <button class="reels-nav-btn up" aria-label="Previous Reel">▲</button>
-        <button class="reels-nav-btn down" aria-label="Next Reel">▼</button>
-        
+        <!-- 🏗️ Reels UI Overlay (Floating Interaction Layer) -->
+        <div class="reels-ui-overlay">
+            <!-- Left Rail: Share -->
+            <div class="reels-left-rail">
+                <!-- Dynamically injected: .reels-share-btn -->
+            </div>
+
+            <!-- Right Rail: Close & Navigation -->
+            <div class="reels-right-rail">
+                <button class="white-close-btn reels-close-btn" onclick="closeReelsModal()" aria-label="Close Reels">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+
+                <!-- Navigation Hub (Vertical Stack on Right Rail) -->
+                <div class="reels-nav-hub">
+                    <button class="reels-nav-btn up" aria-label="Previous Reel">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="18 15 12 9 6 15"></polyline>
+                        </svg>
+                    </button>
+                    <button class="reels-nav-btn down" aria-label="Next Reel">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- Scroll Container -->
         <div class="reels-scroll-container" id="reels-feed-container">
             <!-- Reels content loads here dynamically -->
         </div>
     </div>
 
-    
+
     <!-- Core Scripts - Load in order -->
     <script src="assets/js/dom-cache.js"></script>
+    <script src="assets/js/device-detector.js"></script>
     <script src="assets/js/theme-toggle.js"></script>
-    <script src="assets/js/event-handlers.js"></script>
     <script src="assets/js/ui-states.js"></script>
+    <script src="assets/js/media-state.js"></script>
     <script src="assets/js/currency-modal.js"></script>
     <script src="assets/js/product-modal.js"></script>
+    <script src="assets/js/external-controls.js"></script>
     <script src="assets/js/modal-utils.js"></script>
     <script src="assets/js/currency-loader.js"></script>
     <script src="assets/js/product-loader.js"></script>
-    <script src="assets/js/filter-manager.js"></script>
     <script src="assets/js/products.js"></script>
+    <script src="assets/js/price-filter.js"></script>
     <script src="assets/js/glass-settings.js"></script>
     <script src="assets/js/main.js"></script>
+
     <!-- NEW: Reels Scripts -->
     <script src="assets/js/reels-feed.js"></script>
     <script src="assets/js/reels-position.js"></script>
     <script src="assets/js/reels-modal.js"></script>
-    
+
     <script>
         // Initialize the application
         document.addEventListener('DOMContentLoaded', () => {
@@ -315,17 +403,25 @@
     <!-- PWA Scripts -->
     <script src="assets/js/install-prompt.js"></script>
 
+    <!-- NEW: Carousel Utilities -->
+    <script src="assets/js/carousel-utils.js"></script>
+
+    <!-- NEW: Inline Carousel Component -->
+    <script src="assets/js/inline-carousel.js"></script>
+
+    <!-- NEW: Lightbox -->
+    <script src="assets/js/lightbox.js"></script>
+
+    <!-- NEW: Media Overlay -->
+    <script src="assets/js/media-overlay.js"></script>
+
     <!-- Music Control & Share -->
+    <script src="assets/js/clipboard-voyager.js"></script>
     <script src="assets/js/music-control.js"></script>
     <script src="assets/js/share.js"></script>
-    
-    <!-- PWA Service Worker Registration -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/VibeDrips/sw.js')
-                .then(reg => console.log('Service Worker registered:', reg))
-                .catch(err => console.log('Service Worker registration failed:', err));
-        }
-    </script>
+
+    <!-- PWA Service Worker Registration with Update Detection -->
+    <script src="assets/js/sw-update-detector.js"></script>
 </body>
+
 </html>

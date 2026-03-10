@@ -16,10 +16,55 @@ function openReelsModal() {
   // Disable body scroll
   document.body.style.overflow = 'hidden';
 
-    // Render reels feed inside modal
+  // 🧹 PHASE_5: Safety Cleanup - Remove any lingering warp overlays on open
+  const existingOverlay = document.querySelector('.warp-overlay');
+  if (existingOverlay && !localStorage.getItem('vibedrips-warp-target')) {
+    existingOverlay.remove();
+  }
+
+  // Render reels feed inside modal
   if (window.renderReelsFeed) {
     window.renderReelsFeed();
-    
+
+    // ✅ REUSE: Inject Share button into modal (positioned Top-Left via CSS)
+    if (modal && !modal.querySelector('.reels-share-btn')) {
+      const shareBtn = document.createElement('button');
+      shareBtn.className = 'reels-share-btn';
+      shareBtn.innerHTML = '<span>🔗</span>';
+      shareBtn.title = 'Copy Reel Link';
+      shareBtn.onclick = (e) => {
+        e.stopPropagation();
+        const activeReel = document.querySelector('.reel-section:not(.hidden)');
+        const video = activeReel?.querySelector('.reel-video');
+        const asin = video?.dataset?.asin;
+
+        if (window.handleShare && asin) {
+          window.handleShare({
+            asin: asin,
+            currency: VibeDrips.currentCurrency || 'INR',
+            view: 'reel'
+          });
+        } else {
+          // Fallback for safety
+          const url = video?.dataset?.url || window.location.href;
+          if (window.fallbackCopyToClipboard) {
+            window.fallbackCopyToClipboard(url);
+          } else {
+            navigator.clipboard.writeText(url);
+          }
+        }
+        shareBtn.classList.add('success');
+        setTimeout(() => shareBtn.classList.remove('success'), 2000);
+      };
+      // Append to left rail for stable alignment
+      const leftRail = modal.querySelector('.reels-left-rail');
+      if (leftRail) {
+        leftRail.appendChild(shareBtn);
+      } else {
+        modal.appendChild(shareBtn);
+      }
+    }
+
     // ✅ NEW: Restore last position after render
     setTimeout(() => {
       if (window.restoreReelPosition) {
@@ -30,14 +75,18 @@ function openReelsModal() {
     console.error('❌ renderReelsFeed function not found');
   }
 
+  // 🧼 Contextual Cleanup: Hide site-wide center badge
+  const centerBadge = document.querySelector('.center-badge-container');
+  if (centerBadge) centerBadge.classList.add('context-hidden');
+
   // Setup close handlers
   setupModalCloseHandlers();
   // Setup navigation handlers
   setupNavigationHandlers();
-  
+
   // ✅ Initial arrow state update (after render)
   setTimeout(updateNavigationArrows, 100);
-  
+
   console.log('✅ Reels modal opened');
 }
 
@@ -45,18 +94,34 @@ function openReelsModal() {
 function closeReelsModal() {
   console.log('🎬 Closing reels modal...');
   const modal = document.getElementById('reels-modal');
+  const closeBtn = document.querySelector('.reels-close-btn');
   if (!modal) return;
 
-  // Hide modal
-  modal.classList.add('hidden');
-  // Re-enable body scroll
-  document.body.style.overflow = '';
+  // Render high-fidelity exit animation
+  if (closeBtn) {
+    closeBtn.classList.add('closing-animation');
+  }
 
-  // Clean up
-  removeModalCloseHandlers();
-  removeNavigationHandlers();
+  // Delay actual close to allow animation to play
+  setTimeout(() => {
+    // Hide modal
+    modal.classList.add('hidden');
+    // Re-enable body scroll
+    document.body.style.overflow = '';
 
-  console.log('✅ Reels modal closed');
+    // 🧼 Contextual Cleanup: Restore site-wide center badge
+    const centerBadge = document.querySelector('.center-badge-container');
+    if (centerBadge) centerBadge.classList.remove('context-hidden');
+
+    // Clean up
+    if (closeBtn) {
+      closeBtn.classList.remove('closing-animation');
+    }
+    removeModalCloseHandlers();
+    removeNavigationHandlers();
+
+    console.log('✅ Reels modal closed');
+  }, 300);
 }
 
 // Setup close event handlers
@@ -131,7 +196,7 @@ function setupNavigationHandlers() {
 // Remove navigation handlers
 function removeNavigationHandlers() {
   document.removeEventListener('keydown', handleArrowKeys);
-  
+
   const upBtn = document.querySelector('.reels-nav-btn.up');
   const downBtn = document.querySelector('.reels-nav-btn.down');
   if (upBtn) upBtn.removeEventListener('click', scrollToPreviousReel);

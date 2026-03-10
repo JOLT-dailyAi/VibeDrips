@@ -28,15 +28,15 @@ function saveReelPosition(reelUrl, pageIndex) {
  */
 function restoreReelPosition() {
   try {
+    // PHASE_3: Check for Warp Target (priority) or Saved URL
+    const warpAsin = localStorage.getItem('vibedrips-warp-target');
     const savedUrl = localStorage.getItem(STORAGE_KEY_REEL_URL);
     const savedPage = parseInt(localStorage.getItem(STORAGE_KEY_PAGE) || '0');
 
-    if (!savedUrl) {
-      console.log('💾 No saved position found');
+    if (!warpAsin && !savedUrl) {
+      console.log('💾 No saved position or warp target found');
       return;
     }
-
-    console.log(`💾 Restoring position: ${savedUrl}, page ${savedPage}`);
 
     // Get all reels data
     const reelsData = window.getReelsDataFromProducts ? window.getReelsDataFromProducts() : [];
@@ -45,35 +45,71 @@ function restoreReelPosition() {
       return;
     }
 
-    // Find reel index by URL
-    const reelIndex = reelsData.findIndex(reel => reel.url === savedUrl);
+    let targetIndex = -1;
+    let targetPage = 0;
 
-    if (reelIndex === -1) {
-      console.warn('⚠️ Saved reel URL not found, clearing localStorage');
-      localStorage.removeItem(STORAGE_KEY_REEL_URL);
-      localStorage.removeItem(STORAGE_KEY_PAGE);
+    if (warpAsin) {
+      // 🚀 WARP LOGIC: Find reel containing the target ASIN
+      reelsData.forEach((reel, rIdx) => {
+        const pIdx = reel.products.findIndex(p => p.asin === warpAsin);
+        if (pIdx !== -1) {
+          targetIndex = rIdx;
+          targetPage = pIdx;
+        }
+      });
+      console.log(`🚀 Warp target found: ASIN ${warpAsin} -> Reel ${targetIndex}, Page ${targetPage}`);
+      // Clear warp state immediately to prevent infinite "Warp" on refresh
+      localStorage.removeItem('vibedrips-warp-target');
+      localStorage.removeItem('vibedrips-warp-currency');
+    } else {
+      // Find reel index by URL
+      targetIndex = reelsData.findIndex(reel => reel.url === savedUrl);
+      targetPage = savedPage;
+    }
+
+    if (targetIndex === -1) {
+      console.warn('⚠️ Target not found');
+      if (!warpAsin) {
+        localStorage.removeItem(STORAGE_KEY_REEL_URL);
+        localStorage.removeItem(STORAGE_KEY_PAGE);
+      }
       return;
     }
 
-    console.log(`✅ Found reel at index ${reelIndex}, navigating...`);
+    // Scroll and Highlight
+    const container = document.querySelector('.reels-scroll-container');
+    const reelSection = document.querySelector(`[data-reel-index="${targetIndex}"]`);
 
-    // Scroll to saved reel section
-    const reelSection = document.querySelector(`[data-reel-index="${reelIndex}"]`);
     if (reelSection) {
+      console.log(`🎬 Scrolling to target section: ${targetIndex}`);
       reelSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      
-      // Restore carousel page after scrolling
-      setTimeout(() => {
-        const carousel = reelSection.querySelector('.products-carousel');
-        if (carousel && window.goToPage) {
-          window.goToPage(carousel, savedPage);
-          console.log(`✅ Restored to page ${savedPage}`);
-        }
-      }, 2000);  // ← Give it 2 full seconds
-    }
 
+      // 🏙️ Phase 9: Unified Reel Landing - Highlight the entire content card
+      setTimeout(() => {
+        const content = reelSection.querySelector('.reel-content');
+        if (content) {
+          console.log('✨ Applying Unified Reel Highlight');
+          content.classList.add('persistent-warp-highlight');
+        }
+
+        // 🛑 Step 10: Stop Inward Pulsating Glow
+        const overlay = document.querySelector('.warp-overlay');
+        if (overlay) {
+          overlay.style.opacity = '0';
+          setTimeout(() => overlay.remove(), 800);
+        }
+
+        // 🔗 PHASE_25: Conditional Post-Warp Landing (Automatic Modal Open)
+        const deeplinkMode = localStorage.getItem('vibedrips-deeplink-mode');
+        if (deeplinkMode === 'modal' && warpAsin && window.showProductModal) {
+          console.log('🚀 Deep-Link: Automatically opening product modal...');
+          window.showProductModal(warpAsin);
+        }
+        localStorage.removeItem('vibedrips-deeplink-mode');
+      }, 1500); // Wait for reel scroll to settle
+    }
   } catch (error) {
-    console.error('❌ Error restoring position:', error);
+    console.error('❌ Error in restoreReelPosition:', error);
   }
 }
 

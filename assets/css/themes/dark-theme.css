@@ -5,6 +5,13 @@ body.dark-theme {
     color: #FFFFFF;
 }
 
+/* Global Glass & Badge Parity */
+body.dark-theme .glass,
+body.dark-theme .glass-pill,
+body.dark-theme .center-badge {
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+}
+
 /* Currency Modal */
 body.dark-theme .currency-content {
     background: rgba(0, 0, 0, 0.9);
@@ -33,6 +40,7 @@ body.dark-theme .currency-select:focus {
 body.dark-theme .time-category {
     background: rgba(0, 0, 0, 0.9);
     color: #FFFFFF;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
 }
 
 body.dark-theme .time-category:hover {
@@ -46,17 +54,20 @@ body.dark-theme .time-category.active {
 
 body.dark-theme .filter-controls {
     background: rgba(0, 0, 0, 0.9);
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
 }
 
 body.dark-theme .filter-group input,
-body.dark-theme .filter-group select {
+body.dark-theme .filter-group select,
+body.dark-theme .filter-group .price-filter-trigger {
     background: #333333;
     color: #FFFFFF;
-    border-color: #555555;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
 }
 
 body.dark-theme .filter-group input:focus,
-body.dark-theme .filter-group select:focus {
+body.dark-theme .filter-group select:focus,
+body.dark-theme .filter-group .price-filter-trigger:focus {
     border-color: #667eea;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
@@ -73,6 +84,7 @@ body.dark-theme .stats-bar {
 
 body.dark-theme .stat-item {
     background: rgba(0, 0, 0, 0.9);
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
 }
 
 body.dark-theme .stat-number {
@@ -85,8 +97,9 @@ body.dark-theme .stat-label {
 
 /* Product Cards */
 body.dark-theme .product-card {
-    background: rgba(0, 0, 0, 0.9);  /* ← Remove !important */
-    color: #FFFFFF;  /* ← Remove !important */
+    background: rgba(0, 0, 0, 0.9);
+    color: #FFFFFF;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
 }
 
 body.dark-theme .product-card:hover {
@@ -177,14 +190,14 @@ body.dark-theme .no-products a:hover {
 /* Modals */
 body.dark-theme .simple-modal-content {
     background: rgba(0, 0, 0, 0.9);
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
 }
 
-body.dark-theme .simple-modal-header {
-    border-bottom: 1px solid #4a5568;
-}
+/* Header border removed - uses purple ribbon */
 
 body.dark-theme .simple-modal-header h2 {
     color: #FFFFFF;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 body.dark-theme .simple-modal-header button {
@@ -203,4 +216,25 @@ body.dark-theme .simple-modal-body p {
 
 body.dark-theme .simple-modal-body p strong {
     color: #667EEA;
+}
+
+/* Modal External Controls Parity */
+body.dark-theme .modal-external-controls .globe-toggle,
+body.dark-theme .modal-external-controls .reels-toggle,
+body.dark-theme .carousel-controls button,
+body.dark-theme .carousel-prev,
+body.dark-theme .carousel-next,
+body.dark-theme .carousel-counter,
+body.dark-theme .carousel-controls .counter {
+    background: rgba(0, 0, 0, 0.8) !important;
+    backdrop-filter: blur(var(--glass-blur)) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(150%) !important;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    z-index: 2000 !important;
+}
+
+body.dark-theme .modal-external-controls .globe-toggle:hover,
+body.dark-theme .modal-external-controls .reels-toggle:hover {
+    background: rgba(255, 255, 255, 0.25) !important;
 }

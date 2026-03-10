@@ -1,0 +1,156 @@
+# Project Philosophy: Feature Preservation & Architectural Constraints
+
+This document defines the core technical rules and the philosophy of "Feature Preservation" for this project. Adherence to these rules is mandatory to prevent regressions and loss of implementation time.
+
+## 🛡️ Feature Preservation Philosophy
+
+> [!IMPORTANT]
+> **Every line of code is a feature.**
+- **Strict Scope Adheresence**: You must only modify code that is directly within the current task's scope.
+- **CRUD Operations Risk**: Any Create, Update, or Delete operation on existing code can lead to severe regressions, breaking established features and causing massive project delays.
+- **Impact Notification Rule**: If a proposed change, update, or deletion might impact a feature or component outside the immediate scope, you **MUST** provide a detailed impact list separately and wait for **Accept/Reject approval** before proceeding.
+
+---
+
+## 🏗️ Architectural Constraints (Product Modal)
+
+### 1. The "No-Touch" Rule
+The internal HTML logic of `.simple-modal-content` is a **No-Touch Zone**. Modifications must only happen via wrappers, siblings, or non-propagating event handlers.
+
+### 2. Sliding Strip & Caching
+- **Windowed Caching**: Maintain exactly 5 products `[P-2, P-1, Active, N+1, N+2]` in the DOM.
+- **Hardware Acceleration**: Only use `translateX` for navigation. Position re-centering must happen instantly (`transition: none`) on `transitionend`.
+
+### 3. Elasticity & Feedback
+- **Dampening**: Apply a **0.25x multiplier** to drag distance at boundaries.
+- **Visual Feedback**: The Red Edge Glow and the Premium Blue Content Glow must be preserved and scaled via CSS variables.
+
+### 4. Theme & Variable Unity
+Design changes must always respect the 3-theme parity (**Classic**, **Glass**, **Dark/Light**). Root variables (e.g., `--glass-refraction`, `--glass-blur`) must be used for all styling to ensure global propagation.
+
+### 5. Event Isolation
+The `.modal-image-gallery` and other interactive elements must strictly use `event.stopPropagation()` to prevent unintended modal navigation.
+
+### 6. Button Standardization
+All buttons in the project **must** be sourced from `buttons.css`. If a required button style does not exist, it must be added to `buttons.css` first, then called from there. This ensures consistency, reusability, and maintainability across the entire project.
+
+---
+
+## 🏗️ Responsive & Safe-Area Constraints
+
+### 1. Global Safety Strategy
+The project uses a centralized Safe-Area strategy in `responsive.css`. All primary content wrappers must use the `.container` class to automatically inherit `env(safe-area-inset)` protection.
+
+### 2. Floating Element Positioning
+New floating or absolute-positioned elements (Close buttons, Floating Menus, Navigation bars) must utilize `env(safe-area-inset-...)` to prevent clipping by the **Notch** or **Dynamic Island**:
+- **Right Alignment**: `calc(OFFSET + env(safe-area-inset-right, 0px))`
+- **Top Alignment**: `calc(OFFSET + env(safe-area-inset-top, 0px))`
+
+### 3. Landscape Density Polish
+Mobile landscape is height-constrained. New components should include scaling overrides in `responsive.css` to reduce font sizes, padding, and gaps when `(orientation: landscape)` is active. This ensures the UI feels proportional and maintains a high information density without feeling "oversized."
+
+---
+
+
+### 7. Global Gesture & Intercept Logic
+- **The Sensitive Shield**: On mobile/iPad, the `.lightbox-iframe-shield` MUST be `pointer-events: auto` to prevent cross-domain iframes (YouTube, TikTok) from stealing swipe gestures.
+- **Tap Proxying**: Clicks on the shield must be handled via a "Tap Proxy" that forwards unmuting/playback commands to the underlying media, ensuring high sensitivity for both swiping and interaction.
+
+---
+
+## 🏗️ Mobile-First Media & Performance Constraints
+
+### 1. The "Fresh Injection" Rule (Autoplay)
+To preserve the "User Activation" privilege on mobile (iOS/Android), media elements (iframes/videos) should be injected via `innerHTML` or fresh node creation rather than updating `.src`. This ensures the browser treats the media as part of the initial gesture window.
+
+### 2. 5-Media Sliding Strip (Buffer Architecture)
+The Product Modal and Lightbox MUST utilize a 5-product sliding window `[P-2, P-1, Active, N+1, N+2]` for performance. 
+- **Active-Only Playback**: **CRITICAL.** Only the center (`Active`) element is permitted to play. All adjacent buffered items MUST be paused and muted.
+- **Preloading**: Synchronously load/buffer the 1-2 neighbors to provide instant swiping.
+- **Media Discipline (Unload)**: Any media beyond the 5-item buffer must be explicitly unloaded (`src = ""`) and paused to minimize memory pressure.
+
+### 3. User Intent Sovereignty (Sound)
+- **Manual Mute Rule**: If a user explicitly mutes a video via native controls, the global unmuting script MUST cease all unmuting attempts for the remainder of that specific media's lifecycle.
+- **Persistence vs. Intent**: Global `MediaState.isUnmuted()` indicates permission to *attempt* unmuting, but it must never override an active `userMuted` state on a specific element.
+
+### 3. Absolute 32px Lock (Landscape Toggles)
+Mobile landscape toggles (`.reels-toggle`, `.globe-toggle`) must maintain an **absolute** 32px width and height. 
+- **No Expansion**: Forbid `scale()` or `border-width` growth on selection to prevent overlapping nearby icons or causing layout "bloat."
+- **Specificity**: Use body-theme scoped selectors to override all global styles and enforce this lock.
+
+### 4. Hard State Policing (The "Anti-Revert" Rule)
+- **Problem**: Browsers occasionally reset unmuted video volume to `0.2` (20%) upon birth/activation.
+- **Constraint**: `MediaState.js` acts as the "State Police". It MUST intercept volume changes and, if the change matches the suspicious `0.2` revert and is NOT marked as a `manual` user interaction, it MUST forcibly restore the user's cached volume preference.
+- **Manual Sovereignty**: User-initiated volume changes (passed with `isManual: true`) are the ONLY changes permitted to update the global cached volume.
+
+### 6. Unified Media Handover (The "One-Stream" Rule)
+- **Reporting Requirement**: All foreground media components (Reels, Lightbox, Modals) MUST report their playback via `MediaState.reportMediaPlay(senderId)`.
+- **Handover Listener**: Every media-active component MUST listen for `vibedrips-media-play` and pause itself if the `senderId` does not match its own identifier.
+- **Single Source of Truth**: `MediaState.js` is the central dispatcher for site-wide media synchronization.
+
+### 7. Smart Engagement Pill Standards
+- **Cycle Duration**: MUST maintain a **22s loop** (2s In, 3s Stay, 2s Out, 15s Wait).
+- **Z-Index Lock**: MUST be pinned at `z-index: 11000`.
+- **Icon Requirement**: MUST use the red speaker SVG (VibeDrips Red: `#E53E3E`) to ensure accessibility and visibility across heavy background motion.
+
+### 8. Context Guard Selectors (The "Visibility" Rule)
+- **Constraint**: Detection logic for foreground components MUST use visibility-aware CSS selectors.
+- **Standard**: `document.querySelector('.simple-modal:not(.hidden)')` is the required pattern. 
+- **Danger**: Generic selectors like `.simple-modal` are FORBIDDEN for focus detection as they match hidden static roots in `index.html`, leading to permanent autoplay blocks (The "Desktop Regression").
+
+### 9. Asymmetric Platform Guards
+- **Constraint**: Major media "Focus Guards" (intended to solve mobile audio hijacking) MUST be restricted via `Device.isMobile()` if they negatively impact desktop autoplay.
+- **Why**: Desktop browsers do not suffer from the same aggressive background-audio-stealing bugs as iOS/Android; imposing mobile-strict focus rules on desktop constitutes a regression.
+
+---
+
+### 1. Nested Dropdown Group Rule
+Any dropdown item that serves as a container for secondary options (e.g., "Categories", "Brand Filter", "Collection Bundles") MUST implement a **Dual-Action Interaction**:
+- **Navigation Action**: MUST expand or collapse the nested sub-menu to reveal granular choices.
+- **Isolation Action**: MUST simultaneously update the background layout to an "Isolated View". This view MUST render child rails (partitions) for each nested option, preceded by a prominent **Group Header** (e.g., "📂 Categories") to clearly designate the parent-child relationship.
+- **Global View Exception**: When the parent group is NOT explicitly selected (e.g., in "Discovery (All Rails)"), child nodes SHOULD NOT be partitioned. Instead, all child values MUST be bundled into a single rail under the parent name (e.g., one "Categories" rail containing all departmental products).
+- **View All Navigation Rule**:
+    - **Parent/Group Rails**: The "View All" button MUST lead to the **Isolated Rails View** (partitions).
+    - **Leaf/Child Rails**: The "View All" button MUST lead to the **Grid View** focused on that specific item.
+- **Emoji Aesthetic Standard**: Emojis in rail and group headers MUST maintain their native, vibrant colors. They should be wrapped in a `.emoji` class to bypass any linear-gradient text-fill styles applied to headers.
+- **Group Header Requirement**: Sticky group headers are mandatory for **Isolated Views** to provide directional context as users scroll through child partitions.
+- **Visual Persistence**: The group header MUST maintain an `active` state as long as the view is isolated to its children, providing clear visual context to the user.
+- **Closure Rule**: Selecting a specific "leaf" item from the nested menu MUST apply that specific filter and close the entire dropdown. Clicking the Group Header itself MUST apply the broader isolated view but keep the menu open.
+
+---
+
+## 🏗️ Known Architectural Gaps (Waitlist)
+- **One-Way Slider Binding**: The header volume slider (Music Control) propagates its value to media, but media changes (e.g., native volume adjustments) do not reflect back to the slider.
+- **Muted Asymmetry**: The system allows volume persistence but intentionally enforces *Muted-First* behavior on iOS to comply with hardware policies, which can result in perceived state "mismatch" for users moving between platforms.
+### 10. Warp Navigation Standards
+When implementing "Warp" navigation (e.g., from Product Modal to Reels), you must ensure state persistence.
+- **Rule**: Use specific `localStorage` keys (e.g., `vibedrips-last-reel-url`) to preserve the user's focus during the transition.
+- **Rule**: Transitions must be smooth and non-disruptive to the underlying UI state.
+
+### 11. Highlighting Discipline
+To prevent user disorientation after a "Warp" or direct navigation event, the landing target must be visually emphasized.
+- **Rule**: The target element (e.g., a product card in a reel) must trigger a pulse animation or a temporary highlight state upon successful landing.
+- **Rule**: Use a consistent highlight color (e.g., `--color-primary`) to maintain brand parity.
+
+---
+
+## 🏗️ Service Worker & PWA Constraints
+
+### 1. The Method Guard Rule (Stability)
+- **Constraint**: `sw.js` MUST implement a Method Guard to bypass caching for non-GET requests.
+- **Why**: Attempting to cache `HEAD` requests (common in media pre-fetching) causes a `TypeError` that crashes the Service Worker lifecycle.
+
+### 2. Error Shielding (External Fetches)
+- **Constraint**: All external network fetches within the Service Worker MUST be wrapped in `.catch()` with a fallback response/null.
+- **Standard**: Provide `new Response(null, { status: 404 })` for failed external media lookups to prevent console noise and SW stalling.
+
+### 3. Version Tagging Protocol (Automation)
+- **Rule**: All automated `CACHE_VERSION` bumps MUST include a stateful suffix.
+- **Suffixes**:
+    - `-data`: Used by the CSV processor for product data changes.
+    - `-ui`: Used by the UI versioning workflow for CSS/JS/HTML changes.
+- **Handshake**: The Service Worker MUST respond to a `'GET_VERSION'` message from the client to support targeted update prompts.
+
+### 4. Zero-Reload Install Trigger
+- **Constraint**: The PWA install flow MUST NOT trigger a manual page reload (`location.reload()` or `href = href`).
+- **Standard**: Rely on manual instruction visibility triggers only.

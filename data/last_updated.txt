@@ -1,42 +1,93 @@
 VibeDrips Data Processing Summary
-Generated: 2025-12-17T13:49:43.585Z
+Generated: 2026-03-10T02:46:08.275Z
 
 📊 STATISTICS
-- Total Rows Processed: 9
-- Products Successfully Processed: 9
+- Total Rows Processed: 23
+- Products Successfully Processed: 23
 - Errors Encountered: 0
 - Success Rate: 100.0%
 
+⚠️ VALIDATION
+- Records Flagged: 3
+- Field Conflicts: 23
+- Error Breakdown:
+  • DISCOUNT_MISMATCH: 2
+  • INVALID_ORIGINAL: 1
+
 💰 CURRENCIES
-- Currencies Found: 1
-- Available: INR
+- Currencies Found: 2
+- Available: AUD, INR
 
 📦 CATEGORIES
-- Categories Found: 3
-- Top Categories: General, Electronics, Toys & Games
+- Categories Found: 4
+- Review Needed: 0 products
 
-🏷️ BRANDS
-- Brands Found: 5
-- Top Brands: Diamond Books, MyMirror Publishing House Pvt. Ltd., boAt, CodersParadise, woopme
+👤 INFLUENCERS
+- Products with influencers: 13
+- Unique influencers: 2
+
+💎 COLLECTIONS
+- Unique collections: 3
+
+🌿 SEASONS
+- Seasons Detected: 2
+- Review Needed: 3 products
+
+⚠️ ERRORS & VALIDATION
+- Products with errors: 3
+- Error rate: 13%
+
+🎬 DROPS
+- 🎬 Creator Picks: 23 products
+- 🌍 Global Drops: 0 products
+- 📱 Viral Reels: 7 products
+- 🆕 New Releases: 0 products
 
 📁 FILES BEFORE DELETION
+- UnderTheBag.json
+- brands.json
+- categories.json
+- categories_auto-detect.json
 - last_updated.txt
 - products.csv
+- recent-drops.json
+- seasons.json
+- seasons_auto-detect.json
 
 📁 FILES DELETED
-- None
-
-📁 FILES PRESENT AFTER DELETION
-- last_updated.txt
-- products.csv
-
+- UnderTheBag.json
+- brands.json
+- categories.json
+- categories_auto-detect.json
+- recent-drops.json
+- seasons.json
+- seasons_auto-detect.json
 
 📁 FILES GENERATED
-- products-INR.json (9 products)
-- currencies.json (manifest)
+- products-AUD.json (10 products)
+- products-INR.json (13 products)
+- categories.json & categories_auto-detect.json
+- seasons.json & seasons_auto-detect.json
+- influencers.json
+- collections.json
+- recent-drops.json
+- UnderTheBag.json
+- brands.json
+- errors.json
 
 📁 FINAL FILES PRESENT
+- UnderTheBag.json
+- brands.json
+- categories.json
+- categories_auto-detect.json
+- collections.json
 - currencies.json
+- errors.json
+- influencers.json
 - last_updated.txt
+- products-AUD.json
 - products-INR.json
 - products.csv
+- recent-drops.json
+- seasons.json
+- seasons_auto-detect.json

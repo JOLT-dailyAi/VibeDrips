@@ -51,23 +51,589 @@
 }
 
 .retry-button:hover {
-    background: #5a67d8;
+    background: #5568d3;
 }
 
-/* Product card specific button container */
-.product-actions {
+/* ======================================
+   UNIVERSAL CLOSE BUTTON - All Modals
+   Added: 2025-12-21
+   ====================================== */
+
+.modal-close-button {
+    /* Layout */
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
+    padding: 0;
     display: flex;
-    gap: 10px;
+    align-items: center;
+    justify-content: center;
+
+    /* Style - RED across all themes */
+    background: rgba(229, 62, 62, 0.1);
+    border: 2px solid #E53E3E;
+    border-radius: 8px;
+    color: #E53E3E;
+
+    /* Typography */
+    font-size: 16px;
+    /* Changed from 18px to 16px for emoji */
+    font-weight: bold;
+    line-height: 1;
+
+    /* Interaction */
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+
+    /* Reset */
+    outline: none;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .product-actions {
-        flex-direction: column;
+.modal-close-button:hover {
+    background: rgba(229, 62, 62, 0.2);
+    transform: rotate(90deg);
+    border-color: #C53030;
+}
+
+.modal-close-button:active {
+    transform: rotate(90deg) scale(0.95);
+    background: rgba(229, 62, 62, 0.3);
+}
+
+.modal-close-button:focus {
+    outline: 2px solid rgba(229, 62, 62, 0.4);
+    outline-offset: 2px;
+}
+
+/* NO theme overrides - red stays red */
+
+/* Touch Device Support */
+@media (hover: none) and (pointer: coarse) {
+    .modal-close-button:active {
+        background: rgba(229, 62, 62, 0.3);
+        transform: scale(0.95);
+    }
+}
+
+/* ========================================
+   TOUCH DEVICE: Close Button Delay
+   Prevents accidental closes on mobile
+   ======================================== */
+
+.modal-close-button.touch-delay {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+/* ========================================
+   TOUCH DEVICE: Close Button Animation
+   ======================================== */
+
+.modal-close-button.closing {
+    animation: rotateClose 0.3s ease forwards;
+}
+
+@keyframes rotateClose {
+    0% {
+        transform: rotate(0deg) scale(1);
     }
 
-    .amazon-button,
-    .details-button {
-        width: 100%;
+    100% {
+        transform: rotate(90deg) scale(1.1);
     }
+}
+
+/* ========================================
+   ARROW NAVIGATION BUTTONS
+   Reusable arrow buttons for lightbox, carousel, galleries
+   ======================================== */
+
+.arrow-button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    transition: all 0.2s ease;
+    padding: 0;
+}
+
+.arrow-button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.arrow-button:active {
+    transform: scale(0.95);
+}
+
+/* Size variants */
+.arrow-button.arrow-sm {
+    width: 40px;
+    height: 40px;
+}
+
+.arrow-button.arrow-lg {
+    width: 60px;
+    height: 60px;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .arrow-button {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* ========================================
+   REUSABLE WHITE CLOSE BUTTON
+   High-fidelity, animated circular close button
+   Used in Lightbox and future modals
+   ======================================== */
+
+.white-close-btn {
+    /* Layout & Base Style */
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    padding: 0;
+    outline: none;
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    flex-shrink: 0;
+}
+
+.white-close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: rotate(90deg);
+}
+
+.white-close-btn:active {
+    transform: scale(0.95);
+}
+
+/* Spin Exit Animation (Requires JS trigger) */
+.white-close-btn.closing-animation {
+    animation: whiteBtnSpinExit 0.3s ease forwards;
+    pointer-events: none;
+}
+
+@keyframes whiteBtnSpinExit {
+    0% {
+        transform: rotate(0deg) scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: rotate(180deg) scale(1.2);
+        opacity: 0;
+    }
+}
+
+/* Responsive Sizing */
+@media (max-width: 768px) {
+    .white-close-btn {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* ========================================
+   REUSABLE CAROUSEL DOTS
+   Standard indicators for all carousels
+   ======================================== */
+
+/* Glass Pill Utility - For Indicators & Overlays */
+.glass-pill {
+    /* Harmonized with .modal-section-header but with pill radius */
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, var(--glass-refraction)) 0%,
+            rgba(255, 255, 255, calc(var(--glass-refraction) / 2)) 100%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    border-radius: var(--glass-border-radius, 20px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    padding: 8px 18px;
+    /* Refined padding */
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s ease, transform 0.15s ease-out;
+    /* Snappier & Smoother */
+}
+
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+    /* The True Sweet Spot */
+    padding: 8px 12px;
+    flex-shrink: 0;
+    z-index: 10;
+    transition: all 0.15s ease-out;
+    /* Snappier */
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: all 0.1s ease-out;
+    /* Snappy state change */
+    pointer-events: auto;
+}
+
+.dot:hover {
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(1.2);
+}
+
+.dot.active {
+    background: white;
+    width: 26px;
+    /* Toned down for optimal weighting */
+    border-radius: 5px;
+}
+
+/* Mobile dot variants */
+@media (max-width: 767px) {
+    .dot {
+        width: 6px;
+        height: 6px;
+    }
+
+    .dot.active {
+        width: 18px;
+    }
+}
+
+/* ========================================
+   GLOBE ROTATION BUTTON
+   Represents Global Availability
+   ======================================== */
+
+.globe-toggle {
+    /* Layout & Base Style */
+    width: 42px;
+    height: 42px;
+    background: rgba(var(--color-primary-rgb), 0.1);
+    border: 0.8px solid rgba(var(--color-primary-rgb), 0.6);
+    /* Precise user-requested thickness */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    padding: 0;
+    font-size: 26px;
+    position: relative;
+    overflow: hidden;
+}
+
+.globe-toggle:hover {
+    transform: scale(1.1);
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+/* IDLE CYCLE (1-3): 🌏 -> 🌍 -> 🌎 (Pace: 2s per icon, 6s loop) */
+.globe-toggle span {
+    position: absolute;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transform: translate(-14px, 0.5px) scale(1);
+    /* Start from West (Left) - Adjusted slightly DOWN (+0.5px) for geometric centering */
+    line-height: 1;
+    transition: all 0.5s ease;
+    animation: globeCycle 6s infinite;
+    pointer-events: none;
+}
+
+.globe-toggle:not(.active) span {
+    display: flex;
+}
+
+.globe-toggle span:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.globe-toggle span:nth-child(2) {
+    animation-delay: 2s;
+}
+
+.globe-toggle span:nth-child(3) {
+    animation-delay: 4s;
+}
+
+/* ✈️ ON STATE: Static Flight (Mirroring Reels Close pattern) */
+.globe-toggle.active span {
+    display: none !important;
+}
+
+.globe-toggle.active::before {
+    content: '✈️';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+@keyframes globeCycle {
+    0% {
+        opacity: 0;
+        transform: translate(-14px, 0.5px);
+        /* Start: West */
+    }
+
+    5%,
+    33.33% {
+        opacity: 1;
+        transform: translate(0, 0.5px);
+        /* Resting State: Center (Geometric Adjustment) */
+    }
+
+    38.33%,
+    100% {
+        opacity: 0;
+        transform: translate(14px, 0.5px);
+        /* End: East */
+    }
+}
+
+/* Glass Theme Override */
+body.glass-theme .globe-toggle {
+    background: rgba(255, 255, 255, var(--glass-refraction)) !important;
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    border: 0.8px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+body.glass-theme .globe-toggle:hover {
+    background: rgba(255, 255, 255, calc(var(--glass-refraction) + 0.05)) !important;
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+
+
+
+
+/* Light Theme Override */
+body.light-theme .globe-toggle {
+    background: var(--color-white);
+    border-color: rgba(var(--color-primary-rgb), 0.3);
+    box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.15);
+}
+
+body.light-theme .globe-toggle:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+/* ========================================
+   REELS ROTATION BUTTON (🎬 -> 🎞️ -> 📱 -> 🎞️)
+   ======================================== */
+
+.reels-toggle {
+    /* Layout & Base Style (Parity with globe-toggle) */
+    width: 42px;
+    height: 42px;
+    background: rgba(var(--color-primary-rgb), 0.1);
+    border: 0.8px solid rgba(var(--color-primary-rgb), 0.6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    padding: 0;
+    font-size: 26px;
+    position: relative;
+    overflow: hidden;
+}
+
+.reels-toggle:hover {
+    transform: scale(1.1);
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+/* Default state: Internal spans animate immediately */
+.reels-toggle span {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transform: translate(0, 12.5px) scale(1);
+    /* Start position adjusted for alignment (+0.5px shift) */
+    line-height: 1;
+    transition: all 0.5s ease;
+    animation: reelsCycle 8s infinite;
+}
+
+/* Stagger the 4 stages (2s per emoji) */
+.reels-toggle span:nth-child(1) {
+    animation-delay: 0s;
+}
+
+/* 🎬 */
+.reels-toggle span:nth-child(2) {
+    animation-delay: 2s;
+}
+
+/* 🎞️ */
+.reels-toggle span:nth-child(3) {
+    animation-delay: 4s;
+}
+
+/* 📱 */
+.reels-toggle span:nth-child(4) {
+    animation-delay: 6s;
+}
+
+/* 🎞️ */
+
+@keyframes reelsCycle {
+    0% {
+        opacity: 0;
+        transform: translateY(14.5px);
+    }
+
+    5%,
+    25% {
+        opacity: 1;
+        transform: translateY(0.5px);
+        /* Centered resting position (Geometric Adjustment) */
+    }
+
+    30%,
+    100% {
+        opacity: 0;
+        transform: translateY(-15.5px);
+    }
+}
+
+/* Theme support parity for Reels */
+body.glass-theme .reels-toggle {
+    background: rgba(255, 255, 255, var(--glass-refraction)) !important;
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    border: 0.8px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+
+
+
+
+/* Light Theme Override */
+body.light-theme .reels-toggle {
+    background: var(--color-white);
+    border-color: rgba(var(--color-primary-rgb), 0.3);
+    box-shadow: 0 4px 12px rgba(var(--color-primary-rgb), 0.15);
+}
+
+body.light-theme .reels-toggle:hover {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+/* ========================================
+   MEDIA OVERLAY BUTTONS
+   ======================================== */
+
+.zoom-btn {
+    pointer-events: auto;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.zoom-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.zoom-btn-mirror {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    padding: 0 15px;
+    animation: zoomPulse 2s infinite;
+}
+
+@keyframes zoomPulse {
+    0% {
+        opacity: 0.8;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.02);
+    }
+
+    100% {
+        opacity: 0.8;
+        transform: scale(1);
+    }
+}
+
+.zoom-btn-mirror svg {
+    color: #E53E3E;
 }

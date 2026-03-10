@@ -47,7 +47,7 @@ body.glass-theme .time-category {
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     border: 1px solid rgba(255, 255, 255, 0.3);
     color: white;
-    box-shadow: 
+    box-shadow:
         0 4px 15px rgba(0, 0, 0, 0.1),
         inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
@@ -62,21 +62,25 @@ body.glass-theme .time-category.active {
     background: rgba(255, 255, 255, calc(var(--glass-refraction) + 0.1));
     border: 1px solid rgba(255, 255, 255, 0.6);
     color: white;
-    box-shadow: 
+    box-shadow:
         0 8px 25px rgba(0, 0, 0, 0.15),
         inset 0 2px 0 rgba(255, 255, 255, 0.7);
 }
 
-/* Filter Controls */
+/* Filter Controls - Standardized Flex Layout */
 .filter-controls {
-    display: grid;
-    grid-template-columns: auto auto auto;
-    gap: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
     background: rgba(255, 255, 255, 0.9);
-    padding: 5px;
+    padding: 8px 12px;
     border-radius: 15px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
+    width: fit-content;
+    margin: 10px auto;
+    /* Force block-level centering */
 }
 
 /* Glass theme - Filter Controls Container */
@@ -85,38 +89,37 @@ body.glass-theme .filter-controls {
     backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 
+    box-shadow:
         0 4px 20px rgba(0, 0, 0, 0.1),
         inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    width: fit-content;
 }
 
 .filter-group input,
-.filter-group select {
-    width: 160px;
-    padding: 6px;
-    border: 2px solid #e2e8f0;
+.filter-group select,
+.filter-group .price-filter-trigger {
+    min-width: 120px;
+    width: auto;
+    height: 38px;
+    padding: 6px 12px;
+    border: 2px solid #185a9d;
+    /* Standard Blue Border for Light Theme */
     border-radius: 8px;
     font-size: 14px;
-    transition: border-color 0.3s;
+    transition: all 0.3s;
     background: #FFFFFF;
     color: #333;
+    box-sizing: border-box;
 }
 
 #search {
-    width: 300px;
-}
-
-#category-filter {
-    width: 160px;
-}
-
-#price-sort {
-    width: 160px;
+    width: 240px;
 }
 
 /* Glass theme - Filter Inputs */
 body.glass-theme .filter-group input,
-body.glass-theme .filter-group select {
+body.glass-theme .filter-group select,
+body.glass-theme .filter-group .price-filter-trigger {
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
@@ -134,14 +137,16 @@ body.glass-theme .filter-group select option {
 }
 
 .filter-group input:focus,
-.filter-group select:focus {
+.filter-group select:focus,
+.filter-group .price-filter-trigger:focus {
     outline: none;
     border-color: #667eea;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 body.glass-theme .filter-group input:focus,
-body.glass-theme .filter-group select:focus {
+body.glass-theme .filter-group select:focus,
+body.glass-theme .filter-group .price-filter-trigger:focus {
     border-color: rgba(255, 255, 255, 0.5);
     box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
 }
@@ -155,7 +160,8 @@ body.glass-theme .filter-group select:focus {
 /* Responsive */
 @media (max-width: 768px) {
     .time-categories {
-        justify-content: flex-start;
+        justify-content: center;
+        /* Center aligned as requested */
         overflow-x: auto;
         padding: 5px 0;
         gap: 8px;
@@ -168,46 +174,50 @@ body.glass-theme .filter-group select:focus {
     }
 
     .filter-controls {
-        grid-template-columns: auto auto auto;
-        gap: 5px;
-        padding: 5px;
+        gap: 8px;
+        padding: 6px 12px;
+        flex-wrap: nowrap !important;
+        overflow-x: auto;
+        justify-content: flex-start;
+        max-width: 95vw;
+        scrollbar-width: none;
+        /* Firefox */
+    }
+
+    .filter-controls::-webkit-scrollbar {
+        display: none;
+        /* Chrome/Safari */
     }
 
     .filter-group input,
-    .filter-group select {
-        width: 120px;
-        padding: 6px;
-        font-size: 14px;
+    .filter-group select,
+    .filter-group .price-filter-trigger {
+        min-width: 100px;
+        width: auto;
+        height: 34px;
+        padding: 4px 8px;
+        font-size: 13px;
     }
 
     #search {
-        width: 200px;
-    }
-
-    #category-filter {
-        width: 120px;
-    }
-
-    #price-sort {
-        width: 120px;
+        width: 160px;
     }
 }
 
 @media (max-width: 480px) {
+    .filter-controls {
+        gap: 5px;
+    }
+
     .filter-group input,
-    .filter-group select {
-        width: 100px;
+    .filter-group select,
+    .filter-group .price-filter-trigger {
+        min-width: 80px;
+        width: auto;
+        font-size: 12px;
     }
 
     #search {
-        width: 150px;
-    }
-
-    #category-filter {
-        width: 100px;
-    }
-
-    #price-sort {
-        width: 100px;
+        width: 120px;
     }
 }

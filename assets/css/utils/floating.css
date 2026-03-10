@@ -40,7 +40,7 @@ body.glass-theme #theme-toggle {
     backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 
+    box-shadow:
         0 8px 32px rgba(0, 0, 0, 0.1),
         inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
@@ -95,7 +95,7 @@ body.glass-theme .social-float .currency-display {
     backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 
+    box-shadow:
         0 8px 32px rgba(0, 0, 0, 0.1),
         inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
@@ -127,6 +127,62 @@ body.dark-theme .social-float .currency-display.active {
 
 body.dark-theme .social-float .currency-display.active span {
     color: white;
+}
+
+/* ========================================
+   FLOATING GLASS NAVIGATION UTILITY
+   Premium Floating Buttons with Chevrons
+   ======================================== */
+
+.floating-glass-nav {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    /* ✅ Sync with Amazon Branding */
+    background: linear-gradient(135deg, #ff9500 0%, #ff6b00 100%);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(255, 149, 0, 0.4);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: all 0.15s ease-out;
+    z-index: 100;
+    /* Ensure it stays on top */
+    pointer-events: auto;
+}
+
+.floating-glass-nav i,
+.floating-glass-nav svg {
+    width: 24px;
+    height: 24px;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    fill: none;
+    transition: transform 0.2s ease;
+}
+
+.floating-glass-nav:hover {
+    transform: scale(1.1);
+    background: linear-gradient(135deg, #ffaa00 0%, #ff7700 100%);
+    box-shadow: 0 8px 25px rgba(255, 149, 0, 0.6);
+}
+
+.floating-glass-nav:active {
+    transform: scale(0.95);
+}
+
+/* Specific button placements - using absolute by default if inside relative parent */
+.floating-glass-nav.prev {
+    left: 10px;
+}
+
+.floating-glass-nav.next {
+    right: 10px;
 }
 
 
@@ -194,7 +250,7 @@ body.glass-theme .linktree-button {
     backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 
+    box-shadow:
         0 8px 32px rgba(0, 0, 0, 0.1),
         inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
@@ -235,7 +291,7 @@ body.glass-theme .music-control-button {
     backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 
+    box-shadow:
         0 8px 32px rgba(0, 0, 0, 0.1),
         inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
@@ -356,10 +412,27 @@ body.dark-theme .volume-panel {
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 999;
+    z-index: 1002;
+    /* Above side floats (1000) */
     display: flex;
     justify-content: center;
     align-items: center;
+    pointer-events: none;
+    /* Allow interaction with underlying elements if needed */
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* 🧼 Contextual Cleanup: Hide site-wide badge on Modals/Reels to prevent overlap/redundancy */
+.center-badge-container.context-hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+}
+
+/* 📱 PWA Mode: Strictly hide install elements in standalone mode */
+body.pwa-mode #install-badge,
+body.pwa-mode .deeplink-nudge {
+    display: none !important;
 }
 
 .center-badge {
@@ -383,6 +456,8 @@ body.dark-theme .volume-panel {
     text-overflow: ellipsis;
     max-width: calc(100vw - 40px);
     font-family: inherit;
+    pointer-events: auto;
+    /* Re-enable for the actual button */
 }
 
 .center-badge:hover {
@@ -402,7 +477,7 @@ body.glass-theme .center-badge {
     -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
     border: 1px solid rgba(255, 255, 255, 0.3);
     color: white;
-    box-shadow: 
+    box-shadow:
         0 8px 32px rgba(0, 0, 0, 0.1),
         inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
@@ -515,7 +590,8 @@ body.glass-theme .credits-tooltip-divider {
     font-size: 13px;
     color: #667eea;
     text-decoration: none;
-    display: inline;  /* ← CHANGED from inline-flex */
+    display: inline;
+    /* ← CHANGED from inline-flex */
     transition: color 0.2s ease;
 }
 
@@ -682,17 +758,24 @@ body.dark-theme .inline-icon {
     transform: scale(1.02);
 }
 
+/* Volume Panel Hiding for Mobile/Tablets */
+@media (max-width: 1024px) {
+    .volume-panel {
+        display: none !important;
+    }
+}
+
 /* Mobile optimization */
 @media (max-width: 768px) {
     .install-modal-content {
         max-width: 90%;
         padding: 24px 20px;
     }
-    
+
     .install-modal-content h3 {
         font-size: 18px;
     }
-    
+
     .install-instructions {
         font-size: 14px;
     }
@@ -701,6 +784,7 @@ body.dark-theme .inline-icon {
 
 /* Mobile responsive */
 @media (max-width: 768px) {
+
     .social-float,
     .media-float {
         bottom: 15px;
@@ -772,19 +856,22 @@ body.dark-theme .inline-icon {
         bottom: 15px;
         max-width: calc(100vw - 160px);
     }
-    
-    .center-badge-container > div {
+
+    .center-badge-container>div {
         display: flex;
         gap: 8px;
         flex-wrap: nowrap;
-        justify-content: center; /* Center the buttons */
+        justify-content: center;
+        /* Center the buttons */
     }
-    
+
     .center-badge {
         padding: 8px 12px;
         font-size: 11px;
-        width: auto;           /* ← CHANGED: was max-width: 100% */
-        min-width: fit-content; /* ← NEW: Allow content to determine width */
+        width: auto;
+        /* ← CHANGED: was max-width: 100% */
+        min-width: fit-content;
+        /* ← NEW: Allow content to determine width */
         height: 45px;
         display: inline-flex;
         align-items: center;

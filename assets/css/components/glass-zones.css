@@ -1,0 +1,289 @@
+/* ============================================
+   GLASS ZONES - Modal Side Navigation
+   Version: 1.0.0
+   Extends .arrow-button from buttons.css
+   Matches .modal-section-header glow style
+   ============================================ */
+
+/* Glass Zone Base - Extends .arrow-button */
+.glass-zone {
+    /* Override .arrow-button positioning */
+    position: absolute;
+    top: 50%;
+    /* Use translate3d for performance and to allow dynamic X-offset from JS */
+    transform: translate3d(var(--lever-x, 0), -50%, 0);
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+        background 0.3s ease,
+        box-shadow 0.3s ease,
+        opacity 0.3s ease;
+    will-change: transform;
+
+    /* Override dimensions (rectangular instead of circular) */
+    width: 60px;
+    height: calc(100% - 60px);
+    /* 30px gap from top/bottom */
+    border-radius: 12px;
+    /* Override circular from .arrow-button */
+
+    /* Match .modal-section-header glow */
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.05) 0%,
+            rgba(255, 255, 255, 0.02) 100%) !important;
+    backdrop-filter: blur(var(--glass-blur, 10px)) saturate(180%);
+    -webkit-backdrop-filter: blur(var(--glass-blur, 10px)) saturate(180%);
+
+    /* Section-header matching glow */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: none;
+    /* Remove .arrow-button border */
+
+    /* Blue accent border on sides */
+    z-index: 1003;
+}
+
+.glass-zone.left {
+    left: calc(130px + env(safe-area-inset-left, 30px));
+    border-left: 3px solid rgba(90, 75, 255, 0.6);
+}
+
+.glass-zone.right {
+    right: calc(130px + env(safe-area-inset-right, 30px));
+    border-right: 3px solid rgba(90, 75, 255, 0.6);
+}
+
+/* Icon Styling */
+.glass-zone svg {
+    width: 28px;
+    height: 28px;
+    stroke: rgba(255, 255, 255, 0.9);
+    stroke-width: 2.5;
+    transition: all 0.3s ease;
+}
+
+/* Prohibited Icon (⛔) - Hidden by default */
+.glass-zone .prohibited-icon {
+    display: none;
+    font-size: 28px;
+    transition: all 0.3s ease;
+}
+
+/* Icon Swap at Boundaries */
+.glass-zone.disabled svg {
+    display: none;
+    /* Hide arrow */
+}
+
+.glass-zone.disabled .prohibited-icon {
+    display: block;
+    /* Show prohibited icon */
+}
+
+/* Hover State */
+.glass-zone:hover {
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.08) 0%,
+            rgba(255, 255, 255, 0.04) 100%) !important;
+    transform: translate3d(var(--lever-x, 0), -50%, 0) scale(1.05);
+    box-shadow: 0 4px 12px rgba(90, 75, 255, 0.3);
+}
+
+.glass-zone:hover svg {
+    stroke: rgba(255, 255, 255, 1);
+    transform: scale(1.1);
+}
+
+/* Active State */
+.glass-zone:active {
+    /* Dimensional scale removed to prevent layout contention during navigation start */
+    transform: translateX(var(--lever-x, 0)) translateY(-50%);
+}
+
+.glass-zone:focus {
+    outline: 2px solid rgba(90, 75, 255, 0.5);
+    outline-offset: 2px;
+}
+
+/* Disabled State - Boundary Indicator */
+.glass-zone.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: all;
+    /* Allow clicks for pulse animation */
+    background: linear-gradient(135deg,
+            rgba(255, 100, 100, 0.08) 0%,
+            rgba(255, 100, 100, 0.04) 100%) !important;
+}
+
+.glass-zone.disabled.left {
+    border-left: 3px solid rgba(255, 100, 100, 0.6);
+}
+
+.glass-zone.disabled.right {
+    border-right: 3px solid rgba(255, 100, 100, 0.6);
+}
+
+.glass-zone.disabled svg {
+    stroke: rgba(255, 100, 100, 0.7);
+}
+
+/* Boundary Pulse on Click */
+@keyframes boundaryPulse {
+
+    0%,
+    100% {
+        box-shadow:
+            0 0 15px rgba(255, 100, 100, 0.3),
+            inset 0 0 10px rgba(255, 100, 100, 0.15);
+    }
+
+    50% {
+        box-shadow:
+            0 0 30px rgba(255, 100, 100, 0.6),
+            inset 0 0 20px rgba(255, 100, 100, 0.3);
+    }
+}
+
+.glass-zone.disabled.pulse {
+    animation: boundaryPulse 1s ease-in-out;
+}
+
+/* Rubber Band Wobble on Release */
+@keyframes glassWobble {
+    0% {
+        transform: translate3d(0, -50%, 0);
+    }
+
+    25% {
+        transform: translate3d(var(--wobble-dir, -8px), -50%, 0);
+    }
+
+    50% {
+        transform: translate3d(var(--wobble-rebound, 4px), -50%, 0);
+    }
+
+    75% {
+        transform: translate3d(var(--wobble-settle, -2px), -50%, 0);
+    }
+
+    100% {
+        transform: translate3d(0, -50%, 0);
+    }
+}
+
+.glass-zone.wobbling {
+    animation: glassWobble 0.4s ease-in-out;
+}
+
+/* Boundary Glow Overlay - Proportional to Lever Pull */
+.boundary-glow-overlay {
+    position: absolute;
+    top: 0;
+    width: 0%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1002;
+    opacity: 0;
+    transition: opacity 0.2s ease, width 0.2s ease;
+    /* Ensure visibility on mobile even if .glass-zone is hidden */
+    display: block !important;
+}
+
+.boundary-glow-overlay.left {
+    left: 0;
+    background: linear-gradient(to right,
+            rgba(var(--glow-rgb, 90, 75, 255), var(--glow-intensity, 0)) 0%,
+            transparent 100%);
+}
+
+.boundary-glow-overlay.right {
+    right: 0;
+    background: linear-gradient(to left,
+            rgba(var(--glow-rgb, 90, 75, 255), var(--glow-intensity, 0)) 0%,
+            transparent 100%);
+}
+
+.boundary-glow-overlay.active {
+    opacity: 1;
+}
+
+/* Protection: Disable selection during drag */
+.dynamic-modal.dragging {
+    user-select: none !important;
+    -webkit-user-select: none !important;
+}
+
+.modal-nav-container {
+    cursor: grab;
+}
+
+.dynamic-modal.dragging .modal-nav-container {
+    cursor: grabbing;
+}
+
+/* Mobile - Hide Glass Zones */
+@media (max-width: 768px) {
+    .glass-zone {
+        display: none;
+    }
+}
+
+/* Tablet - Smaller Glass Zones */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .glass-zone {
+        width: 50px;
+        height: calc(100% - 80px);
+    }
+
+    .glass-zone.left {
+        left: 20px;
+    }
+
+    .glass-zone.right {
+        right: 20px;
+    }
+
+    .glass-zone svg {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+/* Desktop - Optimal Glass Zones */
+@media (min-width: 1025px) {
+    .glass-zone {
+        width: 60px;
+        height: calc(100% - 60px);
+    }
+
+    .glass-zone.left {
+        left: 30px;
+    }
+
+    .glass-zone.right {
+        right: 30px;
+    }
+}
+
+/* ========================================
+   V5 REFINE: MOBILE LANDSCAPE OVERRIDE
+   Prevents Tablet/Desktop rules from clipping 
+   levers on mobile landscape.
+   ======================================== */
+@media (max-width: 950px) and (orientation: landscape) {
+    .glass-zone {
+        display: flex !important;
+        /* Force visible */
+        width: 40px !important;
+        /* Narrower levers V8 */
+        height: calc(100% - 100px) !important;
+        /* Slightly more vertical gap */
+    }
+
+    .glass-zone.left {
+        left: calc(15px + env(safe-area-inset-left, 20px)) !important;
+    }
+
+    .glass-zone.right {
+        right: calc(15px + env(safe-area-inset-right, 20px)) !important;
+    }
+}

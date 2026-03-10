@@ -1,0 +1,94 @@
+/* components/deeplink-nudge.css - Deep-link landing nudge */
+
+.deeplink-nudge {
+    position: fixed;
+    bottom: 100px;
+    /* Above the media-float */
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    z-index: 10001;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 40px;
+    padding: 8px 10px 8px 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.deeplink-nudge.visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+    pointer-events: auto;
+}
+
+.nudge-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.nudge-btn {
+    background: white;
+    color: #2E1D80;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.nudge-btn:hover {
+    transform: scale(1.05);
+    background: #f0f0f0;
+}
+
+/* Light theme overrides */
+.light-theme .deeplink-nudge {
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.light-theme .nudge-content {
+    color: #2E1D80;
+}
+
+.light-theme .nudge-btn {
+    background: #2E1D80;
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .deeplink-nudge {
+        bottom: 120px;
+        width: 90%;
+        max-width: 380px;
+        padding: 8px 8px 8px 15px;
+        white-space: normal;
+        border-radius: 25px;
+    }
+
+    .nudge-content {
+        font-size: 13px;
+        line-height: 1.2;
+    }
+
+    .nudge-btn {
+        padding: 8px 15px;
+    }
+}

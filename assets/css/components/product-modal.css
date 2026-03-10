@@ -7,7 +7,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7); /* Dark overlay - same as install modal */
+    background: rgba(0, 0, 0, 0.7);
+    /* Dark overlay - same as install modal */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -28,8 +29,203 @@
     justify-content: center;
     align-items: center;
     z-index: 1000;
-    background: rgba(0, 0, 0, 0.7); /* Dark overlay */
+    background: rgba(0, 0, 0, 0.7);
+    /* Dark overlay */
 }
+
+/* ============================================
+   PHASE_1: Modal Navigation & Sliding Strip
+   ============================================ */
+
+/* Modal Layout Wrapper - The MASTER ANCHOR for alignment */
+.modal-layout-wrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 1200px;
+    z-index: 3000;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    /* Align icon wrapper to the right */
+    border-radius: 24px;
+    /* Unify shadow shape and fix corners */
+    overflow: visible;
+}
+
+/* Modal Navigation Container (The Content Box) */
+.modal-nav-container {
+    position: relative;
+    width: 100% !important;
+    height: 100% !important;
+    pointer-events: auto;
+    display: block;
+    overflow: visible !important;
+    border-radius: 24px;
+    background: transparent !important;
+    /* Ensure no corner bleed */
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        0 0 60px 15px rgba(90, 75, 255, 0.45),
+        0 0 120px 25px rgba(90, 75, 255, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Sliding Viewport - Clips the content while keeping container visible */
+.modal-sliding-viewport {
+    width: 100%;
+    height: 100%;
+    overflow: hidden !important;
+    border-radius: 24px;
+    isolation: isolate;
+}
+
+
+/* ============================================
+   MODAL EXTERNAL CONTROLS (Globe & Reels)
+   Positioned precisely above the header
+   ============================================ */
+.modal-external-controls {
+    position: absolute;
+    bottom: calc(100% + 6px);
+    /* 6px gap above header */
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    padding: 4px;
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+/* Align Globe with the close button area (compensated for container padding) */
+.modal-external-controls .globe-toggle,
+.modal-external-controls .reels-toggle {
+    pointer-events: auto;
+    flex-shrink: 0;
+}
+
+/* Match Header Breakpoints for perfect alignment */
+@media (max-width: 768px) and (orientation: portrait) {
+    .modal-layout-wrapper {
+        width: 95%;
+        top: 51%;
+        /* Subtle 1% shift to clear Dynamic Island */
+    }
+
+    .dynamic-modal .modal-nav-indicator {
+        bottom: 2vh;
+        /* Balanced gap to prevent overlap */
+    }
+}
+
+@media (max-width: 480px) and (orientation: portrait) {
+    .modal-layout-wrapper {
+        width: 98%;
+        top: 51%;
+        /* Consistent 1% shift for small screens */
+    }
+
+    .dynamic-modal .modal-nav-indicator {
+        bottom: 2vh;
+        /* Consistent spacing */
+    }
+}
+
+/* Mobile Landscape Alignment */
+@media (max-width: 950px) and (orientation: landscape) {
+    .modal-layout-wrapper {
+        width: 85% !important;
+        max-width: calc(100vw - env(safe-area-inset-left, 30px) - env(safe-area-inset-right, 30px) - 120px) !important;
+        height: 92vh !important;
+    }
+
+    .modal-external-controls {
+        position: absolute;
+        bottom: calc(100% + 2px);
+        /* Tighten gap for low height */
+        right: 0;
+        /* Align flush with card edge */
+        padding: 2px;
+        gap: 8px;
+    }
+
+    .modal-external-controls .globe-toggle,
+    .modal-external-controls .reels-toggle,
+    .modal-external-controls .share-toggle {
+        width: 32px;
+        height: 32px;
+        font-size: 20px;
+    }
+}
+
+/* Relocated Indicator - Outside the 80vh content area */
+.dynamic-modal .modal-nav-indicator {
+    position: absolute;
+    bottom: 3vh;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1010;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: normal;
+    /* Fix bottom-alignment of text */
+    gap: 9px;
+    /* Synchronized sweet-spot gap */
+    pointer-events: auto;
+    transition: opacity 0.2s ease, transform 0.15s ease-out;
+    /* Snappier & Smoother */
+}
+
+/* Dots specific layout inside hybrid indicator */
+.modal-nav-indicator .dot {
+    margin: 0;
+    /* Clear any residual margins */
+}
+
+/* Sliding Strip (Flex Container) */
+.modal-sliding-strip {
+    display: flex;
+    width: 500%;
+    /* 5 products cached */
+    height: 100%;
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: transform;
+    /* transform: translateX(-40%) center position set by JS */
+
+    /* GPU HARDENING: Prevents jitter and layout recalculation on mobile */
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+}
+
+/* No transition during teleport */
+.modal-sliding-strip.no-transition {
+    transition: none !important;
+}
+
+/* Each item inside strip is exactly 1/5th of the 500% strip */
+.modal-sliding-strip .simple-modal-content {
+    flex: 0 0 20% !important;
+    width: 20% !important;
+    max-width: 20% !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    z-index: auto !important;
+    position: relative;
+    overflow-x: hidden;
+
+    /* LAYER OPTIMIZATION: Removed redundant child GPU layers to restore FPS */
+    /* Only the strip itself should be hardware-accelerated for max performance */
+}
+
+/* END_PHASE_1 */
 
 /* Modal Overlay - Clickable background */
 .modal-overlay {
@@ -46,63 +242,188 @@
 /* Modal Content - Centered, above overlay */
 .simple-modal-content {
     background: white;
-    border-radius: 16px;
+    border-radius: 24px;
     width: 90%;
     max-width: 1200px;
     height: auto;
     min-height: 60vh;
     max-height: 80vh;
     overflow-y: auto;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    overflow-x: hidden;
+    /* Eliminate horizontal scrollbar */
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        0 0 60px 15px rgba(90, 75, 255, 0.45),
+        0 0 120px 25px rgba(90, 75, 255, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
     margin: 20px;
     padding: 0;
     z-index: 1001;
     position: relative;
+    box-sizing: border-box;
+    /* Prevent padding overflow */
 }
 
-/* Modal Header */
+/* Constrain all children to prevent horizontal overflow */
+.simple-modal-content * {
+    box-sizing: border-box;
+}
+
+/* Hide main modal scrollbar for clean design */
+.simple-modal-content {
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.simple-modal-content::-webkit-scrollbar {
+    display: none;
+    /* Chrome/Safari/Edge */
+}
+
+/* Apply to any scrollable container with images */
+.simple-modal-body>div:first-child::-webkit-scrollbar,
+[class*="gallery"]::-webkit-scrollbar,
+[class*="thumbnail"]::-webkit-scrollbar,
+[class*="image"]::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.simple-modal-body>div:first-child::-webkit-scrollbar-track,
+[class*="gallery"]::-webkit-scrollbar-track,
+[class*="thumbnail"]::-webkit-scrollbar-track,
+[class*="image"]::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 3px;
+}
+
+.simple-modal-body>div:first-child::-webkit-scrollbar-thumb,
+[class*="gallery"]::-webkit-scrollbar-thumb,
+[class*="thumbnail"]::-webkit-scrollbar-thumb,
+[class*="image"]::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.25), rgba(255, 255, 255, 0.15));
+    backdrop-filter: blur(10px);
+    border-radius: 3px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.simple-modal-body>div:first-child::-webkit-scrollbar-thumb:hover,
+[class*="gallery"]::-webkit-scrollbar-thumb:hover,
+[class*="thumbnail"]::-webkit-scrollbar-thumb:hover,
+[class*="image"]::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.25));
+}
+
+/* Hide gallery scrollbar by default, show on hover */
+.simple-modal-body>div:first-child,
+[class*="gallery"],
+[class*="thumbnail"],
+[class*="image"] {
+    scrollbar-width: none;
+    /* Firefox - hide by default */
+}
+
+.simple-modal-body>div:first-child:hover,
+[class*="gallery"]:hover,
+[class*="thumbnail"]:hover,
+[class*="image"]:hover {
+    scrollbar-width: thin;
+    /* Firefox - show on hover */
+}
+
+.simple-modal-body>div:first-child::-webkit-scrollbar,
+[class*="gallery"]::-webkit-scrollbar,
+[class*="thumbnail"]::-webkit-scrollbar,
+[class*="image"]::-webkit-scrollbar {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.simple-modal-body>div:first-child:hover::-webkit-scrollbar,
+[class*="gallery"]:hover::-webkit-scrollbar,
+[class*="thumbnail"]:hover::-webkit-scrollbar,
+[class*="image"]:hover::-webkit-scrollbar {
+    opacity: 1;
+}
+
 .simple-modal-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 28px 24px;
-    border-bottom: 1px solid #e2e8f0;
+
+    /* Header positioning - no negative margin to prevent truncation */
+    margin: 0;
+    padding: 28px 40px;
+    border-radius: 24px 24px 0 0;
+
+    /* Transparent glassmorphic ribbon using CSS variables */
+    background: rgba(90, 75, 255, 0.3);
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    /* Ribbon shadow */
+    box-shadow:
+        0 4px 16px rgba(90, 75, 255, 0.4),
+        0 8px 24px rgba(90, 75, 255, 0.2);
+
+    /* Sticky Header */
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+/* Shadow fade below ribbon */
+.simple-modal-header::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    right: 0;
+    height: 10px;
+    background: linear-gradient(to bottom, rgba(90, 75, 255, 0.15), transparent);
+    pointer-events: none;
 }
 
 .simple-modal-header h2 {
-    font-size: 20px;
-    color: #333;
+    font-size: 22px;
+    font-weight: 700;
     margin: 0;
-    font-weight: 600;
+    letter-spacing: -0.3px;
+    line-height: 1.3;
+    color: #FFFFFF;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+
+    /* Prevent long titles from breaking layout */
+    max-width: calc(100% - 50px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    /* Standard property for compatibility */
+    -webkit-box-orient: vertical;
 }
 
-.simple-modal-header button {
-    background: white;
-    border: 2px solid rgba(0, 0, 0, 0.1);
-    width: 32px;
-    height: 32px;
-    min-width: 32px;
-    min-height: 32px;
-    font-size: 18px;
-    color: #333;
-    cursor: pointer;
-    padding: 0;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-}
+/* Close button inherits from .modal-close-button in buttons.css */
+/* No additional styling needed - universal button handles all themes */
 
-.simple-modal-header button:hover {
-    background: rgba(0, 0, 0, 0.05);
-    border-color: rgba(0, 0, 0, 0.2);
-}
 
 /* Modal Body */
 .simple-modal-body {
     padding: 28px 24px;
     text-align: center;
+}
+
+/* Core Fields Indentation - Match Product Details */
+.modal-brand-section,
+.modal-category-section,
+.modal-core-info {
+    padding-left: 40px !important;
+    /* 28px base + 12px additional */
+    padding-right: 12px !important;
+    /* Reduced from 24px (inherited) */
 }
 
 .simple-modal-body img {
@@ -124,95 +445,51 @@
 }
 
 .simple-modal-body .amazon-button {
-    margin-top: 24px;
+    margin-top: 2px;
+    /* Reduced from 24px */
     width: 100%;
     padding: 14px;
     border: none;
     border-radius: 8px;
-    background: #667eea;
+    background: linear-gradient(135deg, #ff9900 0%, #ff6600 100%);
     color: white;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:
+        0 4px 12px rgba(255, 153, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.2);
 }
 
 .simple-modal-body .amazon-button:hover {
-    background: #764ba2;
-    transform: scale(1.02);
-}
-
-/* Dark Theme */
-body.dark-theme .simple-modal-content {
-    background: #1a1a1a;
-}
-
-body.dark-theme .simple-modal-header {
-    border-bottom-color: rgba(255, 255, 255, 0.1);
-}
-
-body.dark-theme .simple-modal-header h2 {
-    color: white;
-}
-
-body.dark-theme .simple-modal-header button {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
-    color: white;
-}
-
-body.dark-theme .simple-modal-header button:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.3);
-}
-
-body.dark-theme .simple-modal-body p {
-    color: rgba(255, 255, 255, 0.9);
-}
-
-body.dark-theme .simple-modal-body p strong {
-    color: white;
-}
-
-/* Glass Theme - Matches Install Modal Exactly */
-body.glass-theme .simple-modal-content {
-    background: rgba(255, 255, 255, var(--glass-refraction));
-    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: linear-gradient(135deg, #ffaa00 0%, #ff7700 100%);
+    transform: translateY(-2px) scale(1.02);
     box-shadow:
-        0 8px 32px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.5);
-    color: white;
+        0 6px 20px rgba(255, 153, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.2);
 }
 
-body.glass-theme .simple-modal-header {
-    border-bottom-color: rgba(255, 255, 255, 0.2);
+.simple-modal-body .amazon-button:active {
+    transform: translateY(0) scale(0.98);
+    box-shadow:
+        0 2px 8px rgba(255, 153, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-body.glass-theme .simple-modal-header h2 {
-    color: white;
+/* Touch device press effect for Amazon button */
+@media (hover: none) and (pointer: coarse) {
+    .simple-modal-body .amazon-button:active {
+        transform: scale(0.95);
+        box-shadow:
+            0 2px 8px rgba(255, 153, 0, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        transition: all 0.1s ease;
+    }
 }
 
-body.glass-theme .simple-modal-header button {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.3);
-    color: white;
-}
-
-body.glass-theme .simple-modal-header button:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.5);
-}
-
-body.glass-theme .simple-modal-body p {
-    color: rgba(255, 255, 255, 0.95);
-}
-
-body.glass-theme .simple-modal-body p strong {
-    color: white;
-    font-weight: 700;
-}
 
 /* Responsive */
 @media (max-width: 768px) {
@@ -244,5 +521,1730 @@ body.glass-theme .simple-modal-body p strong {
 
     .simple-modal-body {
         padding: 20px;
+    }
+}
+
+/* ============================================
+   PRODUCT MODAL - ENHANCED SECTIONS
+   Glass Theme Compatible - Preserves CSS Variables
+   ============================================ */
+
+/* Hide lightbox caption for product modal */
+.product-modal .lightbox-caption {
+    display: none !important;
+}
+
+/* ============================================
+   CORE INFO SECTION
+   ============================================ */
+
+.modal-core-info {
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.modal-core-info .info-row {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+.modal-core-info .info-row .emoji {
+    margin-right: 8px;
+    font-size: 18px;
+}
+
+.modal-core-info .info-row .label {
+    font-weight: 600;
+    margin-right: 6px;
+    opacity: 0.9;
+}
+
+.modal-core-info .info-row .value {
+    opacity: 0.95;
+}
+
+/* ============================================
+   IMAGE GALLERY SECTION
+   ============================================ */
+
+.modal-image-gallery {
+    padding: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    text-align: center;
+}
+
+/* ============================================
+   COLLAPSIBLE SECTIONS
+   ============================================ */
+
+.modal-section {
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-section:last-child {
+    border-bottom: none;
+}
+
+.modal-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    padding: 8px 12px;
+    margin-bottom: 12px;
+    user-select: none;
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.05) 0%,
+            rgba(255, 255, 255, 0.02) 100%);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-left: 3px solid rgba(90, 75, 255, 0.6);
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.modal-section-header .title {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 600;
+    opacity: 0.95;
+}
+
+.modal-section-header .title .emoji {
+    margin-right: 8px;
+    font-size: 20px;
+}
+
+.modal-section-header .toggle-icon {
+    font-size: 14px;
+    opacity: 0.7;
+    transition: transform 0.2s ease;
+}
+
+.modal-section-header.expanded .toggle-icon {
+    transform: rotate(180deg);
+}
+
+/* Section Content */
+.modal-section-content {
+    padding-left: 28px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.modal-section-content.expanded {
+    max-height: 1000px;
+}
+
+/* ============================================
+   PRODUCT DETAILS ROWS
+   ============================================ */
+
+.detail-row {
+    display: flex;
+    align-items: flex-start;
+    padding: 6px 0;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.detail-row .emoji {
+    margin-right: 8px;
+    font-size: 16px;
+    min-width: 20px;
+}
+
+.detail-row .label {
+    font-weight: 500;
+    margin-right: 6px;
+    opacity: 0.85;
+    min-width: 150px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.detail-row .value {
+    opacity: 0.95;
+}
+
+/* Info row labels (for Brand, Category, Price, Rating, Reviews) */
+.info-row .label {
+    font-weight: 500;
+    margin-right: 6px;
+    opacity: 0.85;
+    min-width: 120px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+/* ============================================
+   ADDITIONAL INFO - GROUPED DISPLAY
+   ============================================ */
+
+.info-group {
+    margin-bottom: 16px;
+}
+
+.info-group:last-child {
+    margin-bottom: 0;
+}
+
+.info-group-header {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 600;
+    opacity: 0.9;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.info-group-header .emoji {
+    margin-right: 6px;
+    font-size: 16px;
+}
+
+.info-item {
+    display: flex;
+    padding: 4px 0;
+    padding-left: 22px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.info-item .label {
+    font-weight: 500;
+    margin-right: 6px;
+    opacity: 0.8;
+}
+
+.info-item .value {
+    opacity: 0.9;
+}
+
+/* ============================================
+   DESCRIPTION SECTION
+   ============================================ */
+
+.modal-description {
+    padding: 20px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-description .description-text {
+    font-size: 14px;
+    line-height: 1.7;
+    opacity: 0.9;
+}
+
+/* ============================================
+   ACTIONS SECTION
+   ============================================ */
+
+.modal-actions {
+    position: sticky;
+    bottom: 0;
+    padding: 24px;
+    text-align: center;
+    background: rgba(20, 20, 30, 0.95);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 10;
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 768px) {
+
+    .modal-core-info,
+    .modal-section,
+    .modal-description,
+    .modal-actions {
+        padding: 16px 20px;
+    }
+
+    .modal-section-content {
+        padding-left: 24px;
+    }
+
+    .info-item {
+        padding-left: 18px;
+    }
+}
+
+/* ============================================
+   GLOBAL FIXES
+   ============================================ */
+
+/* Hide lightbox caption globally (filename display) */
+.lightbox-caption {
+    display: none !important;
+}
+
+/* ============================================
+   DISCOUNT BADGE (Reused from product-card.css)
+   ============================================ */
+
+.discount-badge {
+    background: rgba(17, 24, 39, 0.92);
+    border: 1px solid rgba(90, 75, 255, 0.6);
+    color: rgba(255, 255, 255, 0.95);
+    display: inline-flex;
+    align-items: center;
+    height: 18px;
+    padding: 0 6px;
+    border-radius: 999px;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
+    margin-left: 8px;
+}
+
+body.glass-theme .discount-badge {
+    background: rgba(74, 222, 128, 0.16);
+    border: 1px solid rgba(74, 222, 128, 0.28);
+    color: #ffffff;
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
+}
+
+.discount-badge .live-dot {
+    position: relative;
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background-color: #4ade80;
+    margin-right: 6px;
+    box-shadow: 0 0 8px rgba(74, 222, 128, 0.55);
+}
+
+.discount-badge .live-dot::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 999px;
+    background: rgba(74, 222, 128, 0.38);
+    animation: livePulse 1.25s ease-out infinite;
+}
+
+@keyframes livePulse {
+    0% {
+        transform: scale(0.1);
+        opacity: 0.55;
+    }
+
+    70% {
+        transform: scale(1);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1.05);
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .discount-badge .live-dot::after {
+        animation: none;
+        opacity: 0;
+    }
+}
+
+/* ============================================
+   COMPACT SPACING & GRID LAYOUT
+   ============================================ */
+
+.modal-brand-section,
+.modal-category-section {
+    padding-top: 16px;
+    padding-bottom: 16px;
+    /* padding-left and padding-right controlled by line 197-205 */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.info-row .emoji {
+    font-size: 18px;
+}
+
+.title-expand-btn {
+    background: none;
+    border: none;
+    color: inherit;
+    opacity: 0.8;
+    cursor: pointer;
+    font-size: 13px;
+    margin-top: 4px;
+    text-decoration: underline;
+}
+
+.title-expand-btn:hover {
+    opacity: 1;
+}
+
+.simple-modal-header h2.expanded {
+    -webkit-line-clamp: unset;
+    line-clamp: unset;
+}
+
+@media (max-width: 768px) {
+
+    .modal-brand-section,
+    .modal-category-section {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        /* padding-left and padding-right controlled by line 1549-1555 */
+    }
+}
+
+/* Left-align all values */
+.info-row .value,
+.detail-row .value,
+.info-item .value {
+    text-align: left;
+    justify-self: start;
+}
+
+/* Ensure grid layout is applied */
+.modal-core-info .info-row,
+.modal-brand-section .info-row,
+.modal-category-section .info-row,
+.detail-row,
+.info-item {
+    display: grid;
+    grid-template-columns: 24px auto 1fr;
+    gap: 8px 12px;
+    align-items: start;
+    padding: 4px 0;
+}
+
+.info-row .emoji,
+.detail-row .emoji {
+    width: 24px;
+    text-align: center;
+    font-size: 18px;
+}
+
+.info-row .label,
+.detail-row .label,
+.info-item .label {
+    white-space: nowrap;
+    font-weight: 600;
+    opacity: 0.9;
+}
+
+.info-row .value,
+.detail-row .value,
+.info-item .value {
+    text-align: left;
+    word-wrap: break-word;
+    opacity: 0.95;
+}
+
+/* Description Section */
+.modal-description-section {
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.section-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+.section-label .emoji {
+    font-size: 18px;
+}
+
+.description-text {
+    text-align: left;
+    line-height: 1.6;
+    opacity: 0.9;
+}
+
+.read-more-btn {
+    background: none;
+    border: none;
+    color: inherit;
+    opacity: 0.8;
+    cursor: pointer;
+    font-size: 13px;
+    margin-top: 8px;
+    text-decoration: underline;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.read-more-btn:hover {
+    opacity: 1;
+    background: rgba(90, 75, 255, 0.15);
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(90, 75, 255, 0.5);
+    color: #5A4BFF;
+}
+
+.read-more-btn:active {
+    transform: scale(0.95);
+}
+
+/* ============================================
+   SPLIT IMAGE GALLERY
+   ============================================ */
+
+/* Desktop Gallery */
+.gallery-desktop {
+    display: grid;
+    grid-template-columns: 20% 80%;
+    /* 20/80 SPLIT FOR COMPACT THUMBNAILS */
+    gap: 16px;
+    min-height: 400px;
+    padding: 16px;
+}
+
+.gallery-thumbnails {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    /* KEEP 2 COLUMNS */
+    gap: 8px;
+    /* RESTORED FOR BALANCE */
+    height: 100%;
+    /* FILL VERTICAL SPACE */
+    max-height: 480px;
+    /* SYNC WITH MAIN IMAGE AREA */
+    overflow-y: auto;
+    padding-right: 8px;
+    /* Hide scrollbar by default, show on hover */
+    scrollbar-width: thin;
+}
+
+/* Custom scrollbar for thumbnails */
+.gallery-thumbnails::-webkit-scrollbar {
+    width: 6px;
+}
+
+.gallery-thumbnails::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+.gallery-thumbnails::-webkit-scrollbar-thumb {
+    background: rgba(90, 75, 255, 0.6);
+    border-radius: 3px;
+}
+
+.thumbnail {
+    width: 100%;
+    /* ENSURE IT FILLS GRID WIDTH */
+    aspect-ratio: 1;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    position: relative;
+    isolation: isolate;
+}
+
+/* Unified State: Active or Hovered Parity */
+.thumbnail.active,
+.thumbnail:hover {
+    border-color: #5A4BFF;
+    box-shadow:
+        0 10px 35px rgba(90, 75, 255, 0.55),
+        0 0 50px rgba(90, 75, 255, 0.35);
+    transform: translateY(-10px) scale(1.05);
+    /* DRAMATIZED LIFT */
+    z-index: 20;
+}
+
+/* Exclusive Focus: When hovering, the static 'active' thumbnail steps back */
+.is-previewing .thumbnail.active:not(:hover) {
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: none;
+    transform: translateY(0) scale(1);
+    z-index: 1;
+}
+
+.thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Sync internal image zoom (1.15x) for both Pinned and Hovered states */
+.thumbnail.active img,
+.thumbnail:hover img {
+    transform: scale(1.15);
+}
+
+/* Exclusive Focus: Image zoom also reverts when another thumbnail is hovered */
+.is-previewing .thumbnail.active:not(:hover) img {
+    transform: scale(1);
+}
+
+.gallery-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+.gallery-main img {
+    max-width: 100%;
+    max-height: 350px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.gallery-main img:hover {
+    transform: scale(1.02);
+}
+
+@media (min-width: 769px) {
+    .gallery-desktop .carousel-controls {
+        display: flex !important;
+        /* RESTORED BUTTONS BUT KEPT COUNTER HIDDEN */
+        margin-top: 10px;
+    }
+}
+
+.carousel-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.carousel-controls button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 16px;
+}
+
+.carousel-controls button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(90, 75, 255, 0.6);
+}
+
+.carousel-controls .counter {
+    display: none !important;
+    /* DISABLED AS PER REQUEST */
+}
+
+/* Mobile Gallery */
+.gallery-mobile {
+    display: none;
+}
+
+.mobile-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.mobile-main img {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.mobile-thumbnails {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 12px 16px;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    /* MAGNETIC SCROLLING */
+    scrollbar-width: none;
+    mask-image: linear-gradient(to right,
+            transparent,
+            black 10%,
+            black 90%,
+            transparent);
+    -webkit-mask-image: linear-gradient(to right,
+            transparent,
+            black 10%,
+            black 90%,
+            transparent);
+}
+
+.mobile-thumbnails::-webkit-scrollbar {
+    display: none;
+}
+
+.mobile-thumbnails .thumbnail {
+    flex: 0 0 80px;
+    height: 80px;
+    scroll-snap-align: center;
+    /* ALIGNMENT LOCK */
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .gallery-desktop {
+        display: none;
+    }
+
+    .gallery-mobile {
+        display: block;
+        padding: 16px;
+    }
+}
+
+@media (min-width: 769px) {
+    .gallery-desktop {
+        display: grid;
+    }
+
+    .gallery-mobile {
+        display: none;
+    }
+}
+
+/* ============================================
+   PADDING REDUCTIONS & GRID REFINEMENTS
+   ============================================ */
+
+/* Modal Header - Reduced padding */
+.simple-modal-header {
+    padding: 14px 12px !important;
+}
+
+/* Title Toggle Styles */
+.simple-modal-header h2.expandable {
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.simple-modal-header h2.expandable:hover {
+    opacity: 0.8;
+}
+
+.simple-modal-header h2.expanded {
+    white-space: normal;
+}
+
+/* Modal Body - Small padding for breathing room */
+.simple-modal-body {
+    padding: 8px !important;
+}
+
+/* Brand & Category Sections - Reduced padding */
+.modal-brand-section,
+.modal-category-section {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    /* padding-left and padding-right controlled by line 197-205 */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Image Gallery - No padding */
+.modal-image-gallery {
+    padding: 0 !important;
+}
+
+.gallery-desktop {
+    padding: 0 !important;
+}
+
+.gallery-mobile {
+    padding: 8px !important;
+}
+
+/* Core Info Section - Reduced padding */
+.modal-core-info {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    /* padding-left and padding-right controlled by line 197-205 */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Modal Sections (Product Details, Additional Info) - Reduced padding */
+.modal-section {
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Description Section - Reduced padding */
+.modal-description-section {
+    padding: 8px 12px !important;
+}
+
+/* Modal Actions - Reduced padding */
+.modal-actions {
+    padding: 8px 12px;
+}
+
+/* ============================================
+   GRID LAYOUT - 30/70 SPLIT
+   ============================================ */
+
+/* Core Sections WITH Emojis (Brand, Category, Core Info, Product Details) */
+.modal-brand-section .info-row,
+.modal-category-section .info-row,
+.modal-core-info .info-row,
+.modal-section .detail-row {
+    display: grid;
+    grid-template-columns: 45% 55%;
+    /* Changed to 45:55 for consistency */
+    gap: 12px;
+    align-items: start;
+    padding: 4px 0;
+}
+
+/* Emoji + Label together in first column */
+.modal-brand-section .info-row .label,
+.modal-category-section .info-row .label,
+.modal-core-info .info-row .label,
+.modal-section .detail-row .label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.modal-brand-section .info-row .emoji,
+.modal-category-section .info-row .emoji,
+.modal-core-info .info-row .emoji,
+.modal-section .detail-row .emoji {
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+/* Additional Info - NO Emojis, 35/65 split */
+.modal-section .info-row {
+    display: grid;
+    grid-template-columns: 45% 55%;
+    /* Changed to 45:55 for consistency */
+    gap: 12px;
+    align-items: start;
+    padding: 4px 0;
+}
+
+.modal-section .info-row .label {
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Hide emoji in Additional Info */
+.modal-section .info-row .emoji {
+    display: none !important;
+}
+
+/* Values for all sections */
+.info-row .value,
+.detail-row .value {
+    text-align: left;
+    word-wrap: break-word;
+    opacity: 0.95;
+}
+
+/* ============================================
+   GALLERY ENHANCEMENTS
+   ============================================ */
+
+/* Smooth Image Transitions */
+.gallery-main img,
+.mobile-main img {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.gallery-main img.changing,
+.mobile-main img.changing {
+    opacity: 0.7;
+}
+
+/* Image Container for Zoom Hint */
+.gallery-main,
+.mobile-main {
+    position: relative;
+}
+
+/* Zoom Hint Overlay */
+.zoom-hint {
+    position: absolute;
+    bottom: 50px;
+    right: 16px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 10;
+}
+
+/* Desktop: Show on hover */
+@media (min-width: 769px) {
+    .gallery-main:hover .zoom-hint {
+        opacity: 1;
+    }
+}
+
+/* Mobile: Always visible but subtle */
+@media (max-width: 768px) {
+    .mobile-main .zoom-hint {
+        opacity: 0.8;
+        bottom: 60px;
+    }
+}
+
+/* Thumbnail Hover Effect Enhancement */
+.thumbnail {
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.thumbnail::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(90, 75, 255, 0.3);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 8px;
+}
+
+.thumbnail:hover::after {
+    opacity: 1;
+}
+
+/* Active thumbnail glow */
+.thumbnail.active {
+    box-shadow: 0 0 16px rgba(90, 75, 255, 0.85);
+}
+
+/* Thumbnail Preview Hint (Desktop) */
+@media (min-width: 769px) {
+    .thumbnail {
+        cursor: pointer;
+    }
+
+    .thumbnail:hover {
+        transform: scale(1.08);
+        z-index: 5;
+    }
+}
+
+/* ============================================
+   FINAL MODAL REFINEMENTS
+   ============================================ */
+
+/* Modal Header - Reduce padding by half on all sides */
+.simple-modal-header {
+    padding: 7px 6px !important;
+}
+
+/* Modal Body - Remove top padding */
+.simple-modal-body {
+    padding: 0 8px 8px 8px !important;
+}
+
+/* Gallery Desktop - Add vertical padding */
+.gallery-desktop {
+    padding: 8px 0 !important;
+}
+
+/* Additional Info - Right-align labels, smaller font */
+.modal-section .info-row .label {
+    text-align: right;
+    font-size: 14px;
+    padding-right: 12px;
+    /* Updated from 8px to match Product Details (8px + 4px) */
+}
+
+.modal-section .info-row .value {
+    text-align: left;
+    font-size: 14px;
+}
+
+/* Discount Badge - Match price text size */
+.discount-badge {
+    font-size: inherit;
+    padding: 4px 10px;
+    line-height: 1.2;
+    vertical-align: middle;
+    margin-left: 8px;
+}
+
+/* Mobile: Zoom hint - just icon */
+@media (max-width: 768px) {
+    .mobile-main .zoom-hint {
+        font-size: 18px;
+    }
+}
+
+/* Mobile: Fix text wrapping - Option A + B */
+@media (max-width: 768px) {
+
+    /* Option A: Allow wrapping */
+    .info-row .label,
+    .detail-row .label {
+        white-space: normal;
+        word-wrap: break-word;
+    }
+
+    /* Option B: Adjust grid split for more label space */
+    /* Grid columns removed - using flexbox instead (see line 1542) */
+
+    /* Additional Info - keep right-align on mobile */
+    .modal-section .info-row .label {
+        text-align: right;
+        font-size: 13px;
+    }
+
+    .modal-section .info-row .value {
+        font-size: 13px;
+    }
+}
+
+/* ============================================
+   POLISH REFINEMENTS
+   ============================================ */
+
+/* Section Spacing - 6px between sections */
+.modal-category-section,
+.modal-core-info,
+.modal-section,
+.modal-description-section {
+    margin-top: 6px;
+}
+
+/* Right-align all labels */
+.modal-brand-section .info-row .label,
+.modal-category-section .info-row .label,
+.modal-core-info .info-row .label,
+.modal-section .detail-row .label {
+    text-align: right !important;
+    padding-right: 12px;
+}
+
+/* Gallery Shadow for Depth */
+.gallery-main img {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.3s ease;
+}
+
+.gallery-main img:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Section Header Hover Effects */
+.modal-section-header:hover {
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.08) 0%,
+            rgba(255, 255, 255, 0.04) 100%);
+    box-shadow:
+        0 4px 12px rgba(90, 75, 255, 0.3),
+        0 0 20px rgba(90, 75, 255, 0.15);
+    transform: translateY(-1px);
+    border-left-color: rgba(90, 75, 255, 0.85);
+}
+
+.modal-section-header:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Persistent glow on expanded sections - combined with hover for specificity */
+.modal-section-header.expanded,
+.modal-section-header.expanded:hover {
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.08) 0%,
+            rgba(255, 255, 255, 0.04) 100%);
+    box-shadow:
+        0 4px 12px rgba(90, 75, 255, 0.4),
+        0 0 25px rgba(90, 75, 255, 0.2);
+    border-left-color: rgba(90, 75, 255, 0.9);
+}
+
+.modal-section-header:hover .toggle-icon {
+    color: #5A4BFF;
+}
+
+/* Description Line-Height Improvement */
+.description-text {
+    line-height: 1.7 !important;
+    letter-spacing: 0.01em;
+    opacity: 0.92;
+}
+
+/* Discount Badge Fine-Tuning */
+.discount-badge {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    vertical-align: baseline !important;
+    line-height: 1.2 !important;
+    padding: 3px 8px !important;
+    margin-left: 6px !important;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.live-dot {
+    width: 6px;
+    height: 6px;
+    margin-right: 4px;
+    vertical-align: middle;
+}
+
+/* ============================================
+   GALLERY NAVIGATION - LIGHTBOX STYLE
+   ============================================ */
+
+/* Gallery Container - Fixed Height */
+.gallery-main,
+.mobile-main {
+    position: relative;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.02);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Main Image - Fit within container */
+.gallery-main img,
+.mobile-main img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    object-position: center;
+}
+
+/* Carousel Controls - Fixed Center-Side Position */
+.carousel-controls {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    /* Allow clicks to pass through container */
+    z-index: 10;
+}
+
+/* Navigation Buttons - Glassmorphic Style */
+.carousel-controls button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: auto;
+    /* Re-enable clicks on buttons */
+
+    /* Glassmorphic styling */
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+    color: #333;
+}
+
+.carousel-controls button:hover {
+    background: rgba(255, 255, 255, 1);
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Previous Button - Left Side */
+.carousel-controls button:first-of-type {
+    left: 15px;
+}
+
+/* Next Button - Right Side */
+.carousel-controls button:last-of-type {
+    right: 15px;
+}
+
+/* Page Counter - Bottom Center */
+.carousel-controls .counter {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: auto;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    z-index: 11;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+
+    .gallery-main,
+    .mobile-main {
+        height: 350px;
+        /* Smaller on mobile */
+    }
+
+    .carousel-controls button {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+    }
+
+    .carousel-controls button:first-of-type {
+        left: 10px;
+    }
+
+    .carousel-controls button:last-of-type {
+        right: 10px;
+    }
+
+    .carousel-controls .counter {
+        bottom: 10px;
+        padding: 4px 10px;
+        font-size: 12px;
+    }
+}
+
+/* ============================================
+   GLASSMORPHIC BORDER SEPARATOR
+   ============================================ 
+   
+   REVERTIBLE: To remove this feature, delete this entire section
+   from "GLASSMORPHIC BORDER SEPARATOR" to the end of file.
+   
+   Purpose: Creates a fixed visual separator between labels and values
+   using a glassmorphic border on the label's right side.
+*/
+
+/* Field Row Layout - Flexbox */
+.info-row,
+.detail-row {
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+/* Label with Glassmorphic Border Separator */
+.info-row .label,
+.detail-row .label {
+    text-align: right;
+    flex-shrink: 0;
+    flex-basis: 45%;
+    /* Changed from width: 220px to enable 45:55 ratio */
+    padding-right: 16px;
+    border-right: 2px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+}
+
+/* Add subtle gradient effect to border */
+.info-row .label::after,
+.detail-row .label::after {
+    content: '';
+    position: absolute;
+    right: -2px;
+    top: 15%;
+    bottom: 15%;
+    width: 2px;
+    background: linear-gradient(to bottom,
+            transparent 0%,
+            rgba(90, 75, 255, 0.5) 30%,
+            rgba(90, 75, 255, 0.5) 70%,
+            transparent 100%);
+    pointer-events: none;
+}
+
+/* Value Styling */
+.info-row .value,
+.detail-row .value {
+    text-align: left;
+    flex: 1;
+}
+
+/* Mobile Responsive - Percentage-Based Approach */
+@media (max-width: 768px) {
+
+    /* Override grid with flexbox for 45:55 ratio */
+    .modal-brand-section .info-row,
+    .modal-category-section .info-row,
+    .modal-core-info .info-row,
+    .modal-section .detail-row,
+    .modal-section .info-row,
+    .info-row,
+    .detail-row {
+        display: flex !important;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .info-row .label,
+    .detail-row .label,
+    .modal-section .info-row .label {
+        width: auto !important;
+        flex-basis: 45% !important;
+        /* Changed from 40% to match mobile 45:55 ratio */
+        /* max-width removed to allow flex-basis 45% to work */
+        min-width: 0 !important;
+        flex-shrink: 0;
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+        padding-right: 10px;
+        border-right-width: 1px;
+    }
+
+    .info-row .value,
+    .detail-row .value,
+    .modal-section .info-row .value {
+        flex-basis: 55%;
+        /* Changed from 60% to match mobile 45:55 ratio */
+        flex-grow: 1;
+    }
+
+    /* Reduce padding on mobile */
+    .modal-brand-section,
+    .modal-category-section,
+    .modal-core-info {
+        padding-left: 36px !important;
+        /* Tablet padding */
+        padding-right: 12px !important;
+        /* Keep right padding */
+    }
+
+    .info-row .label::after,
+    .detail-row .label::after {
+        width: 1px;
+    }
+
+    .info-row,
+    .detail-row {
+        gap: 12px !important;
+    }
+}
+
+/* Extra Small Mobile (≤500px) - Includes iPhone 14 Pro Max (430px) */
+@media (max-width: 500px) {
+
+    .info-row .label,
+    .detail-row .label,
+    .modal-section .info-row .label {
+        flex-basis: 45% !important;
+        /* Changed from 38% for 45:55 ratio */
+        /* max-width removed to allow flex-basis 45% to work */
+        min-width: 0 !important;
+        font-size: 9px;
+        /* Reduced from 13px */
+        padding-right: 8px;
+    }
+
+    .info-row .value,
+    .detail-row .value,
+    .modal-section .info-row .value {
+        font-size: 10px;
+        /* Reduced from 14px */
+    }
+
+    .description-text {
+        font-size: 10px;
+    }
+
+    .info-row,
+    .detail-row {
+        gap: 10px !important;
+    }
+
+    .modal-brand-section,
+    .modal-category-section,
+    .modal-core-info {
+        padding-left: 36px !important;
+        /* Match tablet padding */
+        padding-right: 12px !important;
+        /* Keep right padding */
+    }
+}
+
+/* ============================================
+   PHASE 1: ROW HOVER EFFECTS & BORDER GLOW
+   ============================================ */
+
+/* Row Hover Effects */
+.info-row,
+.detail-row {
+    transition: all 0.2s ease;
+    border-radius: 4px;
+}
+
+.info-row:hover,
+.detail-row:hover {
+    background: rgba(255, 255, 255, 0.03);
+    box-shadow:
+        inset 0 0 20px rgba(90, 75, 255, 0.15),
+        0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Enhanced Glassmorphic Border Glow */
+.info-row .label::after,
+.detail-row .label::after {
+    box-shadow: 0 0 15px rgba(90, 75, 255, 0.8);
+    filter: blur(1px);
+}
+
+
+/* Modal Header - Responsive */
+@media (max-width: 768px) {
+    .simple-modal-header {
+        padding: 20px 16px;
+    }
+
+    .simple-modal-header h2 {
+        font-size: 18px;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+        /* Standard property for compatibility */
+    }
+}
+
+/* ========================================
+   TOUCH DEVICE SUPPORT
+   ======================================== */
+
+/* Desktop: Hover Effects (already defined above) */
+@media (hover: hover) and (pointer: fine) {
+    /* Hover effects already exist in the file */
+}
+
+/* Touch: Active/Press Effects */
+@media (hover: none) and (pointer: coarse) {
+
+    /* Rows - Brighter feedback on tap */
+    .info-row:active,
+    .detail-row:active {
+        background: rgba(255, 255, 255, 0.05);
+        box-shadow:
+            inset 0 0 20px rgba(90, 75, 255, 0.12),
+            0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Section Headers - Press down effect */
+    .modal-section-header:active {
+        background: linear-gradient(135deg,
+                rgba(255, 255, 255, 0.1) 0%,
+                rgba(255, 255, 255, 0.05) 100%);
+        transform: scale(0.98);
+        box-shadow: 0 2px 8px rgba(90, 75, 255, 0.2);
+    }
+
+    /* Read More Button - Press effect */
+    .read-more-btn:active {
+        background: rgba(90, 75, 255, 0.2);
+        transform: scale(0.95);
+        box-shadow: 0 2px 4px rgba(90, 75, 255, 0.4);
+        color: #5A4BFF;
+    }
+
+    /* Faster transitions for touch */
+    .info-row,
+    .detail-row,
+    .modal-section-header,
+    .read-more-btn {
+        transition: all 0.15s ease;
+    }
+}
+
+/* ============================================
+   ENHANCED THUMBNAILS - Phase 1
+   Glassmorphic styling with hover and active states
+   ============================================ */
+
+.thumbnail {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+
+    /* Glassmorphic border */
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+
+    /* Smooth transitions */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.thumbnail:hover {
+    /* Lift effect */
+    transform: translateY(-4px) scale(1.05);
+
+    /* Purple glow */
+    border-color: rgba(90, 75, 255, 0.5);
+    box-shadow:
+        0 8px 16px rgba(0, 0, 0, 0.2),
+        0 0 20px rgba(90, 75, 255, 0.3),
+        0 0 40px rgba(90, 75, 255, 0.15);
+}
+
+.thumbnail.active {
+    /* Strong purple glow for active state */
+    border-color: rgba(90, 75, 255, 0.8);
+    box-shadow:
+        0 0 20px rgba(90, 75, 255, 0.6),
+        0 0 40px rgba(90, 75, 255, 0.3),
+        inset 0 0 20px rgba(90, 75, 255, 0.2);
+
+    /* Slight scale */
+    transform: scale(1.05);
+}
+
+.thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+    /* Smooth zoom on hover */
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.thumbnail:hover img {
+    /* Zoom effect */
+    transform: scale(1.1);
+}
+
+/* Active state maintains zoom */
+.thumbnail.active img {
+    transform: scale(1.05);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .thumbnail {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+/* ============================================
+   CAROUSEL NAVIGATION BUTTONS
+   Match lightbox arrow styling
+   ============================================ */
+
+.carousel-controls .arrow-button,
+.carousel-controls .lightbox-arrow {
+    /* Base arrow button style - match lightbox */
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: white;
+    transition: all 0.2s ease;
+    padding: 0;
+}
+
+.carousel-controls .arrow-button:hover,
+.carousel-controls .lightbox-arrow:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.carousel-controls .arrow-button:active,
+.carousel-controls .lightbox-arrow:active {
+    transform: scale(0.95);
+}
+
+/* SVG icon sizing */
+.carousel-controls .arrow-button svg,
+.carousel-controls .lightbox-arrow svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* ========================================
+   MOBILE LANDSCAPE OPTIMIZATION
+   Maximize space and dodge Dynamic Islands
+   (STRICTLY LANDSCAPE ONLY)
+   ======================================== */
+
+@media (max-width: 950px) and (orientation: landscape) {
+
+    /* Maximize container area - Refined balance */
+    .modal-layout-wrapper,
+    .modal-nav-container,
+    .modal-sliding-viewport,
+    .simple-modal-content,
+    .simple-modal-header,
+    .modal-actions {
+        border-radius: 16px !important;
+        /* Radius Sync V3 - Universal Force */
+    }
+
+    .modal-nav-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        max-height: 92vh !important;
+        margin: 0 auto;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        overflow: hidden !important;
+        /* Force content clipping */
+    }
+
+    .simple-modal-header {
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+        padding: 8px 15px !important;
+    }
+
+    .modal-actions {
+        border-top-left-radius: 0 !important;
+        border-top-right-radius: 0 !important;
+        padding: 10px !important;
+    }
+
+    /* Landscape Polish: 15/85 Sidebar Split */
+    .gallery-desktop {
+        display: grid !important;
+        grid-template-columns: 15% 85% !important;
+        /* 15/85 RATIO */
+        gap: 10px !important;
+        padding: 5px !important;
+        min-height: auto !important;
+    }
+
+    .gallery-mobile {
+        display: none !important;
+    }
+
+    .gallery-main,
+    .mobile-main {
+        height: auto !important;
+        /* Ghost Space Fix: Allow container to shrink */
+        max-height: 70vh !important;
+        background: transparent !important;
+        /* Clear background to ensure no ghost bounds */
+    }
+
+    .carousel-controls {
+        display: flex !important;
+        /* RESTORED BUTTONS IN LANDSCAPE */
+        gap: 12px !important;
+    }
+
+    .gallery-thumbnails {
+        grid-template-columns: 1fr !important;
+        /* FORCE 1 COLUMN */
+        gap: 8px !important;
+        height: 100% !important;
+        /* SYNC: Matches the height of the auto-calculated main area */
+        max-height: 70vh !important;
+        padding-right: 0 !important;
+    }
+
+    .mobile-main img,
+    .gallery-main img {
+        max-height: 70vh !important;
+        width: auto !important;
+        object-fit: contain !important;
+    }
+
+    .thumbnail {
+        width: 100% !important;
+        aspect-ratio: 1 !important;
+    }
+
+    /* Immersive Body Layout */
+    .simple-modal-body {
+        padding: 10px 15px !important;
+    }
+
+    /* Compact Header */
+    .simple-modal-header {
+        padding: 5px 15px !important;
+        min-height: auto !important;
+    }
+
+    .simple-modal-header h2 {
+        font-size: 14px !important;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 80%;
+    }
+
+    /* Fixed Close Button Positioning */
+    .dynamic-modal .modal-close-button {
+        top: 10px !important;
+        right: calc(10px + env(safe-area-inset-right, 0px)) !important;
+        width: 32px;
+        height: 32px;
+    }
+
+    /* Scale internal UI components */
+    .modal-core-info {
+        padding: 8px 12px !important;
+    }
+
+    .info-row,
+    .detail-row {
+        gap: 6px !important;
+        padding: 2px 0 !important;
+    }
+
+    /* Relocate Indicators slightly higher to avoid home bars */
+    .dynamic-modal .modal-nav-indicator {
+        bottom: 5px !important;
+        transform: translateX(-50%) scale(0.8);
     }
 }
