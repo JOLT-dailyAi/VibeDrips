@@ -591,7 +591,7 @@
     "amazon_long": "",
     "affiliate_link": "https://amzn.to/4byi6UO",
     "release_date": "2025-07-31T00:00:00.000Z",
-    "timestamp": "2026-03-11T07:56:04.083Z",
+    "timestamp": "3/11/2026, 1:23:28 PM",
     "influencer": "Steven Sullivan, UrAvgConsumer",
     "manual_collections": [
       "AR Glasses"
@@ -622,27 +622,13 @@
       }
     ],
     "additionalInfo": {
-      "Product Specs": [
-        {
-          "key": "Discount",
-          "label": "Discount",
-          "category": "Product Specs",
-          "value": "0"
-        },
-        {
-          "key": "numberOfPieces",
-          "label": "Number Of Pieces",
-          "category": "Product Specs",
-          "value": "1"
-        },
-        {
-          "key": "unitCount",
-          "label": "Unit Count",
-          "category": "Product Specs",
-          "value": "1 Count"
-        }
-      ],
       "Other": [
+        {
+          "key": "Timestamp",
+          "label": "Timestamp",
+          "category": "Other",
+          "value": "3/11/2026, 1:23:28 PM"
+        },
         {
           "key": "generic_name",
           "label": "Generic Name",
@@ -708,6 +694,26 @@
           "label": "Human Interface Input",
           "category": "Other",
           "value": "Keyboard, Mouse"
+        }
+      ],
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "0"
+        },
+        {
+          "key": "numberOfPieces",
+          "label": "Number Of Pieces",
+          "category": "Product Specs",
+          "value": "1"
+        },
+        {
+          "key": "unitCount",
+          "label": "Unit Count",
+          "category": "Product Specs",
+          "value": "1 Count"
         }
       ]
     },
