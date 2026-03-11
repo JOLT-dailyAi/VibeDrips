@@ -2,7 +2,7 @@
   "config": {
     "title": "💸 Under the Bag",
     "enabled": true,
-    "last_updated": "2026-03-10T19:35:18.838Z",
+    "last_updated": "2026-03-11T02:35:05.505Z",
     "currencies": {
       "AUD": {
         "range_min": 16,
