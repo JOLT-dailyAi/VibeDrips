@@ -1,8 +1,8 @@
 {
   "summary": {
-    "total_categories": 4,
-    "total_products": 23,
-    "last_updated": "2026-03-11T02:35:05.504Z"
+    "total_categories": 5,
+    "total_products": 24,
+    "last_updated": "2026-03-11T07:56:04.094Z"
   },
   "categories": [
     {
@@ -46,6 +46,14 @@
         "9388550072",
         "9355995008",
         "9355991479"
+      ]
+    },
+    {
+      "id": "electronics",
+      "name": "Electronics",
+      "product_count": 1,
+      "asins": [
+        "B0FFT61X6F"
       ]
     },
     {

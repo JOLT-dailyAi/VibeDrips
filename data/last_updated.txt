@@ -1,44 +1,44 @@
 VibeDrips Data Processing Summary
-Generated: 2026-03-11T02:35:05.508Z
+Generated: 2026-03-11T07:56:04.102Z
 
 📊 STATISTICS
-- Total Rows Processed: 23
-- Products Successfully Processed: 23
+- Total Rows Processed: 24
+- Products Successfully Processed: 24
 - Errors Encountered: 0
 - Success Rate: 100.0%
 
 ⚠️ VALIDATION
-- Records Flagged: 3
-- Field Conflicts: 23
+- Records Flagged: 4
+- Field Conflicts: 24
 - Error Breakdown:
   • DISCOUNT_MISMATCH: 2
-  • INVALID_ORIGINAL: 1
+  • INVALID_ORIGINAL: 2
 
 💰 CURRENCIES
 - Currencies Found: 2
 - Available: AUD, INR
 
 📦 CATEGORIES
-- Categories Found: 4
+- Categories Found: 5
 - Review Needed: 0 products
 
 👤 INFLUENCERS
-- Products with influencers: 13
-- Unique influencers: 2
+- Products with influencers: 14
+- Unique influencers: 3
 
 💎 COLLECTIONS
-- Unique collections: 3
+- Unique collections: 4
 
 🌿 SEASONS
 - Seasons Detected: 2
 - Review Needed: 3 products
 
 ⚠️ ERRORS & VALIDATION
-- Products with errors: 3
-- Error rate: 13%
+- Products with errors: 4
+- Error rate: 17%
 
 🎬 DROPS
-- 🎬 Creator Picks: 23 products
+- 🎬 Creator Picks: 24 products
 - 🌍 Global Drops: 0 products
 - 📱 Viral Reels: 7 products
 - 🆕 New Releases: 0 products
@@ -64,7 +64,7 @@ Generated: 2026-03-11T02:35:05.508Z
 - seasons_auto-detect.json
 
 📁 FILES GENERATED
-- products-AUD.json (10 products)
+- products-AUD.json (11 products)
 - products-INR.json (13 products)
 - categories.json & categories_auto-detect.json
 - seasons.json & seasons_auto-detect.json

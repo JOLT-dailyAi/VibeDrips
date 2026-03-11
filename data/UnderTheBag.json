@@ -2,13 +2,13 @@
   "config": {
     "title": "💸 Under the Bag",
     "enabled": true,
-    "last_updated": "2026-03-11T02:35:05.505Z",
+    "last_updated": "2026-03-11T07:56:04.097Z",
     "currencies": {
       "AUD": {
         "range_min": 16,
-        "range_max": 343,
+        "range_max": 599,
         "user_min": 16,
-        "user_max": 343,
+        "user_max": 599,
         "step": 1,
         "allow_free_input": true,
         "has_reset": true

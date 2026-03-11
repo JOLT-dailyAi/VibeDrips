@@ -1,8 +1,8 @@
 {
   "summary": {
-    "total_influencers": 2,
-    "total_products": 13,
-    "last_updated": "2026-03-11T02:35:05.504Z"
+    "total_influencers": 3,
+    "total_products": 14,
+    "last_updated": "2026-03-11T07:56:04.096Z"
   },
   "influencers": [
     {
@@ -76,6 +76,23 @@
           "category": "Furniture",
           "asins": [
             "B0BDX9ZN46"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Steven Sullivan, UrAvgConsumer",
+      "product_count": 1,
+      "has_creator_video": false,
+      "regions": [
+        "AUD"
+      ],
+      "media_groups": [
+        {
+          "media_url": "https://youtu.be/-_Z7GS4IgRk?si=m0K2hFomZZ5o390g",
+          "category": "Electronics",
+          "asins": [
+            "B0FFT61X6F"
           ]
         }
       ]

@@ -38,27 +38,29 @@
       "countries": [
         "Australia"
       ],
-      "product_count": 10,
+      "product_count": 11,
       "filename": "products-AUD.json",
       "categories": [
         "Furniture",
         "General",
+        "Electronics",
         "Books"
       ],
       "brands": [
         "Levoit",
         "Winix",
+        "VITURE",
         "Cornerstone Press",
         "Breville",
         "HUTCHINSON PUBLISHING - TRADE"
       ],
       "price_range": {
         "min": 16,
-        "max": 343
+        "max": 599
       }
     }
   ],
-  "last_updated": "2026-03-11T02:35:05.501Z",
-  "total_products": 23,
+  "last_updated": "2026-03-11T07:56:04.090Z",
+  "total_products": 24,
   "default_currency": "INR"
 }

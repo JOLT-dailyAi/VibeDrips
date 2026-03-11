@@ -1,8 +1,8 @@
 {
   "summary": {
-    "total_brands": 14,
-    "total_products": 23,
-    "last_updated": "2026-03-11T02:35:05.506Z"
+    "total_brands": 15,
+    "total_products": 24,
+    "last_updated": "2026-03-11T07:56:04.098Z"
   },
   "brands": [
     {
@@ -68,6 +68,13 @@
       "product_count": 1,
       "asins": [
         "1529902401"
+      ]
+    },
+    {
+      "name": "VITURE",
+      "product_count": 1,
+      "asins": [
+        "B0FFT61X6F"
       ]
     },
     {
