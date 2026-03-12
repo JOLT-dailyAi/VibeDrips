@@ -24,56 +24,67 @@ A Google Service Account acts like a separate user. It **cannot** see your "My D
 
 ## 2. Handling New Folders from Meta (The "Janitor" Script)
 
-Since Meta deposits folders into your **Root** (which n8n can't see), you can use a small Google Apps Script to auto-move them into your shared `00_AUTOMATION` folder.
+Since Meta deposits folders into your **Root** (which n8n can't see), use this script to move them.
 
-### The "Janitor" Script:
-1. Go to [script.google.com](https://script.google.com/).
-2. Create a new project and paste this code:
-   ```javascript
-   function moveMetaFolders() {
-     var sourceFolder = DriveApp.getRootFolder();
-     var targetFolder = DriveApp.getFoldersByName("00_AUTOMATION").next();
-     var folders = sourceFolder.getFolders();
-     
-     while (folders.hasNext()) {
-       var folder = folders.next();
-       // Adjust the name check to match your Meta folders (e.g., starts with "meta-")
-       if (folder.getName().toLowerCase().startsWith("meta")) {
-         folder.moveTo(targetFolder);
-         console.log("Moved: " + folder.getName());
-       }
-     }
-   }
-   ```
-3. Click the **Clock icon (Triggers)** on the left.
-4. Add a trigger to run `moveMetaFolders` every hour (or daily).
-
-**Result**: Your Meta folders will now automatically "teleport" into the shared folder where n8n can see them.
+### Updated "Janitor" Script:
+This version catches both "meta-" and "instagram-" folders.
+```javascript
+function moveMetaFolders() {
+  var sourceFolder = DriveApp.getRootFolder();
+  var targetFolder = DriveApp.getFoldersByName("00_AUTOMATION").next();
+  var folders = sourceFolder.getFolders();
+  
+  while (folders.hasNext()) {
+    var folder = folders.next();
+    var name = folder.getName().toLowerCase();
+    
+    // Catches meta-YYYY-MON and instagram-XXXX formats
+    if (name.includes("meta") || name.includes("instagram")) {
+      folder.moveTo(targetFolder);
+      console.log("Moved: " + folder.getName());
+    }
+  }
+}
+```
 
 ---
 
-## 2. The 3-Node Workflow Implementation
+## 3. The Monthly Automation Workflow (n8n)
 
-To move files, you need to chain these nodes together:
+Follow these steps to build the automated monthly transfer.
 
-### Node 1: Google Drive (Search)
-- **Resource**: `File/Folder`
-- **Operation**: `Search`
-- **Query String**: `name = 'YourFolderName'` (to find a specific folder) or `*` for everything.
-- **Goal**: This gets the `File ID` of the file you want to move.
+### Step 1: Schedule & Date (Timing)
+1. **Schedule Trigger**: Set to "Every Month" on the **15th** at 00:00.
+2. **Date & Time Node**: 
+   - Operations: `Format a Date`
+   - Date: `{{ $now }}`
+   - Format: `yyyy-MMM` (This outputs e.g., `2026-Mar`).
 
-### Node 2: Google Drive (Download)
-- **Resource**: `File/Folder`
-- **Operation**: `Download`
-- **File ID**: `{{ $node["Search"].json["id"] }}` (Map this from the Search node).
-- **Goal**: This pulls the actual file data into n8n's memory.
+### Step 2: Dynamic Search (Finding the Month's Folder)
+1. **Google Drive Node (Search)**:
+   - Operation: `Find Files/Folders`
+   - Query: `name contains 'meta-{{ $node["Date & Time"].json["formattedDate"] }}'`
+   - **Important**: This finds the specific backup folder for the current month.
 
-### Node 3: SSH (Upload)
-- **Operation**: `Upload`
-- **Authentication**: Use your EC2 `.pem` key.
-- **Path**: `/home/ubuntu/destination_folder/`
-- **File Data**: Use the binary data from the Download node.
-- **Goal**: This sends the file to your EC2 instance.
+### Step 3: Destination Cleanup (SSH)
+Before uploading new files, clean the old ones inside the EC2.
+1. **SSH Node (Run Command)**:
+   - Command: `rm -rf /home/ubuntu/n8n-data/dailyAi/VibeDrips/inbox/*`
+   - **Warning**: This wipes the destination folder to ensure no old files remain.
+
+### Step 4: Recursive File Fetch
+1. **Google Drive Node (List Files)**:
+   - Operation: `List`
+   - Folder ID: Use the ID from Step 2.
+   - Filters: Navigate down to `messages/inbox/`.
+
+### Step 5: Download & Upload
+1. **Google Drive Node (Download)**: Fetch each file found in Step 4.
+2. **SSH Node (Upload file)**: 
+   - Path: `/home/ubuntu/n8n-data/dailyAi/VibeDrips/inbox/{{ $json.name }}`
+   - File Content: The binary data from the Download node.
+
+---
 
 ---
 
