@@ -37,7 +37,14 @@ ANY(SELECT(Intake[caption], TEXT([link]) = TEXT([_THISROW].[Product Source Link]
 ANY(SELECT(Intake[original_content_owner], TEXT([link]) = TEXT([_THISROW].[Product Source Link])))
 ```
 
-## Why this works
-- **ANY(SELECT)**: Acts as a manual de-reference. It finds the specific row in the `Intake` table where the URLs match and pulls the requested column.
-- **TEXT() conversion**: Ensures that the `Url` from the parent and the `Ref/Text` from the child are compared as standard strings, clearing the validation errors.
-- **Constraint Respect**: This fix requires **zero changes** to your spreadsheet data or your table Keys.
+## The Best Approach: Standalone Architecture
+
+To completely eliminate the "Type Mismatch" errors and standard Ref overhead, we recommend converting the relationship to a **Standalone** structure:
+
+1. **Change Column Type**: Switch `Product Source Link` in the `Products` table from `Ref` to **`Url`**.
+2. **Remove TEXT() Wrappers**: Once both columns are the same type (`Url`), your formulas can be simplified:
+   - **Filter**: `FILTER("VibeDrips_Products", [Product Source Link] = [_THISROW].[link])`
+   - **Select**: `ANY(SELECT(Intake[caption], [link] = [_THISROW].[Product Source Link]))`
+3. **Use LINKTOFORM**: Use a custom action with `LINKTOFORM` to handle auto-population since the automatic Ref-link is gone.
+
+This provides the cleanest dashboard with the best performance and zero AppSheet warnings.
