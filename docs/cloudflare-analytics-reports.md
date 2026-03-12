@@ -294,19 +294,25 @@ This method creates charts *inside* AppSheet using the raw data.
 > [!IMPORTANT]
 > AppSheet does **not** automatically import your Google Sheets charts. It only imports the rows of data. You must manually create the "Chart" views in AppSheet's UX tab.
 
-### Option B: The Embed Method (Easiest / Identical Look)
+### Option C: The Image Column Method (No Re-creating)
 
-If you want the charts in AppSheet to look **exactly** like they do in Google Sheets without setting them up again:
+If you can't find the "Web Page" view or don't want to re-invent the chart logic in AppSheet, you can "paste" the live Google Sheets chart as a picture.
 
-1. **Publish Chart**: In Google Sheets, click the 3-dot menu on a chart → **"Publish chart"**.
-2. **Get Link**: Select **Link** (not Embed) → click **Publish** → Copy the URL.
-3. **AppSheet View**:
-   - In AppSheet Editor, go to **App → Views** → **"+" (New View)**.
-   - **View Name**: `Cloudflare Traffic`.
-   - **For this data**: Select any small table (even an empty one).
-   - **View Type**: **web page**.
-   - **URL Content**: Paste the chart URL you copied from Google Sheets.
-4. **Result**: Your Google Sheets chart will now render perfectly inside your app.
+1. **Publish as Image**:
+   - In Google Sheets, click the 3-dot menu on your chart → **"Publish chart"**.
+   - Select **Link** → Change "Interactive" to **"Image"**.
+   - Click **Publish** and copy the URL (it should end in `&format=image`).
+2. **Add Virtual Column in AppSheet**:
+   - Go to **Data → Columns** → Select your `Daily Traffic` table.
+   - Click **"+ Add Virtual Column"**.
+   - **Column Name**: `Traffic Chart`.
+   - **App Formula**: Paste your URL inside quotes like this: `"https://docs.google.com/spreadsheets/d/e/.../pubchart?oid=...&format=image"`
+3. **Set Type to Image**:
+   - Save the formula and set the **Type** of this column to **Image**.
+4. **Display It**:
+   - Go to **App → Views** → Select your `Daily Traffic_Detail` view (or create a new Detail view).
+   - In **Column order**, make sure your new `Traffic Chart` column is selected.
+5. **Result**: Your AppSheet app will now show the exact same chart image from Google Sheets.
 
 ### Step 3 — Create the Analytics Dashboard (Grouping)
 
