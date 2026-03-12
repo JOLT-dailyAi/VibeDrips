@@ -272,4 +272,58 @@ function emailMonthlyReport() {
 }
 ```
 
-Then create a monthly trigger for `emailMonthlyReport` (runs 1st of each month).
+---
+
+## 7. Integrating with Google AppSheet
+
+If you already have a Google AppSheet app for VibeDrips, you can pull this analytics data directly into it to have a mobile-friendly dashboard.
+
+### Step 1 — Connect the Data
+
+1. Open your [AppSheet Editor](https://www.appsheet.com/).
+2. In the left menu, go to **Data → Tables**.
+3. Click **"+" (Add Data)** → **Google Sheets**.
+4. Select your `VibeDrips — Cloudflare Analytics` spreadsheet.
+5. Add the following tables:
+   - `Daily Traffic` (for trends)
+   - `Top Countries` (for geo breakdown)
+
+### Step 2 — Create Chart Views
+
+You need to create individual "UX Views" for each chart:
+
+#### A. Daily Traffic Trend (Line Chart)
+1. Go to **App → Views** (UX) → Click **"+" (New View)**.
+2. View name: `Traffic Trend`.
+3. For this data: `Daily Traffic`.
+4. View type: **chart**.
+5. Chart type: **col series (line)**.
+6. Chart columns:
+   - **X-axis**: Date
+   - **Series**: Total Requests, Unique Visitors
+7. Position: **ref** (hides it from main menu so you can group it).
+
+#### B. Country Breakdown (Horizontal Bar)
+1. Created another **New View**.
+2. View name: `Top Countries`.
+3. For this data: `Top Countries`.
+4. View type: **chart**.
+5. Chart type: **histogram (horizontal)**.
+6. Chart columns:
+   - **X-axis**: Country Code (or Country Name)
+   - **Series**: Requests
+7. Position: **ref**.
+
+### Step 3 — Create the Analytics Dashboard
+
+1. Create one final **New View**.
+2. View name: `Analytics Dashboard`.
+3. View type: **dashboard**.
+4. In **View entries**, click **Add** and select the views you created:
+   - `Traffic Trend`
+   - `Top Countries`
+5. Position: **center** (so it appears in your app's main navigation).
+
+> [!TIP]
+> **Real-time Sync**: AppSheet caches data. If your Apps Script updates the Google Sheet, you may need to click the "Sync" button (cloud icon) in the AppSheet app to see the latest bars/lines.
+
