@@ -281,30 +281,33 @@ function emailMonthlyReport() {
 
 ---
 
-## 7. Integrating with Google AppSheet (Fastest Way)
+## 7. Integrating with Google AppSheet (The Menu Sheet Method)
 
-Since native AppSheet charts require re-creating all your logic, the fastest way to see your data is to add a **"Dashboard Button"** to your app. This button will open your full-screen Google Sheets dashboard with one click.
+If you've created a dedicated spreadsheet tab to act as a "menu," follow these steps to turn those rows into buttons:
 
-### Step 1 — Get your Dashboard URL
-1. Follow **Section 4 (Option A or C)** above to get a public URL for your dashboard.
-2. Copy that URL.
+### Step 1 — Create the Redirection Action
+1. In AppSheet, go to **Actions** → **"+"**.
+2. **Action name**: `Open Report Link`.
+3. **For this data**: Select your `Cloudflare Dashboard` table.
+4. **Do this**: `External: go to a website`.
+5. **Target**: Use a formula to pick the right URL based on the row:
+   ```excel
+   IFS(
+     NOT(ISBLANK([📊 Dashboard])), "YOUR_WEB_DASHBOARD_URL",
+     NOT(ISBLANK([Mobile 📊 Dashboard])), "YOUR_MOBILE_DASHBOARD_URL"
+   )
+   ```
+6. **Position**: Set to **Inline** and attach it to your main column.
 
-### Step 2 — Create an "Open Analytics" Action in AppSheet
+### Step 2 — Set up the UX View
+1. Go to **App → Views** → select your `Cloudflare Dashboard` view.
+2. **View type**: **deck**.
+3. **Primary header**: Choose the column that has your text (`📊 Dashboard`).
+4. **Behavior**: Scroll down to **Event Actions**.
+5. Set **Row Selected** to **`Open Report Link`**.
 
-1. Open your [AppSheet Editor](https://www.appsheet.com/).
-2. In the left menu, go to **Actions** (bolt icon).
-3. Click **"+" (New Action)**.
-4. **Action name**: `Open Analytics`.
-5. **For this data**: Select your primary table (e.g., `VibeDrips_Products`).
-6. **Do this**: Select **"External: go to a website"**.
-7. **Target**: Paste your Dashboard URL inside quotes, for example: `"https://docs.google.com/spreadsheets/d/e/.../pubhtml"`
-8. **Appearance**: 
-   - **Display name**: `View Analytics Dashboard`
-   - **Action icon**: Search for `chart` or `dashboard`.
-   - **Prominence**: Set to **"Display prominently"** (this puts it at the top of your product views) or **"Display in primary navigation"**.
-
-### Step 3 — Result
-You now have a clean button in your AppSheet app. Clicking it instantly opens your beautiful Google Sheets charts in a new tab, exactly as they appear in Sheets, with no extra setup required.
+### Result
+Now, when you tap "web" or "mobile" in your app, it will instantly trigger the redirect to the correct dashboard link. Clear and professional!
 
 
 
