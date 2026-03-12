@@ -62,26 +62,30 @@ Follow these steps to build the automated monthly transfer.
 
 ### Step 2: Dynamic Search (Finding the Month's Folder)
 1. **Google Drive Node (Search)**:
-   - Operation: `Find Files/Folders`
-   - Query: `name contains 'meta-{{ $node["Date & Time"].json["formattedDate"] }}'`
-   - **Important**: This finds the specific backup folder for the current month.
+   - Operation: **Search** (Resource: File/Folder)
+   - Query: `*meta-{{ $node["Date & Time"].json["formattedDate"] }}*`
+   - **Important**: This wildcard syntax ensures n8n finds the specific folder even with the varying timestamps at the end.
 
 ### Step 3: Destination Cleanup (SSH)
-Before uploading new files, clean the old ones inside the EC2.
+Before uploading new files, wipe the old ones on your EC2.
 1. **SSH Node (Run Command)**:
    - Command: `rm -rf /home/ubuntu/n8n-data/dailyAi/VibeDrips/inbox/*`
-   - **Warning**: This wipes the destination folder to ensure no old files remain.
 
-### Step 4: Recursive File Fetch
-1. **Google Drive Node (List Files)**:
+### Step 4: Drilling down to the "Inbox" Folder
+Since your files are buried inside `.../messages/inbox/`, we need to find that final folder ID:
+1. **Google Drive Node (Search)**: 
+   - Query: `name = 'messages' and '{{ $node["Step 2"].json["id"] }}' in parents` (This finds the "messages" sub-folder).
+2. **Google Drive Node (Search)**:
+   - Query: `name = 'inbox' and '{{ $node["Step 4-1"].json["id"] }}' in parents` (This finds the final "inbox" sub-folder).
+
+### Step 5: List, Download, & Upload
+1. **Google Drive Node (List Content)**:
+   - Resource: `File/Folder`
    - Operation: `List`
-   - Folder ID: Use the ID from Step 2.
-   - Filters: Navigate down to `messages/inbox/`.
-
-### Step 5: Download & Upload
-1. **Google Drive Node (Download)**: Fetch each file found in Step 4.
-2. **SSH Node (Upload file)**: 
-   - Path: `/home/ubuntu/n8n-data/dailyAi/VibeDrips/inbox/{{ $json.name }}`
+   - Folder ID: `{{ $node["Step 4-2"].json["id"] }}`
+2. **Google Drive Node (Download)**: Download all files from Step 5-1.
+3. **SSH Node (Upload file)**: 
+   - Destination Path: `/home/ubuntu/n8n-data/dailyAi/VibeDrips/inbox/{{ $json.name }}`
    - File Content: The binary data from the Download node.
 
 ---
