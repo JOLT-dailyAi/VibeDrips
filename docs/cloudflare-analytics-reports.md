@@ -283,35 +283,33 @@ function emailMonthlyReport() {
 
 ---
 
-## 7. Integrating with Google AppSheet (Verified Method)
+---
 
-The most robust way to handle multiple links in one view is using **"Conditional Actions"**.
+## 7. Integrating with Google AppSheet (The Dynamic Action Method) — BEST 🏆
+
+The most professional way to build this is with a single **"Universal Redirect"** button that works for any report you add in the future.
 
 ### Step 1 — Sheet Structure
-Create a sheet named `Cloudflare Dashboard` with a single column:
-- **Menu**: Add two rows: `📊 Web Dashboard` and `📱 Mobile Dashboard`.
+Create your `Cloudflare Dashboard` sheet with two columns:
+- **Menu**: The text you want on the button (e.g., `📊 Web Dashboard`, `📱 Mobile Dashboard`).
+- **URL**: The actual link to that dashboard.
 
-### Step 2 — Create the Actions
-Create TWO separate actions for the `Cloudflare Dashboard` table:
+### Step 2 — Create the Dynamic Action
+In AppSheet, create one action for the `Cloudflare Dashboard` table:
+1. **Action name**: `Open Dashboard`.
+2. **Do this**: `External: go to a website`.
+3. **Target**: `=[URL]` (This pulls the link from your sheet).
+4. **Display name**: `=[Menu]` (This pulls the button text from your sheet).
+5. **Position**: Set to **Inline** and attach to the `URL` column.
+6. **Behavior → Only if true**: `NOT(ISBLANK([URL]))`.
 
-1. **Action A: Open Web Dashboard**
-   - **Do this**: `External: go to a website`
-   - **Target**: `"YOUR_WEB_URL"`
-   - **Behavior → Only if true**: `[Menu] = "📊 Web Dashboard"`
-
-2. **Action B: Open Mobile Dashboard**
-   - **Do this**: `External: go to a website`
-   - **Target**: `"YOUR_MOBILE_URL"`
-   - **Behavior → Only if true**: `[Menu] = "📱 Mobile Dashboard"`
-
-### Step 3 — Group them (The "Trigger")
-1. Create a third action: **Open Analytics | Dashboard**.
-2. **Do this**: `Grouped: execute a sequence of actions`.
-3. **Actions to run**: Add both Action A and Action B.
-4. **Behavior**: Set this to "Inline" or use it as the "Row Selected" event action in your view.
+### Step 3 — View Setup
+1. Create a **Deck** view for the `Cloudflare Dashboard` table.
+2. In **Behavior**, set the **Row Selected** event to your `Open Dashboard` action.
 
 ### Result
-Because of the conditions, when you tap the "Web" row, only the Web action runs. When you tap "Mobile," only the Mobile one runs. Clean, simple, and perfectly synchronized!
+Your app now has a perfectly clean, icon-based menu. To add a 3rd or 4th report (like "Weekly Stats"), you just add a new row to your Google Sheet. **AppSheet handles the rest automatically!**
+
 
 
 
