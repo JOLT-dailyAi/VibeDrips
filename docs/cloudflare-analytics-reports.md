@@ -281,33 +281,37 @@ function emailMonthlyReport() {
 
 ---
 
+---
+
 ## 7. Integrating with Google AppSheet (The Menu Sheet Method)
 
-If you've created a dedicated spreadsheet tab to act as a "menu," follow these steps to turn those rows into buttons:
+To ensure each dashboard appears as its own row in AppSheet, use a **"Tall"** spreadsheet structure. This is the most reliable way to build menus in AppSheet.
 
-### Step 1 — Create the Redirection Action
-1. In AppSheet, go to **Actions** → **"+"**.
-2. **Action name**: `Open Report Link`.
-3. **For this data**: Select your `Cloudflare Dashboard` table.
-4. **Do this**: `External: go to a website`.
-5. **Target**: Use a formula to pick the right URL based on the row:
-   ```excel
-   IFS(
-     NOT(ISBLANK([📊 Dashboard])), "YOUR_WEB_DASHBOARD_URL",
-     NOT(ISBLANK([Mobile 📊 Dashboard])), "YOUR_MOBILE_DASHBOARD_URL"
-   )
-   ```
-6. **Position**: Set to **Inline** and attach it to your main column.
+### Step 1 — Simplify your spreadsheet (The "Tall" Layout)
+1. Go to your **Cloudflare Dashboard** sheet in Google Sheets.
+2. Structure it like this (one column for the title, each button is a new row):
 
-### Step 2 — Set up the UX View
-1. Go to **App → Views** → select your `Cloudflare Dashboard` view.
+| Menu Item | URL (Optional) |
+| :--- | :--- |
+| 📊 Web Dashboard | (Paste Link Here) |
+| 📱 Mobile Dashboard | (Paste Link Here) |
+
+*Delete any old columns or extra headers so you only have these two.*
+
+### Step 2 — Update AppSheet Data
+1. In AppSheet Editor, go to **Data → Cloudflare Dashboard**.
+2. Click the **Sync** icon (top right) to pick up the new columns.
+3. Ensure **"Menu Item"** is set as the **Label**.
+
+### Step 3 — Create the UX View (The "Deck" View)
+1. Go to **App → Views** → select `Cloudflare Dashboard`.
 2. **View type**: **deck**.
-3. **Primary header**: Choose the column that has your text (`📊 Dashboard`).
-4. **Behavior**: Scroll down to **Event Actions**.
-5. Set **Row Selected** to **`Open Report Link`**.
+3. **Primary header**: Select `Menu Item`.
+4. **Behavior**: Scroll to **Event Actions**.
+5. Set **Row Selected** to your redirection action.
 
 ### Result
-Now, when you tap "web" or "mobile" in your app, it will instantly trigger the redirect to the correct dashboard link. Clear and professional!
+Your app will now show **two distinct rows**: "📊 Web Dashboard" and "📱 Mobile Dashboard". Clicking either one will trigger the correct redirect.
 
 
 
