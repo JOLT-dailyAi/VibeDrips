@@ -66,10 +66,12 @@ Follow these steps to build the automated monthly transfer.
    - Query: `*meta-{{ $node["Date & Time"].json["formattedDate"] }}*`
    - **Important**: This wildcard syntax ensures n8n finds the specific folder even with the varying timestamps at the end.
 
-### Step 3: Destination Cleanup (SSH)
-Before uploading new files, wipe the old ones on your EC2.
-1. **SSH Node (Run Command)**:
-   - Command: `rm -rf /home/ubuntu/n8n-data/dailyAi/VibeDrips/inbox/*`
+### Step 3: Destination Cleanup (Local)
+Since n8n is running directly on your EC2, use the **Read/Write Files from Disk** node.
+1. **Read/Write Files from Disk Node**:
+   - Operation: **Delete**
+   - Path: `/home/ubuntu/n8n-data/dailyAi/VibeDrips/inbox/*`
+   - **Note**: If you are using Docker, see the "Docker Paths" section below.
 
 ### Step 4: Drilling down to the "Inbox" Folder
 Since your files are buried inside `.../messages/inbox/`, we need to find that final folder ID:
@@ -78,18 +80,19 @@ Since your files are buried inside `.../messages/inbox/`, we need to find that f
 2. **Google Drive Node (Search)**:
    - Query: `name = 'inbox' and '{{ $node["Step 4-1"].json["id"] }}' in parents` (This finds the final "inbox" sub-folder).
 
-### Step 5: Download & Upload
+### Step 5: Download & Save
 
-This is where most users get mixed up: The **Download** node only names the file in n8n's memory. The **SSH** node actually puts it on your server.
+This is where most users get mixed up: The **Download** node only names the file in n8n's memory. The **Read/Write Files from Disk** node actually puts it on your server.
 
 1. **Google Drive Node (Download)**:
    - **File ID**: `{{ $json.id }}`
    - **File Name (Options)**: Set this to `{{ $json.name }}`. 
-   - **CRITICAL**: *Do not* put the `/home/ubuntu/` path here. This is just for the "label" inside n8n.
+   - **CRITICAL**: *Do not* put the `/home/ubuntu/` path here. This is just for the internal label.
 
-2. **SSH Node (Upload file)**: 
-   - **Path**: This is where you put the full server path: `/home/ubuntu/n8n-data/dailyAi/VibeDrips/inbox/{{ $json.name }}`
-   - **File Content**: Select the binary data coming from the Download node.
+2. **Read/Write Files from Disk Node**: 
+   - Operation: **Write**
+   - File Path: `/home/ubuntu/n8n-data/dailyAi/VibeDrips/inbox/{{ $json.name }}`
+   - Binary Property: `data` (mapping the output from the Download node).
 
 ### Result
 Your files will now appear on your EC2 as clean names like `message_1.json` inside your `/inbox/` folder.
@@ -98,7 +101,15 @@ Your files will now appear on your EC2 as clean names like `message_1.json` insi
 
 ---
 
-## 3. Best Practices for EC2 Folders
-- Ensure the destination folder on EC2 has correct write permissions:
-  `sudo chown -R ubuntu:ubuntu /path/to/folder`
-- Use the **SSH Node**'s "Upload" operation instead of "Run Command" for binary files.
+## 4. Troubleshooting Docker Paths & Permissions
+
+If n8n is running in **Docker**, it can only see files *inside* its container.
+- **Problem**: n8n won't find `/home/ubuntu/...` unless you mapped it in your `docker-compose.yml`.
+- **The Fix**: Add a volume mapping to your n8n service:
+  ```yaml
+  volumes:
+    - /home/ubuntu/n8n-data:/home/ubuntu/n8n-data
+  ```
+- **Permission Fix**: The n8n user inside Docker (usually `node` or UID `1000`) needs write access to that folder:
+  `sudo chown -R 1000:1000 /home/ubuntu/n8n-data`
+  `sudo chmod -R 777 /home/ubuntu/n8n-data`
