@@ -276,53 +276,32 @@ function emailMonthlyReport() {
 
 ---
 
-## 7. Integrating with Google AppSheet
+---
 
-If you already have a Google AppSheet app for VibeDrips, you can pull this analytics data directly into it.
+## 7. Integrating with Google AppSheet (Fastest Way)
 
-### Option A: The Native Method (Best for Data Filtering)
+Since native AppSheet charts require re-creating all your logic, the fastest way to see your data is to add a **"Dashboard Button"** to your app. This button will open your full-screen Google Sheets dashboard with one click.
 
-This method creates charts *inside* AppSheet using the raw data.
+### Step 1 — Get your Dashboard URL
+1. Follow **Section 4 (Option A or C)** above to get a public URL for your dashboard.
+2. Copy that URL.
 
-1. **Connect Data**: In AppSheet Editor, go to **Data → Tables** → **"+"** → **Google Sheets** → select `VibeDrips — Cloudflare Analytics`.
-2. **Add Tables**: Add `Daily Traffic` and `Top Countries`.
-3. **Create Views**: Go to **App → Views** → **"+"**.
-   - **Type**: `chart`
-   - **Chart Type**: `col series (line)` for Traffic, `histogram (horizontal)` for Geo.
-   - **Columns**: Select the metrics you want (Requests, Visitors, etc.).
+### Step 2 — Create an "Open Analytics" Action in AppSheet
 
-> [!IMPORTANT]
-> AppSheet does **not** automatically import your Google Sheets charts. It only imports the rows of data. You must manually create the "Chart" views in AppSheet's UX tab.
+1. Open your [AppSheet Editor](https://www.appsheet.com/).
+2. In the left menu, go to **Actions** (bolt icon).
+3. Click **"+" (New Action)**.
+4. **Action name**: `Open Analytics`.
+5. **For this data**: Select your primary table (e.g., `VibeDrips_Products`).
+6. **Do this**: Select **"External: go to a website"**.
+7. **Target**: Paste your Dashboard URL inside quotes, for example: `"https://docs.google.com/spreadsheets/d/e/.../pubhtml"`
+8. **Appearance**: 
+   - **Display name**: `View Analytics Dashboard`
+   - **Action icon**: Search for `chart` or `dashboard`.
+   - **Prominence**: Set to **"Display prominently"** (this puts it at the top of your product views) or **"Display in primary navigation"**.
 
-### Option C: The Image Column Method (No Re-creating)
+### Step 3 — Result
+You now have a clean button in your AppSheet app. Clicking it instantly opens your beautiful Google Sheets charts in a new tab, exactly as they appear in Sheets, with no extra setup required.
 
-If you can't find the "Web Page" view or don't want to re-invent the chart logic in AppSheet, you can "paste" the live Google Sheets chart as a picture.
-
-1. **Publish as Image**:
-   - In Google Sheets, click the 3-dot menu on your chart → **"Publish chart"**.
-   - Select **Link** → Change "Interactive" to **"Image"**.
-   - Click **Publish** and copy the URL (it should end in `&format=image`).
-2. **Add Virtual Column in AppSheet**:
-   - Go to **Data → Columns** → Select your `Daily Traffic` table.
-   - Click **"+ Add Virtual Column"**.
-   - **Column Name**: `Traffic Chart`.
-   - **App Formula**: Paste your URL inside quotes like this: `"https://docs.google.com/spreadsheets/d/e/.../pubchart?oid=...&format=image"`
-3. **Set Type to Image**:
-   - Save the formula and set the **Type** of this column to **Image**.
-4. **Display It**:
-   - Go to **App → Views** → Select your `Daily Traffic_Detail` view (or create a new Detail view).
-   - In **Column order**, make sure your new `Traffic Chart` column is selected.
-5. **Result**: Your AppSheet app will now show the exact same chart image from Google Sheets.
-
-### Step 3 — Create the Analytics Dashboard (Grouping)
-
-1. Create one final **New View**.
-2. View name: `Analytics Dashboard`.
-3. View type: **dashboard**.
-4. In **View entries**, click **Add** and select the views you created in Step 2.
-5. Position: **center** (so it appears in your app's main navigation).
-
-> [!TIP]
-> **Real-time Sync**: AppSheet caches data. If your Apps Script updates the Google Sheet, you may need to click the "Sync" button (cloud icon) in the AppSheet app to see the latest bars/lines.
 
 
