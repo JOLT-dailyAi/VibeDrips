@@ -17,24 +17,29 @@ In our `VibeDrips` app:
 We bypassed the automatic "Ref" system by using manual search formulas that use the `URL` (common to both tables) to link the records.
 
 ### 1. Fix the "Related Products" List
-In the **`Intake`** table, we replaced `REF_ROWS` with a `FILTER` formula that forces both sides to be treated as Text for comparison.
+In the **`Intake`** table, we replaced `REF_ROWS` with a `FILTER` formula that supports matching via two different columns (Primary or Similar). 
 
 **Formula**:
 ```excel
-FILTER("VibeDrips_Products", TEXT([Product Source Link]) = TEXT([_THISROW].[link]))
+FILTER("VibeDrips_Products", 
+  OR(
+    TEXT([Product Source Link]) = TEXT([_THISROW].[link]), 
+    TEXT([Reference Media for similar products]) = TEXT([_THISROW].[link])
+  )
+)
 ```
 
 ### 2. Fix the Empty Data Columns (De-references)
-In the **`VibeDrips_Products`** table, we replaced `[Product Source Link].[Column]` style de-references with explicit `SELECT` lookups.
+In the **`VibeDrips_Products`** table, we use `ANY(SELECT)` to pull parent data from `Intake` using the same multi-link logic.
 
 **Formula (for `caption`)**:
 ```excel
-ANY(SELECT(Intake[caption], TEXT([link]) = TEXT([_THISROW].[Product Source Link])))
-```
-
-**Formula (for `original_content_owner`)**:
-```excel
-ANY(SELECT(Intake[original_content_owner], TEXT([link]) = TEXT([_THISROW].[Product Source Link])))
+ANY(SELECT(Intake[caption], 
+  OR(
+    TEXT([link]) = TEXT([_THISROW].[Product Source Link]), 
+    TEXT([link]) = TEXT([_THISROW].[Reference Media for similar products])
+  )
+))
 ```
 
 ## The Best Approach: Standalone Architecture
