@@ -283,35 +283,35 @@ function emailMonthlyReport() {
 
 ---
 
-## 7. Integrating with Google AppSheet (The Menu Sheet Method)
+## 7. Integrating with Google AppSheet (Verified Method)
 
-To ensure each dashboard appears as its own row in AppSheet, use a **"Tall"** spreadsheet structure. This is the most reliable way to build menus in AppSheet.
+The most robust way to handle multiple links in one view is using **"Conditional Actions"**.
 
-### Step 1 — Simplify your spreadsheet (The "Tall" Layout)
-1. Go to your **Cloudflare Dashboard** sheet in Google Sheets.
-2. Structure it like this (one column for the title, each button is a new row):
+### Step 1 — Sheet Structure
+Create a sheet named `Cloudflare Dashboard` with a single column:
+- **Menu**: Add two rows: `📊 Web Dashboard` and `📱 Mobile Dashboard`.
 
-| Menu Item | URL (Optional) |
-| :--- | :--- |
-| 📊 Web Dashboard | (Paste Link Here) |
-| 📱 Mobile Dashboard | (Paste Link Here) |
+### Step 2 — Create the Actions
+Create TWO separate actions for the `Cloudflare Dashboard` table:
 
-*Delete any old columns or extra headers so you only have these two.*
+1. **Action A: Open Web Dashboard**
+   - **Do this**: `External: go to a website`
+   - **Target**: `"YOUR_WEB_URL"`
+   - **Behavior → Only if true**: `[Menu] = "📊 Web Dashboard"`
 
-### Step 2 — Update AppSheet Data
-1. In AppSheet Editor, go to **Data → Cloudflare Dashboard**.
-2. Click the **Sync** icon (top right) to pick up the new columns.
-3. Ensure **"Menu Item"** is set as the **Label**.
+2. **Action B: Open Mobile Dashboard**
+   - **Do this**: `External: go to a website`
+   - **Target**: `"YOUR_MOBILE_URL"`
+   - **Behavior → Only if true**: `[Menu] = "📱 Mobile Dashboard"`
 
-### Step 3 — Create the UX View (The "Deck" View)
-1. Go to **App → Views** → select `Cloudflare Dashboard`.
-2. **View type**: **deck**.
-3. **Primary header**: Select `Menu Item`.
-4. **Behavior**: Scroll to **Event Actions**.
-5. Set **Row Selected** to your redirection action.
+### Step 3 — Group them (The "Trigger")
+1. Create a third action: **Open Analytics | Dashboard**.
+2. **Do this**: `Grouped: execute a sequence of actions`.
+3. **Actions to run**: Add both Action A and Action B.
+4. **Behavior**: Set this to "Inline" or use it as the "Row Selected" event action in your view.
 
 ### Result
-Your app will now show **two distinct rows**: "📊 Web Dashboard" and "📱 Mobile Dashboard". Clicking either one will trigger the correct redirect.
+Because of the conditions, when you tap the "Web" row, only the Web action runs. When you tap "Mobile," only the Mobile one runs. Clean, simple, and perfectly synchronized!
 
 
 
