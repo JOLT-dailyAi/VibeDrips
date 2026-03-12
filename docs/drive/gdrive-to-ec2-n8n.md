@@ -78,15 +78,21 @@ Since your files are buried inside `.../messages/inbox/`, we need to find that f
 2. **Google Drive Node (Search)**:
    - Query: `name = 'inbox' and '{{ $node["Step 4-1"].json["id"] }}' in parents` (This finds the final "inbox" sub-folder).
 
-### Step 5: List, Download, & Upload
-1. **Google Drive Node (List Content)**:
-   - Resource: `File/Folder`
-   - Operation: `List`
-   - Folder ID: `{{ $node["Step 4-2"].json["id"] }}`
-2. **Google Drive Node (Download)**: Download all files from Step 5-1.
-3. **SSH Node (Upload file)**: 
-   - Destination Path: `/home/ubuntu/n8n-data/dailyAi/VibeDrips/inbox/{{ $json.name }}`
-   - File Content: The binary data from the Download node.
+### Step 5: Download & Upload
+
+This is where most users get mixed up: The **Download** node only names the file in n8n's memory. The **SSH** node actually puts it on your server.
+
+1. **Google Drive Node (Download)**:
+   - **File ID**: `{{ $json.id }}`
+   - **File Name (Options)**: Set this to `{{ $json.name }}`. 
+   - **CRITICAL**: *Do not* put the `/home/ubuntu/` path here. This is just for the "label" inside n8n.
+
+2. **SSH Node (Upload file)**: 
+   - **Path**: This is where you put the full server path: `/home/ubuntu/n8n-data/dailyAi/VibeDrips/inbox/{{ $json.name }}`
+   - **File Content**: Select the binary data coming from the Download node.
+
+### Result
+Your files will now appear on your EC2 as clean names like `message_1.json` inside your `/inbox/` folder.
 
 ---
 
