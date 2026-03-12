@@ -12,12 +12,43 @@ In your n8n output, you likely only see files that have been shared with your **
 A Google Service Account acts like a separate user. It **cannot** see your "My Drive" folders unless you explicitly invite it to those folders.
 
 ### The Fix:
-1. Copy the **Service Account Email** from your n8n credentials (e.g., `n8n-drive-service-account@...iam.gserviceaccount.com`).
+1. Copy your Service Account Email:
+   `n8n-google-sheets@youtube-data-api-xxxxx.iam.gserviceaccount.com`
 2. Go to your Google Drive in the browser.
-3. **Right-click the folder** you want n8n to access (or the root folder).
-4. Click **Share** and paste the Service Account email.
+3. **Right-click the folder** you want to move (e.g., `GITHUB` or `DIRCORD`).
+4. Click **Share** and paste that email address.
 5. Give it **Editor** permissions.
-6. Re-run your n8n search — all folders and files inside will now appear.
+6. Re-run your n8n search — the folder will now appear in your results.
+
+---
+
+## 2. Handling New Folders from Meta (The "Janitor" Script)
+
+Since Meta deposits folders into your **Root** (which n8n can't see), you can use a small Google Apps Script to auto-move them into your shared `00_AUTOMATION` folder.
+
+### The "Janitor" Script:
+1. Go to [script.google.com](https://script.google.com/).
+2. Create a new project and paste this code:
+   ```javascript
+   function moveMetaFolders() {
+     var sourceFolder = DriveApp.getRootFolder();
+     var targetFolder = DriveApp.getFoldersByName("00_AUTOMATION").next();
+     var folders = sourceFolder.getFolders();
+     
+     while (folders.hasNext()) {
+       var folder = folders.next();
+       // Adjust the name check to match your Meta folders (e.g., starts with "meta-")
+       if (folder.getName().toLowerCase().startsWith("meta")) {
+         folder.moveTo(targetFolder);
+         console.log("Moved: " + folder.getName());
+       }
+     }
+   }
+   ```
+3. Click the **Clock icon (Triggers)** on the left.
+4. Add a trigger to run `moveMetaFolders` every hour (or daily).
+
+**Result**: Your Meta folders will now automatically "teleport" into the shared folder where n8n can see them.
 
 ---
 
