@@ -61,10 +61,13 @@
 ### Chart 5 — Top Countries (Bar Chart)
 
 1. Go to `Top Countries` sheet
-2. Select **B (Country)** + **C (Requests)**
+2. Select **F (Country Name)** + **C (Requests)** (hold Ctrl to select non-adjacent columns)
 3. `Insert → Chart` → Chart type: **Horizontal bar chart**
 4. Title: `Top 10 Countries by Requests`
-5. In Chart Editor → Customize → Chart & axis titles → set max to top 10
+5. In Chart Editor (Setup tab):
+   - **X-axis**: Country Name
+   - **Series**: Requests
+6. In Chart Editor (Customize tab) → Chart & axis titles → set max to top 10
 
 ---
 

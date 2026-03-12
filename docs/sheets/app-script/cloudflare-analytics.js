@@ -43,7 +43,7 @@ const HEADERS = {
         'Unique Visitors', 'Page Views', 'Encrypted Requests', 'Error 4xx', 'Error 5xx'
     ],
     THREATS: ['Date', 'Total Threats', 'Bot Challenges', 'Bot Solved', 'Firewall Events'],
-    GEO: ['Date', 'Country', 'Country Code', 'Requests', 'Bandwidth (MB)', 'Threats'],
+    GEO: ['Date', 'Country Code', 'Requests', 'Bandwidth (MB)', 'Threats', 'Country Name'],
 };
 
 // ─── COUNTRY CODE LOOKUP ──────────────────────────────────────────────────────
@@ -191,7 +191,7 @@ function writeHeaders(sheetName, headers) {
 function resetGeoHeaders() {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     const sheet = ss.getSheetByName(SHEETS.GEO);
-    const headers = HEADERS.GEO; // ['Date','Country','Country Code','Requests','Bandwidth (MB)','Threats']
+    const headers = HEADERS.GEO; // ['Date','Country Code','Requests','Bandwidth (MB)','Threats','Country Name']
     sheet.getRange(1, 1, 1, headers.length).setValues([headers])
         .setFontWeight('bold')
         .setBackground('#1a73e8')
@@ -410,11 +410,11 @@ function fetchGeo() {
         .slice(0, 50)
         .map(([code, data]) => [
             today,
-            getCountryName(code),        // ← Full name e.g. "India", "Netherlands"
-            code,                        // ← Keep code too e.g. "IN", "NL"
-            data.requests,
-            (data.bytes / 1048576).toFixed(2),
-            data.threats,
+            code,                        // ← Column B: Country Code e.g. "IN"
+            data.requests,               // ← Column C: Requests
+            (data.bytes / 1048576).toFixed(2), // ← Column D: Bandwidth
+            data.threats,                // ← Column E: Threats
+            getCountryName(code),        // ← Column F: Country Name e.g. "India"
         ]);
 
     // Replace geo sheet data (fresh each run)
