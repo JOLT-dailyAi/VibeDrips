@@ -274,56 +274,49 @@ function emailMonthlyReport() {
 
 ---
 
+---
+
 ## 7. Integrating with Google AppSheet
 
-If you already have a Google AppSheet app for VibeDrips, you can pull this analytics data directly into it to have a mobile-friendly dashboard.
+If you already have a Google AppSheet app for VibeDrips, you can pull this analytics data directly into it.
 
-### Step 1 — Connect the Data
+### Option A: The Native Method (Best for Data Filtering)
 
-1. Open your [AppSheet Editor](https://www.appsheet.com/).
-2. In the left menu, go to **Data → Tables**.
-3. Click **"+" (Add Data)** → **Google Sheets**.
-4. Select your `VibeDrips — Cloudflare Analytics` spreadsheet.
-5. Add the following tables:
-   - `Daily Traffic` (for trends)
-   - `Top Countries` (for geo breakdown)
+This method creates charts *inside* AppSheet using the raw data.
 
-### Step 2 — Create Chart Views
+1. **Connect Data**: In AppSheet Editor, go to **Data → Tables** → **"+"** → **Google Sheets** → select `VibeDrips — Cloudflare Analytics`.
+2. **Add Tables**: Add `Daily Traffic` and `Top Countries`.
+3. **Create Views**: Go to **App → Views** → **"+"**.
+   - **Type**: `chart`
+   - **Chart Type**: `col series (line)` for Traffic, `histogram (horizontal)` for Geo.
+   - **Columns**: Select the metrics you want (Requests, Visitors, etc.).
 
-You need to create individual "UX Views" for each chart:
+> [!IMPORTANT]
+> AppSheet does **not** automatically import your Google Sheets charts. It only imports the rows of data. You must manually create the "Chart" views in AppSheet's UX tab.
 
-#### A. Daily Traffic Trend (Line Chart)
-1. Go to **App → Views** (UX) → Click **"+" (New View)**.
-2. View name: `Traffic Trend`.
-3. For this data: `Daily Traffic`.
-4. View type: **chart**.
-5. Chart type: **col series (line)**.
-6. Chart columns:
-   - **X-axis**: Date
-   - **Series**: Total Requests, Unique Visitors
-7. Position: **ref** (hides it from main menu so you can group it).
+### Option B: The Embed Method (Easiest / Identical Look)
 
-#### B. Country Breakdown (Horizontal Bar)
-1. Created another **New View**.
-2. View name: `Top Countries`.
-3. For this data: `Top Countries`.
-4. View type: **chart**.
-5. Chart type: **histogram (horizontal)**.
-6. Chart columns:
-   - **X-axis**: Country Code (or Country Name)
-   - **Series**: Requests
-7. Position: **ref**.
+If you want the charts in AppSheet to look **exactly** like they do in Google Sheets without setting them up again:
 
-### Step 3 — Create the Analytics Dashboard
+1. **Publish Chart**: In Google Sheets, click the 3-dot menu on a chart → **"Publish chart"**.
+2. **Get Link**: Select **Link** (not Embed) → click **Publish** → Copy the URL.
+3. **AppSheet View**:
+   - In AppSheet Editor, go to **App → Views** → **"+" (New View)**.
+   - **View Name**: `Cloudflare Traffic`.
+   - **For this data**: Select any small table (even an empty one).
+   - **View Type**: **web page**.
+   - **URL Content**: Paste the chart URL you copied from Google Sheets.
+4. **Result**: Your Google Sheets chart will now render perfectly inside your app.
+
+### Step 3 — Create the Analytics Dashboard (Grouping)
 
 1. Create one final **New View**.
 2. View name: `Analytics Dashboard`.
 3. View type: **dashboard**.
-4. In **View entries**, click **Add** and select the views you created:
-   - `Traffic Trend`
-   - `Top Countries`
+4. In **View entries**, click **Add** and select the views you created in Step 2.
 5. Position: **center** (so it appears in your app's main navigation).
 
 > [!TIP]
 > **Real-time Sync**: AppSheet caches data. If your Apps Script updates the Google Sheet, you may need to click the "Sync" button (cloud icon) in the AppSheet app to see the latest bars/lines.
+
 
