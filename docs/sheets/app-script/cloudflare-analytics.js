@@ -112,6 +112,21 @@ const COUNTRY_NAMES = {
     VC: 'St. Vincent', VE: 'Venezuela', VN: 'Vietnam',
     VU: 'Vanuatu', WS: 'Samoa', YE: 'Yemen',
     ZA: 'South Africa', ZM: 'Zambia', ZW: 'Zimbabwe',
+    // Additional territories & special codes
+    HK: 'Hong Kong', MO: 'Macao', TF: 'French Southern Territories',
+    XK: 'Kosovo', PS: 'Palestine', GG: 'Guernsey',
+    JE: 'Jersey', IM: 'Isle of Man', AX: 'Åland Islands',
+    BL: 'Saint Barthélemy', MF: 'Saint Martin', SX: 'Sint Maarten',
+    CW: 'Curaçao', BQ: 'Caribbean Netherlands', SH: 'Saint Helena',
+    GI: 'Gibraltar', PM: 'Saint Pierre & Miquelon', WF: 'Wallis and Futuna',
+    YT: 'Mayotte', RE: 'Réunion', GP: 'Guadeloupe',
+    MQ: 'Martinique', GF: 'French Guiana', NC: 'New Caledonia',
+    PF: 'French Polynesia', FK: 'Falkland Islands', GL: 'Greenland',
+    FO: 'Faroe Islands', AS: 'American Samoa', GU: 'Guam',
+    MP: 'Northern Mariana Islands', PR: 'Puerto Rico', VI: 'US Virgin Islands',
+    // Cloudflare-specific special codes
+    T1: 'Tor Network', XX: 'Unknown', A1: 'Anonymous Proxy',
+    A2: 'Satellite Provider',
 };
 
 function getCountryName(code) {
@@ -167,6 +182,22 @@ function writeHeaders(sheetName, headers) {
             .setFontColor('#ffffff');
         sheet.setFrozenRows(1);
     }
+}
+
+/**
+ * Force-update the Top Countries header row (run once to fix mismatch).
+ * Safe to run — only updates row 1, does NOT touch data rows.
+ */
+function resetGeoHeaders() {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = ss.getSheetByName(SHEETS.GEO);
+    const headers = HEADERS.GEO; // ['Date','Country','Country Code','Requests','Bandwidth (MB)','Threats']
+    sheet.getRange(1, 1, 1, headers.length).setValues([headers])
+        .setFontWeight('bold')
+        .setBackground('#1a73e8')
+        .setFontColor('#ffffff');
+    sheet.setFrozenRows(1);
+    Logger.log('✅ Top Countries header updated: ' + headers.join(' | '));
 }
 
 // ─── GRAPHQL QUERIES ──────────────────────────────────────────────────────────
