@@ -119,7 +119,8 @@ You can publish your Google Sheet as a **read-only web app** so anyone with the 
 4. Click **Publish**
 5. Copy the link — anyone can view it without a Google account
 
-> ⚠️ This publishes a **static** view. Charts will reflect whatever the sheet shows at the time of viewing. Since the Apps Script updates the data automatically, the published view auto-updates too.
+> [!WARNING]
+> **Static View Only**: This creates a simple HTML snapshot. **Interactive Slicers and Filters will NOT work here.** It is purely for viewing.
 
 ---
 
@@ -130,16 +131,18 @@ Each individual chart can be published as an embed:
 1. Click a chart → 3-dot menu → **"Publish chart"**
 2. Change "Interactive" to **"Image"** (more reliable) or keep Interactive
 3. Copy the embed code or link
-4. Embed in any webpage using:
+4. Embed in any webpage using an `<iframe>`.
 
-```html
-<iframe 
-  src="YOUR_CHART_PUBLISH_URL" 
-  width="600" 
-  height="400" 
-  frameborder="0">
-</iframe>
-```
+---
+
+### Option D — Read-Only Share Link (Working Slicers)
+
+If you want your **Slicers/Filters** to actually work for someone viewing the dashboard, this is the best method:
+
+1. Click the **Share** button (top right).
+2. Under "General access", change to **"Anyone with the link"**.
+3. Set the role to **Viewer**.
+4. **Copy the Link**: Send this link to anyone. They will see the full Google Sheets interface (Read-Only), and all **Slicers will work perfectly**.
 
 ---
 
