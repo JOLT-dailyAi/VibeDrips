@@ -160,3 +160,8 @@ To prevent user disorientation after a "Warp" or direct navigation event, the la
 - **Standard**: All internal routing and caching MUST use root-relative paths (starting with `/`) or relative paths.
 - **Why**: Cloudflare Pages serves from the absolute root of the domain (`vibedrips.com/`). Including the repo-name subdirectory in absolute paths causes 404 errors for CSS and JS assets, crashing the Service Worker and resulting in unstyled pages.
 - **Social Metadata**: Open Graph (`og:url`) and Twitter Cards MUST use the production root domain `https://vibedrips.com/` for canonical previews.
+
+### 6. YouTube Embed Security Protocol (Origin Handshake)
+- **Constraint**: All YouTube embed URLs utilizing the IFrame API (`enablejsapi=1`) MUST include the explicitly declared `origin` parameter.
+- **Standard**: Append `&origin=${window.location.origin}` to all YouTube embed strings.
+- **Why**: Custom domains (Cloudflare) require a security handshake between the host and the YouTube player. Omitting the origin causes an "Error 153" (Video player configuration error) on custom domain deployments.
