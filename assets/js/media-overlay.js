@@ -527,7 +527,10 @@ class MediaOverlay {
             // ⚠️ PILL CONTROL: Move to One-Shot logic
             const isIOS = window.Device?.isIOS();
             const shouldMute = window.MediaState?.shouldStartMuted();
-            if (play && (isIOS || shouldMute) && this.engagementPill) {
+            const currentUrl = this.mediaItems[0] || '';
+            const isSilent = (!video && !iframe) || currentUrl.match(/\.(jpg|jpeg|png|gif|webp|svg|avif|heic|heif)$/i); 
+
+            if (play && (isIOS || shouldMute) && this.engagementPill && !isSilent) {
                 this.engagementPill.classList.remove('instantly-hidden');
                 this.engagementPill.classList.add('smart-cycling');
             } else if (this.engagementPill) {

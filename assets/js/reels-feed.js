@@ -254,13 +254,17 @@ function activateMedia(container, shouldPlay) {
       }
 
       // Phase 1: Engagement Pill
-      const pill = document.createElement('div');
-      pill.className = 'engagement-pill';
-      pill.innerHTML = `Tap <span class="pill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></span> for sound`;
+      const isSilent = type === 'image' || url.match(/\.(jpg|jpeg|png|gif|webp|svg|avif|heic|heif)$/i);
 
-      const isUnmuted = window.MediaState?.isUnmuted();
-      if (!isUnmuted) pill.classList.add('smart-cycling');
-      container.appendChild(pill);
+      if (!isSilent) {
+        const pill = document.createElement('div');
+        pill.className = 'engagement-pill';
+        pill.innerHTML = `Tap <span class="pill-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></span> for sound`;
+
+        const isUnmuted = window.MediaState?.isUnmuted();
+        if (!isUnmuted) pill.classList.add('smart-cycling');
+        container.appendChild(pill);
+      }
 
       const handleHandover = (e) => {
         e.stopPropagation();
@@ -401,7 +405,10 @@ function triggerShotgunPulse(media) {
 
   // Phase 1: Pill control (iOS always shows it on EVERY reel; Android only if muted)
   const pill = media.parentElement?.querySelector('.engagement-pill');
-  if (pill) {
+  const url = media.parentElement?.dataset.url || '';
+  const isSilent = media.parentElement?.dataset.type === 'image' || url.match(/\.(jpg|jpeg|png|gif|webp|svg|avif|heic|heif)$/i);
+
+  if (pill && !isSilent) {
     if (isIOS || shouldMute) {
       pill.classList.remove('instantly-hidden');
       pill.classList.add('smart-cycling');
@@ -409,6 +416,9 @@ function triggerShotgunPulse(media) {
       pill.classList.add('instantly-hidden');
       pill.classList.remove('smart-cycling');
     }
+  } else if (pill && isSilent) {
+    pill.classList.add('instantly-hidden');
+    pill.classList.remove('smart-cycling');
   }
 
   // 🔊 SILENT PRIMING: Set volume once, separate from play pulse logic
