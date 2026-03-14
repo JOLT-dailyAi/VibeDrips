@@ -500,7 +500,7 @@ function getMediaHTML(type, url, isActive) {
               data-birth-volume="${currentVol}"
               style="width:100%;height:100%;object-fit:cover;"></video>`;
   } else {
-    return `<iframe src="${embedUrl}" frameborder="0" scrolling="no" allowtransparency="true" allowfullscreen="true" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>`;
+    return `<iframe src="${embedUrl}" frameborder="0" scrolling="no" allowtransparency="true" allowfullscreen="true" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
   }
 }
 
@@ -529,7 +529,7 @@ function getUniversalVideoEmbedUrlForReels(sourceUrl, isActive) {
     // 🔥 FORCE ACTIVE: If we are active, we MUST have autoplay=1
     const forcedAutoplay = isActive ? '1' : '0';
 
-    if (videoId) return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${forcedAutoplay}&mute=${initialMute}&rel=0&origin=${window.location.origin}`;
+    if (videoId) return `https://www.youtube-nocookie.com/embed/${videoId}?enablejsapi=1&autoplay=${forcedAutoplay}&mute=${initialMute}&rel=0&origin=${window.location.origin}`;
   }
   return sourceUrl;
 }
@@ -619,7 +619,7 @@ function getUniversalVideoEmbedUrl(sourceUrl) {
         videoId = sourceUrl.match(/shorts\/([^?]+)/)?.[1];
       }
       if (videoId) {
-        return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=1&mute=1&rel=0&origin=${window.location.origin}`;
+        return `https://www.youtube-nocookie.com/embed/${videoId}?enablejsapi=1&autoplay=1&mute=1&rel=0&origin=${window.location.origin}`;
       }
     }
 

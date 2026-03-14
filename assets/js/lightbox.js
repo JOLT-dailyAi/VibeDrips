@@ -956,7 +956,7 @@ class MediaLightbox {
     refreshPlayer(type, container, url, attributes = {}) {
         if (type === 'iframe') {
             const attrStr = Object.entries(attributes).map(([k, v]) => `${k}="${v}"`).join(' ');
-            container.innerHTML = `<iframe class="lightbox-iframe" frameborder="0" allowfullscreen allow="autoplay; encrypted-media" src="${url}" ${attrStr} style="display: block;"></iframe>`;
+            container.innerHTML = `<iframe class="lightbox-iframe" frameborder="0" allowfullscreen allow="autoplay; encrypted-media" src="${url}" ${attrStr} referrerpolicy="strict-origin-when-cross-origin" style="display: block;"></iframe>`;
             return container.querySelector('iframe');
         } else if (type === 'video') {
             const attrStr = Object.entries(attributes).map(([k, v]) => `${k}="${v}"`).join(' ');
@@ -1270,7 +1270,7 @@ class MediaLightbox {
             // UNLESS: The session is already unmuted globally.
             const initialMute = (window.MediaState && window.MediaState.isUnmuted()) ? '0' : '1';
 
-            return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${autoplay}&mute=${initialMute}&rel=0&origin=${window.location.origin}`;
+            return `https://www.youtube-nocookie.com/embed/${videoId}?enablejsapi=1&autoplay=${autoplay}&mute=${initialMute}&rel=0&origin=${window.location.origin}`;
         }
         return null;
     }
