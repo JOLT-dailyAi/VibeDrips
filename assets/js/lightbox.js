@@ -936,7 +936,7 @@ class MediaLightbox {
         }
 
         // Video files
-        if (lowerUrl.match(/\.(mp4|mov|avi|webm|mkv|m4v|ogv)$/)) {
+        if (lowerUrl.match(/\.(mp4|mov|avi|webm|mkv|m4v|ogv)([?#]|$)/i)) {
             return 'video';
         }
 

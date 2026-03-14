@@ -395,6 +395,31 @@
     <script src="assets/js/reels-position.js"></script>
     <script src="assets/js/reels-modal.js"></script>
 
+    <!-- Nuclear Reset Script: Clears stale Service Workers and Caches (One-time Force) -->
+    <script>
+        (async function() {
+            const RESET_VERSION = '20260314_NUCLEAR_V1';
+            if (localStorage.getItem('vibedrips-reset-version') !== RESET_VERSION) {
+                console.log('☢️ Nuclear Reset: Clearing stale caches and workers...');
+                try {
+                    // Unregister ALL workers
+                    const regs = await navigator.serviceWorker.getRegistrations();
+                    for (let reg of regs) { await reg.unregister(); }
+                    
+                    // Clear ALL caches
+                    const names = await caches.keys();
+                    for (let name of names) { await caches.delete(name); }
+                    
+                    localStorage.setItem('vibedrips-reset-version', RESET_VERSION);
+                    console.log('✅ Nuclear Reset Complete. Reloading...');
+                    window.location.reload(true);
+                } catch (e) {
+                    console.error('❌ Nuclear Reset Failed:', e);
+                }
+            }
+        })();
+    </script>
+
     <script>
         // Initialize the application
         document.addEventListener('DOMContentLoaded', () => {
