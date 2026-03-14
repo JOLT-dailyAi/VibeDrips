@@ -467,12 +467,26 @@ class MediaLightbox {
         this.updateDots(idx);
         this.updateNavButtons();
 
-        // 🛡️ SHIELD & PILLING CONTROL: Asymmetric OS Logic
-        const isIOS = window.Device?.isIOS();
-        const shouldMute = window.MediaState?.shouldStartMuted();
+        const currentUrl = this.mediaArray[this.currentIndex];
+        const currentType = this.detectMediaType(currentUrl);
+        const isSilent = currentType === 'image';
 
         const shield = overlay.querySelector('.lightbox-iframe-shield');
         const pill = overlay.querySelector('.engagement-pill');
+
+        // 🛡️ SILENCE GUARD: If media has no audio, skip all pilling/shielding
+        if (isSilent) {
+            if (shield) {
+                shield.style.pointerEvents = 'none';
+                shield.style.display = 'none';
+            }
+            if (pill) {
+                pill.classList.add('instantly-hidden');
+                pill.classList.remove('smart-cycling');
+            }
+            return;
+        }
+
 
         // 🍎 iOS: Every swipe resets the pill and muted state
         if (isIOS) {
@@ -819,6 +833,10 @@ class MediaLightbox {
         videoPlaceholder.style.display = 'none';
         socialPlaceholder.style.display = 'none';
 
+        const url = this.mediaArray[index];
+        const mediaType = this.detectMediaType(url);
+        const isSilent = mediaType === 'image';
+
         // 🛡️ AUTO-RELEASE: No shield barrier if sound is already unlocked
         const shield = overlay.querySelector('.lightbox-iframe-shield');
         if (shield) {
@@ -826,7 +844,7 @@ class MediaLightbox {
             const strategy = window.Device?.getStrategy() || 'muted';
             const isHighTrust = (strategy === 'unmuted' || isUnmutedSession);
 
-            if (isHighTrust) {
+            if (isSilent || isHighTrust) {
                 shield.style.pointerEvents = 'none';
                 shield.style.display = 'none';
                 if (pill) {
@@ -843,8 +861,6 @@ class MediaLightbox {
             }
         }
 
-        const url = this.mediaArray[index];
-        const mediaType = this.detectMediaType(url);
         const filename = this.getFilenameFromUrl(url);
 
         // Update counter
