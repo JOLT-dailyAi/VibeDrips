@@ -1,7 +1,7 @@
 // sw.js - Service worker for VibeDrips PWA
 // CACHE_VERSION is now timestamp-based and auto-updated by the workflow
 
-const CACHE_VERSION = 'v20260314T093213-ui'; // Manually bumped to trigger update detection
+const CACHE_VERSION = 'v20260314T093919-ui'; // Manually bumped to trigger update detection
 const CACHE_NAME = `vibedrips-static-${CACHE_VERSION}`;
 const DATA_CACHE = `vibedrips-data-${CACHE_VERSION}`;
 
