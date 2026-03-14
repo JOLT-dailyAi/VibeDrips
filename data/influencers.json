@@ -1,13 +1,13 @@
 {
   "summary": {
     "total_influencers": 3,
-    "total_products": 14,
-    "last_updated": "2026-03-14T10:47:54.190Z"
+    "total_products": 12,
+    "last_updated": "2026-03-14T19:35:17.453Z"
   },
   "influencers": [
     {
       "name": "HouseFresh",
-      "product_count": 8,
+      "product_count": 6,
       "has_creator_video": false,
       "regions": [
         "AUD"
@@ -19,14 +19,6 @@
           "asins": [
             "B0F2MLPWTG",
             "B0F9FJS3VW"
-          ]
-        },
-        {
-          "media_url": "https://youtu.be/MAfvR2a9nuE?si=g4c8Cz5FNHs61ZCi",
-          "category": "General",
-          "asins": [
-            "B0BGRHMQ7C",
-            "B08NYTLNQ9"
           ]
         },
         {

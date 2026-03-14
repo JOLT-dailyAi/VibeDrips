@@ -1,8 +1,8 @@
 {
   "summary": {
-    "total_brands": 15,
-    "total_products": 24,
-    "last_updated": "2026-03-14T10:47:54.191Z"
+    "total_brands": 14,
+    "total_products": 22,
+    "last_updated": "2026-03-14T19:35:17.454Z"
   },
   "brands": [
     {
@@ -30,14 +30,6 @@
       "asins": [
         "B0F2MLPWTG",
         "B0F9FJS3VW"
-      ]
-    },
-    {
-      "name": "Breville",
-      "product_count": 2,
-      "asins": [
-        "B0BGRHMQ7C",
-        "B08NYTLNQ9"
       ]
     },
     {

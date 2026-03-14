@@ -1,9 +1,9 @@
 {
   "summary": {
-    "total_products": 24,
+    "total_products": 22,
     "products_with_errors": 4,
-    "error_rate": 17,
-    "last_updated": "2026-03-14T10:47:54.191Z"
+    "error_rate": 18,
+    "last_updated": "2026-03-14T19:35:17.454Z"
   },
   "error_breakdown": {
     "DISCOUNT_MISMATCH": 2,
@@ -56,9 +56,9 @@
       "regional_variants": {
         "INR": "9355991479"
       },
-      "amazon_short": "https://amzn.to/44RpxTq",
+      "amazon_short": "https://amzn.to/4uuJM4s",
       "amazon_long": "",
-      "affiliate_link": "https://amzn.to/44RpxTq",
+      "affiliate_link": "https://amzn.to/4uuJM4s",
       "release_date": "2017-09-18T00:00:00.000Z",
       "timestamp": "1/1/2026 14:13:46",
       "influencer": null,
@@ -243,9 +243,9 @@
       "regional_variants": {
         "INR": "9355991479"
       },
-      "amazon_short": "https://amzn.to/49mRnZa",
+      "amazon_short": "https://amzn.to/4btWiZf",
       "amazon_long": "",
-      "affiliate_link": "https://amzn.to/49mRnZa",
+      "affiliate_link": "https://amzn.to/4btWiZf",
       "release_date": "2023-08-01T00:00:00.000Z",
       "timestamp": "1/1/2026 14:24:13",
       "influencer": null,
@@ -423,9 +423,9 @@
       "regional_variants": {
         "INR": "B076HP91MN"
       },
-      "amazon_short": "https://amzn.to/493nRIX",
+      "amazon_short": "https://amzn.to/3PCb60v",
       "amazon_long": "",
-      "affiliate_link": "https://amzn.to/493nRIX",
+      "affiliate_link": "https://amzn.to/3PCb60v",
       "release_date": "2025-10-15T00:00:00.000Z",
       "timestamp": "1/3/2026 10:41:13",
       "influencer": "HouseFresh",
@@ -563,295 +563,6 @@
       }
     },
     {
-      "asin": "B0BGRHMQ7C",
-      "name": "Breville the Smart Air Viral Protect Compact Purifier, LAP208WHT",
-      "description": "Room Coverage: Compact air purifier for small rooms such as a child’s bedroom or home office up to 28m2 CADR: Clean air delivery rate (CADR) up to 130m3/h Advanced 4-Stage Air Purification System with AntiViral Protection: The AntiViral HEPA-13 filter Reduces 99.97% of viral particles and allergens down to 0.3μm. A Pre-filter reduces dust and pet-dander. Activated Carbon filter reduces smoke and odours. While the Microbe Shield light uses a short-wave light designed to target bacteria and viruses. Microbe Shield: Uses a shortwave light specially designed to target bacteria and viruses. The Microbe Shield function can be turned on and off according to preference SensAir System: Dual display with real time updates via PM2.5 Micron Monitor & Live Purity Visual Indicator, auto adjusts the performance according to air quality detected WiFi Control & Voice Assistance: Control your home's air purification on the go with the Breville Home Connect app, so you can feel comfortable the moment you walk in the door Immersive airflow design: Purifies the air around you with a 360 degrees design of the air inlet and outlet for a broader filtration compared to flat units with single direction airflow Low energy consumption: This purifier is a low wattage appliance, which uses less energy to run. Auto mode monitors the air quality and adjusts performance to minimise and maximise air purification as and when needed, conserving on energy at the same time.. Validate before displaying - Choose an input from Happy with the purchase. We always have cold/ flu at home despite dosing up with vitamins. Unexpectedly very quiet when turned on. Otherwise, iten is in hood condition and works well.,Eligible for change of mind returns within 30 days of receipt that is not a Customer review or feedback but more of product info/description.",
-      "price": 179,
-      "original_price": 299,
-      "originalPrice": 299,
-      "discount_percentage": 40,
-      "discountPercentage": 40,
-      "availability": "In Stock",
-      "Error-Flag": 0,
-      "Error-Reason": "",
-      "Error-Fields": [
-        "Amazon marketplace domain"
-      ],
-      "currency": "AUD",
-      "symbol": "A$",
-      "brand": "Breville",
-      "category": "General",
-      "subcategory": "Air Purifier",
-      "main_image": "https://m.media-amazon.com/images/I/71AqfDto--L.jpg",
-      "all_images": [
-        "https://m.media-amazon.com/images/I/71AqfDto--L.jpg",
-        "https://m.media-amazon.com/images/I/61dw6G3lfdL.jpg",
-        "https://m.media-amazon.com/images/I/71UpsjX4fgL.jpg",
-        "https://m.media-amazon.com/images/I/71xg3nSNkML.jpg",
-        "https://m.media-amazon.com/images/I/71N3GVlKPnL.jpg",
-        "https://m.media-amazon.com/images/I/7164PnGkeUL.jpg",
-        "https://m.media-amazon.com/images/I/71W688vYrBL.jpg",
-        "https://m.media-amazon.com/images/I/31Z-cfSpXrL.jpg",
-        "https://m.media-amazon.com/images/I/61Oyw03T+TL.jpg",
-        "https://m.media-amazon.com/images/I/61GtnxlIwFL.jpg"
-      ],
-      "customer_rating": "5.0 out of 5 stars",
-      "review_count": 10,
-      "source_link": "https://youtu.be/MAfvR2a9nuE?si=g4c8Cz5FNHs61ZCi",
-      "referenceMedia": [
-        "https://youtu.be/MAfvR2a9nuE?si=g4c8Cz5FNHs61ZCi",
-        "https://youtu.be/p712twUbKGA?si=8_4gWDhsXKd3CiGE",
-        "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd"
-      ],
-      "regional_availability": 1,
-      "regional_variants": {
-        "INR": "B076HP91MN"
-      },
-      "amazon_short": "https://amzn.to/3YROScj",
-      "amazon_long": "",
-      "affiliate_link": "https://amzn.to/3YROScj",
-      "release_date": "2022-09-29T00:00:00.000Z",
-      "timestamp": "1/3/2026 11:23:10",
-      "influencer": "HouseFresh",
-      "manual_collections": [
-        "Air Purifier"
-      ],
-      "season": "Summer",
-      "category_is_auto_detected": false,
-      "season_is_auto_detected": false,
-      "featured": false,
-      "trending": false,
-      "productDetails": [
-        {
-          "key": "weight",
-          "label": "Weight",
-          "value": "8.5 kg",
-          "priority": 1
-        },
-        {
-          "key": "dimensions",
-          "label": "Dimensions",
-          "value": "24 x 34 x 57 cm; 8.5 kg",
-          "priority": 2
-        },
-        {
-          "key": "color",
-          "label": "Color",
-          "value": "White",
-          "priority": 3
-        }
-      ],
-      "additionalInfo": {
-        "Other": [
-          {
-            "key": "Timestamp",
-            "label": "Timestamp",
-            "category": "Other",
-            "value": "1/3/2026 11:23:10"
-          },
-          {
-            "key": "date_first_available",
-            "label": "Date First Available",
-            "category": "Other",
-            "value": "29 September 2022"
-          }
-        ],
-        "Product Specs": [
-          {
-            "key": "Discount",
-            "label": "Discount",
-            "category": "Product Specs",
-            "value": "40"
-          }
-        ],
-        "Technical": [
-          {
-            "key": "item_model_number",
-            "label": "Item Model Number",
-            "category": "Technical",
-            "value": "LAP208WHT2IAN1"
-          }
-        ]
-      },
-      "Warnings": [
-        {
-          "field": "Amazon marketplace domain",
-          "reason": "Metadata leaked: Australia (AU) — amazon.com.au",
-          "severity": "WARNING"
-        }
-      ],
-      "drop_signals": {
-        "has_reference_media": true,
-        "media_count": 3,
-        "regional_availability": true,
-        "available_regions": [
-          "INR"
-        ],
-        "influencer_presence": false,
-        "is_global": false,
-        "is_high_visibility": true,
-        "is_social_proof": false,
-        "is_new_release": false,
-        "product_age_days": 1262,
-        "drop_categories": [
-          "creator-picks"
-        ]
-      }
-    },
-    {
-      "asin": "B08NYTLNQ9",
-      "name": "Breville the Easy Air™ Connect Purifier, LAP158WHT, White",
-      "description": "Founded in Sydney in 1932, Breville has become an iconic global brand that enhances people’s lives through thoughtful design and brilliant innovation, delivering kitchen products to more than 70 countries around the globe. Breville is the kitchen appliance brand that delivers innovation based on consumer insights, empowering people’s potential to do things more impressively or easily than they’d thought possible in their own kitchen.. Validate before displaying - Choose an input from Founded in Sydney in 1932, Breville has become an iconic global brand that enhances people’s lives through thoughtful design and brilliant innovation, delivering kitchen products to more than 70 countries around the globe. Breville is the kitchen appliance brand that delivers innovation based on consumer insights, empowering people’s potential to do things more impressively or easily than they’d thought possible in their own kitchen.,I couldn't work out from reading how it would connect to the app, WiFi or Bluetooth. Nowhere does it mention the type of connection on the box, manual etc. Just downloaded the app and connected after some fiddling with the app settings. Not the easiest way to connect but it is 2.4g WiFi. It works well for double bed sized rooms and we have them sitting atop bedside tables so they're not picking up carpet fibres filling the filters too quickly, carpets get vacuumed weekly, and we are more worried about the airborne dust anyway. that is not a Customer review or feedback but more of product info/description.",
-      "price": 139,
-      "original_price": 249,
-      "originalPrice": 249,
-      "discount_percentage": 44,
-      "discountPercentage": 44,
-      "availability": "In Stock",
-      "Error-Flag": 0,
-      "Error-Reason": "",
-      "Error-Fields": [
-        "Amazon marketplace domain",
-        "color",
-        "colour"
-      ],
-      "currency": "AUD",
-      "symbol": "A$",
-      "brand": "Breville",
-      "category": "General",
-      "subcategory": "Air Purifier",
-      "main_image": "https://m.media-amazon.com/images/I/51qL3f4OqJL.jpg",
-      "all_images": [
-        "https://m.media-amazon.com/images/I/51qL3f4OqJL.jpg",
-        "https://m.media-amazon.com/images/I/61dw6G3lfdL.jpg",
-        "https://m.media-amazon.com/images/I/61KMyg41UGL.jpg",
-        "https://m.media-amazon.com/images/I/31FBRQpEaNL.jpg",
-        "https://m.media-amazon.com/images/I/31Z-cfSpXrL.jpg",
-        "https://m.media-amazon.com/images/I/31HqY+xWMsL.jpg",
-        "https://m.media-amazon.com/images/I/31+kqfUSTlL.jpg",
-        "https://m.media-amazon.com/images/I/41VV-LT1xIL.jpg",
-        "https://m.media-amazon.com/images/I/21vRnOCRljL.jpg"
-      ],
-      "customer_rating": "4.5 out of 5 stars",
-      "review_count": 105,
-      "source_link": "https://youtu.be/MAfvR2a9nuE?si=g4c8Cz5FNHs61ZCi",
-      "referenceMedia": [
-        "https://youtu.be/MAfvR2a9nuE?si=g4c8Cz5FNHs61ZCi",
-        "https://youtu.be/p712twUbKGA?si=8_4gWDhsXKd3CiGE",
-        "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd"
-      ],
-      "regional_availability": 1,
-      "regional_variants": {
-        "INR": "B076HP91MN"
-      },
-      "amazon_short": "https://amzn.to/3Ymok2Q",
-      "amazon_long": "",
-      "affiliate_link": "https://amzn.to/3Ymok2Q",
-      "release_date": "2020-11-21T00:00:00.000Z",
-      "timestamp": "1/3/2026 11:24:21",
-      "influencer": "HouseFresh",
-      "manual_collections": [
-        "Air Purifier"
-      ],
-      "season": "Summer",
-      "category_is_auto_detected": false,
-      "season_is_auto_detected": false,
-      "featured": false,
-      "trending": false,
-      "productDetails": [
-        {
-          "key": "weight",
-          "label": "Weight",
-          "value": "1.64 kg",
-          "priority": 1
-        },
-        {
-          "key": "dimensions",
-          "label": "Dimensions",
-          "value": "36.7 x 24.5 x 24.4 cm; 1.64 kg",
-          "priority": 2
-        },
-        {
-          "key": "material",
-          "label": "Material",
-          "value": "Plastic",
-          "priority": 4
-        }
-      ],
-      "additionalInfo": {
-        "Other": [
-          {
-            "key": "Timestamp",
-            "label": "Timestamp",
-            "category": "Other",
-            "value": "1/3/2026 11:24:21"
-          },
-          {
-            "key": "generic_name",
-            "label": "Generic Name",
-            "category": "Other",
-            "value": "Appliances"
-          },
-          {
-            "key": "date_first_available",
-            "label": "Date First Available",
-            "category": "Other",
-            "value": "21 November 2020"
-          }
-        ],
-        "Product Specs": [
-          {
-            "key": "Discount",
-            "label": "Discount",
-            "category": "Product Specs",
-            "value": "44"
-          }
-        ],
-        "Technical": [
-          {
-            "key": "item_model_number",
-            "label": "Item Model Number",
-            "category": "Technical",
-            "value": "LAP158WHT2IAN1"
-          }
-        ]
-      },
-      "Warnings": [
-        {
-          "field": "Amazon marketplace domain",
-          "reason": "Metadata leaked: Australia (AU) — amazon.com.au",
-          "severity": "WARNING"
-        },
-        {
-          "field": "color",
-          "reason": "Value already in title/description",
-          "severity": "INFO"
-        },
-        {
-          "field": "colour",
-          "reason": "Value already in title/description",
-          "severity": "INFO"
-        }
-      ],
-      "drop_signals": {
-        "has_reference_media": true,
-        "media_count": 3,
-        "regional_availability": true,
-        "available_regions": [
-          "INR"
-        ],
-        "influencer_presence": false,
-        "is_global": false,
-        "is_high_visibility": true,
-        "is_social_proof": false,
-        "is_new_release": false,
-        "product_age_days": 1939,
-        "drop_categories": [
-          "creator-picks"
-        ]
-      }
-    },
-    {
       "asin": "B0DT4F8T4L",
       "name": "Winix Smart Zero 4-Stage Air Purifier",
       "description": "Powerful air purifier that cleans your indoor air quality up to 99.99 percent Suited to rooms up to 1882 sq ft Helps you to purify your living room, bedroom or office space Extremely effective at filtering pollen, house dust mites, particulate matter Control and monitor your unit anytime, anywhere by instantly accessing. Choose an input from The Winix 5520 deserves my rare 5-star rating. Everything about this is exactly what I expect. It just works. I set it up next to my 3D printer, and the difference in air quality is noticeable. PROS * It works - air is cleaned efficiently. * Aesthetically pleasing. * It is very quiet. * Setup was flawless and easy. * The unit's auto feature is accurate and trustworthy. * The replacement filters are a fair price, work well and can be trusted. CONS * The app used to control devices is only available for iOS and Android. Windows, Fire Tables, etc. are not available. In summary, I can personally recommend this product.,Nowhere in the product description does it say that this is a 120V product which most of the world does not use. I plugged it in uae and the unit got busted. Waste of hard earned money 845 dhs and wait time. Worse still no warranty in the UAE. Worldwide buyers be warned and stay AWAY from useless products like this. that is not a Customer review or feedback but more of product info/description.",
@@ -900,9 +611,9 @@
       "regional_variants": {
         "INR": "B076HP91MN"
       },
-      "amazon_short": "https://amzn.to/4q7G8Lg",
+      "amazon_short": "https://amzn.to/4lwFXaS",
       "amazon_long": "",
-      "affiliate_link": "https://amzn.to/4q7G8Lg",
+      "affiliate_link": "https://amzn.to/4lwFXaS",
       "release_date": "2025-01-15T00:00:00.000Z",
       "timestamp": "1/3/2026 11:36:34",
       "influencer": "HouseFresh",
@@ -1088,9 +799,9 @@
       "regional_variants": {
         "INR": "B076HP91MN"
       },
-      "amazon_short": "https://amzn.to/4sjJxIx",
+      "amazon_short": "https://amzn.to/4dlw3GW",
       "amazon_long": "",
-      "affiliate_link": "https://amzn.to/4sjJxIx",
+      "affiliate_link": "https://amzn.to/4dlw3GW",
       "release_date": "2019-03-13T00:00:00.000Z",
       "timestamp": "1/3/2026 11:37:18",
       "influencer": "HouseFresh",
@@ -1273,9 +984,9 @@
       "regional_variants": {
         "INR": "B076HP91MN"
       },
-      "amazon_short": "https://amzn.to/4pl6OXy",
+      "amazon_short": "https://amzn.to/4rweYO8",
       "amazon_long": "",
-      "affiliate_link": "https://amzn.to/4pl6OXy",
+      "affiliate_link": "https://amzn.to/4rweYO8",
       "release_date": "2022-10-05T00:00:00.000Z",
       "timestamp": "1/3/2026 14:36:25",
       "influencer": "HouseFresh",
@@ -1433,9 +1144,9 @@
       "regional_variants": {
         "INR": "B076HP91MN"
       },
-      "amazon_short": "https://amzn.to/4pfw29L",
+      "amazon_short": "https://amzn.to/4cSvVyF",
       "amazon_long": "",
-      "affiliate_link": "https://amzn.to/4pfw29L",
+      "affiliate_link": "https://amzn.to/4cSvVyF",
       "release_date": "2025-10-07T00:00:00.000Z",
       "timestamp": "1/3/2026 14:37:23",
       "influencer": "HouseFresh",
@@ -1598,9 +1309,9 @@
       "regional_variants": {
         "INR": "B076HP91MN"
       },
-      "amazon_short": "https://amzn.to/3MYIkWR",
+      "amazon_short": "https://amzn.to/4d69eXV",
       "amazon_long": "",
-      "affiliate_link": "https://amzn.to/3MYIkWR",
+      "affiliate_link": "https://amzn.to/4d69eXV",
       "release_date": "2025-09-23T00:00:00.000Z",
       "timestamp": "1/3/2026 10:40:34",
       "influencer": "HouseFresh",
@@ -1788,9 +1499,9 @@
       ],
       "regional_availability": 0,
       "regional_variants": {},
-      "amazon_short": "https://amzn.to/4byi6UO",
+      "amazon_short": "https://amzn.to/413l3qe",
       "amazon_long": "",
-      "affiliate_link": "https://amzn.to/4byi6UO",
+      "affiliate_link": "https://amzn.to/413l3qe",
       "release_date": "2025-07-31T00:00:00.000Z",
       "timestamp": "3/11/2026, 1:23:28 PM",
       "influencer": "Steven Sullivan, UrAvgConsumer",

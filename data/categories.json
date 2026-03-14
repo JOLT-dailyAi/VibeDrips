@@ -1,26 +1,10 @@
 {
   "summary": {
     "total_categories": 5,
-    "total_products": 24,
-    "last_updated": "2026-03-14T10:47:54.189Z"
+    "total_products": 22,
+    "last_updated": "2026-03-14T19:35:17.452Z"
   },
   "categories": [
-    {
-      "id": "general",
-      "name": "General",
-      "product_count": 9,
-      "asins": [
-        "B0BGRHMQ7C",
-        "B08NYTLNQ9",
-        "B0DT4F8T4L",
-        "B0FVXJ52W6",
-        "B0FJ5R8JN7",
-        "B0DHGFCG6P",
-        "B0F1MR9W8R",
-        "B0CQ2MVRXR",
-        "B076HP91MN"
-      ]
-    },
     {
       "id": "furniture",
       "name": "Furniture",
@@ -33,6 +17,20 @@
         "B0DF6NBJDW",
         "B0BCC8KZHK",
         "B0BDX9ZN46"
+      ]
+    },
+    {
+      "id": "general",
+      "name": "General",
+      "product_count": 7,
+      "asins": [
+        "B0DT4F8T4L",
+        "B0FVXJ52W6",
+        "B0FJ5R8JN7",
+        "B0DHGFCG6P",
+        "B0F1MR9W8R",
+        "B0CQ2MVRXR",
+        "B076HP91MN"
       ]
     },
     {
