@@ -254,7 +254,7 @@ function activateMedia(container, shouldPlay) {
       }
 
       // Phase 1: Engagement Pill
-      const isSilent = type === 'image' || url.match(/\.(jpg|jpeg|png|gif|webp|svg|avif|heic|heif)$/i);
+      const isSilent = type === 'image' || url.match(/\.(jpg|jpeg|png|gif|webp|svg|avif|heic|heif)([?#]|$)/i);
 
       if (!isSilent) {
         const pill = document.createElement('div');
@@ -406,7 +406,7 @@ function triggerShotgunPulse(media) {
   // Phase 1: Pill control (iOS always shows it on EVERY reel; Android only if muted)
   const pill = media.parentElement?.querySelector('.engagement-pill');
   const url = media.parentElement?.dataset.url || '';
-  const isSilent = media.parentElement?.dataset.type === 'image' || url.match(/\.(jpg|jpeg|png|gif|webp|svg|avif|heic|heif)$/i);
+  const isSilent = media.parentElement?.dataset.type === 'image' || url.match(/\.(jpg|jpeg|png|gif|webp|svg|avif|heic|heif)([?#]|$)/i);
 
   if (pill && !isSilent) {
     if (isIOS || shouldMute) {

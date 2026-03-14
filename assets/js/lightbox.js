@@ -472,7 +472,7 @@ class MediaLightbox {
 
         const currentUrl = this.mediaArray[this.currentIndex];
         const currentType = this.detectMediaType(currentUrl);
-        const isSilent = currentType === 'image' || currentUrl.match(/\.(jpg|jpeg|png|gif|webp|svg|avif|heic|heif)$/i);
+        const isSilent = currentType === 'image' || currentUrl.match(/\.(jpg|jpeg|png|gif|webp|svg|avif|heic|heif)([?#]|$)/i);
 
         const shield = overlay.querySelector('.lightbox-iframe-shield');
         const pill = overlay.querySelector('.engagement-pill');
@@ -838,7 +838,7 @@ class MediaLightbox {
 
         const url = this.mediaArray[index];
         const mediaType = this.detectMediaType(url);
-        const isSilent = mediaType === 'image' || url.match(/\.(jpg|jpeg|png|gif|webp|svg|avif|heic|heif)$/i);
+        const isSilent = mediaType === 'image' || url.match(/\.(jpg|jpeg|png|gif|webp|svg|avif|heic|heif)([?#]|$)/i);
 
         // 🛡️ INITIAL PILING: Force hide pill if media is silent
         if (isSilent && pill) {
@@ -1323,7 +1323,7 @@ class MediaLightbox {
                 const active = MediaLightbox.activeInstance;
                 if (active) {
                     active.currentIndex = i;
-                    active.showMedia(i);
+                    active.refreshStrip();
                 }
             });
             dotsContainer.appendChild(dot);

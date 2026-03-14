@@ -528,7 +528,7 @@ class MediaOverlay {
             const isIOS = window.Device?.isIOS();
             const shouldMute = window.MediaState?.shouldStartMuted();
             const currentUrl = this.mediaItems[0] || '';
-            const isSilent = (!video && !iframe) || currentUrl.match(/\.(jpg|jpeg|png|gif|webp|svg|avif|heic|heif)$/i); 
+            const isSilent = (!video && !iframe) || currentUrl.match(/\.(jpg|jpeg|png|gif|webp|svg|avif|heic|heif)([?#]|$)/i); 
 
             if (play && (isIOS || shouldMute) && this.engagementPill && !isSilent) {
                 this.engagementPill.classList.remove('instantly-hidden');
