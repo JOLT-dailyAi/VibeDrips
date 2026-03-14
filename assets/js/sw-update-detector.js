@@ -4,8 +4,8 @@
 if ('serviceWorker' in navigator) {
   let refreshing = false;
 
-  // Register service worker
-  navigator.serviceWorker.register('/sw.js')
+  // Register service worker - using relative path to be environment-agnostic
+  navigator.serviceWorker.register('sw.js')
     .then(registration => {
       console.log('✅ Service Worker registered');
 

@@ -6,77 +6,77 @@ const CACHE_NAME = `vibedrips-static-${CACHE_VERSION}`;
 const DATA_CACHE = `vibedrips-data-${CACHE_VERSION}`;
 
 const urlsToCache = [
-  '/',
-  '/index.html',
+  './',
+  'index.html',
 
   // CSS Files - Base & Layout
-  '/assets/css/main.css',
-  '/assets/css/base/reset.css',
-  '/assets/css/base/variables.css',
-  '/assets/css/layout/header.css',
-  '/assets/css/layout/footer.css',
-  '/assets/css/layout/grid.css',
+  'assets/css/main.css',
+  'assets/css/base/reset.css',
+  'assets/css/base/variables.css',
+  'assets/css/layout/header.css',
+  'assets/css/layout/footer.css',
+  'assets/css/layout/grid.css',
 
   // CSS Files - Components
-  '/assets/css/components/filters.css',
-  '/assets/css/components/buttons.css',
-  '/assets/css/components/product-card.css',
-  '/assets/css/components/modals.css',
-  '/assets/css/components/currency-modal.css',
-  '/assets/css/components/product-modal.css',
-  '/assets/css/components/reels-modal.css',
-  '/assets/css/components/reels-feed.css',
-  '/assets/css/components/badges.css',
-  '/assets/css/components/stats.css',
+  'assets/css/components/filters.css',
+  'assets/css/components/buttons.css',
+  'assets/css/components/product-card.css',
+  'assets/css/components/modals.css',
+  'assets/css/components/currency-modal.css',
+  'assets/css/components/product-modal.css',
+  'assets/css/components/reels-modal.css',
+  'assets/css/components/reels-feed.css',
+  'assets/css/components/badges.css',
+  'assets/css/components/stats.css',
 
   // CSS Files - States
-  '/assets/css/states/loading.css',
-  '/assets/css/states/error.css',
-  '/assets/css/states/empty.css',
+  'assets/css/states/loading.css',
+  'assets/css/states/error.css',
+  'assets/css/states/empty.css',
 
   // CSS Files - Themes & Utils
-  '/assets/css/themes/light-theme.css',
-  '/assets/css/themes/dark-theme.css',
-  '/assets/css/utils/glass.css',
-  '/assets/css/utils/floating.css',
-  '/assets/css/utils/responsive.css',
+  'assets/css/themes/light-theme.css',
+  'assets/css/themes/dark-theme.css',
+  'assets/css/utils/glass.css',
+  'assets/css/utils/floating.css',
+  'assets/css/utils/responsive.css',
 
   // Core JS Files
-  '/assets/js/main.js',
-  '/assets/js/dom-cache.js',
-  '/assets/js/theme-toggle.js',
-  '/assets/js/ui-states.js',
+  'assets/js/main.js',
+  'assets/js/dom-cache.js',
+  'assets/js/theme-toggle.js',
+  'assets/js/ui-states.js',
 
   // Modal JS Files
-  '/assets/js/currency-modal.js',
-  '/assets/js/product-modal.js',
-  '/assets/js/modal-utils.js',
-  '/assets/js/reels-modal.js',
-  '/assets/js/reels-feed.js',
+  'assets/js/currency-modal.js',
+  'assets/js/product-modal.js',
+  'assets/js/modal-utils.js',
+  'assets/js/reels-modal.js',
+  'assets/js/reels-feed.js',
 
   // Data Loader JS Files
-  '/assets/js/currency-loader.js',
-  '/assets/js/product-loader.js',
-  '/assets/js/products.js',
-  '/assets/js/glass-settings.js',
+  'assets/js/currency-loader.js',
+  'assets/js/product-loader.js',
+  'assets/js/products.js',
+  'assets/js/glass-settings.js',
 
   // PWA & Feature JS Files
-  '/assets/js/install-prompt.js',
-  '/assets/js/music-control.js',
-  '/assets/js/share.js',
-  '/assets/js/clipboard-voyager.js',
+  'assets/js/install-prompt.js',
+  'assets/js/music-control.js',
+  'assets/js/share.js',
+  'assets/js/clipboard-voyager.js',
 
   // Images
-  '/assets/images/VibeDrips.png',
-  '/assets/images/VibeDrips_DP.png',
-  '/assets/images/VibeDrips_logo.png',
-  '/assets/images/linktree.png',
+  'assets/images/VibeDrips.png',
+  'assets/images/VibeDrips_DP.png',
+  'assets/images/VibeDrips_logo.png',
+  'assets/images/linktree.png',
 
   // Music
-  '/assets/music/Losstime.mp3',
+  'assets/music/Losstime.mp3',
 
   // Manifest
-  '/manifest.json'
+  'manifest.json'
 ];
 
 // Install - cache static resources only
@@ -159,7 +159,7 @@ self.addEventListener('fetch', event => {
   }
 
   // NETWORK-FIRST for product data (always fresh, cache as backup)
-  if (url.pathname.includes('/assets/data/')) {
+  if (url.pathname.includes('/data/')) {
     event.respondWith(
       fetch(event.request)
         .then(response => {

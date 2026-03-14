@@ -7,7 +7,8 @@ function handleShare(options = {}) {
     const { asin, currency, view } = options;
 
     // Base site URL
-    let siteUrl = 'https://jolt-dailyai.github.io/VibeDrips/';
+    let siteUrl = window.location.origin + window.location.pathname;
+    if (!siteUrl.endsWith('/')) siteUrl += '/';
 
     // 🔗 PHASE_25: Construct deep-link if parameters are provided
     if (asin && currency) {
