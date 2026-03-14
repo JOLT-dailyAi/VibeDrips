@@ -5,7 +5,7 @@ if ('serviceWorker' in navigator) {
   let refreshing = false;
 
   // Register service worker
-  navigator.serviceWorker.register('/VibeDrips/sw.js')
+  navigator.serviceWorker.register('/sw.js')
     .then(registration => {
       console.log('✅ Service Worker registered');
 

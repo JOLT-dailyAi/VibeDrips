@@ -90,8 +90,8 @@ self.addEventListener('install', event => {
         return cache.addAll(urlsToCache);
       })
       .then(() => {
-        console.log(`[SW ${CACHE_VERSION}] Install complete - skipping waiting`);
-        return self.skipWaiting(); // Activate immediately
+        console.log(`[SW ${CACHE_VERSION}] Install complete`);
+        // We removed self.skipWaiting() to allow the update prompt to control activation
       })
       .catch(error => {
         console.error(`[SW ${CACHE_VERSION}] Install failed:`, error);
