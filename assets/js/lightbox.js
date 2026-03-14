@@ -1270,7 +1270,7 @@ class MediaLightbox {
             // UNLESS: The session is already unmuted globally.
             const initialMute = (window.MediaState && window.MediaState.isUnmuted()) ? '0' : '1';
 
-            return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${autoplay}&mute=${initialMute}&rel=0`;
+            return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${autoplay}&mute=${initialMute}&rel=0&origin=${window.location.origin}`;
         }
         return null;
     }

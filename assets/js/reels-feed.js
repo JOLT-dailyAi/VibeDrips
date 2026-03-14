@@ -529,7 +529,7 @@ function getUniversalVideoEmbedUrlForReels(sourceUrl, isActive) {
     // 🔥 FORCE ACTIVE: If we are active, we MUST have autoplay=1
     const forcedAutoplay = isActive ? '1' : '0';
 
-    if (videoId) return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${forcedAutoplay}&mute=${initialMute}&rel=0`;
+    if (videoId) return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${forcedAutoplay}&mute=${initialMute}&rel=0&origin=${window.location.origin}`;
   }
   return sourceUrl;
 }
@@ -619,7 +619,7 @@ function getUniversalVideoEmbedUrl(sourceUrl) {
         videoId = sourceUrl.match(/shorts\/([^?]+)/)?.[1];
       }
       if (videoId) {
-        return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=1&mute=1&rel=0`;
+        return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=1&mute=1&rel=0&origin=${window.location.origin}`;
       }
     }
 

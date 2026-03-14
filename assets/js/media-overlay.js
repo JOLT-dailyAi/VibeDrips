@@ -653,7 +653,7 @@ class MediaOverlay {
                 // 🛡️ MOBILE PROTOCOL: Always start MUTED on initial load.
                 const initialMute = window.MediaState?.shouldStartMuted() ? '1' : '0';
 
-                if (videoId) return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${autoplayVal}&mute=${initialMute}&rel=0`;
+                if (videoId) return `https://www.youtube.com/embed/${videoId}?enablejsapi=1&autoplay=${autoplayVal}&mute=${initialMute}&rel=0&origin=${window.location.origin}`;
             }
 
             // Direct Video
