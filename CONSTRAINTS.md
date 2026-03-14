@@ -154,3 +154,9 @@ To prevent user disorientation after a "Warp" or direct navigation event, the la
 ### 4. Zero-Reload Install Trigger
 - **Constraint**: The PWA install flow MUST NOT trigger a manual page reload (`location.reload()` or `href = href`).
 - **Standard**: Rely on manual instruction visibility triggers only.
+
+### 5. Root Domain Path Protocol (Cloudflare vs GitHub)
+- **Constraint**: Absolute paths (e.g., in `sw.js` and `manifest.json`) MUST NOT include the GitHub Pages subdirectory (`/VibeDrips/`).
+- **Standard**: All internal routing and caching MUST use root-relative paths (starting with `/`) or relative paths.
+- **Why**: Cloudflare Pages serves from the absolute root of the domain (`vibedrips.com/`). Including the repo-name subdirectory in absolute paths causes 404 errors for CSS and JS assets, crashing the Service Worker and resulting in unstyled pages.
+- **Social Metadata**: Open Graph (`og:url`) and Twitter Cards MUST use the production root domain `https://vibedrips.com/` for canonical previews.

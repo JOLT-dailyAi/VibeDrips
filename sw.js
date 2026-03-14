@@ -6,77 +6,77 @@ const CACHE_NAME = `vibedrips-static-${CACHE_VERSION}`;
 const DATA_CACHE = `vibedrips-data-${CACHE_VERSION}`;
 
 const urlsToCache = [
-  '/VibeDrips/',
-  '/VibeDrips/index.html',
+  '/',
+  '/index.html',
 
   // CSS Files - Base & Layout
-  '/VibeDrips/assets/css/main.css',
-  '/VibeDrips/assets/css/base/reset.css',
-  '/VibeDrips/assets/css/base/variables.css',
-  '/VibeDrips/assets/css/layout/header.css',
-  '/VibeDrips/assets/css/layout/footer.css',
-  '/VibeDrips/assets/css/layout/grid.css',
+  '/assets/css/main.css',
+  '/assets/css/base/reset.css',
+  '/assets/css/base/variables.css',
+  '/assets/css/layout/header.css',
+  '/assets/css/layout/footer.css',
+  '/assets/css/layout/grid.css',
 
   // CSS Files - Components
-  '/VibeDrips/assets/css/components/filters.css',
-  '/VibeDrips/assets/css/components/buttons.css',
-  '/VibeDrips/assets/css/components/product-card.css',
-  '/VibeDrips/assets/css/components/modals.css',
-  '/VibeDrips/assets/css/components/currency-modal.css',
-  '/VibeDrips/assets/css/components/product-modal.css',
-  '/VibeDrips/assets/css/components/reels-modal.css',
-  '/VibeDrips/assets/css/components/reels-feed.css',
-  '/VibeDrips/assets/css/components/badges.css',
-  '/VibeDrips/assets/css/components/stats.css',
+  '/assets/css/components/filters.css',
+  '/assets/css/components/buttons.css',
+  '/assets/css/components/product-card.css',
+  '/assets/css/components/modals.css',
+  '/assets/css/components/currency-modal.css',
+  '/assets/css/components/product-modal.css',
+  '/assets/css/components/reels-modal.css',
+  '/assets/css/components/reels-feed.css',
+  '/assets/css/components/badges.css',
+  '/assets/css/components/stats.css',
 
   // CSS Files - States
-  '/VibeDrips/assets/css/states/loading.css',
-  '/VibeDrips/assets/css/states/error.css',
-  '/VibeDrips/assets/css/states/empty.css',
+  '/assets/css/states/loading.css',
+  '/assets/css/states/error.css',
+  '/assets/css/states/empty.css',
 
   // CSS Files - Themes & Utils
-  '/VibeDrips/assets/css/themes/light-theme.css',
-  '/VibeDrips/assets/css/themes/dark-theme.css',
-  '/VibeDrips/assets/css/utils/glass.css',
-  '/VibeDrips/assets/css/utils/floating.css',
-  '/VibeDrips/assets/css/utils/responsive.css',
+  '/assets/css/themes/light-theme.css',
+  '/assets/css/themes/dark-theme.css',
+  '/assets/css/utils/glass.css',
+  '/assets/css/utils/floating.css',
+  '/assets/css/utils/responsive.css',
 
   // Core JS Files
-  '/VibeDrips/assets/js/main.js',
-  '/VibeDrips/assets/js/dom-cache.js',
-  '/VibeDrips/assets/js/theme-toggle.js',
-  '/VibeDrips/assets/js/ui-states.js',
+  '/assets/js/main.js',
+  '/assets/js/dom-cache.js',
+  '/assets/js/theme-toggle.js',
+  '/assets/js/ui-states.js',
 
   // Modal JS Files
-  '/VibeDrips/assets/js/currency-modal.js',
-  '/VibeDrips/assets/js/product-modal.js',
-  '/VibeDrips/assets/js/modal-utils.js',
-  '/VibeDrips/assets/js/reels-modal.js',
-  '/VibeDrips/assets/js/reels-feed.js',
+  '/assets/js/currency-modal.js',
+  '/assets/js/product-modal.js',
+  '/assets/js/modal-utils.js',
+  '/assets/js/reels-modal.js',
+  '/assets/js/reels-feed.js',
 
   // Data Loader JS Files
-  '/VibeDrips/assets/js/currency-loader.js',
-  '/VibeDrips/assets/js/product-loader.js',
-  '/VibeDrips/assets/js/products.js',
-  '/VibeDrips/assets/js/glass-settings.js',
+  '/assets/js/currency-loader.js',
+  '/assets/js/product-loader.js',
+  '/assets/js/products.js',
+  '/assets/js/glass-settings.js',
 
   // PWA & Feature JS Files
-  '/VibeDrips/assets/js/install-prompt.js',
-  '/VibeDrips/assets/js/music-control.js',
-  '/VibeDrips/assets/js/share.js',
-  '/VibeDrips/assets/js/clipboard-voyager.js',
+  '/assets/js/install-prompt.js',
+  '/assets/js/music-control.js',
+  '/assets/js/share.js',
+  '/assets/js/clipboard-voyager.js',
 
   // Images
-  '/VibeDrips/assets/images/VibeDrips.png',
-  '/VibeDrips/assets/images/VibeDrips_DP.png',
-  '/VibeDrips/assets/images/VibeDrips_logo.png',
-  '/VibeDrips/assets/images/linktree.png',
+  '/assets/images/VibeDrips.png',
+  '/assets/images/VibeDrips_DP.png',
+  '/assets/images/VibeDrips_logo.png',
+  '/assets/images/linktree.png',
 
   // Music
-  '/VibeDrips/assets/music/Losstime.mp3',
+  '/assets/music/Losstime.mp3',
 
   // Manifest
-  '/VibeDrips/manifest.json'
+  '/manifest.json'
 ];
 
 // Install - cache static resources only
@@ -148,7 +148,7 @@ self.addEventListener('fetch', event => {
   }
 
   // Don't cache external resources (CDN, APIs, etc)
-  if (!url.pathname.startsWith('/VibeDrips/')) {
+  if (!url.pathname.startsWith('/')) {
     event.respondWith(
       fetch(event.request).catch(err => {
         console.warn(`[SW ${CACHE_VERSION}] External fetch failed:`, url.href);

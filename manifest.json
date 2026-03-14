@@ -2,21 +2,21 @@
   "name": "VibeDrips",
   "short_name": "VibeDrips",
   "description": "Drops that Drip. Curated Finds, Digitally Yours. Curated digital finds and affiliate drops — aesthetic tools, festive picks, and everyday scroll-stoppers.",
-  "start_url": "/VibeDrips/",
-  "scope": "/VibeDrips/",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#2E1D80",
   "theme_color": "#2E1D80",
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/VibeDrips/assets/images/VibeDrips_DP.png",
+      "src": "/assets/images/VibeDrips_DP.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/VibeDrips/assets/images/VibeDrips_DP.png",
+      "src": "/assets/images/VibeDrips_DP.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -27,7 +27,7 @@
   "protocol_handlers": [
     {
       "protocol": "web+vibedrips",
-      "url": "/VibeDrips/?open=%s"
+      "url": "/?open=%s"
     }
   ]
 }
