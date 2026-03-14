@@ -3,7 +3,7 @@
     "total_products": 24,
     "products_with_errors": 4,
     "error_rate": 17,
-    "last_updated": "2026-03-14T09:02:23.891Z"
+    "last_updated": "2026-03-14T10:47:54.191Z"
   },
   "error_breakdown": {
     "DISCOUNT_MISMATCH": 2,
