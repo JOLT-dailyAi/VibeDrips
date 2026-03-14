@@ -42,5 +42,5 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add sw.js
-          git commit -m "automation: bump UI cache version [skip ci]"
+          git commit -m "automation: bump UI cache version"
           git push
