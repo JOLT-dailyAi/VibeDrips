@@ -511,11 +511,11 @@ function getUniversalVideoEmbedUrlForReels(sourceUrl, isActive) {
 
   if (url.includes('instagram.com')) {
     const match = sourceUrl.match(/\/(p|reel)\/([^\/\?]+)/);
-    return match ? `https://www.instagram.com/p/${match[2]}/embed` : sourceUrl;
+    return match ? `https://www.instagram.com/p/${match[2]}/embed?origin=${window.location.origin}` : sourceUrl;
   }
   if (url.includes('tiktok.com')) {
     const match = sourceUrl.match(/\/video\/(\d+)/);
-    return match ? `https://www.tiktok.com/embed/v2/${match[1]}` : sourceUrl;
+    return match ? `https://www.tiktok.com/embed/v2/${match[1]}?origin=${window.location.origin}` : sourceUrl;
   }
   if (url.includes('youtube.com') || url.includes('youtu.be')) {
     let videoId = null;
@@ -596,7 +596,7 @@ function getUniversalVideoEmbedUrl(sourceUrl) {
     if (url.includes('instagram.com')) {
       const match = sourceUrl.match(/\/(p|reel)\/([^\/\?]+)/);
       if (match && match[2]) {
-        return `https://www.instagram.com/p/${match[2]}/embed`;
+        return `https://www.instagram.com/p/${match[2]}/embed?origin=${window.location.origin}`;
       }
     }
 
@@ -604,7 +604,7 @@ function getUniversalVideoEmbedUrl(sourceUrl) {
     if (url.includes('tiktok.com')) {
       const match = sourceUrl.match(/\/video\/(\d+)/);
       if (match && match[1]) {
-        return `https://www.tiktok.com/embed/v2/${match[1]}`;
+        return `https://www.tiktok.com/embed/v2/${match[1]}?origin=${window.location.origin}`;
       }
     }
 

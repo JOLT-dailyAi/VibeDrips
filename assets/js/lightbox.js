@@ -1240,7 +1240,7 @@ class MediaLightbox {
     getInstagramEmbedUrl(url) {
         const match = url.match(/instagram\.com\/(reel|p)\/([^/?]+)/);
         if (match) {
-            return `https://www.instagram.com/${match[1]}/${match[2]}/embed`;
+            return `https://www.instagram.com/${match[1]}/${match[2]}/embed?origin=${window.location.origin}`;
         }
         return null;
     }
@@ -1248,7 +1248,7 @@ class MediaLightbox {
     getTikTokEmbedUrl(url) {
         const match = url.match(/tiktok\.com\/.*\/video\/(\d+)/);
         if (match) {
-            return `https://www.tiktok.com/embed/${match[1]}`;
+            return `https://www.tiktok.com/embed/${match[1]}?origin=${window.location.origin}`;
         }
         return null;
     }

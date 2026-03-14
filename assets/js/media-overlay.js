@@ -631,13 +631,13 @@ class MediaOverlay {
             // Instagram
             if (url.includes('instagram.com')) {
                 const match = sourceUrl.match(/\/(p|reel)\/([^\/\?]+)/);
-                if (match && match[2]) return `https://www.instagram.com/p/${match[2]}/embed`;
+                return match ? `https://www.instagram.com/p/${match[2]}/embed?origin=${window.location.origin}` : sourceUrl;
             }
 
             // TikTok
             if (url.includes('tiktok.com')) {
                 const match = sourceUrl.match(/\/video\/(\d+)/);
-                if (match && match[1]) return `https://www.tiktok.com/embed/v2/${match[1]}`;
+                return match ? `https://www.tiktok.com/embed/v2/${match[1]}?origin=${window.location.origin}` : sourceUrl;
             }
 
             // YouTube (Long, Short, Shorts)
