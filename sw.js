@@ -1,7 +1,7 @@
 // sw.js - Service worker for VibeDrips PWA
 // CACHE_VERSION is now timestamp-based and auto-updated by the workflow
 
-const CACHE_VERSION = 'v20260314T1609-PROMPT-FX'; // High-vis bump
+const CACHE_VERSION = 'v20260314T103951-ui'; // High-vis bump
 const CACHE_NAME = `vibedrips-static-${CACHE_VERSION}`;
 const DATA_CACHE = `vibedrips-data-${CACHE_VERSION}`;
 
