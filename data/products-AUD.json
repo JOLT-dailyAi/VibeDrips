@@ -177,7 +177,7 @@
       "is_high_visibility": true,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 150,
+      "product_age_days": 151,
       "drop_categories": [
         "creator-picks"
       ]
@@ -342,7 +342,7 @@
       "is_high_visibility": true,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 158,
+      "product_age_days": 159,
       "drop_categories": [
         "creator-picks"
       ]
@@ -526,7 +526,7 @@
       "is_high_visibility": true,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 172,
+      "product_age_days": 173,
       "drop_categories": [
         "creator-picks"
       ]
@@ -789,7 +789,7 @@
       "is_high_visibility": true,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 226,
+      "product_age_days": 227,
       "drop_categories": [
         "creator-picks"
       ]
@@ -978,7 +978,7 @@
       "is_high_visibility": true,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 423,
+      "product_age_days": 424,
       "drop_categories": [
         "creator-picks"
       ]
@@ -1158,7 +1158,7 @@
       "is_high_visibility": true,
       "is_social_proof": true,
       "is_new_release": false,
-      "product_age_days": 956,
+      "product_age_days": 957,
       "drop_categories": [
         "creator-picks",
         "viral-reels"
@@ -1318,7 +1318,7 @@
       "is_high_visibility": true,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 1256,
+      "product_age_days": 1257,
       "drop_categories": [
         "creator-picks"
       ]
@@ -1503,7 +1503,7 @@
       "is_high_visibility": true,
       "is_social_proof": false,
       "is_new_release": false,
-      "product_age_days": 2558,
+      "product_age_days": 2559,
       "drop_categories": [
         "creator-picks"
       ]
@@ -1689,7 +1689,7 @@
       "is_high_visibility": true,
       "is_social_proof": true,
       "is_new_release": false,
-      "product_age_days": 3099,
+      "product_age_days": 3100,
       "drop_categories": [
         "creator-picks",
         "viral-reels"
