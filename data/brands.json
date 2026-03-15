@@ -1,8 +1,8 @@
 {
   "summary": {
-    "total_brands": 14,
-    "total_products": 22,
-    "last_updated": "2026-03-15T03:15:46.445Z"
+    "total_brands": 16,
+    "total_products": 25,
+    "last_updated": "2026-03-15T06:22:56.479Z"
   },
   "brands": [
     {
@@ -30,6 +30,14 @@
       "asins": [
         "B0F2MLPWTG",
         "B0F9FJS3VW"
+      ]
+    },
+    {
+      "name": "Breville",
+      "product_count": 2,
+      "asins": [
+        "B08NYTLNQ9",
+        "B0BGRKRCF6"
       ]
     },
     {
@@ -109,6 +117,13 @@
       "product_count": 1,
       "asins": [
         "B076HP91MN"
+      ]
+    },
+    {
+      "name": "KPAW",
+      "product_count": 1,
+      "asins": [
+        "B0DF7KXF87"
       ]
     }
   ]

@@ -1325,6 +1325,295 @@
     }
   },
   {
+    "asin": "B0BGRKRCF6",
+    "name": "Breville the Smart Air Viral Protect Plus Purifier, LAP408WHT",
+    "description": "Room Coverage: A plus sized air purifier suitable for medium rooms suchs Bedrooms, Living rooms, Kitchen and Home Office up to 42m2. CADR: Clean air delivery rate (CADR) up to 215m3/h Advanced 4-Stage Air Purification System with AntiViral Protection: The AntiViral HEPA-13 filter Reduces 99.97% of viral particles and allergens down to 0.3μm. A Pre-filter reduces dust and pet-dander. Activated Carbon filter reduces smoke and odours. While the Microbe Shield light uses a short-wave light designed to target bacteria and viruses. Microbe Shield: Uses a shortwave light specially designed to target bacteria and viruses. The Microbe Shield function can be turned on and off according to preference. SensAir System: Dual display with real time updates via PM2.5 Micron Monitor & Live Purity Visual Indicator, auto adjusts the performance according to air quality detected. WiFi Control & Voice Assistance: Control your home's air purification on the go with the Breville Home Connect app, so you can feel comfortable the moment you walk in the door. Immersive airflow design: Purifies the air around you with a 360 degrees design of the air inlet and outlet for a broader filtration compared to flat units with single direction airflow. Low energy consumption: This purifier is a low wattage appliance, which uses less energy to run. Auto mode monitors the air quality and adjusts performance to minimise and maximise air purification as and when needed, conserving on energy at the same time..",
+    "price": 329,
+    "original_price": 399,
+    "originalPrice": 399,
+    "discount_percentage": 18,
+    "discountPercentage": 18,
+    "availability": "In Stock",
+    "Error-Flag": 0,
+    "Error-Reason": "",
+    "Error-Fields": [
+      "Amazon marketplace domain"
+    ],
+    "currency": "AUD",
+    "symbol": "A$",
+    "brand": "Breville",
+    "category": "General",
+    "subcategory": "Appliances",
+    "main_image": "https://m.media-amazon.com/images/I/71opaxNB25L.jpg",
+    "all_images": [
+      "https://m.media-amazon.com/images/I/71opaxNB25L.jpg",
+      "https://m.media-amazon.com/images/I/81UUZgCuQ8L.jpg",
+      "https://m.media-amazon.com/images/I/61dw6G3lfdL.jpg",
+      "https://m.media-amazon.com/images/I/81Aq8OTS89L.jpg",
+      "https://m.media-amazon.com/images/I/71Ywvrc9c5L.jpg",
+      "https://m.media-amazon.com/images/I/713sPXN8TrL.jpg",
+      "https://m.media-amazon.com/images/I/41npSRChpfL.jpg",
+      "https://m.media-amazon.com/images/I/31Z-cfSpXrL.jpg",
+      "https://m.media-amazon.com/images/I/410N47MhRfL.jpg",
+      "https://m.media-amazon.com/images/I/61Sx0DQmZ6L.jpg"
+    ],
+    "customer_rating": "5.0 out of 5 stars",
+    "review_count": 6,
+    "source_link": "https://youtu.be/MAfvR2a9nuE?si=g4c8Cz5FNHs61ZCi",
+    "referenceMedia": [
+      "https://youtu.be/MAfvR2a9nuE?si=g4c8Cz5FNHs61ZCi",
+      "https://youtu.be/p712twUbKGA?si=8_4gWDhsXKd3CiGE",
+      "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd"
+    ],
+    "regional_availability": 1,
+    "regional_variants": {
+      "INR": "B076HP91MN"
+    },
+    "amazon_short": "https://amzn.to/4sPCuqu",
+    "amazon_long": "",
+    "affiliate_link": "https://amzn.to/4sPCuqu",
+    "release_date": "2022-09-29T00:00:00.000Z",
+    "timestamp": "3/15/2026, 6:13:31 AM",
+    "influencer": "HouseFresh",
+    "manual_collections": [
+      "Air Purifier"
+    ],
+    "season": "Summer",
+    "category_is_auto_detected": false,
+    "season_is_auto_detected": false,
+    "featured": false,
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "8.5 kg",
+        "priority": 1
+      },
+      {
+        "key": "dimensions",
+        "label": "Dimensions",
+        "value": "24 x 34 x 57 cm; 8.5 kg",
+        "priority": 2
+      },
+      {
+        "key": "color",
+        "label": "Color",
+        "value": "White",
+        "priority": 3
+      }
+    ],
+    "additionalInfo": {
+      "Other": [
+        {
+          "key": "Timestamp",
+          "label": "Timestamp",
+          "category": "Other",
+          "value": "3/15/2026, 6:13:31 AM"
+        },
+        {
+          "key": "generic_name",
+          "label": "Generic Name",
+          "category": "Other",
+          "value": "Appliances"
+        },
+        {
+          "key": "date_first_available",
+          "label": "Date First Available",
+          "category": "Other",
+          "value": "29 September 2022"
+        }
+      ],
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "18"
+        }
+      ],
+      "Technical": [
+        {
+          "key": "item_model_number",
+          "label": "Item Model Number",
+          "category": "Technical",
+          "value": "LAP408WHT2IAN1"
+        }
+      ]
+    },
+    "Warnings": [
+      {
+        "field": "Amazon marketplace domain",
+        "reason": "Metadata leaked: Australia (AU) — amazon.com.au",
+        "severity": "WARNING"
+      }
+    ],
+    "drop_signals": {
+      "has_reference_media": true,
+      "media_count": 3,
+      "regional_availability": true,
+      "available_regions": [
+        "INR"
+      ],
+      "influencer_presence": false,
+      "is_global": false,
+      "is_high_visibility": true,
+      "is_social_proof": false,
+      "is_new_release": false,
+      "product_age_days": 1263,
+      "drop_categories": [
+        "creator-picks"
+      ]
+    }
+  },
+  {
+    "asin": "B08NYTLNQ9",
+    "name": "Breville the Easy Air™ Connect Purifier, LAP158WHT, White",
+    "description": "Founded in Sydney in 1932, Breville has become an iconic global brand that enhances people’s lives through thoughtful design and brilliant innovation, delivering kitchen products to more than 70 countries around the globe. Breville is the kitchen appliance brand that delivers innovation based on consumer insights, empowering people’s potential to do things more impressively or easily than they’d thought possible in their own kitchen.. Validate before displaying - Choose an input from Founded in Sydney in 1932, Breville has become an iconic global brand that enhances people’s lives through thoughtful design and brilliant innovation, delivering kitchen products to more than 70 countries around the globe. Breville is the kitchen appliance brand that delivers innovation based on consumer insights, empowering people’s potential to do things more impressively or easily than they’d thought possible in their own kitchen.,I couldn't work out from reading how it would connect to the app, WiFi or Bluetooth. Nowhere does it mention the type of connection on the box, manual etc. Just downloaded the app and connected after some fiddling with the app settings. Not the easiest way to connect but it is 2.4g WiFi. It works well for double bed sized rooms and we have them sitting atop bedside tables so they're not picking up carpet fibres filling the filters too quickly, carpets get vacuumed weekly, and we are more worried about the airborne dust anyway. that is not a Customer review or feedback but more of product info/description.",
+    "price": 199,
+    "original_price": 249,
+    "originalPrice": 249,
+    "discount_percentage": 20,
+    "discountPercentage": 20,
+    "availability": "In Stock",
+    "Error-Flag": 0,
+    "Error-Reason": "",
+    "Error-Fields": [
+      "Amazon marketplace domain",
+      "color",
+      "colour"
+    ],
+    "currency": "AUD",
+    "symbol": "A$",
+    "brand": "Breville",
+    "category": "General",
+    "subcategory": "Appliances",
+    "main_image": "https://m.media-amazon.com/images/I/51qL3f4OqJL.jpg",
+    "all_images": [
+      "https://m.media-amazon.com/images/I/51qL3f4OqJL.jpg",
+      "https://m.media-amazon.com/images/I/61dw6G3lfdL.jpg",
+      "https://m.media-amazon.com/images/I/61KMyg41UGL.jpg",
+      "https://m.media-amazon.com/images/I/31FBRQpEaNL.jpg",
+      "https://m.media-amazon.com/images/I/31Z-cfSpXrL.jpg",
+      "https://m.media-amazon.com/images/I/31HqY+xWMsL.jpg",
+      "https://m.media-amazon.com/images/I/31+kqfUSTlL.jpg",
+      "https://m.media-amazon.com/images/I/41VV-LT1xIL.jpg",
+      "https://m.media-amazon.com/images/I/21SKlhFC3KL.jpg"
+    ],
+    "customer_rating": "4.5 out of 5 stars",
+    "review_count": 106,
+    "source_link": "https://youtu.be/MAfvR2a9nuE?si=g4c8Cz5FNHs61ZCi",
+    "referenceMedia": [
+      "https://youtu.be/MAfvR2a9nuE?si=g4c8Cz5FNHs61ZCi",
+      "https://youtu.be/p712twUbKGA?si=8_4gWDhsXKd3CiGE",
+      "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd"
+    ],
+    "regional_availability": 1,
+    "regional_variants": {
+      "INR": "B076HP91MN"
+    },
+    "amazon_short": "https://amzn.to/3NoGFdE",
+    "amazon_long": "",
+    "affiliate_link": "https://amzn.to/3NoGFdE",
+    "release_date": "2020-11-21T00:00:00.000Z",
+    "timestamp": "3/15/2026, 6:12:14 AM",
+    "influencer": "HouseFresh",
+    "manual_collections": [
+      "Air Purifier"
+    ],
+    "season": "Summer",
+    "category_is_auto_detected": false,
+    "season_is_auto_detected": false,
+    "featured": false,
+    "trending": false,
+    "productDetails": [
+      {
+        "key": "weight",
+        "label": "Weight",
+        "value": "1.64 kg",
+        "priority": 1
+      },
+      {
+        "key": "dimensions",
+        "label": "Dimensions",
+        "value": "36.7 x 24.5 x 24.4 cm; 1.64 kg",
+        "priority": 2
+      }
+    ],
+    "additionalInfo": {
+      "Other": [
+        {
+          "key": "Timestamp",
+          "label": "Timestamp",
+          "category": "Other",
+          "value": "3/15/2026, 6:12:14 AM"
+        },
+        {
+          "key": "generic_name",
+          "label": "Generic Name",
+          "category": "Other",
+          "value": "Appliances"
+        },
+        {
+          "key": "date_first_available",
+          "label": "Date First Available",
+          "category": "Other",
+          "value": "21 November 2020"
+        }
+      ],
+      "Product Specs": [
+        {
+          "key": "Discount",
+          "label": "Discount",
+          "category": "Product Specs",
+          "value": "20"
+        }
+      ],
+      "Technical": [
+        {
+          "key": "item_model_number",
+          "label": "Item Model Number",
+          "category": "Technical",
+          "value": "LAP158WHT2IAN1"
+        }
+      ]
+    },
+    "Warnings": [
+      {
+        "field": "Amazon marketplace domain",
+        "reason": "Metadata leaked: Australia (AU) — amazon.com.au",
+        "severity": "WARNING"
+      },
+      {
+        "field": "color",
+        "reason": "Value already in title/description",
+        "severity": "INFO"
+      },
+      {
+        "field": "colour",
+        "reason": "Value already in title/description",
+        "severity": "INFO"
+      }
+    ],
+    "drop_signals": {
+      "has_reference_media": true,
+      "media_count": 3,
+      "regional_availability": true,
+      "available_regions": [
+        "INR"
+      ],
+      "influencer_presence": false,
+      "is_global": false,
+      "is_high_visibility": true,
+      "is_social_proof": false,
+      "is_new_release": false,
+      "product_age_days": 1940,
+      "drop_categories": [
+        "creator-picks"
+      ]
+    }
+  },
+  {
     "asin": "B07PNJQMK6",
     "name": "Winix Zero 4-Stage Hospital Grade True HEPA Air Purifier AUS-1050AZBU, Suitable For Areas Up To 79m2, Activated Carbon Filter, White",
     "description": "4 STAGES OF AIR PURIFICATION: 1.Washable pre-filter 2. Deodorization Activated Carbon Filter 3. Hospital grade True HEPA filter (99.97 percent at 0.3 microns) 4. PlasmaWave Technology AUSTRALIAN HOSPITAL-GRADE TRUE HEPA FILTRATION: Confirmed to remove 99.97 percent of airborne pollutants (i.e. viruses, bacteria, smoke and allergens) as fine as 0.3 microns PLASMAWAVE: Unique Winix technology effectively neutralises a variety of airborne pollutants including bacteria & viruses ACTIVATED CARBON FILTER: activated carbon captures VOCs (chemical vapours) as well as offensive odours (up to 99.9 percent efficiency) EXCEPTIONAL ENERGY EFFICIENCY: up to 15 times more efficient than a typical 60w household light bulb INTELLIGENT FEATURES: Dual Smart Sensor, Smart Air Quality Display & Sleep-Mode AWARD WINNING QUALITY: Product Review 2022 Air Purifier Award-Winner / National Asthma Council Australia Sensitive Choice approved. Choose an input from Really quiet and seems like it handles the large space really well. I have it in an open plan kitchen, dining and family room and it is very reactive to smoke and odours. Even when doors are opened, it senses the changes and the orange and even red led lights up and fan increases to counteract the changes in conditions. Very happy after a few weeks, will monitor to see if it continues. Noticeably less allergy symptoms inside the house, even with the dog mainly indoors and constantly malting, large German shepherd, so very happy with the change it has brought about!,I'm very happy with this air purifier. I have a cat and it visibly picks up a lot of hair, that must just be floating around in the air; hair that would normally go unnoticed. I started using a Levoit LV-PUR 131 machine a couple of years ago to remove the smell of vaped marijuana flower (prescribed medical). I love the smell myself, but I know how many don't, and I'm a considerate neighbour. I've had the Winix for 3 months now, and it is far superior to the Levoit model, which has now been demoted to hallway duties. I like the washable pre-filter, although I've not actually had to wash it yet. I find that a good going over with a vacuum once a week, to remove all the large debris, is enough. I vacuum the charcoal filter too. As I've said, my primary reason for using an air purifier was never to remove dust but this is a big bonus, and there is visibly less dust now. The sensor detects VOCs much better than smoke, and for anyone using it for smoke or weed should be aware of this. I just keep it on setting three most of the time, which works very well for cigarette smoke and marijuana vape. Setting 3 on the Winix is quieter than setting 1 on the Levoit. Setting 3 is my \"go to\" setting. It's really not noisy at all. For smoke, leaving it on \"auto\" doesn't work, but manually setting it to 3 does. The same is true of marijuana flower vape. The turbo mode (4th speed) is VERY loud but unnecessary for normal use. I occasionally give it a blast, just to clear the air quickly, and it's very effective for this. I have a large living room, and 10 minutes on turbo will just clear anything quickly. The one niggle I have is that when I want to leave it on, as I retire to bed, I have a practical choice of setting 3 for 4 hours, or turbo for an hour - the timer does 1, 4 or 8 hours. It would be more useful for my purposes, if I could choose 1, 2, and 4 hours. Ideally, I'd like to be able to leave it on setting 3 for 2 hours, but that's not possible. I leave the Plasmawave mode on because on or off, I don't notice any difference. People have talked about it making occasional snapping noises, but I've never heard anything. Unbranded filter sets are about 20 quid, so in practice, I change them every two months. Winix say the charcoal filter will last for a lot longer as it is washable, but TBH washing and drying is too much faff for me. Lastly... it LOOKS better than the Levoit, which has turned yellow from UV light, like many white/off-white plastics. I'm very happy with this Winix machine. From research and experience, I now think that it's probably the best in the UK home market, for smoke and vape. I'm still very happy with the performance. I've discovered that because I've been smoking rollies (tobacco) near the unit, a sticky film develops on the pre-filter. In fact, the surrounding black plastic is also sticky. I think it's nicotine. Anyway, I just laid the filter down in the bath, and went gently over it with some water and a little washing up liquid. This did the trick. Good as new. Another trick I've found is that the carbon filter is exactly half the depth of the Hepa filter, so it is possible to fit three carbon filters, and no Hepa filter. Of course, from the POV of smoke and vape removal, this is not, as one might think, three times the effectiveness, but rather 197% the smoke-reducing power (according to ChatGPT) - something to do with layer passing. That's still almost twice as effective. It doesn't get the fine dust through, that's just blown back into the room. I use this air purifier in the room where I smoke and vape. Just around the corner, in my hallway, I have another Winix with a Hepa filter. That one gets the dust.",

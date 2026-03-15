@@ -1,9 +1,9 @@
 {
   "summary": {
-    "total_products": 22,
+    "total_products": 25,
     "products_with_errors": 4,
-    "error_rate": 18,
-    "last_updated": "2026-03-15T03:15:46.445Z"
+    "error_rate": 16,
+    "last_updated": "2026-03-15T06:22:56.479Z"
   },
   "error_breakdown": {
     "DISCOUNT_MISMATCH": 2,
@@ -1708,6 +1708,295 @@
       }
     },
     {
+      "asin": "B08NYTLNQ9",
+      "name": "Breville the Easy Air™ Connect Purifier, LAP158WHT, White",
+      "description": "Founded in Sydney in 1932, Breville has become an iconic global brand that enhances people’s lives through thoughtful design and brilliant innovation, delivering kitchen products to more than 70 countries around the globe. Breville is the kitchen appliance brand that delivers innovation based on consumer insights, empowering people’s potential to do things more impressively or easily than they’d thought possible in their own kitchen.. Validate before displaying - Choose an input from Founded in Sydney in 1932, Breville has become an iconic global brand that enhances people’s lives through thoughtful design and brilliant innovation, delivering kitchen products to more than 70 countries around the globe. Breville is the kitchen appliance brand that delivers innovation based on consumer insights, empowering people’s potential to do things more impressively or easily than they’d thought possible in their own kitchen.,I couldn't work out from reading how it would connect to the app, WiFi or Bluetooth. Nowhere does it mention the type of connection on the box, manual etc. Just downloaded the app and connected after some fiddling with the app settings. Not the easiest way to connect but it is 2.4g WiFi. It works well for double bed sized rooms and we have them sitting atop bedside tables so they're not picking up carpet fibres filling the filters too quickly, carpets get vacuumed weekly, and we are more worried about the airborne dust anyway. that is not a Customer review or feedback but more of product info/description.",
+      "price": 199,
+      "original_price": 249,
+      "originalPrice": 249,
+      "discount_percentage": 20,
+      "discountPercentage": 20,
+      "availability": "In Stock",
+      "Error-Flag": 0,
+      "Error-Reason": "",
+      "Error-Fields": [
+        "Amazon marketplace domain",
+        "color",
+        "colour"
+      ],
+      "currency": "AUD",
+      "symbol": "A$",
+      "brand": "Breville",
+      "category": "General",
+      "subcategory": "Appliances",
+      "main_image": "https://m.media-amazon.com/images/I/51qL3f4OqJL.jpg",
+      "all_images": [
+        "https://m.media-amazon.com/images/I/51qL3f4OqJL.jpg",
+        "https://m.media-amazon.com/images/I/61dw6G3lfdL.jpg",
+        "https://m.media-amazon.com/images/I/61KMyg41UGL.jpg",
+        "https://m.media-amazon.com/images/I/31FBRQpEaNL.jpg",
+        "https://m.media-amazon.com/images/I/31Z-cfSpXrL.jpg",
+        "https://m.media-amazon.com/images/I/31HqY+xWMsL.jpg",
+        "https://m.media-amazon.com/images/I/31+kqfUSTlL.jpg",
+        "https://m.media-amazon.com/images/I/41VV-LT1xIL.jpg",
+        "https://m.media-amazon.com/images/I/21SKlhFC3KL.jpg"
+      ],
+      "customer_rating": "4.5 out of 5 stars",
+      "review_count": 106,
+      "source_link": "https://youtu.be/MAfvR2a9nuE?si=g4c8Cz5FNHs61ZCi",
+      "referenceMedia": [
+        "https://youtu.be/MAfvR2a9nuE?si=g4c8Cz5FNHs61ZCi",
+        "https://youtu.be/p712twUbKGA?si=8_4gWDhsXKd3CiGE",
+        "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd"
+      ],
+      "regional_availability": 1,
+      "regional_variants": {
+        "INR": "B076HP91MN"
+      },
+      "amazon_short": "https://amzn.to/3NoGFdE",
+      "amazon_long": "",
+      "affiliate_link": "https://amzn.to/3NoGFdE",
+      "release_date": "2020-11-21T00:00:00.000Z",
+      "timestamp": "3/15/2026, 6:12:14 AM",
+      "influencer": "HouseFresh",
+      "manual_collections": [
+        "Air Purifier"
+      ],
+      "season": "Summer",
+      "category_is_auto_detected": false,
+      "season_is_auto_detected": false,
+      "featured": false,
+      "trending": false,
+      "productDetails": [
+        {
+          "key": "weight",
+          "label": "Weight",
+          "value": "1.64 kg",
+          "priority": 1
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions",
+          "value": "36.7 x 24.5 x 24.4 cm; 1.64 kg",
+          "priority": 2
+        }
+      ],
+      "additionalInfo": {
+        "Other": [
+          {
+            "key": "Timestamp",
+            "label": "Timestamp",
+            "category": "Other",
+            "value": "3/15/2026, 6:12:14 AM"
+          },
+          {
+            "key": "generic_name",
+            "label": "Generic Name",
+            "category": "Other",
+            "value": "Appliances"
+          },
+          {
+            "key": "date_first_available",
+            "label": "Date First Available",
+            "category": "Other",
+            "value": "21 November 2020"
+          }
+        ],
+        "Product Specs": [
+          {
+            "key": "Discount",
+            "label": "Discount",
+            "category": "Product Specs",
+            "value": "20"
+          }
+        ],
+        "Technical": [
+          {
+            "key": "item_model_number",
+            "label": "Item Model Number",
+            "category": "Technical",
+            "value": "LAP158WHT2IAN1"
+          }
+        ]
+      },
+      "Warnings": [
+        {
+          "field": "Amazon marketplace domain",
+          "reason": "Metadata leaked: Australia (AU) — amazon.com.au",
+          "severity": "WARNING"
+        },
+        {
+          "field": "color",
+          "reason": "Value already in title/description",
+          "severity": "INFO"
+        },
+        {
+          "field": "colour",
+          "reason": "Value already in title/description",
+          "severity": "INFO"
+        }
+      ],
+      "drop_signals": {
+        "has_reference_media": true,
+        "media_count": 3,
+        "regional_availability": true,
+        "available_regions": [
+          "INR"
+        ],
+        "influencer_presence": false,
+        "is_global": false,
+        "is_high_visibility": true,
+        "is_social_proof": false,
+        "is_new_release": false,
+        "product_age_days": 1940,
+        "drop_categories": [
+          "creator-picks"
+        ]
+      }
+    },
+    {
+      "asin": "B0BGRKRCF6",
+      "name": "Breville the Smart Air Viral Protect Plus Purifier, LAP408WHT",
+      "description": "Room Coverage: A plus sized air purifier suitable for medium rooms suchs Bedrooms, Living rooms, Kitchen and Home Office up to 42m2. CADR: Clean air delivery rate (CADR) up to 215m3/h Advanced 4-Stage Air Purification System with AntiViral Protection: The AntiViral HEPA-13 filter Reduces 99.97% of viral particles and allergens down to 0.3μm. A Pre-filter reduces dust and pet-dander. Activated Carbon filter reduces smoke and odours. While the Microbe Shield light uses a short-wave light designed to target bacteria and viruses. Microbe Shield: Uses a shortwave light specially designed to target bacteria and viruses. The Microbe Shield function can be turned on and off according to preference. SensAir System: Dual display with real time updates via PM2.5 Micron Monitor & Live Purity Visual Indicator, auto adjusts the performance according to air quality detected. WiFi Control & Voice Assistance: Control your home's air purification on the go with the Breville Home Connect app, so you can feel comfortable the moment you walk in the door. Immersive airflow design: Purifies the air around you with a 360 degrees design of the air inlet and outlet for a broader filtration compared to flat units with single direction airflow. Low energy consumption: This purifier is a low wattage appliance, which uses less energy to run. Auto mode monitors the air quality and adjusts performance to minimise and maximise air purification as and when needed, conserving on energy at the same time..",
+      "price": 329,
+      "original_price": 399,
+      "originalPrice": 399,
+      "discount_percentage": 18,
+      "discountPercentage": 18,
+      "availability": "In Stock",
+      "Error-Flag": 0,
+      "Error-Reason": "",
+      "Error-Fields": [
+        "Amazon marketplace domain"
+      ],
+      "currency": "AUD",
+      "symbol": "A$",
+      "brand": "Breville",
+      "category": "General",
+      "subcategory": "Appliances",
+      "main_image": "https://m.media-amazon.com/images/I/71opaxNB25L.jpg",
+      "all_images": [
+        "https://m.media-amazon.com/images/I/71opaxNB25L.jpg",
+        "https://m.media-amazon.com/images/I/81UUZgCuQ8L.jpg",
+        "https://m.media-amazon.com/images/I/61dw6G3lfdL.jpg",
+        "https://m.media-amazon.com/images/I/81Aq8OTS89L.jpg",
+        "https://m.media-amazon.com/images/I/71Ywvrc9c5L.jpg",
+        "https://m.media-amazon.com/images/I/713sPXN8TrL.jpg",
+        "https://m.media-amazon.com/images/I/41npSRChpfL.jpg",
+        "https://m.media-amazon.com/images/I/31Z-cfSpXrL.jpg",
+        "https://m.media-amazon.com/images/I/410N47MhRfL.jpg",
+        "https://m.media-amazon.com/images/I/61Sx0DQmZ6L.jpg"
+      ],
+      "customer_rating": "5.0 out of 5 stars",
+      "review_count": 6,
+      "source_link": "https://youtu.be/MAfvR2a9nuE?si=g4c8Cz5FNHs61ZCi",
+      "referenceMedia": [
+        "https://youtu.be/MAfvR2a9nuE?si=g4c8Cz5FNHs61ZCi",
+        "https://youtu.be/p712twUbKGA?si=8_4gWDhsXKd3CiGE",
+        "https://youtu.be/-LclkpJkwRU?si=a03LfBb1--UqaCzd"
+      ],
+      "regional_availability": 1,
+      "regional_variants": {
+        "INR": "B076HP91MN"
+      },
+      "amazon_short": "https://amzn.to/4sPCuqu",
+      "amazon_long": "",
+      "affiliate_link": "https://amzn.to/4sPCuqu",
+      "release_date": "2022-09-29T00:00:00.000Z",
+      "timestamp": "3/15/2026, 6:13:31 AM",
+      "influencer": "HouseFresh",
+      "manual_collections": [
+        "Air Purifier"
+      ],
+      "season": "Summer",
+      "category_is_auto_detected": false,
+      "season_is_auto_detected": false,
+      "featured": false,
+      "trending": false,
+      "productDetails": [
+        {
+          "key": "weight",
+          "label": "Weight",
+          "value": "8.5 kg",
+          "priority": 1
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions",
+          "value": "24 x 34 x 57 cm; 8.5 kg",
+          "priority": 2
+        },
+        {
+          "key": "color",
+          "label": "Color",
+          "value": "White",
+          "priority": 3
+        }
+      ],
+      "additionalInfo": {
+        "Other": [
+          {
+            "key": "Timestamp",
+            "label": "Timestamp",
+            "category": "Other",
+            "value": "3/15/2026, 6:13:31 AM"
+          },
+          {
+            "key": "generic_name",
+            "label": "Generic Name",
+            "category": "Other",
+            "value": "Appliances"
+          },
+          {
+            "key": "date_first_available",
+            "label": "Date First Available",
+            "category": "Other",
+            "value": "29 September 2022"
+          }
+        ],
+        "Product Specs": [
+          {
+            "key": "Discount",
+            "label": "Discount",
+            "category": "Product Specs",
+            "value": "18"
+          }
+        ],
+        "Technical": [
+          {
+            "key": "item_model_number",
+            "label": "Item Model Number",
+            "category": "Technical",
+            "value": "LAP408WHT2IAN1"
+          }
+        ]
+      },
+      "Warnings": [
+        {
+          "field": "Amazon marketplace domain",
+          "reason": "Metadata leaked: Australia (AU) — amazon.com.au",
+          "severity": "WARNING"
+        }
+      ],
+      "drop_signals": {
+        "has_reference_media": true,
+        "media_count": 3,
+        "regional_availability": true,
+        "available_regions": [
+          "INR"
+        ],
+        "influencer_presence": false,
+        "is_global": false,
+        "is_high_visibility": true,
+        "is_social_proof": false,
+        "is_new_release": false,
+        "product_age_days": 1263,
+        "drop_categories": [
+          "creator-picks"
+        ]
+      }
+    },
+    {
       "asin": "9388550315",
       "name": "Ikigai (Hindi) [hardcover]: Héctor García,Francesc Miralles [May 19, 2021]…",
       "description": "लम्बे और खुशहाल जीवन का जापानी रहस्य हेक्टर गार्सिया और फ़्रान्सेस्क मिरालेस इकिगाई के बारे में अंतरराष्ट्रीय बेस्टसेलिंग गाइड से जानें दीर्घायु होने और खुशहाल जीवन जीने का जापानी रहस्य जापान के लोग विश्वास करते हैं कि इकिगाई हर एक के भीतर छिपा होता है – यह हर सुबह नींद से जागने की वजह होती है। प्रेरणा और सांत्वना देने वाली यह पुस्तक आपको अपना व्यक्तिगत इकिगाई खोजने में मदद के लिए जीवन में परिवर्तन लाने वाले साधन उपलब्ध कराएगी। यह आपको दिखलाएगी कि कैसे अनावश्यक भार को पीछे छोड़कर अपना उद्देश्य हासिल किया जाए, मित्रता को विकसित किया जाए और स्वंय को अपने जुनून के लिए समर्पित किया जाए।. Validate before displaying - Choose an input from लम्बे और खुशहाल जीवन का जापानी रहस्य हेक्टर गार्सिया और फ़्रान्सेस्क मिरालेस इकिगाई के बारे में अंतरराष्ट्रीय बेस्टसेलिंग गाइड से जानें दीर्घायु होने और खुशहाल जीवन जीने का जापानी रहस्य जापान के लोग विश्वास करते हैं कि इकिगाई हर एक के भीतर छिपा होता है – यह हर सुबह नींद से जागने की वजह होती है। प्रेरणा और सांत्वना देने वाली यह पुस्तक आपको अपना व्यक्तिगत इकिगाई खोजने में मदद के लिए जीवन में परिवर्तन लाने वाले साधन उपलब्ध कराएगी। यह आपको दिखलाएगी कि कैसे अनावश्यक भार को पीछे छोड़कर अपना उद्देश्य हासिल किया जाए, मित्रता को विकसित किया जाए और स्वंय को अपने जुनून के लिए समर्पित किया जाए।,📖 Just started reading Ikigai: The Japanese Secret to a Long and Happy Life — and I’m already intrigued by its depth and simplicity. In the middle of deadlines, targets, and daily routines, this book is a gentle reminder to pause and reflect on one essential question: What is my reason for being? Ikigai isn’t just a concept — it’s a way of living with purpose, passion, and balance. Looking forward to discovering insights that can help both personally and professionally — especially in navigating work-life balance, mindful living, and meaningful contribution. Excited for the journey ahead 📘🌿",
@@ -1977,7 +2266,7 @@
       ],
       "regional_availability": 1,
       "regional_variants": {
-        "AUD": "B0F9FJS3VW"
+        "AUD": "B0BGRKRCF6"
       },
       "amazon_short": "https://amzn.to/3P6vk2k",
       "amazon_long": "",
@@ -2234,7 +2523,7 @@
       ],
       "regional_availability": 1,
       "regional_variants": {
-        "AUD": "B0F9FJS3VW"
+        "AUD": "B0BGRKRCF6"
       },
       "amazon_short": "https://amzn.to/3PchdbJ",
       "amazon_long": "",
@@ -2437,7 +2726,7 @@
       ],
       "regional_availability": 1,
       "regional_variants": {
-        "AUD": "B0F9FJS3VW"
+        "AUD": "B0BGRKRCF6"
       },
       "amazon_short": "https://amzn.to/4bfdr8R",
       "amazon_long": "",
@@ -2645,7 +2934,7 @@
       ],
       "regional_availability": 1,
       "regional_variants": {
-        "AUD": "B0F9FJS3VW"
+        "AUD": "B0BGRKRCF6"
       },
       "amazon_short": "https://amzn.to/3N0Hnh8",
       "amazon_long": "",
@@ -2901,7 +3190,7 @@
       ],
       "regional_availability": 1,
       "regional_variants": {
-        "AUD": "B0F9FJS3VW"
+        "AUD": "B0BGRKRCF6"
       },
       "amazon_short": "https://amzn.to/4rpKpJO",
       "amazon_long": "",
@@ -3150,7 +3439,7 @@
       ],
       "regional_availability": 1,
       "regional_variants": {
-        "AUD": "B0F9FJS3VW"
+        "AUD": "B0BGRKRCF6"
       },
       "amazon_short": "https://amzn.to/3PciG1J",
       "amazon_long": "",
@@ -3395,7 +3684,7 @@
       ],
       "regional_availability": 1,
       "regional_variants": {
-        "AUD": "B0F9FJS3VW"
+        "AUD": "B0BGRKRCF6"
       },
       "amazon_short": "https://amzn.to/4sFIFxc",
       "amazon_long": "",
@@ -3865,7 +4154,7 @@
       ],
       "regional_availability": 1,
       "regional_variants": {
-        "AUD": "B0F9FJS3VW"
+        "AUD": "B0BGRKRCF6"
       },
       "amazon_short": "https://amzn.to/4dem2LA",
       "amazon_long": "",
@@ -4105,7 +4394,7 @@
       ],
       "regional_availability": 1,
       "regional_variants": {
-        "AUD": "B0F9FJS3VW"
+        "AUD": "B0BGRKRCF6"
       },
       "amazon_short": "https://amzn.to/4rtsTEG",
       "amazon_long": "",
@@ -4622,6 +4911,166 @@
         "available_regions": [
           "AUD"
         ],
+        "influencer_presence": true,
+        "is_global": false,
+        "is_high_visibility": true,
+        "is_social_proof": true,
+        "is_new_release": false,
+        "product_age_days": null,
+        "drop_categories": [
+          "creator-picks",
+          "viral-reels"
+        ]
+      }
+    },
+    {
+      "asin": "B0DF7KXF87",
+      "name": "2-in-1 Automatic Card Shuffler & Dealer - Support 12 Players, 4 Drawing Remotes, Built-in Gameplays, 360°/180° Deal, Adjustable Dealing Distance, for Poker, UNO, Phase 10, Skip-Bo, Rummy (Black)",
+      "description": "[2-IN-1 SHUFFLING & DEALING] – The KPAW MAX 6 2-in-1 Automatic Card Shuffler & Dealer innovatively combines card shuffling and dealing in one machine. With just one single press, the machine automatically shuffles and then deals as you set. It gets rid of the hassle of manual shuffling, ensuring smooth and error-free gameplay for poker, UNO, Phase 10, Skip-Bo, Five Crowns, Crazy Eights, etc [SUPPORTS UP TO 12 PLAYERS] – Accommodating up to 12 players makes it ideal for larger gatherings like family game nights or friend meetups. Custom settings allow you to adjust the number of cards and players, supporting a wide variety of poker games like Blackjack, Texas Hold'em, Rummy, and Bridge with a fair and engaging experience [CUSTOM DEALING OPTIONS] – Tailor your gameplay with the KPAW MAX 6 2-in-1 Automatic Card Shuffler & Dealer’s customizable dealing features. Adjust card count, direction, and dealing distance based on the game you’re playing. Whether it’s Poker, UNO, or Five Crowns, this machine adapts to card games worldwide, offering flexibility for a variety of game rules [DRAWING REMOTES] – The 4 included drawing remotes let players draw cards remotely by simply pressing the remote, perfect for games like UNO, Rummy and Phase 10 which need to draw cards frequently. Paired for each player, the machine automatically draws a card in the direction of the corresponding paired remote position when press the remote, making it easier to manage card drawing during a game [ADAPTS TO MULTIPLE CARD SIZES] – The retractable card baffle and open-sided trays handle different card sizes, from standard poker decks to specialty games like Canasta or UNO. Its adjustable design ensures smooth operation with various card types, making it a versatile tool for worldwide players [QUIET OPERATION] – Unlike noisy alternatives, the KPAW MAX 6 2-in-1 Automatic Card Shuffler & Dealer operates with lower noise, maintaining a calm atmosphere for players. This makes it perfect for extended game sessions, social gatherings, or family nights where a peaceful environment is key to player enjoyment [RECHARGEABLE BATTERY] – Equipped with a long-lasting rechargeable battery, the KPAW MAX 6 2-in-1 Automatic Card Shuffler and Dealer can handle up to 150 decks on a single full charge. Say goodbye to disposable batteries and the waste they cause. Validate before displaying - Choose an input from Elevate your card game experience with the KPAW MAX 6 2-in-1 Automatic Card Shuffler & Dealer. Designed to combine automatic shuffling and precise card dealing in one seamless machine, it ensures error-free gameplay and a professional feel for every game night. Whether you're playing Poker, UNO, Phase 10, Skip-Bo, Crazy Eight, or Five Crowns, the KPAW MAX 6 streamlines the process so you can focus on enjoying the game. With its intelligent design and customizable settings, it adapts to various card sizes, game rules, and even the number of players, making it the perfect tool for family gatherings, friendly meetups, and competitive tournaments.,I bought this for my sister who plays cards (and UNO Extreme) quite a lot. I don't think we laughed as much as when we were trying to set it up. The instructions aren't the clearest, but when we finally got it right, it was very good. Setting it up involves picking a lot of cards from the floor especially if you don't have a baize topped card table, so this is the only piece of equipment you need to play crib and get excersise at the same time. In summary, great fun but maybe only suitable for twits that have a sense of humour and more money than common sense!",
+      "price": 28129,
+      "original_price": 0,
+      "originalPrice": 0,
+      "discount_percentage": 43,
+      "discountPercentage": 43,
+      "availability": "In Stock",
+      "Error-Flag": 0,
+      "Error-Reason": "",
+      "Error-Fields": [
+        "Amazon marketplace domain",
+        "publisher",
+        "manufacturer"
+      ],
+      "currency": "INR",
+      "symbol": "₹",
+      "brand": "KPAW",
+      "category": "Toys & Games",
+      "subcategory": "Toys",
+      "main_image": "https://m.media-amazon.com/images/I/71l+r5pkPML.jpg",
+      "all_images": [
+        "https://m.media-amazon.com/images/I/71l+r5pkPML.jpg",
+        "https://m.media-amazon.com/images/I/61qU-q4ufAL.jpg",
+        "https://m.media-amazon.com/images/I/71Z7tTFyyjL.jpg",
+        "https://m.media-amazon.com/images/I/71ROghl7ncL.jpg",
+        "https://m.media-amazon.com/images/I/61EU0pxuksL.jpg",
+        "https://m.media-amazon.com/images/I/61KUu6gBTsL.jpg",
+        "https://m.media-amazon.com/images/I/81a+JYqJPbL.jpg",
+        "https://m.media-amazon.com/images/I/51yWATLDyxL.jpg",
+        "https://m.media-amazon.com/images/I/41sbVC6jymL.jpg",
+        "https://m.media-amazon.com/images/I/41C4wYBXQpL.jpg"
+      ],
+      "customer_rating": "4.3 out of 5 stars",
+      "review_count": 351,
+      "source_link": "https://youtu.be/LAfdL6has0s?si=fWBu7bCRRdEoZqBa",
+      "referenceMedia": [
+        "https://youtu.be/LAfdL6has0s?si=fWBu7bCRRdEoZqBa",
+        "https://www.instagram.com/reel/DP-eXldgHg1/?id=3746565502185535541_69799307579",
+        "https://youtu.be/pBQfWuQ5Tbo?si=urnvJJVd5kTKIS03",
+        "https://youtu.be/NKP0uc7CKIA?si=aHQWIRAPvPyQ1Kob"
+      ],
+      "regional_availability": 0,
+      "regional_variants": {},
+      "amazon_short": "https://amzn.to/4digOhY",
+      "amazon_long": "",
+      "affiliate_link": "https://amzn.to/4digOhY",
+      "release_date": null,
+      "timestamp": "3/15/2026, 6:14:46 AM",
+      "influencer": "poker_provoke",
+      "manual_collections": [
+        "Games",
+        "Indoor",
+        "Cards"
+      ],
+      "season": null,
+      "category_is_auto_detected": false,
+      "season_is_auto_detected": false,
+      "featured": false,
+      "trending": false,
+      "productDetails": [
+        {
+          "key": "weight",
+          "label": "Weight",
+          "value": "1 kg 10 g",
+          "priority": 1
+        },
+        {
+          "key": "dimensions",
+          "label": "Dimensions",
+          "value": "16.2 x 12.7 x 11.6 Centimeters",
+          "priority": 2
+        },
+        {
+          "key": "includedComponents",
+          "label": "Included Components",
+          "value": "1 × MAX 6 Automatic Card Shuffler & Dealer, 1 × Packaging Box, 1 × USB-C Charging Cable, 1 × User Manual, 4 × Drawing Remotes",
+          "priority": 11
+        },
+        {
+          "key": "included_components",
+          "label": "Included Components",
+          "value": "1 × MAX 6 Automatic Card Shuffler &amp; Dealer, 1 × Packaging Box, 1 × USB-C Charging Cable, 1 × User Manual, 4 × Drawing Remotes",
+          "priority": 11
+        }
+      ],
+      "additionalInfo": {
+        "Other": [
+          {
+            "key": "Timestamp",
+            "label": "Timestamp",
+            "category": "Other",
+            "value": "3/15/2026, 6:14:46 AM"
+          },
+          {
+            "key": "generic_name",
+            "label": "Generic Name",
+            "category": "Other",
+            "value": "Toys"
+          },
+          {
+            "key": "department",
+            "label": "Department",
+            "category": "Other",
+            "value": "Unisex-Adult"
+          }
+        ],
+        "Product Specs": [
+          {
+            "key": "Discount",
+            "label": "Discount",
+            "category": "Product Specs",
+            "value": "43"
+          }
+        ],
+        "Technical": [
+          {
+            "key": "item_model_number",
+            "label": "Item Model Number",
+            "category": "Technical",
+            "value": "MAX 6-bk"
+          }
+        ]
+      },
+      "Warnings": [
+        {
+          "field": "Amazon marketplace domain",
+          "reason": "Metadata leaked: India (IN) — amazon.in",
+          "severity": "WARNING"
+        },
+        {
+          "field": "publisher",
+          "reason": "Value already in title/description",
+          "severity": "INFO"
+        },
+        {
+          "field": "manufacturer",
+          "reason": "Value already in title/description",
+          "severity": "INFO"
+        }
+      ],
+      "drop_signals": {
+        "has_reference_media": true,
+        "media_count": 4,
+        "regional_availability": false,
+        "available_regions": [],
         "influencer_presence": true,
         "is_global": false,
         "is_high_visibility": true,

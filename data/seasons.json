@@ -1,8 +1,8 @@
 {
   "summary": {
     "total_seasons": 5,
-    "total_products": 22,
-    "last_updated": "2026-03-15T03:15:46.443Z"
+    "total_products": 25,
+    "last_updated": "2026-03-15T06:22:56.477Z"
   },
   "seasons": [
     {
@@ -18,7 +18,7 @@
       "name": "Summer",
       "emoji": "☀️",
       "label": "Summer Vibe",
-      "product_count": 7,
+      "product_count": 9,
       "asins": [
         "B0F2MLPWTG",
         "B0DT4F8T4L",
@@ -26,6 +26,8 @@
         "B094DRK41G",
         "B0FVXJ52W6",
         "B0F9FJS3VW",
+        "B08NYTLNQ9",
+        "B0BGRKRCF6",
         "9388550072"
       ]
     },

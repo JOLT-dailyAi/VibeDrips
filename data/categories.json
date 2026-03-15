@@ -1,10 +1,26 @@
 {
   "summary": {
-    "total_categories": 5,
-    "total_products": 22,
-    "last_updated": "2026-03-15T03:15:46.443Z"
+    "total_categories": 6,
+    "total_products": 25,
+    "last_updated": "2026-03-15T06:22:56.477Z"
   },
   "categories": [
+    {
+      "id": "general",
+      "name": "General",
+      "product_count": 9,
+      "asins": [
+        "B0DT4F8T4L",
+        "B0FVXJ52W6",
+        "B08NYTLNQ9",
+        "B0BGRKRCF6",
+        "B0FJ5R8JN7",
+        "B0DHGFCG6P",
+        "B0F1MR9W8R",
+        "B0CQ2MVRXR",
+        "B076HP91MN"
+      ]
+    },
     {
       "id": "furniture",
       "name": "Furniture",
@@ -17,20 +33,6 @@
         "B0DF6NBJDW",
         "B0BCC8KZHK",
         "B0BDX9ZN46"
-      ]
-    },
-    {
-      "id": "general",
-      "name": "General",
-      "product_count": 7,
-      "asins": [
-        "B0DT4F8T4L",
-        "B0FVXJ52W6",
-        "B0FJ5R8JN7",
-        "B0DHGFCG6P",
-        "B0F1MR9W8R",
-        "B0CQ2MVRXR",
-        "B076HP91MN"
       ]
     },
     {
@@ -60,6 +62,14 @@
       "product_count": 1,
       "asins": [
         "B0CG1N11DV"
+      ]
+    },
+    {
+      "id": "toys-&-games",
+      "name": "Toys & Games",
+      "product_count": 1,
+      "asins": [
+        "B0DF7KXF87"
       ]
     }
   ]

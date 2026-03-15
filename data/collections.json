@@ -1,7 +1,7 @@
 {
   "summary": {
-    "total_top_level": 4,
-    "last_updated": "2026-03-15T03:15:46.444Z"
+    "total_top_level": 7,
+    "last_updated": "2026-03-15T06:22:56.478Z"
   },
   "collections": {
     "Books": {
@@ -19,7 +19,7 @@
     },
     "Air Purifier": {
       "name": "Air Purifier",
-      "product_count": 14,
+      "product_count": 16,
       "asins": [
         "B0F2MLPWTG",
         "B0DT4F8T4L",
@@ -27,6 +27,8 @@
         "B094DRK41G",
         "B0FVXJ52W6",
         "B0F9FJS3VW",
+        "B08NYTLNQ9",
+        "B0BGRKRCF6",
         "B0FJ5R8JN7",
         "B0DHGFCG6P",
         "B0F1MR9W8R",
@@ -51,6 +53,30 @@
       "product_count": 1,
       "asins": [
         "B0DF6NBJDW"
+      ],
+      "sub_collections": {}
+    },
+    "Games": {
+      "name": "Games",
+      "product_count": 1,
+      "asins": [
+        "B0DF7KXF87"
+      ],
+      "sub_collections": {}
+    },
+    "Indoor": {
+      "name": "Indoor",
+      "product_count": 1,
+      "asins": [
+        "B0DF7KXF87"
+      ],
+      "sub_collections": {}
+    },
+    "Cards": {
+      "name": "Cards",
+      "product_count": 1,
+      "asins": [
+        "B0DF7KXF87"
       ],
       "sub_collections": {}
     }

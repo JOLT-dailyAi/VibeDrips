@@ -7,13 +7,14 @@
       "countries": [
         "India"
       ],
-      "product_count": 13,
+      "product_count": 14,
       "filename": "products-INR.json",
       "categories": [
         "General",
         "Beauty & Personal Care",
         "Furniture",
-        "Books"
+        "Books",
+        "Toys & Games"
       ],
       "brands": [
         "Praan",
@@ -24,7 +25,8 @@
         "MyMirror Publishing House",
         "Qubo",
         "Honeywell",
-        "Diamond Books"
+        "Diamond Books",
+        "KPAW"
       ],
       "price_range": {
         "min": 150,
@@ -38,7 +40,7 @@
       "countries": [
         "Australia"
       ],
-      "product_count": 9,
+      "product_count": 11,
       "filename": "products-AUD.json",
       "categories": [
         "Furniture",
@@ -51,6 +53,7 @@
         "Winix",
         "VITURE",
         "Cornerstone Press",
+        "Breville",
         "HUTCHINSON PUBLISHING - TRADE"
       ],
       "price_range": {
@@ -59,7 +62,7 @@
       }
     }
   ],
-  "last_updated": "2026-03-15T03:15:46.440Z",
-  "total_products": 22,
+  "last_updated": "2026-03-15T06:22:56.475Z",
+  "total_products": 25,
   "default_currency": "INR"
 }
