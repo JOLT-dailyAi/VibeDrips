@@ -112,7 +112,17 @@ Key rules:
 
 ## 7. Cache Rules
 
-### Rule: Cache VibeDrips Static Assets
+### Rule 1: Bypass Service Worker Cache (CRITICAL)
+| Setting | Value |
+|---------|-------|
+| Rule name | `Bypass Service Worker Cache` |
+| Match | `URI Path` equals `/sw.js` |
+| Cache eligibility | **Bypass cache** |
+| Order | **First** |
+
+> **Why**: Ensures the browser always detects new versions of the site instantly. If this is cached, users will be stuck on old code for days.
+
+### Rule 2: Cache VibeDrips Static Assets
 | Setting | Value |
 |---------|-------|
 | Rule name | `Cache VibeDrips Static Assets` |
