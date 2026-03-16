@@ -1,8 +1,8 @@
 {
   "summary": {
-    "total_influencers": 4,
-    "total_products": 15,
-    "last_updated": "2026-03-16T03:18:04.856Z"
+    "total_influencers": 5,
+    "total_products": 16,
+    "last_updated": "2026-03-16T19:35:20.379Z"
   },
   "influencers": [
     {
@@ -93,6 +93,23 @@
           "category": "Electronics",
           "asins": [
             "B0FFT61X6F"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Better Pursuits",
+      "product_count": 1,
+      "has_creator_video": true,
+      "regions": [
+        "AUD"
+      ],
+      "media_groups": [
+        {
+          "media_url": "https://youtu.be/wyVgM0OOOL0?si=W0kNiROXuAlIlywF",
+          "category": "Clothing & Accessories",
+          "asins": [
+            "B076B55LF1"
           ]
         }
       ]

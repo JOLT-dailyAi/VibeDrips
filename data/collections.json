@@ -1,7 +1,7 @@
 {
   "summary": {
-    "total_top_level": 7,
-    "last_updated": "2026-03-16T03:18:04.856Z"
+    "total_top_level": 13,
+    "last_updated": "2026-03-16T19:35:20.380Z"
   },
   "collections": {
     "Books": {
@@ -45,6 +45,54 @@
       "product_count": 1,
       "asins": [
         "B0FFT61X6F"
+      ],
+      "sub_collections": {}
+    },
+    "Gen Z": {
+      "name": "Gen Z",
+      "product_count": 1,
+      "asins": [
+        "B076B55LF1"
+      ],
+      "sub_collections": {}
+    },
+    "Fit body": {
+      "name": "Fit body",
+      "product_count": 1,
+      "asins": [
+        "B076B55LF1"
+      ],
+      "sub_collections": {}
+    },
+    "Inner wear": {
+      "name": "Inner wear",
+      "product_count": 1,
+      "asins": [
+        "B076B55LF1"
+      ],
+      "sub_collections": {}
+    },
+    "Shape wear": {
+      "name": "Shape wear",
+      "product_count": 1,
+      "asins": [
+        "B076B55LF1"
+      ],
+      "sub_collections": {}
+    },
+    "Apparel": {
+      "name": "Apparel",
+      "product_count": 1,
+      "asins": [
+        "B076B55LF1"
+      ],
+      "sub_collections": {}
+    },
+    "Mens": {
+      "name": "Mens",
+      "product_count": 1,
+      "asins": [
+        "B076B55LF1"
       ],
       "sub_collections": {}
     },

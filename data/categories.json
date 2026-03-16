@@ -1,8 +1,8 @@
 {
   "summary": {
-    "total_categories": 6,
-    "total_products": 25,
-    "last_updated": "2026-03-16T03:18:04.855Z"
+    "total_categories": 7,
+    "total_products": 26,
+    "last_updated": "2026-03-16T19:35:20.378Z"
   },
   "categories": [
     {
@@ -54,6 +54,14 @@
       "product_count": 1,
       "asins": [
         "B0FFT61X6F"
+      ]
+    },
+    {
+      "id": "clothing-&-accessories",
+      "name": "Clothing & Accessories",
+      "product_count": 1,
+      "asins": [
+        "B076B55LF1"
       ]
     },
     {

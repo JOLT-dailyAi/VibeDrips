@@ -1,17 +1,17 @@
 VibeDrips Data Processing Summary
-Generated: 2026-03-16T03:18:04.860Z
+Generated: 2026-03-16T19:35:20.383Z
 
 📊 STATISTICS
-- Total Rows Processed: 25
-- Products Successfully Processed: 25
+- Total Rows Processed: 26
+- Products Successfully Processed: 26
 - Errors Encountered: 0
 - Success Rate: 100.0%
 
 ⚠️ VALIDATION
-- Records Flagged: 4
-- Field Conflicts: 25
+- Records Flagged: 5
+- Field Conflicts: 26
 - Error Breakdown:
-  • DISCOUNT_MISMATCH: 2
+  • DISCOUNT_MISMATCH: 3
   • INVALID_ORIGINAL: 2
 
 💰 CURRENCIES
@@ -19,28 +19,28 @@ Generated: 2026-03-16T03:18:04.860Z
 - Available: AUD, INR
 
 📦 CATEGORIES
-- Categories Found: 6
+- Categories Found: 7
 - Review Needed: 0 products
 
 👤 INFLUENCERS
-- Products with influencers: 15
-- Unique influencers: 4
+- Products with influencers: 16
+- Unique influencers: 5
 
 💎 COLLECTIONS
-- Unique collections: 7
+- Unique collections: 13
 
 🌿 SEASONS
 - Seasons Detected: 2
 - Review Needed: 3 products
 
 ⚠️ ERRORS & VALIDATION
-- Products with errors: 4
-- Error rate: 16%
+- Products with errors: 5
+- Error rate: 19%
 
 🎬 DROPS
-- 🎬 Creator Picks: 25 products
+- 🎬 Creator Picks: 26 products
 - 🌍 Global Drops: 0 products
-- 📱 Viral Reels: 8 products
+- 📱 Viral Reels: 9 products
 - 🆕 New Releases: 0 products
 
 📁 FILES BEFORE DELETION
@@ -64,7 +64,7 @@ Generated: 2026-03-16T03:18:04.860Z
 - seasons_auto-detect.json
 
 📁 FILES GENERATED
-- products-AUD.json (11 products)
+- products-AUD.json (12 products)
 - products-INR.json (14 products)
 - categories.json & categories_auto-detect.json
 - seasons.json & seasons_auto-detect.json

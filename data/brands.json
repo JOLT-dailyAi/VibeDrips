@@ -1,8 +1,8 @@
 {
   "summary": {
-    "total_brands": 16,
-    "total_products": 25,
-    "last_updated": "2026-03-16T03:18:04.857Z"
+    "total_brands": 17,
+    "total_products": 26,
+    "last_updated": "2026-03-16T19:35:20.380Z"
   },
   "brands": [
     {
@@ -75,6 +75,13 @@
       "product_count": 1,
       "asins": [
         "B0FFT61X6F"
+      ]
+    },
+    {
+      "name": "Esteem Apparel",
+      "product_count": 1,
+      "asins": [
+        "B076B55LF1"
       ]
     },
     {

@@ -1,12 +1,12 @@
 {
   "summary": {
-    "total_products": 25,
-    "products_with_errors": 4,
-    "error_rate": 16,
-    "last_updated": "2026-03-16T03:18:04.857Z"
+    "total_products": 26,
+    "products_with_errors": 5,
+    "error_rate": 19,
+    "last_updated": "2026-03-16T19:35:20.381Z"
   },
   "error_breakdown": {
-    "DISCOUNT_MISMATCH": 2,
+    "DISCOUNT_MISMATCH": 3,
     "INVALID_ORIGINAL": 2
   },
   "flagged_products": [
@@ -1993,6 +1993,356 @@
         "product_age_days": 1264,
         "drop_categories": [
           "creator-picks"
+        ]
+      }
+    },
+    {
+      "asin": "B076B55LF1",
+      "name": "Esteem Apparel Original Men's Chest Compression Shirt to Hide Gynecomastia Moobs",
+      "description": "This is a perfectly fitted, soft to the skin, mens slimming compression undershirt that stretches and recoils as your body moves. On the inside are powerful layers of Polyester & Spandex tightly knitted together flattening your chest and stomach. This garment is designed for men suffering from Gynecomastia. Made for wearing underneath any kind of clothing, such as workout shirts, t-shirts, sweaters and formal dress shirts. The compression is a secret between you and your garment. Get your self-esteem back! A chest flattening breakthrough! This is an excellent Gynecomastia or \"man boobs\" compression shirt for the man who wants to enjoy a healthy looking figure without the need for surgery or medications.. Validate before displaying - Choose an input from This is a perfectly fitted, soft to the skin, mens slimming compression undershirt that stretches and recoils as your body moves. On the inside are powerful layers of Polyester & Spandex tightly knitted together flattening your chest and stomach. This garment is designed for men suffering from Gynecomastia. Made for wearing underneath any kind of clothing, such as workout shirts, t-shirts, sweaters and formal dress shirts. The compression is a secret between you and your garment. Get your self-esteem back! A chest flattening breakthrough! This is an excellent Gynecomastia or \"man boobs\" compression shirt for the man who wants to enjoy a healthy looking figure without the need for surgery or medications.,I can’t thank James the creator enough! Having been widowed I’ve lost over 6 stones in weight (21st down to 14st and over 6” off my waist) and this is the cherry on the top to UP my confidence while I now complete my tone up - it is extremely comfortable to wear, does not become unbearable, remains unrestrictive and is fully breathable. It has completely flattened my tummy and chest and sides with ease and it has totally shaped and tightened my core. It is helping me strengthen my 6’ 3” posture, back, neck and shoulders also. I now stand tall and dare I say proud. I can actually feel the benefits of having a tighter posture as I go about my day while wearing this. It remains discreet under any clothing and doesn’t cut into or mark the skin. It is extremely well made and has a really useful user/after care guide on the packaging. I actually bought both a large and a medium to try out which one fits me best and I then received a really lovely and complimentary email from James asking if all was well and checking that as his valued customer that I remained happy with my chosen size. James - thank you once again! You’ve a finger on the pulse of customer care - something which is diminishing these days. You’ve also a genuine desire to care and help folks who are silently struggling - your product has brought a new instilled confidence to me and a genuine desire to show off my achievements without worry or a need to hide away or wear baggy clothing. I will be definitely buying a further two medium shirts in black to compliment my two white in the very near future. I wish you every success! 5***** Best wishes David",
+      "price": 29,
+      "original_price": 32,
+      "originalPrice": 32,
+      "discount_percentage": 9,
+      "discountPercentage": 9,
+      "availability": "In Stock",
+      "Error-Flag": 1,
+      "Error-Reason": "DISCOUNT_MISMATCH: Scraped 6% vs expected 9%",
+      "Error-Fields": [
+        "discountPercentage",
+        "Amazon marketplace domain",
+        "publisher",
+        "manufacturer",
+        "color",
+        "model_name",
+        "generic_name",
+        "colour",
+        "department",
+        "occasion_type",
+        "style_name",
+        "brand_name"
+      ],
+      "currency": "AUD",
+      "symbol": "A$",
+      "brand": "Esteem Apparel",
+      "category": "Clothing & Accessories",
+      "subcategory": "Clothing",
+      "main_image": "https://m.media-amazon.com/images/I/71pxTWutNxL.jpg",
+      "all_images": [
+        "https://m.media-amazon.com/images/I/71pxTWutNxL.jpg",
+        "https://m.media-amazon.com/images/I/71VuTujT9hL.jpg",
+        "https://m.media-amazon.com/images/I/81GCtAibVrL.jpg",
+        "https://m.media-amazon.com/images/I/81dSydEB5gL.jpg",
+        "https://m.media-amazon.com/images/I/71UWI3hsDyL.jpg",
+        "https://m.media-amazon.com/images/I/81KZxLE-thL.jpg",
+        "https://m.media-amazon.com/images/I/7113uQjsR2L.jpg",
+        "https://m.media-amazon.com/images/I/31HsW8p80YL.jpg",
+        "https://m.media-amazon.com/images/I/416kvCUyRpL.jpg",
+        "https://m.media-amazon.com/images/I/41gIokrg3iL.jpg"
+      ],
+      "customer_rating": "4.2 out of 5 stars",
+      "review_count": 13364,
+      "source_link": "https://youtu.be/wyVgM0OOOL0?si=W0kNiROXuAlIlywF",
+      "referenceMedia": [
+        "https://youtu.be/wyVgM0OOOL0?si=W0kNiROXuAlIlywF",
+        "https://youtube.com/shorts/q6YPBg7a8AU?si=8Vi0W-5W0pSwwWhG\nhttps://youtube.com/shorts/SoIa0rumFCg?si=WdlmEuYr7NVxeWnI"
+      ],
+      "regional_availability": 0,
+      "regional_variants": {},
+      "amazon_short": "https://amzn.to/4lGeqUr",
+      "amazon_long": "",
+      "affiliate_link": "https://amzn.to/4lGeqUr",
+      "release_date": "2016-12-13T00:00:00.000Z",
+      "timestamp": "3/16/2026 18:06:30",
+      "influencer": "Better Pursuits",
+      "manual_collections": [
+        "Gen Z",
+        "Fit body",
+        "Inner wear",
+        "Shape wear",
+        "Apparel",
+        "Mens"
+      ],
+      "season": null,
+      "category_is_auto_detected": false,
+      "season_is_auto_detected": false,
+      "featured": false,
+      "trending": false,
+      "productDetails": [
+        {
+          "key": "origin",
+          "label": "Country of Origin",
+          "value": "China",
+          "priority": 0
+        },
+        {
+          "key": "weight",
+          "label": "Weight",
+          "value": "0.4 Pounds",
+          "priority": 1
+        },
+        {
+          "key": "material",
+          "label": "Material",
+          "value": "Nylon, Spandex",
+          "priority": 4
+        },
+        {
+          "key": "material_type",
+          "label": "Material",
+          "value": "Nylon, Spandex",
+          "priority": 4
+        },
+        {
+          "key": "fabric_type",
+          "label": "Material",
+          "value": "90% Nylon 10% Spandex",
+          "priority": 4
+        },
+        {
+          "key": "fabric_stretchability",
+          "label": "Material",
+          "value": "Stretchable",
+          "priority": 4
+        }
+      ],
+      "additionalInfo": {
+        "Other": [
+          {
+            "key": "Timestamp",
+            "label": "Timestamp",
+            "category": "Other",
+            "value": "3/16/2026 18:06:30"
+          },
+          {
+            "key": "upc",
+            "label": "Upc",
+            "category": "Other",
+            "value": "636836350776 639072974065"
+          },
+          {
+            "key": "date_first_available",
+            "label": "Date First Available",
+            "category": "Other",
+            "value": "13 December 2016"
+          },
+          {
+            "key": "fit_type",
+            "label": "Fit Type",
+            "category": "Other",
+            "value": "Slim Fit"
+          },
+          {
+            "key": "collection_name",
+            "label": "Collection Name",
+            "category": "Other",
+            "value": "All"
+          },
+          {
+            "key": "sleeve_type",
+            "label": "Sleeve Type",
+            "category": "Other",
+            "value": "Sleeveless"
+          },
+          {
+            "key": "shirt_form_type",
+            "label": "Shirt Form Type",
+            "category": "Other",
+            "value": "Tank Top"
+          },
+          {
+            "key": "sport_type",
+            "label": "Sport Type",
+            "category": "Other",
+            "value": "Walking"
+          },
+          {
+            "key": "collar_type",
+            "label": "Collar Type",
+            "category": "Other",
+            "value": "Crew neck"
+          },
+          {
+            "key": "seasons",
+            "label": "Seasons",
+            "category": "Other",
+            "value": "spring-summer"
+          },
+          {
+            "key": "apparel_closure_type",
+            "label": "Apparel Closure Type",
+            "category": "Other",
+            "value": "Pull On"
+          },
+          {
+            "key": "strap_type",
+            "label": "Strap Type",
+            "category": "Other",
+            "value": "Adjustable"
+          },
+          {
+            "key": "cuff_type",
+            "label": "Cuff Type",
+            "category": "Other",
+            "value": "No cuff"
+          },
+          {
+            "key": "item_length_description",
+            "label": "Item Length Description",
+            "category": "Other",
+            "value": "Standard Length"
+          }
+        ],
+        "Product Specs": [
+          {
+            "key": "Discount",
+            "label": "Discount",
+            "category": "Product Specs",
+            "value": "6"
+          },
+          {
+            "key": "numberOfPieces",
+            "label": "Number Of Pieces",
+            "category": "Product Specs",
+            "value": "1"
+          },
+          {
+            "key": "unitCount",
+            "label": "Unit Count",
+            "category": "Product Specs",
+            "value": "1 Count"
+          },
+          {
+            "key": "age_range_description",
+            "label": "Age Range Description",
+            "category": "Product Specs",
+            "value": "Adult"
+          },
+          {
+            "key": "pattern",
+            "label": "Pattern",
+            "category": "Product Specs",
+            "value": "Solid"
+          },
+          {
+            "key": "neck_style",
+            "label": "Neck Style",
+            "category": "Product Specs",
+            "value": "Crew Neck"
+          },
+          {
+            "key": "back_style",
+            "label": "Back Style",
+            "category": "Product Specs",
+            "value": "T Back"
+          },
+          {
+            "key": "style_number",
+            "label": "Style Number",
+            "category": "Product Specs",
+            "value": "51"
+          },
+          {
+            "key": "country_of_publication",
+            "label": "Country Of Publication",
+            "category": "Product Specs",
+            "value": "China"
+          },
+          {
+            "key": "unit_count",
+            "label": "Unit Count",
+            "category": "Product Specs",
+            "value": "1.0 Count"
+          }
+        ],
+        "Manufacturing": [
+          {
+            "key": "is_discontinued_by_manufacturer",
+            "label": "Is Discontinued By Manufacturer",
+            "category": "Manufacturing",
+            "value": "No"
+          }
+        ],
+        "Care Instructions": [
+          {
+            "key": "product_care_instructions",
+            "label": "Product Care Instructions",
+            "category": "Care Instructions",
+            "value": "Hand Wash Only"
+          }
+        ]
+      },
+      "Warnings": [
+        {
+          "field": "Amazon marketplace domain",
+          "reason": "Metadata leaked: Australia (AU) — amazon.com.au",
+          "severity": "WARNING"
+        },
+        {
+          "field": "publisher",
+          "reason": "Value already in title/description",
+          "severity": "INFO"
+        },
+        {
+          "field": "manufacturer",
+          "reason": "Value already in title/description",
+          "severity": "INFO"
+        },
+        {
+          "field": "color",
+          "reason": "Value already in title/description",
+          "severity": "INFO"
+        },
+        {
+          "field": "model_name",
+          "reason": "Value already in title/description",
+          "severity": "INFO"
+        },
+        {
+          "field": "generic_name",
+          "reason": "Value already in title/description",
+          "severity": "INFO"
+        },
+        {
+          "field": "colour",
+          "reason": "Value already in title/description",
+          "severity": "INFO"
+        },
+        {
+          "field": "department",
+          "reason": "Value already in title/description",
+          "severity": "INFO"
+        },
+        {
+          "field": "occasion_type",
+          "reason": "Value already in title/description",
+          "severity": "INFO"
+        },
+        {
+          "field": "style_name",
+          "reason": "Value already in title/description",
+          "severity": "INFO"
+        },
+        {
+          "field": "brand_name",
+          "reason": "Value already in title/description",
+          "severity": "INFO"
+        }
+      ],
+      "drop_signals": {
+        "has_reference_media": true,
+        "media_count": 2,
+        "regional_availability": false,
+        "available_regions": [],
+        "influencer_presence": true,
+        "is_global": false,
+        "is_high_visibility": true,
+        "is_social_proof": true,
+        "is_new_release": false,
+        "product_age_days": 3380,
+        "drop_categories": [
+          "creator-picks",
+          "viral-reels"
         ]
       }
     },
