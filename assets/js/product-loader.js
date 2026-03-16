@@ -1,6 +1,6 @@
 // product-loader.js - Product data loader with cache-busting
 // IMPORTANT: Update DATA_VERSION every time you update products.csv
-const DATA_VERSION = '20260315-auto'; // ⬅️ CHANGE THIS ON EVERY CSV UPDATE (format: YYYYMMDD-vX)
+const DATA_VERSION = '20260316-auto'; // ⬅️ CHANGE THIS ON EVERY CSV UPDATE (format: YYYYMMDD-vX)
 
 // Load products for specified currency
 async function loadProducts(currency) {
