@@ -1,22 +1,9 @@
 {
   "summary": {
-    "total_top_level": 13,
-    "last_updated": "2026-03-17T02:41:26.182Z"
+    "total_top_level": 12,
+    "last_updated": "2026-03-17T23:14:18.491Z"
   },
   "collections": {
-    "Books": {
-      "name": "Books",
-      "product_count": 6,
-      "asins": [
-        "178633089X",
-        "1529902401",
-        "9388550315",
-        "9388550072",
-        "9355995008",
-        "9355991479"
-      ],
-      "sub_collections": {}
-    },
     "Air Purifier": {
       "name": "Air Purifier",
       "product_count": 16,

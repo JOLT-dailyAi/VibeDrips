@@ -1,8 +1,8 @@
 {
   "summary": {
-    "total_brands": 17,
-    "total_products": 26,
-    "last_updated": "2026-03-17T02:41:26.183Z"
+    "total_brands": 13,
+    "total_products": 20,
+    "last_updated": "2026-03-17T23:14:18.492Z"
   },
   "brands": [
     {
@@ -38,36 +38,6 @@
       "asins": [
         "B08NYTLNQ9",
         "B0BGRKRCF6"
-      ]
-    },
-    {
-      "name": "MyMirror Publishing House",
-      "product_count": 2,
-      "asins": [
-        "9388550315",
-        "9388550072"
-      ]
-    },
-    {
-      "name": "Diamond Books",
-      "product_count": 2,
-      "asins": [
-        "9355995008",
-        "9355991479"
-      ]
-    },
-    {
-      "name": "HUTCHINSON PUBLISHING - TRADE",
-      "product_count": 1,
-      "asins": [
-        "178633089X"
-      ]
-    },
-    {
-      "name": "Cornerstone Press",
-      "product_count": 1,
-      "asins": [
-        "1529902401"
       ]
     },
     {

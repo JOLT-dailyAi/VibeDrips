@@ -1,8 +1,8 @@
 {
   "summary": {
     "total_seasons": 5,
-    "total_products": 26,
-    "last_updated": "2026-03-17T02:41:26.181Z"
+    "total_products": 20,
+    "last_updated": "2026-03-17T23:14:18.490Z"
   },
   "seasons": [
     {
@@ -18,7 +18,7 @@
       "name": "Summer",
       "emoji": "☀️",
       "label": "Summer Vibe",
-      "product_count": 9,
+      "product_count": 8,
       "asins": [
         "B0F2MLPWTG",
         "B0DT4F8T4L",
@@ -27,8 +27,7 @@
         "B0FVXJ52W6",
         "B0F9FJS3VW",
         "B08NYTLNQ9",
-        "B0BGRKRCF6",
-        "9388550072"
+        "B0BGRKRCF6"
       ]
     },
     {
@@ -59,10 +58,8 @@
       "name": "Winter",
       "emoji": "❄️",
       "label": "Winter Collection",
-      "product_count": 11,
+      "product_count": 9,
       "asins": [
-        "178633089X",
-        "1529902401",
         "B0FJ5R8JN7",
         "B0DHGFCG6P",
         "B0F1MR9W8R",
