@@ -1,15 +1,15 @@
 VibeDrips Data Processing Summary
-Generated: 2026-03-19T02:49:22.457Z
+Generated: 2026-03-19T04:51:37.211Z
 
 📊 STATISTICS
-- Total Rows Processed: 20
-- Products Successfully Processed: 20
+- Total Rows Processed: 21
+- Products Successfully Processed: 21
 - Errors Encountered: 0
 - Success Rate: 100.0%
 
 ⚠️ VALIDATION
 - Records Flagged: 3
-- Field Conflicts: 20
+- Field Conflicts: 21
 - Error Breakdown:
   • INVALID_ORIGINAL: 2
   • DISCOUNT_MISMATCH: 1
@@ -23,11 +23,11 @@ Generated: 2026-03-19T02:49:22.457Z
 - Review Needed: 0 products
 
 👤 INFLUENCERS
-- Products with influencers: 16
-- Unique influencers: 5
+- Products with influencers: 17
+- Unique influencers: 6
 
 💎 COLLECTIONS
-- Unique collections: 12
+- Unique collections: 14
 
 🌿 SEASONS
 - Seasons Detected: 2
@@ -35,12 +35,12 @@ Generated: 2026-03-19T02:49:22.457Z
 
 ⚠️ ERRORS & VALIDATION
 - Products with errors: 3
-- Error rate: 15%
+- Error rate: 14%
 
 🎬 DROPS
-- 🎬 Creator Picks: 20 products
+- 🎬 Creator Picks: 21 products
 - 🌍 Global Drops: 0 products
-- 📱 Viral Reels: 3 products
+- 📱 Viral Reels: 4 products
 - 🆕 New Releases: 0 products
 
 📁 FILES BEFORE DELETION
@@ -64,7 +64,7 @@ Generated: 2026-03-19T02:49:22.457Z
 - seasons_auto-detect.json
 
 📁 FILES GENERATED
-- products-AUD.json (10 products)
+- products-AUD.json (11 products)
 - products-INR.json (10 products)
 - categories.json & categories_auto-detect.json
 - seasons.json & seasons_auto-detect.json

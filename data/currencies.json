@@ -7,7 +7,7 @@
       "countries": [
         "Australia"
       ],
-      "product_count": 10,
+      "product_count": 11,
       "filename": "products-AUD.json",
       "categories": [
         "Furniture",
@@ -20,7 +20,8 @@
         "Winix",
         "VITURE",
         "Breville",
-        "Esteem Apparel"
+        "Esteem Apparel",
+        "Turtle Beach"
       ],
       "price_range": {
         "min": 29,
@@ -58,7 +59,7 @@
       }
     }
   ],
-  "last_updated": "2026-03-19T02:49:22.450Z",
-  "total_products": 20,
+  "last_updated": "2026-03-19T04:51:37.203Z",
+  "total_products": 21,
   "default_currency": "INR"
 }

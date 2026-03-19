@@ -1,10 +1,16 @@
 {
   "summary": {
-    "total_recent": 5,
+    "total_recent": 6,
     "window_days": 60,
-    "last_updated": "2026-03-19T02:49:22.455Z"
+    "last_updated": "2026-03-19T04:51:37.209Z"
   },
   "recent_drops": [
+    {
+      "asin": "B0DYVVZ4F6",
+      "currency": "AUD",
+      "added_date": "3/18/2026 18:14:23",
+      "expiry_time": "2026-05-17T18:14:23.000Z"
+    },
     {
       "asin": "B076B55LF1",
       "currency": "AUD",

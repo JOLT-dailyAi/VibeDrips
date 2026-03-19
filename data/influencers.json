@@ -1,8 +1,8 @@
 {
   "summary": {
-    "total_influencers": 5,
-    "total_products": 16,
-    "last_updated": "2026-03-19T02:49:22.454Z"
+    "total_influencers": 6,
+    "total_products": 17,
+    "last_updated": "2026-03-19T04:51:37.208Z"
   },
   "influencers": [
     {
@@ -110,6 +110,23 @@
           "category": "Clothing & Accessories",
           "asins": [
             "B076B55LF1"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "YourSixStudios, SpawnPoiint",
+      "product_count": 1,
+      "has_creator_video": true,
+      "regions": [
+        "AUD"
+      ],
+      "media_groups": [
+        {
+          "media_url": "https://youtube.com/shorts/LsQ79UbONOo?si=KtZt12F_sLisicIx",
+          "category": "General",
+          "asins": [
+            "B0DYVVZ4F6"
           ]
         }
       ]

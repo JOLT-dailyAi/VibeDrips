@@ -1,9 +1,9 @@
 {
   "summary": {
-    "total_products": 20,
+    "total_products": 21,
     "products_with_errors": 3,
-    "error_rate": 15,
-    "last_updated": "2026-03-19T02:49:22.455Z"
+    "error_rate": 14,
+    "last_updated": "2026-03-19T04:51:37.209Z"
   },
   "error_breakdown": {
     "INVALID_ORIGINAL": 2,
@@ -1677,7 +1677,8 @@
       "source_link": "https://youtu.be/wyVgM0OOOL0?si=W0kNiROXuAlIlywF",
       "referenceMedia": [
         "https://youtu.be/wyVgM0OOOL0?si=W0kNiROXuAlIlywF",
-        "https://youtube.com/shorts/q6YPBg7a8AU?si=8Vi0W-5W0pSwwWhG\nhttps://youtube.com/shorts/SoIa0rumFCg?si=WdlmEuYr7NVxeWnI"
+        "https://youtube.com/shorts/q6YPBg7a8AU?si=8Vi0W-5W0pSwwWhG",
+        "https://youtube.com/shorts/SoIa0rumFCg?si=WdlmEuYr7NVxeWnI"
       ],
       "regional_availability": 0,
       "regional_variants": {},
@@ -1963,7 +1964,7 @@
       ],
       "drop_signals": {
         "has_reference_media": true,
-        "media_count": 2,
+        "media_count": 3,
         "regional_availability": false,
         "available_regions": [],
         "influencer_presence": true,
@@ -1972,6 +1973,163 @@
         "is_social_proof": true,
         "is_new_release": false,
         "product_age_days": 3383,
+        "drop_categories": [
+          "creator-picks",
+          "viral-reels"
+        ]
+      }
+    },
+    {
+      "asin": "B0DYVVZ4F6",
+      "name": "Victrix By Turtle Beach Pro BFG Reloaded Wireless Gaming Controller for PS5, PS4 and PC",
+      "description": "The Pro BFG Reloaded is the next evolution of the award-winning Pro BFG wireless controller, built for elite gamers on PlayStation and PC. At its core are three customizable modules with built-in Hall-Effect technology, and eleven interchangeable components for top-tier reliability and customization. Play like a pro with mappable buttons, 5-stop Clutch Triggers with Hair-Trigger mode, Sony 3D Audio spatial sound, and an ergonomic 6-button Fightpad module with Kailh microswitches. Officially licensed by PlayStation, this controller is the ultimate weapon for victory that is not a Customer review or feedback but more of product info/description. Output the complete, unmodified paragraph that contains product description. Skip reviews. DO NOT truncate, summarize, or shorten. Return full text exactly as provided.\n\nSpecifications (JSON):\n{\n  \"batteries\":\"2 Lithium Ion batteries required. (included)\",\n  \"product_dimensions\":\"6.1 x 16 x 10.41 cm; 263.08 Grams\",\n  \"release_date\":\"8 August 2025\",\n  \"asin\":\"B0DYVVZ4F6\",\n  \"item_model_number\":\"TBC-3101-05\",\n  \"country_of_origin\":\"China\",\n  \"dimensions\":\"6.1 x 16 x 10.41 cm; 263.08 Grams\"\n}\nKey Info (JSON):\n{\n  \"asin\":\"B0DYVVZ4F6\",\n  \"model_number\":\"TBC-3101-05\",\n  \"dimensions\":\"6.1 x 16 x 10.41 cm; 263.08 Grams\",\n  \"country_of_origin\":\"China\",\n  \"batteries_required\":\"2 Lithium Ion batteries required. (included)\",\n  \"all_available_fields\":[\"asin\",\"batteries\",\"country_of_origin\",\"item_model_number\",\"product_dimensions\",\"release_date\"]\n}",
+      "price": 259,
+      "original_price": 309,
+      "originalPrice": 309,
+      "discount_percentage": 16,
+      "discountPercentage": 16,
+      "availability": "In Stock",
+      "Error-Flag": 0,
+      "Error-Reason": "",
+      "Error-Fields": [
+        "Amazon marketplace domain",
+        "weight",
+        "dimensions",
+        "countryOfOrigin",
+        "item_model_number",
+        "generic_name",
+        "country_of_origin",
+        "product_dimensions",
+        "batteries",
+        "release_date"
+      ],
+      "currency": "AUD",
+      "symbol": "A$",
+      "brand": "Turtle Beach",
+      "category": "General",
+      "subcategory": "Controller",
+      "main_image": "https://m.media-amazon.com/images/I/713teAQz9xL.jpg",
+      "all_images": [
+        "https://m.media-amazon.com/images/I/713teAQz9xL.jpg",
+        "https://m.media-amazon.com/images/I/71LwhbqQMDL.jpg",
+        "https://m.media-amazon.com/images/I/71BMJxOM9KL.jpg",
+        "https://m.media-amazon.com/images/I/81wh30v4z4L.jpg",
+        "https://m.media-amazon.com/images/I/71LFlRKegxL.jpg",
+        "https://m.media-amazon.com/images/I/4154hsGTwUL.jpg",
+        "https://m.media-amazon.com/images/I/319PqVf98UL.jpg",
+        "https://m.media-amazon.com/images/I/41WW-HsA8eL.jpg",
+        "https://m.media-amazon.com/images/I/31qsocUuXiL.jpg",
+        "https://m.media-amazon.com/images/I/41oPD0TszrL.jpg"
+      ],
+      "customer_rating": "3.8 out of 5 stars",
+      "review_count": 211,
+      "source_link": "https://youtube.com/shorts/LsQ79UbONOo?si=KtZt12F_sLisicIx",
+      "referenceMedia": [
+        "https://youtube.com/shorts/LsQ79UbONOo?si=KtZt12F_sLisicIx",
+        "https://youtu.be/2NzYe373sKs?si=rDL7gE7YwX_vNfdM",
+        "https://youtu.be/oJ1BwrWwPZY?si=xJJscZWtstBYNlPG"
+      ],
+      "regional_availability": 0,
+      "regional_variants": {},
+      "amazon_short": "https://amzn.to/4rOjcAU",
+      "amazon_long": "",
+      "affiliate_link": "https://amzn.to/4rOjcAU",
+      "release_date": null,
+      "timestamp": "3/18/2026 18:14:23",
+      "influencer": "YourSixStudios, SpawnPoiint",
+      "manual_collections": [
+        "Games",
+        "Indoor",
+        "esports",
+        "controller"
+      ],
+      "season": null,
+      "category_is_auto_detected": false,
+      "season_is_auto_detected": false,
+      "featured": false,
+      "trending": false,
+      "productDetails": [],
+      "additionalInfo": {
+        "Other": [
+          {
+            "key": "Timestamp",
+            "label": "Timestamp",
+            "category": "Other",
+            "value": "3/18/2026 18:14:23"
+          }
+        ],
+        "Product Specs": [
+          {
+            "key": "Discount",
+            "label": "Discount",
+            "category": "Product Specs",
+            "value": "16"
+          }
+        ]
+      },
+      "Warnings": [
+        {
+          "field": "Amazon marketplace domain",
+          "reason": "Metadata leaked: Australia (AU) — amazon.com.au",
+          "severity": "WARNING"
+        },
+        {
+          "field": "weight",
+          "reason": "Value already in title/description",
+          "severity": "INFO"
+        },
+        {
+          "field": "dimensions",
+          "reason": "Value already in title/description",
+          "severity": "INFO"
+        },
+        {
+          "field": "countryOfOrigin",
+          "reason": "Value already in title/description",
+          "severity": "INFO"
+        },
+        {
+          "field": "item_model_number",
+          "reason": "Value already in title/description",
+          "severity": "INFO"
+        },
+        {
+          "field": "generic_name",
+          "reason": "Value already in title/description",
+          "severity": "INFO"
+        },
+        {
+          "field": "country_of_origin",
+          "reason": "Value already in title/description",
+          "severity": "INFO"
+        },
+        {
+          "field": "product_dimensions",
+          "reason": "Value already in title/description",
+          "severity": "INFO"
+        },
+        {
+          "field": "batteries",
+          "reason": "Value already in title/description",
+          "severity": "INFO"
+        },
+        {
+          "field": "release_date",
+          "reason": "Value already in title/description",
+          "severity": "INFO"
+        }
+      ],
+      "drop_signals": {
+        "has_reference_media": true,
+        "media_count": 3,
+        "regional_availability": false,
+        "available_regions": [],
+        "influencer_presence": true,
+        "is_global": false,
+        "is_high_visibility": true,
+        "is_social_proof": true,
+        "is_new_release": false,
+        "product_age_days": null,
         "drop_categories": [
           "creator-picks",
           "viral-reels"
