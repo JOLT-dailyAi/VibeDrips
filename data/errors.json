@@ -3,7 +3,7 @@
     "total_products": 21,
     "products_with_errors": 3,
     "error_rate": 14,
-    "last_updated": "2026-03-19T04:51:37.209Z"
+    "last_updated": "2026-03-20T02:40:11.154Z"
   },
   "error_breakdown": {
     "INVALID_ORIGINAL": 2,
@@ -188,7 +188,7 @@
         "is_high_visibility": true,
         "is_social_proof": false,
         "is_new_release": false,
-        "product_age_days": 155,
+        "product_age_days": 156,
         "drop_categories": [
           "creator-picks"
         ]
@@ -377,7 +377,7 @@
         "is_high_visibility": true,
         "is_social_proof": false,
         "is_new_release": false,
-        "product_age_days": 428,
+        "product_age_days": 429,
         "drop_categories": [
           "creator-picks"
         ]
@@ -562,7 +562,7 @@
         "is_high_visibility": true,
         "is_social_proof": false,
         "is_new_release": false,
-        "product_age_days": 2563,
+        "product_age_days": 2564,
         "drop_categories": [
           "creator-picks"
         ]
@@ -721,7 +721,7 @@
         "is_high_visibility": true,
         "is_social_proof": false,
         "is_new_release": false,
-        "product_age_days": 1261,
+        "product_age_days": 1262,
         "drop_categories": [
           "creator-picks"
         ]
@@ -886,7 +886,7 @@
         "is_high_visibility": true,
         "is_social_proof": false,
         "is_new_release": false,
-        "product_age_days": 163,
+        "product_age_days": 164,
         "drop_categories": [
           "creator-picks"
         ]
@@ -1070,7 +1070,7 @@
         "is_high_visibility": true,
         "is_social_proof": false,
         "is_new_release": false,
-        "product_age_days": 177,
+        "product_age_days": 178,
         "drop_categories": [
           "creator-picks"
         ]
@@ -1333,7 +1333,7 @@
         "is_high_visibility": true,
         "is_social_proof": false,
         "is_new_release": false,
-        "product_age_days": 231,
+        "product_age_days": 232,
         "drop_categories": [
           "creator-picks"
         ]
@@ -1480,7 +1480,7 @@
         "is_high_visibility": true,
         "is_social_proof": false,
         "is_new_release": false,
-        "product_age_days": 1944,
+        "product_age_days": 1945,
         "drop_categories": [
           "creator-picks"
         ]
@@ -1622,7 +1622,7 @@
         "is_high_visibility": true,
         "is_social_proof": false,
         "is_new_release": false,
-        "product_age_days": 1267,
+        "product_age_days": 1268,
         "drop_categories": [
           "creator-picks"
         ]
@@ -1972,7 +1972,7 @@
         "is_high_visibility": true,
         "is_social_proof": true,
         "is_new_release": false,
-        "product_age_days": 3383,
+        "product_age_days": 3384,
         "drop_categories": [
           "creator-picks",
           "viral-reels"
@@ -2391,7 +2391,7 @@
         "is_high_visibility": true,
         "is_social_proof": false,
         "is_new_release": false,
-        "product_age_days": 442,
+        "product_age_days": 443,
         "drop_categories": [
           "creator-picks"
         ]
@@ -2802,7 +2802,7 @@
         "is_high_visibility": true,
         "is_social_proof": false,
         "is_new_release": false,
-        "product_age_days": 808,
+        "product_age_days": 809,
         "drop_categories": [
           "creator-picks"
         ]
@@ -3047,7 +3047,7 @@
         "is_high_visibility": true,
         "is_social_proof": false,
         "is_new_release": false,
-        "product_age_days": 1173,
+        "product_age_days": 1174,
         "drop_categories": [
           "creator-picks"
         ]
@@ -3298,7 +3298,7 @@
         "is_high_visibility": true,
         "is_social_proof": false,
         "is_new_release": false,
-        "product_age_days": 808,
+        "product_age_days": 809,
         "drop_categories": [
           "creator-picks"
         ]
@@ -3548,7 +3548,7 @@
         "is_high_visibility": true,
         "is_social_proof": false,
         "is_new_release": false,
-        "product_age_days": 808,
+        "product_age_days": 809,
         "drop_categories": [
           "creator-picks"
         ]
@@ -3799,7 +3799,7 @@
         "is_high_visibility": true,
         "is_social_proof": true,
         "is_new_release": false,
-        "product_age_days": 1538,
+        "product_age_days": 1539,
         "drop_categories": [
           "creator-picks",
           "viral-reels"
@@ -4039,7 +4039,7 @@
         "is_high_visibility": true,
         "is_social_proof": false,
         "is_new_release": false,
-        "product_age_days": 1538,
+        "product_age_days": 1539,
         "drop_categories": [
           "creator-picks"
         ]
